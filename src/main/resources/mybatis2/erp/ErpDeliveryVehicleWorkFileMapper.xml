@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ErpDeliveryVehicleWorkFileMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_delivery_vehicle_work_file
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		delivery_vehicle_work_file_id,	
+		delivery_org_id,	
+		vehicle_id,	
+		delivery_vehicle_work_id,	
+		url,	
+		remarks,	
+		status,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{delivery_vehicle_work_file_id},	
+        #{delivery_org_id},	
+        #{vehicle_id},	
+        #{delivery_vehicle_work_id},	
+        #{url},	
+        #{remarks},	
+        #{status},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd" useGeneratedKeys="true"  keyProperty="delivery_vehicle_work_file_id">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        delivery_vehicle_work_file_id,	
+		        delivery_org_id,	
+		        vehicle_id,	
+		        delivery_vehicle_work_id,	
+		        url,	
+		        remarks,	
+		        status,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			delivery_vehicle_work_file_id = #{delivery_vehicle_work_file_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			delivery_vehicle_work_file_id = #{delivery_vehicle_work_file_id},
+			delivery_org_id = #{delivery_org_id},
+			vehicle_id = #{vehicle_id},
+			delivery_vehicle_work_id = #{delivery_vehicle_work_id},
+			url = #{url},
+			remarks = #{remarks},
+			status = #{status},
+			createby = #{createby},
+			create_time = #{create_time},
+			updateby = #{updateby},
+			update_time = #{update_time},
+		delivery_vehicle_work_file_id = delivery_vehicle_work_file_id
+		where 
+		delivery_vehicle_work_file_id = #{delivery_vehicle_work_file_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			delivery_vehicle_work_file_id = #{delivery_vehicle_work_file_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.delivery_vehicle_work_id!= null and pd.delivery_vehicle_work_id != ''"><!-- 关键词检索 -->
+			and
+				(
+					delivery_vehicle_work_id = #{pd.delivery_vehicle_work_id}
+				)
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			delivery_vehicle_work_file_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DeliveryMemberMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_delivery_member
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		user_id,	
+		delivery_org_id,	
+		delivery_user_company_id,	
+		type,	
+		work_type,	
+		status,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,	
+		delivery_member_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{user_id},	
+        #{delivery_org_id},	
+        #{delivery_user_company_id},	
+        #{type},	
+        #{work_type},	
+        #{status},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        user_id,	
+		        delivery_org_id,	
+		        delivery_user_company_id,	
+		        type,	
+		        work_type,	
+		        status,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			delivery_member_id = #{delivery_member_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			user_id = #{user_id},
+			delivery_org_id = #{delivery_org_id},
+			delivery_user_company_id = #{delivery_user_company_id},
+			type = #{type},
+			work_type = #{work_type},
+			status = #{status},
+			updateby = #{updateby},
+			update_time = #{update_time},
+		delivery_member_id = delivery_member_id
+		where 
+		delivery_member_id = #{delivery_member_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+			m.user_id,	
+			m.delivery_org_id,
+			o.delivery_org_name,	
+			m.delivery_user_company_id,
+			u.name delivery_user_company_name,	
+			m.type,	
+			m.work_type,	
+			m.status,	
+			m.createby,	
+			m.create_time,	
+			m.updateby,	
+			m.update_time,	
+			m.delivery_member_id
+		from 
+			pgt_delivery_member m
+		left join 
+			pgt_delivery_org o 
+		on 	
+			m.delivery_org_id = o.delivery_org_id
+		left join 
+			pgt_delivery_user_company u 
+		on 	
+			m.delivery_user_company_id = u.delivery_user_company_id
+		where
+			delivery_member_id = #{delivery_member_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			m.user_id,	
+			m.delivery_org_id,
+			o.delivery_org_name,	
+			m.delivery_user_company_id,
+			u.name delivery_user_company_name,	
+			m.type,	
+			m.work_type,	
+			m.status,	
+			m.createby,	
+			m.create_time,	
+			m.updateby,	
+			m.update_time,	
+			m.delivery_member_id
+		from 
+			pgt_delivery_member m
+		left join 
+			pgt_delivery_org o 
+		on 	
+			m.delivery_org_id = o.delivery_org_id
+		left join 
+			pgt_delivery_user_company u 
+		on 	
+			m.delivery_user_company_id = u.delivery_user_company_id
+		where 1=1
+		<if test="pd.delivery_org_id!= null and pd.delivery_org_id != ''"><!-- 关键词检索 -->
+			and
+				(
+				m.delivery_org_id=#{pd.delivery_org_id}
+				)
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			m.user_id,	
+			m.delivery_org_id,
+			o.delivery_org_name,	
+			m.delivery_user_company_id,
+			u.name delivery_user_company_name,	
+			m.type,	
+			m.work_type,	
+			m.status,	
+			m.createby,	
+			m.create_time,	
+			m.updateby,	
+			m.update_time,	
+			m.delivery_member_id
+		from 
+			pgt_delivery_member m
+		left join 
+			pgt_delivery_org o 
+		on 	
+			m.delivery_org_id = o.delivery_org_id
+		left join 
+			pgt_delivery_user_company u 
+		on 	
+			m.delivery_user_company_id = u.delivery_user_company_id
+		where 1=1
+		<if test="user_id!= null and user_id != ''"><!-- 关键词检索 -->
+			and
+				(
+				m.user_id=#{user_id}
+				)
+		</if>
+		<if test="delivery_org_id!= null and delivery_org_id != ''"><!-- 关键词检索 -->
+			and
+				(
+				m.delivery_org_id=#{delivery_org_id}
+				)
+		</if>
+		
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			delivery_member_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	<!-- 列表(通过配送组织获取) -->
+	<select id="listByOrg" parameterType="pd" resultType="pd">
+		select
+			m.user_id,	
+			m.delivery_org_id,
+			o.delivery_org_name,	
+			m.delivery_user_company_id,
+			u.name delivery_user_company_name,	
+			m.type,	
+			m.work_type,	
+			m.status,	
+			m.createby,	
+			m.create_time,	
+			m.updateby,	
+			m.update_time,	
+			m.delivery_member_id
+		from 
+			pgt_delivery_member m
+		left join 
+			pgt_delivery_org o 
+		on 	
+			m.delivery_org_id = o.delivery_org_id
+		left join 
+			pgt_delivery_user_company u 
+		on 	
+			m.delivery_user_company_id = u.delivery_user_company_id
+		where 
+			m.delivery_org_id = #{delivery_org_id}
+	</select>
+	
+	<select id="findByUserIdAndOrgId" parameterType="pd" resultType="pd">
+		select
+			m.user_id,	
+			m.delivery_org_id,
+			m.delivery_user_company_id,
+			m.type,	
+			m.work_type,	
+			m.status,	
+			m.createby,	
+			m.create_time,	
+			m.updateby,	
+			m.update_time,	
+			m.delivery_member_id
+		from 
+			pgt_delivery_member m
+		where
+			m.user_id = #{user_id}
+		and
+			m.delivery_org_id = #{delivery_org_id} 
+	</select>
+	<!-- fh313596790qq(青苔) -->
+</mapper>

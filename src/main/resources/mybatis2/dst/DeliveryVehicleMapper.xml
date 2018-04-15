@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DeliveryVehicleMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_delivery_vehicle_work
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		delivery_org_id,	
+		delivery_org_name,	
+		work_day,	
+		vehicle_number,	
+		contact,	
+		tel,	
+		vehicle_id,	
+		delivery_vehicle_company_id,	
+		delivery_vehicle_company_name,	
+		standard_amount,	
+		standard_time,	
+		standard_mileage,	
+		out_time_amount,	
+		out_mileage_amount,	
+		type,	
+		status,	
+		start_time,	
+		end_time,	
+		total_time,	
+		start_mileage,	
+		end_mileage,	
+		total_mileage,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,	
+		delivery_vehicle_work_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{delivery_org_id},	
+        #{delivery_org_name},	
+        #{work_day},	
+        #{vehicle_number},	
+        #{contact},	
+        #{tel},	
+        #{vehicle_id},	
+        #{delivery_vehicle_company_id},	
+        #{delivery_vehicle_company_name},	
+        #{standard_amount},	
+        #{standard_time},	
+        #{standard_mileage},	
+        #{out_time_amount},	
+        #{out_mileage_amount},	
+        #{type},	
+        #{status},	
+        #{start_time},	
+        #{end_time},	
+        #{total_time},	
+        #{start_mileage},	
+        #{end_mileage},	
+        #{total_mileage},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        delivery_org_id,	
+		        delivery_org_name,	
+		        work_day,	
+		        vehicle_number,	
+		        contact,	
+		        tel,	
+		        vehicle_id,	
+		        delivery_vehicle_company_id,	
+		        delivery_vehicle_company_name,	
+		        standard_amount,	
+		        standard_time,	
+		        standard_mileage,	
+		        out_time_amount,	
+		        out_mileage_amount,	
+		        type,	
+		        status,	
+		        start_time,	
+		        end_time,	
+		        total_time,	
+		        start_mileage,	
+		        end_mileage,	
+		        total_mileage,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			delivery_vehicle_work_id = #{delivery_vehicle_work_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		    delivery_org_id = #{delivery_org_id},
+			delivery_org_name = #{delivery_org_name},
+			work_day = #{work_day},
+			vehicle_number = #{vehicle_number},
+			contact = #{contact},
+			tel = #{tel},
+			delivery_vehicle_company_id = #{delivery_vehicle_company_id},
+			delivery_vehicle_company_name = #{delivery_vehicle_company_name},
+			standard_amount = #{standard_amount},
+			standard_time = #{standard_time},
+			standard_mileage = #{standard_mileage},
+			out_time_amount = #{out_time_amount},
+			out_mileage_amount = #{out_mileage_amount},
+			type = #{type},
+			status = #{status},
+			updateby = #{updateby},	
+		    update_time = #{update_time},	
+		delivery_vehicle_work_id = delivery_vehicle_work_id
+		where 
+		delivery_vehicle_work_id = #{delivery_vehicle_work_id}
+	</update>
+	
+	<!-- 修改状态 -->
+	<update id="updateStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = #{status},
+			updateby = #{updateby},	
+		    update_time = #{update_time},	
+		delivery_vehicle_work_id = delivery_vehicle_work_id
+		where 
+		delivery_vehicle_work_id = #{delivery_vehicle_work_id}
+	</update>
+	
+	<!-- 修改使用记录 -->
+	<update id="updateUseLog" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		    <if test="start_time!= null and start_time != ''">
+				start_time = #{start_time},
+			</if>
+			<if test="end_time!= null and end_time != ''">
+				end_time = #{end_time},
+			</if>
+			<if test="total_time!= null and total_time != ''">
+				total_time = #{total_time},
+			</if>
+			<if test="start_mileage!= null and start_mileage != ''">
+				start_mileage = #{start_mileage},
+			</if>
+			<if test="end_mileage!= null and end_mileage != ''">
+				end_mileage = #{end_mileage},
+			</if>
+			<if test="total_mileage!= null and total_mileage != ''">
+				total_mileage = #{total_mileage},
+			</if>
+			updateby = #{updateby},	
+		    update_time = #{update_time},	
+		delivery_vehicle_work_id = delivery_vehicle_work_id
+		where 
+		delivery_vehicle_work_id = #{delivery_vehicle_work_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			delivery_vehicle_work_id = #{delivery_vehicle_work_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.workDay!= null and pd.workDay != ''">
+			and
+				(
+					work_day = #{pd.workDay}
+				)
+		</if>
+		<if test="pd.work_day!= null">
+			and
+				(
+					work_day = #{pd.work_day}
+				)
+		</if>
+		
+		<if test="pd.delivery_org_id!= null and pd.delivery_org_id != ''">
+			and
+				(
+					delivery_org_id = #{pd.delivery_org_id}
+				)
+		</if>
+		
+		<if test="pd.status!= null and pd.status != ''">
+			and
+				(
+					status = #{pd.status}
+				)
+		</if>
+		order by work_day desc,create_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			delivery_vehicle_work_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

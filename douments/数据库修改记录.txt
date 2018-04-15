@@ -1,0 +1,366 @@
+#2017-10-12--------
+#pgt_purchase_return_detail 添加字段 remain_quantity:剩余发货数量
+ALTER TABLE `erp`.`pgt_purchase_return_detail` ADD COLUMN `remain_quantity` int(11) DEFAULT 0 COMMENT '剩余未发货数量' AFTER `update_time`;
+
+#2017-10-12--------领料相关
+#pgt_purchase_material 添加字段 total_return_quantity:退货中数量
+ALTER TABLE `erp`.`pgt_purchase_material` ADD COLUMN `total_return_quantity` int(11) DEFAULT 0 COMMENT '退货中数量' AFTER `total_quantity`;
+#添加领料提交明细表pgt_purchase_material_commit
+CREATE TABLE `pgt_purchase_material_commit` (  `material_detail_id` bigint(20) NOT NULL AUTO_INCREMENT,  `purchase_code` varchar(50) NOT NULL COMMENT '采购订单编码',  `purchase_detail_id` bigint(20) NOT NULL,  `store_sn` varchar(20) DEFAULT NULL,  `store_name` varchar(50) DEFAULT NULL,  `sku_id` int(11) NOT NULL COMMENT '物料id',  `sku_encode` varchar(60) DEFAULT NULL,  `sku_name` varchar(100) DEFAULT NULL COMMENT '名称',  `spec` varchar(50) DEFAULT NULL COMMENT '规格',  `unit` varchar(50) DEFAULT NULL COMMENT '单位',  `quantity` int(11) NOT NULL DEFAULT '0' COMMENT '领料数量',  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0未提交、1已提交',  `createby` varchar(50) DEFAULT NULL,  `create_time` datetime DEFAULT NULL,  `updateby` varchar(50) DEFAULT NULL,  `update_time` datetime DEFAULT NULL,  PRIMARY KEY (`material_detail_id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='生产领料提交明细';
+#添加领料明细表pgt_purchase_material_detail
+CREATE TABLE `pgt_purchase_material_detail` (  `material_detail_id` bigint(20) NOT NULL AUTO_INCREMENT,,  `purchase_code` varchar(50) DEFAULT NULL,  `purchase_detail_id` bigint(20) DEFAULT NULL,  `purchase_material_id` bigint(20) DEFAULT NULL,  `store_sn` varchar(20) DEFAULT NULL,  `store_name` varchar(50) DEFAULT NULL,  `sku_id` int(11) NOT NULL COMMENT '物料id',  `sku_encode` varchar(60) DEFAULT NULL,  `sku_name` varchar(100) DEFAULT NULL COMMENT '名称',  `spec` varchar(50) DEFAULT NULL COMMENT '规格',  `unit` varchar(50) DEFAULT NULL COMMENT '单位',  `batch_code` varchar(60) DEFAULT NULL,  `quantity` int(11) NOT NULL DEFAULT '0' COMMENT '领料数量',  `status` int(11) DEFAULT NULL COMMENT '预留',  `createby` varchar(50) DEFAULT NULL,  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  `updateby` varchar(50) DEFAULT NULL,  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',  PRIMARY KEY (`material_detail_id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='生产领料明细';
+
+2017-10-16
+#采购组
+CREATE TABLE `pgt_purchase_group` (
+  `purchase_group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `purchase_group_name` varchar(30) NOT NULL COMMENT '采购组名称',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updateby` varchar(50) DEFAULT NULL,
+  `update_time` timestamp NULL DEFAULT '0000-00-00 00:00:00',
+  `type` int(1) NOT NULL DEFAULT '0' COMMENT '0:采购，1:生产',
+  PRIMARY KEY (`purchase_group_id`),
+  KEY `index_organization_name` (`purchase_group_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='采购组表';
+
+SET FOREIGN_KEY_CHECKS = 1;
+#采购组与用户关系表
+CREATE TABLE `pgt_purchase_group_user` (
+  `purchase_group_id` int(11) NOT NULL,
+  `user_id` varchar(32)
+  #采购表及明细加采购组ID
+  ALTER TABLE `erp`.`pgt_purchase` ADD COLUMN `purchase_group_id` int(11) COMMENT '采购组ID' AFTER `update_time`;
+  ALTER TABLE `erp`.`pgt_purchase_detail` ADD COLUMN `purchase_group_id` int(11) COMMENT '采购组ID' AFTER `update_time`;
+#修改更新时间字段
+ ALTER TABLE `pgt_inbound_notice` MODIFY COLUMN  `pre_arrival_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '预计到货时间'; 
+  
+ #2017-10-24物流功能
+#1.新建表--配送组织
+ CREATE TABLE `pgt_delivery_org` (
+  `delivery_org_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '配送组织id',
+  `delivery_org_code` varchar(50) NOT NULL COMMENT '配送组织code',
+  `delivery_org_name` varchar(50) NOT NULL COMMENT '配送组织name',
+  `user_id` varchar(50) NOT NULL COMMENT '配送组织user_id',
+  `user_name` varchar(50) NOT NULL COMMENT '配送组织user_name',
+  `user_tel` varchar(50) NOT NULL,
+  `user_address` varchar(128) DEFAULT NULL,
+  `type` int(11) NOT NULL COMMENT '0 自营 1 第三方',
+  `status` int(11) NOT NULL COMMENT '0 预留',
+  `store_sn` varchar(50) NOT NULL COMMENT '配送仓库编码',
+  `store_name` varchar(50) NOT NULL COMMENT '配送仓库',
+  `delivery_store_sn` varchar(50) NOT NULL COMMENT '备货仓库编码',
+  `delivery_store_name` varchar(50) NOT NULL COMMENT '备货仓库',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updateby` varchar(50) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`delivery_org_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送组织'; 
+
+#2.新建表--配送车辆公司
+CREATE TABLE `pgt_delivery_vehicle_company` (
+  `delivery_vehicle_company_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `delivery_org_id` int(11) NOT NULL COMMENT '配送组织id',
+  `name` varchar(50) NOT NULL COMMENT '公司名称',
+  `contact` varchar(50) NOT NULL COMMENT '联系人',
+  `tel` varchar(50) NOT NULL COMMENT '联系电话',
+  `address` varchar(50) NOT NULL COMMENT '联系地址',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '0 类型',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0 状态',
+  `standard_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准金额',
+  `standard_time` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准时间',
+  `standard_mileage` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准里程',
+  `out_time_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准时间外金额',
+  `out_mileage_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准里程外金额',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updateby` varchar(50) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`delivery_vehicle_company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送车辆公司';
+
+#3.新建表--配送组织人员公司
+CREATE TABLE `pgt_delivery_user_company` (
+  `delivery_user_company_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `delivery_org_id` int(11) NOT NULL COMMENT '配送组织id',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `contact` varchar(50) NOT NULL COMMENT '联系人',
+  `tel` varchar(50) NOT NULL COMMENT '电话',
+  `address` varchar(50) NOT NULL COMMENT '地址',
+  `standard_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准金额',
+  `standard_quantity` int(11) NOT NULL DEFAULT '0' COMMENT '标准金额',
+  `out_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准金额',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '0 类型',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0 状态',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updateby` varchar(50) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`delivery_user_company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送组织人员公司';
+
+#4.新建表--配送任务
+CREATE TABLE `pgt_delivery_tasks` (
+  `delivery_tasks_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `delivery_tasks_code` varchar(50) NOT NULL COMMENT 'code',
+  `delivery_org_id` int(11) NOT NULL DEFAULT '0' COMMENT '组织id',
+  `work_day` varchar(128) DEFAULT NULL COMMENT 'YYYYMMDD',
+  `delivery_vehicle_work_id` int(11) DEFAULT NULL COMMENT '配送车辆工作id',
+  `vehicle_number` varchar(128) DEFAULT NULL COMMENT '车牌号',
+  `vehicle_contact` varchar(128) DEFAULT NULL COMMENT '车辆联系人',
+  `vehicle_tel` varchar(128) DEFAULT NULL COMMENT '车辆联系电话',
+  `user_id` varchar(128) DEFAULT NULL COMMENT '配送人id',
+  `user_name` varchar(128) DEFAULT NULL COMMENT '配送人姓名',
+  `user_tel` varchar(128) DEFAULT NULL COMMENT '配送人联系电话',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '0 本公司 1 第三方',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0 未上岗 1 配送中 2 已完成',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updateby` varchar(50) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`delivery_tasks_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送任务';
+
+#5.新建表--配送车辆工作
+CREATE TABLE `pgt_delivery_vehicle_work` (
+  `delivery_vehicle_work_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `delivery_org_id` int(11) NOT NULL DEFAULT '0' COMMENT '配送组织id',
+  `delivery_org_name` varchar(50) DEFAULT NULL COMMENT '配送组织名称',
+  `work_day` varchar(50) DEFAULT NULL COMMENT 'YYYYMMDD',
+  `vehicle_number` varchar(50) DEFAULT NULL COMMENT '车牌号',
+  `contact` varchar(50) DEFAULT NULL COMMENT '联系人',
+  `tel` varchar(50) DEFAULT NULL COMMENT '联系电话',
+  `vehicle_id` int(11) DEFAULT NULL COMMENT '预留',
+  `delivery_vehicle_company_id` int(11) DEFAULT NULL COMMENT '所属公司id',
+  `delivery_vehicle_company_name` varchar(50) DEFAULT NULL COMMENT '所属公司名称',
+  `standard_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准金额',
+  `standard_time` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准时间',
+  `standard_mileage` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准金额',
+  `out_time_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准金额',
+  `out_mileage_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '标准金额',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '0 本公司 1 第三方',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0 未上岗 1 配送中 2 已完成',
+  `start_time` timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '出勤时间',
+  `end_time` timestamp DEFAULT '0000-00-00 00:00:00' COMMENT '退勤时间',
+  `total_time` decimal(10,2) DEFAULT '0.00' COMMENT '工作时间',
+  `start_mileage` decimal(10,2) DEFAULT '0.00' COMMENT '出勤里程',
+  `end_mileage` decimal(10,2) DEFAULT '0.00' COMMENT '退勤里程',
+  `total_mileage` decimal(10,2) DEFAULT '0.00' COMMENT '行驶里程',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updateby` varchar(50) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`delivery_vehicle_work_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送车辆工作';
+
+#6.新建表--配送车辆工作文件
+CREATE TABLE `pgt_delivery_vehicle_work_file` (
+  `delivery_vehicle_work_file_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `delivery_org_id` int(11) NOT NULL DEFAULT '0' COMMENT '配送组织id',
+  `vehicle_id` int(11) NOT NULL DEFAULT '0' COMMENT '预留',
+  `delivery_vehicle_work_id` int(11) NOT NULL COMMENT '配送车辆工作id',
+  `url` varchar(128) NOT NULL DEFAULT '' COMMENT 'URL',
+  `remarks` varchar(128) NOT NULL DEFAULT '' COMMENT '说明',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0 状态',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updateby` varchar(50) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`delivery_vehicle_work_file_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送车辆工作文件';
+
+#配送组织编码
+INSERT INTO `serial_config` ( `type_code`, `type_name`, `latest_no`, `code_length`, `code_prefix`, `remark`) VALUES ( 'deliveryorg', '配送组织', '0', '8', 'DEY', '配送组织编码');
+#配送任务编码
+INSERT INTO `serial_config` VALUES  ('23', 'delivery_task', '配送任务', '1', '8', 'DET', '配送任务');
+
+#配送人员
+CREATE TABLE `pgt_delivery_member` (
+  `delivery_member_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `user_id` varchar(100) NOT NULL COMMENT '系统用户id',
+  `delivery_org_id` int(11) NOT NULL COMMENT '配送组织id',
+  `delivery_user_company_id` int(11) NOT NULL COMMENT '配送人员公司id',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '1、自营	2、第三方',
+  `work_type` int(11) NOT NULL DEFAULT '0' COMMENT '岗位类型、预留',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '0 状态',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updateby` varchar(50) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`delivery_member_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='配送人员';
+
+#订单新加字段
+ALTER TABLE `pgt_order`
+ADD COLUMN `shipping_status`  int NULL DEFAULT 0 COMMENT '订单物流状态' ;
+ALTER TABLE `pgt_order`
+ADD COLUMN `delivery_tasks_code` varchar(50) DEFAULT NULL  COMMENT '配送任务编码' ;
+ALTER TABLE `pgt_order`
+ADD COLUMN `delivery_org_id`  int NULL DEFAULT 0 COMMENT '配送组织' ;
+
+#物流公司
+CREATE TABLE `pgt_logistics_company` (
+  `logistics_company_id` int(11) NOT NULL AUTO_INCREMENT,
+  `logistics_company_code` varchar(128) DEFAULT NULL,
+  `logistics_company_name` varchar(128) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL COMMENT '预留',
+  `createby` varchar(128) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `updateby` varchar(128) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`logistics_company_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
+
+#物流公司编码
+INSERT INTO `serial_config` ( `type_code`, `type_name`, `latest_no`, `code_length`, `code_prefix`, `remark`) VALUES ( 'logisticscompany', '物流公司编码', '0', '8', 'LC', '物流公司编码');
+
+#物流日志
+CREATE TABLE `pgt_delivery_log` (
+  `delivery_log_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '物流日志id',
+  `order_sn` varchar(128) NOT NULL COMMENT '订单编码',
+  `delivery_log_content` varchar(512) NOT NULL COMMENT '物流日志内容',
+  `delivery_log_time` timestamp NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '物流日志时间',
+  `delivery_log_status` int(11) NOT NULL DEFAULT '0' COMMENT '物流日志状态 0、初始化状态 1、已推送商城',
+  `createby` varchar(50) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updateby` varchar(50) NOT NULL,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`delivery_log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='物流日志';
+#20171115
+ALTER TABLE `erp`.`pgt_purchase` 
+ADD COLUMN `commit_time` timestamp NULL COMMENT '提交时间' AFTER `purchase_group_id`,
+ ADD COLUMN `commitby` varchar(50) COMMENT '提交人' AFTER `commit_time`,
+  ADD COLUMN `complete_time` timestamp NULL COMMENT '完成时间' AFTER `commitby`,
+   ADD COLUMN `completeby` varchar(50) COMMENT '完成人' AFTER `complete_time`,
+    ADD COLUMN `audit_time` timestamp NULL AFTER `completeby`, 
+    ADD COLUMN `auditby` varchar(50) COMMENT '审核人' AFTER `audit_time`;
+ 
+ #20171120	商城发货单编码
+ INSERT INTO `serial_config` ( `type_code`, `type_name`, `latest_no`, `code_length`, `code_prefix`, `remark`) VALUES ( 'deliverygoods', '发货单编码', '0', '8', 'DGS', '发货单编码');
+
+  #20171122	、 
+ ALTER TABLE `pgt_allocation` 
+ ADD COLUMN `commit_time` timestamp NULL COMMENT '提交时间' AFTER `update_time`,
+ ADD COLUMN `commitby` varchar(50) COMMENT '提交人' AFTER `commit_time`,
+ COLUMN `auditby` varchar(50) COMMENT '审核人' AFTER `commitby`
+ ADD COLUMN `audit_time` timestamp NULL  COMMENT '审核时间' AFTER `auditby`
+ 
+ #到货预通知20171122
+ create table pgt_inbound_pre_notice like pgt_inbound_notice;
+create table pgt_inbound_pre_notice_detail like pgt_inbound_notice_detail;
+ALTER TABLE `erp_test`.`pgt_inbound_pre_notice` DROP COLUMN `inbound_notice_id`, ADD COLUMN `inbound_pre_notice_code` varchar(50) NOT NULL AFTER `update_time`, DROP PRIMARY KEY, ADD PRIMARY KEY (`inbound_pre_notice_code`);
+ALTER TABLE `erp_1116`.`pgt_inbound_pre_notice` ADD COLUMN `purchase_group_id` bigint(20) COMMENT '采购组' AFTER `inbound_pre_notice_code`;
+ #20171122 物料添加属性
+ alter table szy_goods_6 add column `is_combination_goods` int(1) not null DEFAULT 0 COMMENT '是否组合商品0非1是' AFTER `is_self_goods`;
+ #报损修改
+  alter table pgt_scrap add column `commitby` varchar(50) NULL DEFAULT NULL COMMENT '提交人' AFTER `create_time`;
+  alter table pgt_scrap add column `commit_time` timestamp NULL DEFAULT NULL COMMENT '提交时间' AFTER `create_time`;
+   alter table pgt_scrap add column `verifyby` varchar(50) NULL DEFAULT NULL COMMENT '审核人' AFTER `create_time`;
+    alter table pgt_scrap add column `verify_time` timestamp NULL DEFAULT NULL COMMENT '审核时间' AFTER `create_time`;
+#不良品提报
+ alter table pgt_defective_goods add column `commitby` varchar(50) NULL DEFAULT NULL COMMENT '提交人' AFTER `audit_time`;
+  alter table pgt_defective_goods add column `commit_time` timestamp NULL DEFAULT NULL COMMENT '提交时间' AFTER `audit_time`;
+
+ #20170929其它出入库
+ALTER TABLE `erp_test`.`pgt_other_instorage` ADD COLUMN `commit_time` datetime AFTER `type`, ADD COLUMN `commitby` varchar(50) AFTER `commit_time`;
+ALTER TABLE `erp_0924`.`pgt_other_outstorage` ADD COLUMN `commit_time` datetime , ADD COLUMN `commitby` varchar(50) AFTER `commit_time`;
+
+#20171201 内销管理
+  ADD COLUMN `commitby` varchar(50) DEFAULT NULL COMMENT '提交人',;
+  ADD COLUMN `commit_time` datetime DEFAULT NULL COMMENT '提交时间',;
+  ADD COLUMN `priceby` varchar(50) DEFAULT NULL COMMENT '定价人',;
+  ADD COLUMN `price_time` datetime DEFAULT NULL COMMENT '定价时间',;
+  
+#20171206
+#逾期预警表
+create table pgt_warning_expire
+(
+   warning_expire_id    int(11) not null,
+   warning_date         timestamp,
+   store_id             int(11),
+   store_sn             varchar(128),
+   store_name           varchar(128),
+   sku_id               int(11),
+   sku_encode           varchar(128),
+   sku_name             varchar(128),
+   spec                 varchar(128),
+   unit_name            varchar(128),
+   warning_days         int(11),
+   quantity             int(11),
+   createby             varchar(128),
+   create_time          timestamp,
+   updateby             varchar(128),
+   update_time          timestamp,
+   primary key (warning_expire_id)
+);
+#逾期预警批次表
+create table pgt_warning_expire_batch
+(
+   warning_expire_batch_id int(11) not null,
+   warning_date         timestamp,
+   store_id             int(11),
+   store_sn             varchar(128),
+   store_name           varchar(128),
+   sku_id               int(11),
+   sku_encode           varchar(128),
+   sku_name             varchar(128),
+   spec                 varchar(128),
+   unit_name            varchar(128),
+   batch_code           varchar(128),
+   quantity             int(11),
+   createby             varchar(128),
+   create_time          timestamp,
+   updateby             varchar(128),
+   update_time          timestamp,
+   primary key (warning_expire_batch_id)
+);
+
+#20171207
+#库存线表
+create table pgt_goods_quantity_line
+(
+   goods_quantity_line_id int(11) not null,
+   sku_id               int(11),
+   store_id             int(11),
+   min_quantity         int(11),
+   max_quantity         int(11),
+   createby             varchar(128),
+   create_time          datetime,
+   updateby             varchar(128),
+   update_time          datetime,
+   primary key (goods_quantity_line_id)
+);
+#库存预警表
+create table pgt_warning_quantity_line
+(
+   warning_quantity_line_id int(11) not null,
+   warning_date         timestamp,
+   type                 int(11) comment '0:库存过低 1:库存过高',
+   store_id             int(11),
+   store_sn             varchar(128),
+   store_name           varchar(128),
+   sku_id               int(11),
+   sku_encode           varchar(128),
+   sku_name             varchar(128),
+   spec                 varchar(128),
+   unit_name            varchar(128),
+   min_quantity         int(11),
+   max_quantity         int(11),
+   quantity             int(11),
+   createby             varchar(128),
+   create_time          timestamp,
+   updateby             varchar(128),
+   update_time          timestamp,
+   primary key (warning_quantity_line_id)
+);
+
+#内销管理添加字段20171208
+ alter table pgt_direct_sales add column `shareby` varchar(50) NULL DEFAULT NULL COMMENT '分摊人' AFTER `audit_time`;
+  alter table pgt_direct_sales add column `share_time` timestamp NULL DEFAULT NULL COMMENT '分摊时间' AFTER `audit_time`;
+alter table pgt_direct_sales add column `amount` decimal(18,2) NULL DEFAULT NULL COMMENT '总金额' AFTER `audit_time`;
+
+
+  
+  

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BatchMapper">
+	
+	<select id="findByBatchCode" parameterType="pd" resultType="pd">
+		select 
+			pgt_purchase.purchase_code,
+			pgt_purchase.supplier_name,
+			pgt_purchase_group.purchase_group_name,
+			pgt_purchase.purchase_date,
+			pgt_purchase.commitby,
+			pgt_purchase.commit_time,
+			pgt_purchase.auditby,
+			pgt_purchase.audit_time,
+			
+			pgt_inbound_pre_notice.inbound_pre_notice_code,
+			pgt_inbound_pre_notice.store_sn,
+			pgt_inbound_pre_notice.store_name,
+			pgt_inbound_pre_notice.pre_arrival_time,
+			pgt_inbound_pre_notice.createby notice_commitby,
+			pgt_inbound_pre_notice.create_time notice_commit_time,
+			pgt_inbound_pre_notice.updateby notice_auditby,
+			pgt_inbound_pre_notice.update_time notice_audit_time
+
+		from 
+			pgt_inbound_check_detail
+		LEFT JOIN 
+			pgt_inbound_pre_notice
+		ON 
+			pgt_inbound_check_detail.purchase_code = pgt_inbound_pre_notice.inbound_pre_notice_code
+		LEFT JOIN 
+			pgt_purchase
+		ON 
+			pgt_inbound_pre_notice.purchase_code = pgt_purchase.purchase_code
+		LEFT JOIN 
+			pgt_purchase_group
+		ON
+			pgt_purchase.purchase_group_id = pgt_purchase_group.purchase_group_id
+		where 
+			pgt_inbound_check_detail.batch_code = #{batch_code}
+	</select>
+	
+	<select id="listCheckByBatchCode" parameterType="pd" resultType="pd">
+		select 
+			pgt_inbound_check_detail_id,	
+			inbound_notice_code,	
+			notice_detail_id,	
+			purchase_code,	
+			purchase_detail_id,	
+			inbound_notice_stock_batch_id,	
+			sku_id,	
+			sku_name,	
+			sku_encode,	
+			total_quantity,	
+			good_quantity,	
+			bad_quantity,	
+			scrap_quantity,	
+			bad_deal_type,	
+			spec,	
+			unit_name,	
+			batch_code,
+			createby,	
+			create_time,	
+			updateby,	
+			update_time,
+			commit_time,
+			note,
+			status
+		from 
+			pgt_inbound_check_detail
+		where 
+			batch_code = #{batch_code}
+	</select>
+	
+	<select id="listInboundByBatchCode" parameterType="pd" resultType="pd">
+		select 
+			pgt_inbound_stock_batch.quantity,
+			pgt_inbound.inbound_code,
+			pgt_inbound.inbound_type,
+			pgt_inbound.inbound_notice_code,
+			pgt_inbound.purchase_code,
+			pgt_inbound.store_sn,
+			pgt_inbound.store_name,
+			pgt_inbound.createby,
+			pgt_inbound.create_time
+		from 
+			pgt_inbound_stock_batch
+		left join 
+			pgt_inbound
+		on
+			pgt_inbound_stock_batch.inbound_code = pgt_inbound.inbound_code
+		where 
+			pgt_inbound_stock_batch.batch_code = #{batch_code}
+	</select>
+	
+	<select id="listOutBoundByBatchCode" parameterType="pd" resultType="pd">
+		select 
+			pgt_outbound_stock_batch.quantity,
+			pgt_outbound.out_bound_code,
+			pgt_outbound.type,
+			pgt_outbound.outbound_notice_code,
+			pgt_outbound.purchase_code,
+			pgt_outbound.store_sn,
+			pgt_outbound.store_name,
+			pgt_outbound.createby,
+			pgt_outbound.create_time
+		from 
+			pgt_outbound_stock_batch
+		left join 
+			pgt_outbound
+		on
+			pgt_outbound_stock_batch.outbound_code = pgt_outbound.out_bound_code
+		where 
+			batch_code = #{batch_code}
+	</select>
+</mapper>

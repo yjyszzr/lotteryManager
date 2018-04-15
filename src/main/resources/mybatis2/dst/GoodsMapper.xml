@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		szy_goods_6 g
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		g.goods_name,	
+		g.cat_id,	
+		g.sku_id,	
+		g.goods_barcode,
+		g.shop_goods_barcode,	
+		g.unit_id,	
+		g.brand_id,	
+		g.shelf_life,	
+		g.store_id,	
+		g.valuation_type,	
+		g.member_price,	
+		g.member_rebate,	
+		g.supplier_id,	
+		g.group_goods_price,	
+		g.goods_images,	
+		g.goods_attr,	
+		g.is_delete,	
+		g.is_open_batch_shelf_life,	
+		g.shelf_life_warn_days,	
+		g.is_stock_warn,	
+		g.min_number_warn,	
+		g.max_number_warn,	
+		g.is_first_set,	
+		g.remark,	
+		g.is_comb_prod,	
+		g.admin_id,	
+		g.add_time,	
+		g.last_time,	
+		g.unit_name,	
+		g.isopen_batch,	
+		g.spec,	
+		g.attr_cate,	
+		g.tax_rate,	
+		g.weight,
+		g.goods_id,
+		g.quality_period,
+		g.cat_id1,
+		g.cat_id2,
+		g.cat_id3,
+		g.is_pre_sales,
+		g.is_self_goods,
+		g.is_combination_goods
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{goods_name},	
+        #{cat_id},	
+        #{sku_id},	
+        #{goods_barcode},	
+        #{shop_goods_barcode},	
+        #{unit_id},	
+        #{brand_id},	
+        #{shelf_life},	
+        #{store_id},	
+        #{valuation_type},	
+        #{member_price},	
+        #{member_rebate},	
+        #{supplier_id},	
+        #{group_goods_price},	
+        #{goods_images},	
+        #{goods_attr},	
+        #{is_delete},	
+        #{is_open_batch_shelf_life},	
+        #{shelf_life_warn_days},	
+        #{is_stock_warn},	
+        #{min_number_warn},	
+        #{max_number_warn},	
+        #{is_first_set},	
+        #{remark},	
+        #{is_comb_prod},	
+        #{admin_id},	
+        #{add_time},	
+        #{last_time},	
+        #{unit_name},	
+        #{isopen_batch},	
+        #{spec},	
+        #{attr_cate},	
+        #{tax_rate},
+        #{weight},
+        #{quality_period},
+        #{cat_id1},
+        #{cat_id2},
+        #{cat_id3},
+        #{is_pre_sales},
+        #{is_self_goods},
+        #{is_combination_goods}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd" useGeneratedKeys="true"  keyProperty="goods_id">
+		insert into szy_goods_6
+		(
+		        goods_name,	
+		        cat_id,	
+		        sku_id,	
+		        goods_barcode,
+		        shop_goods_barcode,
+		        unit_id,	
+		        brand_id,	
+		        shelf_life,	
+		        store_id,	
+		        valuation_type,	
+		        member_price,	
+		        member_rebate,	
+		        supplier_id,	
+		        group_goods_price,	
+		        goods_images,	
+		        goods_attr,	
+		        is_delete,	
+		        is_open_batch_shelf_life,	
+		        shelf_life_warn_days,	
+		        is_stock_warn,	
+		        min_number_warn,	
+		        max_number_warn,	
+		        is_first_set,	
+		        remark,	
+		        is_comb_prod,	
+		        admin_id,	
+		        add_time,	
+		        last_time,	
+		        unit_name,	
+		        isopen_batch,	
+		        spec,	
+		        attr_cate,	
+		        tax_rate,
+		        weight,
+		        quality_period,
+				cat_id1,
+				cat_id2,
+				cat_id3,
+		        is_pre_sales,
+		        is_self_goods,
+		        is_combination_goods	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from szy_goods_6
+		where goods_id = #{goods_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			goods_name = #{goods_name},
+			goods_barcode = #{goods_barcode},
+			shop_goods_barcode = #{shop_goods_barcode},
+			quality_period = #{quality_period},
+			unit_id = #{unit_id},
+			unit_name = #{unit_name},
+			supplier_id = #{supplier_id},
+			isopen_batch = #{isopen_batch},
+			spec = #{spec},
+			attr_cate = #{attr_cate},
+			tax_rate = #{tax_rate},
+			weight = #{weight},
+			quality_period = #{quality_period},
+			cat_id1 = #{cat_id1},
+			cat_id2 = #{cat_id2},
+			cat_id3 = #{cat_id3},
+			is_pre_sales = #{is_pre_sales},
+			is_self_goods = #{is_self_goods},
+			is_combination_goods = #{is_combination_goods},
+		goods_id = goods_id
+		where 
+		goods_id = #{goods_id}
+	</update>
+	<update id="updateSynState" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			is_syn = 1,
+			syn_date = #{syn_date}
+		where 
+		goods_id = #{goods_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findByGoodsId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			g.goods_id = #{goods_id}
+	</select>
+	<!-- 通过skuId反查商品 -->
+	<select id="findBySkuId" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> 
+		 inner join szy_goods_sku_6 s on g.goods_id=s.goods_id
+		where 
+			s.sku_id = #{sku_id}
+	</select>
+	
+	<select id="findBySkuEncode" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> 
+		 inner join szy_goods_sku_6 s on g.goods_id=s.goods_id
+		where 
+			s.sku_encode = #{sku_encode}
+	</select>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		s.sku_encode,
+		s.goods_price,
+		ss.supplier_name,
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		, szy_goods_sku_6 s, szy_supplier ss
+		where g.goods_id = s.goods_id and
+			g.goods_id = #{goods_id}
+			and ss.supplier_id = g.supplier_id
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		s.sku_encode,
+		s.goods_price,
+		g.is_syn,
+		g.syn_date,
+		s.sku_id parent_sku_id,
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		, szy_goods_sku_6 s
+		where 1=1 and g.goods_id = s.goods_id 
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					g.goods_name LIKE CONCAT('%', #{pd.keywords},'%')
+				)
+		</if>
+		<if test="pd.sku_encode!= null and pd.sku_encode != ''"><!-- 关键词检索 -->
+			and s.sku_encode=#{pd.sku_encode}
+		</if>
+		<if test="pd.cat_id1!= null and pd.cat_id1 != ''"><!-- 关键词检索 -->
+			and g.cat_id1=#{pd.cat_id1}
+		</if>
+		<if test="pd.cat_id2!= null and pd.cat_id2 != ''"><!-- 关键词检索 -->
+			and g.cat_id2=#{pd.cat_id2}
+		</if>
+		<if test="pd.cat_id3!= null and pd.cat_id3 != ''"><!-- 关键词检索 -->
+			and g.cat_id3=#{pd.cat_id3}
+		</if>
+		order by g.add_time desc
+	</select>
+	
+	<select id="querylistPage" parameterType="page" resultType="pd">
+		select
+		s.sku_encode,
+		s.sku_barcode,
+		s.sku_name,
+		s.goods_price,
+		g.is_syn,
+		g.syn_date,
+		s.sku_id parent_sku_id,
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		, szy_goods_sku_6 s
+		where 1=1 and g.goods_id = s.goods_id 
+		<if test="pd.sku_encode!= null and pd.sku_encode != ''">
+			and 
+			    (
+					s.sku_encode LIKE CONCAT('%', #{pd.sku_encode},'%')
+				)
+		</if>
+		<if test="pd.sku_barcode!= null and pd.sku_barcode != ''">
+			and 
+			    (
+					s.sku_barcode LIKE CONCAT('%', #{pd.sku_barcode},'%')
+				)
+		</if>
+		<if test="pd.sku_name!= null and pd.sku_name != ''">
+			and 
+			    (
+					s.sku_name LIKE CONCAT('%', #{pd.sku_name},'%')
+				)
+		</if>
+		<if test="pd.attr_cate!= null and pd.attr_cate != ''">
+			and g.attr_cate=#{pd.attr_cate}
+		</if>
+		<if test="pd.is_pre_sales!= null and pd.is_pre_sales != ''">
+			and g.is_pre_sales=#{pd.is_pre_sales}
+		</if>
+		<if test="pd.is_self_goods!= null and pd.is_self_goods != ''">
+			and g.is_self_goods=#{pd.is_self_goods}
+		</if>
+		order by g.add_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		s.sku_encode,
+		s.sku_name,
+		s.goods_price,
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		, szy_goods_sku_6 s
+		where g.goods_id = s.goods_id 
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			goods_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<select id="listUnits" parameterType="pd" resultType="pd">
+		select unit_id, unit_name from szy_goods_unit where 1=1 order by unit_id 
+	</select>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

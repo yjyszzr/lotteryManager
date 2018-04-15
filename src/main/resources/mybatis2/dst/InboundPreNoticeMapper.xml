@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InboundPreNoticeMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_inbound_pre_notice
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		inbound_pre_notice_code,	
+		inbound_notice_code,	
+		bill_type,	
+		purchase_code,	
+		purchase_detail_id,	
+		pre_arrival_time,	
+		arrival_time,	
+		store_sn,	
+		store_name,	
+		status,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,
+		purchase_group_id,
+		audit_time,
+		auditby
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{inbound_pre_notice_code},	
+        #{inbound_notice_code},	
+        #{bill_type},	
+        #{purchase_code},	
+        #{purchase_detail_id},	
+        #{pre_arrival_time},	
+        #{arrival_time},	
+        #{store_sn},	
+        #{store_name},	
+        #{status},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time},	
+        #{purchase_group_id}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        inbound_pre_notice_code,	
+		        inbound_notice_code,	
+		        bill_type,	
+		        purchase_code,	
+		        purchase_detail_id,	
+		        pre_arrival_time,	
+		        arrival_time,	
+		        store_sn,	
+		        store_name,	
+		        status,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time,
+		        purchase_group_id
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			inbound_pre_notice_code = #{inbound_pre_notice_code}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		<if test="status != null and  status!= ''">
+			 status= #{status},
+		</if>
+		<if test="audit_time != null">
+			 audit_time= #{audit_time},
+		</if>
+		<if test="auditby != null and auditby!=''">
+			 auditby= #{auditby},
+		</if>
+			<!-- inbound_notice_code = #{inbound_notice_code},
+			purchase_code = #{purchase_code},
+			pre_arrival_time = #{pre_arrival_time},
+			store_sn = #{store_sn},
+			store_name = #{store_name},
+			status = #{status},
+			createby = #{createby},
+			create_time = #{create_time}, -->
+		inbound_pre_notice_code = inbound_pre_notice_code
+		where 
+		inbound_pre_notice_code = #{inbound_pre_notice_code}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			inbound_pre_notice_code = #{inbound_pre_notice_code}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.status != null and  pd.status!= ''">
+			and	 status= #{pd.status} 
+		</if>
+		<if test="pd.inbound_pre_notice_code != null and  pd.inbound_pre_notice_code!= ''">
+			and	 inbound_pre_notice_code= #{pd.inbound_pre_notice_code} 
+		</if>
+		<if test="pd.purchase_group_id!=null and pd.purchase_group_id!=''">
+			and (
+				purchase_group_id = #{pd.purchase_group_id}
+			)
+		</if>
+		<if test="pd.purchase_code!=null and pd.purchase_code!=''">
+			and (
+				purchase_code = #{pd.purchase_code}
+			)
+		</if>
+		<if test="pd.purchase_group_ids!=null and pd.purchase_group_ids!=''">
+			and (
+			purchase_group_id in 
+				${pd.purchase_group_ids}
+			)
+		</if>
+		<if test="pd.bill_type!=null and pd.bill_type!=''">
+			and (
+			bill_type =	#{pd.bill_type}
+			)
+		</if>
+		order by create_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		order by create_time desc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			inbound_pre_notice_code in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

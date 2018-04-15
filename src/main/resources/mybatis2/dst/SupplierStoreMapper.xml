@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SupplierStoreMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_supplier_store
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		supplier_store_id,	
+		supplier_sn,	
+		supplier_name,	
+		store_sn,	
+		store_name,	
+		status,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{supplier_sn},	
+        #{supplier_name},	
+        #{store_sn},	
+        #{store_name},	
+        #{status},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" useGeneratedKeys="true"  keyProperty="supplier_store_id" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        supplier_sn,	
+		        supplier_name,	
+		        store_sn,	
+		        store_name,	
+		        status,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			supplier_store_id = #{supplier_store_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			supplier_sn = #{supplier_sn},
+			supplier_name = #{supplier_name},
+			store_sn = #{store_sn},
+			store_name = #{store_name}
+		where 
+		supplier_store_id = #{supplier_store_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			supplier_store_id = #{supplier_store_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.supplier_sn!= null and pd.supplier_sn != ''"><!-- 关键词检索 -->
+			and
+				(
+                   supplier_sn LIKE CONCAT(CONCAT('%', #{pd.supplier_sn}),'%')
+				   or 
+				   supplier_name LIKE CONCAT(CONCAT('%', #{pd.supplier_sn}),'%') 
+				<!--	根据需求自己加检索条件
+					supplier_sn LIKE CONCAT(CONCAT('%', #{pd.supplier_sn}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''"><!-- 关键词检索 -->
+			and
+				(
+                   store_sn LIKE CONCAT(CONCAT('%', #{pd.store_sn}),'%')
+				   or 
+				   store_name LIKE CONCAT(CONCAT('%', #{pd.store_sn}),'%') 
+				<!--	根据需求自己加检索条件
+					supplier_sn LIKE CONCAT(CONCAT('%', #{pd.supplier_sn}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			supplier_store_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	<!-- 通过ID获取数据 -->
+	<select id="findBySupplierAndStore" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			supplier_sn = #{supplier_sn}
+			and
+			store_sn = #{store_sn}
+	</select>
+	<!-- fh313596790qq(青苔) -->
+</mapper>

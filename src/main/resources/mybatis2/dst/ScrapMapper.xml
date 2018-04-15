@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ScrapMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_scrap
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		scrap_code,
+		store_sn,
+		store_name,
+		status,
+		remark,
+		auditby,
+		audit_time,
+		createby,
+		create_time,
+		updateby,
+		updatetime,
+		scrap_id,
+		commitby,
+		commit_time,
+		verifyby,
+		verify_time
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{scrap_code},
+		#{store_sn},
+		#{store_name},
+		#{status},
+		#{remark},
+		#{auditby},
+		#{audit_time},
+		#{createby},
+		#{create_time},
+		#{updateby},
+		#{updatetime}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		scrap_code,
+		store_sn,
+		store_name,
+		status,
+		remark,
+		auditby,
+		audit_time,
+		createby,
+		create_time,
+		updateby,
+		updatetime
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		scrap_id = #{scrap_id}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="editStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		status = #{status},
+		updateby=#{updateby},
+		updatetime=#{updatetime}
+		where 1=1
+		<if test="scrap_id!= null and scrap_id != ''">
+			and scrap_id = #{scrap_id}
+		</if>
+		<if test="scrap_code != null and scrap_code != ''">
+			and scrap_code = #{scrap_code}
+		</if>
+	</update>
+	<update id="commit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		status = #{status},
+		updateby=#{updateby},
+		updatetime=#{updatetime},
+		commitby=#{commitby},
+		commit_time=#{commit_time}
+		where 1=1
+		<if test="scrap_id!= null and scrap_id != ''">
+			and scrap_id = #{scrap_id}
+		</if>
+		<if test="scrap_code != null and scrap_code != ''">
+			and scrap_code = #{scrap_code}
+		</if>
+	</update>
+	<update id="verify" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		status = #{status},
+		updateby=#{updateby},
+		updatetime=#{updatetime},
+		verifyby=#{verifyby},
+		verify_time=#{verify_time}
+		where 1=1
+		<if test="scrap_id!= null and scrap_id != ''">
+			and scrap_id = #{scrap_id}
+		</if>
+		<if test="scrap_code != null and scrap_code != ''">
+			and scrap_code = #{scrap_code}
+		</if>
+	</update>
+	<update id="completeCheck" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		status = #{status},
+		auditby=#{auditby},
+		audit_time=#{audit_time},
+		updateby=#{updateby},
+		updatetime=#{updatetime}
+		where
+		scrap_id = #{scrap_id}
+	</update>
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		remark = #{remark},
+		updateby=#{updateby},
+		updatetime=#{updatetime}
+		where
+		scrap_id = #{scrap_id}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		scrap_id = #{scrap_id}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		ss.store_id,
+		ps.scrap_code,
+		ps.store_sn,
+		ps.store_name,
+		ps.status,
+		ps.remark,
+		ps.auditby,
+		ps.audit_time,
+		ps.createby,
+		ps.create_time,
+		ps.updateby,
+		ps.updatetime,
+		ps.scrap_id,
+		commitby,
+		commit_time,
+		verifyby,
+		verify_time
+		from pgt_scrap ps, szy_store ss
+		where 1=1 and ps.store_sn= ss.store_sn
+		and ps.store_sn in
+		<foreach item="item" index="index" collection="pd.my_store"
+			open="(" separator="," close=")">
+			#{pd.my_store[${index}]}
+		</foreach>
+
+		<if test="pd.status!= null and pd.status != ''">
+			and ps.status = #{pd.status}
+		</if>
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.scrap_code LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_sn LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.keywords},'%')
+
+			)
+		</if>
+		<if test="pd.store!= null and pd.store != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.store_sn LIKE CONCAT('%', #{pd.store},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.store},'%')
+
+			)
+		</if>
+		<if test="pd.scrap_code!= null and pd.scrap_code != ''">
+			and ps.scrap_code = #{pd.scrap_code}
+		</if>
+		<if test="pd.lastStart!= null and pd.lastStart != ''">
+			and (
+			ps.audit_time &gt; #{pd.lastStart}
+			or
+			ps.create_time &gt; #{pd.lastStart}
+			or
+			ps.updatetime &gt; #{pd.lastStart}
+			)
+		</if>
+		<if test="pd.lastEnd!= null and pd.lastEnd != ''">
+			and (
+			ps.audit_time &lt; #{pd.lastEnd}
+			or
+			ps.create_time &lt; #{pd.lastEnd}
+			or
+			ps.updatetime &lt; #{pd.lastEnd}
+			)
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and
+			(
+			ps.store_sn = #{pd.store_sn}
+			)
+		</if>
+		order by ps.create_time desc
+	</select>
+	<select id="datalistPage3" parameterType="page" resultType="pd">
+		select
+		ss.store_id,
+		ps.scrap_code,
+		ps.store_sn,
+		ps.store_name,
+		ps.status,
+		ps.remark,
+		ps.auditby,
+		ps.audit_time,
+		ps.createby,
+		ps.create_time,
+		ps.updateby,
+		ps.updatetime,
+		ps.scrap_id,
+		commitby,
+		commit_time,
+		verifyby,
+		verify_time
+		from pgt_scrap ps, szy_store ss
+		where ps.status &gt; 0 and ps.store_sn=
+		ss.store_sn
+		and ps.store_sn in
+		<foreach item="item" index="index" collection="pd.my_store"
+			open="(" separator="," close=")">
+			#{pd.my_store[${index}]}
+		</foreach>
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.scrap_code LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_sn LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.keywords},'%')
+
+			)
+		</if>
+		<if test="pd.store!= null and pd.store != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.store_sn LIKE CONCAT('%', #{pd.store},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.store},'%')
+
+			)
+		</if>
+		<if test="pd.scrap_code!= null and pd.scrap_code != ''">
+			and ps.scrap_code = #{pd.scrap_code}
+		</if>
+		<if test="pd.lastStart!= null and pd.lastStart != ''">
+			and (
+			ps.audit_time &gt; #{pd.lastStart}
+			or
+			ps.create_time &gt; #{pd.lastStart}
+			or
+			ps.updatetime &gt; #{pd.lastStart}
+			)
+		</if>
+		<if test="pd.lastEnd!= null and pd.lastEnd != ''">
+			and (
+			ps.audit_time &lt; #{pd.lastEnd}
+			or
+			ps.create_time &lt; #{pd.lastEnd}
+			or
+			ps.updatetime &lt; #{pd.lastEnd}
+			)
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and
+			(
+			ps.store_sn = #{pd.store_sn}
+			)
+		</if>
+		order by ps.create_time desc
+	</select>
+
+	<select id="datalistPage1" parameterType="page" resultType="pd">
+		select
+		ss.store_id,
+		ps.scrap_code,
+		ps.store_sn,
+		ps.store_name,
+		ps.status,
+		ps.remark,
+		ps.auditby,
+		ps.audit_time,
+		ps.createby,
+		ps.create_time,
+		ps.updateby,
+		ps.updatetime,
+		ps.scrap_id,
+		commitby,
+		commit_time,
+		verifyby,
+		verify_time
+		from pgt_scrap ps, szy_store ss
+		where ps.status = 1 and ps.store_sn=
+		ss.store_sn
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.scrap_code LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_sn LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.keywords},'%')
+
+			)
+		</if>
+		<if test="pd.store!= null and pd.store != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.store_sn LIKE CONCAT('%', #{pd.store},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.store},'%')
+
+			)
+		</if>
+		<if test="pd.scrap_code!= null and pd.scrap_code != ''">
+			and ps.scrap_code = #{pd.scrap_code}
+		</if>
+		<if test="pd.lastStart!= null and pd.lastStart != ''">
+			and (
+			ps.audit_time &gt; #{pd.lastStart}
+			or
+			ps.create_time &gt; #{pd.lastStart}
+			or
+			ps.updatetime &gt; #{pd.lastStart}
+			)
+		</if>
+		<if test="pd.lastEnd!= null and pd.lastEnd != ''">
+			and (
+			ps.audit_time &lt; #{pd.lastEnd}
+			or
+			ps.create_time &lt; #{pd.lastEnd}
+			or
+			ps.updatetime &lt; #{pd.lastEnd}
+			)
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and
+			(
+			ps.store_sn = #{pd.store_sn}
+			)
+		</if>
+		order by ps.create_time desc
+	</select>
+	<select id="datalistPage2" parameterType="page" resultType="pd">
+		select
+		ss.store_id,
+		ps.scrap_code,
+		ps.store_sn,
+		ps.store_name,
+		ps.status,
+		ps.remark,
+		ps.auditby,
+		ps.audit_time,
+		ps.createby,
+		ps.create_time,
+		ps.updateby,
+		ps.updatetime,
+		ps.scrap_id,
+		commitby,
+		commit_time,
+		verifyby,
+		verify_time
+		from pgt_scrap ps, szy_store ss
+		where ps.status = 2 and ps.store_sn=
+		ss.store_sn
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.scrap_code LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_sn LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.keywords},'%')
+
+			)
+		</if>
+		<if test="pd.store!= null and pd.store != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.store_sn LIKE CONCAT('%', #{pd.store},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.store},'%')
+
+			)
+		</if>
+		<if test="pd.scrap_code!= null and pd.scrap_code != ''">
+			and ps.scrap_code = #{pd.scrap_code}
+		</if>
+		<if test="pd.lastStart!= null and pd.lastStart != ''">
+			and (
+			ps.audit_time &gt; #{pd.lastStart}
+			or
+			ps.create_time &gt; #{pd.lastStart}
+			or
+			ps.updatetime &gt; #{pd.lastStart}
+			)
+		</if>
+		<if test="pd.lastEnd!= null and pd.lastEnd != ''">
+			and (
+			ps.audit_time &lt; #{pd.lastEnd}
+			or
+			ps.create_time &lt; #{pd.lastEnd}
+			or
+			ps.updatetime &lt; #{pd.lastEnd}
+			)
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and
+			(
+			ps.store_sn = #{pd.store_sn}
+			)
+		</if>
+		order by ps.create_time desc
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		order by create_time desc
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		scrap_id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 通过ID获取数据 -->
+	<select id="findByCode" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		scrap_code = #{scrap_code}
+	</select>
+
+	<select id="querylist" parameterType="page" resultType="pd">
+		select
+		ss.store_id,
+		ps.scrap_code,
+		ps.store_sn,
+		ps.store_name,
+		ps.status,
+		ps.remark,
+		ps.auditby,
+		ps.audit_time,
+		ps.createby,
+		ps.create_time,
+		ps.updateby,
+		ps.updatetime,
+		ps.scrap_id,
+		commitby,
+		commit_time,
+		verifyby,
+		verify_time
+		from pgt_scrap ps, szy_store ss
+		where 1=1 and ps.store_sn= ss.store_sn
+		and ps.store_sn in
+		<foreach item="item" index="index" collection="pd.my_store"
+			open="(" separator="," close=")">
+			#{pd.my_store[${index}]}
+		</foreach>
+
+		<if test="pd.status!= null and pd.status != ''">
+			and ps.status = #{pd.status}
+		</if>
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.scrap_code LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_sn LIKE CONCAT('%', #{pd.keywords},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.keywords},'%')
+
+			)
+		</if>
+		<if test="pd.store!= null and pd.store != ''"><!-- 关键词检索 -->
+			and
+			(
+			ps.store_sn LIKE CONCAT('%', #{pd.store},'%')
+			or
+			ps.store_name LIKE CONCAT('%', #{pd.store},'%')
+
+			)
+		</if>
+		<if test="pd.scrap_code!= null and pd.scrap_code != ''">
+			and ps.scrap_code LIKE CONCAT('%', #{pd.scrap_code},'%')
+		</if>
+		<if test="pd.lastStart!= null and pd.lastStart != ''">
+			and (
+			ps.audit_time &gt; #{pd.lastStart}
+			or
+			ps.create_time &gt; #{pd.lastStart}
+			or
+			ps.updatetime &gt; #{pd.lastStart}
+			)
+		</if>
+		<if test="pd.lastEnd!= null and pd.lastEnd != ''">
+			and (
+			ps.audit_time &lt; #{pd.lastEnd}
+			or
+			ps.create_time &lt; #{pd.lastEnd}
+			or
+			ps.updatetime &lt; #{pd.lastEnd}
+			)
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and
+			(
+			ps.store_sn = #{pd.store_sn}
+			)
+		</if>
+		order by ps.create_time desc
+	</select>
+
+	<!-- 通过ids查询数据 -->
+	<select id="findByIds" parameterType="string" resultType="pd">
+		SELECT
+		<include refid="Field" />
+		FROM
+		<include refid="tableName" />
+		WHERE scrap_id IN
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- fh313596790qq(青苔) -->
+</mapper>

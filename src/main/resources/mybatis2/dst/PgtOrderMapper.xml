@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PgtOrderMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_order
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		pgt_order_id,	
+		order_id,	
+		order_sn,	
+		user_id,	<!-- 商城用户 -->
+		order_status,	
+		shop_id,	
+		site_id,	
+		store_id,	
+		consignee,	
+		tel,	
+		address,	
+		add_time,	
+		shipping_status,
+		delivery_tasks_code,
+		logistics_company_name,
+		logistics_company_id,
+		freight,
+		logistics_code,
+		shippingTime,
+		is_selfship,
+		isShippingSynced,
+		delivery_org_id
+		
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{pgt_order_id},	
+        #{order_id},	
+        #{order_sn},	
+        #{user_id},	
+        #{order_status},	
+        #{shop_id},	
+        #{site_id},	
+        #{store_id},	
+        #{consignee},	
+        #{tel},	
+        #{address},	
+        #{add_time},	
+        #{shipping_status}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        pgt_order_id,	
+		        order_id,	
+		        order_sn,	
+		        user_id,	
+		        order_status,	
+		        shop_id,	
+		        site_id,	
+		        store_id,	
+		        consignee,	
+		        tel,	
+		        address,	
+		        add_time,	
+		        shipping_status
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			pgt_order_id = #{pgt_order_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			
+			<!-- <if test="order_id!=null and order_id!=''">
+				order_id = #{order_id},
+			</if> -->
+			<if test="shipping_status!=null and shipping_status!=''">
+				shipping_status = #{shipping_status},
+			</if>
+			<if test="delivery_tasks_code!=null and delivery_tasks_code!=''">
+				delivery_tasks_code = #{delivery_tasks_code},
+			</if>		
+			
+			<if test="logistics_company_name!=null and logistics_company_name!=''">
+				logistics_company_name = #{logistics_company_name},
+			</if>		
+			
+			<if test="logistics_company_id!=null and logistics_company_id!=''">
+				logistics_company_id = #{logistics_company_id},
+			</if>		
+			<if test="logistics_code!=null and logistics_code!=''">
+				logistics_code = #{logistics_code},
+			</if>		
+			
+			<if test="freight!=null and freight!=''">
+				freight = #{freight},
+			</if>		
+			<if test="shippingTime!=null ">
+				shippingTime = #{shippingTime},
+			</if>		
+			<if test="is_selfship!=null and is_selfship!=''">
+				is_selfship = #{is_selfship},
+			</if>		
+			<if test="isShippingSynced!=null and isShippingSynced!=''">
+				isShippingSynced = #{isShippingSynced},
+			</if>		
+			<if test="pgt_order_id_del_order!=null and pgt_order_id_del_order!=''">
+				delivery_tasks_code = '',
+				<!-- 重置为‘已到货’ -->
+				shipping_status = 4,
+				is_selfship = null,
+			</if>			<!-- 
+			logistics_company_name,
+		logistics_company_id,
+		freight
+			user_id = #{user_id},
+			order_status = #{order_status},
+			shop_id = #{shop_id},
+			site_id = #{site_id},
+			store_id = #{store_id},
+			consignee = #{consignee},
+			tel = #{tel},
+			address = #{address},
+			add_time = #{add_time},
+			shipping_status = #{shipping_status}, -->
+		pgt_order_id = pgt_order_id
+		where 
+		pgt_order_id = #{pgt_order_id}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="boundOrdersToTask" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			delivery_tasks_code = #{delivery_tasks_code},
+			<!-- 已派件 -->
+			shipping_status = 5
+		where 
+		pgt_order_id in (${orders})
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			pgt_order_id = #{pgt_order_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.delivery_tasks_code!= null and pd.delivery_tasks_code != ''"><!-- 关键词检索 -->
+			and
+				(
+				delivery_tasks_code=#{pd.delivery_tasks_code}
+				)
+		</if>
+		<if test="pd.order_sn!= null and pd.order_sn != ''"><!-- 关键词检索 -->
+			and
+				(
+				order_sn=#{pd.order_sn}
+				)
+		</if>
+		<if test="pd.delivery_org_id!= null and pd.delivery_org_id != ''"><!-- 关键词检索 -->
+			and
+				(
+				delivery_org_id=#{pd.delivery_org_id}
+				)
+		</if>
+		<!-- <if test="pd.operType!=1">
+			and
+				(
+				shipping_status in (2,3,4)
+				)
+		</if> -->
+		<if test="pd.shipping_statusIn!=null and pd.shipping_statusIn!='' "><!-- 关键词检索 -->
+			and
+				(
+				shipping_status in (${pd.shipping_statusIn})
+				)
+		</if>
+		
+		
+		<!-- <if test="pd.statusIn!= null and pd.statusIn != ''">关键词检索
+			and  status in
+				(
+					statusIn
+				)
+		</if> -->
+		
+		order by add_time desc 
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	<!-- 查最近第三方配送的 is_selfship=1:第三方-->
+	<select id="listLatestShiped" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where  shippingTime>#{beginTime} and is_selfship=1 and isShippingSynced=0
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			pgt_order_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

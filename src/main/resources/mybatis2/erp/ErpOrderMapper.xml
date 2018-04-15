@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ErpOrderMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_order
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		pgt_order_id,	
+		order_id,	
+		order_sn,	
+		user_id,	
+		order_status,	
+		shop_id,	
+		site_id,	
+		store_id,	
+		consignee,	
+		tel,	
+		address,	
+		add_time,	
+		shipping_status
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{pgt_order_id},	
+        #{order_id},	
+        #{order_sn},	
+        #{user_id},	
+        #{order_status},	
+        #{shop_id},	
+        #{site_id},	
+        #{store_id},	
+        #{consignee},	
+        #{tel},	
+        #{address},	
+        #{add_time},	
+        #{shipping_status}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        pgt_order_id,	
+		        order_id,	
+		        order_sn,	
+		        user_id,	
+		        order_status,	
+		        shop_id,	
+		        site_id,	
+		        store_id,	
+		        consignee,	
+		        tel,	
+		        address,	
+		        add_time,	
+		        shipping_status	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			pgt_order_id = #{pgt_order_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			shipping_status = #{shipping_status}
+		where 
+		order_sn = #{order_sn}
+	</update>
+	<update id="editShippingAndDelivery" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			shipping_status = #{shipping_status},
+			delivery_org_id = #{delivery_org_id}
+		where 
+		order_sn = #{order_sn}
+	</update>
+	<update id="updateErpOrderDeliveryOrg" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			delivery_org_id = #{delivery_org_id}
+		where 
+		order_sn = #{order_sn}
+	</update>
+   
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			pgt_order_id = #{pgt_order_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			o.pgt_order_id,	
+			o.order_id,	
+			o.order_sn,	
+			o.user_id,	
+			o.order_status,	
+			o.shop_id,	
+			o.site_id,	
+			o.store_id,	
+			o.consignee,	
+			o.tel,	
+			o.address,	
+			o.add_time,	
+			o.delivery_org_id,
+			do.delivery_org_name,
+			o.shipping_status
+		from 
+			pgt_order o left outer join pgt_delivery_org do
+		on o.delivery_org_id = do.delivery_org_id
+		where 1=1
+		and store_id = #{pd.store_id}
+		<if test="pd.order_sn!= null and pd.order_sn != ''"><!-- 关键词检索 -->
+			and
+				(
+					order_sn LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%') 
+				)
+		</if>
+		<if test="pd.order_sn!= null and pd.order_sn != ''"><!-- 关键词检索 -->
+			and
+				(
+					order_sn LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%') 
+				)
+		</if>
+		<if test="pd.shipping_status ==-1">
+        	and (shipping_status = 1 or shipping_status = 3)
+        </if>
+		<if test="pd.shipping_status!=-1">
+        	and shipping_status = #{pd.shipping_status}
+        </if>
+		<if test="pd.lastStartTime!= null and pd.lastStartTime!= ''">
+		    and add_time &gt;= #{pd.lastStartTime} 
+		</if>
+		<if test="pd.lastEndTime != null and pd.lastEndTime!= ''">
+		    and add_time &lt;= #{pd.lastEndTime} 
+		</if>
+		order by o.order_sn desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	<select id="listAllOrderGoods" parameterType="pd" resultType="pd">
+		SELECT goods_id,goods_name,sku_sn,goods_number,goods_status 
+		from pgt_order_goods
+		where order_id=#{order_id}
+	</select>
+	<select id="listAllShop" parameterType="pd" resultType="pd">
+		SELECT DISTINCT shop_id,shop_name  from pgt_store_shop
+	</select>
+	 <select id="listDeliveryByStoreId" parameterType="pd" resultType="pd">
+		SELECT c.delivery_org_id,c.delivery_store_sn,c.delivery_store_name
+        from szy_store b,pgt_delivery_org c
+         where b.store_id=#{store_id} 
+         and b.store_sn=c.store_sn
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			pgt_order_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

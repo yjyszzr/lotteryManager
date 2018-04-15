@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SzyWareHouseMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		szy_warehouse
+	</sql>
+	
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		      warehouse_name,
+		      region_code,
+		      warehouse_code
+		) values (
+			#{warehouse_name},
+			'',
+			#{warehouse_code}
+		)
+	</insert>
+	
+	<select id="findByCode" parameterType="pd" resultType="pd">
+		select 
+			warehouse_id,
+			warehouse_name,
+		    warehouse_code
+		from 
+			<include refid="tableName"></include>
+		where
+			warehouse_code=#{warehouse_code}
+	</select>
+</mapper>

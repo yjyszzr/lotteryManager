@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WarningExpireBatchMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_warning_expire_batch
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		warning_date,	
+		store_id,	
+		store_sn,	
+		store_name,	
+		sku_id,	
+		sku_encode,	
+		sku_name,	
+		spec,	
+		unit_name,	
+		batch_code,	
+		quantity,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,	
+		warning_expire_batch_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{warning_date},	
+        #{store_id},	
+        #{store_sn},	
+        #{store_name},	
+        #{sku_id},	
+        #{sku_encode},	
+        #{sku_name},	
+        #{spec},	
+        #{unit_name},	
+        #{batch_code},	
+        #{quantity},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        warning_date,	
+		        store_id,	
+		        store_sn,	
+		        store_name,	
+		        sku_id,	
+		        sku_encode,	
+		        sku_name,	
+		        spec,	
+		        unit_name,	
+		        batch_code,	
+		        quantity,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<insert id="savewWarningExpireBatch" parameterType="pd">
+		insert into 
+	    <include refid="tableName"></include>
+		(
+		        warning_date,	
+		        store_id,	
+		        store_sn,	
+		        store_name,	
+		        sku_id,	
+		        sku_encode,	
+		        sku_name,	
+		        spec,	
+		        unit_name,	
+		        batch_code,	
+		        quantity,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time		
+		) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+            (
+                #{item.warning_date,jdbcType=TIMESTAMP}, 
+                #{item.store_id,jdbcType=INTEGER},
+                #{item.store_sn,jdbcType=VARCHAR},
+                #{item.store_name,jdbcType=VARCHAR},
+                #{item.sku_id,jdbcType=INTEGER},
+                #{item.sku_encode,jdbcType=VARCHAR},
+                #{item.sku_name,jdbcType=VARCHAR},
+                #{item.spec,jdbcType=VARCHAR},
+                #{item.unit_name,jdbcType=VARCHAR},
+                #{item.batch_code,jdbcType=VARCHAR},
+                #{item.quantity,jdbcType=INTEGER},
+                #{item.createby,jdbcType=VARCHAR},
+                #{item.create_time,jdbcType=TIMESTAMP},
+                #{item.updateby,jdbcType=VARCHAR},
+                #{item.update_time,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			warning_expire_batch_id = #{warning_expire_batch_id}
+	</delete>
+	
+	<delete id="deleteAllBatch" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where warning_date = DATE_FORMAT(NOW(),'%Y-%m-%d')
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			warning_date = #{warning_date},
+			store_id = #{store_id},
+			store_sn = #{store_sn},
+			store_name = #{store_name},
+			sku_id = #{sku_id},
+			sku_encode = #{sku_encode},
+			sku_name = #{sku_name},
+			spec = #{spec},
+			unit_name = #{unit_name},
+			batch_code = #{batch_code},
+			quantity = #{quantity},
+			createby = #{createby},
+			create_time = #{create_time},
+			updateby = #{updateby},
+			update_time = #{update_time},
+		warning_expire_batch_id = warning_expire_batch_id
+		where 
+		warning_expire_batch_id = #{warning_expire_batch_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			warning_expire_batch_id = #{warning_expire_batch_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and
+				(
+					store_sn = #{pd.store_sn}
+				)
+		</if>
+		<if test="pd.sku_encode!= null and pd.sku_encode != ''">
+			and
+				(
+					sku_encode = #{pd.sku_encode}
+				)
+		</if>
+		order by create_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			warning_expire_batch_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WarningQuantityLineMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_warning_quantity_line
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		warning_date,	
+		type,	
+		store_id,	
+		store_sn,	
+		store_name,	
+		sku_id,	
+		sku_encode,	
+		sku_name,	
+		spec,	
+		unit_name,	
+		min_quantity,	
+		max_quantity,	
+		quantity,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,	
+		warning_quantity_line_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{warning_date},	
+        #{type},	
+        #{store_id},	
+        #{store_sn},	
+        #{store_name},	
+        #{sku_id},	
+        #{sku_encode},	
+        #{sku_name},	
+        #{spec},	
+        #{unit_name},	
+        #{min_quantity},	
+        #{max_quantity},	
+        #{quantity},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        warning_date,	
+		        type,	
+		        store_id,	
+		        store_sn,	
+		        store_name,	
+		        sku_id,	
+		        sku_encode,	
+		        sku_name,	
+		        spec,	
+		        unit_name,	
+		        min_quantity,	
+		        max_quantity,	
+		        quantity,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<insert id="saveWarningLineData" parameterType="pd">
+		insert into 
+	    <include refid="tableName"></include>
+		(
+		        warning_date,	
+		        type,	
+		        store_id,	
+		        store_sn,	
+		        store_name,	
+		        sku_id,	
+		        sku_encode,	
+		        sku_name,	
+		        spec,	
+		        unit_name,	
+		        min_quantity,	
+		        max_quantity,	
+		        quantity,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+            (
+                #{item.warning_date,jdbcType=TIMESTAMP}, 
+                #{item.type,jdbcType=INTEGER}, 
+                #{item.store_id,jdbcType=INTEGER},
+                #{item.store_sn,jdbcType=VARCHAR},
+                #{item.store_name,jdbcType=VARCHAR},
+                #{item.sku_id,jdbcType=INTEGER},
+                #{item.sku_encode,jdbcType=VARCHAR},
+                #{item.sku_name,jdbcType=VARCHAR},
+                #{item.spec,jdbcType=VARCHAR},
+                #{item.unit_name,jdbcType=VARCHAR},
+                #{item.min_quantity,jdbcType=INTEGER},
+                #{item.max_quantity,jdbcType=INTEGER},
+                #{item.quantity,jdbcType=INTEGER},
+                #{item.createby,jdbcType=VARCHAR},
+                #{item.create_time,jdbcType=TIMESTAMP},
+                #{item.updateby,jdbcType=VARCHAR},
+                #{item.update_time,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			warning_quantity_line_id = #{warning_quantity_line_id}
+	</delete>
+	
+	<delete id="deleteWarningLine" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			DATE_FORMAT(warning_date,'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			warning_date = #{warning_date},
+			type = #{type},
+			store_id = #{store_id},
+			store_sn = #{store_sn},
+			store_name = #{store_name},
+			sku_id = #{sku_id},
+			sku_encode = #{sku_encode},
+			sku_name = #{sku_name},
+			spec = #{spec},
+			unit_name = #{unit_name},
+			min_quantity = #{min_quantity},
+			max_quantity = #{max_quantity},
+			quantity = #{quantity},
+			createby = #{createby},
+			create_time = #{create_time},
+			updateby = #{updateby},
+			update_time = #{update_time},
+		warning_quantity_line_id = warning_quantity_line_id
+		where 
+		warning_quantity_line_id = #{warning_quantity_line_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			warning_quantity_line_id = #{warning_quantity_line_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.sku_encode!= null and pd.sku_encode != ''">
+			and
+				(
+					sku_encode LIKE CONCAT(CONCAT('%', #{pd.sku_encode}),'%')
+				)
+		</if>
+		<if test="pd.sku_name!= null and pd.sku_name != ''">
+			and
+				(
+					sku_name LIKE CONCAT(CONCAT('%', #{pd.sku_name}),'%')
+				)
+		</if>
+		<if test="pd.type!= null and pd.type != ''">
+			and
+				(
+					type = #{pd.type}
+				)
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and
+				(
+					store_sn = #{pd.store_sn}
+				)
+		</if>
+		<if test="pd.warning_date!= null and pd.warning_date != ''">
+			and
+				(
+					TO_DAYS(warning_date) - TO_DAYS(#{pd.warning_date}) = 0
+				)
+		</if>
+		order by create_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<select id="selectWarningquantityline" parameterType="pd" resultType="pd">
+		SELECT	
+			if(pgt_goods_quantity_line.min_quantity > IFNULL(szy_stock_goods_6.goods_number, 0), 0, 1) type,
+			pgt_goods_quantity_line.store_id, 
+			szy_store.store_sn,
+			szy_store.store_name,
+			pgt_goods_quantity_line.sku_id,
+			szy_goods_6.goods_barcode sku_encode,
+			szy_goods_6.goods_name sku_name,
+			szy_goods_6.spec,
+			szy_goods_6.unit_name,
+			pgt_goods_quantity_line.min_quantity,
+			pgt_goods_quantity_line.max_quantity,
+			IFNULL(szy_stock_goods_6.goods_number,0) quantity 
+		FROM
+			pgt_goods_quantity_line
+		LEFT JOIN szy_stock_goods_6 ON pgt_goods_quantity_line.store_id = szy_stock_goods_6.store_id
+		AND pgt_goods_quantity_line.sku_id = szy_stock_goods_6.sku_id,
+		 szy_store,szy_goods_6
+		WHERE
+			pgt_goods_quantity_line.store_id = szy_store.store_id
+		AND pgt_goods_quantity_line.sku_id = szy_goods_6.goods_id
+		AND (pgt_goods_quantity_line.min_quantity &gt; IFNULL(szy_stock_goods_6.goods_number,0) OR pgt_goods_quantity_line.max_quantity &lt; IFNULL(szy_stock_goods_6.goods_number,0)) 
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			warning_quantity_line_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

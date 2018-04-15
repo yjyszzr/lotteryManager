@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PgtOutboundMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_outbound
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		out_bound_code,	
+		type,	
+		purchase_code,	
+		purchase_detail_id,	
+		outbound_notice_code,	
+		outbound_notice_detail_id,	
+		business_time,	
+		store_sn,	
+		store_name,	
+		status,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,	
+		out_bound_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">	
+        #{out_bound_code},	
+        #{type},	
+        #{purchase_code},	
+        #{purchase_detail_id},	
+        #{outbound_notice_code},	
+        #{outbound_notice_detail_id},	
+        #{business_time},	
+        #{store_sn},	
+        #{store_name},	
+        #{status},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(	
+		        out_bound_code,	
+		        type,	
+		        purchase_code,	
+		        purchase_detail_id,	
+		        outbound_notice_code,	
+		        outbound_notice_detail_id,	
+		        business_time,	
+		        store_sn,	
+		        store_name,	
+		        status,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	  #{out_bound_code},	
+        #{type},	
+        #{purchase_code},	
+        #{purchase_detail_id},	
+        #{outbound_notice_code},	
+        #{outbound_notice_detail_id},	
+        NOW(),	
+        #{store_sn},	
+        #{store_name},	
+        0,	
+        #{createby},	
+        NOW(),	
+        #{updateby},	
+        NOW()	
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			out_bound_id = #{out_bound_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			out_bound_code = #{out_bound_code},
+			type = #{type},
+			purchase_code = #{purchase_code},
+			purchase_detail_id = #{purchase_detail_id},
+			outbound_notice_code = #{outbound_notice_code},
+			outbound_notice_detail_id = #{outbound_notice_detail_id},
+			business_time = #{business_time},
+			store_sn = #{store_sn},
+			store_name = #{store_name},
+			status = #{status},
+			createby = #{createby},
+			create_time = #{create_time},
+			updateby = #{updateby},
+			update_time = #{update_time},
+		out_bound_id = out_bound_id
+		where 
+		out_bound_id = #{out_bound_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			out_bound_id = #{out_bound_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.search_store!= null and pd.search_store != ''"><!-- 关键词检索 -->
+			and
+				(
+					store_sn LIKE CONCAT(CONCAT('%', #{pd.search_store}),'%')
+					 or 
+					store_name LIKE CONCAT(CONCAT('%', #{pd.search_store}),'%') 
+				)
+		</if>
+		<if test="pd.search_purchase_code!= null and pd.search_purchase_code != ''"><!-- 关键词检索 -->
+			and
+				(
+					purchase_code LIKE CONCAT(CONCAT('%', #{pd.search_purchase_code}),'%')
+				)
+		</if>
+		<if test="pd.search_outbound_notice_code!= null and pd.search_outbound_notice_code != ''"><!-- 关键词检索 -->
+			and
+				(
+					outbound_notice_code LIKE CONCAT(CONCAT('%', #{pd.search_outbound_notice_code}),'%')
+				)
+		</if>
+		<if test="pd.search_type!= null and pd.search_type != ''"><!-- 关键词检索 -->
+			and
+				(
+					type = #{pd.search_type}
+				)
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and 
+			(
+				store_sn = #{pd.store_sn}
+			)
+		</if>
+		<if test="pd.start_date!= null and pd.start_date != ''">
+			and 
+			(
+				business_time &gt;= CONCAT(#{pd.start_date},' 00:00:00')
+			)
+		</if>
+		<if test="pd.end_date!= null and pd.end_date != ''">
+			and 
+			(
+				business_time &lt;= CONCAT(#{pd.end_date},' 23:59:59')
+			)
+		</if>
+		order by business_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	<select id="listAllTimeSpan10" parameterType="pd" resultType="pd">
+		SELECT 
+		po.out_bound_id,
+		po.out_bound_code,
+		po.type,
+		po.purchase_code,
+		po.purchase_detail_id,
+		po.outbound_notice_code,
+		po.business_time,
+		po.store_sn,
+		po.store_name,
+		po.status,
+  		ss.store_id
+	    from pgt_outbound po
+	    INNER JOIN szy_store ss ON po.store_sn = ss.store_sn
+	    where po.type != 5 AND po.create_time > date_add(NOW(), INTERVAL - 10 MINUTE) AND po.syn_status = 0
+	</select>
+	<select id="listAllOrder" parameterType="pd" resultType="pd">
+		SELECT out_bound_id,
+		out_bound_code,	
+		type,	
+		purchase_code,	
+		purchase_detail_id,	
+		outbound_notice_code,	
+		business_time,	
+		store_sn,	
+		store_name,
+		syn_status,	
+		status
+	    from pgt_outbound where type=30 and create_time> date_add(NOW(), interval -30 minute)
+	</select>
+	<update id="updateSynStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			syn_status = #{syn_status}
+		where 
+		out_bound_id = #{out_bound_id}
+	</update>
+	<select id="listOutboundDetail" parameterType="pd" resultType="pd">
+		SELECT 		outbound_code,	
+		purchase_code,	
+		purchase_detail_id,	
+		outbound_notice_code,	
+		sku_id,	
+		sku_name,
+		sku_encode,
+		spec,	
+		quantity,	
+		status
+	    from pgt_outbound_detail where outbound_code=#{outbound_code}
+	</select>
+	
+	<select id="listOutboundInfo" parameterType="pd" resultType="pd">
+		SELECT 
+		    '0' io_type, 
+		    A.store_sn, 
+		    A.store_name, 
+		    A.out_bound_code code, 
+		    A.outbound_notice_code notice_code, 
+		    A.type type, 
+		    A.purchase_code, 
+		    A.createby,A.create_time,
+		    B.sku_id,
+		    B.sku_encode,
+		    B.sku_name,
+		    B.spec,
+		    B.quantity 
+		FROM pgt_outbound A,pgt_outbound_detail B 
+		WHERE A.out_bound_code = B.outbound_code and B.sku_id = #{sku_id} AND A.store_sn= #{store_sn}
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			out_bound_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 查询出库单信息 -->
+	<select id="listOutbound" parameterType="string" resultType="pd">
+		SELECT out_bound_id,out_bound_code,type,purchase_code,purchase_detail_id,
+		outbound_notice_code,outbound_notice_detail_id,business_time,store_sn,
+		store_name,status,syn_status,createby,create_time,updateby,update_time 
+		FROM pgt_outbound
+		WHERE out_bound_id IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
+	
+	<select id="queryByPurchaseCode" parameterType="pd" resultType="pd">
+	select
+		<include refid="Field"></include>
+	from
+		<include refid="tableName"></include>
+	where
+		purchase_code = #{purchase_code}
+	</select>
+	<!-- fh313596790qq(青苔) -->
+</mapper>

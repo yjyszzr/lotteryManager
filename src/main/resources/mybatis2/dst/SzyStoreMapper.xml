@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SzyStoreMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		szy_store
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		store_id,
+		store_sn,
+		store_name,
+		store_type_id,
+		contact,
+		tel,
+		region_code,
+		address,
+		store_status,
+		store_remark,
+		is_deleted,
+		admin_id,store_type_sort,
+		bad_store_id,bad_store_name,
+		logistic_store_id,logistic_store_name,
+		parent_store_id,parent_store_name,
+		scrap_store_id,scrap_store_name,virtual_store_id,virtual_store_name,quality_store_id, quality_store_name
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{store_id},
+		#{store_sn},
+		#{store_name},
+		#{store_type_id},
+		#{contact},
+		#{tel},
+		#{region_code},
+		#{address},
+		#{store_status},
+		#{store_remark},
+		#{is_deleted},
+		#{admin_id} ,
+		#{store_type_sort}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		store_id,
+		store_sn,
+		store_name,
+		store_type_id,
+		contact,
+		tel,
+		region_code,
+		address,
+		store_status,
+		store_remark,
+		is_deleted,
+		admin_id, store_type_sort
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		store_id_id = #{store_id_id}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		store_name = #{store_name},
+		store_type_id = #{store_type_id},
+		store_type_sort=#{store_type_sort},
+		contact = #{contact},
+		tel = #{tel},
+		address = #{address}
+		where
+		store_id= #{store_id}
+	</update>
+
+	<!-- 查询总仓 -->
+	<select id="findTotalStore" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			store_type_id = 1
+	</select>
+	<!-- 查询俱乐部仓 -->
+	<select id="findClubStore" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			store_type_id = 7
+	</select>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		store_id = #{store_id}
+	</select>
+
+	<select id="findByStoreSn" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		store_sn = #{store_sn}
+	</select>
+	
+	<select id="findByType" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		store_type_id = #{store_type_id}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					store_sn LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					store_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				)
+		</if>
+		and store_sn in 
+        <foreach item="store" index="index" collection="pd.store_sns" open="("  
+            separator="," close=")">  
+            #{pd.store_sns[${index}].store_sn}
+        </foreach>
+	</select>
+
+
+	<!-- 列表 -->
+	<select id="findByPagelistPage" parameterType="page" resultType="pd">
+		select
+		
+		store_id,
+		store_sn,
+		store_name,
+		store_type_id,
+		contact,
+		tel,
+		region_code,
+		address,
+		store_status,
+		store_remark,
+		is_deleted,
+		admin_id,store_type_sort,
+		bad_store_id,bad_store_name,
+		logistic_store_id,logistic_store_name,
+		parent_store_id,parent_store_name,scrap_store_id, scrap_store_name,virtual_store_id,virtual_store_name,quality_store_id, quality_store_name
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.store_name!= null and pd.store_name != ''">
+			and
+			(
+			store_name LIKE CONCAT(CONCAT('%', #{pd.store_name}),'%')
+			)
+		</if>
+
+		<if test="pd.store_type_id!= null and pd.store_type_id != ''">
+			and store_type_id=#{pd.store_type_id}
+		</if>
+		
+		<if test="pd.store_type_sort!= null and pd.store_type_sort != ''">
+			and store_type_sort=#{pd.store_type_sort}
+		</if>
+		
+		<!-- and store_sn in 
+        <foreach item="store" index="index" collection="pd.store_sns" open="("  
+            separator="," close=")">  
+            #{pd.store_sns[${index}].store_sn}
+        </foreach> -->
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		and store_sn in 
+        <foreach item="store" index="index" collection="pd.store_sns" open="("  
+            separator="," close=")">  
+            #{pd.store_sns[${index}].store_sn}
+        </foreach>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="szyStoreListAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		store_id_id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+
+	<!-- 更新仓库关系 -->
+	<update id="updatestorerel" parameterType="pd">
+		UPDATE szy_store SET
+		parent_store_id=${parent_store_id},
+		parent_store_name=#{parent_store_name},
+		bad_store_id=${bad_store_id},
+		bad_store_name=#{bad_store_name},
+		logistic_store_id=${logistic_store_id},
+		logistic_store_name=#{logistic_store_name},
+		scrap_store_id=${scrap_store_id},
+		scrap_store_name=#{scrap_store_name},
+		virtual_store_id=${virtual_store_id},
+		virtual_store_name=#{virtual_store_name},
+			quality_store_id=${quality_store_id},
+		quality_store_name=#{quality_store_name}
+		WHERE store_id = #{store_id}
+
+	</update>
+	
+	<select id="listBySupplier" parameterType="pd" resultType="pd">
+		select
+		szy_store.store_id,
+		szy_store.store_sn,
+		szy_store.store_name,
+		szy_store.store_type_id,
+		szy_store.contact,
+		szy_store.tel,
+		szy_store.region_code,
+		szy_store.address,
+		szy_store.store_status
+		from
+		<include refid="tableName"></include>
+		right join pgt_supplier_store supplier on szy_store.store_sn = supplier.store_sn
+		where
+		supplier.supplier_sn = #{supplier_sn}
+	</select>
+
+	<!-- fh313596790qq(青苔) -->
+</mapper>

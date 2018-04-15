@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DefectiveGoodsMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_defective_goods
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		defective_id,	
+		defective_code,	
+		store_sn,	
+		store_name,	
+		status,	
+		remark,	
+		auditby,	
+		audit_time,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,	
+		commitby,	
+		commit_time
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        
+        #{defective_code},	
+        #{store_sn},	
+        #{store_name},	
+        #{status},	
+        #{remark},	
+        #{auditby},	
+        #{audit_time},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        defective_code,	
+		        store_sn,	
+		        store_name,	
+		        status,	
+		        remark,	
+		        auditby,	
+		        audit_time,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			defective_id = #{defective_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			store_sn = #{store_sn},
+			store_name = #{store_name},
+			remark = #{remark},
+			updateby = #{updateby},
+			update_time = #{update_time}
+		where 
+		defective_id = #{defective_id}
+	</update>
+	<update id="updateStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		    status =#{status},
+			updateby = #{updateby},
+			update_time = #{update_time}
+		where 1=1 
+		<if test="defective_id!= null and defective_id != ''">
+			and defective_id = #{defective_id}
+		</if>
+		<if test="defective_code!= null and defective_code != ''">
+			and defective_code = #{defective_code}
+		</if>
+	</update>
+		<update id="updateCheckStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			auditby = #{auditby},	
+	        audit_time = #{audit_time},	
+		    status = #{status},
+			updateby = #{updateby},
+			update_time = #{update_time}
+		where 
+		defective_id = #{defective_id}
+	</update>
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			defective_id = #{defective_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		ss.store_id,
+		pdg.defective_id,	
+		pdg.defective_code,	
+		pdg.store_sn,	
+		pdg.store_name,	
+		pdg.status,	
+		pdg.remark,	
+		pdg.auditby,	
+		pdg.audit_time,	
+		pdg.createby,	
+		pdg.create_time,	
+		pdg.updateby,	
+		pdg.update_time,	
+		pdg.commitby,	
+		pdg.commit_time
+		from pgt_defective_goods pdg, szy_store ss
+		where 1=1 and pdg.store_sn= ss.store_sn
+		and pdg.store_sn in 
+		<foreach item="item" index="index" collection="pd.my_store" open="(" separator="," close=")">  
+		  #{pd.my_store[${index}]}
+		</foreach> 
+		
+		<if test="pd.defective_code!= null and pd.defective_code != ''"><!-- 关键词检索 -->
+			and (pdg.defective_code LIKE CONCAT(CONCAT('%', #{pd.defective_code}),'%'))
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''"><!-- 关键词检索 -->
+			and pdg.store_sn = #{pd.store_sn}
+		</if>
+		<if test="pd.status!= null and pd.status != ''"><!-- 关键词检索 -->
+			and pdg.status = #{pd.status}
+		</if>
+		order by pdg.create_time desc
+	</select>
+	
+	<!-- 列表 -->
+	<select id="checklistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1 
+		and store_sn in 
+		<foreach item="item" index="index" collection="pd.my_store" open="(" separator="," close=")">  
+		  #{pd.my_store[${index}]}
+		</foreach>
+		<if test="pd.defective_code!= null and pd.defective_code != ''">
+			and (defective_code LIKE CONCAT(CONCAT('%', #{pd.defective_code}),'%'))
+		</if>
+		<if test="pd.store_sn!= null and pd.store_sn != ''">
+			and store_sn = #{pd.store_sn}
+		</if>
+		
+		<if test="pd.status!= null and pd.status != ''">
+			and status = #{pd.status}
+		</if>
+		<if test="pd.status== null or pd.status == ''">
+			and status > 0
+		</if>
+		order by create_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			defective_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	<update id="commit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		    status =#{status},
+			updateby = #{updateby},
+			update_time = #{update_time},
+			commitby = #{commitby},
+			commit_time = #{commit_time}
+		where 1=1 
+		<if test="defective_id!= null and defective_id != ''">
+			and defective_id = #{defective_id}
+		</if>
+		<if test="defective_code!= null and defective_code != ''">
+			and defective_code = #{defective_code}
+		</if>
+	</update>	
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findByCode" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			defective_code = #{defective_code}
+	</select>
+	<!-- fh313596790qq(青苔) -->
+</mapper>

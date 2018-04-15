@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GoodsShopErpMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		szy_lib_goods
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		goods_id,	
+		goods_name,	
+		sku_id,	
+		goods_sn,	
+		goods_barcode,	
+		goods_id_from_erp,	
+		sku_id_from_erp
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{goods_id},	
+        #{goods_name},	
+        #{sku_id},	
+        #{goods_sn},	
+        #{goods_barcode},	
+        #{goods_id_from_erp},	
+        #{sku_id_from_erp}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        goods_id,	
+		        goods_name,	
+		        sku_id,	
+		        goods_sn,	
+		        goods_barcode,	
+		        goods_id_from_erp,	
+		        sku_id_from_erp	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			goods_id = #{goods_id}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="editGoods" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+
+			goods_sn = #{goods_sn},
+			goods_barcode = #{goods_barcode},
+			goods_id_from_erp = #{goods_id_from_erp},
+			sku_id_from_erp = #{sku_id_from_erp}
+		where 
+		goods_id = #{goods_id}
+	</update>
+	<update id="editSku" parameterType="pd">
+		update
+		szy_lib_goods_sku
+		set 
+			
+			goods_sn = #{goods_sn},
+			goods_barcode = #{goods_barcode},
+			goods_id_from_erp = #{goods_id_from_erp},
+			sku_id_from_erp = #{sku_id_from_erp}
+		where 
+		goods_id = #{goods_id}
+	</update>
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			goods_id = #{goods_id},
+			
+			sku_id = #{sku_id},
+			goods_sn = #{goods_sn},
+			goods_barcode = #{goods_barcode},
+			goods_id_from_erp = #{goods_id_from_erp},
+			sku_id_from_erp = #{sku_id_from_erp}
+		where 
+		goods_id = #{goods_id}
+	</update>
+	
+	<select id="findByIdFromErq" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			goods_id_from_erp = #{goods_id_from_erp}
+			and
+				goods_id != #{goods_id}	
+	</select>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			goods_id = #{goods_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.goods_name!= null and pd.goods_name != ''"><!-- 关键词检索 -->
+			and
+				( goods_name LIKE CONCAT(CONCAT('%', #{pd.goods_name}),'%')
+				<!--	根据需求自己加检索条件
+					goods_name LIKE CONCAT(CONCAT('%', #{pd.goods_name}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+		<if test="pd.goods_sn!= null and pd.goods_sn != ''"><!-- 关键词检索 -->
+			and
+				( goods_sn LIKE CONCAT(CONCAT('%', #{pd.goods_sn}),'%')
+				
+				<!--	根据需求自己加检索条件
+					goods_sn LIKE CONCAT(CONCAT('%', #{pd.goods_sn}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			goods_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

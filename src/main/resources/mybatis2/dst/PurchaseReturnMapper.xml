@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PurchaseReturnMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_purchase_return
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		purchase_return_code,	
+		purchase_code,	
+		supplier_sn,
+		type,	
+		status,	
+		remark,	
+		auditby,	
+		audit_time,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,	
+		return_id
+	</sql>
+	<!-- 字段 -->
+	<sql id="joinField">
+		r.purchase_return_code,	
+		r.purchase_code,	
+		s.supplier_sn,
+		r.type,	
+		r.status,	
+		r.remark,	
+		r.auditby,	
+		r.audit_time,	
+		r.createby,	
+		r.create_time,	
+		r.updateby,	
+		r.update_time,	
+		r.return_id,
+		s.supplier_name,
+		p.purchase_group_id,
+		g.purchase_group_name
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{purchase_return_code},	
+        #{purchase_code},	
+        #{supplier_sn},	
+        #{type},	
+        #{status},	
+        #{remark},	
+        #{auditby},	
+        #{audit_time},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        purchase_return_code,	
+		        purchase_code,	
+		        supplier_sn,
+		        type,	
+		        status,	
+		        remark,	
+		        auditby,	
+		        audit_time,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			return_id = #{return_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			purchase_return_code = #{purchase_return_code},
+			purchase_code = #{purchase_code},
+			supplier_sn = #{supplier_sn},
+			type = #{type},
+			status = #{status},
+			remark = #{remark},
+			auditby = #{auditby},
+			audit_time = #{audit_time},
+			createby = #{createby},
+			create_time = #{create_time},
+			updateby = #{updateby},
+			update_time = #{update_time},
+		return_id = return_id
+		where 
+		return_id = #{return_id}
+	</update>
+	
+	<!-- 审核通过/驳回 -->
+	<update id="update" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = #{status},
+			auditby = #{auditby},
+		    audit_time = #{audit_time},
+			updateby = #{updateby},
+			update_time = #{update_time},
+		return_id = return_id
+		where 
+		return_id = #{return_id}
+	</update>
+	
+	<!-- 审核通过/驳回 -->
+	<update id="updateStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = #{status},
+			updateby = #{updateby},
+			update_time = #{update_time}
+		where 
+		return_id = #{return_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			return_id = #{return_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="joinField"></include>
+		
+		from 
+		<include refid="tableName"></include> 
+		r left join szy_supplier  s on r.supplier_sn=s.supplier_sn left join
+		pgt_purchase p on p.purchase_code=r.purchase_code left join pgt_purchase_group g on p.purchase_group_id=g.purchase_group_id
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				r.purchase_code LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+<!-- 					 or 
+					r.purchase_return_code LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					r.supplier_sn LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+					 or 
+					r.remark LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+ --> 
+				)
+		</if>
+		<if test="pd.lastStart !=null and pd.lastStart !=''">
+            <![CDATA[
+            and r.create_time >= #{pd.lastStart}
+            ]]>
+        </if>
+        <if test="pd.lastEnd !=null and pd.lastEnd !=''">
+            <![CDATA[
+            and r.create_time <= #{pd.lastEnd}
+            ]]>
+        </if>
+	    <if test="pd.status!= null and pd.status != ''">
+			and (
+			        r.status = #{pd.status}
+			    )
+		</if>
+		<if test="pd.type!= null and pd.type != ''">
+			and (
+			        r.type = #{pd.type}
+			    )
+		</if>
+	<if test="pd.purchase_group_id!=null and pd.purchase_group_id!=''">
+			and (
+				p.purchase_group_id = #{pd.purchase_group_id}
+			)
+		</if>
+		<if test="pd.purchase_group_ids!=null and pd.purchase_group_ids!=''">
+			and (
+			p.purchase_group_id in 
+				${pd.purchase_group_ids}
+			)
+		</if>
+		
+		order by create_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			return_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+		<update id="updateStatusByCode" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = #{status},
+			updateby = #{updateby},
+			update_time = #{update_time}
+		where 
+		purchase_return_code = #{purchase_return_code}
+	</update>
+	
+	
+	<select id="findByCode" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			purchase_return_code = #{purchase_return_code}
+	</select>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

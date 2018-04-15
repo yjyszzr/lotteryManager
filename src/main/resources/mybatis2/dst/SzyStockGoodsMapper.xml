@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SzyStockGoodsMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		szy_stock_goods_6
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+			stock_id,
+		store_id,
+		goods_id,
+		sku_id,
+		min_number_warn,
+		max_number_warn,
+		goods_number,
+		first_goods_number,
+		unit_cost,
+		is_deleted,
+		stock_remark,
+		admin_id
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{store_id},
+		#{goods_id},
+		#{sku_id},
+		#{min_number_warn},
+		#{max_number_warn},
+		#{goods_number},
+		#{first_goods_number},
+		#{unit_cost},
+		#{is_deleted},
+		#{stock_remark},
+		#{admin_id}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		store_id,
+		goods_id,
+		sku_id,
+		min_number_warn,
+		max_number_warn,
+		goods_number,
+		first_goods_number,
+		unit_cost,
+		is_deleted,
+		stock_remark,
+		admin_id
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		stock_id = #{stock_id}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		stock_id = #{stock_id},
+		store_id = #{store_id},
+		goods_id = #{goods_id},
+		sku_id = #{sku_id},
+		min_number_warn = #{min_number_warn},
+		max_number_warn = #{max_number_warn},
+		goods_number = #{goods_number},
+		first_goods_number = #{first_goods_number},
+		unit_cost = #{unit_cost},
+		is_deleted = #{is_deleted},
+		stock_remark = #{stock_remark},
+		admin_id = #{admin_id},
+		stock_id = stock_id
+		where
+		stock_id = #{stock_id}
+	</update>
+	
+	<update id="updateQuantity" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		goods_number = goods_number+#{goods_number}
+		where
+		store_id = #{store_id}  and sku_id = #{sku_id}
+		and goods_number+#{goods_number} &gt;= 0
+	</update>
+	
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		stock_id = #{stock_id}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+	
+SELECT 
+s.sku_encode,
+s.sku_id,
+s.sku_name,
+sg.goods_number,
+g.unit_name,
+g.spec,st.store_sn,st.store_name,g.isopen_batch,g.attr_cate,
+sg.store_id
+FROM szy_stock_goods_6  sg INNER JOIN szy_goods_sku_6  s
+ON sg.sku_id=s.sku_id
+INNER JOIN szy_goods_6 g ON g.goods_id=s.goods_id
+INNER JOIN szy_store  st ON st.store_id=sg.store_id
+where 1=1  
+<!-- 库存为0的不显示 -->
+and sg.goods_number>0
+
+	<if test="pd.sku_encode!= null and pd.sku_encode != ''">
+			and
+			(
+			 s.sku_encode LIKE CONCAT(CONCAT('%', #{pd.sku_encode}),'%') 
+			)
+	</if>
+
+	<if test="pd.sku_name!= null and pd.sku_name != ''">
+			and
+			(
+			 s.sku_name LIKE CONCAT(CONCAT('%', #{pd.sku_name}),'%') 
+			)
+	</if>
+	
+	<if test="pd.store_sn!= null and pd.store_sn!= ''">
+	     and st.store_sn=#{pd.store_sn}
+	</if>
+		
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+	</select>
+	
+	<select id="storedatalistPage" parameterType="page" resultType="pd">
+	SELECT  a.store_id,b.store_sn,b.store_name,c.sku_name,c.sku_encode, c.goods_id,a.goods_number from (
+	select store_id,sku_id,sum(goods_number) goods_number from szy_stock_goods_6 a 
+	where store_id=#{pd.store_id} 
+	GROUP BY  store_id,sku_id ) a ,szy_store b,szy_goods_sku_6 c
+	where a.store_id=b.store_id and a.sku_id=c.sku_id
+    <if test="pd.goods_sn!= null and pd.goods_sn != ''">
+			and
+			(
+			 c.sku_encode LIKE CONCAT(CONCAT('%', #{pd.goods_sn}),'%')
+			  or c.sku_name LIKE CONCAT(CONCAT('%', #{pd.goods_sn}),'%')  
+			)
+	</if>
+	</select>
+	<select id="listALLByStore" parameterType="pd" resultType="pd">
+	SELECT  a.store_id,b.store_sn,b.store_name,c.sku_name,c.sku_encode, c.goods_id,a.goods_number from (
+	select store_id,sku_id,sum(goods_number) goods_number from szy_stock_goods_6 a 
+	where store_id=#{store_id} 
+	GROUP BY  store_id,sku_id ) a ,szy_store b,szy_goods_sku_6 c
+	where a.store_id=b.store_id and a.sku_id=c.sku_id
+	</select>
+
+	<!-- 根据条件查询 -->
+	<select id="findByWhere" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="sku_id!= null">
+			and sku_id=#{sku_id}
+		</if>
+		<if test="store_id!= null">
+			and store_id=#{store_id}
+		</if>
+	</select>
+	
+	<select id="stockBySkuIdlistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where sku_id = #{pd.parent_sku_id} 
+		and goods_number > 0
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		stock_id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+<!-- 列表 -->
+	<select id="excelList" parameterType="pd" resultType="pd">
+		SELECT
+			s.sku_encode,
+			s.sku_id,
+			s.sku_name,
+			sg.goods_number,
+			g.unit_name,
+			g.spec,st.store_sn,st.store_name,g.isopen_batch,g.attr_cate,
+			sg.store_id 
+		FROM szy_stock_goods_6 sg 
+			INNER JOIN szy_goods_sku_6 s ON sg.sku_id=s.sku_id 
+			INNER JOIN szy_goods_6 g ON g.goods_id=s.goods_id 
+			INNER JOIN szy_store st ON st.store_id=sg.store_id 
+		where 1=1 
+			<!-- 库存为0的不显示 -->
+			and sg.goods_number>0 
+        <if test="sku_encode!= null and sku_encode != ''">
+			and
+			(
+				s.sku_encode LIKE CONCAT(CONCAT('%', #{sku_encode}),'%')
+			)
+		</if>
+		<if test="sku_name!= null and sku_name != ''">
+			and
+			(
+				s.sku_name LIKE CONCAT(CONCAT('%', #{sku_name}),'%')
+			)
+		</if>
+
+		<if test="store_sn!= null and store_sn!= ''">
+			and st.store_sn=#{store_sn}
+		</if>
+		order by st.store_sn
+	</select>
+</mapper>

@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AllocationMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_allocation
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		allocation_code,
+		from_store_sn,
+		to_store_sn,
+		from_store_name,
+		to_store_name,
+		pre_send_time,
+		send_time,
+		pre_arrival_time,
+		arrival_time,
+		status,
+		createby,
+		create_time,
+		updateby,
+		update_time,
+		allocation_id,
+		commitby,
+		commit_time,
+		audit_time,
+		auditby
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{allocation_code},
+		#{from_store_sn},
+		#{to_store_sn},
+		#{from_store_name},
+		#{to_store_name},
+		#{pre_send_time},
+		#{send_time},
+		#{pre_arrival_time},
+		#{arrival_time},
+		#{status},
+		#{createby},
+		#{create_time},
+		#{updateby},
+		#{update_time}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		allocation_code,
+		from_store_sn,
+		to_store_sn,
+		from_store_name,
+		to_store_name,
+		pre_send_time,
+		send_time,
+		pre_arrival_time,
+		arrival_time,
+		status,
+		createby,
+		create_time,
+		updateby,
+		update_time
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		allocation_id = #{allocation_id}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		from_store_sn = #{from_store_sn},
+		to_store_sn = #{to_store_sn},
+		from_store_name = #{from_store_name},
+		to_store_name = #{to_store_name},
+		pre_send_time = #{pre_send_time},
+		pre_arrival_time =
+		#{pre_arrival_time},
+		updateby = #{updateby},
+		update_time =
+		#{update_time},
+		allocation_id = allocation_id
+		<if test=" commit_time!= null">
+			commit_time = #{commit_time},
+		</if>
+		<if test=" commitby!= null">
+			commitby = #{commitby},
+		</if>
+		<if test=" audit_time!= null">
+			audit_time = #{audit_time},
+		</if>
+		<if test="auditby!= null">
+			auditby = #{auditby},
+		</if>
+		where
+		allocation_id = #{allocation_id}
+	</update>
+
+	<!-- 审核通过/驳回 -->
+	<update id="update" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		status = #{status},
+		updateby = #{updateby},
+		update_time =
+		#{update_time},
+		<if test=" commitby!= null">
+			commitby = #{commitby},
+		</if>
+		<if test=" commit_time != null">
+			commit_time = #{commit_time},
+		</if>
+		<if test=" audit_time!= null">
+			audit_time = #{audit_time},
+		</if>
+		<if test="auditby!= null">
+			auditby = #{auditby},
+		</if>
+		allocation_id = allocation_id
+		where
+		allocation_id = #{allocation_id}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		allocation_id = #{allocation_id}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		and from_store_sn in
+		<foreach item="item" index="index" collection="pd.my_store"
+			open="(" separator="," close=")">
+			#{pd.my_store[${index}]}
+		</foreach>
+
+		and to_store_sn in
+		<foreach item="item" index="index" collection="pd.my_store"
+			open="(" separator="," close=")">
+			#{pd.my_store[${index}]}
+		</foreach>
+
+		<if
+			test="pd.search_allocation_code!= null and pd.search_allocation_code != ''">
+			and
+			(
+			allocation_code = #{pd.search_allocation_code}
+			)
+		</if>
+		<if test="pd.search_from_store!= null and pd.search_from_store != ''">
+			and
+			(
+			from_store_sn LIKE CONCAT('%',
+			#{pd.search_from_store},'%')
+			or
+			from_store_name LIKE CONCAT('%',
+			#{pd.search_from_store},'%')
+			)
+		</if>
+		<if test="pd.search_to_store!= null and pd.search_to_store != ''">
+			and
+			(
+			to_store_name LIKE CONCAT('%',
+			#{pd.search_to_store},'%')
+			or
+			to_store_sn LIKE CONCAT('%',
+			#{pd.search_to_store},'%')
+			)
+		</if>
+		<if test="pd.status!= null and pd.status != ''">
+			and status = #{pd.status}
+		</if>
+		<!-- <if test="pd.lastStart!= null and pd.lastStart != ''"> and ( pre_send_time 
+			&gt; #{pd.lastStart} or send_time &gt; #{pd.lastStart} or arrival_time &gt; 
+			#{pd.lastStart} or create_time &gt; #{pd.lastStart} or update_time &gt; #{pd.lastStart} 
+			) </if> <if test="pd.lastEnd!= null and pd.lastEnd != ''"> and ( pre_send_time 
+			&lt; #{pd.lastEnd} or send_time &lt; #{pd.lastEnd} or arrival_time &lt; #{pd.lastEnd} 
+			or create_time &lt; #{pd.lastEnd} or update_time &lt; #{pd.lastEnd} ) </if> -->
+		<if test="pd.store_sn_out!= null and pd.store_sn_out != ''">
+			and
+			(
+			from_store_sn = #{pd.store_sn_out}
+			)
+		</if>
+		<if test="pd.store_sn_in!= null and pd.store_sn_in != ''">
+			and
+			(
+			to_store_sn = #{pd.store_sn_in}
+			)
+		</if>
+		order by create_time desc
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		order by create_time desc
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		allocation_id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 修改 -->
+	<update id="updateStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		send_time = NOW(),
+		status = #{status},
+		updateby = #{updateby},
+		update_time = NOW()
+		where
+		allocation_code = #{allocation_code}
+	</update>
+
+	<update id="updateStatusWithIn" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		status = #{status},
+		updateby = #{updateby},
+		update_time = NOW()
+		where
+		allocation_code = #{allocation_code}
+	</update>
+
+
+	<select id="findByCode" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		allocation_code = #{allocation_code}
+	</select>
+
+	<!-- 列表 -->
+	<select id="querylist" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where 1=1
+		and from_store_sn in
+		<foreach item="item" index="index" collection="pd.my_store"
+			open="(" separator="," close=")">
+			#{pd.my_store[${index}]}
+		</foreach>
+
+		and to_store_sn in
+		<foreach item="item" index="index" collection="pd.my_store"
+			open="(" separator="," close=")">
+			#{pd.my_store[${index}]}
+		</foreach>
+
+		<if
+			test="pd.search_allocation_code!= null and pd.search_allocation_code != ''">
+			and
+			(
+			allocation_code LIKE CONCAT('%',
+			#{pd.search_allocation_code},'%')
+			)
+		</if>
+		<if test="pd.search_from_store!= null and pd.search_from_store != ''">
+			and
+			(
+			from_store_sn LIKE CONCAT('%',
+			#{pd.search_from_store},'%')
+			or
+			from_store_name LIKE CONCAT('%',
+			#{pd.search_from_store},'%')
+			)
+		</if>
+		<if test="pd.search_to_store!= null and pd.search_to_store != ''">
+			and
+			(
+			to_store_name LIKE CONCAT('%',
+			#{pd.search_to_store},'%')
+			or
+			to_store_sn LIKE CONCAT('%',
+			#{pd.search_to_store},'%')
+			)
+		</if>
+		<if test="pd.status!= null and pd.status != ''">
+			and status = #{pd.status}
+		</if>
+		<!-- <if test="pd.lastStart!= null and pd.lastStart != ''"> and ( pre_send_time 
+			&gt; #{pd.lastStart} or send_time &gt; #{pd.lastStart} or arrival_time &gt; 
+			#{pd.lastStart} or create_time &gt; #{pd.lastStart} or update_time &gt; #{pd.lastStart} 
+			) </if> <if test="pd.lastEnd!= null and pd.lastEnd != ''"> and ( pre_send_time 
+			&lt; #{pd.lastEnd} or send_time &lt; #{pd.lastEnd} or arrival_time &lt; #{pd.lastEnd} 
+			or create_time &lt; #{pd.lastEnd} or update_time &lt; #{pd.lastEnd} ) </if> -->
+		<if test="pd.store_sn_out!= null and pd.store_sn_out != ''">
+			and
+			(
+			from_store_sn = #{pd.store_sn_out}
+			)
+		</if>
+		<if test="pd.store_sn_in!= null and pd.store_sn_in != ''">
+			and
+			(
+			to_store_sn = #{pd.store_sn_in}
+			)
+		</if>
+		order by create_time desc
+	</select>
+	<!-- 通过数组查询所有数据 -->
+	<select id="findByCodes" parameterType="string" resultType="pd">
+		SELECT
+		<include refid="Field"></include>
+		FROM
+		<include refid="tableName"></include>
+		WHERE allocation_code IN
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<update id="updateReceiveTime" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		arrival_time = NOW(),
+		updateby = #{updateby},
+		update_time = NOW()
+		where
+		allocation_code = #{allocation_code}
+	</update>
+	<!-- fh313596790qq(青苔) -->
+</mapper>

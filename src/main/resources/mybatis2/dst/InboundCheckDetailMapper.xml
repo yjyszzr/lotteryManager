@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="InboundCheckDetailMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_inbound_check_detail
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		pgt_inbound_check_detail_id,	
+		inbound_notice_code,	
+		notice_detail_id,	
+		purchase_code,	
+		purchase_detail_id,	
+		inbound_notice_stock_batch_id,	
+		sku_id,	
+		sku_name,	
+		sku_encode,	
+		total_quantity,	
+		good_quantity,	
+		bad_quantity,	
+		scrap_quantity,	
+		bad_deal_type,	
+		spec,	
+		unit_name,	
+		batch_code,
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,
+		commit_time,
+		note,
+		status
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{inbound_notice_code},	
+        #{notice_detail_id},	
+        #{purchase_code},	
+        #{purchase_detail_id},	
+        #{inbound_notice_stock_batch_id},	
+        #{sku_id},	
+        #{sku_name},	
+        #{sku_encode},	
+        #{total_quantity},	
+        #{good_quantity},	
+        #{bad_quantity},	
+        #{scrap_quantity},	
+        #{bad_deal_type},	
+        #{spec},	
+        #{unit_name},
+        #{batch_code},
+       #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time},
+        #{note},
+        #{status}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd" useGeneratedKeys="true"  keyProperty="pgt_inbound_check_detail_id">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        inbound_notice_code,	
+		        notice_detail_id,	
+		        purchase_code,	
+		        purchase_detail_id,	
+		        inbound_notice_stock_batch_id,	
+		        sku_id,	
+		        sku_name,	
+		        sku_encode,	
+		        total_quantity,	
+		        good_quantity,	
+		        bad_quantity,	
+		        scrap_quantity,	
+		        bad_deal_type,	
+		        spec,	
+		        unit_name,
+		        batch_code,
+		        createby,	
+		create_time,	
+		updateby,	
+		update_time,
+		note,
+		        status
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			pgt_inbound_check_detail_id = #{pgt_inbound_check_detail_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			<if test="good_quantity!= null and  good_quantity!= ''"><!-- 关键词检索 -->
+			good_quantity = #{good_quantity},
+		  </if>
+			<if test="bad_quantity != null and  bad_quantity != ''"><!-- 关键词检索 -->
+			bad_quantity = #{bad_quantity},
+		  </if>
+			<if test="scrap_quantity != null and  scrap_quantity != ''"><!-- 关键词检索 -->
+			scrap_quantity = #{scrap_quantity},
+		  </if>
+			<if test="total_quantity != null and  total_quantity != ''"><!-- 关键词检索 -->
+				total_quantity = #{total_quantity},
+		  </if>
+			<if test="bad_deal_type != null and  bad_deal_type != ''"><!-- 关键词检索 -->
+				bad_deal_type = #{bad_deal_type},		  </if>
+			<if test="status != null and  status != ''"><!-- 关键词检索 -->
+				status = #{status},		
+		    </if>
+			<if test="updateby != null and  updateby != ''"><!-- 关键词检索 -->
+				updateby = #{updateby},		
+		    </if>
+			<if test="update_time != null "><!-- 关键词检索 -->
+				update_time = #{update_time},		
+		    </if>
+			<if test="commit_time != null "><!-- 关键词检索 -->
+				commit_time = #{commit_time},		
+		    </if>
+			<if test="note != null and  note != ''"><!-- 关键词检索 -->
+				note = #{note},		
+		    </if>
+		   
+		pgt_inbound_check_detail_id = pgt_inbound_check_detail_id
+		where 
+		pgt_inbound_check_detail_id = #{pgt_inbound_check_detail_id}
+	</update>
+	
+	<update id="updateById" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = #{status},
+		pgt_inbound_check_detail_id = pgt_inbound_check_detail_id
+		where 
+		pgt_inbound_check_detail_id = #{pgt_inbound_check_detail_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			pgt_inbound_check_detail_id = #{pgt_inbound_check_detail_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				<!--	根据需求自己加检索条件
+					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+		<if test="pd.inbound_notice_code!= null and pd.inbound_notice_code != ''">
+			and
+				(
+					inbound_notice_code = #{pd.inbound_notice_code}
+				)
+		</if>
+		<if test="pd.purchase_code!= null and pd.purchase_code != ''">
+			and
+				(
+					purchase_code = #{pd.purchase_code}
+				)
+		</if>
+		<if test="pd.create_time_begin!= null and pd.create_time_begin != ''">
+			and
+				(
+					create_time &gt;= #{pd.create_time_begin}
+				)
+		</if>
+		<if test="pd.create_time_end!= null and pd.create_time_end != ''">
+			and
+				(
+					create_time &lt;= #{pd.create_time_end}
+				)
+		</if>
+		<if test="pd.status!= null and pd.status != ''">
+			and
+				(
+					status = #{pd.status}
+				)
+		</if>
+		order by create_time desc
+	</select>
+	
+	<select id="dataByStatuslistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				<!--	根据需求自己加检索条件
+					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+		<if test="pd.inbound_notice_code!= null and pd.inbound_notice_code != ''">
+			and
+				(
+					inbound_notice_code = #{pd.inbound_notice_code}
+				)
+		</if>
+		and status > 0
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="inbound_notice_stock_batch_id != null and inbound_notice_stock_batch_id != ''"><!-- 关键词检索 -->
+			and inbound_notice_stock_batch_id=#{inbound_notice_stock_batch_id}
+				
+		</if>
+		order by create_time desc
+	</select>
+		
+	<select id="datalistByWhere" parameterType="pd" resultType="pd">
+	select
+		pad.inbound_notice_stock_batch_id,	
+		g.isopen_batch
+		from pgt_inbound_check_detail pad
+		left join szy_goods_sku_6 gs on pad.sku_id = gs.sku_id
+		left join szy_goods_6 g on g.goods_id = gs.goods_id
+		where 1=1
+		<if test="inbound_notice_code!= null">
+			and pad.inbound_notice_code = #{inbound_notice_code}
+		</if>
+		<if test="status!= null">
+			and pad.status = #{status}
+		</if>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			pgt_inbound_check_detail_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

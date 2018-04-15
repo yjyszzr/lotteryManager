@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DeliveryTasksMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_delivery_tasks 
+	</sql>
+	<sql id="rel_tableName">
+		pgt_delivery_tasks dt left join pgt_delivery_vehicle_work dvw on dt.delivery_vehicle_work_id = dvw.delivery_vehicle_work_id
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		delivery_tasks_id,	
+		delivery_tasks_code,	
+		delivery_org_id,	
+		work_day,	
+		delivery_vehicle_work_id,	
+		vehicle_number,	
+		vehicle_contact,	
+		vehicle_tel,	
+		user_id,	<!-- 系统用户 -->
+		user_name,	
+		user_tel,	
+		type,	
+		status,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time
+		
+	</sql>
+	<sql id="rel_Field">
+		dt.delivery_tasks_id,	
+		dt.delivery_tasks_code,	
+		dt.delivery_org_id,	
+		dt.work_day,	
+		dt.delivery_vehicle_work_id,	
+		dt.vehicle_number,	
+		dt.vehicle_contact,	
+		dt.vehicle_tel,	
+		dt.user_id,	<!-- 系统用户 -->
+		dt.user_name,	
+		dt.user_tel,	
+		dt.type,	
+		dt.status,	
+		dt.createby,	
+		dt.create_time,	
+		dt.updateby,	
+		dt.update_time,
+		dvw.delivery_org_name
+		
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+      
+        #{delivery_tasks_code},	
+        #{delivery_org_id},	
+        #{work_day},	
+        #{delivery_vehicle_work_id},	
+        #{vehicle_number},	
+        #{vehicle_contact},	
+        #{vehicle_tel},	
+        #{user_id},	
+        #{user_name},	
+        #{user_tel},	
+        #{type},	
+        #{status},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		       
+		        delivery_tasks_code,	
+		        delivery_org_id,	
+		        work_day,	
+		        delivery_vehicle_work_id,	
+		        vehicle_number,	
+		        vehicle_contact,	
+		        vehicle_tel,	
+		        user_id,	
+		        user_name,	
+		        user_tel,	
+		        type,	
+		        status,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			delivery_tasks_id = #{delivery_tasks_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			<if test="delivery_tasks_code!= null and  delivery_tasks_code!= ''">
+				delivery_tasks_code = #{delivery_tasks_code},
+			</if>
+			<if test="delivery_org_id!= null and  delivery_org_id!= ''">
+				delivery_org_id = #{delivery_org_id},
+			</if>
+			<if test="work_day!= null and  work_day!= ''">
+				work_day = #{work_day},
+			</if>
+			<if test="delivery_vehicle_work_id!= null and  delivery_vehicle_work_id!= ''">
+					delivery_vehicle_work_id = #{delivery_vehicle_work_id},
+			</if>
+			<if test="vehicle_number!= null and  vehicle_number!= ''">
+				vehicle_number = #{vehicle_number},
+			</if>
+			<if test="vehicle_contact!= null and  vehicle_contact!= ''">
+				vehicle_contact = #{vehicle_contact},
+			</if>
+			<if test="vehicle_tel!= null and  vehicle_tel!= ''">
+				vehicle_tel = #{vehicle_tel},
+			</if>
+			<if test="user_id!= null and  user_id!= ''">
+				user_id = #{user_id},
+			</if>
+			<if test="user_name!= null and  user_name!= ''">
+				user_name = #{user_name},
+			</if>
+			<if test="user_tel!= null and  user_tel!= ''">
+				user_tel = #{user_tel},
+			</if>
+			<if test="type!= null and  type!= ''">
+				type = #{type},
+			</if>
+			<if test="status!= null and  status!= ''">
+				status = #{status},
+			</if>
+			<if test="createby!= null and  createby!= ''">
+				createby = #{createby},
+			</if>
+			<if test="create_time!= null and  create_time!= ''">
+				create_time = #{create_time},
+			</if>
+			<if test="updateby!= null and  updateby!= ''">
+				updateby = #{updateby},
+			</if>
+			<if test="update_time!= null and  update_time!= ''">
+				update_time = #{update_time},
+			</if>
+		delivery_tasks_id = delivery_tasks_id
+		where 
+		delivery_tasks_id = #{delivery_tasks_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="rel_Field"></include>
+		from 
+		<include refid="rel_tableName"></include>
+		where 
+			dt.delivery_tasks_id = #{delivery_tasks_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="rel_Field"></include>
+		from 
+		<include refid="rel_tableName"></include>
+		where 1=1
+		<if test="pd.delivery_org_id!= null and pd.delivery_org_id != ''"><!-- 关键词检索 -->
+			and
+				(
+				dt.delivery_org_id=#{pd.delivery_org_id}
+				)
+		</if>
+		<if test="pd.work_day!= null and pd.work_day != ''"><!-- 关键词检索 -->
+			and
+				(
+				dt.work_day=#{pd.work_day}
+				)
+		</if>
+		
+		order by dt.work_day, delivery_tasks_code desc 
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			delivery_tasks_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
