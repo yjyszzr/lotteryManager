@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
-import com.fh.service.dst.szystore.SzyStoreManager;
+//import com.fh.service.dst.szystore.SzyStoreManager;
 import com.fh.service.fhoa.datajur.DatajurManager;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.buttonrights.ButtonrightsManager;
@@ -76,8 +76,8 @@ public class LoginController extends BaseController {
 	private LogInImgManager loginimgService;
 	@Resource(name="organizationService")
 	private OrganizationService organizationService;
-	@Resource(name="szystoreService")
-	private SzyStoreManager szyStoreManager;
+//	@Resource(name="szystoreService")
+//	private SzyStoreManager szyStoreManager;
 	
 	/**访问登录页
 	 * @return
@@ -202,7 +202,7 @@ public class LoginController extends BaseController {
 				PageData pageData = new PageData();
 				List<PageData> pageDatas = new LinkedList<PageData>();
 				if(user.getRole().getROLE_ID().equals(Const.SYSTEM_MANAGER_ID)) {
-					pageDatas = szyStoreManager.listAll(new PageData());
+//					pageDatas = szyStoreManager.listAll(new PageData());
 				}else {
 					pageData.put("user_id", user.getUSER_ID());
 					pageDatas = organizationService.listDataRightsByUserId(pageData);

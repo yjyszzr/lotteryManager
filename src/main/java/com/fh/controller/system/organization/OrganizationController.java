@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
-import com.fh.service.dst.szystore.impl.SzyStoreService;
+//import com.fh.service.dst.szystore.impl.SzyStoreService;
 import com.fh.service.system.organization.OrganizationManager;
 import com.fh.service.system.user.impl.UserService;
 import com.fh.util.AppUtil;
@@ -52,8 +52,8 @@ public class OrganizationController extends BaseController {
 	@Resource(name="organizationService")
 	private OrganizationManager organizationService;
 	
-	@Resource(name="szystoreService")
-	private SzyStoreService szyStoreService;
+//	@Resource(name="szystoreService")
+//	private SzyStoreService szyStoreService;
 	
 	@Resource(name="userService")
 	private UserService userService;
@@ -143,43 +143,43 @@ public class OrganizationController extends BaseController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value="/menuqx")
-	public ModelAndView listAllMenu(Model model,String org_id,String org_name)throws Exception{
-		ModelAndView mv = this.getModelAndView();
-		try{
-			List<PageData> stores = szyStoreService.listAll(new PageData());
-			if(CollectionUtils.isNotEmpty(stores)) {
-				PageData pd = new PageData();
-				pd.put("org_id", org_id);
-				List<PageData> pds = organizationService.listByPageData(pd);
-				List<String> list = new ArrayList<String>();
-				if(CollectionUtils.isNotEmpty(pds)) {
-					for (PageData pageData : pds) {
-						list.add(pageData.getString("store_sn"));
-					}
-				}
-				if(CollectionUtils.isNotEmpty(list)) {
-					for (PageData pageData : stores) {
-						if(list.contains(pageData.getString("store_sn"))) {
-							pageData.put("checked", true);
-						}else {
-							pageData.put("checked", false);
-						}
-					}
-				}
-				JSONArray arr = JSONArray.fromObject(stores);
-				String json = arr.toString();
-				json = json.replaceAll("store_sn", "id").replaceAll("store_name", "name");
-				model.addAttribute("zTreeNodes", json);
-			}
-			mv.addObject("org_id",org_id);
-			mv.addObject("org_name",org_name);
-			mv.setViewName("system/organization/menuqx");
-		} catch(Exception e){
-			logger.error(e.toString(), e);
-		}
-		return mv;
-	}
+//	@RequestMapping(value="/menuqx")
+//	public ModelAndView listAllMenu(Model model,String org_id,String org_name)throws Exception{
+//		ModelAndView mv = this.getModelAndView();
+//		try{
+//			List<PageData> stores = szyStoreService.listAll(new PageData());
+//			if(CollectionUtils.isNotEmpty(stores)) {
+//				PageData pd = new PageData();
+//				pd.put("org_id", org_id);
+//				List<PageData> pds = organizationService.listByPageData(pd);
+//				List<String> list = new ArrayList<String>();
+//				if(CollectionUtils.isNotEmpty(pds)) {
+//					for (PageData pageData : pds) {
+//						list.add(pageData.getString("store_sn"));
+//					}
+//				}
+//				if(CollectionUtils.isNotEmpty(list)) {
+//					for (PageData pageData : stores) {
+//						if(list.contains(pageData.getString("store_sn"))) {
+//							pageData.put("checked", true);
+//						}else {
+//							pageData.put("checked", false);
+//						}
+//					}
+//				}
+//				JSONArray arr = JSONArray.fromObject(stores);
+//				String json = arr.toString();
+//				json = json.replaceAll("store_sn", "id").replaceAll("store_name", "name");
+//				model.addAttribute("zTreeNodes", json);
+//			}
+//			mv.addObject("org_id",org_id);
+//			mv.addObject("org_name",org_name);
+//			mv.setViewName("system/organization/menuqx");
+//		} catch(Exception e){
+//			logger.error(e.toString(), e);
+//		}
+//		return mv;
+//	}
 	
 	/**
 	 * 显示用户列表ztree(关联用户)

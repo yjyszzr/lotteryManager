@@ -85,7 +85,7 @@
 				<div class="control-group normal_text">
 					<h3>
 						<!-- <img src="static/login/logo.png" alt="Logo" /> -->
-						璞谷塘供应链管理平台
+						彩小秘管理平台
 					</h3>
 				</div>
 				<div class="control-group">
@@ -137,7 +137,7 @@
 			</form>
 			<div class="controls">
 				<div class="main_input_box">
-					<font color="white"><span id="nameerr">Copyright © PuGuTang 2017</span></font>
+					<font color="white"><span id="nameerr">Copyright © 数字传奇 2018</span></font>
 				</div>
 			</div>
 		</div>
@@ -149,7 +149,7 @@
 				<div class="control-group normal_text">
 					<h3>
 						<!-- <img src="static/login/logo.png" alt="Logo" /> -->
-						璞谷塘供应链管理平台
+						彩小秘管理平台
 					</h3>
 				</div>
 				<div class="control-group">
@@ -217,7 +217,7 @@
 			</form>
 			<div class="controls">
 				<div class="main_input_box">
-					<font color="white"><span id="nameerr">Copyright © PuGuTang 2017</span></font>
+					<font color="white"><span id="nameerr">Copyright © 数字传奇 2018</span></font>
 				</div>
 			</div>
 		</div>

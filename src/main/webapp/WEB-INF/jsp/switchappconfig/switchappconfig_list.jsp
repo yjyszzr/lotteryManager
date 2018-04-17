@@ -32,7 +32,6 @@
 							
 						<!-- 检索  -->
 						<form action="switchappconfig/list.do" method="post" name="Form" id="Form">
-						<!-- 检索  -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>

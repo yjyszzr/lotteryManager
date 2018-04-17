@@ -47,7 +47,7 @@
 							<ul class="dropdown-menu-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
 								<li class="dropdown-header">
 									<i class="ace-icon fa fa-bell-o"></i>
-									璞谷塘供应链管理平台 即时通讯
+									彩小秘管理平台 即时通讯
 								</li>
 							</ul>
 						</li>
@@ -61,7 +61,7 @@
 						<!-- #section:basics/navbar.user_menu -->
 						<li class="blue"><!-- light-blue -->
 							<a data-toggle="dropdown"  class="dropdown-toggle" href="#">
-								<img class="nav-user-photo" src="static/ace/avatars/user.jpg" alt="Jason's Photo" id="userPhoto" />
+								<img class="nav-user-photo" src="static/ace/avatars/user.png" alt="Jason's Photo" id="userPhoto" />
 								<span class="user-info" id="user_info">
 								</span>
 								<i class="ace-icon fa fa-caret-down"></i>
