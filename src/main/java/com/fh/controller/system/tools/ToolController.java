@@ -155,6 +155,21 @@ public class ToolController extends BaseController {
 		return mv;
 	}
 	
+	
+	/**表单构建页面
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/saveFormbuilder")
+	public ModelAndView saveFormbuilder() throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		mv.setViewName("system/tools/form_builder");
+		mv.addObject("pd", pd);
+		return mv;
+	}
+	
 	/**生成文件并下载（生成的表单构建页面代码放到jsp页面）
 	 * @return
 	 * @throws Exception
