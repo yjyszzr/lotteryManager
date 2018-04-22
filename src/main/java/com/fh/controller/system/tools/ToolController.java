@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
+import com.fh.service.lottery.article.ArticleControllerManager;
+import com.fh.service.system.appuser.AppuserManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DelAllFile;
@@ -38,6 +41,10 @@ import com.fh.util.express.GetExpressMsg;
 @Controller
 @RequestMapping(value="/tool")
 public class ToolController extends BaseController {
+	
+	
+	@Resource(name="articlecontrollerService")
+	private ArticleControllerManager articlecontrollerService;
 	
 	/**去接口测试页面
 	 * @return
@@ -156,19 +163,6 @@ public class ToolController extends BaseController {
 	}
 	
 	
-	/**表单构建页面
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/saveFormbuilder")
-	public ModelAndView saveFormbuilder() throws Exception{
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		mv.setViewName("system/tools/form_builder");
-		mv.addObject("pd", pd);
-		return mv;
-	}
 	
 	/**生成文件并下载（生成的表单构建页面代码放到jsp页面）
 	 * @return

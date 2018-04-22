@@ -38,7 +38,8 @@
 		price,	
 		level,	
 		article_pv,	
-		article_uv
+		article_uv,
+		label_defaults
 	</sql>
 	
 	<!-- 字段值 -->
@@ -72,7 +73,8 @@
         #{price},	
         #{level},	
         #{article_pv},	
-        #{article_uv}	
+        #{article_uv},
+        #{label_defaults}	
 	</sql>
 	
 	<!-- 新增-->
@@ -109,7 +111,8 @@
 		        price,	
 		        level,	
 		        article_pv,	
-		        article_uv	
+		        article_uv,
+		        label_defaults
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -156,7 +159,8 @@
 			price = #{price},
 			level = #{level},
 			article_pv = #{article_pv},
-			article_uv = #{article_uv}
+			article_uv = #{article_uv},
+			label_defaults = #{label_defaults}
 		where 
 		article_id = #{article_id}
 	</update>

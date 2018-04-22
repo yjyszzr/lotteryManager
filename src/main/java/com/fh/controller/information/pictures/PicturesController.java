@@ -214,6 +214,7 @@ public class PicturesController extends BaseController {
 		return mv;
 	}
 	
+	
 	/**去修改页面
 	 * @return
 	 * @throws Exception 

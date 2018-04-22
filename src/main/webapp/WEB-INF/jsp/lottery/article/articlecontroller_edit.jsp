@@ -1,486 +1,571 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-	<base href="<%=basePath%>">
+<head>
+<base href="<%=basePath%>">
 	<!-- 下拉框 -->
 	<link rel="stylesheet" href="static/ace/css/chosen.css" />
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../../system/index/top.jsp"%>
+	<!-- 表单构建组建 -->
+	<link rel="shortcut icon" href="favicon.ico"> <link href="plugins/fhform/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link href="plugins/fhform/css/animate.min.css" rel="stylesheet">
+    <link href="plugins/fhform/css/style.min.css?v=4.0.0" rel="stylesheet"><base target="_blank">
 	<!-- 日期框 -->
 	<link rel="stylesheet" href="static/ace/css/datepicker.css" />
+
+	<style>
+        .droppable-active{background-color:#ffe!important}.tools a{cursor:pointer;font-size:80%}.form-body .col-md-6,.form-body .col-md-12{min-height:400px}.draggable{cursor:move}
+    </style>
+
 </head>
-<body class="no-skin">
-<!-- /section:basics/navbar.layout -->
-<div class="main-container" id="main-container">
-	<!-- /section:basics/sidebar -->
-	<div class="main-content">
-		<div class="main-content-inner">
-			<div class="page-content">
-				<div class="row">
-					<div class="col-xs-12">
-					
-					<form action="articlecontroller/${msg }.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="article_id" id="article_id" value="${pd.article_id}"/>
-						<div id="zhongxin" style="padding-top: 13px;">
-						<table id="table_report" class="table table-striped table-bordered table-hover">
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">文章标题:</td>
-								<td><input type="text" name="title" id="title" value="${pd.title}" maxlength="100" placeholder="这里输入文章标题" title="文章标题" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注3:</td>
-								<td><input type="number" name="cat_id" id="cat_id" value="${pd.cat_id}" maxlength="32" placeholder="这里输入备注3" title="备注3" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">文章内容:</td>
-								<td><input type="text" name="content" id="content" value="${pd.content}" maxlength="715827882" placeholder="这里输入文章内容" title="文章内容" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注5:</td>
-								<td><input type="text" name="keywords" id="keywords" value="${pd.keywords}" maxlength="255" placeholder="这里输入备注5" title="备注5" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注6:</td>
-								<td><input type="text" name="jurisdiction" id="jurisdiction" value="${pd.jurisdiction}" maxlength="255" placeholder="这里输入备注6" title="备注6" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注7:</td>
-								<td><input type="text" name="article_thumb" id="article_thumb" value="${pd.article_thumb}" maxlength="255" placeholder="这里输入备注7" title="备注7" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注8:</td>
-								<td><input type="number" name="add_time" id="add_time" value="${pd.add_time}" maxlength="32" placeholder="这里输入备注8" title="备注8" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注9:</td>
-								<td><input type="number" name="is_comment" id="is_comment" value="${pd.is_comment}" maxlength="32" placeholder="这里输入备注9" title="备注9" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注10:</td>
-								<td><input type="number" name="click_number" id="click_number" value="${pd.click_number}" maxlength="32" placeholder="这里输入备注10" title="备注10" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注11:</td>
-								<td><input type="number" name="is_show" id="is_show" value="${pd.is_show}" maxlength="32" placeholder="这里输入备注11" title="备注11" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注12:</td>
-								<td><input type="number" name="user_id" id="user_id" value="${pd.user_id}" maxlength="32" placeholder="这里输入备注12" title="备注12" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注13:</td>
-								<td><input type="number" name="status" id="status" value="${pd.status}" maxlength="32" placeholder="这里输入备注13" title="备注13" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注14:</td>
-								<td><input type="text" name="link" id="link" value="${pd.link}" maxlength="255" placeholder="这里输入备注14" title="备注14" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注15:</td>
-								<td><input type="text" name="source" id="source" value="${pd.source}" maxlength="255" placeholder="这里输入备注15" title="备注15" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注16:</td>
-								<td><input type="text" name="summary" id="summary" value="${pd.summary}" maxlength="255" placeholder="这里输入备注16" title="备注16" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注17:</td>
-								<td><input type="text" name="extend_cat" id="extend_cat" value="${pd.extend_cat}" maxlength="255" placeholder="这里输入备注17" title="备注17" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注18:</td>
-								<td><input type="number" name="is_recommend" id="is_recommend" value="${pd.is_recommend}" maxlength="32" placeholder="这里输入备注18" title="备注18" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注19:</td>
-								<td><input type="text" name="author" id="author" value="${pd.author}" maxlength="45" placeholder="这里输入备注19" title="备注19" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注20:</td>
-								<td><input type="number" name="match_id" id="match_id" value="${pd.match_id}" maxlength="32" placeholder="这里输入备注20" title="备注20" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注21:</td>
-								<td><input type="text" name="related_team" id="related_team" value="${pd.related_team}" maxlength="45" placeholder="这里输入备注21" title="备注21" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注22:</td>
-								<td><input type="number" name="list_style" id="list_style" value="${pd.list_style}" maxlength="32" placeholder="这里输入备注22" title="备注22" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注23:</td>
-								<td><input type="number" name="is_original" id="is_original" value="${pd.is_original}" maxlength="32" placeholder="这里输入备注23" title="备注23" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注24:</td>
-								<td><input type="number" name="is_delete" id="is_delete" value="${pd.is_delete}" maxlength="32" placeholder="这里输入备注24" title="备注24" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注25:</td>
-								<td><input type="number" name="is_stick" id="is_stick" value="${pd.is_stick}" maxlength="32" placeholder="这里输入备注25" title="备注25" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注26:</td>
-								<td><input type="number" name="stick_time" id="stick_time" value="${pd.stick_time}" maxlength="32" placeholder="这里输入备注26" title="备注26" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注27:</td>
-								<td><input type="text" name="price" id="price" value="${pd.price}" maxlength="12" placeholder="这里输入备注27" title="备注27" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注28:</td>
-								<td><input type="number" name="level" id="level" value="${pd.level}" maxlength="32" placeholder="这里输入备注28" title="备注28" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注29:</td>
-								<td><input type="number" name="article_pv" id="article_pv" value="${pd.article_pv}" maxlength="32" placeholder="这里输入备注29" title="备注29" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注30:</td>
-								<td><input type="number" name="article_uv" id="article_uv" value="${pd.article_uv}" maxlength="32" placeholder="这里输入备注30" title="备注30" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="text-align: center;" colspan="10">
-									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
-									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
-								</td>
-							</tr>
-						</table>
+<body class="gray-bg">
+
+	<!-- /section:basics/navbar.layout -->
+	<div class="main-container" id="main-container">
+		<!-- /section:basics/sidebar -->
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-24">
+						   <div class="wrapper wrapper-content">
+						        <div class="row">
+								  	<div class="col-xs-24">
+										<div class="widget-box">
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-5" style="width:100%;">
+											                <div class="ibox float-e-margins">
+											                    <div class="ibox-content">
+											                        <div class="alert alert-info">
+											                          	编辑文章
+											                        </div>
+											                        <form class="form-horizontal m-t" >
+											                        	<div >
+											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章标题：</label>
+											                                <div class="col-sm-9">
+											                                   <input type="text" id="title" placeholder="文章标题" class="col-xs-10 col-sm-5" />
+											                                </div>
+											                            </div>
+											                            <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">作者：</label>
+																			<div class="col-sm-9">
+																				<input type="text" id="author" placeholder="作者" class="col-xs-10 col-sm-5" />
+																			</div>
+											                            </div>
+											                            <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
+																			<div class="col-sm-9">
+																				<a class="btn btn-mini btn-primary" onclick="addPic()">上传</a>
+																			</div>
+																			<div id='imgBox'>
+																			
+																			</div>
+											                            </div>
+											                            <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">视频:</label>
+																			<div class="col-sm-9">
+																				<input type="text" id="video_url" placeholder="视频url" class="col-xs-10 col-sm-5" />
+																			</div>
+											                            </div>
+
+											                            <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">内容分类：</label>
+											                                <div class="col-sm-9">
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="content_cat" type="radio" value = "1" class="ace" id="content_cat1" />
+																					<span class="lbl">今日关注</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="content_cat" type="radio" value = "2" class="ace" id="content_cat2" />
+																					<span class="lbl">竞彩预测</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="content_cat" type="radio" value = "3" class="ace" id="content_cat3" />
+																					<span class="lbl">牛人分析</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="content_cat" type="radio" value = "4" class="ace" id="content_cat4" />
+																					<span class="lbl">其他</span>
+																				</label>
+											                                </div>
+											                            </div>
+											                            <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">是否原创：</label>
+											                                <div class="col-sm-9">
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="is_original" type="radio"  value = "1" class="ace" id="is_original1" />
+																					<span class="lbl">原创</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="is_original" type="radio" value = "2"  class="ace" id="is_original2" />
+																					<span class="lbl">非原创</span>
+																				</label>
+											                                </div>
+											                            </div>
+											                             <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">添加标签：</label>
+											                                <div class="col-sm-9">
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="add_label1" type="radio" value = "1" class="ace" id="add_label1_1" />
+																					<span class="lbl">主队</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="add_label1" type="radio" value = "2" class="ace" id="add_label1_2" />
+																					<span class="lbl">客队</span>
+																				</label>
+											                                </div>
+											                            </div>
+															            <div >
+															                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
+											                                <div class="col-sm-9">
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="add_label2" type="radio" value = "1" class="ace" id="add_label2_1" />
+																					<span class="lbl">主帅</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="add_label2" type="radio" value = "2" class="ace" id="add_label2_2" />
+																					<span class="lbl">球员</span>
+																				</label>
+																																								<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="add_label2" type="radio" value = "3" class="ace" id="add_label2_3" />
+																					<span class="lbl">球迷</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="add_label2" type="radio" value = "4" class="ace" id="add_label2_4" />
+																					<span class="lbl">阵容</span>
+																				</label>
+																				
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="add_label2" type="radio" value = "5" class="ace" id="add_label2_5" />
+																					<span class="lbl">战意</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="add_label2" type="radio" value = "6" class="ace" id="add_label2_6" />
+																					<span class="lbl">拱手</span>
+																				</label>
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="add_label2" type="radio" value = "7" class="ace" id="add_label2_7" />
+																					<span class="lbl">交锋</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="add_label2" type="radio" value = "8" class="ace" id="add_label2_8" />
+																					<span class="lbl">停赛</span>
+																				</label>
+																				
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="add_label2" type="radio" value = "9" class="ace" id="add_label2_9" />
+																					<span class="lbl">伤病</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="add_label2" type="radio" value = "10" class="ace" id="add_label2_10" />
+																					<span class="lbl">状态</span>
+																				</label>
+											                                </div>
+															            <div>
+											                            <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章内容：</label>
+											                                <div class="col-sm-9">
+											                                	<div class="ueQ313596790Que"></div>
+											                                   <script id="editor" type="text/plain" style="width:96%;height:50px;"></script>
+											                                    <div class="ueQ313596790Que"></div>
+											                                </div>
+											                            </div>
+											                            <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
+											                                <div class="col-sm-9">
+											                                   <a class="btn btn-mini btn-success" onclick="preLook()">预览</a>
+											                                   <a class="btn btn-mini btn-primary" onclick="saveInnerHtml('1')">发表</a>
+											                                   <a class="btn btn-mini btn-danger" onclick="saveInnerHtml('2')">保存草稿</a>
+											                                </div>
+											                            </div>
+											                        </form>
+											                    </div>
+											                </div>
+											            </div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div><!-- /.col -->
+						            
+						        </div><!-- row -->
+						    </div>
 						</div>
-						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
-					</form>
+						<!-- /.col -->
 					</div>
-					<!-- /.col -->
+					<!-- /.row -->
 				</div>
-				<!-- /.row -->
+				<!-- /.page-content -->
 			</div>
-			<!-- /.page-content -->
 		</div>
+		<!-- /.main-content -->
+		
+		<form action="<%=basePath%>/tool/downloadFormCode.do" name="Form" id="Form" method="post">
+			<textarea name="htmlCode" id="htmlCode"style="display: none;"></textarea>
+		</form>
+		
+		<!-- 返回顶部 -->
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+
 	</div>
-	<!-- /.main-content -->
-</div>
-<!-- /.main-container -->
+	<!-- /.main-container -->
 
-
-	<!-- 页面底部js¨ -->
 	<%@ include file="../../system/index/foot.jsp"%>
+	<!-- 表单构建组建 -->
+    <script src="plugins/fhform/js/bootstrap.min.js?v=3.3.5"></script>
+    <script src="plugins/fhform/js/content.min.js?v=1.0.0"></script>
+    <script src="plugins/fhform/js/jquery-ui-1.10.4.min.js"></script>
+    <script src="plugins/fhform/js/beautifyhtml/beautifyhtml.js"></script>
+	<!-- 百度富文本编辑框-->
+	<script type="text/javascript" charset="utf-8">window.UEDITOR_HOME_URL = "<%=path%>/plugins/ueditor/";</script>
+	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.all.js"></script>
+	<!-- 百度富文本编辑框-->
+	<!-- ace scripts -->
+	<script src="static/ace/js/ace/ace.js"></script>
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
-	<!--提示框-->
-	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
-		<script type="text/javascript">
+	<!-- 上传控件 -->
+	<script src="static/ace/js/ace/elements.fileinput.js"></script>
+	<script type="text/javascript">
 		$(top.hangge());
-		//保存
-		function save(){
-			if($("#title").val()==""){
-				$("#title").tips({
-					side:3,
-		            msg:'请输入文章标题',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#title").focus();
-			return false;
-			}
-			if($("#cat_id").val()==""){
-				$("#cat_id").tips({
-					side:3,
-		            msg:'请输入备注3',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#cat_id").focus();
-			return false;
-			}
-			if($("#content").val()==""){
-				$("#content").tips({
-					side:3,
-		            msg:'请输入文章内容',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#content").focus();
-			return false;
-			}
-			if($("#keywords").val()==""){
-				$("#keywords").tips({
-					side:3,
-		            msg:'请输入备注5',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#keywords").focus();
-			return false;
-			}
-			if($("#jurisdiction").val()==""){
-				$("#jurisdiction").tips({
-					side:3,
-		            msg:'请输入备注6',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#jurisdiction").focus();
-			return false;
-			}
-			if($("#article_thumb").val()==""){
-				$("#article_thumb").tips({
-					side:3,
-		            msg:'请输入备注7',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#article_thumb").focus();
-			return false;
-			}
-			if($("#add_time").val()==""){
-				$("#add_time").tips({
-					side:3,
-		            msg:'请输入备注8',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#add_time").focus();
-			return false;
-			}
-			if($("#is_comment").val()==""){
-				$("#is_comment").tips({
-					side:3,
-		            msg:'请输入备注9',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_comment").focus();
-			return false;
-			}
-			if($("#click_number").val()==""){
-				$("#click_number").tips({
-					side:3,
-		            msg:'请输入备注10',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#click_number").focus();
-			return false;
-			}
-			if($("#is_show").val()==""){
-				$("#is_show").tips({
-					side:3,
-		            msg:'请输入备注11',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_show").focus();
-			return false;
-			}
-			if($("#user_id").val()==""){
-				$("#user_id").tips({
-					side:3,
-		            msg:'请输入备注12',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#user_id").focus();
-			return false;
-			}
-			if($("#status").val()==""){
-				$("#status").tips({
-					side:3,
-		            msg:'请输入备注13',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#status").focus();
-			return false;
-			}
-			if($("#link").val()==""){
-				$("#link").tips({
-					side:3,
-		            msg:'请输入备注14',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#link").focus();
-			return false;
-			}
-			if($("#source").val()==""){
-				$("#source").tips({
-					side:3,
-		            msg:'请输入备注15',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#source").focus();
-			return false;
-			}
-			if($("#summary").val()==""){
-				$("#summary").tips({
-					side:3,
-		            msg:'请输入备注16',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#summary").focus();
-			return false;
-			}
-			if($("#extend_cat").val()==""){
-				$("#extend_cat").tips({
-					side:3,
-		            msg:'请输入备注17',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#extend_cat").focus();
-			return false;
-			}
-			if($("#is_recommend").val()==""){
-				$("#is_recommend").tips({
-					side:3,
-		            msg:'请输入备注18',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_recommend").focus();
-			return false;
-			}
-			if($("#author").val()==""){
-				$("#author").tips({
-					side:3,
-		            msg:'请输入备注19',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#author").focus();
-			return false;
-			}
-			if($("#match_id").val()==""){
-				$("#match_id").tips({
-					side:3,
-		            msg:'请输入备注20',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#match_id").focus();
-			return false;
-			}
-			if($("#related_team").val()==""){
-				$("#related_team").tips({
-					side:3,
-		            msg:'请输入备注21',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#related_team").focus();
-			return false;
-			}
-			if($("#list_style").val()==""){
-				$("#list_style").tips({
-					side:3,
-		            msg:'请输入备注22',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#list_style").focus();
-			return false;
-			}
-			if($("#is_original").val()==""){
-				$("#is_original").tips({
-					side:3,
-		            msg:'请输入备注23',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_original").focus();
-			return false;
-			}
-			if($("#is_delete").val()==""){
-				$("#is_delete").tips({
-					side:3,
-		            msg:'请输入备注24',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_delete").focus();
-			return false;
-			}
-			if($("#is_stick").val()==""){
-				$("#is_stick").tips({
-					side:3,
-		            msg:'请输入备注25',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_stick").focus();
-			return false;
-			}
-			if($("#stick_time").val()==""){
-				$("#stick_time").tips({
-					side:3,
-		            msg:'请输入备注26',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#stick_time").focus();
-			return false;
-			}
-			if($("#price").val()==""){
-				$("#price").tips({
-					side:3,
-		            msg:'请输入备注27',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#price").focus();
-			return false;
-			}
-			if($("#level").val()==""){
-				$("#level").tips({
-					side:3,
-		            msg:'请输入备注28',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#level").focus();
-			return false;
-			}
-			if($("#article_pv").val()==""){
-				$("#article_pv").tips({
-					side:3,
-		            msg:'请输入备注29',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#article_pv").focus();
-			return false;
-			}
-			if($("#article_uv").val()==""){
-				$("#article_uv").tips({
-					side:3,
-		            msg:'请输入备注30',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#article_uv").focus();
-			return false;
-			}
-			$("#Form").submit();
-			$("#zhongxin").hide();
-			$("#zhongxin2").show();
-		}
 		
 		$(function() {
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+			
+			//下拉框
+			if(!ace.vars['touch']) {
+				$('.chosen-select').chosen({allow_single_deselect:true}); 
+				$(window)
+				.off('resize.chosen')
+				.on('resize.chosen', function() {
+					$('.chosen-select').each(function() {
+						 var $this = $(this);
+						 $this.next().css({'width': $this.parent().width()});
+					});
+				}).trigger('resize.chosen');
+				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+					if(event_name != 'sidebar_collapsed') return;
+					$('.chosen-select').each(function() {
+						 var $this = $(this);
+						 $this.next().css({'width': $this.parent().width()});
+					});
+				});
+				$('#chosen-multiple-style .btn').on('click', function(e){
+					var target = $(this).find('input[type=radio]');
+					var which = parseInt(target.val());
+					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
+					 else $('#form-field-select-4').removeClass('tag-input-style');
+				});
+			}
+			//上传
+			$('#tp').ace_file_input({
+				no_file:'请选择文件 ...',
+				btn_choose:'选择',
+				btn_change:'更改',
+				droppable:false,
+				onchange:null,
+				thumbnail:false, //| true | large
+				whitelist:'*',
+				//whitelist:'gif|png|jpg|jpeg',
+				//blacklist:'gif|png|jpg|jpeg'
+				//onchange:''
+				//
+			});
 		});
-		</script>
+		
+		//百度富文本
+		setTimeout("ueditor()",500);
+		function ueditor(){
+			UE.getEditor('editor');
+		}
+	</script>
+	
+	<script>
+	function saveInnerHtml(status){
+		var status = 1;
+		if(status == "2"){
+			status = 1;
+		}
+		
+		var editor = UE.getEditor('editor');
+		var content = UE.getEditor('editor').getContent();
+		
+		var title = $("#title").val();
+		var author = $("#author").val();
+		var video_url = $("#video_url").val();
+		var content_cat = $("input[name='content_cat']:checked").val();
+		var is_original = $("input[name='is_original']:checked").val();
+		var related_team = $("input[name='add_label1']:checked").val();
+		var label_defaults = $("input[name='add_label2']:checked").val();
+		
+		var picArr = ['http://image.baby-kingdom.com/images2/2016/b/html5/wyeth_20161122_320x280/poster.jpg','http://n2.hdfimg.com/g10/M03/90/65/voYBAFrOvAaAPWkeAAEQ5eQ-510739.jpg'];
+		var article_thumb = picArr.toString();
+ 		$.ajax({
+		    type: "POST",
+		    url: '<%=basePath%>articlecontroller/goAdd.do',
+		        data: {content:content,title:title,author:author,
+		        	   video_url:video_url,extend_cat:content_cat,
+		        	   is_original:is_original,related_team:related_team,
+		        	   label_defaults:label_defaults,status:status,article_thumb:article_thumb},
+		    dataType:'json',
+		    cache: false,
+		    success: function(data){
+		       if("success" != data.result){
+
+		       }
+		    }
+	    });
+		
+	}
+	
+	
+    
+	//下载代码
+	function downloadCode(code){
+		$("#htmlCode").val(code);
+		$("#Form").submit();
+	}
+	
+	//过滤ueditor
+	var ueditorHtml = "";
+	function getUeditorFormHtml(html,msg,isgx){
+		var arryUe = html.split('<div class="ueQ313596790Que"></div>');
+		if(arryUe.length == 3){
+			var uejscode = "<script id=\"editor\" type=\"text/plain\" style=\"width:96%;height:200px;\"><\/script>";
+			if(msg == '1'){
+				if(isgx == '2'){
+					ueditorHtml = arryUe[1];
+					return arryUe[0] + '<div class="ueQ313596790Que"></div>' + uejscode + '<div class="ueQ313596790Que"></div>' + arryUe[2];
+				}else{
+					return arryUe[0] + '<div class="ueQ313596790Que"></div>' + ueditorHtml + '<div class="ueQ313596790Que"></div>' + arryUe[2];
+				}
+			}else{
+				return arryUe[0] + uejscode + arryUe[2];
+			}
+		}else{
+			return html;
+		}
+	}
+	
+	//过滤下拉框
+	var selectHtml = "";
+	function getSelectFormHtml(html,msg,isgx){
+		var arrySe = html.split('<div class="selQ313596790Qsel"></div>');
+		if(arrySe.length == 3){
+			var selectcode ='<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择">'+
+								'<option value=""></option>'+
+								'<option value="">选项一</option>'+
+								'<option value="">选项二</option>'+
+								'<option value="">选项三</option>'+
+						  	'</select>';
+			selectcode = selectHtml == ''?selectcode:selectHtml;
+			if(msg == '1'){
+				if(isgx == '2'){
+					return arrySe[0] + '<div class="selQ313596790Qsel"></div>' + selectcode + '<div class="selQ313596790Qsel"></div>' + arrySe[2];
+				}else{
+					selectHtml = arrySe[1];
+					return html;
+				}
+			}else{
+				return arrySe[0] + selectcode + arrySe[2];
+			}
+		}else{
+			return html;
+		}
+	}
+	
+	//过滤file上传控件
+	var fileHtml = "";
+	function getFileFormHtml(html,msg,isgx){
+		var arryFile = html.split('<div class="fileQ313596790Qfile"></div>');
+		if(arryFile.length == 3){
+			var filecode = "<input type=\"file\" id=\"tp\" name=\"tp\" />";
+			if(msg == '1'){
+				if(isgx == '2'){
+					fileHtml = arryFile[1];
+					return arryFile[0] + '<div class="fileQ313596790Qfile"></div>' + filecode + '<div class="fileQ313596790Qfile"></div>' + arryFile[2];
+				}else{
+					return arryFile[0] + '<div class="fileQ313596790Qfile"></div>' + fileHtml + '<div class="fileQ313596790Qfile"></div>' + arryFile[2];
+				};
+			}else{
+				return arryFile[0] + filecode + arryFile[2];
+			}
+		}else{
+			return html;
+		};
+	}
+	
+    $(document).ready(function() {
+    setup_draggable();
+    $("#n-columns").on("change",
+    function() {
+        var v = $(this).val();
+        if (v === "1") {
+            var $col = $(".form-body .col-md-12").toggle(true);
+            $(".form-body .col-md-6 .draggable").each(function(i, el) {
+                $(this).remove().appendTo($col);
+            });
+            $(".form-body .col-md-6").toggle(false);
+        } else {
+            var $col = $(".form-body .col-md-6").toggle(true);
+            $(".form-body .col-md-12 .draggable").each(function(i, el) {
+                $(this).remove().appendTo(i % 2 ? $col[1] : $col[0]);
+            });
+            $(".form-body .col-md-12").toggle(false);
+        };
+    });
+    $("#copy-to-clipboard").on("click",
+	    function() {
+	        var $copy = $(".form-body").clone().appendTo(document.body);
+	        $copy.find(".tools, :hidden").remove();
+	        $.each(["draggable", "droppable", "sortable", "dropped", "ui-sortable", "ui-draggable", "ui-droppable", "form-body"],
+	        function(i, c) {
+	            $copy.find("." + c).removeClass(c).removeAttr("style");
+	        });
+	        var html = html_beautify($copy.html());
+	        html = getUeditorFormHtml(html,'2','2');
+	        html = getSelectFormHtml(html,'2','2');
+	        html = getFileFormHtml(html,'2','2');
+	        $copy.remove();
+	        $modal = get_modal(html).modal("show");
+	        $modal.find(".btn").remove();
+	        $('#myHtml').val(html);
+	        $modal.find("#myBtn").html("<button type=\"submit\" class=\"btn btn-primary\" data-clipboard-text=\"testing\" onclick=\"downloadCode($('#myHtml').val())\">下载代码</button>");
+	        $modal.find(".modal-title").html("生成的HTML代码");
+	        $modal.find(":input:first").select().focus();
+	        return false;
+	    });
+	});
+	var setup_draggable = function() {
+	    $(".draggable").draggable({
+	        appendTo: "body",
+	        helper: "clone"
+	    });
+	    $(".droppable").droppable({
+	        accept: ".draggable",
+	        helper: "clone",
+	        hoverClass: "droppable-active",
+	        drop: function(event, ui) {
+	            $(".empty-form").remove();
+	            var $orig = $(ui.draggable);
+	            if (!$(ui.draggable).hasClass("dropped")) {
+	                var $el = $orig.clone().addClass("dropped").css({
+	                    "position": "static",
+	                    "left": null,
+	                    "right": null
+	                }).appendTo(this);
+	                var id = $orig.find(":input").attr("id");
+	                if (id) {
+	                    id = id.split("-").slice(0, -1).join("-") + "-" + (parseInt(id.split("-").slice( - 1)[0]) + 1);
+	                    $orig.find(":input").attr("id", id);
+	                    $orig.find("label").attr("for", id);
+	                }
+	                $('<p class="tools col-sm-12 col-sm-offset-3">						<a class="edit-link">编辑HTML<a> | 						<a class="remove-link">移除</a></p>').appendTo($el);
+	            } else {
+	                if ($(this)[0] != $orig.parent()[0]) {
+	                    var $el = $orig.clone().css({
+	                        "position": "static",
+	                        "left": null,
+	                        "right": null
+	                    }).appendTo(this);
+	                    $orig.remove();
+	                }
+	            }
+	        }
+	    }).sortable();
+	};
+	var get_modal = function(content) {
+	    var modal = $('<div class="modal" style="overflow: auto;" tabindex="-1">	<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a><h4 class="modal-title">编辑HTML</h4></div><div class="modal-body ui-front">	<textarea id="myHtml" class="form-control" 	style="min-height: 200px; margin-bottom: 10px;font-family: Monaco, Fixed">' + content + '</textarea><div id="myBtn"><button class="btn btn-success">更新HTML</button></div></div>				</div></div></div>').appendTo(document.body);
+	    return modal;
+	};
+	$(document).on("click", ".edit-link",
+	function(ev) {
+	    var $el = $(this).parent().parent();
+	    var $el_copy = $el.clone();
+	    var $edit_btn = $el_copy.find(".edit-link").parent().remove();
+	    var memberHtml = html_beautify($el_copy.html());
+	    var editHtml = getUeditorFormHtml(memberHtml,'1','2');
+	    	editHtml = getSelectFormHtml(editHtml,'1','2');
+	    	editHtml = getFileFormHtml(editHtml,'1','2');
+	    var $modal = get_modal(editHtml).modal("show");
+	    $modal.find(":input:first").focus();
+	    $modal.find(".btn-success").click(function(ev2) {
+	        var html = $modal.find("textarea").val();
+	        html = getUeditorFormHtml(html,'1','1');
+	        getSelectFormHtml(html,'1','1');
+	        html = getFileFormHtml(html,'1','1');
+	        if (!html) {
+	            $el.remove();
+	        } else {
+	            $el.html(html);
+	            $edit_btn.appendTo($el);
+	        }
+	        $modal.modal("hide");
+	        return false;
+	    });
+	});
+	$(document).on("click", ".remove-link",
+	function(ev) {
+	    $(this).parent().parent().remove();
+	});
+    
+	
+	//新增
+	function addPic(){
+		 top.jzts();
+		 var diag = new top.Dialog();
+		 diag.Drag=true;
+		 diag.Title ="新增";
+		 diag.URL = '<%=basePath%>pictures/goAdd.do';
+		 diag.Width = 800;
+		 diag.Height = 490;
+		 diag.CancelEvent = function(){ //关闭事件
+			 console.log(1111111111)
+ 			 var picS = ['http://image.baby-kingdom.com/images2/2016/b/html5/wyeth_20161122_320x280/poster.jpg'
+				 ,'http://n2.hdfimg.com/g10/M03/90/65/voYBAFrOvAaAPWkeAAEQ5eQ-510739.jpg'];
+		 
+		 	
+		 	for(var i=0;i<picS.length;i++){
+		 		$('#imgBox').append('<img src='+picS[i]+'/>')
+		 	} 
+		 	
+		 	diag.close();
+		 }
+		diag.show();
+	}
+	
+	
+	
+	//预览
+	function preLook(){
+	/* 	var content = UE.getEditor('editor').getContent();
+		localStorage.setItem('content',content);
+        window.open('http://localhost:8080/erp/main/test.html','','height=800,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no') */
+	}
+	
+	//保存草稿箱
+	function saveDraft(){
+		
+	}
+    </script>
+
 </body>
 </html>

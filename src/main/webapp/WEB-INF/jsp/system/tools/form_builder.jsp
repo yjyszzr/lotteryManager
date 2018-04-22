@@ -28,7 +28,7 @@
     </style>
 
 </head>
-<body class="gray-bg">
+<body class="gray-bg" id= "zhongxin">
 
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">

@@ -32,6 +32,7 @@
 							
 						<!-- 检索  -->
 						<form action="articlecontroller/list.do" method="post" name="Form" id="Form">
+						<div id="zhongxin" style="padding-top: 13px;">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -265,19 +266,19 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>articlecontroller/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Width = 1800;
+			 diag.Height = 1300;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
 			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+/* 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
 						 tosearch();
 					 }else{
 						 tosearch();
 					 }
-				}
+				} */
 				diag.close();
 			 };
 			 diag.show();
@@ -309,9 +310,9 @@
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
 			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+/* 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 tosearch();
-				}
+				} */
 				diag.close();
 			 };
 			 diag.show();

@@ -14,16 +14,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.information.pictures.PicturesManager;
 import com.fh.service.lottery.article.ArticleControllerManager;
 import com.fh.util.AppUtil;
+import com.fh.util.Const;
+import com.fh.util.DateUtil;
+import com.fh.util.DateUtilNew;
+import com.fh.util.FileUpload;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.PathUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.Tools;
+import com.fh.util.Watermark;
 
 /** 
  * 说明：内容管理
@@ -38,6 +47,9 @@ public class ArticleControllerController extends BaseController {
 	@Resource(name="articlecontrollerService")
 	private ArticleControllerManager articlecontrollerService;
 	
+	@Resource(name="picturesService")
+	private PicturesManager picturesService;
+	
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -50,7 +62,28 @@ public class ArticleControllerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 //		pd.put("article_id", this.get32UUID());	//主键
-		pd.put("article_id", "0");	//备注1
+		pd.put("add_time", DateUtilNew.getCurrentTimeLong());	//备注1
+		articlecontrollerService.save(pd);
+		mv.addObject("msg","success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	
+	
+	/**预览
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/preLook")
+	public ModelAndView preLook() throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"新增ArticleController");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+//		pd.put("article_id", this.get32UUID());	//主键
+//		pd.put("article_id", "0");	//备注1
 		articlecontrollerService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -113,20 +146,60 @@ public class ArticleControllerController extends BaseController {
 		return mv;
 	}
 	
-	/**去新增页面
-	 * @param
+	/**表单构建页面
+	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/goAdd")
-	public ModelAndView goAdd()throws Exception{
+	@ResponseBody
+	public ModelAndView saveFormbuilder() throws Exception{
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("content", pd.getString("content"));
+		articlecontrollerService.save(pd);
 		mv.setViewName("lottery/article/articlecontroller_edit");
-		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
-	}	
+	}
+	
+	
+	/**上传缩略图
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/addPic")
+	@ResponseBody
+	public Object save(
+			@RequestParam(required=false) MultipartFile file
+			) throws Exception{
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		logBefore(logger, Jurisdiction.getUsername()+"新增图片");
+		Map<String,String> map = new HashMap<String,String>();
+		String  ffile = DateUtil.getDays(), fileName = "";
+		PageData pd = new PageData();
+		if(Jurisdiction.buttonJurisdiction(menuUrl, "add")){
+			if (null != file && !file.isEmpty()) {
+				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;		//文件上传路径
+				fileName = FileUpload.fileUp(file, filePath, this.get32UUID());				//执行上传
+			}else{
+				System.out.println("上传失败");
+			}
+			pd.put("PICTURES_ID", this.get32UUID());			//主键
+			pd.put("TITLE", "图片");								//标题
+			pd.put("NAME", fileName);							//文件名
+			pd.put("PATH", ffile + "/" + fileName);				//路径
+			pd.put("CREATETIME", Tools.date2Str(new Date()));	//创建时间
+			pd.put("MASTER_ID", "1");							//附属与
+			pd.put("BZ", "图片管理处上传");						//备注
+			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);//加水印
+			picturesService.save(pd);
+		}
+		map.put("result", "ok");
+		return AppUtil.returnObject(pd, map);
+	}
+	
 	
 	 /**去修改页面
 	 * @param
