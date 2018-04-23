@@ -1,5 +1,6 @@
 package com.fh.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -248,5 +249,17 @@ public class DateUtilNew {
      */
     public static String getCurrentWeekOfDate() {
         return getWeekOfDate(LocalDateTime.now());
+    }
+    
+    
+    public static final long getMilliSecondsByStr(String dateStr) {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    	try {
+			return sdf.parse(dateStr).getTime() / 1000;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return 0l;
     }
 }

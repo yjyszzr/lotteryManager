@@ -25,7 +25,7 @@ import com.fh.service.lottery.article.ArticleControllerManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
-import com.fh.util.DateUtilNew;
+//import com.fh.util.DateUtilNew;
 import com.fh.util.FileUpload;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -62,7 +62,7 @@ public class ArticleControllerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 //		pd.put("article_id", this.get32UUID());	//主键
-		pd.put("add_time", DateUtilNew.getCurrentTimeLong());	//备注1
+//		pd.put("add_time", DateUtilNew.getCurrentTimeLong());	//备注1
 		articlecontrollerService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");

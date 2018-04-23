@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserManagerControllerMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		dl_user
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		user_id,	
+		user_name,	
+		mobile,	
+		email,	
+		password,	
+		salt,	
+		nickname,	
+		sex,	
+		birthday,	
+		detail_address,	
+		headimg,	
+		user_money,	
+		user_money_limit,	
+		frozen_money,	
+		pay_point,	
+		rank_point,	
+		reg_time,	
+		reg_ip,	
+		last_time,	
+		last_ip,	
+		mobile_supplier,	
+		mobile_province,	
+		mobile_city,	
+		reg_from,	
+		surplus_password,	
+		pay_pwd_salt,	
+		user_status,	
+		pass_wrong_count,	
+		user_type,	
+		is_real,	
+		user_remark
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{user_id},	
+        #{user_name},	
+        #{mobile},	
+        #{email},	
+        #{password},	
+        #{salt},	
+        #{nickname},	
+        #{sex},	
+        #{birthday},	
+        #{detail_address},	
+        #{headimg},	
+        #{user_money},	
+        #{user_money_limit},	
+        #{frozen_money},	
+        #{pay_point},	
+        #{rank_point},	
+        #{reg_time},	
+        #{reg_ip},	
+        #{last_time},	
+        #{last_ip},	
+        #{mobile_supplier},	
+        #{mobile_province},	
+        #{mobile_city},	
+        #{reg_from},	
+        #{surplus_password},	
+        #{pay_pwd_salt},	
+        #{user_status},	
+        #{pass_wrong_count},	
+        #{user_type},	
+        #{is_real},	
+        #{user_remark}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        user_id,	
+		        user_name,	
+		        mobile,	
+		        email,	
+		        password,	
+		        salt,	
+		        nickname,	
+		        sex,	
+		        birthday,	
+		        detail_address,	
+		        headimg,	
+		        user_money,	
+		        user_money_limit,	
+		        frozen_money,	
+		        pay_point,	
+		        rank_point,	
+		        reg_time,	
+		        reg_ip,	
+		        last_time,	
+		        last_ip,	
+		        mobile_supplier,	
+		        mobile_province,	
+		        mobile_city,	
+		        reg_from,	
+		        surplus_password,	
+		        pay_pwd_salt,	
+		        user_status,	
+		        pass_wrong_count,	
+		        user_type,	
+		        is_real,	
+		        user_remark	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			user_id = #{user_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			password = #{password},
+			salt = #{salt},
+			nickname = #{nickname},
+			sex = #{sex},
+			birthday = #{birthday},
+			detail_address = #{detail_address},
+			headimg = #{headimg},
+			user_money = #{user_money},
+			user_money_limit = #{user_money_limit},
+			frozen_money = #{frozen_money},
+			pay_point = #{pay_point},
+			rank_point = #{rank_point},
+			reg_ip = #{reg_ip},
+			last_ip = #{last_ip},
+			mobile_supplier = #{mobile_supplier},
+			mobile_province = #{mobile_province},
+			mobile_city = #{mobile_city},
+			surplus_password = #{surplus_password},
+			pay_pwd_salt = #{pay_pwd_salt},
+			pass_wrong_count = #{pass_wrong_count},
+			user_type = #{user_type},
+			is_real = #{is_real},
+			user_remark = #{user_remark}
+		where 
+		user_id = #{user_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			user_id = #{user_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		dl_user.user_id,user_name,mobile,nickname,reg_time,last_time,real_name,id_code,dl_user.user_status,reg_from
+		from 
+		<include refid="tableName"></include>
+		left join dl_user_real on dl_user_real.user_id = dl_user.user_id
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				dl_user.user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or 
+				nickname LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				<!--	根据需求自己加检索条件
+					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+		<if test="pd.lastStart != null and pd.lastStart != '' and pd.lastEnd != null and pd.lastEnd != ''">
+			and
+			(
+				reg_time between #{pd.lastStart} and #{pd.lastEnd}
+			)
+		</if>
+		<if test="pd.name_chosen != null and (pd.name_chosen == 1 or pd.name_chosen == 2)">
+			and
+			(
+				user_status = #{pd.name_chosen}
+			)
+		</if>
+		<if test="pd.name_chosen != null and pd.name_chosen == 3">
+			and
+			(
+				is_real = 1
+			)
+		</if>
+		<if test="pd.name_chosen != null and pd.name_chosen == 4">
+			and
+			(
+				is_real = 0
+			)
+		</if>
+		
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			user_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
