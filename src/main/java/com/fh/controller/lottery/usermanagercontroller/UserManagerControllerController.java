@@ -25,7 +25,10 @@ import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.Jurisdiction;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
+import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.service.lottery.userrealmanager.UserRealManagerManager;
+import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
 
 /** 
  * 说明：用户列表
@@ -41,6 +44,11 @@ public class UserManagerControllerController extends BaseController {
 	private UserManagerControllerManager usermanagercontrollerService;
 	@Resource(name="useraccountmanagerService")
 	private UserAccountManagerManager useraccountmanagerService;
+	@Resource(name="userrealmanagerService")
+	private UserRealManagerService userrealmanagerService;
+	@Resource(name="userbankmanagerService")
+	private UserBankManagerService userbankmanagerService;
+	
 	
 	/**保存
 	 * @param
@@ -208,6 +216,7 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("pd",pd);
 		return mv;
 	}
+	
 	 /**批量删除
 	 * @param
 	 * @throws Exception
@@ -326,5 +335,20 @@ public class UserManagerControllerController extends BaseController {
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+	}
+	
+	@RequestMapping(value="/toDetail")
+	public ModelAndView toDetail() throws Exception{
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		PageData rEntity = userrealmanagerService.findById(pd);
+		PageData entity = usermanagercontrollerService.findById(pd);
+		List<PageData> list = userbankmanagerService.listAllByUser(pd);
+		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_detail");
+		mv.addObject("entity",entity);
+		mv.addObject("rentity",rEntity);
+		mv.addObject("list",list);
+		return mv;
 	}
 }
