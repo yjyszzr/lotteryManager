@@ -392,7 +392,6 @@
 		
 		//用户详情页
 		function toDetail(userId){
-			alert(userId);
 			window.location.href='<%=basePath%>usermanagercontroller/toDetail.do?user_id='+userId;
 		}
 		
