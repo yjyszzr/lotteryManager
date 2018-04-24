@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
-
 import org.apache.http.util.TextUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,7 @@ import com.fh.util.DateUtilNew;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
+import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 
 /** 
@@ -40,6 +39,8 @@ public class UserManagerControllerController extends BaseController {
 	String menuUrl = "usermanagercontroller/list.do"; //菜单地址(权限用)
 	@Resource(name="usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
+	@Resource(name="useraccountmanagerService")
+	private UserAccountManagerManager useraccountmanagerService;
 	
 	/**保存
 	 * @param
@@ -128,6 +129,36 @@ public class UserManagerControllerController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData>	varList = usermanagercontrollerService.list(page);	//列出UserManagerController列表
+		if(varList != null) {
+			for(int i = 0;i < varList.size();i++) {
+				PageData pData = varList.get(i);
+				Integer userId = (int) pData.get("user_id");
+				Double val = useraccountmanagerService.getTotalConsumByUserId(userId);
+				if(val == null) {
+					val = 0d;
+				}
+				pData.put("total",val);	
+				//获取个人充值总金额
+				Double valR = useraccountmanagerService.getTotalRechargeByUserId(userId);
+				if(valR == null) {
+					valR = 0d;
+				}
+				pData.put("rtotal",valR);
+				//获取个人获奖总金额
+				Double valA = useraccountmanagerService.getTotalAwardByUserId(userId);
+				if(valA == null) {
+					valA = 0d;
+				}
+				pData.put("atotal", valA);
+				//获取个人总金额
+				Double valRest = useraccountmanagerService.getTotalRestByUserId(userId);
+				if(valRest == null) {
+					valRest = 0d;
+				}
+				pData.put("resttotal",valRest);
+//				System.out.println("用户：" + userId + " 总资金额："  + val + " 充值金额:" +valR);
+			}
+		}
 		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -150,7 +181,7 @@ public class UserManagerControllerController extends BaseController {
 		return mv;
 	}	
 	
-	 /**去修改页面
+	 /**detail详情页
 	 * @param
 	 * @throws Exception
 	 */
@@ -166,6 +197,17 @@ public class UserManagerControllerController extends BaseController {
 		return mv;
 	}	
 	
+	@RequestMapping(value="/godetail")
+	public ModelAndView goDetail() throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd = usermanagercontrollerService.findById(pd);
+		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_detail");
+		mv.addObject("msg","detail");
+		mv.addObject("pd",pd);
+		return mv;
+	}
 	 /**批量删除
 	 * @param
 	 * @throws Exception

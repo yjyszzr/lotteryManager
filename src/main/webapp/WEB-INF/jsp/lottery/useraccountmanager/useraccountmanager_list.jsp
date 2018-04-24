@@ -1,11 +1,7 @@
-﻿<%@page import="com.fh.util.DateUtil"%>
-<%@page import="com.fh.util.MoneyUtil" %>
-
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -35,7 +31,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="usermanagercontroller/list.do" method="post" name="Form" id="Form">
+						<form action="useraccountmanager/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -46,16 +42,14 @@
 										</span>
 									</div>
 								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
 								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name_chosen" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
+								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
 									<option value=""></option>
-									<option value="0">全部</option>
-									<option value="3">已实名</option>
-									<option value="4">未实名</option>
-									<option value="1">已锁定</option>
-									<option value="2">已冻结</option>
+									<option value="">全部</option>
+									<option value="">1</option>
+									<option value="">2</option>
 								  	</select>
 								</td>
 								<c:if test="${QX.cha == 1 }">
@@ -72,20 +66,27 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
-									<th class="center" style="width:50px;">ID</th>
-									<th class="center">用户昵称</th>
-									<th class="center">手机号</th>
-									<th class="center">真实姓名</th>
-									<th class="center">身份证号</th>
-									<th class="center">累计消费</th>
-									<th class="center">累计充值</th>
-									<th class="center">累计中奖</th>
-									<th class="center">账户余额</th>
-									<th class="center">注册时间</th>
-									<th class="center">最后登录时间</th>
+									<th class="center" style="width:50px;">序号</th>
+									<th class="center">数据库表ID</th>
+									<th class="center">流水号</th>
+									<th class="center">用户ID</th>
+									<th class="center">操作人</th>
+									<th class="center">操作金额</th>
+									<th class="center">当前变动后的总余额</th>
+									<th class="center">添加时间</th>
+									<th class="center">最后操作时间</th>
+									<th class="center">操作备注</th>
+									<th class="center">流水类型</th>
+									<th class="center">备注11</th>
+									<th class="center">备注12</th>
+									<th class="center">支付编号</th>
+									<th class="center">商品名称</th>
+									<th class="center">三方支付名称</th>
+									<th class="center">三方支付金额</th>
+									<th class="center">可提现余额</th>
+									<th class="center">不可提现余额</th>
+									<th class="center">备注19</th>
 									<th class="center">状态</th>
-									<th class="center">来源</th>
-									
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -98,35 +99,41 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.user_id}" class="ace" /><span class="lbl"></span></label>
+												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id_id}" class="ace" /><span class="lbl"></span></label>
 											</td>
-											<td class='center' style="width: 30px;">${var.user_id}</td>
-											<td class='center'>${var.nickname}</td>
-											<td class='center'>${var.mobile}</td>
-											<td class="center">${var.real_name}</td>
-											<td class="center">${var.id_code}</td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.total)}</td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.rtotal)}</td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.atotal)}</td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.resttotal)}</td>
-											<td class='center'>${DateUtil.toDateStr(var.reg_time*1000)}</td>
-											<td class='center'>${DateUtil.toDateStr(var.last_time*1000)}</td>
-											<td class='center'>${var.user_status}</td>
-											<td class='center'>${var.reg_from}</td>
-											
-											
+											<td class='center' style="width: 30px;">${vs.index+1}</td>
+											<td class='center'>${var.id}</td>
+											<td class='center'>${var.account_sn}</td>
+											<td class='center'>${var.user_id}</td>
+											<td class='center'>${var.admin_user}</td>
+											<td class='center'>${var.amount}</td>
+											<td class='center'>${var.cur_balance}</td>
+											<td class='center'>${var.add_time}</td>
+											<td class='center'>${var.last_time}</td>
+											<td class='center'>${var.note}</td>
+											<td class='center'>${var.process_type}</td>
+											<td class='center'>${var.order_sn}</td>
+											<td class='center'>${var.parent_sn}</td>
+											<td class='center'>${var.pay_id}</td>
+											<td class='center'>${var.payment_name}</td>
+											<td class='center'>${var.third_part_name}</td>
+											<td class='center'>${var.third_part_paid}</td>
+											<td class='center'>${var.user_surplus}</td>
+											<td class='center'>${var.user_surplus_limit}</td>
+											<td class='center'>${var.bonus_price}</td>
+											<td class='center'>${var.status}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.user_id}');">
+													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id_id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
 													</a>
 													</c:if>
 													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="del('${var.user_id}');">
+													<a class="btn btn-xs btn-danger" onclick="del('${var.id_id}');">
 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
 													</c:if>
@@ -140,7 +147,7 @@
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<c:if test="${QX.edit == 1 }">
 															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.user_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
+																<a style="cursor:pointer;" onclick="edit('${var.id_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
 																	<span class="green">
 																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																	</span>
@@ -149,7 +156,7 @@
 															</c:if>
 															<c:if test="${QX.del == 1 }">
 															<li>
-																<a style="cursor:pointer;" onclick="del('${var.user_id}');" class="tooltip-error" data-rel="tooltip" title="删除">
+																<a style="cursor:pointer;" onclick="del('${var.id_id}');" class="tooltip-error" data-rel="tooltip" title="删除">
 																	<span class="red">
 																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																	</span>
@@ -286,7 +293,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>usermanagercontroller/goAdd.do';
+			 diag.URL = '<%=basePath%>useraccountmanager/goAdd.do';
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
@@ -310,7 +317,7 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>usermanagercontroller/delete.do?user_id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>useraccountmanager/delete.do?id_id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						tosearch();
 					});
@@ -324,7 +331,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>usermanagercontroller/goEdit.do?user_id='+Id;
+			 diag.URL = '<%=basePath%>useraccountmanager/goEdit.do?id_id='+Id;
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
@@ -368,7 +375,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>usermanagercontroller/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>useraccountmanager/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,
@@ -387,7 +394,7 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>usermanagercontroller/excel.do';
+			window.location.href='<%=basePath%>useraccountmanager/excel.do';
 		}
 	</script>
 
