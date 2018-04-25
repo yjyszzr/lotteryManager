@@ -25,7 +25,7 @@
 	
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
-		insert into 
+	insert into 
 	<include refid="tableName"></include>
 		(
 		        id,	

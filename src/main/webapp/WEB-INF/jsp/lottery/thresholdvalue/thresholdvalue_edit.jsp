@@ -28,7 +28,7 @@
 					<div class="col-xs-12">
 					
 					<form action="thresholdvalue/${msg }.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="_id" id="_id" value="${pd._id}"/>
+						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
