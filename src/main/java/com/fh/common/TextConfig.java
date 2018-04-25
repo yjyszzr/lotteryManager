@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TextConfig {
+	public static final String URL_SMS_CODE = "http://39.106.18.39:7071/sms/sendSmsCode";
+	
 	private static Map<String, String> BUSINESS_STATUS_MAP = new HashMap<String, String>();
 	static {
 		BUSINESS_STATUS_MAP.put(PurchaseConstants.BUSINESS_STATUS_NO_COMMIT+"", "待提交");

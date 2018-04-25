@@ -20,7 +20,44 @@
 	<!-- 日期框 -->
 	<link rel="stylesheet" href="static/ace/css/datepicker.css" />
 </head>
+
+<style>
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 6px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 10px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+</style>
+	
 <body class="no-skin">
+
+<div style="padding-top: 12px;padding-bottom: 12px">
+	<button class="button" onclick="sendVerifyCode('${entity.user_id}');">发送验证码</button>  
+	<c:choose>
+		<c:when test="${entity.user_status != 2}">
+			<button class="button" onclick="freezAccount('${entity.user_id}')">账号冻结</button>  
+		</c:when> 
+		<c:otherwise>
+			<button class="button" onclick="unFreezAccount('${entity.user_id}')">解冻该账号</button>  
+		</c:otherwise> 
+	</c:choose>
+	<c:choose>
+		<c:when test="${entity.is_real == 1}">
+			<button class="button" onclick="realNameVerify('${entity.user_id}')">实名认证</button> 
+		</c:when>
+		<c:otherwise>
+			<button class="button" onclick="unRealNameVerify('${entity.user_id}')">未认证</button> 
+		</c:otherwise>
+	</c:choose>
+</div>
+
 <!-- /section:basics/navbar.layout -->
 <div class="main-container" id="main-container">
 	<!-- /section:basics/sidebar -->
@@ -29,7 +66,6 @@
 			<div class="page-content">
 				<div class="row">
 					<div class="col-xs-12">
-					
 					<form action="usermanagercontroller/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
 						<div id="zhongxin" style="padding-top: 3px;">
@@ -129,8 +165,59 @@
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
-		<script type="text/javascript">
+	<!-- 删除时确认窗口 -->
+	<script src="static/ace/js/bootbox.js"></script>
+	
+	<script type="text/javascript">
+		function sendVerifyCode(user_id){
+			var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="发送验证码";
+			 diag.URL = '<%=basePath%>usermanagercontroller/phoneVerifySms.do?user_id='+user_id;
+			 diag.Width = 250;
+			 diag.Height = 155;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = true;	//最大化按钮
+		     diag.ShowMinButton = true;		//最小化按钮
+			 diag.CancelEvent = function(){ //关闭事件
+				//
+				diag.close();
+			 };
+			 diag.show();
+			 
+		}
 		
-		</script>
+		function freezAccount(user_id){
+			bootbox.confirm("确定要冻结该账号吗?", function(result) {
+				if(result) {
+					var url = '<%=basePath%>usermanagercontroller/freezAccount.do?op=frozen&user_id='+user_id;
+					window.location.href = url;
+				}
+			});
+		}
+		
+		function unFreezAccount(user_id){
+			bootbox.confirm("确定要解冻该账号吗?", function(result) {
+				if(result) {
+					var url = '<%=basePath%>usermanagercontroller/freezAccount.do?op=unfrozen&user_id='+user_id;
+					window.location.href = url;
+				}
+			});
+		}
+		
+		function realNameVerify(user_id){
+			bootbox.confirm("确定要清除该账号的实名认证信息?", function(result) {
+				if(result) {
+					var url = '<%=basePath%>usermanagercontroller/clearRealInfo.do?user_id='+user_id;
+					window.location.href = url;
+				}
+			});
+		}
+		
+		function unRealNameVerify(user_id){
+			alert("用户" + user_id +"实名信息已清除~");
+		}
+	</script>
+
 </body>
 </html>

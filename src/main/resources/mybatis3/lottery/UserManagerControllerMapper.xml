@@ -151,6 +151,7 @@
 			surplus_password = #{surplus_password},
 			pay_pwd_salt = #{pay_pwd_salt},
 			pass_wrong_count = #{pass_wrong_count},
+			user_status = #{user_status},
 			user_type = #{user_type},
 			is_real = #{is_real},
 			user_remark = #{user_remark}

@@ -38,20 +38,22 @@ public class IDCardUtil {
 	 * @return
 	 */
 	public static final String getAgeByIdCard(String idcard) {
-		String birthday = idcard.substring(6,14);    
-        Date birthdate;
-		try {
-			birthdate = new SimpleDateFormat("yyyyMMdd").parse(birthday);
-			GregorianCalendar currentDay = new GregorianCalendar();    
-	        currentDay.setTime(birthdate);    
-	        int yearIDCard = currentDay.get(Calendar.YEAR);    
-			SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy");  
-	        String year=simpleDateFormat.format(new Date());  
-	        int age = Integer.parseInt(year)- yearIDCard;  
-			return age+"";
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(!TextUtils.isEmpty(idcard) && idcard.length() > 10) {
+			String birthday = idcard.substring(6,14);    
+	        Date birthdate;
+			try {
+				birthdate = new SimpleDateFormat("yyyyMMdd").parse(birthday);
+				GregorianCalendar currentDay = new GregorianCalendar();    
+		        currentDay.setTime(birthdate);    
+		        int yearIDCard = currentDay.get(Calendar.YEAR);    
+				SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy");  
+		        String year=simpleDateFormat.format(new Date());  
+		        int age = Integer.parseInt(year)- yearIDCard;  
+				return age+"";
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

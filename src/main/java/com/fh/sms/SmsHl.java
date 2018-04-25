@@ -111,12 +111,11 @@ public class SmsHl extends AbsSmsProvider {
 	}
 
 	public static void main(String[] args) {
-
 		String mobile = "";
 		String content = "国庆节快乐";
 		Result result = new SmsHl().send(mobile, content);
 		System.out.println(result.getIsSuccess());
 		System.out.println(result.getResponseContent());
-
+		
 	}
 }

@@ -11,7 +11,10 @@ import com.fh.util.PageData;
  * @version
  */
 public interface UserManagerControllerManager{
-
+	public static final int STATUS_NORMAL = 0;	//正常状态
+	public static final int STATUS_LOCK = 1;	//被锁定
+	public static final int STATUS_FREEN = 2;	//被冻结
+	
 	/**新增
 	 * @param pd
 	 * @throws Exception

@@ -14,13 +14,16 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
-
-
-
+import org.apache.http.util.TextUtils;
 import org.dom4j.Document;   
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;   
-import org.dom4j.Element;   
+import org.dom4j.Element;
+
+import com.fh.common.TextConfig;
+import com.fh.entity.sms.ReqSmsCodeEntity;
+import com.fh.entity.sms.RspSmsCodeEntity;
+import com.google.gson.Gson;   
 
 /** 
  * 说明：短信接口类
@@ -32,10 +35,12 @@ public class SmsUtil {
 	
 	public static void main(String [] args) {
 		
-		sendSms2("13511111111","您的验证码是：1111。请不要把验证码泄露给其他人。");
+//		sendSms2("13511111111","您的验证码是：1111。请不要把验证码泄露给其他人。");
 		//sendSmsAll(List<PageData> list)
 		
 		//sendSms1();
+		RspSmsCodeEntity rspEntity = sendMsgV3("18002571689","123456");
+		System.out.println("rspEntity:" + rspEntity);
 	}
 
 	 //短信商 一  http://www.dxton.com/ =====================================================================================
@@ -81,13 +86,21 @@ public class SmsUtil {
  	     
 	}
 	
-	 public static String SMS(String postData, String postUrl) {
+ 	public static String SMS(String postData, String postUrl) {
+ 		return SMS(postData,postUrl,false);
+ 	}
+ 	
+	 public static String SMS(String postData, String postUrl,boolean isJson) {
 	        try {
 	            //发送POST请求
 	            URL url = new URL(postUrl);
 	            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 	            conn.setRequestMethod("POST");
-	            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+	            if(isJson) {
+	            	conn.setRequestProperty("Content-Type", "application/json");
+	            }else {
+	            	conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+	            }
 	            conn.setRequestProperty("Connection", "Keep-Alive");
 	            conn.setUseCaches(false);
 	            conn.setDoOutput(true);
@@ -206,7 +219,22 @@ public class SmsUtil {
 	}
 	// =================================================================================================
 	
-	
-	
+	/****
+	 * 发送给URL_SMS_CODE获取短信验证码
+	 * @param phone
+	 * @param code
+	 * @return
+	 */
+	public static final RspSmsCodeEntity sendMsgV3(String phone,String code) {
+		RspSmsCodeEntity rspEntity = new RspSmsCodeEntity();
+		ReqSmsCodeEntity reqEntity = new ReqSmsCodeEntity(phone,code);
+		Gson gson = new Gson();
+		String reqStr = gson.toJson(reqEntity);
+		String rspStr = SmsUtil.SMS(reqStr,TextConfig.URL_SMS_CODE,true);
+		if(!TextUtils.isEmpty(rspStr)) {
+			rspEntity = gson.fromJson(rspStr,RspSmsCodeEntity.class);
+		}
+		return rspEntity;
+	}
 }
 

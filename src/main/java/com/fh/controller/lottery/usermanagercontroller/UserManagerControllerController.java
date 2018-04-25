@@ -17,12 +17,19 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.fh.common.TextConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.sms.ReqSmsCodeEntity;
+import com.fh.entity.sms.RspSmsCodeEntity;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.RandomUtil;
+import com.fh.util.SmsUtil;
+import com.google.gson.Gson;
 import com.fh.util.Jurisdiction;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
@@ -339,7 +346,15 @@ public class UserManagerControllerController extends BaseController {
 	
 	@RequestMapping(value="/toDetail")
 	public ModelAndView toDetail() throws Exception{
+		ModelAndView mv = getDetailView(null);
+		return mv;
+	}
+	
+	private ModelAndView getDetailView(ModelAndView pMv) throws Exception{
 		ModelAndView mv = new ModelAndView();
+		if(pMv != null) {
+			mv = pMv;
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		PageData rEntity = userrealmanagerService.findById(pd);
@@ -349,6 +364,74 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("entity",entity);
 		mv.addObject("rentity",rEntity);
 		mv.addObject("list",list);
+		return mv;
+	}
+	
+	@RequestMapping(value="/freezAccount")
+	public ModelAndView freezAccount() throws Exception{
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String op =  pd.getString("op");
+		PageData userEntity = usermanagercontrollerService.findById(pd);
+		if(userEntity != null) {
+			if(op != null) {
+				if(op.equals("frozen")) {
+					userEntity.put("user_status",UserManagerControllerManager.STATUS_FREEN);	
+				}else {
+					userEntity.put("user_status",UserManagerControllerManager.STATUS_NORMAL);
+				}
+			}
+		}
+		usermanagercontrollerService.edit(userEntity);
+		mv = getDetailView(mv);
+		return mv;
+	} 
+	
+	@RequestMapping(value="/clearRealInfo")
+	public ModelAndView clearRealInfo() throws Exception{
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		PageData userEntity = usermanagercontrollerService.findById(pd);
+		if(userEntity != null) {
+			userEntity.put("is_real",0);	
+		}
+		usermanagercontrollerService.edit(userEntity);
+		mv = getDetailView(mv);
+		return mv;
+	}
+	
+	@RequestMapping(value="/phoneVerifySms")
+	public ModelAndView phoneVerifySms() throws Exception{
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		PageData userEntity = usermanagercontrollerService.findById(pd);
+		//获取手机号
+		String phone = userEntity.getString("mobile");
+		String smsCode = RandomUtil.getRandNum(6);
+		//test code
+		userEntity.put("mobile","18002571689");
+		userEntity.put("smscode",smsCode);
+		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_smscode");
+		mv.addObject("entity",userEntity);
+		return mv;
+	}
+	
+	@RequestMapping(value="/postSmsCode")
+	public ModelAndView postSmsCode() throws Exception{
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String mobile = pd.getString("mobile");
+		String smsCode = pd.getString("smscode");
+		RspSmsCodeEntity rspEntity = SmsUtil.sendMsgV3(mobile,smsCode);
+		pd.put("code",rspEntity.code);
+		pd.put("data",rspEntity.data);
+		pd.put("msg",rspEntity.msg);
+		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_result");
+		mv.addObject("rentity",pd);
 		return mv;
 	}
 }
