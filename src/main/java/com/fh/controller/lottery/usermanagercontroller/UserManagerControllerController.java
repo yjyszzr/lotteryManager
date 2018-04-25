@@ -412,7 +412,7 @@ public class UserManagerControllerController extends BaseController {
 		String phone = userEntity.getString("mobile");
 		String smsCode = RandomUtil.getRandNum(6);
 		//test code
-		userEntity.put("mobile","18002571689");
+		userEntity.put("mobile",phone);
 		userEntity.put("smscode",smsCode);
 		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_smscode");
 		mv.addObject("entity",userEntity);
