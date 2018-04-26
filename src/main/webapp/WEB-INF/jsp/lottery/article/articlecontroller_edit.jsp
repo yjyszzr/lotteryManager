@@ -18,6 +18,8 @@
 	<%@ include file="../../system/index/top.jsp"%>
 	<!-- 表单构建组建 -->
 	<link rel="shortcut icon" href="favicon.ico"> <link href="plugins/fhform/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+	
+
     <link href="plugins/fhform/css/animate.min.css" rel="stylesheet">
     <link href="plugins/fhform/css/style.min.css?v=4.0.0" rel="stylesheet"><base target="_blank">
 	<!-- 日期框 -->
@@ -55,28 +57,68 @@
 											                        	<div >
 											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章标题：</label>
 											                                <div class="col-sm-9">
-											                                   <input type="text" id="title" placeholder="文章标题" class="col-xs-10 col-sm-5" />
+<%-- 											                                <input type=hidden id="content1"   value="${pd.content}"/> --%>
+											                                   <input type="text" id="title" placeholder="文章标题" class="col-xs-10 col-sm-5"   value="${pd.title}"/>
 											                                </div>
 											                            </div>
-											                            <div >
+											                          
+											                            <div  >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">作者：</label>
 																			<div class="col-sm-9">
-																				<input type="text" id="author" placeholder="作者" class="col-xs-10 col-sm-5" />
+																				<input type="text" id="author" placeholder="作者" class="col-xs-10 col-sm-5"    value="${pd.author}"/>
 																			</div>
 											                            </div>
 											                            <div >
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">图片张数：</label>
+											                                <div class="col-sm-9">
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
+																					<input  name="photosNum" type="radio" checked  value = "1" class="ace" id="photosNum1" />
+																					<span class="lbl">单张图片</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="photosNum" type="radio"  value = "2" class="ace" id="photosNum2" />
+																					<span class="lbl">三张图片</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="photosNum" type="radio"  value = "3" class="ace" id="photosNum3" />
+																					<span class="lbl">纯文本</span>
+																				</label>
+											                                </div>
+											                            </div>
+											                            <div class="slt1" >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
-																				<a class="btn btn-mini btn-primary" onclick="addPic()">上传</a>
+																			   <span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');"> 上传</span>  
+																			   	<input  type="file" id="fileUpload" name="file"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
+<!-- 																				<a class="btn btn-mini btn-primary" onclick="addPic()">单张上传</a> -->
 																			</div>
-																			<div id='imgBox'>
-																			
+																			<div >
+																			<img id="photoShow1"  src=" "  alt="">
 																			</div>
 											                            </div>
+								                                         <div class="slt2"    style="display:none;">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
+																			<div class="col-sm-9">
+																				<a class="btn btn-mini btn-primary" onclick="addPic()">三张上传</a>
+																			</div>
+																			<div id='imgBox'>
+																			</div>
+											                            </div>
+											                            <div  style="display:none;">
+<!-- 											                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label> -->
+<!-- 											                            <span class="set_Btn" onclick="$('#fileUpload').trigger('click');"> 上传</span>   -->
+<!-- 																			<input  type="file" id="fileUpload" name="myfiles"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>  -->
+<%-- 																			<input type="hidden" id="licencePath"   name="licensePicUrl"  value="${company.licensePicUrl }"  /> --%>
+<!-- 																			<dt class="dtImg"> -->
+<%-- 																				<img id="licencePathShow"  src="${base }/${company.licensePicUrl }"  alt=""> --%>
+<!-- 																			</dt>  -->
+											                            </div>
+											                            
+											                            
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">视频:</label>
 																			<div class="col-sm-9">
-																				<input type="text" id="video_url" placeholder="视频url" class="col-xs-10 col-sm-5" />
+																				<input type="text" id="video_url" placeholder="视频url" class="col-xs-10 col-sm-5"     value="${pd.video_url}"/>
 																			</div>
 											                            </div>
 
@@ -84,19 +126,19 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">内容分类：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="content_cat" type="radio" value = "1" class="ace" id="content_cat1" />
+																					<input  name="content_cat" type="radio" <c:if test="${pd.extend_cat==1}">checked="checked"</c:if>  value = "1" class="ace" id="content_cat1" />
 																					<span class="lbl">今日关注</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="content_cat" type="radio" value = "2" class="ace" id="content_cat2" />
+																					<input name="content_cat" type="radio"  <c:if test="${pd.extend_cat==2}">checked="checked"</c:if>  value = "2" class="ace" id="content_cat2" />
 																					<span class="lbl">竞彩预测</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="content_cat" type="radio" value = "3" class="ace" id="content_cat3" />
+																					<input name="content_cat" type="radio" <c:if test="${pd.extend_cat==3}">checked="checked"</c:if>  value = "3" class="ace" id="content_cat3" />
 																					<span class="lbl">牛人分析</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="content_cat" type="radio" value = "4" class="ace" id="content_cat4" />
+																					<input name="content_cat" type="radio" <c:if test="${pd.extend_cat==4}">checked="checked"</c:if>  value = "4" class="ace" id="content_cat4" />
 																					<span class="lbl">其他</span>
 																				</label>
 											                                </div>
@@ -105,11 +147,11 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">是否原创：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="is_original" type="radio"  value = "1" class="ace" id="is_original1" />
+																					<input  name="is_original" type="radio"  <c:if test="${pd.is_original==1}">checked="checked"</c:if>    value = "1" class="ace" id="is_original1" />
 																					<span class="lbl">原创</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="is_original" type="radio" value = "2"  class="ace" id="is_original2" />
+																					<input name="is_original" type="radio"  <c:if test="${pd.is_original==2}">checked="checked"</c:if>   value = "2"  class="ace" id="is_original2" />
 																					<span class="lbl">非原创</span>
 																				</label>
 											                                </div>
@@ -118,11 +160,11 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">添加标签：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label1" type="radio" value = "1" class="ace" id="add_label1_1" />
+																					<input  name="add_label1" type="radio"   <c:if test="${pd.related_team==1}">checked="checked"</c:if>   value = "1" class="ace" id="add_label1_1" />
 																					<span class="lbl">主队</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label1" type="radio" value = "2" class="ace" id="add_label1_2" />
+																					<input name="add_label1" type="radio"  <c:if test="${pd.related_team==2}">checked="checked"</c:if>    value = "2" class="ace" id="add_label1_2" />
 																					<span class="lbl">客队</span>
 																				</label>
 											                                </div>
@@ -131,45 +173,45 @@
 															                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio" value = "1" class="ace" id="add_label2_1" />
+																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="add_label2_1" />
 																					<span class="lbl">主帅</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio" value = "2" class="ace" id="add_label2_2" />
+																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==2}">checked="checked"</c:if>   value = "2" class="ace" id="add_label2_2" />
 																					<span class="lbl">球员</span>
 																				</label>
 																																								<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio" value = "3" class="ace" id="add_label2_3" />
+																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==3}">checked="checked"</c:if>   value = "3" class="ace" id="add_label2_3" />
 																					<span class="lbl">球迷</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio" value = "4" class="ace" id="add_label2_4" />
+																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==4}">checked="checked"</c:if>   value = "4" class="ace" id="add_label2_4" />
 																					<span class="lbl">阵容</span>
 																				</label>
 																				
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio" value = "5" class="ace" id="add_label2_5" />
+																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==5}">checked="checked"</c:if>   value = "5" class="ace" id="add_label2_5" />
 																					<span class="lbl">战意</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio" value = "6" class="ace" id="add_label2_6" />
+																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==6}">checked="checked"</c:if>   value = "6" class="ace" id="add_label2_6" />
 																					<span class="lbl">拱手</span>
 																				</label>
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio" value = "7" class="ace" id="add_label2_7" />
+																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==7}">checked="checked"</c:if>   value = "7" class="ace" id="add_label2_7" />
 																					<span class="lbl">交锋</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio" value = "8" class="ace" id="add_label2_8" />
+																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==8}">checked="checked"</c:if>   value = "8" class="ace" id="add_label2_8" />
 																					<span class="lbl">停赛</span>
 																				</label>
 																				
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio" value = "9" class="ace" id="add_label2_9" />
+																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==9}">checked="checked"</c:if>   value = "9" class="ace" id="add_label2_9" />
 																					<span class="lbl">伤病</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio" value = "10" class="ace" id="add_label2_10" />
+																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==10}">checked="checked"</c:if>   value = "10" class="ace" id="add_label2_10" />
 																					<span class="lbl">状态</span>
 																				</label>
 											                                </div>
@@ -178,7 +220,7 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章内容：</label>
 											                                <div class="col-sm-9">
 											                                	<div class="ueQ313596790Que"></div>
-											                                   <script id="editor" type="text/plain" style="width:96%;height:50px;"></script>
+											                                   <script id="editor"  type="text/plain" style="width:96%;height:50px;"></script>
 											                                    <div class="ueQ313596790Que"></div>
 											                                </div>
 											                            </div>
@@ -228,6 +270,7 @@
 	<!-- 表单构建组建 -->
     <script src="plugins/fhform/js/bootstrap.min.js?v=3.3.5"></script>
     <script src="plugins/fhform/js/content.min.js?v=1.0.0"></script>
+    <script src="plugins/fhform/js/ajaxfileupload.js"></script>
     <script src="plugins/fhform/js/jquery-ui-1.10.4.min.js"></script>
     <script src="plugins/fhform/js/beautifyhtml/beautifyhtml.js"></script>
 	<!-- 百度富文本编辑框-->
@@ -244,9 +287,48 @@
 	<!-- 上传控件 -->
 	<script src="static/ace/js/ace/elements.fileinput.js"></script>
 	<script type="text/javascript">
+	
+// 	var content = "${pd.content}";
+// 	editor.setContent(content );
 		$(top.hangge());
+		$(document).ready(function() {
+		    $('input[type=radio][name=photosNum]').change(function() {
+		        if (this.value == '1') {
+					$(".slt2").hide();
+		   			$(".slt1").show();
+		        }
+		        else if (this.value == '2') {
+		        	$(".slt1").hide();
+		   			$(".slt2").show();
+		        }
+		        else if (this.value == '3') {
+		        	$(".slt2").hide();
+		   			$(".slt1").hide();
+	   			}
+		    });
+		});
+		
+		//上传营业执照图片
+		function ajaxFileUpload(fileObj,fileId){
+			alert(fileId)
+		    $.ajaxFileUpload({
+		        url:'<%=basePath%>pictures/fileUpload.do',
+		        secureuri:false,                           //是否启用安全提交,默认为false
+		        fileElementId:fileId,               		//文件选择框的id属性
+		        dataType:'json',                           //服务器返回的格式,可以是json或xml等
+		        success:function(data, status){            //服务器响应成功时的处理函数
+// 		            	alert(JSON.stringify(data))
+		            if(data.result){
+// 		            	alert(data.PATH);
+						$("#photoShow1").attr("src",  "<%=basePath%>+data.PATH");
+// 						alert(1)
+		            } 
+		        }
+		    });
+		  }
 		
 		$(function() {
+// 			UE.getEditor('editor').setContent($('#content1').val());
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
 			
@@ -307,7 +389,6 @@
 		
 		var editor = UE.getEditor('editor');
 		var content = UE.getEditor('editor').getContent();
-		
 		var title = $("#title").val();
 		var author = $("#author").val();
 		var video_url = $("#video_url").val();
@@ -318,16 +399,23 @@
 		
 		var picArr = ['http://image.baby-kingdom.com/images2/2016/b/html5/wyeth_20161122_320x280/poster.jpg','http://n2.hdfimg.com/g10/M03/90/65/voYBAFrOvAaAPWkeAAEQ5eQ-510739.jpg'];
 		var article_thumb = picArr.toString();
- 		$.ajax({
-		    type: "POST",
-		    url: '<%=basePath%>articlecontroller/goAdd.do',
-		        data: {content:content,title:title,author:author,
-		        	   video_url:video_url,extend_cat:content_cat,
-		        	   is_original:is_original,related_team:related_team,
-		        	   label_defaults:label_defaults,status:status,article_thumb:article_thumb},
+ 			$.ajax({
+		   	 	type: "POST",
+    		       url: '<%=basePath%>articlecontroller/goAdd.do',
+		        data: {content:content,
+		        		title:title,
+		        	    author:author,
+		        	   video_url:video_url,
+		        	   extend_cat:content_cat,
+		        	   is_original:is_original,
+		        	   related_team:related_team,
+		        	   label_defaults:label_defaults,
+		        	   status:status,
+		        	   article_thumb:article_thumb},
 		    dataType:'json',
 		    cache: false,
 		    success: function(data){
+		    	alert(data)
 		       if("success" != data.result){
 
 		       }
@@ -565,6 +653,7 @@
 	function saveDraft(){
 		
 	}
+	
     </script>
 
 </body>
