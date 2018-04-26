@@ -32,8 +32,16 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">业务ID:</td>
+								<td><input type="text" name="business_id" id="business_id" value="${pd.business_id}" maxlength="12"  onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="这里输入业务Id" title="阈值" style="width:98%;"/></td>
+							</tr>
+							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">阈值:</td>
-								<td><input type="text" name="value" id="value" value="${pd.value}" maxlength="12" placeholder="这里输入阈值" title="阈值" style="width:98%;"/></td>
+								<td><input type="text" name="value" id="value" value="${pd.value}" maxlength="12"  placeholder="这里输入阈值" title="阈值" style="width:98%;"/></td>
+							</tr>
+								<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">业务描述:</td>
+								<td><input type="text" name="describtion" id="describtion" value="${pd.describtion}" maxlength="50" placeholder="业务描述" title="业务描述" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">

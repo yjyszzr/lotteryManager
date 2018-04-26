@@ -50,7 +50,9 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			value = #{value} 
+	     	business_id=#{ business_id},	
+			value = #{value},
+	        describtion=#{describtion}	
 		 		where 
 		id = #{id}
 	</update>

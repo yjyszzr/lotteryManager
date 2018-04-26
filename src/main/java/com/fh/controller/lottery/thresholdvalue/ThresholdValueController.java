@@ -53,10 +53,10 @@ public class ThresholdValueController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// pd.put("_id", this.get32UUID()); //主键
+		// pd.put("id", this.get32UUID()); // 主键
 		pd.put("id", "0"); // id
-		pd.put("business_id", "0"); // 业务ID
-		pd.put("describtion", ""); // 描述
+		// pd.put("business_id", "0"); // 业务ID
+		// pd.put("describtion", ""); // 描述
 		thresholdvalueService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
