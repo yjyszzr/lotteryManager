@@ -57,7 +57,7 @@
 											                        	<div >
 											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章标题：</label>
 											                                <div class="col-sm-9">
-<%-- 											                                <input type=hidden id="content1"   value="${pd.content}"/> --%>
+											                                <input type=hidden id="article_id"   value="${pd.article_id}"/>
 											                                   <input type="text" id="title" placeholder="文章标题" class="col-xs-10 col-sm-5"   value="${pd.title}"/>
 											                                </div>
 											                            </div>
@@ -72,39 +72,59 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">图片张数：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="photosNum" type="radio" checked  value = "1" class="ace" id="photosNum1" />
+																					<input  name="photosNum" type="radio" <c:if test="${pd.photosNum==1}">checked="checked"</c:if>    value = "1" class="ace" id="photosNum1" />
 																					<span class="lbl">单张图片</span>
 																				</label>
+																					<input name="article_thumb1" class="hidden"   id="article_thumb1" value="${pd.article_thumb1}" />
+																					<input name="article_thumb2" class="hidden"   id="article_thumb2" value="${pd.article_thumb2}"/>
+																					<input name="article_thumb3" class="hidden"   id="article_thumb3" value="${pd.article_thumb3}"/>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="photosNum" type="radio"  value = "2" class="ace" id="photosNum2" />
+																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==2}">checked="checked"</c:if>  value = "2" class="ace" id="photosNum2" />
 																					<span class="lbl">三张图片</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="photosNum" type="radio"  value = "3" class="ace" id="photosNum3" />
+																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==3}">checked="checked"</c:if>  value = "3" class="ace" id="photosNum3" />
 																					<span class="lbl">纯文本</span>
 																				</label>
 											                                </div>
 											                            </div>
+																			   	<input  type="file" id="fileUpload" name="file"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
 											                            <div class="slt1" >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
-																			   <span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');"> 上传</span>  
-																			   	<input  type="file" id="fileUpload" name="file"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
-<!-- 																				<a class="btn btn-mini btn-primary" onclick="addPic()">单张上传</a> -->
-																			</div>
-																			<div >
-																			<img id="photoShow1"  src=" "  alt="">
+																			   <span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');"> 单张上传</span>  
 																			</div>
 											                            </div>
-								                                         <div class="slt2"    style="display:none;">
+																			<div  class="slt1">
+																				<div class="col-sm-3"></div>
+																				<div class="col-sm-9">
+																					<img id="photoShow"  <c:if test="${not empty pd.article_thumb1}">src="<%=basePath%>${pd.article_thumb1}" width="100px",hight="50px"  </c:if> >
+																				</div>
+												                            </div>
+									                                      <div class="slt2"   style="display:none;">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
-																				<a class="btn btn-mini btn-primary" onclick="addPic()">三张上传</a>
+																			   <span class="btn btn-mini btn-primary" onclick="uploadThreePhoto()"> 三张上传</span>  
 																			</div>
-																			<div id='imgBox'>
-																			</div>
-											                            </div>
-											                            <div  style="display:none;">
+																		
+											                            </div >
+											                            	<div  class="slt2" >
+																				<div class="col-sm-3"></div>
+																				<div class="col-sm-9">
+																					<img id="photoShow1"    <c:if test="${not empty pd.article_thumb1}">src="<%=basePath%>${pd.article_thumb1}" width="100px",hight="50px"  </c:if>  alt="">
+																					<img id="photoShow2"    <c:if test="${not empty pd.article_thumb2}">src="<%=basePath%>${pd.article_thumb2}" width="100px",hight="50px"  </c:if>   alt="">
+																					<img id="photoShow3"    <c:if test="${not empty pd.article_thumb3}">src="<%=basePath%>${pd.article_thumb3}" width="100px",hight="50px"  </c:if>   alt="">
+																				</div>
+												                            </div>
+<!-- 								                                         <div class="slt2"    style="display:none;"> -->
+<!-- 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label> -->
+<!-- 																			<div class="col-sm-9"> -->
+<!-- 																				<a class="btn btn-mini btn-primary" onclick="addPic()">三张上传</a> -->
+<!-- 																			</div> -->
+<!-- 																			<div id='imgBox'> -->
+<!-- 																			</div> -->
+<!-- 											                            </div> -->
+<!-- 											                            <div  style="display:none;"> -->
 <!-- 											                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label> -->
 <!-- 											                            <span class="set_Btn" onclick="$('#fileUpload').trigger('click');"> 上传</span>   -->
 <!-- 																			<input  type="file" id="fileUpload" name="myfiles"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>  -->
@@ -112,8 +132,7 @@
 <!-- 																			<dt class="dtImg"> -->
 <%-- 																				<img id="licencePathShow"  src="${base }/${company.licensePicUrl }"  alt=""> --%>
 <!-- 																			</dt>  -->
-											                            </div>
-											                            
+<!-- 											                            </div> -->
 											                            
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">视频:</label>
@@ -215,7 +234,7 @@
 																					<span class="lbl">状态</span>
 																				</label>
 											                                </div>
-															            <div>
+															            </div>
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章内容：</label>
 											                                <div class="col-sm-9">
@@ -227,7 +246,7 @@
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
 											                                <div class="col-sm-9">
-											                                   <a class="btn btn-mini btn-success" onclick="preLook()">预览</a>
+<!-- 											                                   <a class="btn btn-mini btn-success" onclick="preLook()">预览</a> -->
 											                                   <a class="btn btn-mini btn-primary" onclick="saveInnerHtml('1')">发表</a>
 											                                   <a class="btn btn-mini btn-danger" onclick="saveInnerHtml('2')">保存草稿</a>
 											                                </div>
@@ -241,7 +260,6 @@
 											</div>
 										</div>
 									</div><!-- /.col -->
-						            
 						        </div><!-- row -->
 						    </div>
 						</div>
@@ -253,11 +271,9 @@
 			</div>
 		</div>
 		<!-- /.main-content -->
-		
 		<form action="<%=basePath%>/tool/downloadFormCode.do" name="Form" id="Form" method="post">
 			<textarea name="htmlCode" id="htmlCode"style="display: none;"></textarea>
 		</form>
-		
 		<!-- 返回顶部 -->
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
 			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
@@ -276,6 +292,7 @@
 	<!-- 百度富文本编辑框-->
 	<script type="text/javascript" charset="utf-8">window.UEDITOR_HOME_URL = "<%=path%>/plugins/ueditor/";</script>
 	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.parse.js"></script>
 	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.all.js"></script>
 	<!-- 百度富文本编辑框-->
 	<!-- ace scripts -->
@@ -287,48 +304,70 @@
 	<!-- 上传控件 -->
 	<script src="static/ace/js/ace/elements.fileinput.js"></script>
 	<script type="text/javascript">
+	$(function(){
+	  if ($("input[name='photosNum']:checked").val()== '1') {
+			$(".slt2").hide();
+ 			$(".slt1").show();
+      }else if ($("input[name='photosNum']:checked").val()== '2') {
+      	$(".slt1").hide();
+ 			$(".slt2").show();
+      }else if ($("input[name='photosNum']:checked").val()=='3') {
+      	$(".slt2").hide();
+ 			$(".slt1").hide();
+			}
+	});
+// 	不能创建editor之后马上使用ue.setContent('文本内容')，要等到创建完成之后才可以使用
+	UE.getEditor('editor').ready(function() {  
+	  UE.getEditor('editor').setContent('${pd.content}');
+	});  
+
+	var clickNum=0;//设置一个全局的变量；
+	function uploadThreePhoto(){
+	$('#fileUpload').trigger('click');
+	clickNum+=1;//第单击一次clickNum的值加1;
+		if(clickNum>3){
+			clickNum=1;
+		}
+	}
 	
-// 	var content = "${pd.content}";
-// 	editor.setContent(content );
 		$(top.hangge());
 		$(document).ready(function() {
 		    $('input[type=radio][name=photosNum]').change(function() {
 		        if (this.value == '1') {
 					$(".slt2").hide();
 		   			$(".slt1").show();
-		        }
-		        else if (this.value == '2') {
+		        }else if (this.value == '2') {
 		        	$(".slt1").hide();
 		   			$(".slt2").show();
-		        }
-		        else if (this.value == '3') {
+		        }else if (this.value == '3') {
 		        	$(".slt2").hide();
 		   			$(".slt1").hide();
 	   			}
 		    });
 		});
-		
+		 var basePath = "<%=basePath%>"; 
 		//上传营业执照图片
 		function ajaxFileUpload(fileObj,fileId){
-			alert(fileId)
 		    $.ajaxFileUpload({
 		        url:'<%=basePath%>pictures/fileUpload.do',
 		        secureuri:false,                           //是否启用安全提交,默认为false
 		        fileElementId:fileId,               		//文件选择框的id属性
 		        dataType:'json',                           //服务器返回的格式,可以是json或xml等
 		        success:function(data, status){            //服务器响应成功时的处理函数
-// 		            	alert(JSON.stringify(data))
 		            if(data.result){
-// 		            	alert(data.PATH);
-						$("#photoShow1").attr("src",  "<%=basePath%>+data.PATH");
-// 						alert(1)
+		            	if($('input[type=radio][name=photosNum]:checked').val() == '1' ){
+			            	$("#photoShow").attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
+			            	$("#article_thumb1").val(data.PATH);
+		            	}else if( $('input[type=radio][name=photosNum]:checked').val() == '2' ){
+			            	$("#photoShow"+clickNum).attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
+			            	$("#article_thumb"+clickNum).val(data.PATH);
+		            	}
 		            } 
 		        }
 		    });
 		  }
 		
 		$(function() {
-// 			UE.getEditor('editor').setContent($('#content1').val());
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
 			
@@ -382,13 +421,14 @@
 	
 	<script>
 	function saveInnerHtml(status){
-		var status = 1;
-		if(status == "2"){
-			status = 1;
-		}
+// 		var status = 1;
+// 		if(status == "2"){
+// 			status = 1;
+// 		}
 		
 		var editor = UE.getEditor('editor');
 		var content = UE.getEditor('editor').getContent();
+		var article_id = $("#article_id").val();
 		var title = $("#title").val();
 		var author = $("#author").val();
 		var video_url = $("#video_url").val();
@@ -397,32 +437,44 @@
 		var related_team = $("input[name='add_label1']:checked").val();
 		var label_defaults = $("input[name='add_label2']:checked").val();
 		
-		var picArr = ['http://image.baby-kingdom.com/images2/2016/b/html5/wyeth_20161122_320x280/poster.jpg','http://n2.hdfimg.com/g10/M03/90/65/voYBAFrOvAaAPWkeAAEQ5eQ-510739.jpg'];
-		var article_thumb = picArr.toString();
+// 		var picArr = ['http://image.baby-kingdom.com/images2/2016/b/html5/wyeth_20161122_320x280/poster.jpg','http://n2.hdfimg.com/g10/M03/90/65/voYBAFrOvAaAPWkeAAEQ5eQ-510739.jpg'];
+// 		var article_thumb = picArr.toString();
+		var photosNum = $("input[name='photosNum']:checked").val();
+		var article_thumb1 =$("#article_thumb1").val();
+		var article_thumb2 =$("#article_thumb2").val();
+		var article_thumb3 =$("#article_thumb3").val();
  			$.ajax({
-		   	 	type: "POST",
-    		       url: '<%=basePath%>articlecontroller/goAdd.do',
-		        data: {content:content,
-		        		title:title,
-		        	    author:author,
-		        	   video_url:video_url,
-		        	   extend_cat:content_cat,
-		        	   is_original:is_original,
-		        	   related_team:related_team,
-		        	   label_defaults:label_defaults,
-		        	   status:status,
-		        	   article_thumb:article_thumb},
-		    dataType:'json',
-		    cache: false,
-		    success: function(data){
-		    	alert(data)
-		       if("success" != data.result){
-
-		       }
-		    }
-	    });
-		
-	}
+		   	 		type: "POST",
+    		       	url: '<%=basePath%>articlecontroller/saveOrUpdate.do',
+		        	data: {
+		        					article_id:article_id,
+				        			content:content,
+					        		title:title,
+					        	    author:author,
+					        	   	video_url:video_url,
+					        	   	extend_cat:content_cat,
+					        	   	is_original:is_original,
+					        	   	related_team:related_team,
+					        	   	label_defaults:label_defaults,
+					        	   	status:status,
+					        	   	photosNum:photosNum,
+					        	   	article_thumb1:article_thumb1,
+					        	   	article_thumb2:article_thumb2,
+					        	   	article_thumb3:article_thumb3
+			        	   		},
+				    dataType:'json',
+				    cache: false,
+				    success: function(data){
+				       if(data.result){
+				    	   	top.Dialog.close();
+							top.jzts();
+							$("#Form").submit();
+				       }
+				    },error:function(e){
+				    	alert(JSON.stringify(e))
+				    }
+			    });
+			}
 	
 	
     

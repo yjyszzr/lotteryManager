@@ -28,6 +28,7 @@ import com.fh.service.lottery.article.ArticleControllerManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
+import com.fh.util.DateUtilNew;
 //import com.fh.util.DateUtilNew;
 import com.fh.util.FileUpload;
 import com.fh.util.Jurisdiction;
@@ -57,8 +58,10 @@ public class ArticleControllerController extends BaseController {
 	 * @param
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/save")
-	public ModelAndView save() throws Exception {
+	@RequestMapping(value = "/saveOrUpdate")
+	@ResponseBody
+	public Map<String, String> save() throws Exception {
+		Map<String, String> map = new HashMap<String, String>();
 		logBefore(logger, Jurisdiction.getUsername() + "新增ArticleController");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
@@ -66,12 +69,24 @@ public class ArticleControllerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// pd.put("article_id", this.get32UUID()); //主键
-		// pd.put("add_time", DateUtilNew.getCurrentTimeLong()); //备注1
-		articlecontrollerService.save(pd);
-		mv.addObject("msg", "success");
-		mv.setViewName("save_result");
-		return mv;
+		pd.put("content", pd.getString("content"));
+		pd.put("add_time", DateUtilNew.getCurrentTimeLong()); // 备注1
+		if ("1".equals(pd.get("photosNum"))) {
+			pd.put("article_thumb", pd.get("article_thumb1"));
+
+		} else if ("2".equals(pd.get("photosNum"))) {
+			String articleThumbAll = pd.get("article_thumb1") + ","
+					+ pd.get("article_thumb2") + "," + pd.get("article_thumb3");
+			pd.put("article_thumb", articleThumbAll);
+		}
+		if (pd.get("article_id") == null || "0".equals(pd.get("article_id"))) {
+			articlecontrollerService.save(pd);
+		} else {
+			articlecontrollerService.edit(pd);
+		}
+		map.put("result", "true");
+		map.put("msg", "success");
+		return map;
 	}
 
 	/**
@@ -98,44 +113,21 @@ public class ArticleControllerController extends BaseController {
 	}
 
 	/**
-	 * 删除
-	 * 
-	 * @param out
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/delete")
-	public void delete(PrintWriter out) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "删除ArticleController");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-			return;
-		} // 校验权限
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		articlecontrollerService.delete(pd);
-		out.write("success");
-		out.close();
-	}
-
-	/**
 	 * 修改
 	 * 
 	 * @param
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/edit")
-	public ModelAndView edit() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "修改ArticleController");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
-			return null;
-		} // 校验权限
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		articlecontrollerService.edit(pd);
-		mv.addObject("msg", "success");
-		mv.setViewName("save_result");
-		return mv;
-	}
+	/*
+	 * @RequestMapping(value = "/edit") public ModelAndView edit() throws
+	 * Exception { logBefore(logger, Jurisdiction.getUsername() +
+	 * "修改ArticleController"); if (!Jurisdiction.buttonJurisdiction(menuUrl,
+	 * "edit")) { return null; } // 校验权限 ModelAndView mv =
+	 * this.getModelAndView(); PageData pd = new PageData(); pd =
+	 * this.getPageData(); articlecontrollerService.edit(pd);
+	 * mv.addObject("msg", "success"); mv.setViewName("save_result"); return mv;
+	 * }
+	 */
 
 	/**
 	 * 列表
@@ -174,12 +166,42 @@ public class ArticleControllerController extends BaseController {
 	@ResponseBody
 	public ModelAndView saveFormbuilder() throws Exception {
 		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("lottery/article/articlecontroller_edit");
+		return mv;
+	}
+
+	/**
+	 * 去修改页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goEdit")
+	public ModelAndView goEdit() throws Exception {
+		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("content", pd.getString("content"));
-		articlecontrollerService.save(pd);
-		pd.put("success", true);
+		pd = articlecontrollerService.findById(pd); // 根据ID读取
 		mv.setViewName("lottery/article/articlecontroller_edit");
+		Object obj = pd.get("article_thumb");
+		String articleThumbArr = null;
+		if (obj != null) {
+			articleThumbArr = obj.toString();
+			String[] strArray = null;
+			strArray = articleThumbArr.split(",");
+			if (strArray.length == 1) {
+				pd.put("article_thumb1", strArray[0]);
+				pd.put("photosNum", 1);// 单图模式
+			} else if (strArray.length > 1) {
+				for (int i = 0; i < strArray.length; i++) {
+					pd.put("article_thumb" + (i + 1), strArray[i]);
+				}
+				pd.put("photosNum", 2);// 三张图模式
+			}
+		} else {
+			pd.put("photosNum", 3);// 文本模式
+		}
+		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -226,21 +248,22 @@ public class ArticleControllerController extends BaseController {
 	}
 
 	/**
-	 * 去修改页面
+	 * 删除
 	 * 
-	 * @param
+	 * @param out
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/goEdit")
-	public ModelAndView goEdit() throws Exception {
-		ModelAndView mv = this.getModelAndView();
+	@RequestMapping(value = "/delete")
+	public void delete(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "删除ArticleController");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = articlecontrollerService.findById(pd); // 根据ID读取
-		mv.setViewName("lottery/article/articlecontroller_edit");
-		mv.addObject("msg", "edit");
-		mv.addObject("pd", pd);
-		return mv;
+		articlecontrollerService.delete(pd);
+		out.write("success");
+		out.close();
 	}
 
 	/**

@@ -163,7 +163,7 @@
 			level = #{level},
 			article_pv = #{article_pv},
 			article_uv = #{article_uv},
-			label_defaults = #{label_defaults}
+			label_defaults = #{label_defaults},
 			video_url=#{video_url}
 		where 
 		article_id = #{article_id}

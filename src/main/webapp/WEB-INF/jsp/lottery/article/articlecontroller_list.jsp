@@ -304,8 +304,10 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>articlecontroller/goEdit.do?article_id='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Width = 1800;
+			 diag.Height = 1300;
+// 			 diag.Width = 450;
+// 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
