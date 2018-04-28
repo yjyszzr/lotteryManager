@@ -116,23 +116,6 @@
 																					<img id="photoShow3"    <c:if test="${not empty pd.article_thumb3}">src="<%=basePath%>${pd.article_thumb3}" width="100px",hight="50px"  </c:if>   alt="">
 																				</div>
 												                            </div>
-<!-- 								                                         <div class="slt2"    style="display:none;"> -->
-<!-- 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label> -->
-<!-- 																			<div class="col-sm-9"> -->
-<!-- 																				<a class="btn btn-mini btn-primary" onclick="addPic()">三张上传</a> -->
-<!-- 																			</div> -->
-<!-- 																			<div id='imgBox'> -->
-<!-- 																			</div> -->
-<!-- 											                            </div> -->
-<!-- 											                            <div  style="display:none;"> -->
-<!-- 											                            <label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label> -->
-<!-- 											                            <span class="set_Btn" onclick="$('#fileUpload').trigger('click');"> 上传</span>   -->
-<!-- 																			<input  type="file" id="fileUpload" name="myfiles"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>  -->
-<%-- 																			<input type="hidden" id="licencePath"   name="licensePicUrl"  value="${company.licensePicUrl }"  /> --%>
-<!-- 																			<dt class="dtImg"> -->
-<%-- 																				<img id="licencePathShow"  src="${base }/${company.licensePicUrl }"  alt=""> --%>
-<!-- 																			</dt>  -->
-<!-- 											                            </div> -->
 											                            
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">视频:</label>
@@ -346,7 +329,7 @@
 		    });
 		});
 		 var basePath = "<%=basePath%>"; 
-		//上传营业执照图片
+		//上传图片
 		function ajaxFileUpload(fileObj,fileId){
 		    $.ajaxFileUpload({
 		        url:'<%=basePath%>pictures/fileUpload.do',
