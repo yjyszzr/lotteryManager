@@ -1,4 +1,4 @@
-package com.fh.service.lottery.article.impl;
+package com.fh.service.lottery.match.impl;
 
 import java.util.List;
 
@@ -8,16 +8,16 @@ import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
-import com.fh.service.lottery.article.ArticleControllerManager;
+import com.fh.service.lottery.match.MatchManager;
 import com.fh.util.PageData;
 
 /**
- * 说明： 内容管理 创建人：FH Q313596790 创建时间：2018-04-18
+ * 说明： 赛事模块 创建人：FH Q313596790 创建时间：2018-04-29
  * 
  * @version
  */
-@Service("articlecontrollerService")
-public class ArticleControllerService implements ArticleControllerManager {
+@Service("matchService")
+public class MatchService implements MatchManager {
 
 	@Resource(name = "daoSupport3")
 	private DaoSupport3 dao;
@@ -29,7 +29,7 @@ public class ArticleControllerService implements ArticleControllerManager {
 	 * @throws Exception
 	 */
 	public void save(PageData pd) throws Exception {
-		dao.save("ArticleControllerMapper.save", pd);
+		dao.save("MatchMapper.save", pd);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public class ArticleControllerService implements ArticleControllerManager {
 	 * @throws Exception
 	 */
 	public void delete(PageData pd) throws Exception {
-		dao.delete("ArticleControllerMapper.delete", pd);
+		dao.delete("MatchMapper.delete", pd);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class ArticleControllerService implements ArticleControllerManager {
 	 * @throws Exception
 	 */
 	public void edit(PageData pd) throws Exception {
-		dao.update("ArticleControllerMapper.edit", pd);
+		dao.update("MatchMapper.edit", pd);
 	}
 
 	/**
@@ -60,8 +60,8 @@ public class ArticleControllerService implements ArticleControllerManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList(
-				"ArticleControllerMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("MatchMapper.datalistPage",
+				page);
 	}
 
 	/**
@@ -72,8 +72,7 @@ public class ArticleControllerService implements ArticleControllerManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList(
-				"ArticleControllerMapper.listAll", pd);
+		return (List<PageData>) dao.findForList("MatchMapper.listAll", pd);
 	}
 
 	/**
@@ -83,8 +82,7 @@ public class ArticleControllerService implements ArticleControllerManager {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("ArticleControllerMapper.findById",
-				pd);
+		return (PageData) dao.findForObject("MatchMapper.findById", pd);
 	}
 
 	/**
@@ -94,13 +92,7 @@ public class ArticleControllerService implements ArticleControllerManager {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
-		dao.delete("ArticleControllerMapper.deleteAll", ArrayDATA_IDS);
-	}
-
-	@Override
-	public void updateByKey(PageData pd) throws Exception {
-		dao.findForObject("ArticleControllerMapper.updateByKey", pd);
-
+		dao.delete("MatchMapper.deleteAll", ArrayDATA_IDS);
 	}
 
 }

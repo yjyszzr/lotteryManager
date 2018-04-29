@@ -147,8 +147,24 @@ public class ArticleControllerController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
+		if (null != pd.get("match_id") || "".equals(pd.get("match_id"))) {
+			int matchId = Integer.parseInt(pd.get("match_id").toString()); // 关键词检索条件
+			pd.put("match_id", matchId);
+		} else {
+			pd.put("match_id", 0);
+		}
 		page.setPd(pd);
 		List<PageData> varList = articlecontrollerService.list(page); // 列出ArticleController列表
+		for (int i = 0; i < varList.size(); i++) {
+			PageData pageData = new PageData();
+			pageData = varList.get(i);
+			if (null != pageData.get("add_time")
+					&& !"".equals(pageData.get("add_time"))) {
+				pageData.put("add_time", DateUtilNew.getCurrentTimeString(
+						Long.parseLong(pageData.get("add_time").toString()),
+						DateUtilNew.date_sdf));
+			}
+		}
 		mv.setViewName("lottery/article/articlecontroller_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -262,6 +278,26 @@ public class ArticleControllerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		articlecontrollerService.delete(pd);
+		out.write("success");
+		out.close();
+	}
+
+	/**
+	 * 删除
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/isStickOrNot")
+	public void isStickOrNot(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername()
+				+ "置顶||取消置顶ArticleController");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		articlecontrollerService.updateByKey(pd);
 		out.write("success");
 		out.close();
 	}

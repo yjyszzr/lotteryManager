@@ -18,6 +18,7 @@
 <%@ include file="../../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+ 
 </head>
 <body class="no-skin">
 
@@ -31,8 +32,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="articlecontroller/list.do" method="post" name="Form" id="Form">
-						<div id="zhongxin" style="padding-top: 13px;">
+						<form action="match/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -56,23 +56,43 @@
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								</c:if>
+								<c:if test="${QX.toExcel == 100000000 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
 							</tr>
 						</table>
 						<!-- 检索  -->
 					
-						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
+						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px ">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
+<!-- 									<th class="center" style="width:35px;"> -->
+<!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
+<!-- 									</th> -->
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">文章ID</th>
-									<th class="center">文章标题</th>
-									<th class="center">发布时间</th>
+									<th class="center">赛事ID</th>
+<!-- 									<th class="center">联赛Id</th> -->
+<!-- 									<th class="center">联赛名称</th> -->
+<!-- 									<th class="center">联赛简称</th> -->
+<!-- 									<th class="center">场次ID</th> -->
+<!-- 									<th class="center">场次名称</th> -->
+<!-- 									<th class="center">主队ID</th> -->
+<!-- 									<th class="center">主队名称</th> -->
+									<th class="center">比赛队伍</th>
+<!-- 									<th class="center">主队排名</th> -->
+<!-- 									<th class="center">客队ID</th> -->
+<!-- 									<th class="center">客队名称</th> -->
+<!-- 									<th class="center">客队简称</th> -->
+<!-- 									<th class="center">客队排名</th> -->
+									<th class="center">比赛时间</th>
+<!-- 									<th class="center">显示时间</th> -->
+<!-- 									<th class="center">创建时间</th> -->
+<!-- 									<th class="center">是否显示</th> -->
+<!-- 									<th class="center">是否删除</th> -->
+<!-- 									<th class="center">比赛号</th> -->
 									<th class="center">状态</th>
-									<th class="center">作者</th>
-<!-- 									<th class="center">标签</th> -->
+									<th class="center">半场比分</th>
+									<th class="center">整场比分</th>
+									<th class="center">文章数量</th>
+<!-- 									<th class="center">是否热门</th> -->
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -84,52 +104,58 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.article_id}" class="ace" /><span class="lbl"></span></label>
-											</td>
+<!-- 											<td class='center'> -->
+<%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.match_id}" class="ace" /><span class="lbl"></span></label> --%>
+<!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.article_id}</td>
-											<td class='center'>${var.title}</td>
-											<td class='center'>${var.add_time}</td>
+											<td class='center'>${var.match_id}</td>
+<%-- 											<td class='center'>${var.league_id}</td> --%>
+<%-- 											<td class='center'>${var.league_name}</td> --%>
+<%-- 											<td class='center'>${var.league_addr}</td> --%>
+<%-- 											<td class='center'>${var.changci_id}</td> --%>
+<%-- 											<td class='center'>${var.changci}</td> --%>
+<%-- 											<td class='center'>${var.home_team_id}</td> --%>
+<%-- 											<td class='center'>${var.home_team_name}</td> --%>
+											<td class='center'>${var.home_team_abbr}<lable style="color:#FF4500">VS</lable>${var.visiting_team_abbr}</td>
+<%-- 											<td class='center'>${var.home_team_rank}</td> --%>
+<%-- 											<td class='center'>${var.visiting_team_id}</td> --%>
+<%-- 											<td class='center'>${var.visiting_team_name}</td> --%>
+<%-- 											<td class='center'>${var.visiting_team_abbr}</td> --%>
+<%-- 											<td class='center'>${var.visiting_team_rank}</td> --%>
+											<td class='center'>${var.match_time}</td>
+<%-- 											<td class='center'>${var.show_time}</td> --%>
+<%-- 											<td class='center'>${var.create_time}</td> --%>
+<%-- 											<td class='center'>${var.is_show}</td> --%>
+<%-- 											<td class='center'>${var.is_del}</td> --%>
+<%-- 											<td class='center'>${var.match_sn}</td> --%>
 											<td class='center'> 
-											<c:choose>
-													<c:when test="${var.status==1}">已发布</c:when>
-													<c:otherwise>草稿</c:otherwise>
+												<c:choose>
+													<c:when test="${var.status==0}">待开赛</c:when>
+													<c:otherwise>已结束</c:otherwise>
 												</c:choose>
 											</td>
-											<td class='center'>${var.author}</td>
-<%-- 											<td class='center'>${var.related_team}</td> --%>
+											<td class='center'>${var.first_half}</td>
+											<td class='center'>${var.whole}</td>
+											<td class='center'>${var.article_num}</td>
+<%-- 											<td class='center'>${var.is_hot}</td> --%>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${QX.edit == 1 }">
-														<c:choose>
-															<c:when test="${var.status==1}"> 
-																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.article_id}');"> 下架</a>
-																	<c:choose>
-																		<c:when test="${var.is_stick==1}"> 
-																			<a class="btn btn-xs " title="取消置顶" style="border-radius: 5px; color:#yellow" onclick="isStickOrNot('0','${var.article_id}');">取消置顶</a>
-																		</c:when>
-																		<c:otherwise> 
-																			<a class="btn btn-xs " title="置顶" style="border-radius: 5px; color:#yellow" onclick="isStickOrNot('1','${var.article_id}');"> 置顶</a>
-																		</c:otherwise>
-																</c:choose>
-															</c:when>
-															<c:otherwise> 
-															<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.article_id}');"> 编辑</a>
-															<a class="btn btn-xs " title="置顶" style="border-radius: 5px; color:#yellow" onclick="edit('${var.article_id}');"> 置顶</a>
-															</c:otherwise>
-														</c:choose>
+													<c:if test="${QX.cha == 1 }">
+														<a class="btn btn-xs btn-success" style="border-radius: 5px;" title="查看"  href="<%=basePath%>/articlecontroller/list.do?match_id=${var.match_id}">查看</a>
 													</c:if>
-													<c:if test="${QX.del == 1 }">
-														<c:choose>
-															<c:when test="${var.status==2}">
-																<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.article_id}');">删除</a>
-															</c:when>
-														</c:choose>
-													</c:if>
+<%-- 													<c:if test="${QX.edit == 1 }"> --%>
+<%-- 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.match_id}');"> --%>
+<!-- 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i> -->
+<!-- 													</a> -->
+<%-- 													</c:if> --%>
+<%-- 													<c:if test="${QX.del == 1 }"> --%>
+<%-- 													<a class="btn btn-xs btn-danger" onclick="del('${var.match_id}');"> --%>
+<!-- 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i> -->
+<!-- 													</a> -->
+<%-- 													</c:if> --%>
 												</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline pos-rel">
@@ -137,6 +163,35 @@
 															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
 														</button>
 			
+<!-- 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close"> -->
+<%-- 															<c:if test="${QX.cha == 0 }"> --%>
+<!-- 															<li> -->
+<%-- 																<a style="cursor:pointer;" onclick="edit('${var.match_id}');" class="tooltip-success" data-rel="tooltip" title="修改"> --%>
+<!-- 																	<span class="green"> -->
+<!-- 																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i> -->
+<!-- 																	</span> -->
+<!-- 																</a> -->
+<!-- 															</li> -->
+<%-- 															</c:if> --%>
+<%-- 															<c:if test="${QX.edit == 1 }"> --%>
+<!-- 															<li> -->
+<%-- 																<a style="cursor:pointer;" onclick="edit('${var.match_id}');" class="tooltip-success" data-rel="tooltip" title="修改"> --%>
+<!-- 																	<span class="green"> -->
+<!-- 																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i> -->
+<!-- 																	</span> -->
+<!-- 																</a> -->
+<!-- 															</li> -->
+<%-- 															</c:if> --%>
+<%-- 															<c:if test="${QX.del == 1 }"> --%>
+<!-- 															<li> -->
+<%-- 																<a style="cursor:pointer;" onclick="del('${var.match_id}');" class="tooltip-error" data-rel="tooltip" title="删除"> --%>
+<!-- 																	<span class="red"> -->
+<!-- 																		<i class="ace-icon fa fa-trash-o bigger-120"></i> -->
+<!-- 																	</span> -->
+<!-- 																</a> -->
+<!-- 															</li> -->
+<%-- 															</c:if> --%>
+<!-- 														</ul> -->
 													</div>
 												</div>
 											</td>
@@ -161,12 +216,12 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
-								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success"  style="border-radius: 5px;"  onclick="add();">新增</a>
+								<td style="vertical-align:top; display:none">
+									<c:if test="${QX.add == 122}">
+									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
 									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" style="border-radius: 5px;"  onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" >批量删除</a>
+									<c:if test="${QX.del == 122 }">
+									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -266,20 +321,20 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>articlecontroller/goAdd.do';
-			 diag.Width = 1800;
-			 diag.Height = 1300;
+			 diag.URL = '<%=basePath%>match/goAdd.do';
+			 diag.Width = 450;
+			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
 			 diag.CancelEvent = function(){ //关闭事件
-/* 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
 						 tosearch();
 					 }else{
 						 tosearch();
 					 }
-				} */
+				}
 				diag.close();
 			 };
 			 diag.show();
@@ -290,20 +345,12 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>articlecontroller/delete.do?article_id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>match/delete.do?match_id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						tosearch();
 					});
 				}
 			});
-		}
-		//置顶&&取消置顶
-		function isStickOrNot(status,articleId){
-				top.jzts();
-				var url = "<%=basePath%>articlecontroller/isStickOrNot.do?article_id="+articleId+"&tm="+new Date().getTime()+"&status="+status;
-				$.get(url,function(data){
-					tosearch();
-				});
 		}
 		
 		//修改
@@ -312,18 +359,16 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>articlecontroller/goEdit.do?article_id='+Id;
-			 diag.Width = 1800;
-			 diag.Height = 1300;
-// 			 diag.Width = 450;
-// 			 diag.Height = 355;
+			 diag.URL = '<%=basePath%>match/goEdit.do?match_id='+Id;
+			 diag.Width = 450;
+			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
 			 diag.CancelEvent = function(){ //关闭事件
-/* 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 tosearch();
-				} */
+				}
 				diag.close();
 			 };
 			 diag.show();
@@ -358,7 +403,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>articlecontroller/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>match/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,
@@ -377,7 +422,7 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>articlecontroller/excel.do';
+			window.location.href='<%=basePath%>match/excel.do';
 		}
 	</script>
 

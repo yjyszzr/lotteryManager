@@ -169,6 +169,21 @@
 		article_id = #{article_id}
 	</update>
 	
+	<!-- 根据Key修改 -->
+	<update id="updateByKey" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		<if test="status != null and status!= ''"> 
+					status = #{pd.status}
+		</if>
+		<if test="is_stick != null and is_stick!=''"> 
+					,is_stick = #{pd.is_stick}
+		</if>
+		where 
+		article_id = #{article_id}
+	</update>
+	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 
@@ -195,6 +210,9 @@
 					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 				-->
 				)
+		</if>
+		<if test="pd.match_id != null and pd.match_id!= ''"> 
+			and match_id = #{pd.match_id}
 		</if>
 	</select>
 	
