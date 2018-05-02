@@ -112,9 +112,9 @@
 																		<c:when test="${var.is_stick==1}"> 
 																			<a class="btn btn-xs " title="取消置顶" style="border-radius: 5px; color:#yellow" onclick="isStickOrNot('0','${var.article_id}');">取消置顶</a>
 																		</c:when>
-																		<c:when test="${var.is_stick==0}"> 
+																		<c:otherwise>
 																			<a class="btn btn-xs " title="置顶" style="border-radius: 5px; color:#yellow" onclick="isStickOrNot('1','${var.article_id}');"> 置顶</a>
-																		</c:when>
+																		</c:otherwise>
 																</c:choose>
 															</c:when>
 															<c:when test="${var.status==2}">
@@ -293,16 +293,21 @@
 				}
 			});
 		}
-		//上架和下架
+		//上架和下架 1-已发布 2-草稿箱
 		function onOrOffLine(status,articleId){   
 				top.jzts();
+				if(status==2){
+					//下架时顺便取消置顶
+				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&status="+status+"&is_stick=0";
+				}else{
 				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&status="+status;
+				}
 				$.get(url,function(data){
 					tosearch();
 				});
 		}
-		
-		//置顶&&取消置顶
+		 
+		//置顶&&取消置顶   0 - 未置顶 1-已置顶
 		function isStickOrNot(stick,articleId){
 				top.jzts();
 				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&is_stick="+stick;
