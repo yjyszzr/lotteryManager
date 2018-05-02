@@ -107,26 +107,22 @@
 													<c:if test="${QX.edit == 1 }">
 														<c:choose>
 															<c:when test="${var.status==1}"> 
-																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.article_id}');"> 下架</a>
+																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="onOrOffLine('2','${var.article_id}');"> 下架</a>
 																	<c:choose>
 																		<c:when test="${var.is_stick==1}"> 
 																			<a class="btn btn-xs " title="取消置顶" style="border-radius: 5px; color:#yellow" onclick="isStickOrNot('0','${var.article_id}');">取消置顶</a>
 																		</c:when>
-																		<c:otherwise> 
+																		<c:when test="${var.is_stick==0}"> 
 																			<a class="btn btn-xs " title="置顶" style="border-radius: 5px; color:#yellow" onclick="isStickOrNot('1','${var.article_id}');"> 置顶</a>
-																		</c:otherwise>
+																		</c:when>
 																</c:choose>
 															</c:when>
-															<c:otherwise> 
-															<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.article_id}');"> 编辑</a>
-															<a class="btn btn-xs " title="置顶" style="border-radius: 5px; color:#yellow" onclick="edit('${var.article_id}');"> 置顶</a>
-															</c:otherwise>
-														</c:choose>
-													</c:if>
-													<c:if test="${QX.del == 1 }">
-														<c:choose>
 															<c:when test="${var.status==2}">
-																<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.article_id}');">删除</a>
+																<a class="btn btn-xs btn-success" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('1','${var.article_id}');"> 上架</a>
+																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.article_id}');"> 编辑</a>
+																<c:if test="${QX.del == 1 }">
+																		<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.article_id}');">删除</a>
+																</c:if>
 															</c:when>
 														</c:choose>
 													</c:if>
@@ -297,10 +293,19 @@
 				}
 			});
 		}
-		//置顶&&取消置顶
-		function isStickOrNot(status,articleId){
+		//上架和下架
+		function onOrOffLine(status,articleId){   
 				top.jzts();
-				var url = "<%=basePath%>articlecontroller/isStickOrNot.do?article_id="+articleId+"&tm="+new Date().getTime()+"&status="+status;
+				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&status="+status;
+				$.get(url,function(data){
+					tosearch();
+				});
+		}
+		
+		//置顶&&取消置顶
+		function isStickOrNot(stick,articleId){
+				top.jzts();
+				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&is_stick="+stick;
 				$.get(url,function(data){
 					tosearch();
 				});

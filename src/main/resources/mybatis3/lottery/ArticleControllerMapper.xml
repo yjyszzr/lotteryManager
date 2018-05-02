@@ -175,10 +175,13 @@
 		<include refid="tableName"></include>
 		set 
 		<if test="status != null and status!= ''"> 
-					status = #{pd.status}
+					status = #{status} 
 		</if>
 		<if test="is_stick != null and is_stick!=''"> 
-					,is_stick = #{pd.is_stick}
+			<if test="status != null and status!= ''"> 
+					,
+			</if>
+					is_stick = #{is_stick}
 		</if>
 		where 
 		article_id = #{article_id}
@@ -214,6 +217,7 @@
 		<if test="pd.match_id != null and pd.match_id!= ''"> 
 			and match_id = #{pd.match_id}
 		</if>
+			order by  is_stick desc , status asc
 	</select>
 	
 	<!-- 列表(全部) -->

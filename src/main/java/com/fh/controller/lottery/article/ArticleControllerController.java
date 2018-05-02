@@ -283,16 +283,15 @@ public class ArticleControllerController extends BaseController {
 	}
 
 	/**
-	 * 删除
+	 * 置顶和上线
 	 * 
 	 * @param out
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/isStickOrNot")
+	@RequestMapping(value = "/stickAndOnLine")
 	public void isStickOrNot(PrintWriter out) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername()
-				+ "置顶||取消置顶ArticleController");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+		logBefore(logger, Jurisdiction.getUsername() + "置顶或者上线操作");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
 			return;
 		} // 校验权限
 		PageData pd = new PageData();
