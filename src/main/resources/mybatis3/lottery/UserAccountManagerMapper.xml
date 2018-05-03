@@ -134,6 +134,9 @@
 				-->
 				)
 		</if>
+		<if test="pd.process_type!= null and pd.process_type != ''"> 
+			and process_type = #{pd.process_type}
+		</if>
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -175,5 +178,32 @@
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId};
 	</select>
 	
-	<!-- fh313596790qq(青苔) -->
+	<!-- 个人钱包总金额 -->
+	<select id="listPageForReward"  parameterType="page" resultType="pd">
+		SELECT
+			a.amount,
+			b.order_sn,
+			b.pay_time,
+			b.ticket_amount,
+			c.lottery_name,
+			d.user_name,
+			d.mobile 
+		FROM
+			dl_user_account a,
+			dl_order b,
+			dl_lottery_classify c,
+			dl_user d 
+		WHERE
+			a.process_type = 1 
+			AND b.order_sn = a.order_sn 
+			AND b.lottery_classify_id = c.lottery_classify_id 
+			AND b.user_id = d.user_id 
+				<if test="pd.user_name!= null and pd.user_name != ''"> 
+						AND d.user_name LIKE '%#{pd.user_name}%' 
+				</if>
+				<if test="pd.mobile!= null and pd.mobile != ''"> 
+						AND d.mobile LIKE '%#{pd.mobile}%'
+				</if>
+	</select>
+	
 </mapper>
