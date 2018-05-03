@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://"
@@ -53,37 +53,44 @@
 											                        <div class="alert alert-info">
 											                          	编辑文章
 											                        </div>
-											                        <form class="form-horizontal m-t" >
+											                        <form action="articlecontroller/${msg }.do" name="Form" id="Form" method="post"  target="_self" class="form-horizontal m-t">
+									                        			<div id="zhongxin" style="padding-top: 13px;">
 											                        	<div >
 											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章标题：</label>
 											                                <div class="col-sm-9">
-											                                <input type=hidden id="article_id"   value="${pd.article_id}"/>
-											                                   <input type="text" id="title" placeholder="文章标题" class="col-xs-10 col-sm-5"   value="${pd.title}"/>
+											                                <input type=hidden id="article_id"   name ="article_id" value="${pd.article_id}"/>
+											                                <input type=hidden id="content"  name="content"   value=""/>
+											                                <input type=hidden id="status"  name="status"   value=""/>
+											                                   <input type="text" id="title"  name="title" placeholder="文章标题" class="col-xs-10 col-sm-5"   value="${pd.title}"/>
 											                                </div>
 											                            </div>
 											                          
 											                            <div  >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">作者：</label>
 																			<div class="col-sm-9">
-																				<input type="text" id="author" placeholder="作者" class="col-xs-10 col-sm-5"    value="${pd.author}"/>
+																				<input type="text" id="author" name="author" placeholder="作者" class="col-xs-10 col-sm-5"    value="${pd.author}"/>
 																			</div>
 											                            </div>
 											                            <div >
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">图片张数：</label>
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">图文类型：</label>
 											                                <div class="col-sm-9">
+																					<input name="article_thumb1" class="hidden"   id="article_thumb1" value="${pd.article_thumb1}" />
+																					<input name="article_thumb2" class="hidden"   id="article_thumb2" value="${pd.article_thumb2}"/>
+																					<input name="article_thumb3" class="hidden"   id="article_thumb3" value="${pd.article_thumb3}"/>
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
 																					<input  name="photosNum" type="radio" <c:if test="${pd.photosNum==1}">checked="checked"</c:if>    value = "1" class="ace" id="photosNum1" />
 																					<span class="lbl">单张图片</span>
 																				</label>
-																					<input name="article_thumb1" class="hidden"   id="article_thumb1" value="${pd.article_thumb1}" />
-																					<input name="article_thumb2" class="hidden"   id="article_thumb2" value="${pd.article_thumb2}"/>
-																					<input name="article_thumb3" class="hidden"   id="article_thumb3" value="${pd.article_thumb3}"/>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
 																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==2}">checked="checked"</c:if>  value = "2" class="ace" id="photosNum2" />
 																					<span class="lbl">三张图片</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==3}">checked="checked"</c:if>  value = "3" class="ace" id="photosNum3" />
+																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==4}">checked="checked"</c:if>  value = "4" class="ace" id="photosNum4" />
+																					<span class="lbl">视频缩略图</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==0}">checked="checked"</c:if>  value = "0" class="ace" id="photosNum0" />
 																					<span class="lbl">纯文本</span>
 																				</label>
 											                                </div>
@@ -101,13 +108,14 @@
 																					<img id="photoShow"  <c:if test="${not empty pd.article_thumb1}">src="<%=basePath%>${pd.article_thumb1}" width="100px",hight="50px"  </c:if> >
 																				</div>
 												                            </div>
+												                            
 									                                      <div class="slt2"   style="display:none;">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
 																			   <span class="btn btn-mini btn-primary" onclick="uploadThreePhoto()"> 三张上传</span>  
 																			</div>
-																		
 											                            </div >
+											                            
 											                            	<div  class="slt2" >
 																				<div class="col-sm-3"></div>
 																				<div class="col-sm-9">
@@ -117,30 +125,30 @@
 																				</div>
 												                            </div>
 											                            
-											                            <div >
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">视频:</label>
-																			<div class="col-sm-9">
-																				<input type="text" id="video_url" placeholder="视频url" class="col-xs-10 col-sm-5"     value="${pd.video_url}"/>
-																			</div>
-											                            </div>
+<!-- 											                            <div > -->
+<!-- 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">视频:</label> -->
+<!-- 																			<div class="col-sm-9"> -->
+<%-- 																				<input type="text" id="video_url" placeholder="视频url" class="col-xs-10 col-sm-5"     value="${pd.video_url}"/> --%>
+<!-- 																			</div> -->
+<!-- 											                            </div> -->
 
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">内容分类：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="content_cat" type="radio" <c:if test="${pd.extend_cat==1}">checked="checked"</c:if>  value = "1" class="ace" id="content_cat1" />
+																					<input  name="extend_cat" type="radio" <c:if test="${pd.extend_cat==1}">checked="checked"</c:if>  value = "1" class="ace" id="extend_cat1" />
 																					<span class="lbl">今日关注</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="content_cat" type="radio"  <c:if test="${pd.extend_cat==2}">checked="checked"</c:if>  value = "2" class="ace" id="content_cat2" />
+																					<input name="extend_cat" type="radio"  <c:if test="${pd.extend_cat==2}">checked="checked"</c:if>  value = "2" class="ace" id="extend_cat2" />
 																					<span class="lbl">竞彩预测</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="content_cat" type="radio" <c:if test="${pd.extend_cat==3}">checked="checked"</c:if>  value = "3" class="ace" id="content_cat3" />
+																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==3}">checked="checked"</c:if>  value = "3" class="ace" id="extend_cat3" />
 																					<span class="lbl">牛人分析</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="content_cat" type="radio" <c:if test="${pd.extend_cat==4}">checked="checked"</c:if>  value = "4" class="ace" id="content_cat4" />
+																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==4}">checked="checked"</c:if>  value = "4" class="ace" id="extend_cat4" />
 																					<span class="lbl">其他</span>
 																				</label>
 											                                </div>
@@ -162,11 +170,11 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">添加标签：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label1" type="radio"   <c:if test="${pd.related_team==1}">checked="checked"</c:if>   value = "1" class="ace" id="add_label1_1" />
+																					<input  name="related_team" type="radio"   <c:if test="${pd.related_team==1}">checked="checked"</c:if>   value = "1" class="ace" id="related_team_1" />
 																					<span class="lbl">主队</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label1" type="radio"  <c:if test="${pd.related_team==2}">checked="checked"</c:if>    value = "2" class="ace" id="add_label1_2" />
+																					<input name="related_team" type="radio"  <c:if test="${pd.related_team==2}">checked="checked"</c:if>    value = "2" class="ace" id="related_team_2" />
 																					<span class="lbl">客队</span>
 																				</label>
 											                                </div>
@@ -175,45 +183,45 @@
 															                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="add_label2_1" />
+																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="label_defaults_1" />
 																					<span class="lbl">主帅</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==2}">checked="checked"</c:if>   value = "2" class="ace" id="add_label2_2" />
+																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==2}">checked="checked"</c:if>   value = "2" class="ace" id="label_defaults_2" />
 																					<span class="lbl">球员</span>
 																				</label>
 																																								<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==3}">checked="checked"</c:if>   value = "3" class="ace" id="add_label2_3" />
+																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==3}">checked="checked"</c:if>   value = "3" class="ace" id="label_defaults_3" />
 																					<span class="lbl">球迷</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==4}">checked="checked"</c:if>   value = "4" class="ace" id="add_label2_4" />
+																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==4}">checked="checked"</c:if>   value = "4" class="ace" id="label_defaults_4" />
 																					<span class="lbl">阵容</span>
 																				</label>
 																				
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==5}">checked="checked"</c:if>   value = "5" class="ace" id="add_label2_5" />
+																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==5}">checked="checked"</c:if>   value = "5" class="ace" id="label_defaults_5" />
 																					<span class="lbl">战意</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==6}">checked="checked"</c:if>   value = "6" class="ace" id="add_label2_6" />
+																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==6}">checked="checked"</c:if>   value = "6" class="ace" id="label_defaults_6" />
 																					<span class="lbl">拱手</span>
 																				</label>
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==7}">checked="checked"</c:if>   value = "7" class="ace" id="add_label2_7" />
+																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==7}">checked="checked"</c:if>   value = "7" class="ace" id="label_defaults_7" />
 																					<span class="lbl">交锋</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==8}">checked="checked"</c:if>   value = "8" class="ace" id="add_label2_8" />
+																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==8}">checked="checked"</c:if>   value = "8" class="ace" id="label_defaults_8" />
 																					<span class="lbl">停赛</span>
 																				</label>
 																				
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="add_label2" type="radio"   <c:if test="${pd.label_defaults==9}">checked="checked"</c:if>   value = "9" class="ace" id="add_label2_9" />
+																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==9}">checked="checked"</c:if>   value = "9" class="ace" id="label_defaults_9" />
 																					<span class="lbl">伤病</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="add_label2" type="radio"   <c:if test="${pd.label_defaults==10}">checked="checked"</c:if>   value = "10" class="ace" id="add_label2_10" />
+																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==10}">checked="checked"</c:if>   value = "10" class="ace" id="label_defaults_10" />
 																					<span class="lbl">状态</span>
 																				</label>
 											                                </div>
@@ -230,10 +238,13 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
 											                                <div class="col-sm-9">
 <!-- 											                                   <a class="btn btn-mini btn-success" onclick="preLook()">预览</a> -->
-											                                   <a class="btn btn-mini btn-primary" onclick="saveInnerHtml('1')">发表</a>
-											                                   <a class="btn btn-mini btn-danger" onclick="saveInnerHtml('2')">保存草稿</a>
+<!-- 											                                   <a class="btn btn-mini btn-primary" onclick="saveInnerHtml('1')" >发表</a> -->
+											                                   <a class="btn btn-mini btn-primary" onclick="save(1)" >发表</a>
+											                                   <a class="btn btn-mini btn-danger" onclick="save('2')">保存草稿</a>
 											                                </div>
 											                            </div>
+											                            </div>
+											                        <div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
 											                        </form>
 											                    </div>
 											                </div>
@@ -254,9 +265,11 @@
 			</div>
 		</div>
 		<!-- /.main-content -->
-		<form action="<%=basePath%>/tool/downloadFormCode.do" name="Form" id="Form" method="post">
-			<textarea name="htmlCode" id="htmlCode"style="display: none;"></textarea>
-		</form>
+<%-- 		<form action="<%=basePath%>/tool/downloadFormCode.do" name="Form" id="Form" method="post"> --%>
+<!-- 			<textarea name="htmlCode" id="htmlCode"style="display: none;"></textarea> -->
+<!-- 		</form> -->
+<%-- 		<form action="<%=basePath%>articlecontroller/list.do" name="Form" id="Form" method="post"> --%>
+<!-- 		</form> -->
 		<!-- 返回顶部 -->
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
 			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
@@ -287,17 +300,32 @@
 	<!-- 上传控件 -->
 	<script src="static/ace/js/ace/elements.fileinput.js"></script>
 	<script type="text/javascript">
+	$(top.hangge());
+	function save(status){
+		var editor = UE.getEditor('editor');
+		var content = UE.getEditor('editor').getContent();
+		    $("#content").val(content);
+		    $("#status").val(status);
+			$("#Form").submit();
+			$("#zhongxin").hide();
+			$("#zhongxin2").show();
+	}
+	
+	
 	$(function(){
-	  if ($("input[name='photosNum']:checked").val()== '1') {
+	  if($("input[name='photosNum']:checked").val()== '1') {
 			$(".slt2").hide();
  			$(".slt1").show();
-      }else if ($("input[name='photosNum']:checked").val()== '2') {
-      	$(".slt1").hide();
+      }else if($("input[name='photosNum']:checked").val()== '2') {
+      		$(".slt1").hide();
  			$(".slt2").show();
-      }else if ($("input[name='photosNum']:checked").val()=='3') {
-      	$(".slt2").hide();
+      }else if($("input[name='photosNum']:checked").val()=='0') {
+      		$(".slt2").hide();
  			$(".slt1").hide();
-			}
+		}else if($("input[name='photosNum']:checked").val()== '4'){
+			$(".slt2").hide();
+ 			$(".slt1").show();
+		}
 	});
 // 	不能创建editor之后马上使用ue.setContent('文本内容')，要等到创建完成之后才可以使用
 	UE.getEditor('editor').ready(function() {  
@@ -322,9 +350,12 @@
 		        }else if (this.value == '2') {
 		        	$(".slt1").hide();
 		   			$(".slt2").show();
-		        }else if (this.value == '3') {
+		        }else if (this.value == '0') {
 		        	$(".slt2").hide();
 		   			$(".slt1").hide();
+		        }else if (this.value == '4') {
+		        	$(".slt2").hide();
+		   			$(".slt1").show();
 	   			}
 		    });
 		});
@@ -419,9 +450,6 @@
 		var is_original = $("input[name='is_original']:checked").val();
 		var related_team = $("input[name='add_label1']:checked").val();
 		var label_defaults = $("input[name='add_label2']:checked").val();
-		
-// 		var picArr = ['http://image.baby-kingdom.com/images2/2016/b/html5/wyeth_20161122_320x280/poster.jpg','http://n2.hdfimg.com/g10/M03/90/65/voYBAFrOvAaAPWkeAAEQ5eQ-510739.jpg'];
-// 		var article_thumb = picArr.toString();
 		var photosNum = $("input[name='photosNum']:checked").val();
 		var article_thumb1 =$("#article_thumb1").val();
 		var article_thumb2 =$("#article_thumb2").val();

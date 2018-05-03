@@ -59,19 +59,18 @@ public class ArticleControllerController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/saveOrUpdate")
-	@ResponseBody
-	public Map<String, String> save() throws Exception {
-		Map<String, String> map = new HashMap<String, String>();
+	public ModelAndView save() throws Exception {
+		ModelAndView mv = this.getModelAndView();
 		logBefore(logger, Jurisdiction.getUsername() + "新增ArticleController");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
-		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("content", pd.getString("content"));
+		pd.put("is_delete", 0);
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong()); // 备注1
-		if ("1".equals(pd.get("photosNum"))) {
+		if ("1".equals(pd.get("photosNum")) || "4".equals(pd.get("photosNum"))) {
 			pd.put("article_thumb", pd.get("article_thumb1"));
 
 		} else if ("2".equals(pd.get("photosNum"))) {
@@ -79,14 +78,19 @@ public class ArticleControllerController extends BaseController {
 					+ pd.get("article_thumb2") + "," + pd.get("article_thumb3");
 			pd.put("article_thumb", articleThumbAll);
 		}
-		if (pd.get("article_id") == null || "0".equals(pd.get("article_id"))) {
+		if (pd.get("article_id") == "" || "".equals(pd.get("article_id"))) {
+			pd.put("is_show", 0);
+			pd.put("article_id", 0);
 			articlecontrollerService.save(pd);
 		} else {
 			articlecontrollerService.edit(pd);
 		}
-		map.put("result", "true");
-		map.put("msg", "success");
-		return map;
+		// map.put("result", "true");
+		// map.put("msg", "success");
+		// return map;
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
 	}
 
 	/**
@@ -182,6 +186,7 @@ public class ArticleControllerController extends BaseController {
 	@ResponseBody
 	public ModelAndView saveFormbuilder() throws Exception {
 		ModelAndView mv = this.getModelAndView();
+		mv.addObject("msg", "saveOrUpdate");
 		mv.setViewName("lottery/article/articlecontroller_edit");
 		return mv;
 	}
