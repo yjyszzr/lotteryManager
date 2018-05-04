@@ -178,31 +178,41 @@
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId};
 	</select>
 	
-	<!-- 个人钱包总金额 -->
 	<select id="listPageForReward"  parameterType="page" resultType="pd">
-		SELECT
-			a.amount,
-			b.order_sn,
-			b.pay_time,
-			b.ticket_amount,
-			c.lottery_name,
-			d.user_name,
-			d.mobile 
+		 SELECT
+		 	o.*, 
+			a.pay_time,
+			a.ticket_amount,
+			b.user_name,
+			b.mobile,
+			c.lottery_name 
 		FROM
-			dl_user_account a,
-			dl_order b,
-			dl_lottery_classify c,
-			dl_user d 
+			dl_user_account o
+			LEFT JOIN dl_order a ON o.order_sn = a.order_sn
+			LEFT JOIN dl_user b ON a.user_id = b.user_id
+			LEFT JOIN dl_lottery_classify c ON a.lottery_classify_id = c.lottery_classify_id 
 		WHERE
-			a.process_type = 1 
-			AND b.order_sn = a.order_sn 
-			AND b.lottery_classify_id = c.lottery_classify_id 
-			AND b.user_id = d.user_id 
+			o.process_type = 1
 				<if test="pd.user_name!= null and pd.user_name != ''"> 
-						AND d.user_name LIKE '%#{pd.user_name}%' 
+						AND b.user_name LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
 				</if>
 				<if test="pd.mobile!= null and pd.mobile != ''"> 
-						AND d.mobile LIKE '%#{pd.mobile}%'
+						AND b.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+				</if>
+				<if test="pd.order_sn != null and pd.order_sn != ''"> 
+						AND o.order_sn LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
+				</if>
+				<if test="pd.lastStart != null and pd.lastStart != ''"> 
+						AND a.pay_time &gt; #{pd.lastStart} 
+				</if>
+				<if test="pd.lastEnd != null and pd.lastEnd != ''"> 
+						AND a.pay_time &lt; #{pd.lastEnd} 
+				</if>
+				<if test="pd.amountStart != null and pd.amountStart != ''"> 
+						AND o.amount   &gt;  #{pd.amountStart} 
+				</if>
+				<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
+						AND o.amount   &lt;   #{pd.amountEnd} 
 				</if>
 	</select>
 	

@@ -125,6 +125,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 				"UserAccountManagerMapper.getTotalRest", userId);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> listForReward(Page page) throws Exception {
 		// TODO Auto-generated method stub

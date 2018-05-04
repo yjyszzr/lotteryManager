@@ -97,15 +97,24 @@
 		from 
 		<include refid="tableName"></include>
 		where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+		<if test="pd.title != null and pd.title != ''"> 
+			and banner_name 
+				LIKE CONCAT(CONCAT('%', #{pd.title}),'%')
+		</if>
+		<if test="pd.is_show != null and pd.is_show != ''">
+			and is_show = #{pd.is_show }
+		</if>
+		<if test="pd.startTimeStart != null and pd.startTimeStart != ''"> 
+			and start_time &gt; #{pd.startTimeStart }
+		</if>
+		<if test="pd.startTimeEnd  != null and pd.startTimeEnd  != ''"> 
+			and start_time &lt; #{pd.startTimeEnd }
+		</if>
+		<if test="pd.endTimeStart != null and pd.endTimeStart != ''"> 
+			and end_time &gt; #{pd.endTimeStart }
+		</if>
+		<if test="pd.endTimeEnd != null and pd.endTimeEnd != ''"> 
+			and end_time &lt; #{pd.endTimeEnd }
 		</if>
 	</select>
 	

@@ -118,9 +118,13 @@ public class MatchController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String match_id = pd.getString("match_id");
+		if (null != match_id && !"".equals(match_id)) {
+			pd.put("match_id", match_id.trim());
+		}
+		String match_team = pd.getString("match_team");
+		if (null != match_team && !"".equals(match_team)) {
+			pd.put("match_team", match_team.trim());
 		}
 		page.setPd(pd);
 		List<PageData> varList = matchService.list(page); // 列出Match列表

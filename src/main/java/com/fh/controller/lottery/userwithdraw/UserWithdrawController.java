@@ -121,14 +121,20 @@ public class UserWithdrawController extends BaseController {
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "列表UserWithdraw");
-		// if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
-		// //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String account_sn = pd.getString("account_sn");
+		if (null != account_sn && !"".equals(account_sn)) {
+			pd.put("account_sn", account_sn.trim());
+		}
+		String mobile = pd.getString("mobile");
+		if (null != mobile && !"".equals(mobile)) {
+			pd.put("mobile", mobile.trim());
+		}
+		String user_name = pd.getString("user_name");
+		if (null != user_name && !"".equals(user_name)) {
+			pd.put("user_name", user_name.trim());
 		}
 		page.setPd(pd);
 

@@ -150,10 +150,28 @@ public class OrderController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+
+		String order_sn = pd.getString("order_sn");
+		if (null != order_sn && !"".equals(order_sn)) {
+			pd.put("order_sn", order_sn.trim());
 		}
+		String mobile = pd.getString("mobile");
+		if (null != mobile && !"".equals(mobile)) {
+			pd.put("mobile", mobile.trim());
+		}
+		String user_name = pd.getString("user_name");
+		if (null != user_name && !"".equals(user_name)) {
+			pd.put("user_name", user_name.trim());
+		}
+		String amountStart = pd.getString("amountStart");
+		if (null != amountStart && !"".equals(amountStart)) {
+			pd.put("amountStart", amountStart.trim());
+		}
+		String amountEnd = pd.getString("amountEnd");
+		if (null != amountEnd && !"".equals(amountEnd)) {
+			pd.put("amountEnd", amountEnd.trim());
+		}
+
 		page.setPd(pd);
 		List<PageData> varList = orderService.list(page); // 列出Order列表
 

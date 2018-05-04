@@ -1,12 +1,9 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,10 +15,8 @@
 <%@ include file="../../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
- 
 </head>
 <body class="no-skin">
-
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->
@@ -30,69 +25,79 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							
 						<!-- 检索  -->
 						<form action="match/list.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
-							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="">全部</option>
-									<option value="">1</option>
-									<option value="">2</option>
-								  	</select>
-								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								<c:if test="${QX.toExcel == 100000000 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
-							</tr>
-						</table>
-						<!-- 检索  -->
+							<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
+								<tr style="margin:2px ">
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												赛事ID:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="赛事ID" class="nav-search-input" id="match_id" autocomplete="off" name="match_id" value="${pd.match_id }"  onkeyup="value=value.replace(/[^\d]/g,'')" />
+											</span>
+										</div>
+									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												比赛队伍:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="比赛队伍" class="nav-search-input" id="match_team" autocomplete="off" name="match_team" value="${pd.match_team}"  />
+											</span>
+										</div>
+									</td>
+									</tr>
+									<tr style="margin:2px">
+									<td >
+										<span class="input-icon" style="width:80px;text-align:right;">
+												比赛时间:
+											</span>
+											<span  >
+												<input class="date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input class="date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+											</span>
+									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													状态:
+												</span>
+										 	<select  name="status" id="status" data-placeholder="请选择" value="${pd.status }" style="width:154px;border-radius:5px !important"  >
+											<option value="" selected>全部</option>
+											<option value="0" <c:if test="${pd.status==0}">selected</c:if>>未结束</option>
+											<option value="1" <c:if test="${pd.status==1}">selected</c:if>>已结束</option>
+										  	</select>
+										  	</div>
+									</td>
+									<c:if test="${QX.cha == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+											<span class="input-icon" style="width:80px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+											</span>
+											<span class="input-icon" style="width:43px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+											</span>
+										</td>
+									</c:if>
+								</tr>
+							</table> <!-- 检索结束 -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px ">	
 							<thead>
 								<tr>
-<!-- 									<th class="center" style="width:35px;"> -->
-<!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
-<!-- 									</th> -->
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">赛事ID</th>
-<!-- 									<th class="center">联赛Id</th> -->
-<!-- 									<th class="center">联赛名称</th> -->
-<!-- 									<th class="center">联赛简称</th> -->
-<!-- 									<th class="center">场次ID</th> -->
-<!-- 									<th class="center">场次名称</th> -->
-<!-- 									<th class="center">主队ID</th> -->
-<!-- 									<th class="center">主队名称</th> -->
 									<th class="center">比赛队伍</th>
-<!-- 									<th class="center">主队排名</th> -->
-<!-- 									<th class="center">客队ID</th> -->
-<!-- 									<th class="center">客队名称</th> -->
-<!-- 									<th class="center">客队简称</th> -->
-<!-- 									<th class="center">客队排名</th> -->
 									<th class="center">比赛时间</th>
-<!-- 									<th class="center">显示时间</th> -->
-<!-- 									<th class="center">创建时间</th> -->
-<!-- 									<th class="center">是否显示</th> -->
-<!-- 									<th class="center">是否删除</th> -->
-<!-- 									<th class="center">比赛号</th> -->
 									<th class="center">状态</th>
 									<th class="center">半场比分</th>
 									<th class="center">整场比分</th>
 									<th class="center">文章数量</th>
-<!-- 									<th class="center">是否热门</th> -->
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -104,30 +109,10 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-<!-- 											<td class='center'> -->
-<%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.match_id}" class="ace" /><span class="lbl"></span></label> --%>
-<!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.match_id}</td>
-<%-- 											<td class='center'>${var.league_id}</td> --%>
-<%-- 											<td class='center'>${var.league_name}</td> --%>
-<%-- 											<td class='center'>${var.league_addr}</td> --%>
-<%-- 											<td class='center'>${var.changci_id}</td> --%>
-<%-- 											<td class='center'>${var.changci}</td> --%>
-<%-- 											<td class='center'>${var.home_team_id}</td> --%>
-<%-- 											<td class='center'>${var.home_team_name}</td> --%>
 											<td class='center'>${var.home_team_abbr}<lable style="color:#FF4500">VS</lable>${var.visiting_team_abbr}</td>
-<%-- 											<td class='center'>${var.home_team_rank}</td> --%>
-<%-- 											<td class='center'>${var.visiting_team_id}</td> --%>
-<%-- 											<td class='center'>${var.visiting_team_name}</td> --%>
-<%-- 											<td class='center'>${var.visiting_team_abbr}</td> --%>
-<%-- 											<td class='center'>${var.visiting_team_rank}</td> --%>
 											<td class='center'>${var.match_time}</td>
-<%-- 											<td class='center'>${var.show_time}</td> --%>
-<%-- 											<td class='center'>${var.create_time}</td> --%>
-<%-- 											<td class='center'>${var.is_show}</td> --%>
-<%-- 											<td class='center'>${var.is_del}</td> --%>
-<%-- 											<td class='center'>${var.match_sn}</td> --%>
 											<td class='center'> 
 												<c:choose>
 													<c:when test="${var.status==0}">待开赛</c:when>
@@ -137,7 +122,6 @@
 											<td class='center'>${var.first_half}</td>
 											<td class='center'>${var.whole}</td>
 											<td class='center'>${var.article_num}</td>
-<%-- 											<td class='center'>${var.is_hot}</td> --%>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -146,52 +130,12 @@
 													<c:if test="${QX.cha == 1 }">
 														<a class="btn btn-xs btn-success" style="border-radius: 5px;" title="查看"  href="<%=basePath%>/articlecontroller/list.do?match_id=${var.match_id}">查看</a>
 													</c:if>
-<%-- 													<c:if test="${QX.edit == 1 }"> --%>
-<%-- 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.match_id}');"> --%>
-<!-- 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i> -->
-<!-- 													</a> -->
-<%-- 													</c:if> --%>
-<%-- 													<c:if test="${QX.del == 1 }"> --%>
-<%-- 													<a class="btn btn-xs btn-danger" onclick="del('${var.match_id}');"> --%>
-<!-- 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i> -->
-<!-- 													</a> -->
-<%-- 													</c:if> --%>
 												</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline pos-rel">
 														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
 															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
 														</button>
-			
-<!-- 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close"> -->
-<%-- 															<c:if test="${QX.cha == 0 }"> --%>
-<!-- 															<li> -->
-<%-- 																<a style="cursor:pointer;" onclick="edit('${var.match_id}');" class="tooltip-success" data-rel="tooltip" title="修改"> --%>
-<!-- 																	<span class="green"> -->
-<!-- 																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i> -->
-<!-- 																	</span> -->
-<!-- 																</a> -->
-<!-- 															</li> -->
-<%-- 															</c:if> --%>
-<%-- 															<c:if test="${QX.edit == 1 }"> --%>
-<!-- 															<li> -->
-<%-- 																<a style="cursor:pointer;" onclick="edit('${var.match_id}');" class="tooltip-success" data-rel="tooltip" title="修改"> --%>
-<!-- 																	<span class="green"> -->
-<!-- 																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i> -->
-<!-- 																	</span> -->
-<!-- 																</a> -->
-<!-- 															</li> -->
-<%-- 															</c:if> --%>
-<%-- 															<c:if test="${QX.del == 1 }"> --%>
-<!-- 															<li> -->
-<%-- 																<a style="cursor:pointer;" onclick="del('${var.match_id}');" class="tooltip-error" data-rel="tooltip" title="删除"> --%>
-<!-- 																	<span class="red"> -->
-<!-- 																		<i class="ace-icon fa fa-trash-o bigger-120"></i> -->
-<!-- 																	</span> -->
-<!-- 																</a> -->
-<!-- 															</li> -->
-<%-- 															</c:if> --%>
-<!-- 														</ul> -->
 													</div>
 												</div>
 											</td>
@@ -264,7 +208,14 @@
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+			function tosearch(status){
+			if(status==0){
+				$("#match_team").val("");
+				$("#match_id").val("");
+				$("#status").empty();
+				$("#lastStart").val("");
+				$("#lastEnd").val("");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}

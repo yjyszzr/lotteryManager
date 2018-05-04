@@ -167,35 +167,48 @@
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-			SELECT
-				o.order_sn,
-				u.user_name,
-				u.mobile,
-				l.lottery_name,
-				o.order_status,
-				o.pay_name,
-				o.ticket_amount,
-				o.winning_money,
-				o.bonus,
-				o.pay_time 
-			FROM
-				dl_order o,
-				dl_lottery_classify l,
-				dl_user u 
-			WHERE
-				o.order_status = 6 
-				AND o.lottery_classify_id = l.lottery_classify_id 
-				AND o.user_id = u.user_id
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+		SELECT
+			o.order_sn,
+			u.user_name,
+			u.mobile,
+			l.lottery_name,
+			o.order_status,
+			o.pay_name,
+			o.ticket_amount,
+			o.winning_money,
+			o.bonus,
+			o.pay_time 
+		FROM
+			dl_order o
+			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
+			LEFT JOIN dl_user u ON o.user_id = u.user_id 
+		WHERE
+			o.order_status = 6
+			<if test="pd.order_sn != null and pd.order_sn != ''"> 
+			and o.order_sn  
+				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
 		</if>
+		<if test="pd.mobile != null and pd.mobile != ''">
+			and u.mobile  
+			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
+		<if test="pd.user_name != null and pd.user_name != ''"> 
+			and u.user_name  
+				LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		</if>
+		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+			and o.pay_time &gt; #{pd.lastStart }
+		</if>
+		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+			and o.pay_time &lt; #{pd.lastEnd }
+		</if>
+		<if test="pd.amountStart != null and pd.amountStart != ''"> 
+			and o.winning_money &gt; #{pd.amountStart }
+		</if>
+		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
+			and o.winning_money &lt; #{pd.amountEnd }
+		</if>
+			
 	</select>
 	
 	<!-- 列表(全部) -->

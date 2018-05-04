@@ -91,24 +91,36 @@
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		select
+		SELECT
 			a.*,
-			b.user_name as user_name,
-			b.mobile as mobile 
-		from
-			dl_user_withdraw a,
-			dl_user b 
-		where
-			b.user_id = a.user_id
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+			b.user_name,
+			b.mobile,
+			c.account_sn 
+		FROM
+			dl_user_withdraw a
+			LEFT JOIN dl_user b ON b.user_id = a.user_id
+			LEFT JOIN dl_user_account c ON a.account_id = c.id 
+		WHERE 1=1
+		<if test="pd.account_sn != null and pd.account_sn != ''"> 
+			and c.account_sn = #{pd.account_sn}
+			LIKE CONCAT(CONCAT('%', #{pd.account_sn}),'%')
+		</if>
+		<if test="pd.mobile != null and pd.mobile != ''">
+			and b.mobile 
+			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
+		<if test="pd.user_name != null and pd.user_name != ''"> 
+			and b.user_name  
+			LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		</if>
+		<if test="pd.status != null and pd.status != ''"> 
+			and a.status = #{pd.status }
+		</if>
+		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+			and a.pay_time &gt; #{pd.lastStart }
+		</if>
+		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+			and a.pay_time &lt; #{pd.lastEnd }
 		</if>
 	</select>
 	

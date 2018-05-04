@@ -204,18 +204,25 @@
 		from 
 		<include refid="tableName"></include>
 		where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+		<if test="pd.title != null and pd.title != ''"> 
+			and title  
+			LIKE CONCAT(CONCAT('%', #{pd.title}),'%')
+		</if>
+		<if test="pd.article_id != null and pd.article_id != ''"> 
+			and article_id 
+			LIKE CONCAT(CONCAT('%', #{pd.article_id}),'%')
+		</if>
+		<if test="pd.status != null and pd.status!= ''"> 
+			and status = #{pd.status}
 		</if>
 		<if test="pd.match_id != null and pd.match_id!= ''"> 
 			and match_id = #{pd.match_id}
+		</if>
+		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+			and  add_time &gt; #{pd.lastStart }
+		</if>
+		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+			and  add_time &lt; #{pd.lastEnd }
 		</if>
 			order by  is_stick desc , status asc
 	</select>

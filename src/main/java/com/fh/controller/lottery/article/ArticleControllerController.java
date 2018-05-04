@@ -147,9 +147,13 @@ public class ArticleControllerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String article_id = pd.getString("article_id");
+		if (null != article_id && !"".equals(article_id)) {
+			pd.put("article_id", article_id.trim());
+		}
+		String title = pd.getString("title");
+		if (null != title && !"".equals(title)) {
+			pd.put("title", title.trim());
 		}
 		if (null != pd.get("match_id") || "".equals(pd.get("match_id"))) {
 			int matchId = Integer.parseInt(pd.get("match_id").toString()); // 关键词检索条件

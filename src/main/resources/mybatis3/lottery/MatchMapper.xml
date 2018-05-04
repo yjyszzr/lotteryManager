@@ -154,15 +154,24 @@
 			FROM
 				dl_match a 
 			where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+		<if test="pd.match_team != null and pd.match_team != ''"> 
+			AND a.home_team_abbr 
+				LIKE CONCAT(CONCAT('%', #{pd.match_team}),'%')
+			OR a.visiting_team_abbr 
+				LIKE CONCAT(CONCAT('%', #{pd.match_team}),'%')
+		</if>
+		<if test="pd.match_id != null and pd.match_id != ''">
+			and a.match_id  
+				LIKE CONCAT(CONCAT('%', #{pd.match_id}),'%')
+		</if>
+		<if test="pd.status != null and pd.status != ''"> 
+			and a.status = #{pd.status }
+		</if>
+		<if test="pd.startTimeStart != null and pd.startTimeStart != ''"> 
+			and a.match_time &gt; #{pd.lastStart }
+		</if>
+		<if test="pd.startTimeEnd  != null and pd.startTimeEnd  != ''"> 
+			and a.match_time &lt; #{pd.lastEnd }
 		</if>
 	</select>
 	
