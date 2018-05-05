@@ -103,11 +103,11 @@
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">提现编号</th>
 									<th class="center">交易流水号</th>
-									<th class="center">用户昵称</th>
+<!-- 									<th class="center">用户昵称</th> -->
+									<th class="center">真实姓名</th>
 									<th class="center">电话</th>
 									<th class="center">提现金额</th>
 									<th class="center">状态</th>
-									<th class="center">真实姓名</th>
 									<th class="center">卡号</th>
 									<th class="center">提现时间</th>
 									<th class="center">银行名称</th>
@@ -125,7 +125,8 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.account_sn}</td>
 											<td class='center'>${var.withdrawal_sn}</td>
-											<td class='center'>${var.user_name}</td>
+<%-- 											<td class='center'>${var.user_name}</td> --%>
+											<td class='center'>${var.real_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.amount}</td>
 												<td class='center'> 
@@ -135,7 +136,6 @@
 													<c:otherwise><lable style="color:orange">未完成</lable></c:otherwise>
 												</c:choose>
 											</td>
-											<td class='center'>${var.real_name}</td>
 											<td class='center'>${var.card_no}</td>
 											<td class='center'>${var.pay_time}</td>
 											<td class='center'>${var.bank_name}</td>

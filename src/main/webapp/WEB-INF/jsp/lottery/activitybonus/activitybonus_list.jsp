@@ -1,12 +1,9 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,56 +26,33 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							
 						<!-- 检索  -->
-						<form action="articlecontroller/list.do" method="post" name="Form" id="Form">
+						<form action="activitybonus/list.do" method="post" name="Form" id="Form">
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
-									<td>
-										<div class="nav-search">
+								
+								<td>
 											<span class="input-icon" style="width:80px;text-align:right;">
-												文章ID:
+													金额范围:
+												</span>
+										 	<span  >
+												<input name="amountStart" id="amountStart"  value="${pd.amountStart }" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
+												<input name="amountEnd" id="amountEnd"  value="${pd.amountEnd}" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
 											</span>
-											<span class="input-icon">
-												<input type="text" placeholder="文章ID" class="nav-search-input" id="article_id" autocomplete="off" name="article_id" value="${pd.article_id }"  onkeyup="value=value.replace(/[^\d]/g,'')" />
-											</span>
-										</div>
-									</td>
-									<td>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-												标题:
-											</span>
-											<span class="input-icon">
-												<input type="text" placeholder="标题" class="nav-search-input" id="title" autocomplete="off" name="title" value="${pd.title}" />
-											</span>
-										</div>
 									</td>
 									<td>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
 													状态:
 												</span>
-										 	<select  name="status" id="status" data-placeholder="请选择" value="${pd.status }" style="width:154px;border-radius:5px !important"  >
+										 	<select  name="is_enable" id="is_enable" data-placeholder="请选择" value="${pd.is_enable }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
-											<option value="1" <c:if test="${pd.status==1}">selected</c:if>>已发布</option>
-											<option value="2" <c:if test="${pd.status==2}">selected</c:if>>草稿</option>
+											<option value="0" <c:if test="${pd.is_enable==0}">selected</c:if>>上线</option>
+											<option value="1" <c:if test="${pd.is_enable==1}">selected</c:if>>下线</option>
 										  	</select>
 										  	</div>
 									</td>
-									</tr>
-									<tr style="margin:2px">
-									<td >
-										<span class="input-icon" style="width:80px;text-align:right;">
-												发布时间:
-											</span>
-											<span  >
-												<input class="date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
-												<input class="date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
-											</span>
-									</td>
-									
 									<c:if test="${QX.cha == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
 											<span class="input-icon" style="width:80px;"> </span>
@@ -91,7 +65,7 @@
 											</span>
 										</td>
 									</c:if>
-								</tr>
+									</tr>
 							</table> <!-- 检索结束 -->
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
@@ -99,13 +73,18 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
-									<th class="center" style="width:50px;">序号</th>
-									<th class="center">文章ID</th>
-									<th class="center">文章标题</th>
-									<th class="center">发布时间</th>
+<!-- 									<th class="center" style="width:50px;">序号</th> -->
+									<th class="center">ID</th>
+									<th class="center">券类型</th>
+									<th class="center">金额</th>
+									<th class="center">使用条件</th>
+									<th class="center">彩种限制</th>
+									<th class="center">生效时间</th>
+									<th class="center">有效期(天)</th>
+									<th class="center">发放数量</th>
+									<th class="center">已领取</th>
+									<th class="center">已使用</th>
 									<th class="center">状态</th>
-									<th class="center">作者</th>
-<!-- 									<th class="center">标签</th> -->
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -118,49 +97,62 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
-												<c:if test="${var.status==2}">
-													<label class="pos-rel"><input type='checkbox' name='ids' value="${var.article_id}" class="ace" /><span class="lbl"></span></label>
+												<c:if test="${var.is_enable == 0 }"> 
+														<label class="pos-rel"><input type='checkbox' name='ids' value="${var.bonus_id}" class="ace" /><span class="lbl"></span></label>
 												</c:if>
 											</td>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.article_id}</td>
-											<td class='center'>${var.title}</td>
-											<td class='center'>${var.add_time}</td>
+											<td class='center'>${var.bonus_id}</td>
 											<td class='center'> 
-											<c:choose>
-													<c:when test="${var.status==1}">已发布</c:when>
-													<c:otherwise>草稿</c:otherwise>
+												<c:if test="${var.bonus_type==1 }">注册送红包</c:if>
+											</td>
+											<td class='center'>${var.bonus_amount}</td>
+											<td class='center'>${var.min_goods_amount}</td>
+											<td class='center'> 
+												<c:if test="${var.use_range==0 }">通用</c:if>
+											</td>
+											<td class='center'>领取后第${var.start_time}天</td>
+											<td class='center'>${var.end_time}</td>
+											<td class='center'>${var.bonus_number}</td>
+											<td class='center'>${var.receive_quantity}</td>
+											<td class='center'>${var.use_count}</td>
+											<td class='center'> 
+												<c:choose>
+													<c:when test="${var.is_enable eq 1}">上线</c:when>
+													<c:otherwise>下线</c:otherwise>
 												</c:choose>
 											</td>
-											<td class='center'>${var.author}</td>
-<%-- 											<td class='center'>${var.related_team}</td> --%>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-														<c:choose>
-															<c:when test="${var.status==1}"> 
-																<a class="btn btn-xs btn-success" title="下架" style="border-radius: 5px;" onclick="onOrOffLine('2','${var.article_id}');"> 下架</a>
-																	<c:choose>
-																		<c:when test="${var.is_stick==1}"> 
-																			<a class="btn btn-xs " title="取消置顶" style="border-radius: 5px; color:#yellow" onclick="isStickOrNot('0','${var.article_id}');">取消置顶</a>
-																		</c:when>
-																		<c:otherwise>
-																			<a class="btn btn-xs " title="置顶" style="border-radius: 5px; color:#yellow" onclick="isStickOrNot('1','${var.article_id}');"> 置顶</a>
-																		</c:otherwise>
-																</c:choose>
+													
+													
+													<c:choose>
+															<c:when test="${var.is_enable==1}"> 
+																<a class="btn btn-xs btn-success" title="下架" style="border-radius: 5px;" onclick="onOrOffLine('0','${var.bonus_id}');"> 下架</a>
 															</c:when>
-															<c:when test="${var.status==2}">
-																<a class="btn btn-xs btn-success" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('1','${var.article_id}');"> 上架</a>
-																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.article_id}');"> 编辑</a>
+															<c:when test="${var.is_enable==0}">
+																<a class="btn btn-xs btn-success" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('1','${var.bonus_id}');"> 上架</a>
+																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.bonus_id}');"> 编辑</a>
 																<c:if test="${QX.del == 1 }">
-																		<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.article_id}');">删除</a>
+																		<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.bonus_id}');">删除</a>
 																</c:if>
 															</c:when>
 														</c:choose>
+													
+													
+													
+<%-- 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.bonus_id}');"> --%>
+<!-- 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i> -->
+<!-- 													</a> -->
 													</c:if>
+<%-- 													<c:if test="${QX.del == 1 }"> --%>
+<%-- 													<a class="btn btn-xs btn-danger" onclick="del('${var.bonus_id}');"> --%>
+<!-- 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i> -->
+<!-- 													</a> -->
+<%-- 													</c:if> --%>
 												</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline pos-rel">
@@ -168,6 +160,26 @@
 															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
 														</button>
 			
+														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+															<c:if test="${QX.edit == 1 }">
+															<li>
+																<a style="cursor:pointer;" onclick="edit('${var.bonus_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
+																	<span class="green">
+																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+															</c:if>
+															<c:if test="${QX.del == 1 }">
+															<li>
+																<a style="cursor:pointer;" onclick="del('${var.bonus_id}');" class="tooltip-error" data-rel="tooltip" title="删除">
+																	<span class="red">
+																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																	</span>
+																</a>
+															</li>
+															</c:if>
+														</ul>
 													</div>
 												</div>
 											</td>
@@ -194,10 +206,10 @@
 							<tr>
 								<td style="vertical-align:top;">
 									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success"  style="border-radius: 5px;"  onclick="add();">新增</a>
+									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" style="border-radius: 5px;"  onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" >批量删除</a>
+									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -242,11 +254,9 @@
 		//检索
 				function tosearch(status){
 			if(status==0){
-				$("#title").val("");
-				$("#article_id").val("");
-				$("#status").empty();
-				$("#lastStart").val("");
-				$("#lastEnd").val("");
+				$("#is_enable").empty();
+				$("#amountStart").val("");
+				$("#amountEnd").val("");
 			}
 			top.jzts();
 			$("#Form").submit();
@@ -304,9 +314,11 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>articlecontroller/goAdd.do';
-			 diag.Width = 1800;
-			 diag.Height = 1300;
+			 diag.URL = '<%=basePath%>activitybonus/goAdd.do';
+// 			 diag.Width = 450;
+// 			 diag.Height = 355;
+			 diag.Width = 700;
+			 diag.Height = 500;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -317,7 +329,7 @@
 					 }else{
 						 tosearch();
 					 }
-				} 
+				}
 				diag.close();
 			 };
 			 diag.show();
@@ -328,34 +340,12 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>articlecontroller/delete.do?article_id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>activitybonus/delete.do?bonus_id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						tosearch();
 					});
 				}
 			});
-		}
-		//上架和下架 1-已发布 2-草稿箱
-		function onOrOffLine(status,articleId){   
-				top.jzts();
-				if(status==2){
-					//下架时顺便取消置顶
-				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&status="+status+"&is_stick=0";
-				}else{
-				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&status="+status;
-				}
-				$.get(url,function(data){
-					tosearch();
-				});
-		}
-		 
-		//置顶&&取消置顶   0 - 未置顶 1-已置顶
-		function isStickOrNot(stick,articleId){
-				top.jzts();
-				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&is_stick="+stick;
-				$.get(url,function(data){
-					tosearch();
-				});
 		}
 		
 		//修改
@@ -364,18 +354,18 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>articlecontroller/goEdit.do?article_id='+Id;
-			 diag.Width = 1800;
-			 diag.Height = 1300;
+			 diag.URL = '<%=basePath%>activitybonus/goEdit.do?bonus_id='+Id;
 // 			 diag.Width = 450;
 // 			 diag.Height = 355;
+	 		 diag.Width = 700;
+			 diag.Height = 500;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
 			 diag.CancelEvent = function(){ //关闭事件
-/* 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 tosearch();
-				} */
+				}
 				diag.close();
 			 };
 			 diag.show();
@@ -410,7 +400,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>articlecontroller/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>activitybonus/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,
@@ -429,10 +419,17 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>articlecontroller/excel.do';
+			window.location.href='<%=basePath%>activitybonus/excel.do';
 		}
-	</script>
-
-
-</body>
+		
+		//上架和下架 1-已发布 2-草稿箱
+		function onOrOffLine(status,bonus_id){   
+				top.jzts();
+				var url = "<%=basePath%>activitybonus/onAndOnLine.do?bonus_id="+bonus_id+"&is_enable="+status;
+				$.get(url,function(data){
+					tosearch();
+				});
+		}
+		</script>
+	</body>
 </html>
