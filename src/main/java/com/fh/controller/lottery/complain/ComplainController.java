@@ -23,6 +23,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.complain.ComplainManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -132,12 +133,24 @@ public class ComplainController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String user_name = pd.getString("user_name");
+		if (null != user_name && !"".equals(user_name)) {
+			pd.put("user_name", user_name.trim());
+		}
+		String complain_content = pd.getString("complain_content");
+		if (null != complain_content && !"".equals(complain_content)) {
+			pd.put("complain_content", complain_content.trim());
 		}
 		page.setPd(pd);
 		List<PageData> varList = complainService.list(page); // 列出Complain列表
+		for (int i = 0; i < varList.size(); i++) {
+			PageData pageData = new PageData();
+			pageData = varList.get(i);
+			if (null != pageData.get("complain_time") && !"".equals(pageData.get("complain_time"))) {
+				pageData.put("complain_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pageData.get("complain_time").toString()), DateUtilNew.date_sdf));
+			}
+		}
+
 		mv.setViewName("lottery/complain/complain_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
