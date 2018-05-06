@@ -446,7 +446,7 @@
 		var title = $("#title").val();
 		var author = $("#author").val();
 		var video_url = $("#video_url").val();
-		var content_cat = $("input[name='content_cat']:checked").val();
+		var extend_cat = $("input[name='extend_cat']:checked").val();
 		var is_original = $("input[name='is_original']:checked").val();
 		var related_team = $("input[name='add_label1']:checked").val();
 		var label_defaults = $("input[name='add_label2']:checked").val();
@@ -463,7 +463,7 @@
 					        		title:title,
 					        	    author:author,
 					        	   	video_url:video_url,
-					        	   	extend_cat:content_cat,
+					        	   	extend_cat:extend_cat,
 					        	   	is_original:is_original,
 					        	   	related_team:related_team,
 					        	   	label_defaults:label_defaults,
