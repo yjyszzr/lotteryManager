@@ -26,7 +26,7 @@ public class SmsHl extends AbsSmsProvider {
 	public final static String PROVIDER_SPLIT_CHAR = ",";
 	public final static String PROVIDER_OK = "00";
 	public final static int RETURN_LENGTH = 2;
-	public final static String PROVIDER_SIGN = "【璞谷塘】";
+	public final static String PROVIDER_SIGN = "【彩小秘】";
 
 	@Override
 	protected String getProviderName() {
