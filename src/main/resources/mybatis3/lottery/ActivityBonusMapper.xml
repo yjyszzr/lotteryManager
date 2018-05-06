@@ -131,13 +131,13 @@
 			dl_activity_bonus a
 		WHERE 1=1
 		<if test="pd.amountStart != null and pd.amountStart != ''"> 
-			and  a.bonus_amount   &gt; #{pd.bonus_amount }
+			and  a.bonus_amount   &gt; #{pd.amountStart }
 		</if>
 		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
-			and a.bonus_amount  &lt; #{pd.bonus_amount }
+			and a.bonus_amount  &lt; #{pd.amountEnd }
 		</if>
 		<if test="pd.is_enable!= null and pd.is_enable != ''"> 
-			and a.is_enable  &lt; #{pd.is_enable }
+			and a.is_enable = #{pd.is_enable }
 		</if>
 	</select>
 	

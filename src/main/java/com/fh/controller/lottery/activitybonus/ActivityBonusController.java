@@ -130,9 +130,13 @@ public class ActivityBonusController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String amountStart = pd.getString("amountStart");
+		if (null != amountStart && !"".equals(amountStart)) {
+			pd.put("amountStart", amountStart.trim());
+		}
+		String amountEnd = pd.getString("amountEnd");
+		if (null != amountEnd && !"".equals(amountEnd)) {
+			pd.put("amountEnd", amountEnd.trim());
 		}
 		page.setPd(pd);
 		List<PageData> varList = activitybonusService.list(page); // 列出ActivityBonus列表

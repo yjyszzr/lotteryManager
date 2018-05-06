@@ -48,8 +48,8 @@
 												</span>
 										 	<select  name="is_enable" id="is_enable" data-placeholder="请选择" value="${pd.is_enable }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
-											<option value="0" <c:if test="${pd.is_enable==0}">selected</c:if>>上线</option>
-											<option value="1" <c:if test="${pd.is_enable==1}">selected</c:if>>下线</option>
+											<option value="1" <c:if test="${pd.is_enable==1}">selected</c:if>>上线</option>
+											<option value="0" <c:if test="${pd.is_enable==0}">selected</c:if>>下线</option>
 										  	</select>
 										  	</div>
 									</td>
@@ -206,10 +206,10 @@
 							<tr>
 								<td style="vertical-align:top;">
 									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
+									<a class="btn btn-mini btn-success" onclick="add();" style="border-radius:5px ; width:50px">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
+									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" style="border-radius:5px ; width:70px" >批量删除</a>
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
