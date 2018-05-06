@@ -70,16 +70,16 @@ public class ArticleControllerController extends BaseController {
 		pd.put("content", pd.getString("content"));
 		pd.put("is_delete", 0);
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong()); // 备注1
-		if ("1".equals(pd.get("photosNum")) || "4".equals(pd.get("photosNum"))) {
+		if ("1".equals(pd.get("list_style")) || "4".equals(pd.get("list_style"))) {
 			pd.put("article_thumb", pd.get("article_thumb1"));
 
-		} else if ("2".equals(pd.get("photosNum"))) {
-			String articleThumbAll = pd.get("article_thumb1") + ","
-					+ pd.get("article_thumb2") + "," + pd.get("article_thumb3");
+		} else if ("2".equals(pd.get("list_style"))) {
+			String articleThumbAll = pd.get("article_thumb1") + "," + pd.get("article_thumb2") + "," + pd.get("article_thumb3");
 			pd.put("article_thumb", articleThumbAll);
 		}
 		if (pd.get("article_id") == "" || "".equals(pd.get("article_id"))) {
 			pd.put("is_show", 0);
+			pd.put("is_stick", 0);
 			pd.put("article_id", 0);
 			articlecontrollerService.save(pd);
 		} else {
@@ -166,11 +166,8 @@ public class ArticleControllerController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
 			pageData = varList.get(i);
-			if (null != pageData.get("add_time")
-					&& !"".equals(pageData.get("add_time"))) {
-				pageData.put("add_time", DateUtilNew.getCurrentTimeString(
-						Long.parseLong(pageData.get("add_time").toString()),
-						DateUtilNew.date_sdf));
+			if (null != pageData.get("add_time") && !"".equals(pageData.get("add_time"))) {
+				pageData.put("add_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pageData.get("add_time").toString()), DateUtilNew.date_sdf));
 			}
 		}
 		mv.setViewName("lottery/article/articlecontroller_list");
@@ -207,6 +204,22 @@ public class ArticleControllerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = articlecontrollerService.findById(pd); // 根据ID读取
+
+		Object obj = pd.get("article_thumb");
+		String articleThumbArr = null;
+		if (obj != null) {
+			articleThumbArr = obj.toString();
+			String[] strArray = null;
+			strArray = articleThumbArr.split(",");
+			if (strArray.length == 1) {
+				pd.put("article_thumb1", strArray[0]);
+			} else if (strArray.length > 1) {
+				for (int i = 0; i < strArray.length; i++) {
+					pd.put("article_thumb" + (i + 1), strArray[i]);
+				}
+			}
+		}
+
 		mv.setViewName("lottery/article/articlecontroller_edit");
 		mv.addObject("msg", "saveOrUpdate");
 		mv.addObject("pd", pd);
@@ -222,8 +235,7 @@ public class ArticleControllerController extends BaseController {
 	 */
 	@RequestMapping(value = "/addPic")
 	@ResponseBody
-	public Object save(@RequestParam(required = false) MultipartFile file)
-			throws Exception {
+	public Object save(@RequestParam(required = false) MultipartFile file) throws Exception {
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
@@ -233,8 +245,7 @@ public class ArticleControllerController extends BaseController {
 		PageData pd = new PageData();
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
-						+ ffile; // 文件上传路径
+				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
@@ -246,8 +257,7 @@ public class ArticleControllerController extends BaseController {
 			pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 			pd.put("MASTER_ID", "1"); // 附属与
 			pd.put("BZ", "图片管理处上传"); // 备注
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
-					+ ffile + "/" + fileName);// 加水印
+			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
 			picturesService.save(pd);
 		}
 		map.put("result", "ok");
@@ -330,8 +340,7 @@ public class ArticleControllerController extends BaseController {
 	 */
 	@RequestMapping(value = "/excel")
 	public ModelAndView exportExcel() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername()
-				+ "导出ArticleController到excel");
+		logBefore(logger, Jurisdiction.getUsername() + "导出ArticleController到excel");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
 			return null;
 		}
@@ -416,7 +425,6 @@ public class ArticleControllerController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,
-				true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

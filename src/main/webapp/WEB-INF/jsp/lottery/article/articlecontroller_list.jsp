@@ -313,9 +313,9 @@
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
-						 tosearch();
+						 tosearch(0);
 					 }else{
-						 tosearch();
+						 tosearch(0);
 					 }
 				} 
 				diag.close();
@@ -330,7 +330,7 @@
 					top.jzts();
 					var url = "<%=basePath%>articlecontroller/delete.do?article_id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
-						tosearch();
+						tosearch(0);
 					});
 				}
 			});
@@ -345,7 +345,7 @@
 				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&status="+status;
 				}
 				$.get(url,function(data){
-					tosearch();
+					tosearch(0);
 				});
 		}
 		 
@@ -354,7 +354,7 @@
 				top.jzts();
 				var url = "<%=basePath%>articlecontroller/stickAndOnLine.do?article_id="+articleId+"&tm="+new Date().getTime()+"&is_stick="+stick;
 				$.get(url,function(data){
-					tosearch();
+					tosearch(0);
 				});
 		}
 		
@@ -373,9 +373,9 @@
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
 			 diag.CancelEvent = function(){ //关闭事件
-/* 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 tosearch();
-				} */
+  				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 tosearch(0);
+				}  
 				diag.close();
 			 };
 			 diag.show();
@@ -417,7 +417,7 @@
 								cache: false,
 								success: function(data){
 									 $.each(data.list, function(i, list){
-											tosearch();
+											tosearch(0);
 									 });
 								}
 							});

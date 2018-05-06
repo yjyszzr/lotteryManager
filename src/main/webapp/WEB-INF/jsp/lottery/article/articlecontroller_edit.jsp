@@ -313,16 +313,16 @@
 	
 	
 	$(function(){
-	  if($("input[name='photosNum']:checked").val()== '1') {
+	  if($("input[name='list_style']:checked").val()== '1') {
 			$(".slt2").hide();
  			$(".slt1").show();
-      }else if($("input[name='photosNum']:checked").val()== '2') {
+      }else if($("input[name='list_style']:checked").val()== '2') {
       		$(".slt1").hide();
  			$(".slt2").show();
-      }else if($("input[name='photosNum']:checked").val()=='0') {
+      }else if($("input[name='list_style']:checked").val()=='0') {
       		$(".slt2").hide();
  			$(".slt1").hide();
-		}else if($("input[name='photosNum']:checked").val()== '4'){
+		}else if($("input[name='list_style']:checked").val()== '4'){
 			$(".slt2").hide();
  			$(".slt1").show();
 		}
