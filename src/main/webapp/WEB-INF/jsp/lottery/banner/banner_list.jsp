@@ -134,7 +134,7 @@
 											<td class='center'>${var.banner_sort}</td>
 											<td class='center'> 
 												<c:choose>
-													<c:when test="${pd.is_show==1}">否</c:when>
+													<c:when test="${pd.is_show==0}">否</c:when>
 													<c:otherwise>是</c:otherwise>
 												</c:choose>
 											</td>						

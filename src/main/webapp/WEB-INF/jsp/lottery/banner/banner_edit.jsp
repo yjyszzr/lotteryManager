@@ -75,8 +75,8 @@
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">是否显示：</label>
 									 <div class="col-sm-9">
 									    <select  name="is_show" id="is_show" value="${pd.is_show}"  style="width:188px;">
-									        <option value="1" <c:if test="${pd.is_show==1}">selected</c:if>>否</option>
-									        <option value="2" <c:if test="${pd.is_show==2}">selected</c:if>>是</option>
+									        <option value="0" <c:if test="${pd.is_show==0}">selected</c:if>>否</option>
+									        <option value="1" <c:if test="${pd.is_show==1}">selected</c:if>>是</option>
 									    </select>
 								</div>
                             </div>

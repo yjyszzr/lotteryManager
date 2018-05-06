@@ -78,19 +78,19 @@
 																					<input name="article_thumb2" class="hidden"   id="article_thumb2" value="${pd.article_thumb2}"/>
 																					<input name="article_thumb3" class="hidden"   id="article_thumb3" value="${pd.article_thumb3}"/>
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="photosNum" type="radio" <c:if test="${pd.photosNum==1}">checked="checked"</c:if>    value = "1" class="ace" id="photosNum1" />
+																					<input  name="list_style" type="radio" <c:if test="${pd.list_style==1}">checked="checked"</c:if>    value = "1" class="ace" id="list_style1" />
 																					<span class="lbl">单张图片</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==2}">checked="checked"</c:if>  value = "2" class="ace" id="photosNum2" />
+																					<input name="list_style" type="radio"  <c:if test="${pd.list_style==2}">checked="checked"</c:if>  value = "2" class="ace" id="list_style2" />
 																					<span class="lbl">三张图片</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==4}">checked="checked"</c:if>  value = "4" class="ace" id="photosNum4" />
+																					<input name="list_style" type="radio"  <c:if test="${pd.list_style==4}">checked="checked"</c:if>  value = "4" class="ace" id="list_style4" />
 																					<span class="lbl">视频缩略图</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="photosNum" type="radio"  <c:if test="${pd.photosNum==0}">checked="checked"</c:if>  value = "0" class="ace" id="photosNum0" />
+																					<input name="list_style" type="radio"  <c:if test="${pd.list_style==0}">checked="checked"</c:if>  value = "0" class="ace" id="list_style0" />
 																					<span class="lbl">纯文本</span>
 																				</label>
 											                                </div>
@@ -343,7 +343,7 @@
 	
 		$(top.hangge());
 		$(document).ready(function() {
-		    $('input[type=radio][name=photosNum]').change(function() {
+		    $('input[type=radio][name=list_style]').change(function() {
 		        if (this.value == '1') {
 					$(".slt2").hide();
 		   			$(".slt1").show();
@@ -369,10 +369,10 @@
 		        dataType:'json',                           //服务器返回的格式,可以是json或xml等
 		        success:function(data, status){            //服务器响应成功时的处理函数
 		            if(data.result){
-		            	if($('input[type=radio][name=photosNum]:checked').val() == '1' ){
+		            	if($('input[type=radio][name=list_style]:checked').val() == '1'  || $('input[type=radio][name=list_style]:checked').val() == '4'  ){
 			            	$("#photoShow").attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb1").val(data.PATH);
-		            	}else if( $('input[type=radio][name=photosNum]:checked').val() == '2' ){
+		            	}else if( $('input[type=radio][name=list_style]:checked').val() == '2' ){
 			            	$("#photoShow"+clickNum).attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb"+clickNum).val(data.PATH);
 		            	}

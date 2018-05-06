@@ -208,25 +208,7 @@ public class ArticleControllerController extends BaseController {
 		pd = this.getPageData();
 		pd = articlecontrollerService.findById(pd); // 根据ID读取
 		mv.setViewName("lottery/article/articlecontroller_edit");
-		Object obj = pd.get("article_thumb");
-		String articleThumbArr = null;
-		if (obj != null) {
-			articleThumbArr = obj.toString();
-			String[] strArray = null;
-			strArray = articleThumbArr.split(",");
-			if (strArray.length == 1) {
-				pd.put("article_thumb1", strArray[0]);
-				pd.put("photosNum", 1);// 单图模式
-			} else if (strArray.length > 1) {
-				for (int i = 0; i < strArray.length; i++) {
-					pd.put("article_thumb" + (i + 1), strArray[i]);
-				}
-				pd.put("photosNum", 2);// 三张图模式
-			}
-		} else {
-			pd.put("photosNum", 3);// 文本模式
-		}
-		mv.addObject("msg", "edit");
+		mv.addObject("msg", "saveOrUpdate");
 		mv.addObject("pd", pd);
 		return mv;
 	}
