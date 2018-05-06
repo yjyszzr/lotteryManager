@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>FH</groupId>
-	<artifactId>erp</artifactId>
+	<artifactId>lotteryManager</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>erp</name>
+	<name>lotteryManager</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -521,7 +521,7 @@
 		
 	</dependencies>
 	<build>
-		<finalName>erp</finalName>
+		<finalName>lotteryManager</finalName>
 		<resources>
             <resource>
                 <directory>src/main/resources/conf</directory>
@@ -543,7 +543,7 @@
                     <archive>
                         <addMavenDescriptor>false</addMavenDescriptor>
                     </archive>
-                    <warName>erp</warName>
+                    <warName>lotteryManager</warName>
                     <webResources>
                         <resource>
                             <directory>src/main/resources/conf/${package.environment}</directory>
