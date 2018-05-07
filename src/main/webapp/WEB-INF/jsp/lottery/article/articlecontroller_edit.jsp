@@ -79,7 +79,7 @@
 																					<input name="article_thumb3" class="hidden"   id="article_thumb3" value="${pd.article_thumb3}"/>
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
 																					<input  name="list_style" type="radio" <c:if test="${pd.list_style==1}">checked="checked"</c:if>    value = "1" class="ace" id="list_style1" />
-																					<span class="lbl">单张图片</span>
+																					<span class="lbl">单张图片</span>   
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
 																					<input name="list_style" type="radio"  <c:if test="${pd.list_style==3}">checked="checked"</c:if>  value = "3" class="ace" id="list_style3" />
@@ -306,7 +306,7 @@
 	  if($("input[name='list_style']:checked").val()== '1') {
 			$(".slt2").hide();
  			$(".slt1").show();
-      }else if($("input[name='list_style']:checked").val()== '2') {
+      }else if($("input[name='list_style']:checked").val()== '3') {
       		$(".slt1").hide();
  			$(".slt2").show();
       }else if($("input[name='list_style']:checked").val()=='0') {
@@ -337,7 +337,7 @@
 		        if (this.value == '1') {
 					$(".slt2").hide();
 		   			$(".slt1").show();
-		        }else if (this.value == '2') {
+		        }else if (this.value == '3') {
 		        	$(".slt1").hide();
 		   			$(".slt2").show();
 		        }else if (this.value == '0') {
@@ -362,7 +362,7 @@
 		            	if($('input[type=radio][name=list_style]:checked').val() == '1'  || $('input[type=radio][name=list_style]:checked').val() == '4'  ){
 			            	$("#photoShow").attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb1").val(data.PATH);
-		            	}else if( $('input[type=radio][name=list_style]:checked').val() == '2' ){
+		            	}else if( $('input[type=radio][name=list_style]:checked').val() == '3' ){
 			            	$("#photoShow"+clickNum).attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb"+clickNum).val(data.PATH);
 		            	}

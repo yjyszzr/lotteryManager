@@ -35,7 +35,6 @@ import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 import com.fh.util.PathUtil;
 import com.fh.util.Tools;
-import com.fh.util.Watermark;
 
 /**
  * 类名称：图片管理 创建人：FH Q313596790 创建时间：2015-03-21
@@ -161,8 +160,9 @@ public class PicturesController extends BaseController {
 			pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 			pd.put("MASTER_ID", "1"); // 附属与
 			pd.put("BZ", "图片管理处上传"); // 备注
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
-			picturesService.save(pd);
+			// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
+			// + ffile + "/" + fileName);// 加水印
+			// picturesService.save(pd);
 		}
 		map.put("result", "true");
 		map.put("PICTURES_ID", this.get32UUID()); // 主键
@@ -239,7 +239,8 @@ public class PicturesController extends BaseController {
 			} else {
 				pd.put("PATH", tpz);
 			}
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
+			// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
+			// + ffile + "/" + fileName);// 加水印
 			picturesService.edit(pd); // 执行修改数据库
 		}
 		mv.addObject("msg", "success");
@@ -383,7 +384,8 @@ public class PicturesController extends BaseController {
 						pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 						pd.put("MASTER_ID", "1"); // 附属与
 						pd.put("BZ", serverUrl + "爬取"); // 备注
-						Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
+						// Watermark.setWatemark(PathUtil.getClasspath() +
+						// Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
 						picturesService.save(pd);
 					}
 				}
