@@ -82,7 +82,7 @@
 																					<span class="lbl">单张图片</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="list_style" type="radio"  <c:if test="${pd.list_style==2}">checked="checked"</c:if>  value = "2" class="ace" id="list_style2" />
+																					<input name="list_style" type="radio"  <c:if test="${pd.list_style==3}">checked="checked"</c:if>  value = "3" class="ace" id="list_style3" />
 																					<span class="lbl">三张图片</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
@@ -124,14 +124,6 @@
 																					<img id="photoShow3"    <c:if test="${not empty pd.article_thumb3}">src="<%=basePath%>${pd.article_thumb3}" width="100px",hight="50px"  </c:if>   alt="">
 																				</div>
 												                            </div>
-											                            
-<!-- 											                            <div > -->
-<!-- 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">视频:</label> -->
-<!-- 																			<div class="col-sm-9"> -->
-<%-- 																				<input type="text" id="video_url" placeholder="视频url" class="col-xs-10 col-sm-5"     value="${pd.video_url}"/> --%>
-<!-- 																			</div> -->
-<!-- 											                            </div> -->
-
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">内容分类：</label>
 											                                <div class="col-sm-9">
@@ -237,8 +229,6 @@
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
 											                                <div class="col-sm-9">
-<!-- 											                                   <a class="btn btn-mini btn-success" onclick="preLook()">预览</a> -->
-<!-- 											                                   <a class="btn btn-mini btn-primary" onclick="saveInnerHtml('1')" >发表</a> -->
 											                                   <a class="btn btn-mini btn-primary" onclick="save(1)" >发表</a>
 											                                   <a class="btn btn-mini btn-danger" onclick="save('2')">保存草稿</a>
 											                                </div>

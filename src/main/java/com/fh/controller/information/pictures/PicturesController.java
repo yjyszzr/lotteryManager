@@ -107,8 +107,7 @@ public class PicturesController extends BaseController {
 	 */
 	@RequestMapping(value = "/save")
 	@ResponseBody
-	public Object save(@RequestParam(required = false) MultipartFile file)
-			throws Exception {
+	public Object save(@RequestParam(required = false) MultipartFile file) throws Exception {
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
@@ -118,8 +117,7 @@ public class PicturesController extends BaseController {
 		PageData pd = new PageData();
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
-						+ ffile; // 文件上传路径
+				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
@@ -131,8 +129,8 @@ public class PicturesController extends BaseController {
 			pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 			pd.put("MASTER_ID", "1"); // 附属与
 			pd.put("BZ", "图片管理处上传"); // 备注
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
-					+ ffile + "/" + fileName);// 加水印
+			// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
+			// + ffile + "/" + fileName);// 加水印
 			picturesService.save(pd);
 		}
 		map.put("result", "ok");
@@ -141,9 +139,7 @@ public class PicturesController extends BaseController {
 
 	@RequestMapping(value = "/fileUpload")
 	@ResponseBody
-	public Map<String, String> fileUpload(
-			@RequestParam(required = false) MultipartFile file)
-			throws Exception {
+	public Map<String, String> fileUpload(@RequestParam(required = false) MultipartFile file) throws Exception {
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
@@ -153,8 +149,7 @@ public class PicturesController extends BaseController {
 		PageData pd = new PageData();
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
-						+ ffile; // 文件上传路径
+				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
@@ -166,8 +161,7 @@ public class PicturesController extends BaseController {
 			pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 			pd.put("MASTER_ID", "1"); // 附属与
 			pd.put("BZ", "图片管理处上传"); // 备注
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
-					+ ffile + "/" + fileName);// 加水印
+			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
 			picturesService.save(pd);
 		}
 		map.put("result", "true");
@@ -197,8 +191,7 @@ public class PicturesController extends BaseController {
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			pd = this.getPageData();
 			if (Tools.notEmpty(pd.getString("PATH").trim())) {
-				DelAllFile.delFolder(PathUtil.getClasspath()
-						+ Const.FILEPATHIMG + pd.getString("PATH")); // 删除图片
+				DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH")); // 删除图片
 			}
 			picturesService.delete(pd);
 		}
@@ -220,15 +213,8 @@ public class PicturesController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/edit")
-	public ModelAndView edit(
-			HttpServletRequest request,
-			@RequestParam(value = "tp", required = false) MultipartFile file,
-			@RequestParam(value = "tpz", required = false) String tpz,
-			@RequestParam(value = "PICTURES_ID", required = false) String PICTURES_ID,
-			@RequestParam(value = "TITLE", required = false) String TITLE,
-			@RequestParam(value = "MASTER_ID", required = false) String MASTER_ID,
-			@RequestParam(value = "BZ", required = false) String BZ)
-			throws Exception {
+	public ModelAndView edit(HttpServletRequest request, @RequestParam(value = "tp", required = false) MultipartFile file, @RequestParam(value = "tpz", required = false) String tpz, @RequestParam(value = "PICTURES_ID", required = false) String PICTURES_ID, @RequestParam(value = "TITLE", required = false) String TITLE, @RequestParam(value = "MASTER_ID", required = false) String MASTER_ID,
+			@RequestParam(value = "BZ", required = false) String BZ) throws Exception {
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
 			return null;
 		} // 校验权限
@@ -246,16 +232,14 @@ public class PicturesController extends BaseController {
 			}
 			String ffile = DateUtil.getDays(), fileName = "";
 			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
-						+ ffile; // 文件上传路径
+				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 				pd.put("PATH", ffile + "/" + fileName); // 路径
 				pd.put("NAME", fileName);
 			} else {
 				pd.put("PATH", tpz);
 			}
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
-					+ ffile + "/" + fileName);// 加水印
+			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
 			picturesService.edit(pd); // 执行修改数据库
 		}
 		mv.addObject("msg", "success");
@@ -316,11 +300,8 @@ public class PicturesController extends BaseController {
 				String ArrayDATA_IDS[] = DATA_IDS.split(",");
 				pathList = picturesService.getAllById(ArrayDATA_IDS);
 				for (int i = 0; i < pathList.size(); i++) {
-					if (Tools
-							.notEmpty(pathList.get(i).getString("PATH").trim())) {
-						DelAllFile.delFolder(PathUtil.getClasspath()
-								+ Const.FILEPATHIMG
-								+ pathList.get(i).getString("PATH"));// 删除图片
+					if (Tools.notEmpty(pathList.get(i).getString("PATH").trim())) {
+						DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pathList.get(i).getString("PATH"));// 删除图片
 					}
 				}
 				picturesService.deleteAll(ArrayDATA_IDS);
@@ -346,8 +327,7 @@ public class PicturesController extends BaseController {
 		pd = this.getPageData();
 		String PATH = pd.getString("PATH");
 		if (Tools.notEmpty(pd.getString("PATH").trim())) {// 图片路径
-			DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG
-					+ pd.getString("PATH")); // 删除图片
+			DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH")); // 删除图片
 		}
 		if (PATH != null) {
 			picturesService.delTp(pd); // 删除数据库中图片数据
@@ -392,11 +372,9 @@ public class PicturesController extends BaseController {
 				imgList = GetWeb.getImagePathList(serverUrl);
 				if ("save".equals(msg)) {
 					String ffile = DateUtil.getDays();
-					String filePath = PathUtil.getClasspath()
-							+ Const.FILEPATHIMG + ffile; // 文件上传路径
+					String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
 					for (int i = 0; i < imgList.size(); i++) { // 把网络图片保存到服务器硬盘，并数据库记录
-						String fileName = FileUpload.getHtmlPicture(
-								imgList.get(i), filePath, null); // 下载网络图片上传到服务器上
+						String fileName = FileUpload.getHtmlPicture(imgList.get(i), filePath, null); // 下载网络图片上传到服务器上
 						// 保存到数据库
 						pd.put("PICTURES_ID", this.get32UUID()); // 主键
 						pd.put("TITLE", "图片"); // 标题
@@ -405,8 +383,7 @@ public class PicturesController extends BaseController {
 						pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 						pd.put("MASTER_ID", "1"); // 附属与
 						pd.put("BZ", serverUrl + "爬取"); // 备注
-						Watermark.setWatemark(PathUtil.getClasspath()
-								+ Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
+						Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);// 加水印
 						picturesService.save(pd);
 					}
 				}
@@ -422,7 +399,6 @@ public class PicturesController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,
-				true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

@@ -29,16 +29,78 @@
 					
 					<form action="userwithdraw/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
+						<input type="hidden" name="status" id="status" value=""/>
+						<input type="hidden" id="order_sn " value="${pd.withdrawal_sn }"/>
+						<input type="hidden" id="user_id" value="${pd.user_id }"/>
+						<input type="hidden" id="amount" value="${pd.amount }"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">提现编号:</td>
-								<td><input type="text" name="withdrawal_sn" id="withdrawal_sn" value="${pd.withdrawal_sn}" maxlength="40" placeholder="这里输入提现编号" title="提现编号" style="width:98%;"/></td>
+									<td style="text-align: right;width:200px">
+	                                	<label class=" no-padding-right" for="form-field-1">提现单号：</label>
+                                	</td>
+                                	<td style="text-align: left;width:200px"  >
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.withdrawal_sn}</label>
+	                                </td>
+                               		<td style="text-align: right;width:200px" >
+	                                	<label class=" no-padding-right" for="form-field-1">真实姓名：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >	
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.real_name }</label>
+                           		  	</td>
 							</tr>
 							<tr>
-								<td style="text-align: center;" colspan="10">
-									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
-									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+									<td style="text-align: right;width:200px">
+	                                	<label class=" no-padding-right" for="form-field-1">身份证号：</label>
+                                	</td>
+                                	<td style="text-align: left;width:200px"  >
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.id_code}</label>
+	                                </td>
+                           		  	<td style="text-align: right;width:200px" >
+	                                	<label class=" no-padding-right" for="form-field-1">手机号：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >	
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.mobile }</label>
+                           		  	</td>
+							</tr>
+							<tr>
+									<td style="text-align: right;width:200px">
+	                                	<label class=" no-padding-right" for="form-field-1">发卡行：</label>
+                                	</td>
+                                	<td style="text-align: left;width:200px"  >
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.bank_name}</label>
+	                                </td>
+									<td style="text-align: right;width:200px">
+	                                	<label class=" no-padding-right" for="form-field-1">银行卡号：</label>
+                                	</td>
+                                	<td style="text-align: left;width:200px"  >
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.card_no}</label>
+	                                </td>
+							</tr>
+							<tr>
+								<td style="text-align: right;width:200px" >
+	                                	<label class=" no-padding-right" for="form-field-1">提现金额：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >	
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.amount }元</label>
+                           		  	</td>
+                           		  	<td style="text-align: right;width:200px" >
+	                                	<label class=" no-padding-right" for="form-field-1">可提现金额：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >	
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.amount }元</label>
+                           		  	</td>
+							</tr>
+							<tr>
+								<td style="text-align: center;width:200px" >
+								</td>
+								<td style="text-align: right;width:200px" >
+									<a class="btn btn-mini btn-primary" onclick="save(1);">通过</a>
+								</td>
+								<td style="text-align: left;width:200px" >
+									<a class="btn btn-mini btn-danger" onclick="save(2);">拒绝</a>
+								</td>
+								<td style="text-align: center;width:200px" >
 								</td>
 							</tr>
 						</table>
@@ -69,26 +131,31 @@
 		<script type="text/javascript">
 		$(top.hangge());
 		//保存
-		function save(){
-			if($("#withdrawal_sn").val()==""){
-				$("#withdrawal_sn").tips({
-					side:3,
-		            msg:'请输入提现编号',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#withdrawal_sn").focus();
-			return false;
-			}
-			$("#Form").submit();
-			$("#zhongxin").hide();
-			$("#zhongxin2").show();
+		function save(value){
+			 $("#status").val(value);
+			 if(value==1){
+				 var orderSn=$("#order_sn").val();
+				 var userId=$("#user_id").val();
+				 var reward=$("#amount").val();
+				 var url ="http://39.106.18.39:7071/user/account/batchUpdateUserAccount";
+				 $.post(url,
+						 	{ "userIdAndRewardList": 
+						 		[{"orderSn": orderSn,
+							      "reward": reward,
+							      "userId": userId,
+							      "userMoney": 0 }]},
+						 function(data){
+								$("#Form").submit();
+								$("#zhongxin").hide();
+								$("#zhongxin2").show();
+							},'json');
+			 }else{
+					$("#Form").submit();
+					$("#zhongxin").hide();
+					$("#zhongxin2").show();
+			 }
 		}
 		
-		$(function() {
-			//日期框
-			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
-		});
-		</script>
+	</script>
 </body>
 </html>

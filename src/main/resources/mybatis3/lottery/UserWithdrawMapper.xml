@@ -81,11 +81,15 @@
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 
+		SELECT
+			a.*,
+			u_r.id_code,
+			u.mobile 
+		FROM
+			dl_user_withdraw a
+			LEFT JOIN dl_user_real u_r ON a.user_id = u_r.user_id
+			LEFT JOIN dl_user u ON a.user_id = u.user_id
+		WHERE 
 			id = #{id}
 	</select>
 	
