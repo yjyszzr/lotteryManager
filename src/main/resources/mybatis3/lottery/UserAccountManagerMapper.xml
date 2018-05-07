@@ -178,6 +178,10 @@
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId};
 	</select>
 	
+	<select id="findByUserId" parameterType="java.lang.Integer"  resultType="pd">
+		SELECT * FROM dl_user_account WHERE user_id = #{userId} ;
+	</select>
+	
 	<select id="listPageForReward"  parameterType="page" resultType="pd">
 		 SELECT
 		 	o.*, 

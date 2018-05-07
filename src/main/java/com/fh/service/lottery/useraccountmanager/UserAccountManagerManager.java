@@ -84,8 +84,7 @@ public interface UserAccountManagerManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public Double getTotalConsumByUserId(@Param("userId") Integer userId)
-			throws Exception;
+	public Double getTotalConsumByUserId(@Param("userId") Integer userId) throws Exception;
 
 	/****
 	 * 充值资金总额
@@ -94,8 +93,7 @@ public interface UserAccountManagerManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public Double getTotalRechargeByUserId(@Param("userId") Integer userId)
-			throws Exception;
+	public Double getTotalRechargeByUserId(@Param("userId") Integer userId) throws Exception;
 
 	/****
 	 * 累计中奖
@@ -104,8 +102,7 @@ public interface UserAccountManagerManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public Double getTotalAwardByUserId(@Param("userId") Integer userId)
-			throws Exception;
+	public Double getTotalAwardByUserId(@Param("userId") Integer userId) throws Exception;
 
 	/****
 	 * 获取个人钱包余额
@@ -114,8 +111,9 @@ public interface UserAccountManagerManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public Double getTotalRestByUserId(@Param("userId") Integer userId)
-			throws Exception;
+	public Double getTotalRestByUserId(@Param("userId") Integer userId) throws Exception;
 
 	public List<PageData> listForReward(Page page) throws Exception;
+
+	public List<PageData> findByUserId(int userId) throws Exception;
 }

@@ -238,5 +238,21 @@
 		</foreach>
 	</delete>
 	
-	<!-- fh313596790qq(青苔) -->
+	<select id="findByUserId" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where user_id = #{pd.user_id}
+	</select>
+	<select id="findUserBonusByUserId"  parameterType="java.lang.Integer" resultType="java.lang.Double">
+		SELECT
+			SUM(bonus_price)
+		FROM
+			dl_user_bonus 
+		WHERE
+			user_id =  #{pd.user_id} 
+			AND bonus_status = 0
+	</select>
+	
 </mapper>

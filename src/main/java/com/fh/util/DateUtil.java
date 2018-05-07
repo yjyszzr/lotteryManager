@@ -71,8 +71,7 @@ public class DateUtil {
 	 * @param s
 	 * @param e
 	 * @return boolean
-	 * @throws @author
-	 *             fh
+	 * @throws @author fh
 	 */
 	public static boolean compareDate(String s, String e) {
 		if (fomatDate(s) == null || fomatDate(e) == null) {
@@ -131,8 +130,7 @@ public class DateUtil {
 		DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			// long aa=0;
-			int years = (int) (((fmt.parse(endTime).getTime() - fmt.parse(startTime).getTime()) / (1000 * 60 * 60 * 24))
-					/ 365);
+			int years = (int) (((fmt.parse(endTime).getTime() - fmt.parse(startTime).getTime()) / (1000 * 60 * 60 * 24)) / 365);
 			return years;
 		} catch (Exception e) {
 			// 如果throw java.text.ParseException或者NullPointerException，就说明格式不对
@@ -201,7 +199,6 @@ public class DateUtil {
 			throw new RuntimeException("", e);
 		}
 
-
 		Calendar canlendar = new GregorianCalendar(); // java.util包
 		canlendar.setTime(date);
 		canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
@@ -234,7 +231,8 @@ public class DateUtil {
 	}
 
 	public static String toSdfTimeStr(Date date) {
-		if(null == date) return "";
+		if (null == date)
+			return "";
 		return sdfTime.format(date);
 	}
 
@@ -246,7 +244,12 @@ public class DateUtil {
 	public static String toDateStr(Date date) {
 		return sdfDay.format(date);
 	}
-    public static String toDateStr(long time) {
-    	return sdfDay.format(new Date(time));
-    }
+
+	public static String toDateStr(long time) {
+		return sdfDay.format(new Date(time));
+	}
+
+	public static String toSDFTime(long time) {
+		return sdfTime.format(new Date(time));
+	}
 }

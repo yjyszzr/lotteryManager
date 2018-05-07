@@ -60,8 +60,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList(
-				"UserAccountManagerMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("UserAccountManagerMapper.datalistPage", page);
 	}
 
 	/**
@@ -72,8 +71,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList(
-				"UserAccountManagerMapper.listAll", pd);
+		return (List<PageData>) dao.findForList("UserAccountManagerMapper.listAll", pd);
 	}
 
 	/**
@@ -83,8 +81,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject(
-				"UserAccountManagerMapper.findById", pd);
+		return (PageData) dao.findForObject("UserAccountManagerMapper.findById", pd);
 	}
 
 	/**
@@ -100,37 +97,37 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	@Override
 	public Double getTotalConsumByUserId(Integer userId) throws Exception {
 		// TODO Auto-generated method stub
-		return (Double) dao.findForObject(
-				"UserAccountManagerMapper.getTotalById", userId);
+		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalById", userId);
 	}
 
 	@Override
 	public Double getTotalRechargeByUserId(Integer userId) throws Exception {
 		// TODO Auto-generated method stub
-		return (Double) dao.findForObject(
-				"UserAccountManagerMapper.getTotalRecharge", userId);
+		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalRecharge", userId);
 	}
 
 	@Override
 	public Double getTotalAwardByUserId(Integer userId) throws Exception {
 		// TODO Auto-generated method stub
-		return (Double) dao.findForObject(
-				"UserAccountManagerMapper.getTotalAward", userId);
+		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalAward", userId);
 	}
 
 	@Override
 	public Double getTotalRestByUserId(Integer userId) throws Exception {
 		// TODO Auto-generated method stub
-		return (Double) dao.findForObject(
-				"UserAccountManagerMapper.getTotalRest", userId);
+		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalRest", userId);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> listForReward(Page page) throws Exception {
 		// TODO Auto-generated method stub
-		return (List<PageData>) dao.findForList(
-				"UserAccountManagerMapper.listPageForReward", page);
+		return (List<PageData>) dao.findForList("UserAccountManagerMapper.listPageForReward", page);
+	}
+
+	@Override
+	public List<PageData> findByUserId(int userId) throws Exception {
+		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByUserId", userId);
 	}
 
 }

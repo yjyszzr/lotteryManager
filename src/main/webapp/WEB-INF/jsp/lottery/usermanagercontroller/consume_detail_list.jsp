@@ -1,16 +1,13 @@
 ﻿<%@page import="com.fh.util.DateUtil"%>
 <%@page import="com.fh.util.MoneyUtil" %>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,136 +31,83 @@
 					<div class="row">
 						<div class="col-xs-12">
 							
-						<!-- 检索  -->
 						<form action="usermanagercontroller/list.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
+					<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name_chosen" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="0">全部</option>
-									<option value="3">已实名</option>
-									<option value="4">未实名</option>
-									<option value="1">已锁定</option>
-									<option value="2">已冻结</option>
-								  	</select>
-								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
+									<td style="text-align: right;width:200px">
+	                                	<label class=" no-padding-right" for="form-field-1">账户总金额：</label>
+                                	</td>
+                                	<td style="text-align: left;width:200px"  >
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.allAmount}</label>
+	                                </td>
+                               		<td style="text-align: right;width:200px" >
+	                                	<label class=" no-padding-right" for="form-field-1">可提现金额：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >	
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.user_money }</label>
+                           		  	</td>
+							</tr>
+							<tr>
+									<td style="text-align: right;width:200px">
+	                                	<label class=" no-padding-right" for="form-field-1">可使用红包金额：</label>
+                                	</td>
+                                	<td style="text-align: left;width:200px"  >
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.unUseBonus}</label>
+	                                </td>
+                           		  	<td style="text-align: right;width:200px" >
+	                                	<label class=" no-padding-right" for="form-field-1">充值总金额：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >	
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.rechargeAllAmount }</label>
+                           		  	</td>
+							</tr>
+							<tr>
+									<td style="text-align: right;width:200px">
+	                                	<label class=" no-padding-right" for="form-field-1">奖金总金额：</label>
+                                	</td>
+                                	<td style="text-align: left;width:200px"  >
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.rewardAllAmount}</label>
+	                                </td>
+									<td style="text-align: right;width:200px">
+	                                	<label class=" no-padding-right" for="form-field-1">购彩总金额：</label>
+                                	</td>
+                                	<td style="text-align: left;width:200px"  >
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.buyTicketAllAmount}</label>
+	                                </td>
 							</tr>
 						</table>
-						<!-- 检索  -->
+					
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
-									<th class="center" style="width:50px;">ID</th>
-									<th class="center">用户昵称</th>
-									<th class="center">手机号</th>
-									<th class="center">真实姓名</th>
-									<th class="center">身份证号</th>
-									<th class="center">累计消费</th>
-									<th class="center">累计充值</th>
-									<th class="center">累计中奖</th>
+									<th class="center">交易时间</th>
+									<th class="center">交易类型</th>
+									<th class="center">收入</th>
+									<th class="center">支出</th>
 									<th class="center">账户余额</th>
-									<th class="center">注册时间</th>
-									<th class="center">最后登录时间</th>
-									<th class="center">状态</th>
-									<th class="center">来源</th>
-									
-									<th class="center">操作</th>
+									<th class="center">可提现金额</th>
 								</tr>
 							</thead>
 													
 							<tbody>
 							<!-- 开始循环 -->	
 							<c:choose>
-								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
-									<c:forEach items="${varList}" var="var" varStatus="vs">
+								<c:when test="${not empty pd.userAccountList}">
+<%-- 							${pd.userAccountList} --%>
+<%-- 									<c:if test="${QX.cha == 1 }"> --%>
+									<c:forEach items="${pd.userAccountList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.user_id}" class="ace" /><span class="lbl"></span></label>
-											</td>
-											<td class='center' style="width: 30px;">${var.user_id}</td>
-											<td class='center'><a onclick="toDetail('${var.user_id}');">${var.nickname}</a></td>
-											<td class='center'>${var.mobile}</td>
-											<td class="center">${var.real_name}</td>
-											<td class="center">${var.id_code}</td>
-											<td class="center"><a onclick="toConsumeDetail('${var.user_id}');">${MoneyUtil.getMoneyByFen(var.total)}</a></td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.rtotal)}</td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.atotal)}</td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.resttotal)}</td>
-											<td class='center'>${DateUtil.toDateStr(var.reg_time*1000)}</td>
-											<td class='center'>${DateUtil.toDateStr(var.last_time*1000)}</td>
-											<td class='center'>${var.user_status}</td>
-											<td class='center'>${var.reg_from}</td>
-											
-											
-											<td class="center">
-												<c:if test="${QX.edit != 1 && QX.del != 1 }">
-												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
-												</c:if>
-												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.user_id}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
-													</a>
-													</c:if>
-													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="del('${var.user_id}');">
-														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
-													</a>
-													</c:if>
-												</div>
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-			
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.user_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-															<c:if test="${QX.del == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="del('${var.user_id}');" class="tooltip-error" data-rel="tooltip" title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-														</ul>
-													</div>
-												</div>
-											</td>
+											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
+											<td class='center'>${var.process_type}</td>
+											<td class='center'>${var.amount}</td>
+											<td class='center'>${var.amount}</td>
+											<td class="center">${var.cur_balance}</td>
+											<td class="center">${var.user_surplus}</td>
 										</tr>
 									
 									</c:forEach>
-									</c:if>
+<%-- 									</c:if> --%>
 									<c:if test="${QX.cha == 0 }">
 										<tr>
 											<td colspan="100" class="center">您无权查看</td>
@@ -182,12 +126,6 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
@@ -279,7 +217,7 @@
 				});
 			});
 		});
-		function toConsumeDetail(userId){
+		function toConsumeDetail(consumeId){
 			window.location.href='<%=basePath%>usermanagercontroller/toConsumeDetail.do?user_id='+userId;
 		}
 		//新增
