@@ -28,11 +28,8 @@
 					<div class="col-xs-12">
 					
 					<form action="userwithdraw/${msg }.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<input type="hidden" name="status" id="status" value=""/>
-						<input type="hidden" id="order_sn " value="${pd.withdrawal_sn }"/>
-						<input type="hidden" id="user_id" value="${pd.user_id }"/>
-						<input type="hidden" id="amount" value="${pd.amount }"/>
+						<input type="hidden" id="withdrawSn" name= "withdrawSn" value="${pd.withdrawal_sn }"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -95,10 +92,10 @@
 								<td style="text-align: center;width:200px" >
 								</td>
 								<td style="text-align: right;width:200px" >
-									<a class="btn btn-mini btn-primary" onclick="save(1);">通过</a>
+									<a class="btn btn-mini btn-primary" onclick="toManualAudit('1','${pd.withdrawal_sn}');">通过</a>
 								</td>
 								<td style="text-align: left;width:200px" >
-									<a class="btn btn-mini btn-danger" onclick="save(2);">拒绝</a>
+									<a class="btn btn-mini btn-danger" onclick="toManualAudit('2','${pd.withdrawal_sn}');">拒绝</a>
 								</td>
 								<td style="text-align: center;width:200px" >
 								</td>
@@ -130,32 +127,14 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		<script type="text/javascript">
 		$(top.hangge());
-		//保存
-		function save(value){
-			 $("#status").val(value);
-			 if(value==1){
-				 var orderSn=$("#order_sn").val();
-				 var userId=$("#user_id").val();
-				 var reward=$("#amount").val();
-				 var url ="http://39.106.18.39:7071/user/account/batchUpdateUserAccount";
-				 $.post(url,
-						 	{ "userIdAndRewardList": 
-						 		[{"orderSn": orderSn,
-							      "reward": reward,
-							      "userId": userId,
-							      "userMoney": 0 }]},
-						 function(data){
-								$("#Form").submit();
-								$("#zhongxin").hide();
-								$("#zhongxin2").show();
-							},'json');
-			 }else{
+
+		function toManualAudit(status,withdrawSn){
+					top.jzts();
+					$("#status").val(status);
 					$("#Form").submit();
 					$("#zhongxin").hide();
 					$("#zhongxin2").show();
-			 }
-		}
-		
+			}
 	</script>
 </body>
 </html>

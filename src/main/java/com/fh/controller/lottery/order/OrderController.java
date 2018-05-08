@@ -19,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
+import com.fh.common.TextConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
+import com.fh.util.ManualAuditUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
@@ -178,11 +181,8 @@ public class OrderController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
 			pageData = varList.get(i);
-			if (null != pageData.get("pay_time")
-					&& !"".equals(pageData.get("pay_time"))) {
-				pageData.put("pay_time", DateUtilNew.getCurrentTimeString(
-						Long.parseLong(pageData.get("pay_time").toString()),
-						DateUtilNew.datetimeFormat));
+			if (null != pageData.get("pay_time") && !"".equals(pageData.get("pay_time"))) {
+				pageData.put("pay_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pageData.get("pay_time").toString()), DateUtilNew.datetimeFormat));
 			}
 		}
 		mv.setViewName("lottery/order/order_list");
@@ -339,10 +339,8 @@ public class OrderController extends BaseController {
 			vpd.put("var21", varOList.get(i).get("add_time").toString()); // 21
 			vpd.put("var22", varOList.get(i).get("pay_time").toString()); // 22
 			vpd.put("var23", varOList.get(i).get("order_type").toString()); // 23
-			vpd.put("var24", varOList.get(i).get("lottery_classify_id")
-					.toString()); // 24
-			vpd.put("var25", varOList.get(i).get("lottery_play_classify_id")
-					.toString()); // 25
+			vpd.put("var24", varOList.get(i).get("lottery_classify_id").toString()); // 24
+			vpd.put("var25", varOList.get(i).get("lottery_play_classify_id").toString()); // 25
 			vpd.put("var26", varOList.get(i).getString("match_time")); // 26
 			vpd.put("var27", varOList.get(i).getString("winning_money")); // 27
 			vpd.put("var28", varOList.get(i).getString("play_type")); // 28
@@ -366,7 +364,38 @@ public class OrderController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,
-				true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
+	}
+
+	/**
+	 * 手动派奖(对接张子荣)
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/manualAward")
+	public ModelAndView manualAward() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String orderSn = pd.getString("orderSn");
+		PageData orderPd = orderService.findByOrderSn(orderSn);
+		if (null != orderPd) {
+			double reward = Double.parseDouble(orderPd.getString("winning_money"));
+			int userId = Integer.parseInt(orderPd.getString("user_id"));
+			ReqOrdeEntity reqOrdeEntity = new ReqOrdeEntity();
+			reqOrdeEntity.orderSn = orderSn;
+			reqOrdeEntity.reward = reward;
+			reqOrdeEntity.userId = userId;
+			reqOrdeEntity.userMoney = 0;
+			List<ReqOrdeEntity> userIdAndRewardList = new ArrayList<ReqOrdeEntity>();
+			userIdAndRewardList.add(reqOrdeEntity);
+			String reqStr = JSON.toJSONString(userIdAndRewardList);
+			ManualAuditUtil.ManualAuditUtil(reqStr, TextConfig.URL_MANUAL_AUDIT_CODE, true);
+			mv.addObject("msg", "success");
+			mv.setViewName("save_result");
+			return mv;
+		}
+		return null;
 	}
 }

@@ -100,6 +100,7 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
+									<th class="center">ID</th>
 									<th class="center">标题</th>
 									<th class="center">图片</th>
 									<th class="center">投放资源</th>
@@ -122,6 +123,7 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
+											<td class='center'>${var.id}</td>
 											<td class='center'>${var.banner_name}</td>
 											<td class='center'><img src="${var.banner_image}" width="48px" hight="24px"/></td>
 											<td class='center'> 
@@ -134,8 +136,8 @@
 											<td class='center'>${var.banner_sort}</td>
 											<td class='center'> 
 												<c:choose>
-													<c:when test="${pd.is_show==0}">否</c:when>
-													<c:otherwise>是</c:otherwise>
+													<c:when test="${pd.is_show==0}">已过期</c:when>
+													<c:otherwise>已发布</c:otherwise>
 												</c:choose>
 											</td>						
 											<td class='center'>${var.start_time}</td>

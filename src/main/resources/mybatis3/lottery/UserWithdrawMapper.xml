@@ -74,7 +74,7 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			withdrawal_sn = #{withdrawal_sn}
+			status = #{status}
 		where 
 		id = #{id}
 	</update>

@@ -113,7 +113,7 @@
 									<th class="center">中奖金额</th>
 									<th class="center">优惠券</th>
 									<th class="center">购彩时间</th>
-									<th class="center">操作</th>
+									<th class="center">是否派奖</th>
 								</tr>
 							</thead>
 													
@@ -128,13 +128,30 @@
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
-											<td class='center'>${var.order_status}</td>
+											<td class='center'> 
+												<c:choose> 
+													<c:when test="${var.order_status=='0'}">待付款</c:when>
+													<c:when test="${var.order_status=='1'}">待出票</c:when>
+													<c:when test="${var.order_status=='2'}">出票失败</c:when>
+													<c:when test="${var.order_status=='3'}">待开奖</c:when>
+													<c:when test="${var.order_status=='4'}">未中奖</c:when>
+													<c:when test="${var.order_status=='5'}">已中奖</c:when>
+													<c:when test="${var.order_status=='6'}">派奖中</c:when>
+													<c:when test="${var.order_status=='7'}">已派奖</c:when>
+												</c:choose>
+											</td>
 											<td class='center'>${var.pay_name}</td>
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.winning_money}</td>
 											<td class='center'>${var.bonus}</td>
 											<td class='center'>${var.pay_time}</td>
-											<td class='center'>审核</td>
+											<td class='center'>
+											<c:choose>
+											<c:when test="${var.order_status=='7'}">已派奖</c:when>
+											<c:when test="${var.order_status=='6'}"><a class="btn btn-xs btn-success" title="派奖" style="border-radius: 5px;" onclick="toManualAward('${var.order_sn}');" >是</a></c:when>
+											</c:choose>
+											
+											</td>
 										</tr>
 									
 									</c:forEach>
@@ -282,89 +299,17 @@
 			 diag.show();
 		}
 		
-		//删除
-		function del(Id){
-			bootbox.confirm("确定要删除吗?", function(result) {
+		function toManualAward(orderSn){
+			bootbox.confirm("确定要派奖吗?", function(result) {
 				if(result) {
-					top.jzts();
-					var url = "<%=basePath%>order/delete.do?order_id="+Id+"&tm="+new Date().getTime();
-					$.get(url,function(data){
-						tosearch();
-					});
-				}
-			});
-		}
-		
-		//修改
-		function edit(Id){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>order/goEdit.do?order_id='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮 
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 tosearch();
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
-		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++){
-					  if(document.getElementsByName('ids')[i].checked){
-					  	if(str=='') str += document.getElementsByName('ids')[i].value;
-					  	else str += ',' + document.getElementsByName('ids')[i].value;
-					  }
+					 var url ="<%=basePath%>order/manualAward";
+					 $.post(url,{'orderSn':orderSn}, function(data){
+							$("#Form").submit();
+							$("#zhongxin").hide();
+							$("#zhongxin2").show();
+						},'json');
 					}
-					if(str==''){
-						bootbox.dialog({
-							message: "<span class='bigger-110'>您没有选择任何内容!</span>",
-							buttons: 			
-							{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
-						});
-						$("#zcheckbox").tips({
-							side:1,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>order/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											tosearch();
-									 });
-								}
-							});
-						}
-					}
-				}
 			});
-		};
-		
-		//导出excel
-		function toExcel(){
-			window.location.href='<%=basePath%>order/excel.do';
 		}
 	</script>
 

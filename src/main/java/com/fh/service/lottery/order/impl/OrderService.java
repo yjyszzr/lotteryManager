@@ -60,8 +60,7 @@ public class OrderService implements OrderManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("OrderMapper.datalistPage",
-				page);
+		return (List<PageData>) dao.findForList("OrderMapper.datalistPage", page);
 	}
 
 	/**
@@ -93,6 +92,11 @@ public class OrderService implements OrderManager {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("OrderMapper.deleteAll", ArrayDATA_IDS);
+	}
+
+	@Override
+	public PageData findByOrderSn(String orderSn) throws Exception {
+		return (PageData) dao.findForObject("OrderMapper.findByOrderSn", orderSn);
 	}
 
 }

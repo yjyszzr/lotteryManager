@@ -60,8 +60,7 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList(
-				"UserWithdrawMapper.datalistPage", page);
+		return (List<PageData>) dao.findForList("UserWithdrawMapper.datalistPage", page);
 	}
 
 	/**
@@ -72,8 +71,7 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("UserWithdrawMapper.listAll",
-				pd);
+		return (List<PageData>) dao.findForList("UserWithdrawMapper.listAll", pd);
 	}
 
 	/**
@@ -95,5 +93,4 @@ public class UserWithdrawService implements UserWithdrawManager {
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("UserWithdrawMapper.deleteAll", ArrayDATA_IDS);
 	}
-
 }

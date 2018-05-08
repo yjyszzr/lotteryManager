@@ -390,7 +390,7 @@ public class UserManagerControllerController extends BaseController {
 		double user_money = Double.parseDouble(rEntity.get("user_money").toString());
 		double frozen_money = Double.parseDouble(rEntity.get("frozen_money").toString());
 		double user_money_limit = Double.parseDouble(rEntity.get("user_money_limit").toString());
-		allAmount = user_money + frozen_money + user_money_limit;
+		allAmount = user_money + user_money_limit - frozen_money;
 		pd.put("allAmount", allAmount);
 		pd.put("user_money", user_money);
 		// 红包

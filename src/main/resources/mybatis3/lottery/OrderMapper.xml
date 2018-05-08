@@ -156,6 +156,15 @@
 	</update>
 	
 	<!-- 通过ID获取数据 -->
+	<select id="findByOrderSn" parameterType="String" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			order_sn = #{order_sn}
+	</select>
+	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 
 		<include refid="Field"></include>
@@ -169,6 +178,7 @@
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		SELECT
 			o.order_sn,
+			u.user_id,
 			u.user_name,
 			u.mobile,
 			l.lottery_name,

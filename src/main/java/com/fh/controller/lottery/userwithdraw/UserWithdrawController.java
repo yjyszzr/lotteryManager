@@ -19,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
+import com.fh.common.TextConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.userwithdraw.UserWithdrawManager;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
+import com.fh.util.ManualAuditUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
@@ -145,31 +148,21 @@ public class UserWithdrawController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
 			pageData = varList.get(i);
-			if (null != pageData.get("pay_time")
-					&& !"".equals(pageData.get("pay_time"))) {
-				pageData.put("pay_time", DateUtilNew.getCurrentTimeString(
-						Long.parseLong(pageData.get("pay_time").toString()),
-						DateUtilNew.datetimeFormat));
+			if (null != pageData.get("pay_time") && !"".equals(pageData.get("pay_time"))) {
+				pageData.put("pay_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pageData.get("pay_time").toString()), DateUtilNew.datetimeFormat));
 			}
-			if (null != pageData.get("status")
-					&& !"".equals(pageData.get("status"))) {
+			if (null != pageData.get("status") && !"".equals(pageData.get("status"))) {
 				if ("1".equals(pageData.get("status").toString())) {
-					if (null != pageData.get("amount")
-							&& !"".equals(pageData.get("amount"))) {
-						successAmount += Double.parseDouble(pageData.get(
-								"amount").toString());
+					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+						successAmount += Double.parseDouble(pageData.get("amount").toString());
 					}
 				} else if ("2".equals(pageData.get("status").toString())) {
-					if (null != pageData.get("amount")
-							&& !"".equals(pageData.get("amount"))) {
-						failAmount += Double.parseDouble(pageData.get("amount")
-								.toString());
+					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+						failAmount += Double.parseDouble(pageData.get("amount").toString());
 					}
 				} else if ("0".equals(pageData.get("status").toString())) {
-					if (null != pageData.get("amount")
-							&& !"".equals(pageData.get("amount"))) {
-						unfinished += Double.parseDouble(pageData.get("amount")
-								.toString());
+					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+						unfinished += Double.parseDouble(pageData.get("amount").toString());
 					}
 				}
 			}
@@ -202,6 +195,32 @@ public class UserWithdrawController extends BaseController {
 	}
 
 	/**
+	 * 手动提现
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/manualAudit")
+	public ModelAndView manualAudit() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String sendData = pd.getString("withdrawSn");
+		String status = pd.getString("status");
+		ReqCashEntity reqCashEntity = new ReqCashEntity();
+		reqCashEntity.withdrawSn = sendData;
+		String reqStr = JSON.toJSONString(reqCashEntity);
+		if ("1".equals(status)) { // 状态为1的走审核通过接口
+			ManualAuditUtil.ManualAuditUtil(reqStr, TextConfig.URL_MANUAL_AWARD_CODE, true);
+		} else if ("2".equals(status)) {// 状态为2的拒绝提现,直接将状态改成2(失败)
+			userwithdrawService.edit(pd);
+		}
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+
+	/**
 	 * 去修改页面
 	 * 
 	 * @param
@@ -214,7 +233,7 @@ public class UserWithdrawController extends BaseController {
 		pd = this.getPageData();
 		pd = userwithdrawService.findById(pd); // 根据ID读取
 		mv.setViewName("lottery/userwithdraw/userwithdraw_edit");
-		mv.addObject("msg", "edit");
+		mv.addObject("msg", "manualAudit");
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -306,7 +325,6 @@ public class UserWithdrawController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,
-				true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }
