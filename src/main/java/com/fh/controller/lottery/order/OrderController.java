@@ -390,8 +390,10 @@ public class OrderController extends BaseController {
 			reqOrdeEntity.userMoney = 0;
 			List<ReqOrdeEntity> userIdAndRewardList = new ArrayList<ReqOrdeEntity>();
 			userIdAndRewardList.add(reqOrdeEntity);
+			String value = "{'userIdAndRewardList':";
 			String reqStr = JSON.toJSONString(userIdAndRewardList);
-			ManualAuditUtil.ManualAuditUtil(reqStr, TextConfig.URL_MANUAL_AUDIT_CODE, true);
+			String stra = value + reqStr + "}";
+			ManualAuditUtil.ManualAuditUtil(stra, TextConfig.URL_MANUAL_AUDIT_CODE, true);
 			mv.addObject("msg", "success");
 			mv.setViewName("save_result");
 			return mv;

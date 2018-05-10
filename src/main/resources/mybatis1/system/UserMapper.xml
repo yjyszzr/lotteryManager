@@ -85,7 +85,7 @@
 		<include refid="tableName"></include>
 		where 1=1
 		<if test="USERNAME!=null and PASSWORD!=null">
-		and USERNAME = #{USERNAME} and PASSWORD=#{PASSWORD}
+		and PHONE = #{USERNAME} and PASSWORD=#{PASSWORD}
 		</if>
 		<if test="USER_ID!=null and USER_ID>0">
 		and USER_ID = #{USER_ID}
@@ -271,6 +271,16 @@
 		<if test="USERNAME != null and USERNAME != ''">
 			and USERNAME != #{USERNAME} 
 		</if>
+	</select>
+	
+	<!-- 通过user_id获取数据 -->
+	<select id="findByMobile" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			PHONE = #{mobile}
 	</select>
 	
 	<!-- 通过user_id获取数据 -->

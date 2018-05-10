@@ -167,11 +167,11 @@
 		<if test="pd.status != null and pd.status != ''"> 
 			and a.status = #{pd.status }
 		</if>
-		<if test="pd.startTimeStart != null and pd.startTimeStart != ''"> 
-			and a.match_time &gt; #{pd.lastStart }
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and a.match_time &gt; #{pd.lastStart1}
 		</if>
-		<if test="pd.startTimeEnd  != null and pd.startTimeEnd  != ''"> 
-			and a.match_time &lt; #{pd.lastEnd }
+		<if test="pd.lastEnd1  != null and pd.lastEnd1 != ''"> 
+			and a.match_time &lt; #{pd.lastEnd1 }
 		</if>
 	</select>
 	

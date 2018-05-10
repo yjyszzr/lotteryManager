@@ -49,14 +49,14 @@
 													<div class="row">
 														<div class="col-sm-5" style="width:100%;">
 											                <div class="ibox float-e-margins">
-											                    <div class="ibox-content">
-											                        <div class="alert alert-info">
-											                          	编辑文章
-											                        </div>
+											                    <div class="ibox-content" style="padding: 0px;">
+<!-- 											                        <div class="alert alert-info"> -->
+<!-- 											                          	编辑文章 -->
+<!-- 											                        </div> -->
 											                        <form action="articlecontroller/${msg }.do" name="Form" id="Form" method="post"  target="_self" class="form-horizontal m-t">
 									                        			<div id="zhongxin" style="padding-top: 13px;">
-											                        	<div >
-											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章标题：</label>
+											                        	<div class="row" style="padding:5px">
+											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>文章标题：</label>
 											                                <div class="col-sm-9">
 											                                <input type=hidden id="article_id"   name ="article_id" value="${pd.article_id}"/>
 											                                <input type=hidden id="content"  name="content"   value=""/>
@@ -65,20 +65,20 @@
 											                                </div>
 											                            </div>
 											                          
-											                            <div  >
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">作者：</label>
+											                           <div class="row"  style="padding:5px">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>作者：</label>
 																			<div class="col-sm-9">
 																				<input type="text" id="author" name="author" placeholder="作者" class="col-xs-10 col-sm-5"    value="${pd.author}"/>
 																			</div>
 											                            </div>
-											                            <div >
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">图文类型：</label>
+											                               <div class="row"  style="padding:5px">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>图文类型：</label>
 											                                <div class="col-sm-9">
 																					<input name="article_thumb1" class="hidden"   id="article_thumb1" value="${pd.article_thumb1}" />
 																					<input name="article_thumb2" class="hidden"   id="article_thumb2" value="${pd.article_thumb2}"/>
 																					<input name="article_thumb3" class="hidden"   id="article_thumb3" value="${pd.article_thumb3}"/>
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="list_style" type="radio" <c:if test="${pd.list_style==1}">checked="checked"</c:if>    value = "1" class="ace" id="list_style1" />
+																					<input  name="list_style" type="radio" checked <c:if test="${pd.list_style==1}">checked="checked"</c:if>    value = "1" class="ace" id="list_style1" />
 																					<span class="lbl">单张图片</span>   
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
@@ -99,7 +99,7 @@
 											                            <div class="slt1" >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
-																			   <span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');"> 单张上传</span>  
+																			   <span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');"  id="showOnePhoto"> 单张上传</span>  
 																			</div>
 											                            </div>
 																			<div  class="slt1">
@@ -112,7 +112,7 @@
 									                                      <div class="slt2"   style="display:none;">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
-																			   <span class="btn btn-mini btn-primary" onclick="uploadThreePhoto()"> 三张上传</span>  
+																			   <span class="btn btn-mini btn-primary" onclick="uploadThreePhoto()" id="showThirdPhoto"> 三张上传</span>  
 																			</div>
 											                            </div >
 											                            
@@ -124,11 +124,18 @@
 																					<img id="photoShow3"    <c:if test="${not empty pd.article_thumb3}">src="<%=basePath%>${pd.article_thumb3}" width="100px",hight="50px"  </c:if>   alt="">
 																				</div>
 												                            </div>
-											                            <div >
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">内容分类：</label>
+										                                <div class="slt3"   style="display:none;">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">副标题：</label>
+																			<div class="col-sm-9">
+																			   <input type="text" id="subheading" name="subheading" placeholder="副标题" class="col-xs-10 col-sm-5"    value="${pd.subheading}"/>
+																			</div>
+											                            </div >
+											                            
+											                               <div class="row"  style="padding:5px">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>内容分类：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="extend_cat" type="radio" <c:if test="${pd.extend_cat==1}">checked="checked"</c:if>  value = "1" class="ace" id="extend_cat1" />
+																					<input  name="extend_cat" type="radio" checked <c:if test="${pd.extend_cat==1}">checked="checked"</c:if>  value = "1" class="ace" id="extend_cat1" />
 																					<span class="lbl">今日关注</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
@@ -145,11 +152,11 @@
 																				</label>
 											                                </div>
 											                            </div>
-											                            <div >
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">是否原创：</label>
+											                                <div class="row"  style="padding:5px">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>是否原创：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="is_original" type="radio"  <c:if test="${pd.is_original==1}">checked="checked"</c:if>    value = "1" class="ace" id="is_original1" />
+																					<input  name="is_original" type="radio" checked <c:if test="${pd.is_original==1}">checked="checked"</c:if>    value = "1" class="ace" id="is_original1" />
 																					<span class="lbl">原创</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
@@ -158,11 +165,11 @@
 																				</label>
 											                                </div>
 											                            </div>
-											                             <div >
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">添加标签：</label>
+											                                 <div class="row"  style="padding:5px">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>添加标签：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="related_team" type="radio"   <c:if test="${pd.related_team==1}">checked="checked"</c:if>   value = "1" class="ace" id="related_team_1" />
+																					<input  name="related_team" type="radio"  checked <c:if test="${pd.related_team==1}">checked="checked"</c:if>   value = "1" class="ace" id="related_team_1" />
 																					<span class="lbl">主队</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
@@ -171,18 +178,19 @@
 																				</label>
 											                                </div>
 											                            </div>
-															            <div >
-															                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
+															                <div class="row"  style="padding:5px">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>默认标签：</label>
+<!-- 															                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>默认标签:</label> -->
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="label_defaults_1" />
+																					<input  name="label_defaults" type="radio"   checked <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="label_defaults_1" />
 																					<span class="lbl">主帅</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
 																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==2}">checked="checked"</c:if>   value = "2" class="ace" id="label_defaults_2" />
 																					<span class="lbl">球员</span>
 																				</label>
-																																								<label style="float:left;padding-left: 8px;padding-top:7px;">
+																				<label style="float:left;padding-left: 8px;padding-top:7px;">
 																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==3}">checked="checked"</c:if>   value = "3" class="ace" id="label_defaults_3" />
 																					<span class="lbl">球迷</span>
 																				</label>
@@ -218,11 +226,11 @@
 																				</label>
 											                                </div>
 															            </div>
-											                            <div >
+											                                <div class="row"  style="padding:5px">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章内容：</label>
 											                                <div class="col-sm-9">
 											                                	<div class="ueQ313596790Que"></div>
-											                                   <script id="editor"  type="text/plain" style="width:96%;height:50px;"></script>
+											                                   <script id="editor"  type="text/plain" style="width:550px;height:250px;"></script>
 											                                    <div class="ueQ313596790Que"></div>
 											                                </div>
 											                            </div>
@@ -254,12 +262,6 @@
 				<!-- /.page-content -->
 			</div>
 		</div>
-		<!-- /.main-content -->
-<%-- 		<form action="<%=basePath%>/tool/downloadFormCode.do" name="Form" id="Form" method="post"> --%>
-<!-- 			<textarea name="htmlCode" id="htmlCode"style="display: none;"></textarea> -->
-<!-- 		</form> -->
-<%-- 		<form action="<%=basePath%>articlecontroller/list.do" name="Form" id="Form" method="post"> --%>
-<!-- 		</form> -->
 		<!-- 返回顶部 -->
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
 			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
@@ -289,9 +291,61 @@
 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 	<!-- 上传控件 -->
 	<script src="static/ace/js/ace/elements.fileinput.js"></script>
+	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 	$(top.hangge());
 	function save(status){
+		if($("#title").val()==""){
+			$("#title").tips({
+				side:3,
+	            msg:'请输入标题',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#title").focus();
+		return false;
+		}
+		if($("#author").val()==""){
+			$("#author").tips({
+				side:3,
+	            msg:'请输入作者',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#author").focus();
+		return false;
+		}
+		var a=0;
+		var flag = false;
+		$('input[id^=article_thumb]').each(function(){  
+			 if(!$(this).val()==""){
+				 a++;
+			 }	 
+		});  
+		if( $("input[name='list_style']:checked").val()== 1  ){
+			if(a==0){
+				$("#showOnePhoto").tips({
+					side:3,
+		            msg:'请上传一张图片',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#showOnePhoto").focus();
+			return false;
+			}
+		}else if( $("input[name='list_style']:checked").val()== 3){
+			if(a<3){
+				$("#showThirdPhoto").tips({
+					side:3,
+		            msg:'请上传三张图片',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#showThirdPhoto").focus();
+			return false;
+			}
+		}
+		
 		var editor = UE.getEditor('editor');
 		var content = UE.getEditor('editor').getContent();
 		    $("#content").val(content);
@@ -300,21 +354,23 @@
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
 	}
-	
-	
 	$(function(){
 	  if($("input[name='list_style']:checked").val()== '1') {
 			$(".slt2").hide();
  			$(".slt1").show();
+ 			$(".slt3").hide();
       }else if($("input[name='list_style']:checked").val()== '3') {
       		$(".slt1").hide();
  			$(".slt2").show();
+ 			$(".slt3").hide();
       }else if($("input[name='list_style']:checked").val()=='0') {
       		$(".slt2").hide();
  			$(".slt1").hide();
+ 			$(".slt3").show();
 		}else if($("input[name='list_style']:checked").val()== '4'){
 			$(".slt2").hide();
  			$(".slt1").show();
+ 			$(".slt3").hide();
 		}
 	});
 // 	不能创建editor之后马上使用ue.setContent('文本内容')，要等到创建完成之后才可以使用
@@ -337,14 +393,18 @@
 		        if (this.value == '1') {
 					$(".slt2").hide();
 		   			$(".slt1").show();
+		   			$(".slt3").hide();
 		        }else if (this.value == '3') {
 		        	$(".slt1").hide();
 		   			$(".slt2").show();
+		   			$(".slt3").hide();
 		        }else if (this.value == '0') {
 		        	$(".slt2").hide();
 		   			$(".slt1").hide();
+		   			$(".slt3").show();
 		        }else if (this.value == '4') {
 		        	$(".slt2").hide();
+		   			$(".slt3").hide();
 		   			$(".slt1").show();
 	   			}
 		    });
@@ -425,11 +485,6 @@
 	
 	<script>
 	function saveInnerHtml(status){
-// 		var status = 1;
-// 		if(status == "2"){
-// 			status = 1;
-// 		}
-		
 		var editor = UE.getEditor('editor');
 		var content = UE.getEditor('editor').getContent();
 		var article_id = $("#article_id").val();
@@ -476,14 +531,6 @@
 				    }
 			    });
 			}
-	
-	
-    
-	//下载代码
-	function downloadCode(code){
-		$("#htmlCode").val(code);
-		$("#Form").submit();
-	}
 	
 	//过滤ueditor
 	var ueditorHtml = "";
@@ -668,33 +715,6 @@
 	    $(this).parent().parent().remove();
 	});
     
-	
-	//新增
-	function addPic(){
-		 top.jzts();
-		 var diag = new top.Dialog();
-		 diag.Drag=true;
-		 diag.Title ="新增";
-		 diag.URL = '<%=basePath%>pictures/goAdd.do';
-		 diag.Width = 800;
-		 diag.Height = 490;
-		 diag.CancelEvent = function(){ //关闭事件
-			 console.log(1111111111)
- 			 var picS = ['http://image.baby-kingdom.com/images2/2016/b/html5/wyeth_20161122_320x280/poster.jpg'
-				 ,'http://n2.hdfimg.com/g10/M03/90/65/voYBAFrOvAaAPWkeAAEQ5eQ-510739.jpg'];
-		 
-		 	
-		 	for(var i=0;i<picS.length;i++){
-		 		$('#imgBox').append('<img src='+picS[i]+'/>')
-		 	} 
-		 	
-		 	diag.close();
-		 }
-		diag.show();
-	}
-	
-	
-	
 	//预览
 	function preLook(){
 	/* 	var content = UE.getEditor('editor').getContent();
@@ -702,12 +722,6 @@
         window.open('http://localhost:8080/erp/main/test.html','','height=800,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no') */
 	}
 	
-	//保存草稿箱
-	function saveDraft(){
-		
-	}
-	
     </script>
-
 </body>
 </html>

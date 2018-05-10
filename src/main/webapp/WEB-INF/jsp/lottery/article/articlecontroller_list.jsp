@@ -1,5 +1,5 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -29,7 +29,6 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							
 						<!-- 检索  -->
 						<form action="articlecontroller/list.do" method="post" name="Form" id="Form">
 						<div id="zhongxin" style="padding-top: 13px;">
@@ -64,18 +63,30 @@
 											<option value="" selected>全部</option>
 											<option value="1" <c:if test="${pd.status==1}">selected</c:if>>已发布</option>
 											<option value="2" <c:if test="${pd.status==2}">selected</c:if>>草稿</option>
+											<option value="4" <c:if test="${pd.status==4}">selected</c:if>>已过期</option>
+											<option value="5" <c:if test="${pd.status==5}">selected</c:if>>已删除</option>
 										  	</select>
 										  	</div>
 									</td>
 									</tr>
 									<tr style="margin:2px">
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												作者:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="作者" class="nav-search-input" id="author" autocomplete="off" name="author" value="${pd.author}" />
+											</span>
+										</div>
+									</td>
 									<td >
 										<span class="input-icon" style="width:80px;text-align:right;">
 												发布时间:
 											</span>
 											<span  >
-												<input class="date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
-												<input class="date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+												<input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 											</span>
 									</td>
 									
@@ -101,9 +112,9 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">文章ID</th>
-									<th class="center">文章标题</th>
+									<th class="center" width="300px">文章标题</th>
 									<th class="center">发布时间</th>
-									<th class="center">状态</th>
+									<th class="center">文章状态</th>
 									<th class="center">作者</th>
 <!-- 									<th class="center">标签</th> -->
 									<th class="center">操作</th>
@@ -125,11 +136,13 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.article_id}</td>
 											<td class='center'>${var.title}</td>
-											<td class='center'>${var.add_time}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											<td class='center'> 
 											<c:choose>
 													<c:when test="${var.status==1}">已发布</c:when>
-													<c:otherwise>草稿</c:otherwise>
+													<c:when test="${var.status==2}">草稿</c:when>
+													<c:when test="${var.status==4}">已过期</c:when>
+													<c:when test="${var.status==5}">已删除</c:when>
 												</c:choose>
 											</td>
 											<td class='center'>${var.author}</td>
@@ -153,10 +166,24 @@
 																</c:choose>
 															</c:when>
 															<c:when test="${var.status==2}">
-																<a class="btn btn-xs btn-success" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('1','${var.article_id}');"> 上架</a>
-																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.article_id}');"> 编辑</a>
+																<c:if test="${QX.edit == 1 }">
+																<a class="btn btn-xs btn-primary" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('1','${var.article_id}');"> 上架</a>
+																<a class="btn btn-xs btn-info" title="编辑" style="border-radius: 5px;" onclick="edit('${var.article_id}');"> 编辑</a>
+																<a class="btn btn-xs btn-default" title="过期" style="border-radius: 5px;" onclick="onOrOffLine('4','${var.article_id}');">过期</a>
+																</c:if>
 																<c:if test="${QX.del == 1 }">
-																		<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.article_id}');">删除</a>
+																		<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="onOrOffLine('5','${var.article_id}');">删除</a>
+																</c:if>
+															</c:when>
+															<c:when test="${var.status==4}">
+																<c:if test="${QX.edit == 1 }">
+																		<a class="btn btn-xs btn-warning" title="恢复" style="border-radius: 5px;" onclick="onOrOffLine('2','${var.article_id}');"> 恢复</a>
+																		<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="onOrOffLine('5','${var.article_id}');">删除</a>
+																</c:if>
+															</c:when>
+															<c:when test="${var.status==5}">
+																<c:if test="${QX.edit == 1 }">
+																		<a class="btn btn-xs btn-warning" title="恢复" style="border-radius: 5px;" onclick="onOrOffLine('2','${var.article_id}');"> 恢复</a>
 																</c:if>
 															</c:when>
 														</c:choose>
@@ -167,12 +194,10 @@
 														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
 															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
 														</button>
-			
 													</div>
 												</div>
 											</td>
 										</tr>
-									
 									</c:forEach>
 									</c:if>
 									<c:if test="${QX.cha == 0 }">
@@ -205,25 +230,17 @@
 						</table>
 						</div>
 						</form>
-					
-						</div>
-						<!-- /.col -->
-					</div>
-					<!-- /.row -->
-				</div>
-				<!-- /.page-content -->
+						</div> <!-- /.col -->
+					</div> <!-- /.row -->
+				</div> <!-- /.page-content -->
 			</div>
-		</div>
-		<!-- /.main-content -->
-
+		</div> <!-- /.main-content -->
 		<!-- 返回顶部 -->
 		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
 			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 		</a>
-
 	</div>
 	<!-- /.main-container -->
-
 	<!-- basic scripts -->
 	<!-- 页面底部js¨ -->
 	<%@ include file="../../system/index/foot.jsp"%>
@@ -234,7 +251,7 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="static/ace/js/My97Date/WdatePicker.js"</script>	
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
@@ -243,6 +260,7 @@
 				function tosearch(status){
 			if(status==0){
 				$("#title").val("");
+				$("#author").val("");
 				$("#article_id").val("");
 				$("#status").empty();
 				$("#lastStart").val("");
@@ -252,13 +270,6 @@
 			$("#Form").submit();
 		}
 		$(function() {
-		
-			//日期框
-			$('.date-picker').datepicker({
-				autoclose: true,
-				todayHighlight: true
-			});
-			
 			//下拉框
 			if(!ace.vars['touch']) {
 				$('.chosen-select').chosen({allow_single_deselect:true}); 
@@ -305,8 +316,8 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>articlecontroller/goAdd.do';
-			 diag.Width = 1800;
-			 diag.Height = 1300;
+			 diag.Width = 800;
+			 diag.Height = 800;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -365,8 +376,8 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>articlecontroller/goEdit.do?article_id='+Id;
-			 diag.Width = 1800;
-			 diag.Height = 1300;
+			 diag.Width = 800;
+			 diag.Height = 800;
 // 			 diag.Width = 450;
 // 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
@@ -426,13 +437,6 @@
 				}
 			});
 		};
-		
-		//导出excel
-		function toExcel(){
-			window.location.href='<%=basePath%>articlecontroller/excel.do';
-		}
 	</script>
-
-
 </body>
 </html>

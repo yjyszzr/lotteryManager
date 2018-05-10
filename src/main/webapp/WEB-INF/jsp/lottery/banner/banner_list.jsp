@@ -1,12 +1,10 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +27,6 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							
 						<!-- 检索  -->
 						<form action="banner/list.do" method="post" name="Form" id="Form">
 							<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
@@ -63,8 +60,8 @@
 												投放开始:
 											</span>
 											<span  >
-												<input class="date-picker" name="startTimeStart" id="startTimeStart"  value="${pd.startTimeStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
-												<input class="date-picker" name="startTimeEnd" id="startTimeEnd"  value="${pd.startTimeEnd}" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+												<input name="startTimeStart" id="startTimeStart"  value="${pd.startTimeStart }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input name="startTimeEnd" id="startTimeEnd"  value="${pd.startTimeEnd}" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 											</span>
 									</td>
 									<td >
@@ -72,8 +69,8 @@
 												投放结束:
 											</span>
 											<span  >
-												<input class="date-picker" name="endTimeStart" id="endTimeStart"  value="${pd.endTimeStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
-												<input class="date-picker" name="endTimeEnd" id="endTimeEnd"  value="${pd.endTimeEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+												<input name="endTimeStart" id="endTimeStart"  value="${pd.endTimeStart }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input name="endTimeEnd" id="endTimeEnd"  value="${pd.endTimeEnd }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 											</span>
 									</td>
 									
@@ -105,7 +102,8 @@
 									<th class="center">图片</th>
 									<th class="center">投放资源</th>
 									<th class="center">排序字段</th>
-									<th class="center">是否展示</th>
+									<th class="center">位置</th>
+									<th class="center">状态</th>
 									<th class="center">投放开始时间</th>
 									<th class="center">投放结束时间</th>
 									<th class="center">操作</th>
@@ -126,22 +124,25 @@
 											<td class='center'>${var.id}</td>
 											<td class='center'>${var.banner_name}</td>
 											<td class='center'><img src="${var.banner_image}" width="48px" hight="24px"/></td>
-											<td class='center'> 
+											<td class='center' width="200px"> 
 												<c:choose>
-													<c:when test="${pd.banner_param==1}">(文章ID)</c:when>
-													<c:when test="${pd.banner_param==2}">(赛事ID)</c:when>
+													<c:when test="${var.banner_param==1}">(文章ID)</c:when>
+													<c:when test="${var.banner_param==2}">(赛事ID)</c:when>
 													<c:otherwise>(活动URL)</c:otherwise>
 												</c:choose>${var.banner_link}
 											</td> 
 											<td class='center'>${var.banner_sort}</td>
+											<td class='center'>
+												<c:if test="${var.show_position ==0}">首页轮播图</c:if>
+											</td>
 											<td class='center'> 
 												<c:choose>
 													<c:when test="${pd.is_show==0}">已过期</c:when>
 													<c:otherwise>已发布</c:otherwise>
 												</c:choose>
 											</td>						
-											<td class='center'>${var.start_time}</td>
-											<td class='center'>${var.end_time}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.start_time*1000)} </td>
+											<td class='center'>${DateUtil.toSDFTime(var.end_time*1000)} </td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -188,7 +189,6 @@
 												</div>
 											</td>
 										</tr>
-									
 									</c:forEach>
 									</c:if>
 									<c:if test="${QX.cha == 0 }">
@@ -250,7 +250,7 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="static/ace/js/My97Date/WdatePicker.js"</script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
@@ -269,13 +269,7 @@
 			$("#Form").submit();
 		}
 		$(function() {
-		
-			//日期框
-			$('.date-picker').datepicker({
-				autoclose: true,
-				todayHighlight: true
-			});
-			
+ 
 			//下拉框
 			if(!ace.vars['touch']) {
 				$('.chosen-select').chosen({allow_single_deselect:true}); 
@@ -322,8 +316,8 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>banner/goAdd.do';
-			 diag.Width = 1800;
-			 diag.Height = 1300;
+			 diag.Width = 800;
+			 diag.Height = 480;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -360,8 +354,8 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>banner/goEdit.do?id='+Id;
-			 diag.Width = 1800;
-			 diag.Height = 1300;
+			 diag.Width = 800;
+			 diag.Height = 480;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

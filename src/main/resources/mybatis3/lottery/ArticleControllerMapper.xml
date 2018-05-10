@@ -40,7 +40,8 @@
 		article_pv,	
 		article_uv,
 		label_defaults,
-		video_url
+		video_url,
+		subheading
 	</sql>
 	
 	<!-- 字段值 -->
@@ -76,7 +77,8 @@
         #{article_pv},	
         #{article_uv},
         #{label_defaults},
-        #{video_url}	
+        #{video_url},
+        #{subheading}
 	</sql>
 	
 	<!-- 新增-->
@@ -115,7 +117,8 @@
 		        article_pv,	
 		        article_uv,
 		        label_defaults,
-		        video_url
+		        video_url,
+		        subheading
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -157,14 +160,15 @@
 			list_style = #{list_style},
 			is_original = #{is_original},
 			is_delete = #{is_delete},
-			is_stick = #{is_stick},
-			stick_time = #{stick_time},
+			is_stick = #{is_stick}
 			price = #{price},
 			level = #{level},
 			article_pv = #{article_pv},
 			article_uv = #{article_uv},
 			label_defaults = #{label_defaults},
-			video_url=#{video_url}
+			video_url=#{video_url},
+			subheading=#{subheading},
+			article_status=#{article_status}
 		where 
 		article_id = #{article_id}
 	</update>
@@ -208,6 +212,10 @@
 			and title  
 			LIKE CONCAT(CONCAT('%', #{pd.title}),'%')
 		</if>
+		<if test="pd.author != null and pd.author != ''"> 
+			and author  
+			LIKE CONCAT(CONCAT('%', #{pd.author}),'%')
+		</if>
 		<if test="pd.article_id != null and pd.article_id != ''"> 
 			and article_id 
 			LIKE CONCAT(CONCAT('%', #{pd.article_id}),'%')
@@ -218,11 +226,11 @@
 		<if test="pd.match_id != null and pd.match_id!= ''"> 
 			and match_id = #{pd.match_id}
 		</if>
-		<if test="pd.lastStart != null and pd.lastStart != ''"> 
-			and  add_time &gt; #{pd.lastStart }
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and  add_time &gt; #{pd.lastStart1 }
 		</if>
-		<if test="pd.lastStart != null and pd.lastStart != ''"> 
-			and  add_time &lt; #{pd.lastEnd }
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and  add_time &lt; #{pd.lastEnd1 }
 		</if>
 			order by  is_stick desc , status asc
 	</select>

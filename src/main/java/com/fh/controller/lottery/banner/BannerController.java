@@ -129,22 +129,25 @@ public class BannerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String startTimeStart = pd.getString("startTimeStart");
+		if (null != startTimeStart && !"".equals(startTimeStart)) {
+			pd.put("startTimeStart1", DateUtilNew.getMilliSecondsByStr(startTimeStart));
 		}
+		String startTimeEnd = pd.getString("startTimeEnd");
+		if (null != startTimeEnd && !"".equals(startTimeEnd)) {
+			pd.put("startTimeEnd1", DateUtilNew.getMilliSecondsByStr(startTimeEnd));
+		}
+		String endTimeStart = pd.getString("endTimeStart");
+		if (null != endTimeStart && !"".equals(endTimeStart)) {
+			pd.put("endTimeStart1", DateUtilNew.getMilliSecondsByStr(endTimeStart));
+		}
+		String endTimeEnd = pd.getString("endTimeEnd");
+		if (null != endTimeEnd && !"".equals(endTimeEnd)) {
+			pd.put("endTimeEnd1", DateUtilNew.getMilliSecondsByStr(endTimeEnd));
+		}
+
 		page.setPd(pd);
 		List<PageData> varList = bannerService.list(page); // 列出Banner列表
-		for (int i = 0; i < varList.size(); i++) {
-			PageData pageData = new PageData();
-			pageData = varList.get(i);
-			pageData.put("start_time", DateUtilNew.getCurrentTimeString(
-					Long.parseLong(pageData.get("start_time").toString()),
-					DateUtilNew.date_sdf));
-			pageData.put("end_time", DateUtilNew.getCurrentTimeString(
-					Long.parseLong(pageData.get("end_time").toString()),
-					DateUtilNew.date_sdf));
-		}
 		mv.setViewName("lottery/banner/banner_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -181,12 +184,8 @@ public class BannerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = bannerService.findById(pd); // 根据ID读取
-		pd.put("start_time", DateUtilNew.getCurrentTimeString(
-				Long.parseLong(pd.get("start_time").toString()),
-				DateUtilNew.date_sdf));
-		pd.put("end_time", DateUtilNew.getCurrentTimeString(
-				Long.parseLong(pd.get("end_time").toString()),
-				DateUtilNew.date_sdf));
+		pd.put("start_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pd.get("start_time").toString()), DateUtilNew.date_sdf));
+		pd.put("end_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pd.get("end_time").toString()), DateUtilNew.date_sdf));
 		mv.setViewName("lottery/banner/banner_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -276,7 +275,6 @@ public class BannerController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,
-				true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

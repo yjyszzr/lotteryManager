@@ -24,6 +24,7 @@ import com.fh.entity.Page;
 import com.fh.service.lottery.article.ArticleControllerManager;
 import com.fh.service.lottery.match.MatchManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -125,6 +126,14 @@ public class MatchController extends BaseController {
 		String match_team = pd.getString("match_team");
 		if (null != match_team && !"".equals(match_team)) {
 			pd.put("match_team", match_team.trim());
+		}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		}
 		page.setPd(pd);
 		List<PageData> varList = matchService.list(page); // 列出Match列表
@@ -281,7 +290,6 @@ public class MatchController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,
-				true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

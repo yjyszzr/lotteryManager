@@ -69,10 +69,11 @@
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
-									<th class="center" style="width:50px;">序号</th>
+<!-- 									<th class="center" style="width:50px;">序号</th> -->
 									<th class="center">编号</th>
 									<th class="center">用户名</th>
-									<th class="center">姓名</th>
+<!-- 									<th class="center">姓名</th> -->
+									<th class="center">电话</th>
 									<th class="center">角色</th>
 									<th class="center"><i class="ace-icon fa fa-envelope-o"></i>邮箱</th>
 									<th class="center"><i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>最近登录</th>
@@ -94,10 +95,11 @@
 												<c:if test="${user.USERNAME != 'admin'}"><label><input type='checkbox' name='ids' value="${user.USER_ID }" id="${user.EMAIL }" alt="${user.PHONE }" title="${user.USERNAME }" class="ace"/><span class="lbl"></span></label></c:if>
 												<c:if test="${user.USERNAME == 'admin'}"><label><input type='checkbox' disabled="disabled" class="ace" /><span class="lbl"></span></label></c:if>
 											</td>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
+<%-- 											<td class='center' style="width: 30px;">${vs.index+1}</td> --%>
 											<td class="center">${user.NUMBER }</td>
 											<td class="center"><a onclick="viewUser('${user.USERNAME}')" style="cursor:pointer;">${user.USERNAME }</a></td>
-											<td class="center">${user.NAME }</td>
+<%-- 											<td class="center">${user.NAME }</td> --%>
+											<td class="center">${user.PHONE }</td>
 											<td class="center">${user.ROLE_NAME }</td>
 											<td class="center"><a title="发送电子邮件" style="text-decoration:none;cursor:pointer;" <c:if test="${QX.email == 1 }">onclick="sendEmail('${user.EMAIL }');"</c:if>>${user.EMAIL }&nbsp;<i class="ace-icon fa fa-envelope-o"></i></a></td>
 											<td class="center">${user.LAST_LOGIN}</td>

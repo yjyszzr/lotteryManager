@@ -39,6 +39,7 @@
 				/static/js/** 				= anon
 				/uploadFiles/uploadImgs/** 	= anon
 	           	/code.do 					= anon
+	           	/login_smsCode	 			= anon
 	           	/login_login	 			= anon
 	           	/app**/** 					= anon
 	           	/weixin/** 					= anon

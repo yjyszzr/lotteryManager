@@ -1,8 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-	String path = request.getContextPath();
+	String path = request.getContextPath()+"/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +16,8 @@
 <link rel="stylesheet" href="static/login/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="static/login/matrix-login.css" />
 <link href="static/login/font-awesome.css" rel="stylesheet" />
-<script type="text/javascript" src="static/login/js/jquery-1.5.1.min.js"></script>
+<!-- <script type="text/javascript" src="static/login/js/jquery-1.5.1.min.js"></script> -->
+<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
 <!-- 软键盘控件start -->
 <!-- <link href="static/login/keypad/css/framework/form.css" rel="stylesheet" type="text/css"/> -->
 <!-- 软键盘控件end -->
@@ -37,6 +37,33 @@
     	margin-left: 20px;
     	margin-right: 20px;
     }
+/* 	.main_input_box{ */
+/* 		 float: left; */
+/* 	} */
+/* 	.main_input_box input{ */
+/* 		margin-bottom: 29px; */
+/* 		height: 32px !important; */
+/* 		float: left; */
+/* 	} */
+
+.main_input_box .add-on {
+    padding: 9.9px 9px;
+    *line-height: 33px;
+    color: #fff;
+    width: 30px;
+    display: inline-block;
+}
+
+.main_input_box input{
+    height: 32px ! important;
+
+}
+.control-group input{
+    height: 30px ! important;
+
+}
+ 
+
   </style>
   <script>
   		//window.setTimeout(showfh,3000); 
@@ -44,7 +71,7 @@
 		function showfh(){
 			fhi = 1;
 			//关闭提示晃动屏幕，注释掉这句话即可
-			timer = setInterval(xzfh2, 10); 
+// 			timer = setInterval(xzfh2, 10); 
 		};
 		var current = 0;
 		function xzfh(){
@@ -93,7 +120,7 @@
 						<div class="main_input_box">
 							<span class="add-on bg_lg">
 							<i><img height="37" src="static/login/user.png" /></i>
-							</span><input type="text" name="loginname" id="loginname" value="" placeholder="请输入用户名" />
+							</span><input type="text" name="loginname" id="loginname" value="" placeholder="请输入手机号" autocomplete="off"  onkeyup="value=value.replace(/[^\d]/g,'')" />
 						</div>
 					</div>
 				</div>
@@ -102,9 +129,24 @@
 						<div class="main_input_box">
 							<span class="add-on bg_ly">
 							<i><img height="37" src="static/login/suo.png" /></i>
-							</span><input type="password" name="password" id="password" placeholder="请输入密码"  value=""/>
+							</span><input type="password" name="password" id="password" placeholder="请输入密码"  value="" autocomplete="off" />
 						</div>
 					</div>
+				</div>
+				<div class="control-group">
+					<div  style="float:left;padding-left:10%;">
+						<div class="main_input_box " style="float: left;">
+							<span class="add-on bg_lr"><i><img height="37" src="static/login/shouji.png"  /></i></span>
+						</div>
+						<div style="float: left;" >
+							<input  type="text" name="code" id="code" placeholder="请输入手机验证码"  value=""  autocomplete="off" />
+						</div>
+						<div style="float: left; "  >
+						<span style="height:32px;  cursor:pointer;  " >
+						 <input type="button" onclick="sendMsgCode();" id="sendMsgBtn" value="获取验证码" style="float: left; background:#FFD700;padding: 0px; width: 90px;height: 40px !important;}" />  
+						</span>
+						</div>
+				</div>
 				</div>
 				<!-- <div style="float:left;padding-left:10%;">
 					<div style="float: left;">
@@ -247,6 +289,51 @@
 	</div>
 
 	<script type="text/javascript">
+	var countdown=60; 
+	function sendMsgCode(){
+	    var obj = $("#sendMsgBtn");
+	    var loginName = $("#loginname").val();
+// 	    var url= "";
+<%-- 	    var url="<%=path%>login_toSend/smsCode.do"; --%>
+	    $.ajax({  
+	        type:"POST",
+	        url: "login_smsCode",  
+	        data:{mobile:loginName},
+	        dataType:'json',
+	        cache: false,
+	        success: function (data) {
+			    settime(obj);
+	        } ,error: function (data){
+				$("#loginname").tips({
+					side : 1,
+					msg : "该手机号不合法",
+					bg : '#FF5080',
+					time : 15
+				});
+				showfh();
+				$("#loginname").focus();
+	        },  
+	    });  
+    }
+	
+	
+	function settime(obj) { //发送验证码倒计时
+	    if (countdown == 0) { 
+	        obj.attr('disabled',false); 
+	        //obj.removeattr("disabled"); 
+	        obj.val("重新获取");
+	        countdown = 60; 
+	        return;
+	    } else { 
+	        obj.attr('disabled',true);
+	        obj.val("重新发送(" + countdown + ")");
+	        countdown--; 
+	    } 
+	setTimeout(function() { 
+	    settime(obj) }
+	    ,1000) 
+	}
+	
 		//服务器校验
 		function severCheck(){
 			if(check()){
@@ -274,7 +361,7 @@
 							showfh();
 							$("#loginname").focus();
 						}
-						/* else if("codeerror" == data.result){
+						 else if("codeerror" == data.result){
 							 $("#code").tips({
 								side : 1,
 								msg : "验证码输入有误",
@@ -283,7 +370,7 @@
 							});
 							showfh();
 							$("#code").focus(); 
-						} */
+						}
 						else{
 							$("#loginname").tips({
 								side : 1,

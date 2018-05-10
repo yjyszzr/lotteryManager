@@ -64,11 +64,11 @@
 										</tr>
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">姓名:</td>
-											<td><input type="text" name="NAME" id="name"  value="${pd.NAME }"  maxlength="32" placeholder="这里输入姓名" title="姓名" style="width:98%;"/></td>
+											<td><input type="text" name="NAME" id="name"  value="${pd.NAME }"  maxlength="32" placeholder="这里输入姓名" title="姓名" style="width:98%;"/></td>  
 										</tr>
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">手机号:</td>
-											<td><input type="text" name="PHONE" id="PHONE"  value="${pd.PHONE }"  maxlength="32" placeholder="这里输入手机号" title="手机号" style="width:98%;"/></td>
+											<td><input type="text" name="PHONE" id="PHONE"  value="${pd.PHONE }"  maxlength="32" placeholder="这里输入手机号" title="手机号" style="width:98%;" onblur="hasPHONE('${pd.PHONE }')" /></td>
 										</tr>
 										<tr>
 											<td style="width:79px;text-align: right;padding-top: 13px;">邮箱:</td>
@@ -307,6 +307,33 @@
 				 }
 			}
 		});
+	}
+	//判断编码是否存在
+	function hasPHONE(DefaultPHONE){
+		alert(DefaultPHONE)
+		var PHONE = $.trim($("#PHONE").val());
+		alert(PHONE)
+		if(DefaultPHONE!=PHONE){
+		$.ajax({
+			type: "POST",
+			url: '<%=basePath%>user/hasPHONE.do',
+	    	data: {mobile:PHONE,tm:new Date().getTime()},
+			dataType:'json',
+			cache: false,
+			success: function(data){
+				alert(data.result)
+				 if("success" != data.result){
+					 $("#PHONE").tips({
+							side:3,
+				            msg:'手机号'+PHONE+' 已存在',
+				            bg:'#AE81FF',
+				            time:3
+				        });
+					 $("#PHONE").val('');
+				 }
+			}
+		});
+		}
 	}
 	$(function() {
 		//下拉框

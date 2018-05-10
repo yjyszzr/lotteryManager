@@ -4,7 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TextConfig {
-	public static final String URL_SMS_CODE = "http://39.106.18.39:7071/sms/sendSmsCode";
+	// public static final String URL_SMS_CODE =
+	// "http://39.106.18.39:7071/sms/sendSmsCode";
+
+	public static final String URL_SMS_CODE = "http://39.106.18.39:7071/sms/sendServiceSmsCode";
 
 	// 手动派奖
 	public static final String URL_MANUAL_AUDIT_CODE = "http://39.106.18.39:7071/user/account/batchUpdateUserAccount";

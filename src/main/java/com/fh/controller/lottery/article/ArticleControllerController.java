@@ -80,6 +80,7 @@ public class ArticleControllerController extends BaseController {
 		if (pd.get("article_id") == "" || "".equals(pd.get("article_id"))) {
 			pd.put("is_show", 0);
 			pd.put("is_stick", 0);
+			pd.put("click_number", 0);
 			pd.put("article_id", 0);
 			articlecontrollerService.save(pd);
 		} else {
@@ -155,21 +156,27 @@ public class ArticleControllerController extends BaseController {
 		if (null != title && !"".equals(title)) {
 			pd.put("title", title.trim());
 		}
+		String author = pd.getString("author");
+		if (null != author && !"".equals(author)) {
+			pd.put("author", author.trim());
+		}
 		if (null != pd.get("match_id") || "".equals(pd.get("match_id"))) {
 			int matchId = Integer.parseInt(pd.get("match_id").toString()); // 关键词检索条件
 			pd.put("match_id", matchId);
 		} else {
 			pd.put("match_id", 0);
 		}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
+
 		page.setPd(pd);
 		List<PageData> varList = articlecontrollerService.list(page); // 列出ArticleController列表
-		for (int i = 0; i < varList.size(); i++) {
-			PageData pageData = new PageData();
-			pageData = varList.get(i);
-			if (null != pageData.get("add_time") && !"".equals(pageData.get("add_time"))) {
-				pageData.put("add_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pageData.get("add_time").toString()), DateUtilNew.date_sdf));
-			}
-		}
 		mv.setViewName("lottery/article/articlecontroller_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
