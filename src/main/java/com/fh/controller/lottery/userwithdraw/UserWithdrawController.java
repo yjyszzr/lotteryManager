@@ -139,8 +139,15 @@ public class UserWithdrawController extends BaseController {
 		if (null != user_name && !"".equals(user_name)) {
 			pd.put("user_name", user_name.trim());
 		}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
 		page.setPd(pd);
-
 		double failAmount = 0;
 		double successAmount = 0;
 		double unfinished = 0;
@@ -148,9 +155,6 @@ public class UserWithdrawController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
 			pageData = varList.get(i);
-			if (null != pageData.get("pay_time") && !"".equals(pageData.get("pay_time"))) {
-				pageData.put("pay_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pageData.get("pay_time").toString()), DateUtilNew.datetimeFormat));
-			}
 			if (null != pageData.get("status") && !"".equals(pageData.get("status"))) {
 				if ("1".equals(pageData.get("status").toString())) {
 					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {

@@ -40,8 +40,7 @@
 		article_pv,	
 		article_uv,
 		label_defaults,
-		video_url,
-		subheading
+		video_url 
 	</sql>
 	
 	<!-- 字段值 -->
@@ -77,8 +76,7 @@
         #{article_pv},	
         #{article_uv},
         #{label_defaults},
-        #{video_url},
-        #{subheading}
+        #{video_url} 
 	</sql>
 	
 	<!-- 新增-->
@@ -117,8 +115,7 @@
 		        article_pv,	
 		        article_uv,
 		        label_defaults,
-		        video_url,
-		        subheading
+		        video_url 
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -160,15 +157,13 @@
 			list_style = #{list_style},
 			is_original = #{is_original},
 			is_delete = #{is_delete},
-			is_stick = #{is_stick}
+			is_stick = #{is_stick},
 			price = #{price},
 			level = #{level},
 			article_pv = #{article_pv},
 			article_uv = #{article_uv},
 			label_defaults = #{label_defaults},
-			video_url=#{video_url},
-			subheading=#{subheading},
-			article_status=#{article_status}
+			video_url=#{video_url} 
 		where 
 		article_id = #{article_id}
 	</update>

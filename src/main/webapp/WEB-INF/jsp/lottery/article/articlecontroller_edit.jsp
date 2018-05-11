@@ -127,7 +127,7 @@
 										                                <div class="slt3"   style="display:none;">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">副标题：</label>
 																			<div class="col-sm-9">
-																			   <input type="text" id="subheading" name="subheading" placeholder="副标题" class="col-xs-10 col-sm-5"    value="${pd.subheading}"/>
+																			   <input type="text" id="summary" name="summary" placeholder="副标题" class="col-xs-10 col-sm-5"    value="${pd.summary}"/>
 																			</div>
 											                            </div >
 											                            
