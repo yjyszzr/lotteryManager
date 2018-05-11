@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fh.common.TextConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.banner.BannerManager;
@@ -148,6 +149,11 @@ public class BannerController extends BaseController {
 
 		page.setPd(pd);
 		List<PageData> varList = bannerService.list(page); // 列出Banner列表
+		for (int i = 0; i < varList.size(); i++) {
+			PageData pageData = varList.get(i);
+			String imgValue = pageData.getString("banner_image");
+			pageData.put("banner_image", TextConfig.URL_SHOW_IMG_CODE + imgValue);
+		}
 		mv.setViewName("lottery/banner/banner_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -186,6 +192,7 @@ public class BannerController extends BaseController {
 		pd = bannerService.findById(pd); // 根据ID读取
 		pd.put("start_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pd.get("start_time").toString()), DateUtilNew.date_sdf));
 		pd.put("end_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pd.get("end_time").toString()), DateUtilNew.date_sdf));
+		pd.put("banner_image_show", pd.getString("banner_image"));
 		mv.setViewName("lottery/banner/banner_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

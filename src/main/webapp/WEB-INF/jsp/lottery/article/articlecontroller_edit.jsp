@@ -105,7 +105,7 @@
 																			<div  class="slt1">
 																				<div class="col-sm-3"></div>
 																				<div class="col-sm-9">
-																					<img id="photoShow"  <c:if test="${not empty pd.article_thumb1}">src="<%=basePath%>${pd.article_thumb1}" width="100px",hight="50px"  </c:if> >
+																					<img id="photoShow"  <c:if test="${not empty pd.article_thumb1_show}">src="${pd.article_thumb1_show}" width="100px",hight="50px"  </c:if> >
 																				</div>
 												                            </div>
 												                            
@@ -119,9 +119,9 @@
 											                            	<div  class="slt2" >
 																				<div class="col-sm-3"></div>
 																				<div class="col-sm-9">
-																					<img id="photoShow1"    <c:if test="${not empty pd.article_thumb1}">src="<%=basePath%>${pd.article_thumb1}" width="100px",hight="50px"  </c:if>  alt="">
-																					<img id="photoShow2"    <c:if test="${not empty pd.article_thumb2}">src="<%=basePath%>${pd.article_thumb2}" width="100px",hight="50px"  </c:if>   alt="">
-																					<img id="photoShow3"    <c:if test="${not empty pd.article_thumb3}">src="<%=basePath%>${pd.article_thumb3}" width="100px",hight="50px"  </c:if>   alt="">
+																					<img id="photoShow1"    <c:if test="${not empty pd.article_thumb1_show}">src="${pd.article_thumb1_show}" width="100px",hight="50px"  </c:if>  alt="">
+																					<img id="photoShow2"    <c:if test="${not empty pd.article_thumb2_show}">src="${pd.article_thumb2_show}" width="100px",hight="50px"  </c:if>   alt="">
+																					<img id="photoShow3"    <c:if test="${not empty pd.article_thumb3_show}">src="${pd.article_thumb3_show}" width="100px",hight="50px"  </c:if>   alt="">
 																				</div>
 												                            </div>
 										                                <div class="slt3"   style="display:none;">
@@ -420,10 +420,10 @@
 		        success:function(data, status){            //服务器响应成功时的处理函数
 		            if(data.result){
 		            	if($('input[type=radio][name=list_style]:checked').val() == '1'  || $('input[type=radio][name=list_style]:checked').val() == '4'  ){
-			            	$("#photoShow").attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
+			            	$("#photoShow").attr("src", data.IMG_SHOW_PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb1").val(data.PATH);
 		            	}else if( $('input[type=radio][name=list_style]:checked').val() == '3' ){
-			            	$("#photoShow"+clickNum).attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
+			            	$("#photoShow"+clickNum).attr("src", data.IMG_SHOW_PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb"+clickNum).val(data.PATH);
 		            	}
 		            } 

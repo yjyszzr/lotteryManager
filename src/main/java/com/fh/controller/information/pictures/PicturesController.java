@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fh.common.TextConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.information.pictures.PicturesManager;
@@ -116,7 +117,9 @@ public class PicturesController extends BaseController {
 		PageData pd = new PageData();
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
+				// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
+				// + ffile; // 文件上传路径
+				String filePath = Const.FILEPATHIMG + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
@@ -148,7 +151,9 @@ public class PicturesController extends BaseController {
 		PageData pd = new PageData();
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
+				// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
+				// + ffile; // 文件上传路径
+				String filePath = Const.FILEPATHIMG + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
@@ -156,7 +161,7 @@ public class PicturesController extends BaseController {
 			pd.put("PICTURES_ID", this.get32UUID()); // 主键
 			pd.put("TITLE", "图片"); // 标题
 			pd.put("NAME", fileName); // 文件名
-			pd.put("PATH", ffile + "/" + fileName); // 路径
+			pd.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
 			pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 			pd.put("MASTER_ID", "1"); // 附属与
 			pd.put("BZ", "图片管理处上传"); // 备注
@@ -168,7 +173,8 @@ public class PicturesController extends BaseController {
 		map.put("PICTURES_ID", this.get32UUID()); // 主键
 		map.put("TITLE", "图片"); // 标题
 		map.put("NAME", fileName); // 文件名
-		map.put("PATH", Const.FILEPATHIMG + ffile + "/" + fileName); // 路径
+		map.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
+		map.put("IMG_SHOW_PATH", TextConfig.URL_SHOW_IMG_CODE + "uploadImgs/" + ffile + "/" + fileName); // 路径
 		map.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 		map.put("MASTER_ID", "1"); // 附属与
 		map.put("BZ", "图片管理处上传"); // 备注

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fh.common.TextConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.information.pictures.PicturesManager;
@@ -220,13 +221,14 @@ public class ArticleControllerController extends BaseController {
 			strArray = articleThumbArr.split(",");
 			if (strArray.length == 1) {
 				pd.put("article_thumb1", strArray[0]);
+				pd.put("article_thumb1_show", TextConfig.URL_SHOW_IMG_CODE + strArray[0]);// 单图做展示用
 			} else if (strArray.length > 1) {
 				for (int i = 0; i < strArray.length; i++) {
 					pd.put("article_thumb" + (i + 1), strArray[i]);
+					pd.put("article_thumb" + (i + 1) + "_show", TextConfig.URL_SHOW_IMG_CODE + strArray[i]);// 三张图做展示用
 				}
 			}
 		}
-
 		mv.setViewName("lottery/article/articlecontroller_edit");
 		mv.addObject("msg", "saveOrUpdate");
 		mv.addObject("pd", pd);

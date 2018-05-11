@@ -8,6 +8,8 @@ public class TextConfig {
 	// "http://39.106.18.39:7071/sms/sendSmsCode";
 
 	public static final String URL_SMS_CODE = "http://39.106.18.39:7071/sms/sendServiceSmsCode";
+	// 图片展示
+	public static final String URL_SHOW_IMG_CODE = "http://caixiaomi.net:9809/";
 
 	// 手动派奖
 	public static final String URL_MANUAL_AUDIT_CODE = "http://39.106.18.39:7071/user/account/batchUpdateUserAccount";

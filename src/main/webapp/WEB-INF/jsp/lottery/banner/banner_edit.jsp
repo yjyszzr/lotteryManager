@@ -62,7 +62,7 @@
 								<div>
 									<div class="col-sm-3"></div>
 									<div class="col-sm-9">
-										<img id="photoShow"  <c:if test="${not empty pd.banner_image}">src="<%=basePath%>${pd.banner_image}" width="100px",hight="50px"  </c:if> >
+										<img id="photoShow"  <c:if test="${not empty pd.banner_image_show}">src="${pd.banner_image_show}" width="100px",hight="50px"  </c:if> >
 									</div>
 	                            </div>
 	   						     <div class="row"  style="padding:5px">
@@ -237,7 +237,6 @@
 		});
 		
 		//上传图片
-		 var basePath = "<%=basePath%>"; 
 		function ajaxFileUpload(fileObj,fileId){
 		    $.ajaxFileUpload({
 		        url:'<%=basePath%>pictures/fileUpload.do',
@@ -246,7 +245,7 @@
 		        dataType:'json',                           //服务器返回的格式,可以是json或xml等
 		        success:function(data, status){            //服务器响应成功时的处理函数
 		            if(data.result){
-			            	$("#photoShow").attr("src", basePath +data.PATH).attr("width","100px").attr("hight","50px");
+			            	$("#photoShow").attr("src", data.IMG_SHOW_PATH).attr("width","100px").attr("hight","50px");
 			            	$("#banner_image").val(data.PATH);
 		            } 
 		        }

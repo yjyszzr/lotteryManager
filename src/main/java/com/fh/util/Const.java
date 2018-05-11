@@ -38,7 +38,7 @@ public class Const {
 	public static final String WEIXIN = "admin/config/WEIXIN.txt"; // 微信配置路径
 	public static final String WEBSOCKET = "admin/config/WEBSOCKET.txt"; // WEBSOCKET配置路径
 	public static final String LOGINEDIT = "admin/config/LOGIN.txt"; // 登录页面配置
-	public static final String FILEPATHIMG = UPLOADFILESDIR + "uploadImgs"; // 图片上传路径
+	public static final String FILEPATHIMG = UPLOADFILESDIR + "uploadImgs/"; // 图片上传路径
 	public static final String FILEPATHFILE = UPLOADFILESDIR + "file/"; // 文件上传路径
 	public static final String FILEPATHFILEOA = UPLOADFILESDIR; // 文件上传路径(oa管理)
 	public static final String FILEPATHTWODIMENSIONCODE = UPLOADFILESDIR + "twoDimensionCode/"; // 二维码存放路径
