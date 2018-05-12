@@ -174,17 +174,16 @@ public class OrderController extends BaseController {
 		if (null != amountEnd && !"".equals(amountEnd)) {
 			pd.put("amountEnd", amountEnd.trim());
 		}
-
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
 		page.setPd(pd);
 		List<PageData> varList = orderService.list(page); // 列出Order列表
-
-		for (int i = 0; i < varList.size(); i++) {
-			PageData pageData = new PageData();
-			pageData = varList.get(i);
-			if (null != pageData.get("pay_time") && !"".equals(pageData.get("pay_time"))) {
-				pageData.put("pay_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pageData.get("pay_time").toString()), DateUtilNew.datetimeFormat));
-			}
-		}
 		mv.setViewName("lottery/order/order_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

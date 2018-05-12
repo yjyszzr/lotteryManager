@@ -80,7 +80,7 @@
 									<th class="center">使用条件</th>
 									<th class="center">彩种限制</th>
 									<th class="center">生效时间</th>
-									<th class="center">有效期(天)</th>
+									<th class="center">有效期</th>
 									<th class="center">发放数量</th>
 									<th class="center">已领取</th>
 									<th class="center">已使用</th>
@@ -111,7 +111,7 @@
 												<c:if test="${var.use_range==0 }">通用</c:if>
 											</td>
 											<td class='center'>领取后第${var.start_time}天</td>
-											<td class='center'>${var.end_time}</td>
+											<td class='center'>${var.end_time}天</td>
 											<td class='center'>${var.bonus_number}</td>
 											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.use_count}</td>
@@ -127,8 +127,6 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													
-													
 													<c:choose>
 															<c:when test="${var.is_enable==1}"> 
 																<a class="btn btn-xs btn-success" title="下架" style="border-radius: 5px;" onclick="onOrOffLine('0','${var.bonus_id}');"> 下架</a>
@@ -141,18 +139,7 @@
 																</c:if>
 															</c:when>
 														</c:choose>
-													
-													
-													
-<%-- 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.bonus_id}');"> --%>
-<!-- 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i> -->
-<!-- 													</a> -->
 													</c:if>
-<%-- 													<c:if test="${QX.del == 1 }"> --%>
-<%-- 													<a class="btn btn-xs btn-danger" onclick="del('${var.bonus_id}');"> --%>
-<!-- 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i> -->
-<!-- 													</a> -->
-<%-- 													</c:if> --%>
 												</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline pos-rel">
@@ -261,52 +248,6 @@
 			top.jzts();
 			$("#Form").submit();
 		}
-		$(function() {
-		
-			//日期框
-			$('.date-picker').datepicker({
-				autoclose: true,
-				todayHighlight: true
-			});
-			
-			//下拉框
-			if(!ace.vars['touch']) {
-				$('.chosen-select').chosen({allow_single_deselect:true}); 
-				$(window)
-				.off('resize.chosen')
-				.on('resize.chosen', function() {
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				}).trigger('resize.chosen');
-				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-					if(event_name != 'sidebar_collapsed') return;
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				});
-				$('#chosen-multiple-style .btn').on('click', function(e){
-					var target = $(this).find('input[type=radio]');
-					var which = parseInt(target.val());
-					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-					 else $('#form-field-select-4').removeClass('tag-input-style');
-				});
-			}
-			
-			
-			//复选框全选控制
-			var active_class = 'active';
-			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-				var th_checked = this.checked;//checkbox inside "TH" table header
-				$(this).closest('table').find('tbody > tr').each(function(){
-					var row = this;
-					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-				});
-			});
-		});
 		
 		//新增
 		function add(){
@@ -315,10 +256,8 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>activitybonus/goAdd.do';
-// 			 diag.Width = 450;
-// 			 diag.Height = 355;
 			 diag.Width = 700;
-			 diag.Height = 500;
+			 diag.Height = 410;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -355,10 +294,8 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>activitybonus/goEdit.do?bonus_id='+Id;
-// 			 diag.Width = 450;
-// 			 diag.Height = 355;
 	 		 diag.Width = 700;
-			 diag.Height = 500;
+			 diag.Height = 410;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
@@ -416,11 +353,6 @@
 				}
 			});
 		};
-		
-		//导出excel
-		function toExcel(){
-			window.location.href='<%=basePath%>activitybonus/excel.do';
-		}
 		
 		//上架和下架 1-已发布 2-草稿箱
 		function onOrOffLine(status,bonus_id){   

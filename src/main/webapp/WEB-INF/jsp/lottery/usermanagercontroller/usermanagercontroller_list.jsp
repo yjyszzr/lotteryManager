@@ -101,11 +101,11 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.user_id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${var.user_id}</td>
-											<td class='center'><a onclick="toDetail('${var.user_id}');">${var.nickname}</a></td>
+											<td class='center'><a onclick="toDetail('${var.user_id}');" style=" cursor:pointer;">${var.nickname}</a></td>
 											<td class='center'>${var.mobile}</td>
 											<td class="center">${var.real_name}</td>
 											<td class="center">${var.id_code}</td>
-											<td class="center"><a onclick="toConsumeDetail('${var.user_id}');">${MoneyUtil.getMoneyByFen(var.total)}</a></td>
+											<td class="center"><a onclick="toConsumeDetail('${var.user_id}');" style=" cursor:pointer;" title="消费详情">${MoneyUtil.getMoneyByFen(var.total)}</a></td>
 											<td class="center">${MoneyUtil.getMoneyByFen(var.rtotal)}</td>
 											<td class="center">${MoneyUtil.getMoneyByFen(var.atotal)}</td>
 											<td class="center">${MoneyUtil.getMoneyByFen(var.resttotal)}</td>

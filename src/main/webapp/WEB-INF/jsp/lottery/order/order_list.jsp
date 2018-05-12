@@ -1,12 +1,10 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,8 +69,8 @@
 												购彩时间:
 											</span>
 											<span  >
-												<input class="date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
-												<input class="date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+												<input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 											</span>
 									</td>
 										<td>
@@ -144,7 +142,7 @@
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.winning_money}</td>
 											<td class='center'>${var.bonus}</td>
-											<td class='center'>${var.pay_time}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)}</td>
 											<td class='center'>
 											<c:choose>
 											<c:when test="${var.order_status=='7'}">已派奖</c:when>
@@ -208,7 +206,7 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="static/ace/js/My97Date/WdatePicker.js"</script>	
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
@@ -226,77 +224,6 @@
 			}
 			top.jzts();
 			$("#Form").submit();
-		}
-		$(function() {
-		
-			//日期框
-			$('.date-picker').datepicker({
-				autoclose: true,
-				todayHighlight: true
-			});
-			
-			//下拉框
-			if(!ace.vars['touch']) {
-				$('.chosen-select').chosen({allow_single_deselect:true}); 
-				$(window)
-				.off('resize.chosen')
-				.on('resize.chosen', function() {
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				}).trigger('resize.chosen');
-				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-					if(event_name != 'sidebar_collapsed') return;
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				});
-				$('#chosen-multiple-style .btn').on('click', function(e){
-					var target = $(this).find('input[type=radio]');
-					var which = parseInt(target.val());
-					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-					 else $('#form-field-select-4').removeClass('tag-input-style'); 
-				});
-			}
-			
-			
-			//复选框全选控制
-			var active_class = 'active';
-			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-				var th_checked = this.checked;//checkbox inside "TH" table header
-				$(this).closest('table').find('tbody > tr').each(function(){
-					var row = this;
-					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-				});
-			});
-		});
-		
-		//新增
-		function add(){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>order/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 if('${page.currentPage}' == '0'){
-						 tosearch();
-					 }else{
-						 tosearch();
-					 }
-				}
-				diag.close();
-			 };
-			 diag.show();
 		}
 		
 		function toManualAward(orderSn){

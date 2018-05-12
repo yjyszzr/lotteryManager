@@ -55,11 +55,15 @@ public class RewardController extends BaseController {
 		if (null != user_name && !"".equals(user_name)) {
 			pd.put("user_name", user_name.trim());
 		}
-
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
 		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
+
 		pd.put("process_type", 1);
 		page.setPd(pd);
 		List<PageData> varList = useraccountmanagerService.listForReward(page); // 列出UserAccountManager列表
@@ -67,16 +71,8 @@ public class RewardController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
 			pageData = varList.get(i);
-			if (null != pageData.get("pay_time")
-					&& !"".equals(pageData.get("pay_time"))) {
-				pageData.put("pay_time", DateUtilNew.getCurrentTimeString(
-						Long.parseLong(pageData.get("pay_time").toString()),
-						DateUtilNew.datetimeFormat));
-			}
-			if (null != pageData.get("amount")
-					&& !"".equals(pageData.get("amount"))) {
-				rewardAmount += Double.parseDouble(pageData.get("amount")
-						.toString());
+			if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+				rewardAmount += Double.parseDouble(pageData.get("amount").toString());
 			}
 		}
 		mv.setViewName("lottery/reward/reward_list");

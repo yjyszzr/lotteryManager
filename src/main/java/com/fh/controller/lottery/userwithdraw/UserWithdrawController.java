@@ -213,12 +213,14 @@ public class UserWithdrawController extends BaseController {
 		String status = pd.getString("status");
 		ReqCashEntity reqCashEntity = new ReqCashEntity();
 		reqCashEntity.withdrawSn = sendData;
-		String reqStr = JSON.toJSONString(reqCashEntity);
 		if ("1".equals(status)) { // 状态为1的走审核通过接口
-			ManualAuditUtil.ManualAuditUtil(reqStr, TextConfig.URL_MANUAL_AWARD_CODE, true);
-		} else if ("2".equals(status)) {// 状态为2的拒绝提现,直接将状态改成2(失败)
-			userwithdrawService.edit(pd);
+			reqCashEntity.isPass = true;
+		} else if ("2".equals(status)) {// 状态为2的拒绝提现,
+			reqCashEntity.isPass = false;
+			// userwithdrawService.edit(pd);
 		}
+		String reqStr = JSON.toJSONString(reqCashEntity);
+		ManualAuditUtil.ManualAuditUtil(reqStr, TextConfig.URL_MANUAL_AWARD_CODE, true);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;

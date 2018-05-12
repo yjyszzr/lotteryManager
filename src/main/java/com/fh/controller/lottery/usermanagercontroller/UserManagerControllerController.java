@@ -394,7 +394,7 @@ public class UserManagerControllerController extends BaseController {
 		pd.put("allAmount", allAmount);
 		pd.put("user_money", user_money);
 		// 红包
-		double unUseBonus = usermanagercontrollerService.findUserBonusByUserId(pd);
+		Double unUseBonus = usermanagercontrollerService.findUserBonusByUserId(pd);
 
 		int userId = Integer.parseInt(pd.get("user_id").toString());
 		List<PageData> userAccountList = useraccountmanagerService.findByUserId(userId);
@@ -413,7 +413,7 @@ public class UserManagerControllerController extends BaseController {
 				buyTicketAllAmount += Double.parseDouble(userAccountPd.get("process_type").toString());
 			}
 		}
-		pd.put("unUseBonus", unUseBonus);
+		pd.put("unUseBonus", unUseBonus == null ? 0 : unUseBonus);
 		pd.put("rechargeAllAmount", rechargeAllAmount);
 		pd.put("rewardAllAmount", rewardAllAmount);
 		pd.put("buyTicketAllAmount", buyTicketAllAmount);

@@ -56,7 +56,7 @@
 												<input name="min_amount" type="radio"  <c:if test="${pd.min_amount==1}">checked="checked"</c:if>  value = "1" class="ace" id="min_amount1" />
 												<span class="lbl">满减优惠券</span>
 											</label>
-											<input type="text" id="min_goods_amount"  name="min_goods_amount" placeholder="最低消费金额"    value="${pd.min_goods_amount}"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:100px;border-radius:5px !important;display:none;"/>
+											<input type="text" id="min_goods_amount"  name="min_goods_amount" placeholder="最低消费金额"    value="${pd.min_goods_amount}"  onkeyup="value=value.replace(/[^\d\.]/g,'')" style="width:100px;border-radius:5px !important;display:none;"/>
 	                                <div class="col-sm-5">
 	                                </div>
 	                                </td>
@@ -163,6 +163,36 @@
 		$(top.hangge());
 		//保存
 		function save(){
+			if($("#bonus_amount").val()==""){
+				$("#bonus_amount").tips({
+					side:3,
+		            msg:'请输红包金额',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#bonus_amount").focus();
+			return false;
+			}
+			if($("#start_time").val()==""){
+				$("#start_time").tips({
+					side:3,
+		            msg:'请输起始天数',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#start_time").focus();
+			return false;
+			}
+			if($("#end_time").val()==""){
+				$("#end_time").tips({
+					side:3,
+		            msg:'请输生效天数',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#end_time").focus();
+			return false;
+			}
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

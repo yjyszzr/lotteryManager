@@ -206,11 +206,11 @@
 			and u.user_name  
 				LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
 		</if>
-		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
 			and o.pay_time &gt; #{pd.lastStart }
 		</if>
-		<if test="pd.lastStart != null and pd.lastStart != ''"> 
-			and o.pay_time &lt; #{pd.lastEnd }
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and o.pay_time &lt; #{pd.lastEnd1 }
 		</if>
 		<if test="pd.amountStart != null and pd.amountStart != ''"> 
 			and o.winning_money &gt; #{pd.amountStart }
