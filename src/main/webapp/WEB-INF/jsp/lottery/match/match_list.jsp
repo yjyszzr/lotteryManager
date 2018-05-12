@@ -128,7 +128,7 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.cha == 1 }">
-														<a class="btn btn-xs btn-success" style="border-radius: 5px;" title="查看"  href="<%=basePath%>/articlecontroller/list.do?match_id=${var.match_id}">查看</a>
+														<a class="btn btn-xs btn-success" style="border-radius: 5px;" title="查看"  href="<%=basePath%>/articlecontroller/list.do?match_id=${var.match_id}">相关文章</a>
 													</c:if>
 												</div>
 												<div class="hidden-md hidden-lg">

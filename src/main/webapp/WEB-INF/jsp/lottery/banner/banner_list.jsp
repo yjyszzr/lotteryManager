@@ -93,9 +93,9 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
+<!-- 									<th class="center" style="width:35px;"> -->
+<!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
+<!-- 									</th> -->
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">ID</th>
 									<th class="center">标题</th>
@@ -117,11 +117,11 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
-												<c:if test="${var.is_show==0}">
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
-												</c:if>
-											</td>
+<!-- 											<td class='center'> -->
+<%-- 												<c:if test="${var.is_show==0}"> --%>
+<%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label> --%>
+<%-- 												</c:if> --%>
+<!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.id}</td>
 											<td class='center'>${var.banner_name}</td>
@@ -156,12 +156,17 @@
 													<a class="btn btn-xs btn-success" style="border-radius: 5px;"  title="编辑" onclick="edit('${var.id}');">编辑 </a>
 													</c:if>
 													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger"   style="border-radius: 5px;"  onclick="del('${var.id}');">删除</a>
+													<a class="btn btn-xs btn-danger"   style="border-radius: 5px;"  onclick="editStatus('2','${var.id}');">删除</a>
 													</c:if>
 													</c:if>
 												<c:if test="${var.is_show==1}">
 													<c:if test="${QX.edit == 1 }">
 													<a class="btn btn-xs btn-warming"   style="border-radius: 5px;"  onclick="editStatus('0','${var.id}');">置为过期</a>
+												</c:if>
+												</c:if>
+												<c:if test="${var.is_show==2}">
+													<c:if test="${QX.edit == 1 }">
+													<a class="btn btn-xs"   style="border-radius: 5px;color:#yellow"  onclick="editStatus('0','${var.id}');">恢复</a>
 												</c:if>
 												</c:if>
 												</div>
@@ -191,7 +196,7 @@
 									<a class="btn btn-mini btn-success"  style="border-radius: 5px;" onclick="add();">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" style="border-radius: 5px;" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" >批量删除 </a>
+<!-- 									<a class="btn btn-mini btn-danger" style="border-radius: 5px;" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" >批量删除 </a> -->
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>

@@ -4,9 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,13 +16,10 @@
 	<%@ include file="../../system/index/top.jsp"%>
 	<!-- 表单构建组建 -->
 	<link rel="shortcut icon" href="favicon.ico"> <link href="plugins/fhform/css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
-	
-
     <link href="plugins/fhform/css/animate.min.css" rel="stylesheet">
     <link href="plugins/fhform/css/style.min.css?v=4.0.0" rel="stylesheet"><base target="_blank">
 	<!-- 日期框 -->
 	<link rel="stylesheet" href="static/ace/css/datepicker.css" />
-
 	<style>
         .droppable-active{background-color:#ffe!important}.tools a{cursor:pointer;font-size:80%}.form-body .col-md-6,.form-body .col-md-12{min-height:400px}.draggable{cursor:move}
     </style>
@@ -58,9 +53,10 @@
 											                        	<div class="row" style="padding:5px">
 											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>文章标题：</label>
 											                                <div class="col-sm-9">
-											                                <input type=hidden id="article_id"   name ="article_id" value="${pd.article_id}"/>
-											                                <input type=hidden id="content"  name="content"   value=""/>
-											                                <input type=hidden id="status"  name="status"   value=""/>
+											                                <input type="hidden"  id="article_id"   name ="article_id" value="${pd.article_id}"/>
+											                                <input type=""  id="match_id"   name ="match_id" value="${pd.match_id}"/>
+											                                <input type="hidden"  id="content"  name="content"   value=""/>
+											                                <input type="hidden"  id="status"  name="status"   value=""/>
 											                                   <input type="text" id="title"  name="title" placeholder="文章标题" class="col-xs-10 col-sm-5"   value="${pd.title}"/>
 											                                </div>
 											                            </div>

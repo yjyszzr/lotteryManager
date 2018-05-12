@@ -30,6 +30,7 @@
 						<!-- 检索  -->
 						<form action="articlecontroller/list.do" method="post" name="Form" id="Form">
 						<div id="zhongxin" style="padding-top: 13px;">
+												<input type="hidden"  id="match_id" autocomplete="off" name="match_id" value="${pd.match_id }"  />
 						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
 									<td>
@@ -105,9 +106,9 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
+<!-- 									<th class="center" style="width:35px;"> -->
+<!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
+<!-- 									</th> -->
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">文章ID</th>
 									<th class="center" width="300px">文章标题</th>
@@ -126,11 +127,11 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
-												<c:if test="${var.status==2}">
-													<label class="pos-rel"><input type='checkbox' name='ids' value="${var.article_id}" class="ace" /><span class="lbl"></span></label>
-												</c:if>
-											</td>
+<!-- 											<td class='center'> -->
+<%-- 												<c:if test="${var.status==2}"> --%>
+<%-- 													<label class="pos-rel"><input type='checkbox' name='ids' value="${var.article_id}" class="ace" /><span class="lbl"></span></label> --%>
+<%-- 												</c:if> --%>
+<!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.article_id}</td>
 											<td class='center'>${var.title}</td>
@@ -220,7 +221,7 @@
 									<a class="btn btn-mini btn-success"  style="border-radius: 5px;"  onclick="add();">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" style="border-radius: 5px;"  onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" >批量删除</a>
+<!-- 									<a class="btn btn-mini btn-danger" style="border-radius: 5px;"  onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" >批量删除</a> -->
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -309,11 +310,12 @@
 		
 		//新增
 		function add(){
+			var match_id = $("#match_id").val();
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>articlecontroller/goAdd.do';
+			 diag.URL = '<%=basePath%>articlecontroller/goAdd.do?match_id='+match_id;
 			 diag.Width = 800;
 			 diag.Height = 800;
 			 diag.Modal = true;				//有无遮罩窗口

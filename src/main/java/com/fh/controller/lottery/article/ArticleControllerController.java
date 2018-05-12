@@ -83,6 +83,7 @@ public class ArticleControllerController extends BaseController {
 			pd.put("is_stick", 0);
 			pd.put("click_number", 0);
 			pd.put("article_id", 0);
+			pd.put("match_id", 0);
 			articlecontrollerService.save(pd);
 		} else {
 			articlecontrollerService.edit(pd);
@@ -161,11 +162,13 @@ public class ArticleControllerController extends BaseController {
 		if (null != author && !"".equals(author)) {
 			pd.put("author", author.trim());
 		}
-		if (null != pd.get("match_id") || "".equals(pd.get("match_id"))) {
-			int matchId = Integer.parseInt(pd.get("match_id").toString()); // 关键词检索条件
-			pd.put("match_id", matchId);
-		} else {
-			pd.put("match_id", 0);
+		if (null != pd.get("match_id") && !"".equals(pd.get("match_id"))) {
+			int matchId = Integer.parseInt(pd.get("match_id").toString());
+			if (matchId != 0) {
+				pd.put("match_id", matchId);
+			} else {
+				pd.put("match_id", "");
+			}
 		}
 		String lastStart = pd.getString("lastStart");
 		if (null != lastStart && !"".equals(lastStart)) {
@@ -195,6 +198,9 @@ public class ArticleControllerController extends BaseController {
 	@ResponseBody
 	public ModelAndView saveFormbuilder() throws Exception {
 		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		mv.addObject("pd", pd);
 		mv.addObject("msg", "saveOrUpdate");
 		mv.setViewName("lottery/article/articlecontroller_edit");
 		return mv;
@@ -212,7 +218,6 @@ public class ArticleControllerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = articlecontrollerService.findById(pd); // 根据ID读取
-
 		Object obj = pd.get("article_thumb");
 		String articleThumbArr = null;
 		if (obj != null) {
