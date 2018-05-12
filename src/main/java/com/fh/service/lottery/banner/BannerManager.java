@@ -68,4 +68,6 @@ public interface BannerManager {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
 
+	public void updateByKey(PageData pd) throws Exception;
+
 }

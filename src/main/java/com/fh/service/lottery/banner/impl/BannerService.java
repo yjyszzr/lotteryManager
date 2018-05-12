@@ -60,8 +60,7 @@ public class BannerService implements BannerManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("BannerMapper.datalistPage",
-				page);
+		return (List<PageData>) dao.findForList("BannerMapper.datalistPage", page);
 	}
 
 	/**
@@ -93,6 +92,11 @@ public class BannerService implements BannerManager {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("BannerMapper.deleteAll", ArrayDATA_IDS);
+	}
+
+	@Override
+	public void updateByKey(PageData pd) throws Exception {
+		dao.update("BannerMapper.updateByKey", pd);
 	}
 
 }

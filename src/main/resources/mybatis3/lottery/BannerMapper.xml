@@ -140,6 +140,15 @@
                  #{item}
 		</foreach>
 	</delete>
-	
+	<update id="updateByKey" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			<if test="is_show != null and is_show !=''"> 
+				is_show = #{is_show}
+			</if>
+		where 
+			id= #{banner_id}
+	</update>
 	<!-- fh313596790qq(青苔) -->
 </mapper>

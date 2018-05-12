@@ -1,3 +1,4 @@
+<%@page import="com.fh.util.DateUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -80,24 +81,24 @@
 								</div>
                             </div>
 	   						     <div class="row"  style="padding:5px">
-								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">是否显示：</label>
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">发布状态：</label>
 									 <div class="col-sm-9">
 									    <select  name="is_show" id="is_show" value="${pd.is_show}"  style="width:235px;">
-									        <option value="0" <c:if test="${pd.is_show==0}">selected</c:if>>否</option>
-									        <option value="1" <c:if test="${pd.is_show==1}">selected</c:if>>是</option>
+									        <option value="0" <c:if test="${pd.is_show==0}">selected</c:if>>过期</option>
+									        <option value="1" <c:if test="${pd.is_show==1}">selected</c:if>>发布</option>
 									    </select>
 								</div>
                             </div>
 							     <div class="row"  style="padding:5px">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">开始日期：</label>
 								<div class="col-sm-9" >
-									<input   name="start_time" id="start_time"  value="${pd.start_time }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:235px;" placeholder="开始日期" title="开始日期"/>
+									<input   name="start_time" id="start_time"  value="${DateUtil.toSDFTime(pd.start_time*1000)} " type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:235px;" placeholder="开始日期" title="开始日期"/>
 								</div>
                             </div>
 							     <div class="row"  style="padding:5px">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">结束日期：</label>
 								<div class="col-sm-9" >
-									<input  name="end_time" id="end_time"  value="${pd.end_time }" type="text"   onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:235px;" placeholder="结束日期" title="结束日期"/>
+									<input  name="end_time" id="end_time"  value="${DateUtil.toSDFTime(pd.end_time*1000)} " type="text"   onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:235px;" placeholder="结束日期" title="结束日期"/>
 								</div>
                             </div>
 							     <div class="row"  style="padding:5px;text-align: center;">

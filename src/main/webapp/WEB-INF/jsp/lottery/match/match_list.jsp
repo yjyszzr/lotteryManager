@@ -67,7 +67,7 @@
 												</span>
 										 	<select  name="status" id="status" data-placeholder="请选择" value="${pd.status }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
-											<option value="0" <c:if test="${pd.status==0}">selected</c:if>>未结束</option>
+											<option value="0" <c:if test="${pd.status!=NULL && pd.status!='' && pd.status == 0}">selected</c:if>>未结束</option>
 											<option value="1" <c:if test="${pd.status==1}">selected</c:if>>已结束</option>
 										  	</select>
 										  	</div>

@@ -1,20 +1,14 @@
 package com.fh.controller.lottery.banner;
 
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,7 +20,6 @@ import com.fh.service.lottery.banner.BannerManager;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
-import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /**
@@ -190,8 +183,6 @@ public class BannerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = bannerService.findById(pd); // 根据ID读取
-		pd.put("start_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pd.get("start_time").toString()), DateUtilNew.date_sdf));
-		pd.put("end_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pd.get("end_time").toString()), DateUtilNew.date_sdf));
 		pd.put("banner_image_show", pd.getString("banner_image"));
 		mv.setViewName("lottery/banner/banner_edit");
 		mv.addObject("msg", "edit");
@@ -230,58 +221,22 @@ public class BannerController extends BaseController {
 	}
 
 	/**
-	 * 导出到excel
+	 * 上线下线
 	 * 
-	 * @param
+	 * @param out
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/excel")
-	public ModelAndView exportExcel() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "导出Banner到excel");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
-			return null;
-		}
-		ModelAndView mv = new ModelAndView();
+	@RequestMapping(value = "/onOrOffLine")
+	public void onOrOffLine(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "下线或者上线操作");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return;
+		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<String> titles = new ArrayList<String>();
-		titles.add("备注1"); // 1
-		titles.add("标题"); // 2
-		titles.add("图片路径"); // 3
-		titles.add("链接"); // 4
-		titles.add("链接参数列表(投放资源):  1:文章id;2:活动URL;3:赛事id "); // 5
-		titles.add("排序字段"); // 6
-		titles.add("是否展示"); // 7
-		titles.add("创建时间"); // 8
-		titles.add("投放开始时间"); // 9
-		titles.add("投放结束时间"); // 10
-		dataMap.put("titles", titles);
-		List<PageData> varOList = bannerService.listAll(pd);
-		List<PageData> varList = new ArrayList<PageData>();
-		for (int i = 0; i < varOList.size(); i++) {
-			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("id").toString()); // 1
-			vpd.put("var2", varOList.get(i).getString("banner_name")); // 2
-			vpd.put("var3", varOList.get(i).getString("banner_image")); // 3
-			vpd.put("var4", varOList.get(i).getString("banner_link")); // 4
-			vpd.put("var5", varOList.get(i).getString("banner_param")); // 5
-			vpd.put("var6", varOList.get(i).get("banner_sort").toString()); // 6
-			vpd.put("var7", varOList.get(i).get("is_show").toString()); // 7
-			vpd.put("var8", varOList.get(i).get("create_time").toString()); // 8
-			vpd.put("var9", varOList.get(i).get("start_time").toString()); // 9
-			vpd.put("var10", varOList.get(i).get("end_time").toString()); // 10
-			varList.add(vpd);
-		}
-		dataMap.put("varList", varList);
-		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv, dataMap);
-		return mv;
+		bannerService.updateByKey(pd);
+		out.write("success");
+		out.close();
 	}
 
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
-	}
 }

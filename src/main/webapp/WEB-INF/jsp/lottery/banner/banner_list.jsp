@@ -48,8 +48,8 @@
 												</span>
 										 	<select  name="is_show" id="is_show" data-placeholder="请选择" value="${pd.is_show }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
-											<option value="0" <c:if test="${pd.is_show==0}">selected</c:if>>不显示</option>
-											<option value="1" <c:if test="${pd.is_show==1}">selected</c:if>>显示</option>
+											<option value="0" <c:if test="${pd.is_show!=NULL && pd.is_show!='' && pd.is_show == 0}">selected</c:if>>已过期</option>
+											<option value="1" <c:if test="${pd.is_show==1}">selected</c:if>>已发布</option>
 										  	</select>
 										  	</div>
 									</td>
@@ -118,7 +118,9 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
+												<c:if test="${var.is_show==0}">
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
+												</c:if>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.id}</td>
@@ -137,7 +139,7 @@
 											</td>
 											<td class='center'> 
 												<c:choose>
-													<c:when test="${pd.is_show==0}">已过期</c:when>
+													<c:when test="${var.is_show==0}"><lable style="color:red">已过期</lable></c:when>
 													<c:otherwise>已发布</c:otherwise>
 												</c:choose>
 											</td>						
@@ -148,44 +150,20 @@
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
+												<c:if test="${var.is_show==0}">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
-													</a>
+													<a class="btn btn-xs btn-primary" title="发布" style="border-radius: 5px;" onclick="editStatus('1','${var.id}');">发布</a>
+													<a class="btn btn-xs btn-success" style="border-radius: 5px;"  title="编辑" onclick="edit('${var.id}');">编辑 </a>
 													</c:if>
 													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="del('${var.id}');">
-														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
-													</a>
+													<a class="btn btn-xs btn-danger"   style="border-radius: 5px;"  onclick="del('${var.id}');">删除</a>
 													</c:if>
-												</div>
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-			
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.id}');" class="tooltip-success" data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-															<c:if test="${QX.del == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="del('${var.id}');" class="tooltip-error" data-rel="tooltip" title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-														</ul>
-													</div>
+													</c:if>
+												<c:if test="${var.is_show==1}">
+													<c:if test="${QX.edit == 1 }">
+													<a class="btn btn-xs btn-warming"   style="border-radius: 5px;"  onclick="editStatus('0','${var.id}');">置为过期</a>
+												</c:if>
+												</c:if>
 												</div>
 											</td>
 										</tr>
@@ -210,10 +188,10 @@
 							<tr>
 								<td style="vertical-align:top;">
 									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
+									<a class="btn btn-mini btn-success"  style="border-radius: 5px;" onclick="add();">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
+									<a class="btn btn-mini btn-danger" style="border-radius: 5px;" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" >批量删除 </a>
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -269,34 +247,6 @@
 			$("#Form").submit();
 		}
 		$(function() {
- 
-			//下拉框
-			if(!ace.vars['touch']) {
-				$('.chosen-select').chosen({allow_single_deselect:true}); 
-				$(window)
-				.off('resize.chosen')
-				.on('resize.chosen', function() {
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				}).trigger('resize.chosen');
-				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-					if(event_name != 'sidebar_collapsed') return;
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				});
-				$('#chosen-multiple-style .btn').on('click', function(e){
-					var target = $(this).find('input[type=radio]');
-					var which = parseInt(target.val());
-					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-					 else $('#form-field-select-4').removeClass('tag-input-style');
-				});
-			}
-			
-			
 			//复选框全选控制
 			var active_class = 'active';
 			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
@@ -413,11 +363,12 @@
 				}
 			});
 		};
-		
-		//导出excel
-		function toExcel(){
-			window.location.href='<%=basePath%>banner/excel.do';
-		}
+ function editStatus(status,id){
+	var url = "<%=basePath%>banner/onOrOffLine.do?banner_id="+id+"&is_show="+status;
+	$.get(url,function(data){
+		tosearch(0);
+	});
+ }
 	</script>
 
 

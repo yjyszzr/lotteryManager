@@ -48,8 +48,8 @@
 												</span>
 										 	<select  name="is_enable" id="is_enable" data-placeholder="请选择" value="${pd.is_enable }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
+											<option value="0" <c:if test="${pd.is_enable!=NULL && pd.is_enable!='' && pd.is_enable == 0}">selected</c:if>>下线</option>
 											<option value="1" <c:if test="${pd.is_enable==1}">selected</c:if>>上线</option>
-											<option value="0" <c:if test="${pd.is_enable==0}">selected</c:if>>下线</option>
 										  	</select>
 										  	</div>
 									</td>
