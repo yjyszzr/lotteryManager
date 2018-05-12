@@ -179,26 +179,25 @@
 											                                </div>
 											                            </div>
 															                <div class="row"  style="padding:5px">
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>默认标签：</label>
-<!-- 															                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>默认标签:</label> -->
-											                                <div class="col-sm-9">
-																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="label_defaults" type="radio"   checked <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="label_defaults_1" />
-																					<span class="lbl">主帅</span>
-																				</label>
-																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==2}">checked="checked"</c:if>   value = "2" class="ace" id="label_defaults_2" />
-																					<span class="lbl">球员</span>
-																				</label>
-																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==3}">checked="checked"</c:if>   value = "3" class="ace" id="label_defaults_3" />
-																					<span class="lbl">球迷</span>
-																				</label>
-																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==4}">checked="checked"</c:if>   value = "4" class="ace" id="label_defaults_4" />
-																					<span class="lbl">阵容</span>
-																				</label>
-																				
+																				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>默认标签：</label>
+												                                <div class="col-sm-9">
+																					<label style="float:left;padding-left: 8px;padding-top:7px;">
+																						<input  name="label_defaults" type="radio"   checked <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="label_defaults_1" />
+																						<span class="lbl">主帅</span>
+																					</label>
+																					<label style="float:left;padding-left: 5px;padding-top:7px;">
+																						<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==2}">checked="checked"</c:if>   value = "2" class="ace" id="label_defaults_2" />
+																						<span class="lbl">球员</span>
+																					</label>
+																					<label style="float:left;padding-left: 8px;padding-top:7px;">
+																						<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==3}">checked="checked"</c:if>   value = "3" class="ace" id="label_defaults_3" />
+																						<span class="lbl">球迷</span>
+																					</label>
+																					<label style="float:left;padding-left: 5px;padding-top:7px;">
+																						<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==4}">checked="checked"</c:if>   value = "4" class="ace" id="label_defaults_4" />
+																						<span class="lbl">阵容</span>
+																					</label>
+																		
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
 																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==5}">checked="checked"</c:if>   value = "5" class="ace" id="label_defaults_5" />
 																					<span class="lbl">战意</span>
@@ -225,20 +224,23 @@
 																					<span class="lbl">状态</span>
 																				</label>
 											                                </div>
-															            </div>
-											                                <div class="row"  style="padding:5px">
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章内容：</label>
-											                                <div class="col-sm-9">
-											                                	<div class="ueQ313596790Que"></div>
-											                                   <script id="editor"  type="text/plain" style="width:550px;height:250px;"></script>
-											                                    <div class="ueQ313596790Que"></div>
 											                                </div>
+											                                <div class="row"  style="padding:5px">
+																				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章内容：</label>
+												                                <div class="col-sm-9"> </div>
+											                            </div>
+											                                <div class="row"  style="padding:5px">
+												                                	<div class="ueQ313596790Que"></div>
+												                                   <script id="editor"  type="text/plain"></script>
+												                                    <div class="ueQ313596790Que"></div>
 											                            </div>
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
 											                                <div class="col-sm-9">
 											                                   <a class="btn btn-mini btn-primary" onclick="save(1)" >发表</a>
 											                                   <a class="btn btn-mini btn-danger" onclick="save('2')">保存草稿</a>
+											                                   <a class="btn btn-mini btn-warming" onclick="toPreShow()">预览</a>
+<!-- 											                                   <a class="btn btn-mini btn-warming" onclick="preLook()">预览</a> -->
 											                                </div>
 											                            </div>
 											                            </div>
@@ -285,6 +287,7 @@
 	<!-- 百度富文本编辑框-->
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
+	<script src="static/ace/js/bootbox.js"></script>
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
@@ -431,50 +434,6 @@
 		    });
 		  }
 		
-		$(function() {
-			//日期框
-			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
-			
-			//下拉框
-			if(!ace.vars['touch']) {
-				$('.chosen-select').chosen({allow_single_deselect:true}); 
-				$(window)
-				.off('resize.chosen')
-				.on('resize.chosen', function() {
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				}).trigger('resize.chosen');
-				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-					if(event_name != 'sidebar_collapsed') return;
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				});
-				$('#chosen-multiple-style .btn').on('click', function(e){
-					var target = $(this).find('input[type=radio]');
-					var which = parseInt(target.val());
-					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-					 else $('#form-field-select-4').removeClass('tag-input-style');
-				});
-			}
-			//上传
-			$('#tp').ace_file_input({
-				no_file:'请选择文件 ...',
-				btn_choose:'选择',
-				btn_change:'更改',
-				droppable:false,
-				onchange:null,
-				thumbnail:false, //| true | large
-				whitelist:'*',
-				//whitelist:'gif|png|jpg|jpeg',
-				//blacklist:'gif|png|jpg|jpeg'
-				//onchange:''
-				//
-			});
-		});
 		
 		//百度富文本
 		setTimeout("ueditor()",500);
@@ -715,11 +674,24 @@
 	    $(this).parent().parent().remove();
 	});
     
+	 
+	
+// 	function preLook(){
+//   	var content = UE.getEditor('editor').getContent();
+// 		localStorage.setItem('content',content);
+//         window.open('http://localhost:8080/lotteryManager/main/test.html','','height=800,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')  
+// 	}
+	
+	
 	//预览
-	function preLook(){
-	/* 	var content = UE.getEditor('editor').getContent();
-		localStorage.setItem('content',content);
-        window.open('http://localhost:8080/erp/main/test.html','','height=800,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no') */
+	function toPreShow(){
+		var toPreShowContent = UE.getEditor('editor').getContent();
+		var str = '<style type="text/css">#mydiv{margin:0 auto;  text-align:center; width:375px; height:667px; border:1px solid red; overflow:hidden; } #mydiv img{ max-width:375px; max-height:200px;overflow:hidden; }</style>';
+		var toPreShowContentValue= str+"<div id='mydiv'  style='OVERFLOW-Y: auto; OVERFLOW-X:hidden;'>" +  toPreShowContent +"</div>";
+		bootbox.confirm(toPreShowContentValue, function(result) {
+			if(result) {
+			}
+		});
 	}
 	
     </script>
