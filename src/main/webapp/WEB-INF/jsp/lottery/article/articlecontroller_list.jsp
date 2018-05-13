@@ -1,4 +1,5 @@
 ﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -134,7 +135,14 @@
 <!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.article_id}</td>
-											<td class='center'>${var.title}</td>
+												<c:choose>
+												<c:when test="${fn:length(var.title)  <= 20 }">
+													<td  title="${var.title}"><a style="cursor:pointer;"  onclick="toPreShow('${var.article_id}');">${var.title}</a></td>
+												</c:when>
+												<c:otherwise>
+													<td title="${var.title}"> <a style="cursor:pointer;" onclick="toPreShow('${var.article_id}');">${fn:substring(var.title,0,20)}... </a></td>
+												</c:otherwise>
+											</c:choose>
 											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											<td class='center'> 
 											<c:choose>
@@ -269,31 +277,6 @@
 			$("#Form").submit();
 		}
 		$(function() {
-			//下拉框
-			if(!ace.vars['touch']) {
-				$('.chosen-select').chosen({allow_single_deselect:true}); 
-				$(window)
-				.off('resize.chosen')
-				.on('resize.chosen', function() {
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				}).trigger('resize.chosen');
-				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-					if(event_name != 'sidebar_collapsed') return;
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				});
-				$('#chosen-multiple-style .btn').on('click', function(e){
-					var target = $(this).find('input[type=radio]');
-					var which = parseInt(target.val());
-					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-					 else $('#form-field-select-4').removeClass('tag-input-style');
-				});
-			}
 			
 			
 			//复选框全选控制
@@ -437,6 +420,25 @@
 				}
 			});
 		};
+		
+		function toPreShow(id){
+			var url = "<%=basePath%>articlecontroller/toPreShow.do";
+			$.ajax({
+				  type: 'POST',
+				  url: url,
+				  data: {article_id:id},
+				  dataType: "json",
+				  success: function(result){
+						if(result){
+							var toPreShowContent =  result.pd.content;
+							var str = '<style type="text/css">#mydiv{margin:0 auto;  text-align:center; width:375px; height:667px; border:1px solid red; overflow:hidden; } #mydiv img{ max-width:375px; max-height:200px;overflow:hidden; }</style>';
+							var toPreShowContentValue= str+"<div id='mydiv'  style='OVERFLOW-Y: auto; OVERFLOW-X:hidden;'>" +  toPreShowContent +"</div>";
+								bootbox.confirm(toPreShowContentValue, function(result) {});
+						}
+				 	 }
+				});
+		}
+	 
 	</script>
 </body>
 </html>

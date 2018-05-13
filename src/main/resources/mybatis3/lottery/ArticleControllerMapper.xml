@@ -227,7 +227,7 @@
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
 			and  add_time &lt; #{pd.lastEnd1 }
 		</if>
-			order by  is_stick desc , status asc
+			order by  is_stick desc, status asc, add_time desc
 	</select>
 	
 	<!-- 列表(全部) -->
