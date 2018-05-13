@@ -135,10 +135,10 @@
 	<!-- 日期框 -->
 	<script src="static/ace/js/My97Date/WdatePicker.js"</script>
 	<!--提示框-->
-	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
   	<script src="plugins/fhform/js/content.min.js?v=1.0.0"></script>
   	<!-- 文件上传 -->
     <script src="plugins/fhform/js/ajaxfileupload.js"></script>
+	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		<script type="text/javascript">
 		$(top.hangge());
 		//保存
@@ -227,15 +227,6 @@
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
 		}
-		
-		$(function() {	
-			var date = new Date();//日期框
-			$('.date-picker').datetimepicker({
-				altFormat : 'yyyy-mm-dd HH:mm:ss',
-				startDate: date ,
-				autoclose: true,
-				todayHighlight: true});
-		});
 		
 		//上传图片
 		function ajaxFileUpload(fileObj,fileId){

@@ -286,8 +286,6 @@
 	<script src="static/ace/js/bootbox.js"></script>
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
-	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 	<!-- 上传控件 -->
 	<script src="static/ace/js/ace/elements.fileinput.js"></script>
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>

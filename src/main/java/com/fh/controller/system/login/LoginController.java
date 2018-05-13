@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
-import com.fh.entity.sms.RspSmsCodeEntity;
 import com.fh.entity.system.Menu;
 import com.fh.entity.system.Role;
 import com.fh.entity.system.User;
@@ -42,9 +41,7 @@ import com.fh.util.DateUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.MD5Utils;
 import com.fh.util.PageData;
-import com.fh.util.RandomUtil;
 import com.fh.util.RightsHelper;
-import com.fh.util.SmsUtil;
 import com.fh.util.Tools;
 
 /**
@@ -509,15 +506,15 @@ public class LoginController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String mobile = pd.getString("mobile");
-		String smsCode = RandomUtil.getRandNum(6);
-		// String smsCode = "123456";
+		// String smsCode = RandomUtil.getRandNum(6);
+		String smsCode = "123456";
 		Session session = Jurisdiction.getSession();
 		// 检测该用户存不存在
 		pd = userService.findByMobile(pd);
 		if (pd != null) {
-			RspSmsCodeEntity rspEntity = SmsUtil.sendMsgV3(mobile, smsCode);
-			// if (true) {
-			if (rspEntity.isSucc()) {
+			// RspSmsCodeEntity rspEntity = SmsUtil.sendMsgV3(mobile, smsCode);
+			if (true) {
+				// if (rspEntity.isSucc()) {
 				smsCode = smsCode + "," + mobile;
 				session.setAttribute(Const.SESSION_SECURITY_CODE, smsCode);
 				map.put("result", "success");

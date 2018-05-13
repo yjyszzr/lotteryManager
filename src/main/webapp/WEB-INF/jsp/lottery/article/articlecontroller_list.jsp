@@ -135,7 +135,7 @@
 <!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.article_id}</td>
-												<c:choose>
+											<c:choose>
 												<c:when test="${fn:length(var.title)  <= 20 }">
 													<td  title="${var.title}"><a style="cursor:pointer;"  onclick="toPreShow('${var.article_id}');">${var.title}</a></td>
 												</c:when>

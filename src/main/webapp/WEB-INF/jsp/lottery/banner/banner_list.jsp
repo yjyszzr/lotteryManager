@@ -1,4 +1,5 @@
 ﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -124,15 +125,30 @@
 <!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.id}</td>
-											<td class='center'>${var.banner_name}</td>
+											<c:choose>
+												<c:when test="${fn:length(var.banner_name)  <= 5 }">
+													<td  title="${var.banner_name}">${var.banner_name}</td>
+												</c:when>
+												<c:otherwise>
+													<td title="${var.banner_name}">  ${fn:substring(var.banner_name,0,5)}...  </td>
+												</c:otherwise>
+											</c:choose>
 											<td class='center'><img src="${var.banner_image}" width="48px" hight="24px"/></td>
-											<td class='center' width="200px"> 
+										
 												<c:choose>
-													<c:when test="${var.banner_param==1}">(文章ID)</c:when>
-													<c:when test="${var.banner_param==2}">(赛事ID)</c:when>
-													<c:otherwise>(活动URL)</c:otherwise>
-												</c:choose>${var.banner_link}
-											</td> 
+													<c:when test="${var.banner_param==1}"><td>(文章ID)${var.banner_link}</td></c:when>
+													<c:when test="${var.banner_param==2}"><td>(赛事ID)${var.banner_link}</td></c:when>
+													<c:otherwise>
+															<c:choose>
+															<c:when test="${fn:length(var.banner_link)  <= 15 }">
+																<td  title="(活动URL)${var.banner_link}">(活动URL)${var.banner_link}</td>
+															</c:when>
+															<c:otherwise>
+																<td title="(活动URL)${var.banner_link}">  (活动URL)${fn:substring(var.banner_link,0,15)}...  </td>
+															</c:otherwise>
+														</c:choose>
+													 </c:otherwise>
+												</c:choose>
 											<td class='center'>${var.banner_sort}</td>
 											<td class='center'>
 												<c:if test="${var.show_position ==0}">首页轮播图</c:if>
