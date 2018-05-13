@@ -141,16 +141,17 @@ public class ComplainController extends BaseController {
 		if (null != complain_content && !"".equals(complain_content)) {
 			pd.put("complain_content", complain_content.trim());
 		}
-		page.setPd(pd);
-		List<PageData> varList = complainService.list(page); // 列出Complain列表
-		for (int i = 0; i < varList.size(); i++) {
-			PageData pageData = new PageData();
-			pageData = varList.get(i);
-			if (null != pageData.get("complain_time") && !"".equals(pageData.get("complain_time"))) {
-				pageData.put("complain_time", DateUtilNew.getCurrentTimeString(Long.parseLong(pageData.get("complain_time").toString()), DateUtilNew.date_sdf));
-			}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		}
 
+		page.setPd(pd);
+		List<PageData> varList = complainService.list(page); // 列出Complain列表
 		mv.setViewName("lottery/complain/complain_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

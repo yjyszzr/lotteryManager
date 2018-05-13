@@ -1,4 +1,5 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -59,8 +60,8 @@
 												时间:
 											</span>
 											<span  >
-												<input class="date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
-												<input class="date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+												<input  name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input  name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 											</span>
 									</td>
 											<td>
@@ -70,8 +71,8 @@
 												</span>
 										 	<select  name="is_read" id="is_read" data-placeholder="请选择" value="${pd.is_read }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
+											<option value="0" <c:if test="${pd.is_read!=NULL && pd.is_read!='' && pd.is_read == 0}">selected</c:if>>未读</option>
 											<option value="1" <c:if test="${pd.is_read==1}">selected</c:if>>已读</option>
-											<option value="0" <c:if test="${pd.is_read==0}">selected</c:if>>未读</option>
 										  	</select>
 										  	</div>
 									</td>
@@ -113,7 +114,7 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.id}</td>
 											<td class='center'>${var.user_name}</td>
-											<td class='center'>${var.complain_time}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.complain_time*1000)} </td>
 											<td class='center'>${var.complain_content}</td>
 											<td class='center'> 
 												<c:choose>
@@ -187,7 +188,7 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="static/ace/js/My97Date/WdatePicker.js"</script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
@@ -204,12 +205,6 @@
 			top.jzts();
 			$("#Form").submit();
 		}
-		$(function() {
-			$('.date-picker').datepicker({	//日期框
-				autoclose: true,
-				todayHighlight: true
-			});
-		});
 		
 		//置为已读
 		function readOrUnread(status,complainId){

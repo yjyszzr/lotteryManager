@@ -54,7 +54,7 @@
 											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>文章标题：</label>
 											                                <div class="col-sm-9">
 											                                <input type="hidden"  id="article_id"   name ="article_id" value="${pd.article_id}"/>
-											                                <input type=""  id="match_id"   name ="match_id" value="${pd.match_id}"/>
+											                                <input type="hidden"  id="match_id"   name ="match_id" value="${pd.match_id}"/>
 											                                <input type="hidden"  id="content"  name="content"   value=""/>
 											                                <input type="hidden"  id="status"  name="status"   value=""/>
 											                                   <input type="text" id="title"  name="title" placeholder="文章标题" class="col-xs-10 col-sm-5"   value="${pd.title}"/>

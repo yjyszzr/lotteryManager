@@ -74,7 +74,7 @@ public class ArticleControllerController extends BaseController {
 		if ("1".equals(pd.get("list_style")) || "4".equals(pd.get("list_style"))) {
 			pd.put("article_thumb", pd.get("article_thumb1"));
 
-		} else if ("2".equals(pd.get("list_style"))) {
+		} else if ("3".equals(pd.get("list_style"))) {
 			String articleThumbAll = pd.get("article_thumb1") + "," + pd.get("article_thumb2") + "," + pd.get("article_thumb3");
 			pd.put("article_thumb", articleThumbAll);
 		}
