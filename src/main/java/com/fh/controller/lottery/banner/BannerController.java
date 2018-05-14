@@ -183,7 +183,7 @@ public class BannerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = bannerService.findById(pd); // 根据ID读取
-		pd.put("banner_image_show", pd.getString("banner_image"));
+		pd.put("banner_image_show", TextConfig.URL_SHOW_IMG_CODE + pd.getString("banner_image"));
 		mv.setViewName("lottery/banner/banner_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
