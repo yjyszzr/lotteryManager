@@ -72,7 +72,8 @@
 	<select id="datalistPage" parameterType="page" resultType="pd">
 	SELECT
 		c.*,
-		u.user_name 
+		u.user_name ,
+		u.mobile
 	FROM
 		dl_complain c
 		LEFT JOIN dl_user u ON c.complainer = u.user_id
@@ -80,6 +81,10 @@
 		<if test="pd.user_name != null and pd.user_name != ''"> 
 			and u.user_name  
 			LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		</if>
+		<if test="pd.mobile != null and pd.mobile != ''"> 
+			and u.mobile  
+			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
 		</if>
 		<if test="pd.complain_content != null and pd.complain_content != ''"> 
 			and c.complain_content 

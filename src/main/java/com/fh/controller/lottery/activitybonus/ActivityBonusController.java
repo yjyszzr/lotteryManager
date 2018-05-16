@@ -23,6 +23,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -53,10 +54,22 @@ public class ActivityBonusController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		if ("0".equals(pd.getString("bonus_number_type"))) {
+			pd.put("bonus_number", "0");
+		} else {
+			pd.put("bonus_number", pd.getString("bonus_number_type"));
+		}
+		if ("0".equals(pd.getString("min_amount"))) {
+			pd.put("min_goods_amount", "0");
+		} else {
+			pd.put("min_goods_amount", pd.getString("min_amount"));
+		}
+
 		pd.put("bonus_id", "0"); // id
 		pd.put("receive_count", "0"); // id
 		pd.put("is_enable", "0"); // id
 		pd.put("is_delete", "0"); // id
+		pd.put("add_time", DateUtilNew.getCurrentTimeLong()); // id
 		activitybonusService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -149,8 +162,7 @@ public class ActivityBonusController extends BaseController {
 				if (Double.parseDouble(min_goods_amount) == 0.00) {
 					pageData.put("min_goods_amount", "无门槛");
 				} else {
-					pageData.put("min_goods_amount", "	需消费满" + min_goods_amount
-							+ "元");
+					pageData.put("min_goods_amount", "	需消费满" + min_goods_amount + "元");
 				}
 			}
 			String bonus_number = pageData.getString("bonus_number");
@@ -163,8 +175,7 @@ public class ActivityBonusController extends BaseController {
 			if (null != start_time && !"".equals(start_time)) {
 				String end_time = pageData.getString("end_time");
 				if (null != end_time && !"".equals(end_time)) {
-					int value = Integer.parseInt(end_time)
-							- Integer.parseInt(start_time);
+					int value = Integer.parseInt(end_time) - Integer.parseInt(start_time);
 					pageData.put("end_time", value);
 				}
 			}
@@ -314,8 +325,7 @@ public class ActivityBonusController extends BaseController {
 			vpd.put("var14", varOList.get(i).get("is_delete").toString()); // 14
 			vpd.put("var15", varOList.get(i).get("add_time").toString()); // 15
 			vpd.put("var16", varOList.get(i).get("exchange_points").toString()); // 16
-			vpd.put("var17", varOList.get(i).get("exchange_goods_number")
-					.toString()); // 17
+			vpd.put("var17", varOList.get(i).get("exchange_goods_number").toString()); // 17
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -327,7 +337,6 @@ public class ActivityBonusController extends BaseController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,
-				true));
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

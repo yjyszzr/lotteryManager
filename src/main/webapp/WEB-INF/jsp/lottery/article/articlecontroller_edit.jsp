@@ -193,11 +193,15 @@
 																						<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==4}">checked="checked"</c:if>   value = "4" class="ace" id="label_defaults_4" />
 																						<span class="lbl">阵容</span>
 																					</label>
-																		
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
 																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==5}">checked="checked"</c:if>   value = "5" class="ace" id="label_defaults_5" />
 																					<span class="lbl">战意</span>
 																				</label>
+																				</div>
+																				</div>
+																				<div class="row"  style="padding:5px">
+																				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> </label>
+												                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
 																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==6}">checked="checked"</c:if>   value = "6" class="ace" id="label_defaults_6" />
 																					<span class="lbl">攻守</span>

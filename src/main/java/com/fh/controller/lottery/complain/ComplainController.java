@@ -137,6 +137,10 @@ public class ComplainController extends BaseController {
 		if (null != user_name && !"".equals(user_name)) {
 			pd.put("user_name", user_name.trim());
 		}
+		String mobile = pd.getString("mobile");
+		if (null != mobile && !"".equals(mobile)) {
+			pd.put("mobile", mobile.trim());
+		}
 		String complain_content = pd.getString("complain_content");
 		if (null != complain_content && !"".equals(complain_content)) {
 			pd.put("complain_content", complain_content.trim());

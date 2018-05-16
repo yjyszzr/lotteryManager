@@ -52,6 +52,16 @@
 											</span>
 										</div>
 									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												电话:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="电话" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}" />
+											</span>
+										</div>
+									</td>
 							
 									</tr>
 									<tr style="margin:2px">
@@ -97,8 +107,9 @@
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">id</th>
 									<th class="center">投诉者</th>
+									<th class="center">电话</th>
 									<th class="center">投诉时间</th>
-									<th class="center">投诉内容</th>
+									<th class="center" width="600px">投诉内容</th>
 									<th class="center">是否已读</th>
 									<th class="center">操作</th>
 								</tr>
@@ -114,6 +125,7 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.id}</td>
 											<td class='center'>${var.user_name}</td>
+											<td class='center'>${var.mobile}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.complain_time*1000)} </td>
 											<td class='center'>${var.complain_content}</td>
 											<td class='center'> 
@@ -197,6 +209,7 @@
 			function tosearch(status){
 			if(status==0){
 				$("#user_name").val("");
+				$("#mobile").val("");
 				$("#complain_content").val("");
 				$("#is_read").empty();
 				$("#lastStart").val("");
