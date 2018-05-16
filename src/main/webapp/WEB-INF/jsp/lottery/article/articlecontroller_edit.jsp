@@ -200,7 +200,7 @@
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
 																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==6}">checked="checked"</c:if>   value = "6" class="ace" id="label_defaults_6" />
-																					<span class="lbl">拱手</span>
+																					<span class="lbl">攻守</span>
 																				</label>
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
 																					<input  name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==7}">checked="checked"</c:if>   value = "7" class="ace" id="label_defaults_7" />
@@ -218,6 +218,10 @@
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
 																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==10}">checked="checked"</c:if>   value = "10" class="ace" id="label_defaults_10" />
 																					<span class="lbl">状态</span>
+																				</label>
+																				<label style="float:left;padding-left: 5px;padding-top:7px;">
+																					<input name="label_defaults" type="radio"   <c:if test="${pd.label_defaults==11}">checked="checked"</c:if>   value = "11" class="ace" id="label_defaults_11" />
+																					<span class="lbl">世界杯</span>
 																				</label>
 											                                </div>
 											                                </div>
