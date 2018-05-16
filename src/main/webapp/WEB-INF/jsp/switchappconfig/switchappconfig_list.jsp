@@ -43,6 +43,7 @@
 									<th class="center">app版本号</th>
 									<th class="center">平台</th>
 									<th class="center">业务版本</th>
+									<th class="center">渠道</th>
 									<th class="center">开关</th>
 									<th class="center">操作</th>
 								</tr>
@@ -62,7 +63,16 @@
 											<td class='center'>${var.version}</td>
 											<td class='center'>${var.platform}</td>
 											<td class='center'>${var.business_type}</td>
-											<td class='center'>${var.turn_on}</td>
+											<td class='center'>${var.channel_name}</td>
+											
+											<td class='center'>
+												<c:if test="${var.turn_on == 1 }">
+												开
+												</c:if>
+												<c:if test="${var.turn_on == 0 }">
+												关
+												</c:if>
+											</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -274,7 +284,7 @@
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>switchappconfig/goEdit.do?id='+Id;
 			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Height = 400;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

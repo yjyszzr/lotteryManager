@@ -106,6 +106,7 @@ public class SwitchAppConfigController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData>	varList = switchappconfigService.list(page);	//列出SwitchAppConfig列表
+		
 		mv.setViewName("switchappconfig/switchappconfig_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);

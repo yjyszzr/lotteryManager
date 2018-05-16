@@ -54,5 +54,10 @@ public interface SwitchAppConfigManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 	
+	/**
+	 * 查询渠道
+	 */
+	public List<PageData> queryChannel()throws Exception;
+	
 }
 
