@@ -79,5 +79,15 @@ public class SwitchAppConfigService implements SwitchAppConfigManager{
 		dao.delete("SwitchAppConfigMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	/**查询渠道
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> queryChannel() throws Exception {
+		return (List<PageData>)dao.findForList("SwitchAppConfigMapper.findChannels", "");
+
+	}
+	
 }
 

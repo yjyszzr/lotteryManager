@@ -13,6 +13,7 @@
 		version,	
 		platform,	
 		business_type,	
+		channel,
 		turn_on
 	</sql>
 	
@@ -21,9 +22,19 @@
         #{id},	
         #{version},	
         #{platform},	
-        #{business_type},	
-        #{turn_on}	
+        #{business_type},
+        #{turn_on},
+        #{channel}
 	</sql>
+	
+
+	<!-- 通过ID获取数据 -->
+	<select id="findChannels" resultType="pd">
+		select id,channel,channel_name
+		from 
+		dl_phone_channel
+	</select>
+	
 	
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
@@ -34,7 +45,8 @@
 		        version,	
 		        platform,	
 		        business_type,	
-		        turn_on	
+		        turn_on,
+		        channel
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -56,6 +68,7 @@
 			version = #{version},
 			platform = #{platform},
 			business_type = #{business_type},
+			channel = #{channel},
 			turn_on = #{turn_on}
 		where 
 		id = #{id}
@@ -74,9 +87,18 @@
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-		<include refid="Field"></include>
+			sc.id,	
+			sc.version,	
+			sc.platform,	
+			sc.business_type,	
+			pc.channel,
+			pc.channel_name,
+			sc.turn_on
 		from 
-		<include refid="tableName"></include>
+		dl_switch_config sc
+		left join
+		dl_phone_channel pc
+		on sc.channel = pc.channel
 		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
