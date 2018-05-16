@@ -181,6 +181,30 @@ public class PicturesController extends BaseController {
 		return map;
 	}
 
+	@RequestMapping(value = "/fileUploadForWangEditor")
+	@ResponseBody
+	public Map<String, String> fileUploadForWangEditor(@RequestParam(required = false) MultipartFile file) throws Exception {
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		} // 校验权限
+		logBefore(logger, Jurisdiction.getUsername() + "新增图片");
+		Map<String, String> map = new HashMap<String, String>();
+		String ffile = DateUtil.getDays(), fileName = "";
+		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			if (null != file && !file.isEmpty()) {
+				// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
+				// + ffile; // 文件上传路径
+				String filePath = Const.FILEPATHIMG + ffile; // 文件上传路径
+				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
+			} else {
+				System.out.println("上传失败");
+			}
+		}
+		map.put("errno", "0");
+		map.put("data", TextConfig.URL_SHOW_IMG_CODE + "uploadImgs/" + ffile + "/" + fileName); // 路径
+		return map;
+	}
+
 	/**
 	 * 删除
 	 * 

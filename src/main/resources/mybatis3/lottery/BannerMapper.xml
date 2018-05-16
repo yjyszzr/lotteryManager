@@ -16,6 +16,7 @@
 		banner_param,	
 		banner_sort,	
 		is_show,	
+		is_transaction,
 		create_time,	
 		start_time,	
 		end_time,
@@ -31,6 +32,7 @@
         #{banner_param},	
         #{banner_sort},	
         #{is_show},	
+        #{is_transaction},	
         #{create_time},	
         #{start_time},	
         #{end_time}	,
@@ -49,6 +51,7 @@
 		        banner_param,	
 		        banner_sort,	
 		        is_show,	
+		        is_transaction,
 		        create_time,	
 		        start_time,	
 		        end_time,
@@ -77,6 +80,7 @@
 			banner_param = #{banner_param},
 			banner_sort = #{banner_sort},
 			is_show = #{is_show},
+			is_transaction = #{is_transaction},
 			start_time = #{start_time},
 			end_time = #{end_time},
 			show_position = #{show_position}
@@ -107,6 +111,9 @@
 		</if>
 		<if test="pd.is_show != null and pd.is_show != ''">
 			and is_show = #{pd.is_show }
+		</if>
+		<if test="pd.is_transaction != null and pd.is_transaction != ''">
+			and is_transaction = #{pd.is_transaction }
 		</if>
 		<if test="pd.startTimeStart1 != null and pd.startTimeStart1 != ''"> 
 			and start_time &gt; #{pd.startTimeStart1 }

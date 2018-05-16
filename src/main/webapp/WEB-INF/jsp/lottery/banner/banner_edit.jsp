@@ -73,6 +73,15 @@
 								</div>
                             </div>
 	   						     <div class="row"  style="padding:5px">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">版本类型：</label>
+									 <div class="col-sm-9">
+									    <select  name="is_transaction" id="is_transaction" value="${pd.is_transaction}"  style="width:235px;">
+									        <option value="1"  selected<c:if test="${pd.is_transaction==1}">selected</c:if>>资讯版</option>
+									        <option value="2" <c:if test="${pd.is_transaction==2}">selected</c:if>>交易版</option>
+									    </select>
+								</div>
+                            </div>
+	   						     <div class="row"  style="padding:5px">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">展示位置：</label>
 									 <div class="col-sm-9">
 									    <select  name="show_position" id="show_position" value="${pd.show_position}"  style="width:235px;">

@@ -54,6 +54,18 @@
 										  	</select>
 										  	</div>
 									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													是否显示:
+												</span>
+										 	<select  name="is_transaction" id="is_transaction" data-placeholder="请选择" value="${pd.is_transaction }" style="width:154px;border-radius:5px !important"  >
+											<option value="" selected>全部</option>
+											<option value="1" <c:if test="${pd.is_transaction == 1}">selected</c:if>>资讯版</option>
+											<option value="2" <c:if test="${pd.is_transaction == 2}">selected</c:if>>交易版</option>
+										  	</select>
+										  	</div>
+									</td>
 									</tr>
 									<tr style="margin:2px">
 									<td >
@@ -104,6 +116,7 @@
 									<th class="center">投放资源</th>
 									<th class="center">排序字段</th>
 									<th class="center">位置</th>
+									<th class="center">版本类型</th>
 									<th class="center">状态</th>
 									<th class="center">投放开始时间</th>
 									<th class="center">投放结束时间</th>
@@ -153,6 +166,13 @@
 											<td class='center'>
 												<c:if test="${var.show_position ==0}">首页轮播图</c:if>
 											</td>
+											<td class='center'> 
+												<c:choose>
+													<c:when test="${var.is_transaction==2}"> 交易版 </c:when>
+													<c:when test="${var.is_transaction==1}"> 资讯版 </c:when>
+													<c:otherwise>--</c:otherwise>
+												</c:choose>
+											</td>						
 											<td class='center'> 
 												<c:choose>
 													<c:when test="${var.is_show==0}"><lable style="color:red">已过期</lable></c:when>
@@ -259,6 +279,7 @@
 			if(status==0){
 				$("#title").val("");
 				$("#is_show").empty();
+				$("#is_transaction").empty();
 				$("#startTimeStart").val("");
 				$("#startTimeEnd").val("");
 				$("#endTimeStart").val("");
@@ -288,7 +309,7 @@
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>banner/goAdd.do';
 			 diag.Width = 800;
-			 diag.Height = 480;
+			 diag.Height = 520;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -326,7 +347,7 @@
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>banner/goEdit.do?id='+Id;
 			 diag.Width = 800;
-			 diag.Height = 480;
+			 diag.Height = 520;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
