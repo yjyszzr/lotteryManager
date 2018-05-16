@@ -1,20 +1,14 @@
 package com.fh.controller.lottery.match;
 
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,7 +20,6 @@ import com.fh.service.lottery.match.MatchManager;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
-import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /**
@@ -137,6 +130,20 @@ public class MatchController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = matchService.list(page); // 列出Match列表
+		PageData articlePd = new PageData();
+		List<PageData> articleList = articlecontrollerService.listAll(articlePd);
+		for (int i = 0; i < varList.size(); i++) {
+			int articleNum = 0;
+			PageData matchPage = varList.get(i);
+			String matchId = matchPage.getString("match_id");
+			for (int j = 0; j < articleList.size(); j++) {
+				PageData articlePage = articleList.get(j);
+				if (matchId.equals(articlePage.getString("match_id"))) {
+					articleNum++;
+				}
+			}
+			matchPage.put("article_num", articleNum);
+		}
 		mv.setViewName("lottery/match/match_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -207,89 +214,5 @@ public class MatchController extends BaseController {
 		pdList.add(pd);
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
-	}
-
-	/**
-	 * 导出到excel
-	 * 
-	 * @param
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/excel")
-	public ModelAndView exportExcel() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "导出Match到excel");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
-			return null;
-		}
-		ModelAndView mv = new ModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<String> titles = new ArrayList<String>();
-		titles.add("赛事ID"); // 1
-		titles.add("联赛Id"); // 2
-		titles.add("联赛名称"); // 3
-		titles.add("联赛简称"); // 4
-		titles.add("场次ID"); // 5
-		titles.add("场次名称"); // 6
-		titles.add("主队ID"); // 7
-		titles.add("主队名称"); // 8
-		titles.add("主队简称"); // 9
-		titles.add("主队排名"); // 10
-		titles.add("客队ID"); // 11
-		titles.add("客队名称"); // 12
-		titles.add("客队简称"); // 13
-		titles.add("客队排名"); // 14
-		titles.add("比赛时间"); // 15
-		titles.add("显示时间"); // 16
-		titles.add("创建时间"); // 17
-		titles.add("是否显示"); // 18
-		titles.add("是否删除"); // 19
-		titles.add("比赛号"); // 20
-		titles.add("上半场比分"); // 21
-		titles.add("整场比分"); // 22
-		titles.add("拉取状态"); // 23
-		titles.add("是否热门"); // 24
-		dataMap.put("titles", titles);
-		List<PageData> varOList = matchService.listAll(pd);
-		List<PageData> varList = new ArrayList<PageData>();
-		for (int i = 0; i < varOList.size(); i++) {
-			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("match_id").toString()); // 1
-			vpd.put("var2", varOList.get(i).get("league_id").toString()); // 2
-			vpd.put("var3", varOList.get(i).getString("league_name")); // 3
-			vpd.put("var4", varOList.get(i).getString("league_addr")); // 4
-			vpd.put("var5", varOList.get(i).get("changci_id").toString()); // 5
-			vpd.put("var6", varOList.get(i).getString("changci")); // 6
-			vpd.put("var7", varOList.get(i).get("home_team_id").toString()); // 7
-			vpd.put("var8", varOList.get(i).getString("home_team_name")); // 8
-			vpd.put("var9", varOList.get(i).getString("home_team_abbr")); // 9
-			vpd.put("var10", varOList.get(i).getString("home_team_rank")); // 10
-			vpd.put("var11", varOList.get(i).get("visiting_team_id").toString()); // 11
-			vpd.put("var12", varOList.get(i).getString("visiting_team_name")); // 12
-			vpd.put("var13", varOList.get(i).getString("visiting_team_abbr")); // 13
-			vpd.put("var14", varOList.get(i).getString("visiting_team_rank")); // 14
-			vpd.put("var15", varOList.get(i).getString("match_time")); // 15
-			vpd.put("var16", varOList.get(i).getString("show_time")); // 16
-			vpd.put("var17", varOList.get(i).get("create_time").toString()); // 17
-			vpd.put("var18", varOList.get(i).get("is_show").toString()); // 18
-			vpd.put("var19", varOList.get(i).get("is_del").toString()); // 19
-			vpd.put("var20", varOList.get(i).getString("match_sn")); // 20
-			vpd.put("var21", varOList.get(i).getString("first_half")); // 21
-			vpd.put("var22", varOList.get(i).getString("whole")); // 22
-			vpd.put("var23", varOList.get(i).getString("status")); // 23
-			vpd.put("var24", varOList.get(i).get("is_hot").toString()); // 24
-			varList.add(vpd);
-		}
-		dataMap.put("varList", varList);
-		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv, dataMap);
-		return mv;
-	}
-
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
 	}
 }

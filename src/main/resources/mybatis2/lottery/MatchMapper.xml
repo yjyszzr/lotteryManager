@@ -149,11 +149,10 @@
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 			SELECT
-				a.*,
-				( SELECT count( * ) FROM dl_article b WHERE b.match_id = a.match_id ) AS article_num 
+				a.* 
 			FROM
 				dl_match a 
-			where 1=1
+			WHERE 1=1
 		<if test="pd.match_team != null and pd.match_team != ''"> 
 			AND a.home_team_abbr 
 				LIKE CONCAT(CONCAT('%', #{pd.match_team}),'%')
@@ -177,14 +176,7 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-<!-- 		select -->
-<!-- 		<include refid="Field"></include> -->
-<!-- 		from  -->
-<!-- 		<include refid="tableName"></include> -->
-		SELECT a.*,
-			( SELECT count( * ) FROM dl_article b WHERE b.match_id = a.match_id ) AS article_num 
-		FROM
-			dl_match a;
+		SELECT *FROM dl_match;
 	</select>
 	
 	<!-- 批量删除 -->

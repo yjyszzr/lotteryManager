@@ -7,15 +7,15 @@ public class TextConfig {
 	// public static final String URL_SMS_CODE =
 	// "http://39.106.18.39:7071/sms/sendSmsCode";
 
-	public static final String URL_SMS_CODE = "http://39.106.18.39:7071/sms/sendServiceSmsCode";
+	public static final String URL_SMS_CODE = "http://172.17.0.20:9321/sms/sendServiceSmsCode";
 	// 图片展示
-	public static final String URL_SHOW_IMG_CODE = "http://caixiaomi.net:9809/";
+	public static final String URL_SHOW_IMG_CODE = "http://static.caixiaomi.net/";
 
 	// 手动派奖
-	public static final String URL_MANUAL_AUDIT_CODE = "http://39.106.18.39:7071/user/account/batchUpdateUserAccount";
+	public static final String URL_MANUAL_AUDIT_CODE = "http://172.17.0.20:9321/user/account/batchUpdateUserAccount";
 
 	// 大额提现
-	public static final String URL_MANUAL_AWARD_CODE = "http://39.106.18.39:7076/cash/getcash";
+	public static final String URL_MANUAL_AWARD_CODE = "http://172.17.0.20:9621/cash/getcash";
 
 	private static Map<String, String> BUSINESS_STATUS_MAP = new HashMap<String, String>();
 	static {

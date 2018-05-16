@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fh.dao.DaoSupport3;
+import com.fh.dao.DaoSupport2;
 import com.fh.entity.Page;
 import com.fh.service.lottery.match.MatchManager;
 import com.fh.util.PageData;
@@ -19,8 +19,8 @@ import com.fh.util.PageData;
 @Service("matchService")
 public class MatchService implements MatchManager {
 
-	@Resource(name = "daoSupport3")
-	private DaoSupport3 dao;
+	@Resource(name = "daoSupport2")
+	private DaoSupport2 dao;
 
 	/**
 	 * 新增
@@ -60,8 +60,7 @@ public class MatchService implements MatchManager {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("MatchMapper.datalistPage",
-				page);
+		return (List<PageData>) dao.findForList("MatchMapper.datalistPage", page);
 	}
 
 	/**

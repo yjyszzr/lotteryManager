@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
  */
 public class Const {
 
-	public static final String UPLOADFILESDIR = "/data/lotteryManager/uploadFiles/"; // 文件总目录
+	public static final String UPLOADFILESDIR = "/static/cxm_files/"; // 文件总目录
 	public static final String SESSION_SECURITY_CODE = "sessionSecCode"; // 验证码
 	public static final String SESSION_USER = "sessionUser"; // session用的用户
 	public static final String SESSION_DATA_RIGHTS = "sessionDataRights"; // 用户数据权限
