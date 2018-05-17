@@ -77,7 +77,10 @@
 										<option value="c10032">搜狗</option>
 										<option value="c10033">机锋</option>
 										<option value="c10034">应用汇</option>
-										<option value="c10035">乐视</option>																			
+										<option value="c10035">乐视</option>	
+										<option value="c10036">应用宝</option>
+										<option value="c10037">木蚂蚁</option>
+										<option value="c10038">安智</option>																				
 								  	</select>
 								</td>
 							</tr>
