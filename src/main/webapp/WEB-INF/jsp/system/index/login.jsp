@@ -16,8 +16,8 @@
 <link rel="stylesheet" href="static/login/bootstrap-responsive.min.css" />
 <link rel="stylesheet" href="static/login/matrix-login.css" />
 <link href="static/login/font-awesome.css" rel="stylesheet" />
-<!-- <script type="text/javascript" src="static/login/js/jquery-1.5.1.min.js"></script> -->
-<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="static/login/js/jquery-1.5.1.min.js"></script>
+<!-- <script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script> -->
 <!-- 软键盘控件start -->
 <!-- <link href="static/login/keypad/css/framework/form.css" rel="stylesheet" type="text/css"/> -->
 <!-- 软键盘控件end -->
@@ -437,17 +437,7 @@
 				$("#password").focus();
 				return false;
 			}
-			/* if ($("#code").val() == "") {
-				$("#code").tips({
-					side : 1,
-					msg : '验证码不得为空',
-					bg : '#AE81FF',
-					time : 3
-				});
-				showfh();
-				$("#code").focus();
-				return false;
-			} */
+
 			$("#loginbox").tips({
 				side : 1,
 				msg : '正在登录 , 请稍后 ...',

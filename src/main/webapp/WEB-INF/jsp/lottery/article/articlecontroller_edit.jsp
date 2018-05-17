@@ -45,9 +45,6 @@
 														<div class="col-sm-5" style="width:100%;">
 											                <div class="ibox float-e-margins">
 											                    <div class="ibox-content" style="padding: 0px;">
-<!-- 											                        <div class="alert alert-info"> -->
-<!-- 											                          	编辑文章 -->
-<!-- 											                        </div> -->
 											                        <form action="articlecontroller/${msg }.do" name="Form" id="Form" method="post"  target="_self" class="form-horizontal m-t">
 									                        			<div id="zhongxin" style="padding-top: 13px;">
 											                        	<div class="row" style="padding:5px">
@@ -231,20 +228,15 @@
 											                                </div>
 											                                <div class="row"  style="padding:5px">
 																				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">文章内容：</label>
-												                                <div class="col-sm-9"> </div>
-											                            </div>
-											                                <div class="row"  style="padding:5px">
-												                                	<div class="ueQ313596790Que"></div>
-												                                   <script id="editor"  type="text/plain"></script>
-												                                    <div class="ueQ313596790Que"></div>
-											                            </div>
+												                                <div class="col-sm-9"></div>
+											                               </div>
+											                               <div  id="editor"></div>
 											                            <div >
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
 											                                <div class="col-sm-9">
 											                                   <a class="btn btn-mini btn-primary" onclick="save(1)" >发表</a>
 											                                   <a class="btn btn-mini btn-danger" onclick="save('2')">保存草稿</a>
 											                                   <a class="btn btn-mini btn-warming" onclick="toPreShow()">预览</a>
-<!-- 											                                   <a class="btn btn-mini btn-warming" onclick="preLook()">预览</a> -->
 											                                </div>
 											                            </div>
 											                            </div>
@@ -283,12 +275,11 @@
     <script src="plugins/fhform/js/ajaxfileupload.js"></script>
     <script src="plugins/fhform/js/jquery-ui-1.10.4.min.js"></script>
     <script src="plugins/fhform/js/beautifyhtml/beautifyhtml.js"></script>
-	<!-- 百度富文本编辑框-->
-	<script type="text/javascript" charset="utf-8">window.UEDITOR_HOME_URL = "<%=path%>/plugins/ueditor/";</script>
-	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.config.js"></script>
-	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.parse.js"></script>
-	<script type="text/javascript" charset="utf-8" src="plugins/ueditor/ueditor.all.js"></script>
-	<!-- 百度富文本编辑框-->
+	<!-- 富文本编辑框-->
+	<script src="static/ace/js/wangEditor.min.js"</script>
+ 
+	
+	<!-- 富文本编辑框-->
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
 	<script src="static/ace/js/bootbox.js"></script>
@@ -297,7 +288,24 @@
 	<!-- 上传控件 -->
 	<script src="static/ace/js/ace/elements.fileinput.js"></script>
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+
 	<script type="text/javascript">
+	   var E = window.wangEditor;
+       var editor = new E('#editor');
+       editor.customConfig.showLinkImg = false;//关闭网络上传tab
+     	editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+       editor.customConfig.uploadImgMaxLength = 1;
+       editor.customConfig.debug=true;
+       editor.customConfig.uploadFileName = 'myFileName';
+       editor.customConfig.uploadImgServer = '<%=basePath%>pictures/fileUploadForWangEditor.do';  // 上传图片到服务器
+       editor.customConfig.uploadImgHooks = {
+               customInsert: function (insertImg, result, editor) {
+                   insertImg(result.data);
+               }
+           };
+      editor.create();
+      editor.txt.append('${pd.content}');
+	
 	$(top.hangge());
 	function save(status){
 		if($("#title").val()==""){
@@ -350,9 +358,7 @@
 			return false;
 			}
 		}
-		
-		var editor = UE.getEditor('editor');
-		var content = UE.getEditor('editor').getContent();
+		var content = editor.txt.html();
 		    $("#content").val(content);
 		    $("#status").val(status);
 			$("#Form").submit();
@@ -378,11 +384,7 @@
  			$(".slt3").hide();
 		}
 	});
-// 	不能创建editor之后马上使用ue.setContent('文本内容')，要等到创建完成之后才可以使用
-	UE.getEditor('editor').ready(function() {  
-	  UE.getEditor('editor').setContent('${pd.content}');
-	});  
-
+	
 	var clickNum=0;//设置一个全局的变量；
 	function uploadThreePhoto(){
 	$('#fileUpload').trigger('click');
@@ -435,259 +437,9 @@
 		        }
 		    });
 		  }
-		
-		
-		//百度富文本
-		setTimeout("ueditor()",500);
-		function ueditor(){
-			UE.getEditor('editor');
-		}
-	</script>
-	
-	<script>
-	function saveInnerHtml(status){
-		var editor = UE.getEditor('editor');
-		var content = UE.getEditor('editor').getContent();
-		var article_id = $("#article_id").val();
-		var title = $("#title").val();
-		var author = $("#author").val();
-		var video_url = $("#video_url").val();
-		var extend_cat = $("input[name='extend_cat']:checked").val();
-		var is_original = $("input[name='is_original']:checked").val();
-		var related_team = $("input[name='add_label1']:checked").val();
-		var label_defaults = $("input[name='add_label2']:checked").val();
-		var photosNum = $("input[name='photosNum']:checked").val();
-		var article_thumb1 =$("#article_thumb1").val();
-		var article_thumb2 =$("#article_thumb2").val();
-		var article_thumb3 =$("#article_thumb3").val();
- 			$.ajax({
-		   	 		type: "POST",
-    		       	url: '<%=basePath%>articlecontroller/saveOrUpdate.do',
-		        	data: {
-		        					article_id:article_id,
-				        			content:content,
-					        		title:title,
-					        	    author:author,
-					        	   	video_url:video_url,
-					        	   	extend_cat:extend_cat,
-					        	   	is_original:is_original,
-					        	   	related_team:related_team,
-					        	   	label_defaults:label_defaults,
-					        	   	status:status,
-					        	   	photosNum:photosNum,
-					        	   	article_thumb1:article_thumb1,
-					        	   	article_thumb2:article_thumb2,
-					        	   	article_thumb3:article_thumb3
-			        	   		},
-				    dataType:'json',
-				    cache: false,
-				    success: function(data){
-				       if(data.result){
-				    	   	top.Dialog.close();
-							top.jzts();
-							$("#Form").submit();
-				       }
-				    },error:function(e){
-				    	alert(JSON.stringify(e))
-				    }
-			    });
-			}
-	
-	//过滤ueditor
-	var ueditorHtml = "";
-	function getUeditorFormHtml(html,msg,isgx){
-		var arryUe = html.split('<div class="ueQ313596790Que"></div>');
-		if(arryUe.length == 3){
-			var uejscode = "<script id=\"editor\" type=\"text/plain\" style=\"width:96%;height:200px;\"><\/script>";
-			if(msg == '1'){
-				if(isgx == '2'){
-					ueditorHtml = arryUe[1];
-					return arryUe[0] + '<div class="ueQ313596790Que"></div>' + uejscode + '<div class="ueQ313596790Que"></div>' + arryUe[2];
-				}else{
-					return arryUe[0] + '<div class="ueQ313596790Que"></div>' + ueditorHtml + '<div class="ueQ313596790Que"></div>' + arryUe[2];
-				}
-			}else{
-				return arryUe[0] + uejscode + arryUe[2];
-			}
-		}else{
-			return html;
-		}
-	}
-	
-	//过滤下拉框
-	var selectHtml = "";
-	function getSelectFormHtml(html,msg,isgx){
-		var arrySe = html.split('<div class="selQ313596790Qsel"></div>');
-		if(arrySe.length == 3){
-			var selectcode ='<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择">'+
-								'<option value=""></option>'+
-								'<option value="">选项一</option>'+
-								'<option value="">选项二</option>'+
-								'<option value="">选项三</option>'+
-						  	'</select>';
-			selectcode = selectHtml == ''?selectcode:selectHtml;
-			if(msg == '1'){
-				if(isgx == '2'){
-					return arrySe[0] + '<div class="selQ313596790Qsel"></div>' + selectcode + '<div class="selQ313596790Qsel"></div>' + arrySe[2];
-				}else{
-					selectHtml = arrySe[1];
-					return html;
-				}
-			}else{
-				return arrySe[0] + selectcode + arrySe[2];
-			}
-		}else{
-			return html;
-		}
-	}
-	
-	//过滤file上传控件
-	var fileHtml = "";
-	function getFileFormHtml(html,msg,isgx){
-		var arryFile = html.split('<div class="fileQ313596790Qfile"></div>');
-		if(arryFile.length == 3){
-			var filecode = "<input type=\"file\" id=\"tp\" name=\"tp\" />";
-			if(msg == '1'){
-				if(isgx == '2'){
-					fileHtml = arryFile[1];
-					return arryFile[0] + '<div class="fileQ313596790Qfile"></div>' + filecode + '<div class="fileQ313596790Qfile"></div>' + arryFile[2];
-				}else{
-					return arryFile[0] + '<div class="fileQ313596790Qfile"></div>' + fileHtml + '<div class="fileQ313596790Qfile"></div>' + arryFile[2];
-				};
-			}else{
-				return arryFile[0] + filecode + arryFile[2];
-			}
-		}else{
-			return html;
-		};
-	}
-	
-    $(document).ready(function() {
-    setup_draggable();
-    $("#n-columns").on("change",
-    function() {
-        var v = $(this).val();
-        if (v === "1") {
-            var $col = $(".form-body .col-md-12").toggle(true);
-            $(".form-body .col-md-6 .draggable").each(function(i, el) {
-                $(this).remove().appendTo($col);
-            });
-            $(".form-body .col-md-6").toggle(false);
-        } else {
-            var $col = $(".form-body .col-md-6").toggle(true);
-            $(".form-body .col-md-12 .draggable").each(function(i, el) {
-                $(this).remove().appendTo(i % 2 ? $col[1] : $col[0]);
-            });
-            $(".form-body .col-md-12").toggle(false);
-        };
-    });
-    $("#copy-to-clipboard").on("click",
-	    function() {
-	        var $copy = $(".form-body").clone().appendTo(document.body);
-	        $copy.find(".tools, :hidden").remove();
-	        $.each(["draggable", "droppable", "sortable", "dropped", "ui-sortable", "ui-draggable", "ui-droppable", "form-body"],
-	        function(i, c) {
-	            $copy.find("." + c).removeClass(c).removeAttr("style");
-	        });
-	        var html = html_beautify($copy.html());
-	        html = getUeditorFormHtml(html,'2','2');
-	        html = getSelectFormHtml(html,'2','2');
-	        html = getFileFormHtml(html,'2','2');
-	        $copy.remove();
-	        $modal = get_modal(html).modal("show");
-	        $modal.find(".btn").remove();
-	        $('#myHtml').val(html);
-	        $modal.find("#myBtn").html("<button type=\"submit\" class=\"btn btn-primary\" data-clipboard-text=\"testing\" onclick=\"downloadCode($('#myHtml').val())\">下载代码</button>");
-	        $modal.find(".modal-title").html("生成的HTML代码");
-	        $modal.find(":input:first").select().focus();
-	        return false;
-	    });
-	});
-	var setup_draggable = function() {
-	    $(".draggable").draggable({
-	        appendTo: "body",
-	        helper: "clone"
-	    });
-	    $(".droppable").droppable({
-	        accept: ".draggable",
-	        helper: "clone",
-	        hoverClass: "droppable-active",
-	        drop: function(event, ui) {
-	            $(".empty-form").remove();
-	            var $orig = $(ui.draggable);
-	            if (!$(ui.draggable).hasClass("dropped")) {
-	                var $el = $orig.clone().addClass("dropped").css({
-	                    "position": "static",
-	                    "left": null,
-	                    "right": null
-	                }).appendTo(this);
-	                var id = $orig.find(":input").attr("id");
-	                if (id) {
-	                    id = id.split("-").slice(0, -1).join("-") + "-" + (parseInt(id.split("-").slice( - 1)[0]) + 1);
-	                    $orig.find(":input").attr("id", id);
-	                    $orig.find("label").attr("for", id);
-	                }
-	                $('<p class="tools col-sm-12 col-sm-offset-3">						<a class="edit-link">编辑HTML<a> | 						<a class="remove-link">移除</a></p>').appendTo($el);
-	            } else {
-	                if ($(this)[0] != $orig.parent()[0]) {
-	                    var $el = $orig.clone().css({
-	                        "position": "static",
-	                        "left": null,
-	                        "right": null
-	                    }).appendTo(this);
-	                    $orig.remove();
-	                }
-	            }
-	        }
-	    }).sortable();
-	};
-	var get_modal = function(content) {
-	    var modal = $('<div class="modal" style="overflow: auto;" tabindex="-1">	<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a><h4 class="modal-title">编辑HTML</h4></div><div class="modal-body ui-front">	<textarea id="myHtml" class="form-control" 	style="min-height: 200px; margin-bottom: 10px;font-family: Monaco, Fixed">' + content + '</textarea><div id="myBtn"><button class="btn btn-success">更新HTML</button></div></div>				</div></div></div>').appendTo(document.body);
-	    return modal;
-	};
-	$(document).on("click", ".edit-link",
-	function(ev) {
-	    var $el = $(this).parent().parent();
-	    var $el_copy = $el.clone();
-	    var $edit_btn = $el_copy.find(".edit-link").parent().remove();
-	    var memberHtml = html_beautify($el_copy.html());
-	    var editHtml = getUeditorFormHtml(memberHtml,'1','2');
-	    	editHtml = getSelectFormHtml(editHtml,'1','2');
-	    	editHtml = getFileFormHtml(editHtml,'1','2');
-	    var $modal = get_modal(editHtml).modal("show");
-	    $modal.find(":input:first").focus();
-	    $modal.find(".btn-success").click(function(ev2) {
-	        var html = $modal.find("textarea").val();
-	        html = getUeditorFormHtml(html,'1','1');
-	        getSelectFormHtml(html,'1','1');
-	        html = getFileFormHtml(html,'1','1');
-	        if (!html) {
-	            $el.remove();
-	        } else {
-	            $el.html(html);
-	            $edit_btn.appendTo($el);
-	        }
-	        $modal.modal("hide");
-	        return false;
-	    });
-	});
-	$(document).on("click", ".remove-link",
-	function(ev) {
-	    $(this).parent().parent().remove();
-	});
-    
-	 
-	
-// 	function preLook(){
-//   	var content = UE.getEditor('editor').getContent();
-// 		localStorage.setItem('content',content);
-//         window.open('http://localhost:8080/lotteryManager/main/test.html','','height=800,width=400,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')  
-// 	}
-	
-	
 	//预览
 	function toPreShow(){
-		var toPreShowContent = UE.getEditor('editor').getContent();
+		var toPreShowContent = editor.txt.html();
 		var str = '<style type="text/css">#mydiv{margin:0 auto;  text-align:center; width:375px; height:667px; border:1px solid red; overflow:hidden; } #mydiv img{ max-width:375px; max-height:200px;overflow:hidden; }</style>';
 		var toPreShowContentValue= str+"<div id='mydiv'  style='OVERFLOW-Y: auto; OVERFLOW-X:hidden;'>" +  toPreShowContent +"</div>";
 		bootbox.confirm(toPreShowContentValue, function(result) {
