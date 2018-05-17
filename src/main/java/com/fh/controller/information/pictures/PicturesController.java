@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -178,31 +179,33 @@ public class PicturesController extends BaseController {
 		map.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 		map.put("MASTER_ID", "1"); // 附属与
 		map.put("BZ", "图片管理处上传"); // 备注
+		map.put("errno", "0");
+		String imgPath = TextConfig.URL_SHOW_IMG_CODE + "uploadImgs/" + ffile + "/" + fileName; // 路径
+		map.put("data", imgPath); // 备注
 		return map;
 	}
 
-	@RequestMapping(value = "/fileUploadForWangEditor")
+	@RequestMapping(value = "/fileUploadForWangEditor", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> fileUploadForWangEditor(@RequestParam(required = false) MultipartFile file) throws Exception {
+	public Object fileUploadForWangEditor(@RequestParam(value = "myFileName") MultipartFile file) throws Exception {
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
 		logBefore(logger, Jurisdiction.getUsername() + "新增图片");
-		Map<String, String> map = new HashMap<String, String>();
 		String ffile = DateUtil.getDays(), fileName = "";
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			if (null != file && !file.isEmpty()) {
-				// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
-				// + ffile; // 文件上传路径
 				String filePath = Const.FILEPATHIMG + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
 			}
 		}
-		map.put("errno", "0");
-		map.put("data", TextConfig.URL_SHOW_IMG_CODE + "uploadImgs/" + ffile + "/" + fileName); // 路径
-		return map;
+		String data = TextConfig.URL_SHOW_IMG_CODE + "uploadImgs/" + ffile + "/" + fileName; // 路径
+		// String data = "{'errno':0,'data':['" + imgPath + "']}";
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("data", data);// 这里应该是项目路径
+		return map;// 将图片地址返回
 	}
 
 	/**

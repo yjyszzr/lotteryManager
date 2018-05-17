@@ -57,12 +57,12 @@ public class ActivityBonusController extends BaseController {
 		if ("0".equals(pd.getString("bonus_number_type"))) {
 			pd.put("bonus_number", "0");
 		} else {
-			pd.put("bonus_number", pd.getString("bonus_number_type"));
+			pd.put("bonus_number", pd.getString("bonus_number"));
 		}
 		if ("0".equals(pd.getString("min_amount"))) {
 			pd.put("min_goods_amount", "0");
 		} else {
-			pd.put("min_goods_amount", pd.getString("min_amount"));
+			pd.put("min_goods_amount", pd.getString("min_goods_amount"));
 		}
 
 		pd.put("bonus_id", "0"); // id
