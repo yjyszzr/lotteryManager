@@ -66,12 +66,14 @@
 											<td class='center'>${var.channel_name}</td>
 											
 											<td class='center'>
-												<c:if test="${var.turn_on == 1 }">
+											<c:choose>
+												<c:when test="${var.turn_on == 1 }">
 												开
-												</c:if>
-												<c:if test="${var.turn_on == 0 }">
+												</c:when>
+												<c:otherwise>
 												关
-												</c:if>
+												</c:otherwise>
+											</c:choose>
 											</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">

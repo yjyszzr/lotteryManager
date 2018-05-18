@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 
 import org.apache.http.util.TextUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -41,7 +42,9 @@ import com.fh.util.SmsUtil;
 @Controller
 @RequestMapping(value = "/usermanagercontroller")
 public class UserManagerControllerController extends BaseController {
-
+	
+	private final static String USER_SESSION_PREFIX = "US:";
+	
 	String menuUrl = "usermanagercontroller/list.do"; // 菜单地址(权限用)
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
@@ -51,6 +54,8 @@ public class UserManagerControllerController extends BaseController {
 	private UserRealManagerService userrealmanagerService;
 	@Resource(name = "userbankmanagerService")
 	private UserBankManagerService userbankmanagerService;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
 	/**
 	 * 保存
@@ -458,6 +463,9 @@ public class UserManagerControllerController extends BaseController {
 			}
 		}
 		usermanagercontrollerService.edit(userEntity);
+		
+		stringRedisTemplate.delete(USER_SESSION_PREFIX + Integer.valueOf(userEntity.getString("user_id")));
+		
 		mv = getDetailView(mv);
 		return mv;
 	}
