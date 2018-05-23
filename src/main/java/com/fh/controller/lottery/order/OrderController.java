@@ -21,7 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.fh.common.TextConfig;
+import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
+import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.util.AppUtil;
@@ -41,6 +43,9 @@ public class OrderController extends BaseController {
 	String menuUrl = "order/list.do"; // 菜单地址(权限用)
 	@Resource(name = "orderService")
 	private OrderManager orderService;
+	
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
 
 	/**
 	 * 保存
@@ -374,6 +379,7 @@ public class OrderController extends BaseController {
 	 */
 	@RequestMapping(value = "/manualAward")
 	public ModelAndView manualAward() throws Exception {
+		String url1 = urlConfig.getManualAuditUrl();
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -392,7 +398,7 @@ public class OrderController extends BaseController {
 			String value = "{'userIdAndRewardList':";
 			String reqStr = JSON.toJSONString(userIdAndRewardList);
 			String stra = value + reqStr + "}";
-			ManualAuditUtil.ManualAuditUtil(stra, TextConfig.URL_MANUAL_AUDIT_CODE, true);
+			ManualAuditUtil.ManualAuditUtil(stra, urlConfig.getManualAuditUrl(), true);
 			mv.addObject("msg", "success");
 			mv.setViewName("save_result");
 			return mv;

@@ -188,6 +188,11 @@
     	<property name="dataSource" ref="dataSource3"></property>
  	</bean> 
  	
- 	
+ 	<bean name="urlConfig" class="com.fh.config.URLConfig">
+    	<property name="serviceSmsUrl" value="${serviceSmsUrl}"></property>
+        <property name="imgShowUrl" value="${imgShowUrl}"></property>
+        <property name="manualAuditUrl" value="${manualAuditUrl}"></property>
+        <property name="manualRewardUrl" value="${manualRewardUrl}"></property>
+    </bean>
  	<!-- QQ313596790 -->
 </beans>

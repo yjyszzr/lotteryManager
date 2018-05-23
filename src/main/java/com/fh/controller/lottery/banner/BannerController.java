@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.common.TextConfig;
+import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.banner.BannerManager;
@@ -32,6 +33,9 @@ public class BannerController extends BaseController {
 	String menuUrl = "banner/list.do"; // 菜单地址(权限用)
 	@Resource(name = "bannerService")
 	private BannerManager bannerService;
+	
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
 
 	/**
 	 * 保存
@@ -145,7 +149,7 @@ public class BannerController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = varList.get(i);
 			String imgValue = pageData.getString("banner_image");
-			pageData.put("banner_image", TextConfig.URL_SHOW_IMG_CODE + imgValue);
+			pageData.put("banner_image", urlConfig.getImgShowUrl()+ imgValue);
 		}
 		mv.setViewName("lottery/banner/banner_list");
 		mv.addObject("varList", varList);
@@ -183,7 +187,7 @@ public class BannerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = bannerService.findById(pd); // 根据ID读取
-		pd.put("banner_image_show", TextConfig.URL_SHOW_IMG_CODE + pd.getString("banner_image"));
+		pd.put("banner_image_show", urlConfig.getImgShowUrl()+ pd.getString("banner_image"));
 		mv.setViewName("lottery/banner/banner_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

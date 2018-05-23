@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.common.TextConfig;
+import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.information.pictures.PicturesManager;
@@ -49,6 +50,8 @@ public class PicturesController extends BaseController {
 	@Resource(name = "picturesService")
 	private PicturesManager picturesService;
 
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
 	/**
 	 * 列表
 	 * 
@@ -175,12 +178,12 @@ public class PicturesController extends BaseController {
 		map.put("TITLE", "图片"); // 标题
 		map.put("NAME", fileName); // 文件名
 		map.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
-		map.put("IMG_SHOW_PATH", TextConfig.URL_SHOW_IMG_CODE + "uploadImgs/" + ffile + "/" + fileName); // 路径
+		map.put("IMG_SHOW_PATH", urlConfig.getImgShowUrl() + "uploadImgs/" + ffile + "/" + fileName); // 路径
 		map.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 		map.put("MASTER_ID", "1"); // 附属与
 		map.put("BZ", "图片管理处上传"); // 备注
 		map.put("errno", "0");
-		String imgPath = TextConfig.URL_SHOW_IMG_CODE + "uploadImgs/" + ffile + "/" + fileName; // 路径
+		String imgPath = urlConfig.getImgShowUrl() + "uploadImgs/" + ffile + "/" + fileName; // 路径
 		map.put("data", imgPath); // 备注
 		return map;
 	}
@@ -201,7 +204,7 @@ public class PicturesController extends BaseController {
 				System.out.println("上传失败");
 			}
 		}
-		String data = TextConfig.URL_SHOW_IMG_CODE + "uploadImgs/" + ffile + "/" + fileName; // 路径
+		String data = urlConfig.getImgShowUrl() + "uploadImgs/" + ffile + "/" + fileName; // 路径
 		// String data = "{'errno':0,'data':['" + imgPath + "']}";
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("data", data);// 这里应该是项目路径

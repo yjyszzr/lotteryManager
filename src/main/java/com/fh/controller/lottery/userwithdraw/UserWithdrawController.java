@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.fh.common.TextConfig;
+import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.userwithdraw.UserWithdrawManager;
@@ -41,6 +42,9 @@ public class UserWithdrawController extends BaseController {
 	String menuUrl = "userwithdraw/list.do"; // 菜单地址(权限用)
 	@Resource(name = "userwithdrawService")
 	private UserWithdrawManager userwithdrawService;
+	
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
 
 	/**
 	 * 保存
@@ -220,7 +224,7 @@ public class UserWithdrawController extends BaseController {
 			// userwithdrawService.edit(pd);
 		}
 		String reqStr = JSON.toJSONString(reqCashEntity);
-		ManualAuditUtil.ManualAuditUtil(reqStr, TextConfig.URL_MANUAL_AWARD_CODE, true);
+		ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getManualAuditUrl(), true);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;

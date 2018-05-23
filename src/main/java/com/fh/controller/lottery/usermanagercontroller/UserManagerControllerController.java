@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.sms.RspSmsCodeEntity;
@@ -56,6 +57,8 @@ public class UserManagerControllerController extends BaseController {
 	private UserBankManagerService userbankmanagerService;
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
 
 	/**
 	 * 保存
@@ -507,8 +510,8 @@ public class UserManagerControllerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String mobile = pd.getString("mobile");
-		String smsCode = pd.getString("smscode");
-		RspSmsCodeEntity rspEntity = SmsUtil.sendMsgV3(mobile, smsCode);
+		String smsCode = pd.getString("smsCode");
+		RspSmsCodeEntity rspEntity = SmsUtil.sendMsgV3(mobile,smsCode,urlConfig.getServiceSmsUrl());
 		pd.put("code", rspEntity.code);
 		pd.put("data", rspEntity.data);
 		pd.put("msg", rspEntity.msg);

@@ -10,6 +10,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
@@ -21,6 +23,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import com.fh.common.TextConfig;
+import com.fh.config.URLConfig;
 import com.fh.entity.sms.ReqSmsCodeEntity;
 import com.fh.entity.sms.RspSmsCodeEntity;
 import com.google.gson.Gson;   
@@ -32,6 +35,8 @@ import com.google.gson.Gson;
  * @version
  */
 public class SmsUtil {
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
 	
 	public static void main(String [] args) {
 		
@@ -39,7 +44,7 @@ public class SmsUtil {
 		//sendSmsAll(List<PageData> list)
 		
 		//sendSms1();
-		RspSmsCodeEntity rspEntity = sendMsgV3("18002571689","123456");
+		RspSmsCodeEntity rspEntity = sendMsgV3("18002571689","","123456");
 		System.out.println("rspEntity:" + rspEntity);
 	}
 
@@ -225,12 +230,12 @@ public class SmsUtil {
 	 * @param code
 	 * @return
 	 */
-	public static final RspSmsCodeEntity sendMsgV3(String phone,String code) {
+	public static final RspSmsCodeEntity sendMsgV3(String phone,String code,String url) {
 		RspSmsCodeEntity rspEntity = new RspSmsCodeEntity();
 		ReqSmsCodeEntity reqEntity = new ReqSmsCodeEntity(phone,code);
 		Gson gson = new Gson();
 		String reqStr = gson.toJson(reqEntity);
-		String rspStr = SmsUtil.SMS(reqStr,TextConfig.URL_SMS_CODE,true);
+		String rspStr = SmsUtil.SMS(reqStr,url,true);
 		if(!TextUtils.isEmpty(rspStr)) {
 			rspEntity = gson.fromJson(rspStr,RspSmsCodeEntity.class);
 		}
