@@ -8,5 +8,7 @@ public class ReqOrdeEntity {
 	public double reward;
 	public int userId;
 	public double userMoney;
+	public double betMoney;
+	public String betTime;
 	public List<ReqOrdeEntity> userIdAndRewardList;
 }

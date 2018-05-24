@@ -27,6 +27,7 @@ import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ManualAuditUtil;
@@ -393,6 +394,11 @@ public class OrderController extends BaseController {
 			reqOrdeEntity.reward = reward;
 			reqOrdeEntity.userId = userId;
 			reqOrdeEntity.userMoney = 0;
+			reqOrdeEntity.betMoney = Double.parseDouble(orderPd.getString("ticket_amount"));
+			Integer payTimeTmp = Integer.valueOf(orderPd.getString("pay_time"));
+			String payTime = DateUtilNew.getCurrentTimeString(Long.valueOf(payTimeTmp),DateUtilNew.datetimeFormat);
+			reqOrdeEntity.betTime = payTime;
+			
 			List<ReqOrdeEntity> userIdAndRewardList = new ArrayList<ReqOrdeEntity>();
 			userIdAndRewardList.add(reqOrdeEntity);
 			String value = "{'userIdAndRewardList':";
