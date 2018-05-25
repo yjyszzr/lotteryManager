@@ -86,6 +86,7 @@
 									 <div class="col-sm-9">
 									    <select  name="show_position" id="show_position" value="${pd.show_position}"  style="width:235px;">
 									        <option value="0" <c:if test="${pd.show_position==0}">selected</c:if>>首页轮播图</option>
+									    	<option value="1" <c:if test="${pd.show_position==1}">selected</c:if>>发现页轮播图</option>
 									    </select>
 								</div>
                             </div>
