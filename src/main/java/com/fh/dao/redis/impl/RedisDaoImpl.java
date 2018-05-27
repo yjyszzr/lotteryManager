@@ -149,6 +149,13 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 		return set;
 	}
 	
+	//删除某个db下的key
+	public void delRedisKey(String key){
+		Jedis jedis = getJedisByDBIndex();
+		jedis.del(key);
+		jedis.close();
+	}
+	
 	/**删除
 	 * (non-Javadoc)
 	 * @see com.fh.dao.redis.RedisDao#delete(java.lang.String)
@@ -212,6 +219,26 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
             }  
         });  
         return result; 
+	}
+
+	/**获取Jedis
+	 * @return
+	 */
+	public Jedis getJedisByDBIndex(){
+		Properties pros = getPprVue();
+		String isopen = pros.getProperty("redis.isopen");	//地址
+		String host = pros.getProperty("redis.host");		//地址
+		String port = pros.getProperty("redis.port");		//端口
+		String pass = pros.getProperty("redis.pass");		//密码
+		String dbIndex = pros.getProperty("redis.database");
+		if("yes".equals(isopen)){
+			Jedis jedis = new Jedis(host,Integer.parseInt(port));
+			jedis.auth(pass);
+			jedis.select(Integer.valueOf(dbIndex));
+			return jedis;
+		}else{
+			return null;
+		}
 	}
 	
 	/**获取Jedis

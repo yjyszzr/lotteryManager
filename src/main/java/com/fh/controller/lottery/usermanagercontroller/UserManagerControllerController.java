@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
+import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
 import com.fh.entity.sms.RspSmsCodeEntity;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
@@ -59,6 +60,9 @@ public class UserManagerControllerController extends BaseController {
     private StringRedisTemplate stringRedisTemplate;
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
+	
+	@Resource(name = "redisDaoImpl")
+	private RedisDaoImpl redisDaoImpl;
 
 	/**
 	 * 保存
@@ -465,9 +469,10 @@ public class UserManagerControllerController extends BaseController {
 				}
 			}
 		}
-		usermanagercontrollerService.edit(userEntity);
 		
-		stringRedisTemplate.delete(USER_SESSION_PREFIX + Integer.valueOf(userEntity.getString("user_id")));
+		redisDaoImpl.delRedisKey(USER_SESSION_PREFIX + Integer.valueOf(userEntity.getString("user_id")));
+		
+		usermanagercontrollerService.edit(userEntity);
 		
 		mv = getDetailView(mv);
 		return mv;
