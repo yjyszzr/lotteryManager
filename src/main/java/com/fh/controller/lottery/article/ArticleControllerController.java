@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fh.common.TextConfig;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
@@ -37,7 +36,7 @@ public class ArticleControllerController extends BaseController {
 
 	@Resource(name = "picturesService")
 	private PicturesManager picturesService;
-	
+
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
 
@@ -196,7 +195,7 @@ public class ArticleControllerController extends BaseController {
 			} else if (strArray.length > 1) {
 				for (int i = 0; i < strArray.length; i++) {
 					pd.put("article_thumb" + (i + 1), strArray[i]);
-					pd.put("article_thumb" + (i + 1) + "_show", urlConfig.getImgShowUrl()+ strArray[i]);// 三张图做展示用
+					pd.put("article_thumb" + (i + 1) + "_show", urlConfig.getImgShowUrl() + strArray[i]);// 三张图做展示用
 				}
 			}
 		}
@@ -239,6 +238,7 @@ public class ArticleControllerController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("stick_time", DateUtilNew.getCurrentTimeLong());
 		articlecontrollerService.updateByKey(pd);
 		out.write("success");
 		out.close();

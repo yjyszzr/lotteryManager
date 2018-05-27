@@ -176,8 +176,14 @@
 		<if test="status != null and status!= ''"> 
 					status = #{status} 
 		</if>
-		<if test="is_stick != null and is_stick!=''"> 
+		<if test="stick_time != null and stick_time!=''"> 
 			<if test="status != null and status!= ''"> 
+					,
+			</if>
+					stick_time = #{stick_time}
+		</if>
+		<if test="is_stick != null and is_stick!=''"> 
+			<if test="stick_time != null and stick_time!= ''"> 
 					,
 			</if>
 					is_stick = #{is_stick}

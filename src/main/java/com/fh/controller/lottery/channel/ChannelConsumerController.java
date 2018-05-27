@@ -1,7 +1,6 @@
 package com.fh.controller.lottery.channel;
 
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,25 +21,22 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.lottery.channel.ChannelManager;
-import com.fh.service.lottery.channel.ChannelOptionLogManager;
+import com.fh.service.lottery.channel.ChannelConsumerManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /**
- * 说明：渠道模块 创建人：FH Q313596790 创建时间：2018-05-18
+ * 说明：渠道消费者 创建人：FH Q313596790 创建时间：2018-05-27
  */
 @Controller
-@RequestMapping(value = "/channel")
-public class ChannelController extends BaseController {
+@RequestMapping(value = "/channelconsumer")
+public class ChannelConsumerController extends BaseController {
 
-	String menuUrl = "channel/list.do"; // 菜单地址(权限用)
-	@Resource(name = "channelService")
-	private ChannelManager channelService;
-	@Resource(name = "channeloptionlogService")
-	private ChannelOptionLogManager channeloptionlogService;
+	String menuUrl = "channelconsumer/list.do"; // 菜单地址(权限用)
+	@Resource(name = "channelconsumerService")
+	private ChannelConsumerManager channelconsumerService;
 
 	/**
 	 * 保存
@@ -50,18 +46,20 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/save")
 	public ModelAndView save() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "新增Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "新增ChannelConsumer");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// pd.put("channel_id", this.get32UUID()); //主键
-		pd.put("channel_id", "0"); // 渠道ID
-		pd.put("channel_status", "0"); // 状态
-		pd.put("add_time", "0"); // 时间
-		channelService.save(pd);
+		// pd.put("consumer_id", this.get32UUID()); //主键
+		pd.put("consumer_id", "0"); // 消费者Id
+		pd.put("channel_distributor_id", "0"); // 分销店员ID
+		pd.put("user_id", "0"); // 消费者用户Id
+		pd.put("consumer_ip", ""); // IP
+		pd.put("device_code", ""); // 设备号
+		channelconsumerService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -75,13 +73,13 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/delete")
 	public void delete(PrintWriter out) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "删除Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "删除ChannelConsumer");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			return;
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		channelService.delete(pd);
+		channelconsumerService.delete(pd);
 		out.write("success");
 		out.close();
 	}
@@ -94,14 +92,14 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/edit")
 	public ModelAndView edit() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "修改Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "修改ChannelConsumer");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
 			return null;
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		channelService.edit(pd);
+		channelconsumerService.edit(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -115,7 +113,7 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "列表Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "列表ChannelConsumer");
 		// if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		// //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
@@ -126,29 +124,8 @@ public class ChannelController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData> varList = channelService.list(page); // 列出Channel列表
-
-		PageData pda = new PageData();
-		List<PageData> optionlogList = channeloptionlogService.listAll(pda);
-
-		for (int i = 0; i < varList.size(); i++) {
-			BigDecimal big = new BigDecimal(0);
-			PageData channel = varList.get(i);
-			for (int j = 0; j < optionlogList.size(); j++) {
-				PageData optionlog = varList.get(i);
-				if (channel.getString("channel_id").equals(optionlog.getString("channel_id"))) {
-					if (null != optionlog.getString("option_amount") && !"".equals(optionlog.getString("option_amount"))) {
-						BigDecimal big_option_amount = new BigDecimal(optionlog.getString("option_amount"));
-						big.add(big_option_amount);
-					}
-				}
-			}
-			BigDecimal channelRate = new BigDecimal(channel.getString("commission_rate"));
-			varList.get(i).put("total_amount", big);
-			varList.get(i).put("total_amount_extract", big.multiply(channelRate));
-		}
-
-		mv.setViewName("lottery/channel/channel_list");
+		List<PageData> varList = channelconsumerService.list(page); // 列出ChannelConsumer列表
+		mv.setViewName("lottery/channelconsumer/channelconsumer_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
@@ -166,7 +143,7 @@ public class ChannelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		mv.setViewName("lottery/channel/channel_edit");
+		mv.setViewName("lottery/channelconsumer/channelconsumer_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
@@ -183,8 +160,8 @@ public class ChannelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = channelService.findById(pd); // 根据ID读取
-		mv.setViewName("lottery/channel/channel_edit");
+		pd = channelconsumerService.findById(pd); // 根据ID读取
+		mv.setViewName("lottery/channelconsumer/channelconsumer_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
@@ -199,7 +176,7 @@ public class ChannelController extends BaseController {
 	@RequestMapping(value = "/deleteAll")
 	@ResponseBody
 	public Object deleteAll() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "批量删除Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "批量删除ChannelConsumer");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			return null;
 		} // 校验权限
@@ -210,7 +187,7 @@ public class ChannelController extends BaseController {
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			channelService.deleteAll(ArrayDATA_IDS);
+			channelconsumerService.deleteAll(ArrayDATA_IDS);
 			pd.put("msg", "ok");
 		} else {
 			pd.put("msg", "no");
@@ -228,7 +205,7 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/excel")
 	public ModelAndView exportExcel() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "导出Channel到excel");
+		logBefore(logger, Jurisdiction.getUsername() + "导出ChannelConsumer到excel");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
 			return null;
 		}
@@ -237,35 +214,31 @@ public class ChannelController extends BaseController {
 		pd = this.getPageData();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("渠道ID"); // 1
-		titles.add("渠道名称"); // 2
-		titles.add("渠道号"); // 3
-		titles.add("佣金比例"); // 4
-		titles.add("渠道类型"); // 5
-		titles.add("渠道联系人"); // 6
-		titles.add("电话"); // 7
-		titles.add("地址"); // 8
-		titles.add("状态"); // 9
-		titles.add("时间"); // 10
-		titles.add("是否删除"); // 11
-		titles.add("备注"); // 12
+		titles.add("消费者Id"); // 1
+		titles.add("分销店员ID"); // 2
+		titles.add("消费者用户Id"); // 3
+		titles.add("消费者名称"); // 4
+		titles.add("电话"); // 5
+		titles.add("IP"); // 6
+		titles.add("添加时间"); // 7
+		titles.add("设备号"); // 8
+		titles.add("是否删除"); // 9
+		titles.add("最后登录时间"); // 10
 		dataMap.put("titles", titles);
-		List<PageData> varOList = channelService.listAll(pd);
+		List<PageData> varOList = channelconsumerService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("channel_id").toString()); // 1
-			vpd.put("var2", varOList.get(i).getString("channel_name")); // 2
-			vpd.put("var3", varOList.get(i).getString("channel_num")); // 3
-			vpd.put("var4", varOList.get(i).get("commission_rate").toString()); // 4
-			vpd.put("var5", varOList.get(i).get("channel_type").toString()); // 5
-			vpd.put("var6", varOList.get(i).getString("channel_contact")); // 6
-			vpd.put("var7", varOList.get(i).getString("channel_mobile")); // 7
-			vpd.put("var8", varOList.get(i).getString("channel_address")); // 8
-			vpd.put("var9", varOList.get(i).get("channel_status").toString()); // 9
-			vpd.put("var10", varOList.get(i).get("add_time").toString()); // 10
-			vpd.put("var11", varOList.get(i).get("deleted").toString()); // 11
-			vpd.put("var12", varOList.get(i).getString("remark")); // 12
+			vpd.put("var1", varOList.get(i).get("consumer_id").toString()); // 1
+			vpd.put("var2", varOList.get(i).get("channel_distributor_id").toString()); // 2
+			vpd.put("var3", varOList.get(i).get("user_id").toString()); // 3
+			vpd.put("var4", varOList.get(i).getString("user_name")); // 4
+			vpd.put("var5", varOList.get(i).getString("mobile")); // 5
+			vpd.put("var6", varOList.get(i).getString("consumer_ip")); // 6
+			vpd.put("var7", varOList.get(i).get("add_time").toString()); // 7
+			vpd.put("var8", varOList.get(i).getString("device_code")); // 8
+			vpd.put("var9", varOList.get(i).get("deleted").toString()); // 9
+			vpd.put("var10", varOList.get(i).get("frist_login_time").toString()); // 10
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

@@ -1,12 +1,9 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +29,7 @@
 							
 						<!-- 检索  -->
 						<form action="channeldistributor/list.do" method="post" name="Form" id="Form">
+									<input type="hidden"  id="channel_id" name="channel_id" value="${channelId }"/>
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -63,21 +61,23 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
-									<th class="center" style="width:50px;">序号</th>
-									<th class="center">分销员Id</th>
-									<th class="center">渠道Id</th>
-									<th class="center">用户Id</th>
+<!-- 									<th class="center" style="width:35px;"> -->
+<!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
+<!-- 									</th> -->
+<!-- 									<th class="center" style="width:50px;">序号</th> -->
+<!-- 									<th class="center">分销员Id</th> -->
+<!-- 									<th class="center">渠道Id</th> -->
+									<th class="center">渠道名称</th>
+<!-- 									<th class="center">用户Id</th> -->
 									<th class="center">用户名</th>
 									<th class="center">渠道分销号</th>
 									<th class="center">电话</th>
+									<th class="center">总销售额</th>
 									<th class="center">分销佣金比例</th>
-									<th class="center">渠道名称</th>
+									<th class="center">销售提成</th>
 									<th class="center">添加时间</th>
 									<th class="center">备注</th>
-									<th class="center">是否删除</th>
+<!-- 									<th class="center">是否删除</th> -->
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -89,21 +89,23 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.channel_distributor_id}" class="ace" /><span class="lbl"></span></label>
-											</td>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.channel_distributor_id}</td>
-											<td class='center'>${var.channel_id}</td>
-											<td class='center'>${var.user_id}</td>
-											<td class='center'>${var.user_name}</td>
+<!-- 											<td class='center'> -->
+<%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.channel_distributor_id}" class="ace" /><span class="lbl"></span></label> --%>
+<!-- 											</td> -->
+<%-- 											<td class='center' style="width: 30px;">${vs.index+1}</td> --%>
+<%-- 											<td class='center'>${var.channel_distributor_id}</td> --%>
+<%-- 											<td class='center'>${var.channel_id}</td> --%>
+											<td class='center'>${var.channel_name}</td>
+<%-- 											<td class='center'>${var.user_id}</td> --%>
+											<td class='center'><lable ><a href="<%=basePath%>/channeldistributor/goConsumerListByTime.do?distributorId=${var.channel_distributor_id}">${var.user_name} </a></lable></td>
 											<td class='center'>${var.channel_distributor_num}</td>
 											<td class='center'>${var.mobile}</td>
-											<td class='center'>${var.distributor_commission_rate}</td>
-											<td class='center'>${var.channel_name}</td>
+											<td class='center'>${var.total_amount}</td>
+											<td class='center'>${var.distributor_commission_rate}%</td>
+											<td class='center'>${var.total_amount_extract}</td>
 											<td class='center'>${var.add_time}</td>
 											<td class='center'>${var.remark}</td>
-											<td class='center'>${var.deleted}</td>
+<%-- 											<td class='center'>${var.deleted}</td> --%>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -119,34 +121,6 @@
 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
 													</c:if>
-												</div>
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-			
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.channel_distributor_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-															<c:if test="${QX.del == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="del('${var.channel_distributor_id}');" class="tooltip-error" data-rel="tooltip" title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-														</ul>
-													</div>
 												</div>
 											</td>
 										</tr>
@@ -171,12 +145,9 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
+										<c:if test="${QX.add == 1 }">
+											<a class="btn btn-xs btn-success"  title="新增分销"    style="border-radius: 5px;" onclick="addDistribution('${channelId}');">新增分销</a>
+										</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
@@ -216,6 +187,33 @@
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
+	
+	
+	//新增
+	function addDistribution(channel_id){
+		 top.jzts();
+		 var diag = new top.Dialog();
+		 diag.Drag=true;
+		 diag.Title ="新增分销";
+		 diag.URL = '<%=basePath%>channeldistributor/goAdd.do?channel_id='+channel_id;
+		 diag.Width = 450;
+		 diag.Height = 355;
+		 diag.Modal = true;				//有无遮罩窗口
+		 diag. ShowMaxButton = true;	//最大化按钮
+	     diag.ShowMinButton = true;		//最小化按钮
+		 diag.CancelEvent = function(){ //关闭事件
+			 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+				 if('${page.currentPage}' == '0'){
+					 tosearch();
+				 }else{
+					 tosearch();
+				 }
+			}
+			diag.close();
+		 };
+		 diag.show();
+	}
+	
 		$(top.hangge());//关闭加载状态
 		//检索
 		function tosearch(){
