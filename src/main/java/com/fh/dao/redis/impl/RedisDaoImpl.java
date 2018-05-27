@@ -221,11 +221,11 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
         return result; 
 	}
 
-	/**获取Jedis
+	/**获取测试环境Jedis
 	 * @return
 	 */
 	public Jedis getJedisByDBIndex(){
-		Properties pros = getPprVue();
+		Properties pros = getPprVueTest();
 		String isopen = pros.getProperty("redis.isopen");	//地址
 		String host = pros.getProperty("redis.host");		//地址
 		String port = pros.getProperty("redis.port");		//端口
@@ -257,6 +257,23 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 		}else{
 			return null;
 		}
+	}
+
+	/**读取redis.properties 配置文件
+	 * @return
+	 * @throws IOException
+	 */
+	public Properties getPprVueTest(){
+		InputStream inputStream = DbFH.class.getClassLoader().getResourceAsStream("redis-test.properties");
+		Properties p = new Properties();
+		try {
+			p.load(inputStream);
+			inputStream.close();
+		} catch (IOException e) {
+			//读取配置文件出错
+			e.printStackTrace();
+		}
+		return p;
 	}
 	
 	/**读取redis.properties 配置文件
