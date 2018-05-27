@@ -140,11 +140,11 @@
 																					<span class="lbl">牛人分析</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==4}">checked="checked"</c:if>  value = "3" class="ace" id="extend_cat4" />
+																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==4}">checked="checked"</c:if>  value = "4" class="ace" id="extend_cat4" />
 																					<span class="lbl">世界杯</span>
 																				</label>																				
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==5}">checked="checked"</c:if>  value = "4" class="ace" id="extend_cat5" />
+																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==5}">checked="checked"</c:if>  value = "5" class="ace" id="extend_cat5" />
 																					<span class="lbl">其他</span>
 																				</label>
 											                                </div>

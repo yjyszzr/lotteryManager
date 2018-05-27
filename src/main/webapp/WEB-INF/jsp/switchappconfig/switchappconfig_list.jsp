@@ -61,8 +61,26 @@
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.version}</td>
-											<td class='center'>${var.platform}</td>
-											<td class='center'>${var.business_type}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.platform == 1 }">
+													android
+													</c:when>
+													<c:otherwise>
+													ios
+													</c:otherwise>
+												</c:choose>											
+											</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.platform == 1 }">
+													交易版
+													</c:when>
+													<c:otherwise>
+													资讯版
+													</c:otherwise>
+												</c:choose>													
+											</td>
 											<td class='center'>${var.channel_name}</td>
 											
 											<td class='center'>
