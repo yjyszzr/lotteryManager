@@ -123,7 +123,7 @@ public class PicturesController extends BaseController {
 			if (null != file && !file.isEmpty()) {
 				// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
 				// + ffile; // 文件上传路径
-				String filePath = Const.FILEPATHIMG + ffile; // 文件上传路径
+				String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
@@ -131,13 +131,13 @@ public class PicturesController extends BaseController {
 			pd.put("PICTURES_ID", this.get32UUID()); // 主键
 			pd.put("TITLE", "图片"); // 标题
 			pd.put("NAME", fileName); // 文件名
-			pd.put("PATH", ffile + "/" + fileName); // 路径
+			pd.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
 			pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
 			pd.put("MASTER_ID", "1"); // 附属与
 			pd.put("BZ", "图片管理处上传"); // 备注
 			// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
 			// + ffile + "/" + fileName);// 加水印
-			picturesService.save(pd);
+			// picturesService.save(pd);
 		}
 		map.put("result", "ok");
 		return AppUtil.returnObject(pd, map);
@@ -157,7 +157,7 @@ public class PicturesController extends BaseController {
 			if (null != file && !file.isEmpty()) {
 				// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
 				// + ffile; // 文件上传路径
-				String filePath = Const.FILEPATHIMG + ffile; // 文件上传路径
+				String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
@@ -198,7 +198,7 @@ public class PicturesController extends BaseController {
 		String ffile = DateUtil.getDays(), fileName = "";
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			if (null != file && !file.isEmpty()) {
-				String filePath = Const.FILEPATHIMG + ffile; // 文件上传路径
+				String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 			} else {
 				System.out.println("上传失败");
@@ -227,7 +227,7 @@ public class PicturesController extends BaseController {
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			pd = this.getPageData();
 			if (Tools.notEmpty(pd.getString("PATH").trim())) {
-				DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH")); // 删除图片
+				DelAllFile.delFolder(PathUtil.getClasspath() + urlConfig.getUploadURL() + pd.getString("PATH")); // 删除图片
 			}
 			picturesService.delete(pd);
 		}
@@ -268,7 +268,7 @@ public class PicturesController extends BaseController {
 			}
 			String ffile = DateUtil.getDays(), fileName = "";
 			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
+				String filePath = PathUtil.getClasspath() + urlConfig.getUploadURL() + ffile; // 文件上传路径
 				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
 				pd.put("PATH", ffile + "/" + fileName); // 路径
 				pd.put("NAME", fileName);
@@ -338,7 +338,7 @@ public class PicturesController extends BaseController {
 				pathList = picturesService.getAllById(ArrayDATA_IDS);
 				for (int i = 0; i < pathList.size(); i++) {
 					if (Tools.notEmpty(pathList.get(i).getString("PATH").trim())) {
-						DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pathList.get(i).getString("PATH"));// 删除图片
+						DelAllFile.delFolder(PathUtil.getClasspath() + urlConfig.getUploadURL() + pathList.get(i).getString("PATH"));// 删除图片
 					}
 				}
 				picturesService.deleteAll(ArrayDATA_IDS);
@@ -364,7 +364,7 @@ public class PicturesController extends BaseController {
 		pd = this.getPageData();
 		String PATH = pd.getString("PATH");
 		if (Tools.notEmpty(pd.getString("PATH").trim())) {// 图片路径
-			DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH")); // 删除图片
+			DelAllFile.delFolder(PathUtil.getClasspath() + urlConfig.getUploadURL() + pd.getString("PATH")); // 删除图片
 		}
 		if (PATH != null) {
 			picturesService.delTp(pd); // 删除数据库中图片数据
@@ -409,7 +409,7 @@ public class PicturesController extends BaseController {
 				imgList = GetWeb.getImagePathList(serverUrl);
 				if ("save".equals(msg)) {
 					String ffile = DateUtil.getDays();
-					String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile; // 文件上传路径
+					String filePath = PathUtil.getClasspath() + urlConfig.getUploadURL() + ffile; // 文件上传路径
 					for (int i = 0; i < imgList.size(); i++) { // 把网络图片保存到服务器硬盘，并数据库记录
 						String fileName = FileUpload.getHtmlPicture(imgList.get(i), filePath, null); // 下载网络图片上传到服务器上
 						// 保存到数据库

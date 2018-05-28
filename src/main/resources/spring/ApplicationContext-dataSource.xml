@@ -193,6 +193,7 @@
         <property name="imgShowUrl" value="${imgShowUrl}"></property>
         <property name="manualAuditUrl" value="${manualAuditUrl}"></property>
         <property name="manualRewardUrl" value="${manualRewardUrl}"></property>
+        <property name="uploadURL" value="${uploadURL}"></property>
     </bean>
  	<!-- QQ313596790 -->
 </beans>

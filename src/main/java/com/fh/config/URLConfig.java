@@ -6,7 +6,16 @@ public class URLConfig {
 	private String imgShowUrl;
 	private String manualAuditUrl;
 	private String manualRewardUrl;
+	private String uploadURL;
 	
+	
+	
+	public String getUploadURL() {
+		return uploadURL;
+	}
+	public void setUploadURL(String uploadURL) {
+		this.uploadURL = uploadURL;
+	}
 	public String getServiceSmsUrl() {
 		return serviceSmsUrl;
 	}
