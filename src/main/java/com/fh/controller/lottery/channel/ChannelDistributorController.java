@@ -1,6 +1,7 @@
 package com.fh.controller.lottery.channel;
 
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,8 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.lottery.channel.ChannelConsumerManager;
 import com.fh.service.lottery.channel.ChannelDistributorManager;
+import com.fh.service.lottery.channel.ChannelOptionLogManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -37,6 +41,11 @@ public class ChannelDistributorController extends BaseController {
 	String menuUrl = "channeldistributor/list.do"; // 菜单地址(权限用)
 	@Resource(name = "channeldistributorService")
 	private ChannelDistributorManager channeldistributorService;
+	@Resource(name = "channelconsumerService")
+	private ChannelConsumerManager channelconsumerService;
+
+	@Resource(name = "channeloptionlogService")
+	private ChannelOptionLogManager channeloptionlogService;
 
 	/**
 	 * 保存
@@ -119,15 +128,34 @@ public class ChannelDistributorController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String channel_id = pd.getString("channel_id");
+		if (null != channel_id && !"".equals(channel_id)) {
+			pd.put("channel_id", channel_id.trim());
 		}
 		page.setPd(pd);
 		List<PageData> varList = channeldistributorService.list(page); // 列出ChannelDistributor列表
+		PageData pda = new PageData();
+		List<PageData> optionlogList = channeloptionlogService.listAll(pda);
+		for (int i = 0; i < varList.size(); i++) {
+			BigDecimal big = new BigDecimal(0);
+			PageData distributor = varList.get(i);
+			for (int j = 0; j < optionlogList.size(); j++) {
+				PageData optionlog = varList.get(i);
+				if (distributor.getString("channel_distributor_id").equals(optionlog.getString("distributor_id"))) {
+					if (null != optionlog.getString("option_amount") && !"".equals(optionlog.getString("option_amount"))) {
+						BigDecimal big_option_amount = new BigDecimal(optionlog.getString("option_amount"));
+						big.add(big_option_amount);
+					}
+				}
+			}
+			BigDecimal distributorRate = new BigDecimal(distributor.getString("distributor_commission_rate"));
+			varList.get(i).put("total_amount", big);
+			varList.get(i).put("total_amount_extract", big.multiply(distributorRate));
+		}
 		mv.setViewName("lottery/channeldistributor/channeldistributor_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
+		mv.addObject("channelId", channel_id);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
@@ -253,5 +281,42 @@ public class ChannelDistributorController extends BaseController {
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
+	}
+
+	@RequestMapping(value = "/goConsumerListByTime")
+	public ModelAndView goConsumerListByTime() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		List<PageData> consumerPd = channelconsumerService.findByChannelId(pd);
+		pd = this.getPageData();
+		List<PageData> pds = channeloptionlogService.goConsumerListByTime(pd); // 根据ID读取
+
+		if (pd.getString("distributorId") != null) {
+			for (int i = 0; i < pds.size(); i++) {
+				int a = 0;
+				int b = 0;
+				for (int j = 0; j < consumerPd.size(); j++) {
+					// 判断是哪一天的
+					if (DateUtil.fomatDate(pds.get(i).getString("optionTime")).getTime() == DateUtil.fomatDate(consumerPd.get(j).getString("add_time")).getTime()) {
+						// 判断电话为不为空 来计数输入手机号人数
+						if (consumerPd.get(j).getString("mobile") != null) {
+							a += 1;
+						}
+						// 判断用户Id为不为空 来计数领没领取优惠券
+						if (consumerPd.get(j).getString("user_id") != null) {
+							b += 1;
+						}
+					}
+				}
+				pds.get(i).put("inputNum", a);
+				pds.get(i).put("receiveNum", b);
+			}
+		}
+		mv.setViewName("lottery/channeloptionlog/channeloptionlog_list");
+		mv.addObject("varList", pds);
+		mv.addObject("pd", pd);
+		mv.addObject("distributorId", pd.getString("distributorId"));
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
 	}
 }

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ChannelOptionLogMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		dl_channel_option_log
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		option_id,	
+		channel_id,	
+		distributor_id,	
+		user_id,	
+		user_name,	
+		id_card_num,	
+		true_name,	
+		mobile,	
+		operation_node,	
+		status,	
+		option_amount,	
+		option_time,	
+		source
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{option_id},	
+        #{channel_id},	
+        #{distributor_id},	
+        #{user_id},	
+        #{user_name},	
+        #{id_card_num},	
+        #{true_name},	
+        #{mobile},	
+        #{operation_node},	
+        #{status},	
+        #{option_amount},	
+        #{option_time},	
+        #{source}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        option_id,	
+		        channel_id,	
+		        distributor_id,	
+		        user_id,	
+		        user_name,	
+		        id_card_num,	
+		        true_name,	
+		        mobile,	
+		        operation_node,	
+		        status,	
+		        option_amount,	
+		        option_time,	
+		        source	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			option_id = #{option_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+		   <trim suffixOverrides=",">
+			<if test="user_name != null and user_name != ''">
+				user_name = #{user_name},
+			</if>
+			<if test="id_card_num != null and id_card_num != ''">
+			id_card_num = #{id_card_num},
+			</if>
+			<if test="true_name != null and true_name != ''">
+			true_name = #{true_name},
+			</if>
+			<if test="mobile != null and mobile != ''">
+			mobile = #{mobile},
+			</if>
+			<if test="mobile != null and mobile != ''">
+			operation_node = #{operation_node},
+			</if>
+			<if test="status != null and status != ''">
+			status = #{status},
+			</if>
+			<if test="option_amount != null and option_amount != ''">
+			option_amount = #{option_amount},
+			</if>
+			<if test="option_time != null and option_time != ''">
+			option_time = #{option_time},
+			</if>
+			<if test="source != null and source != ''">
+			source = #{source},
+			</if>
+			</trim>
+		where 
+		option_id = #{option_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			option_id = #{option_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select 
+			*,
+			DATE_FORMAT( FROM_UNIXTIME( option_time ), '%Y-%m-%d %H:%i:%s' ) as operation_time 
+		 from 	
+			dl_channel_option_log
+		where
+			distributor_id = #{pd.distributor_id}
+			and
+			DATE_FORMAT( FROM_UNIXTIME( option_time ), '%Y-%m-%d' ) = #{pd.option_time}
+	</select>
+	<!-- 列表 -->
+	<select id="goConsumerListByTime" parameterType="page" resultType="pd">
+		SELECT
+			COUNT( IF ( operation_node = 1, TRUE, NULL ) ) AS loginNum,
+			DATE( FROM_UNIXTIME( option_time ) ) AS optionTime,
+			SUM( option_amount ) AS optionAmount,
+			COUNT( DISTINCT user_id, IF ( operation_node = 2, TRUE, NULL ) ) AS buyNum 
+		FROM
+			dl_channel_option_log 
+		WHERE
+			distributor_id = #{distributorId} 
+		GROUP BY
+			DAY ( FROM_UNIXTIME( option_time ) ) DESC;
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where  status = 1 
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			option_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+</mapper>

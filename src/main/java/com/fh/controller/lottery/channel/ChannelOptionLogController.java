@@ -1,7 +1,6 @@
 package com.fh.controller.lottery.channel;
 
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.lottery.channel.ChannelManager;
 import com.fh.service.lottery.channel.ChannelOptionLogManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
@@ -30,15 +28,13 @@ import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /**
- * 说明：渠道模块 创建人：FH Q313596790 创建时间：2018-05-18
+ * 说明：渠道分销操作日志 创建时间：2018-05-27
  */
 @Controller
-@RequestMapping(value = "/channel")
-public class ChannelController extends BaseController {
+@RequestMapping(value = "/channeloptionlog")
+public class ChannelOptionLogController extends BaseController {
 
-	String menuUrl = "channel/list.do"; // 菜单地址(权限用)
-	@Resource(name = "channelService")
-	private ChannelManager channelService;
+	String menuUrl = "channeloptionlog/list.do"; // 菜单地址(权限用)
 	@Resource(name = "channeloptionlogService")
 	private ChannelOptionLogManager channeloptionlogService;
 
@@ -50,18 +46,19 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/save")
 	public ModelAndView save() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "新增Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "新增ChannelOptionLog");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// pd.put("channel_id", this.get32UUID()); //主键
-		pd.put("channel_id", "0"); // 渠道ID
-		pd.put("channel_status", "0"); // 状态
-		pd.put("add_time", "0"); // 时间
-		channelService.save(pd);
+		// pd.put("option_id", this.get32UUID()); //主键
+		pd.put("option_id", "0"); // Id
+		pd.put("channel_id", "0"); // 渠道Id
+		pd.put("distributor_id", "0"); // 分销店员id
+		pd.put("user_id", "0"); // 渠道消费者用户Id
+		channeloptionlogService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -75,13 +72,13 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/delete")
 	public void delete(PrintWriter out) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "删除Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "删除ChannelOptionLog");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			return;
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		channelService.delete(pd);
+		channeloptionlogService.delete(pd);
 		out.write("success");
 		out.close();
 	}
@@ -94,14 +91,14 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/edit")
 	public ModelAndView edit() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "修改Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "修改ChannelOptionLog");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
 			return null;
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		channelService.edit(pd);
+		channeloptionlogService.edit(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -115,7 +112,7 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "列表Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "列表ChannelOptionLog");
 		// if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		// //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
@@ -126,31 +123,13 @@ public class ChannelController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData> varList = channelService.list(page); // 列出Channel列表
-
-		PageData pda = new PageData();
-		List<PageData> optionlogList = channeloptionlogService.listAll(pda);
-
-		for (int i = 0; i < varList.size(); i++) {
-			BigDecimal big = new BigDecimal(0);
-			PageData channel = varList.get(i);
-			for (int j = 0; j < optionlogList.size(); j++) {
-				PageData optionlog = varList.get(i);
-				if (channel.getString("channel_id").equals(optionlog.getString("channel_id"))) {
-					if (null != optionlog.getString("option_amount") && !"".equals(optionlog.getString("option_amount"))) {
-						BigDecimal big_option_amount = new BigDecimal(optionlog.getString("option_amount"));
-						big.add(big_option_amount);
-					}
-				}
-			}
-			BigDecimal channelRate = new BigDecimal(channel.getString("commission_rate"));
-			varList.get(i).put("total_amount", big);
-			varList.get(i).put("total_amount_extract", big.multiply(channelRate));
-		}
-
-		mv.setViewName("lottery/channel/channel_list");
+		List<PageData> varList = channeloptionlogService.list(page); // 列出ChannelOptionLog列表
+		mv.setViewName("lottery/channeloptionlog/channeloptionlog_details_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
+		mv.addObject("pd", pd);
+		mv.addObject("distributor_id", pd.getString("distributor_id"));
+		mv.addObject("option_time", pd.getString("option_time"));
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
@@ -166,7 +145,7 @@ public class ChannelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		mv.setViewName("lottery/channel/channel_edit");
+		mv.setViewName("channel/channeloptionlog/channeloptionlog_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
@@ -183,8 +162,8 @@ public class ChannelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = channelService.findById(pd); // 根据ID读取
-		mv.setViewName("lottery/channel/channel_edit");
+		pd = channeloptionlogService.findById(pd); // 根据ID读取
+		mv.setViewName("channel/channeloptionlog/channeloptionlog_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
@@ -199,7 +178,7 @@ public class ChannelController extends BaseController {
 	@RequestMapping(value = "/deleteAll")
 	@ResponseBody
 	public Object deleteAll() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "批量删除Channel");
+		logBefore(logger, Jurisdiction.getUsername() + "批量删除ChannelOptionLog");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
 			return null;
 		} // 校验权限
@@ -210,7 +189,7 @@ public class ChannelController extends BaseController {
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			channelService.deleteAll(ArrayDATA_IDS);
+			channeloptionlogService.deleteAll(ArrayDATA_IDS);
 			pd.put("msg", "ok");
 		} else {
 			pd.put("msg", "no");
@@ -228,7 +207,7 @@ public class ChannelController extends BaseController {
 	 */
 	@RequestMapping(value = "/excel")
 	public ModelAndView exportExcel() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "导出Channel到excel");
+		logBefore(logger, Jurisdiction.getUsername() + "导出ChannelOptionLog到excel");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
 			return null;
 		}
@@ -237,35 +216,37 @@ public class ChannelController extends BaseController {
 		pd = this.getPageData();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("渠道ID"); // 1
-		titles.add("渠道名称"); // 2
-		titles.add("渠道号"); // 3
-		titles.add("佣金比例"); // 4
-		titles.add("渠道类型"); // 5
-		titles.add("渠道联系人"); // 6
-		titles.add("电话"); // 7
-		titles.add("地址"); // 8
-		titles.add("状态"); // 9
-		titles.add("时间"); // 10
-		titles.add("是否删除"); // 11
-		titles.add("备注"); // 12
+		titles.add("Id"); // 1
+		titles.add("渠道Id"); // 2
+		titles.add("分销店员id"); // 3
+		titles.add("渠道消费者用户Id"); // 4
+		titles.add("渠道消费者用户名称"); // 5
+		titles.add("身份证编号"); // 6
+		titles.add("真实姓名"); // 7
+		titles.add("电话"); // 8
+		titles.add("操作节点"); // 9
+		titles.add("状态"); // 10
+		titles.add("操作金额"); // 11
+		titles.add("操作时间"); // 12
+		titles.add("来源"); // 13
 		dataMap.put("titles", titles);
-		List<PageData> varOList = channelService.listAll(pd);
+		List<PageData> varOList = channeloptionlogService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("channel_id").toString()); // 1
-			vpd.put("var2", varOList.get(i).getString("channel_name")); // 2
-			vpd.put("var3", varOList.get(i).getString("channel_num")); // 3
-			vpd.put("var4", varOList.get(i).get("commission_rate").toString()); // 4
-			vpd.put("var5", varOList.get(i).get("channel_type").toString()); // 5
-			vpd.put("var6", varOList.get(i).getString("channel_contact")); // 6
-			vpd.put("var7", varOList.get(i).getString("channel_mobile")); // 7
-			vpd.put("var8", varOList.get(i).getString("channel_address")); // 8
-			vpd.put("var9", varOList.get(i).get("channel_status").toString()); // 9
-			vpd.put("var10", varOList.get(i).get("add_time").toString()); // 10
-			vpd.put("var11", varOList.get(i).get("deleted").toString()); // 11
-			vpd.put("var12", varOList.get(i).getString("remark")); // 12
+			vpd.put("var1", varOList.get(i).get("option_id").toString()); // 1
+			vpd.put("var2", varOList.get(i).get("channel_id").toString()); // 2
+			vpd.put("var3", varOList.get(i).get("distributor_id").toString()); // 3
+			vpd.put("var4", varOList.get(i).get("user_id").toString()); // 4
+			vpd.put("var5", varOList.get(i).getString("user_name")); // 5
+			vpd.put("var6", varOList.get(i).get("id_card_num").toString()); // 6
+			vpd.put("var7", varOList.get(i).getString("true_name")); // 7
+			vpd.put("var8", varOList.get(i).getString("mobile")); // 8
+			vpd.put("var9", varOList.get(i).getString("operation_node")); // 9
+			vpd.put("var10", varOList.get(i).get("status").toString()); // 10
+			vpd.put("var11", varOList.get(i).get("option_amount").toString()); // 11
+			vpd.put("var12", varOList.get(i).get("option_time").toString()); // 12
+			vpd.put("var13", varOList.get(i).getString("source")); // 13
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

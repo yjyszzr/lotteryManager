@@ -28,7 +28,9 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="channel/list.do" method="post" name="Form" id="Form">
+						<form action="channeloptionlog/list.do" method="post" name="Form" id="Form">
+							<input type="hidden" id="distributor_id" name="distributor_id" value="${distributor_id }" />
+							<input type="hidden" id="option_time" name="option_time" value="${option_time }" />
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
@@ -63,25 +65,23 @@
 <!-- 									<th class="center" style="width:35px;"> -->
 <!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
 <!-- 									</th> -->
-<!-- 									<th class="center" style="width:50px;">序号</th> -->
-<!-- 									<th class="center">渠道ID</th> -->
-									<th class="center">渠道名称</th>
-									<th class="center">渠道号</th>
-									<th class="center">总销售额</th>
-									<th class="center">佣金比例</th>
-									<th class="center">渠道提成</th>
-									<th class="center">所属企业</th>
-									<th class="center">渠道联系人</th>
+									<th class="center" style="width:50px;">序号</th>
+<!-- 									<th class="center">Id</th> -->
+<!-- 									<th class="center">渠道Id</th> -->
+<!-- 									<th class="center">分销店员id</th> -->
+<!-- 									<th class="center">渠道消费者用户Id</th> -->
+									<th class="center">渠道消费者用户名称</th>
+									<th class="center">身份证编号</th>
+									<th class="center">真实姓名</th>
 									<th class="center">电话</th>
-									<th class="center">地址</th>
+									<th class="center">操作节点</th>
 									<th class="center">状态</th>
-									<th class="center">时间</th>
-									<th class="center">是否删除</th>
-									<th class="center">备注</th>
+									<th class="center">操作金额</th>
+									<th class="center">操作时间</th>
+									<th class="center">来源</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
-													
 							<tbody>
 							<!-- 开始循环 -->	
 							<c:choose>
@@ -90,38 +90,37 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 <!-- 											<td class='center'> -->
-<%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.channel_id}" class="ace" /><span class="lbl"></span></label> --%>
+<%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.option_id}" class="ace" /><span class="lbl"></span></label> --%>
 <!-- 											</td> -->
-<%-- 											<td class='center' style="width: 30px;">${vs.index+1}</td> --%>
+											<td class='center' style="width: 30px;">${vs.index+1}</td>
+<%-- 											<td class='center'>${var.option_id}</td> --%>
 <%-- 											<td class='center'>${var.channel_id}</td> --%>
-											<td class='center'>${var.channel_name}</td>
-											<td class='center'>${var.channel_num}</td>
-											<td class='center'>${var.total_amount}</td>
-											<td class='center'>${var.commission_rate}%</td>
-											<td class='center'>${var.total_amount_extract}</td>
-											<td class='center'>
-												<c:if test="${var.channel_type==1}">  西安每一天便利店</c:if>
-										 	</td>
-											<td class='center'>${var.channel_contact}</td>
-											<td class='center'>${var.channel_mobile}</td>
-											<td class='center'>${var.channel_address}</td>
-											<td class='center'>${var.channel_status}</td>
-											<td class='center'>${var.add_time}</td>
-											<td class='center'>${var.deleted}</td>
-											<td class='center'>${var.remark}</td>
+<%-- 											<td class='center'>${var.distributor_id}</td> --%>
+<%-- 											<td class='center'>${var.user_id}</td> --%>
+											<td class='center'>${var.user_name}</td>
+											<td class='center'>${var.id_card_num}</td>
+											<td class='center'>${var.true_name}</td>
+											<td class='center'>${var.mobile}</td>
+											<td class='center'><c:if test="${var.operation_node == 1}">注册</c:if> <c:if test="${var.operation_node == 2}">购彩</c:if></td>
+											<td class='center'><c:if test="${var.status == 1}">正常</c:if> <c:if test="${var.status == 2}">冻结</c:if></td>
+											<td class='center'>${var.option_amount}</td>
+											<td class='center'>${var.option_time}</td>
+											<td class='center'>${var.source}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑"  style="border-radius: 5px;" onclick="edit('${var.channel_id}');">编辑 </a>
-													</c:if>
-													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger"  style="border-radius: 5px;" onclick="del('${var.channel_id}');">删除 </a>
-													</c:if>
-													<c:if test="${QX.cha == 1 }">
-														<a class="btn btn-xs btn-success"  title="分销"    style="border-radius: 5px;"  href="<%=basePath%>/channeldistributor/list.do?channel_id=${var.channel_id}">分销</a>
+													<c:choose>
+													
+													<c:when test="${var.status == 2}">
+														<a class="btn btn-xs btn-bule"  style="border-radius: 5px;"   title="冻结" onclick="frozen('${var.option_id}','1');">恢复</i> </a>
+													</c:when>
+													<c:otherwise>
+														<a class="btn btn-xs btn-danger"  style="border-radius: 5px;"   title="冻结" onclick="frozen('${var.option_id}','2');"> 冻结</i> </a>
+													</c:otherwise>
+													</c:choose>
 													</c:if>
 												</div>
 											</td>
@@ -146,14 +145,7 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
-								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
-								</td>
+								<td style="vertical-align:top;"> </td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>
@@ -192,7 +184,7 @@
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
- 
+	
 		$(top.hangge());//关闭加载状态
 		//检索
 		function tosearch(){
@@ -252,7 +244,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>channel/goAdd.do';
+			 diag.URL = '<%=basePath%>channeloptionlog/goAdd.do';
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
@@ -276,7 +268,7 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>channel/delete.do?channel_id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>channeloptionlog/delete.do?option_id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						tosearch();
 					});
@@ -290,7 +282,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>channel/goEdit.do?channel_id='+Id;
+			 diag.URL = '<%=basePath%>channeloptionlog/goEdit.do?option_id='+Id;
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
@@ -334,7 +326,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>channel/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>channeloptionlog/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,
@@ -353,10 +345,27 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>channel/excel.do';
+			window.location.href='<%=basePath%>channeloptionlog/excel.do';
 		}
+		
+		
+		 function frozen(id,status){
+			 var str ='';
+			 if(status==1){
+				 str = "冻结"
+			 }else{
+				 str = "恢复"
+			 }
+				bootbox.confirm("确定要"+str+"该条记录吗!", function(result) {
+							if(result) {
+								top.jzts();
+								var  url= '<%=basePath%>channeloptionlog/edit.do?option_id='+id+'&status='+status;
+								$.get(url,function(data){
+									tosearch(0);
+								});
+							}
+						});
+					}
 	</script>
-
-
 </body>
 </html>

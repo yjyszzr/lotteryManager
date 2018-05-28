@@ -27,34 +27,29 @@
 				<div class="row">
 					<div class="col-xs-12">
 					
-					<form action="channeldistributor/${msg }.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="channel_distributor_id" id="channel_distributor_id" value="${pd.channel_distributor_id}"/>
-						<input type="hidden" name="channel_id" id="channel_id" value="${pd.channel_id}"/>
+					<form action="channelconsumer/${msg }.do" name="Form" id="Form" method="post">
+						<input type="hidden" name="consumer_id" id="consumer_id" value="${pd.consumer_id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
-								<td><input type="text" name="user_name" id="user_name" value="${pd.user_name}" maxlength="60" placeholder="这里输入用户名" title="用户名" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">渠道分销号:</td>
-								<td><input type="text" name="channel_distributor_num" id="channel_distributor_num" value="${pd.channel_distributor_num}" maxlength="60" placeholder="这里输入渠道分销号" title="渠道分销号" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">消费者名称:</td>
+								<td><input type="text" name="user_name" id="user_name" value="${pd.user_name}" maxlength="60" placeholder="这里输入消费者名称" title="消费者名称" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">电话:</td>
 								<td><input type="text" name="mobile" id="mobile" value="${pd.mobile}" maxlength="20" placeholder="这里输入电话" title="电话" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">分销佣金比例:</td>
-								<td><input type="text" name="distributor_commission_rate" id="distributor_commission_rate" value="${pd.distributor_commission_rate}" maxlength="255" placeholder="这里输入分销佣金比例" title="分销佣金比例" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">添加时间:</td>
+								<td><input type="number" name="add_time" id="add_time" value="${pd.add_time}" maxlength="32" placeholder="这里输入添加时间" title="添加时间" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">渠道名称:</td>
-								<td><input type="text" name="channel_name" id="channel_name" value="${pd.channel_name}" maxlength="25" placeholder="这里输入渠道名称" title="渠道名称" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">是否删除:</td>
+								<td><input type="number" name="deleted" id="deleted" value="${pd.deleted}" maxlength="32" placeholder="这里输入是否删除" title="是否删除" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
-								<td><input type="text" name="remark" id="remark" value="${pd.remark}" maxlength="255" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">最后登录时间:</td>
+								<td><input type="number" name="frist_login_time" id="frist_login_time" value="${pd.frist_login_time}" maxlength="32" placeholder="这里输入最后登录时间" title="最后登录时间" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -94,21 +89,11 @@
 			if($("#user_name").val()==""){
 				$("#user_name").tips({
 					side:3,
-		            msg:'请输入用户名',
+		            msg:'请输入消费者名称',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#user_name").focus();
-			return false;
-			}
-			if($("#channel_distributor_num").val()==""){
-				$("#channel_distributor_num").tips({
-					side:3,
-		            msg:'请输入渠道分销号',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#channel_distributor_num").focus();
 			return false;
 			}
 			if($("#mobile").val()==""){
@@ -121,34 +106,34 @@
 				$("#mobile").focus();
 			return false;
 			}
-			if($("#distributor_commission_rate").val()==""){
-				$("#distributor_commission_rate").tips({
+			if($("#add_time").val()==""){
+				$("#add_time").tips({
 					side:3,
-		            msg:'请输入分销佣金比例',
+		            msg:'请输入添加时间',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#distributor_commission_rate").focus();
+				$("#add_time").focus();
 			return false;
 			}
-			if($("#channel_name").val()==""){
-				$("#channel_name").tips({
+			if($("#deleted").val()==""){
+				$("#deleted").tips({
 					side:3,
-		            msg:'请输入渠道名称',
+		            msg:'请输入是否删除',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#channel_name").focus();
+				$("#deleted").focus();
 			return false;
 			}
-			if($("#remark").val()==""){
-				$("#remark").tips({
+			if($("#frist_login_time").val()==""){
+				$("#frist_login_time").tips({
 					side:3,
-		            msg:'请输入备注',
+		            msg:'请输入最后登录时间',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#remark").focus();
+				$("#frist_login_time").focus();
 			return false;
 			}
 			$("#Form").submit();

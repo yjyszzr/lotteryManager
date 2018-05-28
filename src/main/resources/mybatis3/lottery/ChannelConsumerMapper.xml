@@ -1,40 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ChannelDistributorMapper">
+<mapper namespace="ChannelConsumerMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		dl_channel_distributor
+		dl_channel_consumer
 	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
+		consumer_id,	
 		channel_distributor_id,	
-		channel_id,	
 		user_id,	
 		user_name,	
-		channel_distributor_num,	
 		mobile,	
-		distributor_commission_rate,	
-		channel_name,	
+		consumer_ip,	
 		add_time,	
-		remark,	
-		deleted
+		device_code,	
+		deleted,	
+		frist_login_time
 	</sql>
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
+        #{consumer_id},	
         #{channel_distributor_id},	
-        #{channel_id},	
         #{user_id},	
         #{user_name},	
-        #{channel_distributor_num},	
         #{mobile},	
-        #{distributor_commission_rate},	
-        #{channel_name},	
+        #{consumer_ip},	
         #{add_time},	
-        #{remark},	
-        #{deleted}	
+        #{device_code},	
+        #{deleted},	
+        #{frist_login_time}	
 	</sql>
 	
 	<!-- 新增-->
@@ -42,17 +40,16 @@
 		insert into 
 	<include refid="tableName"></include>
 		(
+		        consumer_id,	
 		        channel_distributor_id,	
-		        channel_id,	
 		        user_id,	
 		        user_name,	
-		        channel_distributor_num,	
 		        mobile,	
-		        distributor_commission_rate,	
-		        channel_name,	
+		        consumer_ip,	
 		        add_time,	
-		        remark,	
-		        deleted	
+		        device_code,	
+		        deleted,	
+		        frist_login_time	
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -63,7 +60,7 @@
 		delete from
 		<include refid="tableName"></include>
 		where 
-			channel_distributor_id = #{channel_distributor_id}
+			consumer_id = #{consumer_id}
 	</delete>
 	
 	<!-- 修改 -->
@@ -72,13 +69,12 @@
 		<include refid="tableName"></include>
 		set 
 			user_name = #{user_name},
-			channel_distributor_num = #{channel_distributor_num},
 			mobile = #{mobile},
-			distributor_commission_rate = #{distributor_commission_rate},
-			channel_name = #{channel_name},
-			remark = #{remark}
+			add_time = #{add_time},
+			deleted = #{deleted},
+			frist_login_time = #{frist_login_time}
 		where 
-		channel_distributor_id = #{channel_distributor_id}
+		consumer_id = #{consumer_id}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
@@ -88,7 +84,7 @@
 		from 
 		<include refid="tableName"></include>
 		where 
-			channel_distributor_id = #{channel_distributor_id}
+			consumer_id = #{consumer_id}
 	</select>
 	
 	<!-- 列表 -->
@@ -98,9 +94,32 @@
 		from 
 		<include refid="tableName"></include>
 		where 1=1
-		<if test="pd.channel_id!= null and pd.channel_id != ''"> 
-			and channel_id = #{pd.channel_id}
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				<!--	根据需求自己加检索条件
+					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
 		</if>
+	</select>
+	<select id="findByChannelId" parameterType="page" resultType="pd">
+			SELECT
+			consumer_id,
+			channel_distributor_id,
+			user_id,
+			user_name,
+			mobile,
+			frist_login_time,
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d  %H:%i:%s' ) AS add_time,
+			device_code,
+			deleted
+		FROM
+			dl_channel_consumer 
+		WHERE
+			channel_distributor_id = #{distributorId}
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -116,9 +135,11 @@
 		delete from
 		<include refid="tableName"></include>
 		where 
-			channel_distributor_id in
+			consumer_id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                  #{item}
 		</foreach>
 	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
 </mapper>
