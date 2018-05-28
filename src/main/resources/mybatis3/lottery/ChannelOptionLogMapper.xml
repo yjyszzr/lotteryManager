@@ -63,6 +63,27 @@
 	<include refid="FieldValue"></include>
 		)
 	</insert>
+	<insert id="insertList"  parameterType="java.util.List">
+        insert into 
+        dl_channel_option_log(channel_id,	distributor_id,	 user_id,user_name,	id_card_num,true_name,mobile,operation_node,status,option_amount,option_time,source) 
+        	values   
+          <foreach collection ="list" item="item" index= "index" separator =",">
+                (
+                #{item.channel_id},
+                #{item.distributor_id},
+                #{item.user_id},
+                #{item.user_name},
+                #{item.id_card_num},
+                #{item.true_name},
+                #{item.mobile},
+                #{item.operation_node},
+                #{item.status},
+                #{item.option_amount},
+                #{item.option_time},
+                #{item.source}
+                )
+            </foreach >
+	</insert>
 	
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">

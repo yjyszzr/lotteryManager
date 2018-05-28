@@ -99,4 +99,8 @@ public class OrderService implements OrderManager {
 		return (PageData) dao.findForObject("OrderMapper.findByOrderSn", orderSn);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<PageData> selectByTime(String format) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.selectByTime", format);
+	}
 }

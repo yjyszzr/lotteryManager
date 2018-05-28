@@ -70,4 +70,6 @@ public interface ChannelOptionLogManager {
 
 	public List<PageData> goConsumerListByTime(PageData pd) throws Exception;
 
+	public int insertList(List<PageData> channelOperationList) throws Exception;
+
 }

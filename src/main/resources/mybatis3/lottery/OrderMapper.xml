@@ -229,6 +229,19 @@
 		<include refid="tableName"></include>
 	</select>
 	
+	<select id="selectByTime" parameterType="String" resultType="pd">
+		SELECT
+			user_id,
+			money_paid,
+			ticket_time,
+			DATE_FORMAT( FROM_UNIXTIME( ticket_time ), '%Y-%m-%d %H' ) AS ticket_time_str 
+		FROM
+			dl_order 
+		WHERE
+			DATE_FORMAT( FROM_UNIXTIME( ticket_time ), '%Y-%m-%d %H' ) = #{addTime}
+			AND order_status IN ( 3, 4, 5, 6, 7 )
+	</select>
+	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from

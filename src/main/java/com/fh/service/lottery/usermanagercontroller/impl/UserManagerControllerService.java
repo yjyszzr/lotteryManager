@@ -104,4 +104,9 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		int userId = Integer.parseInt(pd.getString("user_id"));
 		return (Double) dao.findForObject("UserManagerControllerMapper.findUserBonusByUserId", userId);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<PageData> findAll() throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.findAll", null);
+	}
 }

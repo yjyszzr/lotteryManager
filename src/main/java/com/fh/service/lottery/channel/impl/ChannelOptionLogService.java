@@ -99,4 +99,9 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.goConsumerListByTime", pd);
 	}
 
+	@Override
+	public int insertList(List<PageData> channelOperationList) throws Exception {
+		return (int) dao.save("ChannelOptionLogMapper.insertList", channelOperationList);
+	}
+
 }

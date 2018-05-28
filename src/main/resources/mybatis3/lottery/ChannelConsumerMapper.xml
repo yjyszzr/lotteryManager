@@ -130,6 +130,22 @@
 		<include refid="tableName"></include>
 	</select>
 	
+	<select id="selectByTime" parameterType="String" resultType="pd">
+		SELECT
+			consumer_id,
+			channel_distributor_id,
+			user_id,
+			user_name,
+			mobile,
+			frist_login_time,
+			add_time 
+		FROM
+			dl_channel_consumer 
+		WHERE
+			! ISNULL( frist_login_time ) 
+			AND date_format( FROM_UNIXTIME( frist_login_time ), '%Y-%m-%d %H' ) = #{format}
+	</select>
+	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
@@ -140,6 +156,4 @@
                  #{item}
 		</foreach>
 	</delete>
-	
-	<!-- fh313596790qq(青苔) -->
 </mapper>

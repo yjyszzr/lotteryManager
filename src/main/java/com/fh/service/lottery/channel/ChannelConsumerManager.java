@@ -70,4 +70,6 @@ public interface ChannelConsumerManager {
 
 	public List<PageData> findByChannelId(PageData pd) throws Exception;
 
+	public List<PageData> selectByTime(String format) throws Exception;
+
 }

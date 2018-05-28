@@ -254,5 +254,15 @@
 			user_id =  #{pd.user_id} 
 			AND bonus_status = 0
 	</select>
-	
+	<select id="findAll" resultType="pd" >
+		SELECT
+			a.user_id AS user_id,
+			a.user_name AS user_name,
+			a.mobile AS mobile,
+			b.id_code AS id_code,
+			b.real_name AS real_name 
+		FROM
+			dl_user a
+			LEFT JOIN dl_user_real b ON a.user_id = b.user_id
+	</select>
 </mapper>

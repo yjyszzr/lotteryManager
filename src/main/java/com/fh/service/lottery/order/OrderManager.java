@@ -70,4 +70,6 @@ public interface OrderManager {
 
 	public PageData findByOrderSn(String orderSn) throws Exception;
 
+	public List<PageData> selectByTime(String format) throws Exception;
+
 }

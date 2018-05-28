@@ -75,4 +75,6 @@ public interface UserManagerControllerManager {
 
 	public Double findUserBonusByUserId(PageData pd) throws Exception;
 
+	public List<PageData> findAll() throws Exception;
+
 }

@@ -17,6 +17,7 @@ public class DateUtilNew {
 	public static final DateTimeFormatter date_sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	public static final DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
 	public static final DateTimeFormatter date_sdf_ch = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
+	public static final DateTimeFormatter DTF_YYYYMMDDHH = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
 	public static final DateTimeFormatter time_sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	public static final DateTimeFormatter ymd_sdf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	public static final DateTimeFormatter yyyymmddhhmmss = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");

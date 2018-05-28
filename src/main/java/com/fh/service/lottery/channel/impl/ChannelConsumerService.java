@@ -99,4 +99,9 @@ public class ChannelConsumerService implements ChannelConsumerManager {
 		return (List<PageData>) dao.findForList("ChannelConsumerMapper.findByChannelId", pd);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<PageData> selectByTime(String format) throws Exception {
+		return (List<PageData>) dao.findForList("ChannelConsumerMapper.selectByTime", format);
+	}
+
 }
