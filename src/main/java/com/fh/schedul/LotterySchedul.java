@@ -38,49 +38,49 @@ public class LotterySchedul {
 	 * 更新新注册用户和订单到渠道操作记录表
 	 * 
 	 * @throws Exception
-	 *             每分钟跑一次
-	 * @Scheduled(cron = "0 0/1 * * * ?")
+	 *             每小时跑一次
+	 * @Scheduled(cron = "0 0 * * * ?") *
 	 */
-	// 每小时跑一次
-	@Scheduled(cron = "0 0 * * * ?")
+	// 每分钟跑一次
+	@Scheduled(cron = "0 0/1 * * * ?")
 	public void updateNewUserAndOrderToChannelOperationLog() throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Calendar c = Calendar.getInstance();
-		c.add(Calendar.HOUR_OF_DAY, -1);// 1小时前
+		// c.add(Calendar.HOUR_OF_DAY, -1);// 1小时前
+		c.add(Calendar.MINUTE, -1);// 减去一分钟
 		logger.info("每小时扫描一次===============扫描开始");
 		int insertNum = 0;
 		List<PageData> channelOperationList = new ArrayList<PageData>();
 		List<PageData> userList = usermanagercontrollerService.findAll();
 		PageData pd = new PageData();
-		List<PageData> distributorList = channeldistributorService.listAll(pd);
+		List<PageData> consumers = channelconsumerService.listAll(pd);
 		List<PageData> orderList = orderService.selectByTime(sdf.format(c.getTime()));
 		// 封装下单所有的信息
 		if (orderList.size() > 0) {
 			for (int i = 0; i < orderList.size(); i++) {
 				PageData channelOperationPageData = new PageData();
 				for (int j = 0; j < userList.size(); j++) {
-					if (orderList.get(i).getString("user_id").equals(userList.get(j).get("user_id"))) {
+					if (orderList.get(i).getString("user_id").equals(userList.get(j).getString("user_id"))) {
 						// 封装用户相关信息
-						channelOperationPageData.put("user_name", userList.get(j).get("user_name"));
-						channelOperationPageData.put("id_card_num", userList.get(j).get("id_code"));
-						channelOperationPageData.put("true_name", userList.get(j).get("real_name"));
-						channelOperationPageData.put("mobile", userList.get(j).get("mobile"));
+						channelOperationPageData.put("user_name", userList.get(j).getString("user_name") == "" ? null : userList.get(j).getString("user_name"));
+						channelOperationPageData.put("id_card_num", userList.get(j).getString("id_code") == "" ? null : userList.get(j).getString("id_code"));
+						channelOperationPageData.put("true_name", userList.get(j).getString("real_name") == "" ? null : userList.get(j).getString("real_name"));
+						channelOperationPageData.put("mobile", userList.get(j).getString("mobile") == "" ? null : userList.get(j).getString("mobile"));
 					}
 				}
-				for (int k = 0; k < distributorList.size(); k++) {
-					if (orderList.get(i).getString("user_id").equals(distributorList.get(k).get("user_id"))) {
+				for (int k = 0; k < consumers.size(); k++) {
+					if (orderList.get(i).getString("user_id").equals(consumers.get(k).getString("user_id"))) {
 						// 封装消费者的所属店员以及店铺信息
-						channelOperationPageData.put("channel_id", distributorList.get(k).get("channel_id"));
-						channelOperationPageData.put("distributor_id", distributorList.get(k).get("channel_distributor_id"));
+						channelOperationPageData.put("distributor_id", consumers.get(k).getString("channel_distributor_id") == "" ? null : consumers.get(k).getString("channel_distributor_id"));
 					}
 				}
 				// 封装下单信息
-				channelOperationPageData.put("user_id", orderList.get(i).getString("user_id"));
+				channelOperationPageData.put("user_id", orderList.get(i).getString("user_id") == "" ? null : orderList.get(i).getString("user_id"));
 				channelOperationPageData.put("operation_node", "2");
 				channelOperationPageData.put("status", "1");
 				channelOperationPageData.put("source", "h5");
-				channelOperationPageData.put("option_amount", orderList.get(i).getString("money_paid"));
-				channelOperationPageData.put("option_time", orderList.get(i).getString("ticket_time"));
+				channelOperationPageData.put("option_amount", orderList.get(i).getString("money_paid") == "" ? null : orderList.get(i).getString("money_paid"));
+				channelOperationPageData.put("option_time", orderList.get(i).getString("ticket_time") == "" ? null : orderList.get(i).getString("ticket_time"));
 				channelOperationList.add(channelOperationPageData);
 			}
 		}
@@ -90,33 +90,49 @@ public class LotterySchedul {
 		for (int i = 0; i < consumerList.size(); i++) {
 			PageData channelOperationPageData = new PageData();
 			for (int j = 0; j < userList.size(); j++) {
-				if (consumerList.get(i).getString("user_id").equals(userList.get(j).get("user_id"))) {
+				if (consumerList.get(i).getString("user_id").equals(userList.get(j).getString("user_id"))) {
 					// 封装用户相关信息
-					channelOperationPageData.put("user_name", userList.get(j).get("user_name"));
-					channelOperationPageData.put("id_card_num", userList.get(j).get("id_code"));
-					channelOperationPageData.put("true_name", userList.get(j).get("real_name"));
-					channelOperationPageData.put("mobile", userList.get(j).get("mobile"));
+					channelOperationPageData.put("user_name", userList.get(j).getString("user_name") == "" ? null : userList.get(j).getString("user_name"));
+					channelOperationPageData.put("id_card_num", userList.get(j).getString("id_code") == "" ? null : userList.get(j).getString("id_code"));
+					channelOperationPageData.put("true_name", userList.get(j).getString("real_name") == "" ? null : userList.get(j).getString("real_name"));
+					channelOperationPageData.put("mobile", userList.get(j).getString("mobile") == "" ? null : userList.get(j).getString("mobile"));
 				}
 			}
-			for (int k = 0; k < distributorList.size(); k++) {
-				if (consumerList.get(i).getString("user_id").equals(distributorList.get(k).get("user_id"))) {
+			for (int k = 0; k < consumers.size(); k++) {
+				if (consumerList.get(i).getString("user_id").equals(consumers.get(k).getString("user_id"))) {
 					// 封装消费者的所属店员以及店铺信息
-					channelOperationPageData.put("channel_id", distributorList.get(k).get("channel_id"));
-					channelOperationPageData.put("distributor_id", distributorList.get(k).get("channel_distributor_id"));
+					channelOperationPageData.put("distributor_id", consumers.get(k).getString("channel_distributor_id") == "" ? null : consumers.get(k).getString("channel_distributor_id"));
 				}
 			}
 			// 封装首次登录信息
-			channelOperationPageData.put("user_id", consumerList.get(i).getString("user_id"));
+			channelOperationPageData.put("user_id", consumerList.get(i).getString("user_id") == "" ? null : consumerList.get(i).getString("user_id"));
 			channelOperationPageData.put("operation_node", "1");
 			channelOperationPageData.put("status", "1");
 			channelOperationPageData.put("source", "h5");
-			channelOperationPageData.put("option_amount", "");
-			channelOperationPageData.put("option_time", consumerList.get(i).getString("frist_login_time"));
+			// channelOperationPageData.put("option_amount", "");
+			channelOperationPageData.put("option_time", consumerList.get(i).getString("frist_login_time") == "" ? null : consumerList.get(i).getString("frist_login_time"));
 			channelOperationList.add(channelOperationPageData);
 		}
 		if (channelOperationList.size() > 0) {
+			PageData distributorpd = new PageData();
+			List<PageData> distributors = channeldistributorService.listAll(distributorpd);
+			for (int i = 0; i < channelOperationList.size(); i++) {
+				for (int j = 0; j < distributors.size(); j++) {
+					if (channelOperationList.get(i).getString("distributor_id").equals(distributors.get(j).getString("channel_distributor_id"))) {
+						channelOperationList.get(i).put("channel_id", distributors.get(j).getString("channel_id") == "" ? null : distributors.get(j).getString("channel_id"));
+					}
+				}
+			}
 			insertNum = channeloptionlogService.insertList(channelOperationList);
 		}
 		logger.info(" 扫描结束,更新完成!共更新" + insertNum + "条。");
+	}
+
+	public static void main(String[] args) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Calendar c = Calendar.getInstance();
+		// c.add(Calendar.HOUR_OF_DAY, -1);// 1小时前
+		c.add(Calendar.MINUTE, -1);// 减去一分钟
+		System.out.println(sdf.format(c.getTime()));
 	}
 }
