@@ -73,7 +73,7 @@
 											</td>
 											<td class='center'>
 												<c:choose>
-													<c:when test="${var.platform == 1 }">
+													<c:when test="${var.business_type == 1 }">
 													交易版
 													</c:when>
 													<c:otherwise>
