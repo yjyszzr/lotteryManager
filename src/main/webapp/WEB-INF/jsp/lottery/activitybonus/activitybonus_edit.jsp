@@ -99,6 +99,7 @@
 	                                		 <div class="col-sm-4">
 									    <select  name="bonus_type" id="bonus_type" value="${pd.bonus_type}" style="width:204px;border-radius:5px !important">
 									        <option value="1" <c:if test="${pd.bonus_type==1}">selected</c:if>>注册送红包</option>
+									        <option value="2" <c:if test="${pd.bonus_type==2}">selected</c:if>>西安活动红包</option>
 									    </select>
 									</div>
 	                                	<div class="col-sm-5"> </div>

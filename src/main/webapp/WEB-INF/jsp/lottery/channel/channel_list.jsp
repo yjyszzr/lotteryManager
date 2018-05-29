@@ -120,9 +120,9 @@
 													<c:if test="${QX.del == 1 }">
 													<a class="btn btn-xs btn-danger"  style="border-radius: 5px;" onclick="del('${var.channel_id}');">删除 </a>
 													</c:if>
-													<c:if test="${QX.cha == 1 }">
-														<a class="btn btn-xs btn-success"  title="分销"    style="border-radius: 5px;"  href="<%=basePath%>/channeldistributor/list.do?channel_id=${var.channel_id}">分销</a>
-													</c:if>
+<%-- 													<c:if test="${QX.cha == 1 }"> --%>
+<%-- 														<a class="btn btn-xs btn-success"  title="分销"    style="border-radius: 5px;"  href="<%=basePath%>/channeldistributor/list.do">分销</a> --%>
+<%-- 													</c:if> --%>
 												</div>
 											</td>
 										</tr>

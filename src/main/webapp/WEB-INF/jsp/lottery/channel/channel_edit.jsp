@@ -41,11 +41,16 @@
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">佣金比例:</td>
-								<td><input type="number" name="commission_rate" id="commission_rate" value="${pd.commission_rate}" maxlength="32" placeholder="这里输入佣金比例" title="佣金比例" style="width:98%;"/></td>
+								<td><input type="number" name="commission_rate" id="commission_rate" value="${pd.commission_rate}" maxlength="32" placeholder="这里输入佣金比例" title="佣金比例" style="width:90%;"/>%</td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">渠道类型:</td>
-								<td><input type="number" name="channel_type" id="channel_type" value="${pd.channel_type}" maxlength="32" placeholder="这里输入渠道类型" title="渠道类型" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">所属企业:</td>
+								<td>
+									<select  name="channel_type" id="channel_type" value="${pd.channel_type }"  style="width:188px;">
+												 	<option value =""   <c:if test="${channel_type == 0}">selected</c:if>>请选择</option>
+												    <option value="1"     <c:if test="${pd.channel_type==1}">selected</c:if>>西安每一天便利店</option>
+									    </select>
+								</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">渠道联系人:</td>
@@ -59,10 +64,10 @@
 								<td style="width:75px;text-align: right;padding-top: 13px;">地址:</td>
 								<td><input type="text" name="channel_address" id="channel_address" value="${pd.channel_address}" maxlength="255" placeholder="这里输入地址" title="地址" style="width:98%;"/></td>
 							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">是否删除:</td>
-								<td><input type="number" name="deleted" id="deleted" value="${pd.deleted}" maxlength="32" placeholder="这里输入是否删除" title="是否删除" style="width:98%;"/></td>
-							</tr>
+<!-- 							<tr> -->
+<!-- 								<td style="width:75px;text-align: right;padding-top: 13px;">是否删除:</td> -->
+<%-- 								<td><input type="number" name="deleted" id="deleted" value="${pd.deleted}" maxlength="32" placeholder="这里输入是否删除" title="是否删除" style="width:98%;"/></td> --%>
+<!-- 							</tr> -->
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
 								<td><input type="text" name="remark" id="remark" value="${pd.remark}" maxlength="255" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>

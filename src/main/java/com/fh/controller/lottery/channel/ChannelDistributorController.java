@@ -24,9 +24,12 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.channel.ChannelConsumerManager;
 import com.fh.service.lottery.channel.ChannelDistributorManager;
+import com.fh.service.lottery.channel.ChannelManager;
 import com.fh.service.lottery.channel.ChannelOptionLogManager;
+import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtil;
+import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -41,11 +44,18 @@ public class ChannelDistributorController extends BaseController {
 	String menuUrl = "channeldistributor/list.do"; // 菜单地址(权限用)
 	@Resource(name = "channeldistributorService")
 	private ChannelDistributorManager channeldistributorService;
+
 	@Resource(name = "channelconsumerService")
 	private ChannelConsumerManager channelconsumerService;
 
 	@Resource(name = "channeloptionlogService")
 	private ChannelOptionLogManager channeloptionlogService;
+
+	@Resource(name = "usermanagercontrollerService")
+	private UserManagerControllerManager usermanagercontrollerService;
+
+	@Resource(name = "channelService")
+	private ChannelManager channelService;
 
 	/**
 	 * 保存
@@ -62,11 +72,17 @@ public class ChannelDistributorController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String rate = pd.getString("distributor_commission_rate");
+		if (!rate.equals("0")) {
+			BigDecimal bg = new BigDecimal(rate);
+			BigDecimal bg100 = new BigDecimal(100);
+			pd.put("distributor_commission_rate", bg.divide(bg100));
+		}
 		// pd.put("channel_distributor_id", this.get32UUID()); //主键
 		pd.put("channel_distributor_id", "0"); // 分销员Id
-		pd.put("channel_id", "0"); // 渠道Id
-		pd.put("user_id", "0"); // 用户Id
-		pd.put("add_time", "0"); // 添加时间
+		// pd.put("channel_id", "0"); // 渠道Id
+		// pd.put("user_id", "0"); // 用户Id
+		pd.put("add_time", DateUtilNew.getCurrentTimeLong()); // 添加时间
 		pd.put("deleted", "0"); // 是否删除
 		channeldistributorService.save(pd);
 		mv.addObject("msg", "success");
@@ -149,6 +165,8 @@ public class ChannelDistributorController extends BaseController {
 				}
 			}
 			BigDecimal distributorRate = new BigDecimal(distributor.getString("distributor_commission_rate"));
+			BigDecimal bg100 = new BigDecimal(100);
+			varList.get(i).put("distributor_commission_rate", distributorRate.multiply(bg100));
 			varList.get(i).put("total_amount", big);
 			varList.get(i).put("total_amount_extract", big.multiply(distributorRate));
 		}
@@ -169,11 +187,15 @@ public class ChannelDistributorController extends BaseController {
 	@RequestMapping(value = "/goAdd")
 	public ModelAndView goAdd() throws Exception {
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
+		List<PageData> userAll = usermanagercontrollerService.findAll();
+		mv.addObject("userAll", userAll);
+		PageData pda = new PageData();
+		List<PageData> channelAll = channelService.listAll(pda);
+		mv.addObject("channelAll", channelAll);
 		mv.setViewName("lottery/channeldistributor/channeldistributor_edit");
 		mv.addObject("msg", "save");
-		mv.addObject("pd", pd);
+		mv.addObject("channel_id", 0);
+		mv.addObject("user_id", 0);
 		return mv;
 	}
 
@@ -189,6 +211,15 @@ public class ChannelDistributorController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = channeldistributorService.findById(pd); // 根据ID读取
+		String rate = pd.getString("distributor_commission_rate");
+		BigDecimal bg = new BigDecimal(rate);
+		BigDecimal bg100 = new BigDecimal(100);
+		pd.put("distributor_commission_rate", bg.multiply(bg100));
+		List<PageData> userAll = usermanagercontrollerService.findAll();
+		mv.addObject("userAll", userAll);
+		PageData pda = new PageData();
+		List<PageData> channelAll = channelService.listAll(pda);
+		mv.addObject("channelAll", channelAll);
 		mv.setViewName("lottery/channeldistributor/channeldistributor_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

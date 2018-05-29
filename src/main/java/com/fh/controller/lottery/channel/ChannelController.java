@@ -57,10 +57,17 @@ public class ChannelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String rate = pd.getString("commission_rate");
+		if (!rate.equals("0")) {
+			BigDecimal bg = new BigDecimal(rate);
+			BigDecimal bg100 = new BigDecimal(100);
+			pd.put("commission_rate", bg.divide(bg100));
+		}
 		// pd.put("channel_id", this.get32UUID()); //主键
 		pd.put("channel_id", "0"); // 渠道ID
 		pd.put("channel_status", "0"); // 状态
 		pd.put("add_time", "0"); // 时间
+		pd.put("deleted", "0"); // 是否删除
 		channelService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -144,6 +151,8 @@ public class ChannelController extends BaseController {
 				}
 			}
 			BigDecimal channelRate = new BigDecimal(channel.getString("commission_rate"));
+			BigDecimal bg100 = new BigDecimal(100);
+			varList.get(i).put("commission_rate", channelRate.multiply(bg100));
 			varList.get(i).put("total_amount", big);
 			varList.get(i).put("total_amount_extract", big.multiply(channelRate));
 		}
@@ -184,6 +193,10 @@ public class ChannelController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = channelService.findById(pd); // 根据ID读取
+		String rate = pd.getString("commission_rate");
+		BigDecimal bg = new BigDecimal(rate);
+		BigDecimal bg100 = new BigDecimal(100);
+		pd.put("commission_rate", bg.multiply(bg100));
 		mv.setViewName("lottery/channel/channel_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

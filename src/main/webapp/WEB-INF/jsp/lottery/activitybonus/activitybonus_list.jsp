@@ -104,6 +104,7 @@
 											<td class='center'>${var.bonus_id}</td>
 											<td class='center'> 
 												<c:if test="${var.bonus_type==1 }">注册送红包</c:if>
+												<c:if test="${var.bonus_type==2 }">西安活动红包</c:if>
 											</td>
 											<td class='center'>${var.bonus_amount}</td>
 											<td class='center'>${var.min_goods_amount}</td>

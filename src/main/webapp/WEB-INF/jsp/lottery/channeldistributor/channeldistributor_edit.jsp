@@ -29,28 +29,44 @@
 					
 					<form action="channeldistributor/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="channel_distributor_id" id="channel_distributor_id" value="${pd.channel_distributor_id}"/>
-						<input type="hidden" name="channel_id" id="channel_id" value="${pd.channel_id}"/>
+						<input type="hidden" name="channel_name" id="channel_name" value=""/>
+						<input type="hidden" name="user_name" id="user_name" value=""/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
-								<td><input type="text" name="user_name" id="user_name" value="${pd.user_name}" maxlength="60" placeholder="这里输入用户名" title="用户名" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">渠道名称:</td>
+								<td>
+										<select name="channel_id" id="channel_id" value="${pd.channel_id }"  style="width:188px;">
+												 	<option value ="0"  oldName=""   channelNum = ""  <c:if test="${channel_id == 0}">selected</c:if>>请选择</option>
+												 	<c:forEach var="channel" items="${channelAll }" >
+													     <option value="${channel.channel_id}"  oldName="${channel.channel_name}"   channelNum = "${channel.channel_num}" <c:if test="${pd.channel_id==channel.channel_id}">selected</c:if>>${channel.channel_name} </option>
+													</c:forEach>
+									    </select>
+									    </td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">渠道分销号:</td>
 								<td><input type="text" name="channel_distributor_num" id="channel_distributor_num" value="${pd.channel_distributor_num}" maxlength="60" placeholder="这里输入渠道分销号" title="渠道分销号" style="width:98%;"/></td>
 							</tr>
 							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
+								 	<td>   
+								 		<select   name="user_id"  id = "user_id" value="${pd.user_id }"   style="width:188px;">
+												 	<option value ="0"    oldName=""  mobile="" <c:if test="${user_id == 0}">selected</c:if>>请选择</option>
+												 	<c:forEach var="user" items="${userAll }" >
+													    <option value="${user.user_id}"  oldName="${user.user_name}"  mobile="${user.mobile }" <c:if test="${pd.userId==user.user_id}">selected</c:if>>${user.user_name}<c:if test="${not empty user.real_name }">（${user.real_name}）</c:if></option>
+													</c:forEach>
+									    </select>
+								    </td>
+							</tr>
+						
+							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">电话:</td>
 								<td><input type="text" name="mobile" id="mobile" value="${pd.mobile}" maxlength="20" placeholder="这里输入电话" title="电话" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">分销佣金比例:</td>
-								<td><input type="text" name="distributor_commission_rate" id="distributor_commission_rate" value="${pd.distributor_commission_rate}" maxlength="255" placeholder="这里输入分销佣金比例" title="分销佣金比例" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">渠道名称:</td>
-								<td><input type="text" name="channel_name" id="channel_name" value="${pd.channel_name}" maxlength="25" placeholder="这里输入渠道名称" title="渠道名称" style="width:98%;"/></td>
+								<td><input  type="number" name="distributor_commission_rate" id="distributor_commission_rate" value="${pd.distributor_commission_rate}" maxlength="255" placeholder="这里输入分销佣金比例" title="分销佣金比例" style="width:90%;"/>%</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
@@ -89,6 +105,22 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		<script type="text/javascript">
 		$(top.hangge());
+		
+		$("#user_id").change(function(){
+		    var mobile= $("#user_id").find("option:selected").attr("mobile");
+		    var oldName= $("#user_id").find("option:selected").attr("oldName");
+		    $("#user_name").val(oldName);
+		    $("#mobile").val(mobile);
+		});
+		
+		$("#channel_id").change(function(){
+		    var channelNum= $("#channel_id").find("option:selected").attr("channelNum");
+		    var oldName= $("#channel_id").find("option:selected").attr("oldName");
+		    $("#channel_distributor_num").val(channelNum);
+		    $("#channel_name").val(oldName);
+		});
+		
+		
 		//保存
 		function save(){
 			if($("#user_name").val()==""){
