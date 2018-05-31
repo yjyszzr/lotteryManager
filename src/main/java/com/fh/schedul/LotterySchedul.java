@@ -59,7 +59,7 @@ public class LotterySchedul {
 		if (orderList.size() > 0) {
 			for (int i = 0; i < orderList.size(); i++) {
 				for (int m = 0; m < consumers.size(); m++) {
-					if (orderList.get(i).getString("user_id") == consumers.get(m).getString("user_id")) {
+					if (orderList.get(i).getString("user_id").equals(consumers.get(m).getString("user_id"))) {
 						PageData channelOperationPageData = new PageData();
 						for (int j = 0; j < userList.size(); j++) {
 							if (orderList.get(i).getString("user_id").equals(userList.get(j).getString("user_id"))) {
@@ -70,13 +70,7 @@ public class LotterySchedul {
 								channelOperationPageData.put("mobile", userList.get(j).getString("mobile") == "" ? null : userList.get(j).getString("mobile"));
 							}
 						}
-						for (int k = 0; k < consumers.size(); k++) {
-							if (orderList.get(i).getString("user_id").equals(consumers.get(k).getString("user_id"))) {
-								// 封装消费者的所属店员以及店铺信息
-								channelOperationPageData.put("distributor_id", consumers.get(k).getString("channel_distributor_id") == "" ? null : consumers.get(k).getString("channel_distributor_id"));
-							}
-						}
-						// 封装下单信息
+						channelOperationPageData.put("distributor_id", consumers.get(m).getString("channel_distributor_id") == "" ? null : consumers.get(m).getString("channel_distributor_id"));
 						channelOperationPageData.put("user_id", orderList.get(i).getString("user_id") == "" ? null : orderList.get(i).getString("user_id"));
 						channelOperationPageData.put("operation_node", "2");
 						channelOperationPageData.put("status", "1");
