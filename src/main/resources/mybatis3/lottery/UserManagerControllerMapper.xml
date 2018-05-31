@@ -175,8 +175,8 @@
 		dl_user.user_id,user_name,mobile,nickname,reg_time,last_time,real_name,id_code,dl_user.user_status,reg_from
 		from 
 		<include refid="tableName"></include>
-		left join dl_user_real on dl_user_real.user_id = dl_user.user_id
-		where 1=1
+		left join dl_user_real on dl_user_real.user_id = dl_user.user_id 
+		where 1=1 
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -185,12 +185,9 @@
 				mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 				or 
 				nickname LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
+		 
 				)
+			 
 		</if>
 		<if test="pd.lastStart != null and pd.lastStart != '' and pd.lastEnd != null and pd.lastEnd != ''">
 			and
@@ -216,7 +213,7 @@
 				is_real = 0
 			)
 		</if>
-		
+		order by dl_user.reg_time DESC
 	</select>
 	
 	<!-- 列表(全部) -->

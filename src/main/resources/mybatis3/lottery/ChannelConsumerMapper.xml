@@ -124,10 +124,12 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
+		SELECT
+			* 
+		FROM
+			dl_channel_consumer 
+		WHERE
+			user_id IS NOT NULL
 	</select>
 	
 	<select id="selectByTime" parameterType="String" resultType="pd">

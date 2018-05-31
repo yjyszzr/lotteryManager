@@ -39,21 +39,21 @@
 <body class="no-skin">
 
 <div style="padding-top: 12px;padding-bottom: 12px">
-	<button class="button" onclick="sendVerifyCode('${entity.user_id}');">发送验证码</button>  
+	<button class="button" style="border-radius: 5px;"  onclick="sendVerifyCode('${entity.user_id}');">发送验证码</button>  
 	<c:choose>
 		<c:when test="${entity.user_status != 2}">
-			<button class="button" onclick="freezAccount('${entity.user_id}')">账号冻结</button>  
+			<button class="button" style="border-radius: 5px;"  onclick="freezAccount('${entity.user_id}')">账号冻结</button>  
 		</c:when> 
 		<c:otherwise>
-			<button class="button" onclick="unFreezAccount('${entity.user_id}')">解冻该账号</button>  
+			<button class="button" style="border-radius: 5px;"  onclick="unFreezAccount('${entity.user_id}')">解冻该账号</button>  
 		</c:otherwise> 
 	</c:choose>
 	<c:choose>
 		<c:when test="${entity.is_real == 1}">
-			<button class="button" onclick="realNameVerify('${entity.user_id}')">实名认证</button> 
+			<button class="button"  style="border-radius: 5px;"  onclick="realNameVerify('${entity.user_id}')">实名认证</button> 
 		</c:when>
 		<c:otherwise>
-			<button class="button" onclick="unRealNameVerify('${entity.user_id}')">未认证</button> 
+			<button class="button" style="border-radius: 5px;"  onclick="unRealNameVerify('${entity.user_id}')">未认证</button> 
 		</c:otherwise>
 	</c:choose>
 </div>
@@ -72,37 +72,41 @@
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">用户ID:</td>
-								<td><input type="text" value="${entity.user_id}" maxlength="255" title="${entity.user_id}" style="width:28%;"/></td>
+								<td style="padding: 13px;"> <lable >${entity.user_id}</lable></td>
 								<td style="width:75px;text-align: right;padding-top: 13px;">用户昵称:</td>
-								<td><input type="text" value="${entity.nickname}" maxlength="255" style="width:28%;"/></td>
+								<td style="padding: 13px;"> <lable >${entity.nickname} </lable></td>
 								<td style="width:75px;text-align: right;padding-top: 13px;">性别:</td>
-								<td><input type="text" value="${entity.sex}" maxlength="255" style="width:28%;"/></td>
+								<td style="padding: 13px;"> 
+									<lable >
+										<c:if test="${!entity.sex}">男</c:if>
+										<c:if test="${entity.sex}">女</c:if>
+									</lable>
+								</td>  
 							</tr>
 							
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">手机号:</td>
-								<td><input type="text" value="${entity.mobile}" maxlength="255" style="width:38%;"/></td>
+								<td style="padding: 13px;"> <lable >${entity.mobile} </lable></td>
 								<td style="width:75px;text-align: right;padding-top: 13px;">真实姓名:</td>
-								<td><input type="text" value="${rentity.real_name}" maxlength="255" title="${rEntity.realname}" style="width:28%;"/></td>
+								<td style="padding: 13px;"> <lable >${rentity.real_name} </lable></td>
 								<td style="width:75px;text-align: right;padding-top: 13px;">身份证号:</td>
-								<td><input type="text" value="${rentity.id_code}" maxlength="255" style="width:68%;"/></td>
+								<td style="padding: 13px;"> <lable >${rentity.id_code} </lable></td>
 							</tr>
-							
-							
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">年龄:</td>
-								<td><input type="text" value="${IDCardUtil.getAgeByIdCard(rentity.id_code)}" maxlength="255" style="width:38%;"/></td>
-								<td style="width:75px;text-align: right;padding-top: 13px;">地域:</td>
-								<td><input type="text" value="${rentity.address_info}" maxlength="255" style="width:28%;"/></td>
-								<td style="width:75px;text-align: right;padding-top: 13px;"></td>
-								<td><input type="text" value="" maxlength="255" style="width:68%;"/></td>
+								<td style="padding: 13px;"> <lable >${IDCardUtil.getAgeByIdCard(rentity.id_code)} 岁</lable></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">地址或IP:</td>
+<%-- 								<td style="padding: 13px;"> <lable >${rentity.address_info}</lable></td> --%>
+								<td style="padding: 13px;"> <lable >${entity.reg_ip}</lable></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">状态:</td>
+								<td style="padding: 13px;"> <lable >
+									<c:choose>
+										<c:when test="${entity.user_status == 0 }">正常</c:when>
+										<c:when test="${entity.user_status == 1 }"><lable style = "color:red">冻结</c:when>
+									</c:choose>
+								 </lable></td>
 							</tr>
-							
 						</table>
-						
-						
-						
-						
 						</div>
 						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
 					</form>
