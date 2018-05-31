@@ -131,6 +131,15 @@
 		where 
 		match_id = #{match_id}
 	</update>
+	<!-- 修改 -->
+	<update id="updateStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set   
+			is_hot = #{is_hot}
+		where 
+		match_id = #{match_id}
+	</update>
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">

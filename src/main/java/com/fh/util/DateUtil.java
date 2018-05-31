@@ -252,4 +252,10 @@ public class DateUtil {
 	public static String toSDFTime(long time) {
 		return sdfTime.format(new Date(time));
 	}
+
+	public static String toTimeSubtraction(String time) {
+		long dateLong = DateUtilNew.getMilliSecondsByStr(time);
+		dateLong = dateLong - 13 * 60;
+		return toSDFTime(dateLong * 1000);
+	}
 }

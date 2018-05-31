@@ -94,4 +94,9 @@ public class FootballMatchLotteryService implements FootballMatchLotteryManager 
 		dao.delete("FootballMatchLotteryMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	@Override
+	public void updateStatus(PageData pd) throws Exception {
+		dao.update("FootballMatchLotteryMapper.updateStatus", pd);
+	}
+
 }

@@ -1,5 +1,5 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -32,32 +32,31 @@
 							
 						<!-- 检索  -->
 						<form action="footballmatchlottery/list.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
-							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="">全部</option>
-									<option value="">1</option>
-									<option value="">2</option>
-								  	</select>
-								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
-							</tr>
-						</table>
+							<table style="margin-top:5px;">
+								<tr style="margin:2px ">
+										<td>
+											<div class="nav-search">
+												<span class="input-icon" style="width:80px;text-align:right;">
+													联赛名称:
+												</span>
+												<span class="input-icon">
+													<input type="text" placeholder="	联赛名称" class="nav-search-input" id="league_name" autocomplete="off" name="league_name" value="${pd.league_name }"/>
+												</span>
+											</div>
+										</td>
+										<c:if test="${QX.cha == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+											<span class="input-icon" style="width:80px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+											</span>
+											<span class="input-icon" style="width:43px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+											</span>
+										</td>
+									</c:if>
+							</table>
 						<!-- 检索  -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
@@ -81,6 +80,7 @@
 									<th class="center">客队名称</th>
 <!-- 									<th class="center">客队简称</th> -->
 <!-- 									<th class="center">客队排名</th> -->
+									<th class="center">截售时间</th>
 									<th class="center">比赛时间</th>
 <!-- 									<th class="center">显示时间</th> -->
 <!-- 									<th class="center">创建时间</th> -->
@@ -120,6 +120,7 @@
 											<td class='center'>${var.visiting_team_name}</td>
 <%-- 											<td class='center'>${var.visiting_team_abbr}</td> --%>
 <%-- 											<td class='center'>${var.visiting_team_rank}</td> --%>
+											<td class='center'>${DateUtil.toTimeSubtraction(var.match_time)}</td>
 											<td class='center'>${var.match_time}</td>
 <%-- 											<td class='center'>${var.show_time}</td> --%>
 <%-- 											<td class='center'>${var.create_time}</td> --%>
@@ -128,51 +129,29 @@
 <%-- 											<td class='center'>${var.match_sn}</td> --%>
 <%-- 											<td class='center'>${var.first_half}</td> --%>
 <%-- 											<td class='center'>${var.whole}</td> --%>
-											<td class='center'>${var.status}</td>
-											<td class='center'>${var.is_hot}</td>
+											<td class='center'> 
+											<c:choose>
+												<c:when test="${var.status == 0 }">待开赛</c:when>
+												<c:when test="${var.status == 1 }">已结束</c:when>
+											</c:choose>
+											</td>
+											<td class='center'> 
+											<c:choose>
+												<c:when test="${var.is_hot == 0 }">非热门</c:when>
+												<c:when test="${var.is_hot == 1 }">热门</c:when>
+											</c:choose>
+											</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.match_id}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
-													</a>
+														<c:choose>
+															<c:when test="${var.is_hot == 0 }"><a  onclick="updateStatus('${var.match_id}','1');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-warning" title="置为热门"   >置为热门</a></c:when>
+															<c:when test="${var.is_hot == 1 }"><a  onclick="updateStatus('${var.match_id}','0');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="撤销热门"   >撤销热门</a></c:when>
+														</c:choose>
 													</c:if>
-													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="del('${var.match_id}');">
-														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
-													</a>
-													</c:if>
-												</div>
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-			
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.match_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-															<c:if test="${QX.del == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="del('${var.match_id}');" class="tooltip-error" data-rel="tooltip" title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-														</ul>
-													</div>
 												</div>
 											</td>
 										</tr>
@@ -197,12 +176,6 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
@@ -244,10 +217,16 @@
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+ 
+		
+		function tosearch(status){
+			if(status==0){
+				$("#league_name").val("");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}
+		
 		$(function() {
 		
 			//日期框
@@ -321,11 +300,17 @@
 		}
 		
 		//删除
-		function del(Id){
-			bootbox.confirm("确定要删除吗?", function(result) {
+		function updateStatus(Id,status){
+			var str = "";
+			if(status == 1){
+				str = "确定置为热门吗?";
+			}else{
+				str = "确定撤销热门吗?";
+			}
+			bootbox.confirm(str, function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>footballmatchlottery/delete.do?match_id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>footballmatchlottery/updateStatus.do?match_id="+Id+"&is_hot="+status;
 					$.get(url,function(data){
 						tosearch();
 					});
