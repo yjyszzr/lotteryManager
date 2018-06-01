@@ -85,7 +85,7 @@
 									<c:if test="${QX.cha == 1 }">
 										<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>${var.changci}</td>
+											<td class='center'>${var.list}</td>
 											<td class='center'>
 												<c:choose>
 													<c:when test="${var.is_dan == 0}">否</c:when>

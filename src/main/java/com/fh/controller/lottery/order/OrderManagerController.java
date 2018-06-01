@@ -1,6 +1,9 @@
 package com.fh.controller.lottery.order;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -10,6 +13,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.dto.DlJcZqMatchCellDTO;
+import com.fh.entity.dto.MatchBetCellDTO;
+import com.fh.enums.MatchPlayTypeEnum;
+import com.fh.enums.MatchResultCrsEnum;
+import com.fh.enums.MatchResultHadEnum;
+import com.fh.enums.MatchResultHafuEnum;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -87,9 +96,57 @@ public class OrderManagerController extends BaseController {
 		List<PageData> orderDetailsList = ordermanagerService.toDetail(pd); // 列出OrderManager列表
 		mv.setViewName("lottery/ordermanager/ordermanager_details");
 		mv.addObject("varList", orderDetailsList);
+		for (int i = 0; i < orderDetailsList.size(); i++) {
+			List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
+			orderDetailsList.get(i).put("list", list);
+		}
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
 
+	@SuppressWarnings("unused")
+	private List<MatchBetCellDTO> getString(String ticketsStr, String orderSn) {
+		List<MatchBetCellDTO> matchBetCells = new ArrayList<MatchBetCellDTO>();
+		String[] tickets = ticketsStr.split(";");
+		String playCode = null;
+		for (String tikcket : tickets) {
+			String[] split = tikcket.split("\\|");
+			if (split.length != 3) {
+				logger.error("getBetInfoByOrderInfo ticket has error, orderSn=" + orderSn + " ticket=" + tikcket);
+				continue;
+			}
+			String playType = split[0];
+			if (null == playCode) {
+				playCode = split[1];
+			}
+			String[] split2 = split[2].split(",");
+			List<DlJcZqMatchCellDTO> betCells = Arrays.asList(split2).stream().map(str -> {
+				String[] split3 = str.split("@");
+				String matchResult = getCathecticData(split[0], split3[0]);
+				DlJcZqMatchCellDTO dto = new DlJcZqMatchCellDTO(split3[0], matchResult, split3[1]);
+				return dto;
+			}).collect(Collectors.toList());
+			MatchBetCellDTO matchBetCell = new MatchBetCellDTO();
+			matchBetCell.setPlayType(playType);
+			matchBetCell.setBetCells(betCells);
+			matchBetCells.add(matchBetCell);
+		}
+		return matchBetCells;
+	}
+
+	private String getCathecticData(String playType, String cathecticStr) {
+		int playCode = Integer.parseInt(playType);
+		String cathecticData = "";
+		if (MatchPlayTypeEnum.PLAY_TYPE_HHAD.getcode() == playCode || MatchPlayTypeEnum.PLAY_TYPE_HAD.getcode() == playCode) {
+			cathecticData = MatchResultHadEnum.getName(Integer.valueOf(cathecticStr));
+		} else if (MatchPlayTypeEnum.PLAY_TYPE_CRS.getcode() == playCode) {
+			cathecticData = MatchResultCrsEnum.getName(cathecticStr);
+		} else if (MatchPlayTypeEnum.PLAY_TYPE_TTG.getcode() == playCode) {
+			cathecticData = cathecticStr;
+		} else if (MatchPlayTypeEnum.PLAY_TYPE_HAFU.getcode() == playCode) {
+			cathecticData = MatchResultHafuEnum.getName(cathecticStr);
+		}
+		return cathecticData;
+	}
 }
