@@ -14,10 +14,9 @@
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
 <%@ include file="../../system/index/top.jsp"%>
-<!-- 日期框 -->
-<link rel="stylesheet" href="static/ace/css/datepicker.css" />
 </head>
 <body class="no-skin">
+
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->
@@ -27,8 +26,8 @@
 					<div class="row">
 						<div class="col-xs-12">
 						<!-- 检索  -->
-						<form action="userwithdraw/list.do" method="post" name="Form" id="Form">
-							<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
+						<form action="ordermanager/list.do" method="post" name="Form" id="Form">
+						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
 									<td>
 										<div class="nav-search">
@@ -36,7 +35,7 @@
 												订单编号:
 											</span>
 											<span class="input-icon">
-												<input type="text" placeholder="订单编号" class="nav-search-input" id="account_sn" autocomplete="off" name="account_sn" value="${pd.account_sn }"/>
+												<input type="text" placeholder="订单编号" class="nav-search-input" id="order_sn" autocomplete="off" name="order_sn" value="${pd.order_sn }"   onkeyup="value=value.replace(/[^\d]/g,'')"  />
 											</span>
 										</div>
 									</td>
@@ -46,7 +45,7 @@
 												手机号:
 											</span>
 											<span class="input-icon">
-												<input type="text" placeholder="手机号" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"   onkeyup="value=value.replace(/[^\d]/g,'')" />
+												<input type="text" placeholder="手机号" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"  onkeyup="value=value.replace(/[^\d]/g,'')"  />
 											</span>
 										</div>
 									</td>
@@ -60,30 +59,56 @@
 											</span>
 										</div>
 									</td>
+										<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													订单状态:
+												</span>
+										 	<select  name="order_status" id="order_status" data-placeholder="请选择" value="${pd.order_status }" style="width:154px;border-radius:5px !important"  >
+											<option value="" selected="selected">全部</option>
+													<option value="0" <c:if test="${pd.order_status!=NULL && pd.order_status!='' && pd.order_status == 0}">selected</c:if>>待付款</option>
+													<option value="1" <c:if test="${pd.order_status == 1}">selected</c:if>>待出票</option>
+													<option value="2" <c:if test="${pd.order_status == 2}">selected</c:if>>出票失败</option>
+													<option value="3" <c:if test="${pd.order_status == 3}">selected</c:if>>待开奖</option>
+													<option value="4" <c:if test="${pd.order_status == 4}">selected</c:if>>未中奖</option>
+													<option value="5" <c:if test="${pd.order_status == 5}">selected</c:if>>已中奖</option>
+													<option value="6" <c:if test="${pd.order_status == 6}">selected</c:if>>派奖中</option>
+													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>已派奖</option>
+													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option>
+										  	</select>
+										  	</div>
+									</td>
 									</tr>
 									<tr style="margin:2px">
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													彩种:
+												</span>
+										 	<select  name="lottery_classify_id" id="lottery_classify_id" data-placeholder="请选择" value="${pd.lottery_classify_id }" style="width:154px;border-radius:5px !important"  >
+											<option value="" selected="selected">全部</option>
+													<option value="1" <c:if test="${pd.lottery_classify_id == 1}">selected</c:if>>竞彩足球</option>
+										  	</select>
+										  	</div>
+									</td>
 									<td >
 										<span class="input-icon" style="width:80px;text-align:right;">
-												提现时间:
+												购彩时间:
 											</span>
 											<span  >
 												<input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
 												<input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 											</span>
 									</td>
-									<td>
-										<div class="nav-search">
+										<td>
 											<span class="input-icon" style="width:80px;text-align:right;">
-													提现状态:
+													奖金范围:
 												</span>
-										 	<select  name="status" id="status" data-placeholder="请选择" value="${pd.status }" style="width:154px;border-radius:5px !important"  >
-											<option value="" selected>全部</option>
-											<option value="0" <c:if test="${pd.status!=NULL && pd.status!='' && pd.status == 0}">selected</c:if>>未完成</option>
-											<option value="1" <c:if test="${pd.status==1}">selected</c:if>>成功</option>
-											<option value="2" <c:if test="${pd.status==2}">selected</c:if>>失败</option>
-										  	</select>
-										  	</div>
-									</td>
+										 	<span  >
+												<input name="amountStart" id="amountStart"  value="${pd.amountStart }" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
+												<input name="amountEnd" id="amountEnd"  value="${pd.amountEnd}" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
+											</span>
+									</td>								
 									<c:if test="${QX.cha == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
 											<span class="input-icon" style="width:80px;"> </span>
@@ -97,22 +122,23 @@
 										</td>
 									</c:if>
 								</tr>
-							</table> <!-- 检索结束 -->
+							</table>
+						<!-- 检索  -->
+					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">提现编号</th>
-<!-- 									<th class="center">交易流水号</th> -->
-<!-- 									<th class="center">用户昵称</th> -->
-									<th class="center">真实姓名</th>
-									<th class="center">电话</th>
-									<th class="center">提现金额</th>
-									<th class="center">状态</th>
-									<th class="center">卡号</th>
-									<th class="center">提现时间</th>
-									<th class="center">银行名称</th>
-									<th class="center">操作</th>
+									<th class="center">订单编号</th>
+									<th class="center">用户名称</th>
+									<th class="center">手机号</th>
+									<th class="center">彩种名称</th>
+									<th class="center">订单状态</th>
+									<th class="center">支付方式</th>
+									<th class="center">投注金额</th>
+									<th class="center">中奖金额</th>
+									<th class="center">红包金额</th>
+									<th class="center">购彩时间</th>
 								</tr>
 							</thead>
 													
@@ -124,42 +150,28 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.account_sn}</td>
-<%-- 											<td class='center'>${var.withdrawal_sn}</td> --%>
-<%-- 											<td class='center'>${var.user_name}</td> --%>
-											<td class='center'>${var.real_name}</td>
+											<td class='center'><a onclick="toDetail('${var.order_id}');" style=" cursor:pointer;">${var.order_sn}</a></td>
+											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
-											<td class='center'>${var.amount}</td>
-												<td class='center'> 
-													<c:choose>
-													<c:when test="${var.status==1}">成功</c:when>
-													<c:when test="${var.status==2}"><lable style="color:red">失败</lable></c:when>
-													<c:otherwise><lable style="color:orange">未完成</lable></c:otherwise>
-												</c:choose>
+											<td class='center'>${var.lottery_name}</td>
+											<td class='center'> 
+											<c:choose>
+												<c:when test="${var.order_status == 0}">待付款</c:when>
+												<c:when test="${var.order_status == 1}">待出票</c:when>
+												<c:when test="${var.order_status == 2}">出票失败</c:when>
+												<c:when test="${var.order_status == 3}">待开奖</c:when>
+												<c:when test="${var.order_status == 4}">未中奖</c:when>
+												<c:when test="${var.order_status == 5}">已中奖</c:when>
+												<c:when test="${var.order_status == 6}">派奖中</c:when>
+												<c:when test="${var.order_status == 7}">已派奖</c:when>
+												<c:when test="${var.order_status == 8}">支付失败</c:when>
+											</c:choose>
 											</td>
-											<td class='center'>${var.card_no}</td>
-											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)}</td>
-											<td class='center'>${var.bank_name}</td>
-											<td class="center">
-												<c:if test="${QX.edit != 1 && QX.del != 1 }">
-												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
-												</c:if>
-												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${QX.edit == 1 }">
-														<c:choose>
-															<c:when test="${var.status == 0 }">
-																<a class="btn btn-xs btn-success" title="审核" onclick="edit('${var.id}');">审核</a>
-															</c:when>
-															<c:when test="${var.status == 1 }">
-																<lable  style="color:blue">审核完成</lable>
-															</c:when>
-															<c:when test="${var.status == 2 }">
-																<lable style="color:red">拒绝</lable>
-															</c:when>
-														</c:choose>													
-													</c:if>
-												</div>
-											</td>
+											<td class='center'><c:if test="${!empty var.pay_name}">${var.pay_name}/</c:if><c:if test="${ var.surplus > 0}">余额</c:if></td>
+											<td class='center'>${var.ticket_amount}</td>
+											<td class='center'>${var.winning_money}</td>
+											<td class='center'>${var.bonus}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -180,17 +192,19 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
-								<td style="vertical-align:top;">
-								总计:提现成功<lable style="color:red">￥:</lable>${successAmount}元，提现失败<lable style="color:red">￥:</lable>${failAmount}元，提现未完成<lable style="color:red">￥:</lable>${unfinished}元。
-								</td>
+								<td style="vertical-align:top;"> </td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>
 						</div>
 						</form>
-						</div> <!-- /.col -->
-					</div> <!-- /.row -->
-				</div>  <!-- /.page-content -->
+					
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.page-content -->
 			</div>
 		</div>
 		<!-- /.main-content -->
@@ -217,41 +231,28 @@
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
-	
 		$(top.hangge());//关闭加载状态
-
-			function tosearch(status){		//检索
+		//检索
+			function tosearch(status){
 			if(status==0){
 				$("#user_name").val("");
 				$("#mobile").val("");
-				$("#account_sn").val("");
-				$("#status").empty();
+				$("#order_sn").val("");
 				$("#lastStart").val("");
 				$("#lastEnd").val("");
+				$("#amountStart").val("");
+				$("#amountEnd").val("");
+				$("#order_status").empty();
+				$("#lottery_classify_id").empty();
 			}
 			top.jzts();
 			$("#Form").submit();
 		}
- 
-		function edit(Id){	//修改
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>userwithdraw/goEdit.do?id='+Id;
-			 diag.Width =800;
-			 diag.Height = 230;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮 
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 tosearch();
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
+			//订单详情页
+			function toDetail(orderId){
+				window.location.href='<%=basePath%>ordermanager/toDetail.do?order_id='+orderId;
+			}
+			
 	</script>
 </body>
 </html>

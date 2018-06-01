@@ -143,7 +143,7 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
-	<script src="static/ace/js/My97Date/WdatePicker.js"</script>
+	<script src="static/ace/js/My97DatePicker/WdatePicker.js"></script>
 	<!--提示框-->
   	<script src="plugins/fhform/js/content.min.js?v=1.0.0"></script>
   	<!-- 文件上传 -->

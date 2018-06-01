@@ -103,4 +103,14 @@ public class OrderService implements OrderManager {
 	public List<PageData> selectByTime(String format) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.selectByTime", format);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<PageData> getOrderList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.datalistPage1", page);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<PageData> toDetail(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.toDetail", pd);
+	}
 }

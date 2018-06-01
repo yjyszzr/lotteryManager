@@ -72,4 +72,8 @@ public interface OrderManager {
 
 	public List<PageData> selectByTime(String format) throws Exception;
 
+	public List<PageData> getOrderList(Page page) throws Exception;
+
+	public List<PageData> toDetail(PageData pd) throws Exception;
+
 }

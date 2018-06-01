@@ -126,7 +126,6 @@
 						</table>
 						</div>
 						</form>
-					
 						</div>
 						<!-- /.col -->
 					</div>

@@ -1,4 +1,5 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -31,30 +32,30 @@
 						<form action="channeldistributor/list.do" method="post" name="Form" id="Form">
 									<input type="hidden"  id="channel_id" name="channel_id" value="${channelId }"/>
 						<table style="margin-top:5px;">
-							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="">全部</option>
-									<option value="">1</option>
-									<option value="">2</option>
-								  	</select>
-								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
-							</tr>
+<!-- 							<tr> -->
+<!-- 								<td> -->
+<!-- 									<div class="nav-search"> -->
+<!-- 										<span class="input-icon"> -->
+<%-- 											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/> --%>
+<!-- 											<i class="ace-icon fa fa-search nav-search-icon"></i> -->
+<!-- 										</span> -->
+<!-- 									</div> -->
+<!-- 								</td> -->
+<!-- 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td> -->
+<!-- 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td> -->
+<!-- 								<td style="vertical-align:top;padding-left:2px;"> -->
+<!-- 								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;"> -->
+<!-- 									<option value=""></option> -->
+<!-- 									<option value="">全部</option> -->
+<!-- 									<option value="">1</option> -->
+<!-- 									<option value="">2</option> -->
+<!-- 								  	</select> -->
+<!-- 								</td> -->
+<%-- 								<c:if test="${QX.cha == 1 }"> --%>
+<!-- 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td> -->
+<%-- 								</c:if> --%>
+<%-- 								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if> --%>
+<!-- 							</tr> -->
 						</table>
 						<!-- 检索  -->
 					
@@ -103,7 +104,7 @@
 											<td class='center'>${var.total_amount}</td>
 											<td class='center'>${var.distributor_commission_rate}%</td>
 											<td class='center'>${var.total_amount_extract}</td>
-											<td class='center'>${var.add_time}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											<td class='center'>${var.remark}</td>
 <%-- 											<td class='center'>${var.deleted}</td> --%>
 											<td class="center">
@@ -112,13 +113,11 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.channel_distributor_id}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
+													<a class="btn btn-xs btn-success"   style="border-radius: 5px;" title="编辑" onclick="edit('${var.channel_distributor_id}');">编辑</i>
 													</a>
 													</c:if>
 													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="del('${var.channel_distributor_id}');">
-														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
+													<a class="btn btn-xs btn-danger"   style="border-radius: 5px;"  onclick="del('${var.channel_distributor_id}');">删除</i>
 													</a>
 													</c:if>
 												</div>

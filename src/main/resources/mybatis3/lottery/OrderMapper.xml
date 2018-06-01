@@ -220,6 +220,61 @@
 		</if>
 			
 	</select>
+	<!-- 列表 -->
+	<select id="datalistPage1" parameterType="page" resultType="pd">
+		SELECT
+			o.order_id,
+			o.order_sn,
+			u.user_id,
+			u.user_name,
+			u.mobile,
+			l.lottery_name,
+			l.lottery_classify_id,
+			o.order_status,
+			o.pay_name,
+			o.surplus,
+			o.ticket_amount,
+			o.winning_money,
+			o.bonus,
+			o.add_time,
+			o.pay_time 
+		FROM
+			dl_order o
+			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
+			LEFT JOIN dl_user u ON o.user_id = u.user_id 
+		WHERE 1 = 1
+			<if test="pd.order_sn != null and pd.order_sn != ''"> 
+			and o.order_sn  
+				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
+		</if>
+		<if test="pd.mobile != null and pd.mobile != ''">
+			and u.mobile  
+			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
+		<if test="pd.user_name != null and pd.user_name != ''"> 
+			and u.user_name  
+				LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		</if>
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and o.pay_time &gt; #{pd.lastStart }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and o.pay_time &lt; #{pd.lastEnd1 }
+		</if>
+		<if test="pd.amountStart != null and pd.amountStart != ''"> 
+			and o.winning_money &gt; #{pd.amountStart }
+		</if>
+		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
+			and o.winning_money &lt; #{pd.amountEnd }
+		</if>
+		<if test="pd.order_status != null and pd.order_status != ''"> 
+			and o.order_status = #{pd.order_status }
+		</if>
+		<if test="pd.lottery_classify_id != null and pd.lottery_classify_id != ''"> 
+			and l.lottery_classify_id = #{pd.lottery_classify_id }
+		</if>
+		order  by 	o.add_time desc
+	</select>
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
@@ -240,6 +295,14 @@
 		WHERE
 			DATE_FORMAT( FROM_UNIXTIME( ticket_time ), '%Y-%m-%d %H:%i' ) = #{addTime}
 			AND order_status IN ( 3, 4, 5, 6, 7 )
+	</select>
+	<select id="toDetail" parameterType="Integer" resultType="pd">
+		SELECT
+		 *
+		FROM
+			dl_order_detail
+		WHERE
+		 order_id = #{order_id}
 	</select>
 	
 	<!-- 批量删除 -->
