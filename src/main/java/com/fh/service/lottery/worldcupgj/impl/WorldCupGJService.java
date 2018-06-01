@@ -94,7 +94,6 @@ public class WorldCupGJService implements WorldCupGJManager {
 		dao.delete("WorldCupGJMapper.deleteAll", ArrayDATA_IDS);
 	}
 
-	@Override
 	public void updateSellStatus(PageData pd) throws Exception {
 		dao.update("WorldCupGJMapper.updateSellStatus", pd);
 	}

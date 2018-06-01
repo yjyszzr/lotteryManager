@@ -15,6 +15,22 @@
 <%@ include file="../../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<style type="text/css">
+.box1,.box2,.box3 { float:left; width:170px}
+
+.box1{
+float:left; width:200px;
+  text-align:right;
+}
+.box2{
+float:left; width:40px;
+  text-align:center;
+}
+.box3{
+float:left; width:200px;
+  text-align:left;
+}
+</style>
 </head>
 <body class="no-skin">
 
@@ -61,8 +77,8 @@
 							<thead>
 								<tr>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">名称</th>
-									<th class="center">状态</th>
+									<th class="center">国家队名称</th>
+									<th class="center">竞彩网当前销售状态</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -75,7 +91,11 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.home_contry_name} VS ${var.visitor_contry_name}</td>
+											<td style= "padding-left:440px; padding-top:10px; ">
+												<div class = "box1" ><span style="margin:15px;font-size:120%">${var.home_contry_name}</span>	<img src="${var.home_contry_pic}"   alt="${var.home_contry_name}"/></div>
+												<div  class = "box2"> <h5 style="color:red">VS</h5> </div>
+												<div  class = "box3">	<img src="${var.visitor_contry_pic}"   alt="${var.visitor_contry_name}"/><span style="margin:15px;font-size:120%">${var.visitor_contry_name}</span></div>
+										 	</td>
 											<td class='center'> 
 												<c:choose>
 															<c:when test="${var.bet_status == 0 }">开售</c:when>
@@ -89,7 +109,7 @@
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
 														<c:choose>
-															<c:when test="${var.sell == 0 }"><a  onclick="updateSellStatus('${var.id}','1');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-warning" title="停售"   >停售</a></c:when>
+															<c:when test="${empty var.sell || var.sell== 0 }"><a  onclick="updateSellStatus('${var.id}','1');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-warning" title="停售"   >停售</a></c:when>
 															<c:when test="${var.sell == 1 }"><a  onclick="updateSellStatus('${var.id}','0');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="开售"   >开售</a></c:when>
 														</c:choose>
 													</c:if>
@@ -172,7 +192,7 @@
 			bootbox.confirm(str, function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>worldcupgyj/updateSellStatus.do?id="+Id+"&cell="+status;
+					var url = "<%=basePath%>worldcupgyj/updateSellStatus.do?id="+Id+"&sell="+status;
 					$.get(url,function(data){
 						tosearch();
 					});
