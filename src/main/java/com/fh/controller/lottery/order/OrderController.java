@@ -404,7 +404,7 @@ public class OrderController extends BaseController {
 			String value = "{'userIdAndRewardList':";
 			String reqStr = JSON.toJSONString(userIdAndRewardList);
 			String stra = value + reqStr + "}";
-			ManualAuditUtil.ManualAuditUtil(stra, urlConfig.getManualAuditUrl(), true);
+			ManualAuditUtil.ManualAuditUtil(stra, urlConfig.getManualRewardUrl(), true);
 			mv.addObject("msg", "success");
 			mv.setViewName("save_result");
 			return mv;
