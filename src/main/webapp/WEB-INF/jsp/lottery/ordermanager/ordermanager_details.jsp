@@ -43,9 +43,9 @@
 										<tr>
 											<td class='center'>${pd.order_sn}</td>
 											<td class='center'>${pd.ticket_amount}</td>
-											<td class='center'>${pd.ticket_amount}</td>
-											<td class='center'>${pd.ticket_amount}</td>
-											<td class='center'>${pd.ticket_amount}</td>
+											<td class='center'>${pd.pass_type}</td>
+											<td class='center'>${pd.cathectic}</td>
+											<td class='center'>${pd.bet_num}</td>
 											<td class='center'> 
 											<c:choose>
 												<c:when test="${pd.order_status == 0}">待付款</c:when>

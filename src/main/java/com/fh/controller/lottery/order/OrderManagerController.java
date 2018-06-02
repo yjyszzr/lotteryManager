@@ -97,8 +97,15 @@ public class OrderManagerController extends BaseController {
 		mv.setViewName("lottery/ordermanager/ordermanager_details");
 		mv.addObject("varList", orderDetailsList);
 		for (int i = 0; i < orderDetailsList.size(); i++) {
+			String nameStr = "";
 			List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
-			orderDetailsList.get(i).put("list", list);
+			for (int j = 0; j < list.size(); j++) {
+				list.get(j).getBetCells();
+				for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
+					nameStr = orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "," + list.get(j).getBetCells().get(j2).getCellOdds() + ";";
+				}
+			}
+			orderDetailsList.get(i).put("list", nameStr);
 		}
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限

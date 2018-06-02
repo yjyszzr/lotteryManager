@@ -163,10 +163,10 @@
 											                                </div>
 											                            </div>
 											                                 <div class="row"  style="padding:5px">
-																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>添加标签：</label>
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">添加标签：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="related_team" type="radio"  checked <c:if test="${pd.related_team==1}">checked="checked"</c:if>   value = "1" class="ace" id="related_team_1" />
+																					<input  name="related_team" type="radio"  <c:if test="${pd.related_team==1}">checked="checked"</c:if>   value = "1" class="ace" id="related_team_1" />
 																					<span class="lbl">主队</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
@@ -176,10 +176,10 @@
 											                                </div>
 											                            </div>
 															                <div class="row"  style="padding:5px">
-																				<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>默认标签：</label>
+																				<label class="col-sm-3 control-label no-padding-right" for="form-field-1">默认标签：</label>
 												                                <div class="col-sm-9">
 																					<label style="float:left;padding-left: 8px;padding-top:7px;">
-																						<input  name="label_defaults" type="radio"   checked <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="label_defaults_1" />
+																						<input  name="label_defaults" type="radio"  <c:if test="${pd.label_defaults==1}">checked="checked"</c:if>   value = "1" class="ace" id="label_defaults_1" />
 																						<span class="lbl">主帅</span>
 																					</label>
 																					<label style="float:left;padding-left: 5px;padding-top:7px;">
@@ -294,6 +294,35 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 
 	<script type="text/javascript">
+	
+	
+	$(function(){
+        $("input[name='label_defaults']").click(function(){
+            var domName = $(this).attr('name');
+            var $radio = $(this);
+            if ($radio.data('waschecked') == true){
+                $radio.prop('checked', false);
+                $("input:radio[name='" + domName + "']").data('waschecked',false);
+            } else {
+                $radio.prop('checked', true);
+                $("input:radio[name='" + domName + "']").data('waschecked',false);
+                $radio.data('waschecked', true);
+            }
+        });
+        $("input[name='related_team']").click(function(){
+            var domName = $(this).attr('name');
+            var $radio = $(this);
+            if ($radio.data('waschecked') == true){
+                $radio.prop('checked', false);
+                $("input:radio[name='" + domName + "']").data('waschecked',false);
+            } else {
+                $radio.prop('checked', true);
+                $("input:radio[name='" + domName + "']").data('waschecked',false);
+                $radio.data('waschecked', true);
+            }
+        });
+    });
+	
 	   var E = window.wangEditor;
        var editor = new E('#editor');
        editor.customConfig.showLinkImg = false;//关闭网络上传tab
