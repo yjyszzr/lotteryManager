@@ -124,7 +124,7 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.account_sn}</td>
+											<td class='center'>${var.withdrawal_sn}</td>
 <%-- 											<td class='center'>${var.withdrawal_sn}</td> --%>
 <%-- 											<td class='center'>${var.user_name}</td> --%>
 											<td class='center'>${var.real_name}</td>
@@ -181,7 +181,8 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-								总计:提现成功<lable style="color:red">￥:</lable>${successAmount}元，提现失败<lable style="color:red">￥:</lable>${failAmount}元，提现未完成<lable style="color:red">￥:</lable>${unfinished}元。
+<!-- 								<lable style="color:red">￥:</lable> -->
+								总计:提现成功  ${successAmount}元，提现失败 ${failAmount}元，提现未完成${unfinished}元。
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

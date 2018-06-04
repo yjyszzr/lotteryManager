@@ -120,11 +120,11 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.account_sn}</td>
 											<td class='center'>${var.recharge_sn}</td>
+											<td class='center'>${var.payment_id}</td>
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
-											<td class='center'><lable style="color:red">￥:</lable>${var.amount}元</td>
+											<td class='center'>${var.amount}元</td>
 											<td class='center'>${var.payment_name}</td>
 											<td class='center'> 
 													<c:choose>
@@ -155,7 +155,7 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-								总计:充值成功<lable style="color:red">￥:</lable>${successAmount}元，充值失败<lable style="color:red">￥:</lable>${failAmount}元，充值未完成<lable style="color:red">￥:</lable>${unfinished}元。
+								总计:充值成功${successAmount}元，充值失败${failAmount}元，充值未完成${unfinished}元。
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

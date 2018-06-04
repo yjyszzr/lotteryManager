@@ -95,16 +95,17 @@
 											<td class='center'>${var.mobile}</td>
 											<td class="center">${var.real_name}</td>
 											<td class="center">${var.id_code}</td>
-											<td class="center"><a onclick="toConsumeDetail('${var.user_id}');" style=" cursor:pointer;" title="消费详情">${MoneyUtil.getMoneyByFen(var.total)}</a></td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.rtotal)}</td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.atotal)}</td>
-											<td class="center">${MoneyUtil.getMoneyByFen(var.resttotal)}</td>
+											<td class="center"><c:if test="${var.total == 0 }">${var.total }</c:if><c:if test="${var.total != 0 }"><a onclick="toConsumeDetail('${var.user_id}');" style=" cursor:pointer;" title="消费详情">${-var.total }</a></c:if></td>
+											<td class="center">${var.rtotal}</td>
+											<td class="center">${var.atotal}</td>
+											<td class="center">${ var.user_money_limit + var.user_money }</td>
 											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
 											<td class='center'> 
 												<c:choose>
 													<c:when test="${var.user_status == 0 }">正常</c:when>
-													<c:when test="${var.user_status == 1 }"><lable style = "color:red">冻结</c:when>
+													<c:when test="${var.user_status == 1 }"><lable style = "color:yellow">锁定</c:when>
+													<c:when test="${var.user_status == 2 }"><lable style = "color:red">冻结</c:when>
 												</c:choose>
 											</td>
 											<td class='center'>${var.reg_from}</td>
@@ -129,12 +130,12 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
+<%-- 									<c:if test="${QX.add == 1 }"> --%>
+<!-- 									<a class="btn btn-mini btn-success" onclick="add();">新增</a> -->
+<%-- 									</c:if> --%>
+<%-- 									<c:if test="${QX.del == 1 }"> --%>
+<!-- 									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a> -->
+<%-- 									</c:if> --%>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

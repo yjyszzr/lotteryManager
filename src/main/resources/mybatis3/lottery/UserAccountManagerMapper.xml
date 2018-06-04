@@ -158,11 +158,10 @@
 		</foreach>
 	</delete>
 	
-	<!-- 获取单个人购彩汇总 -->
+	<!-- 获取单个人购彩 -->
 	<select id="getTotalById" parameterType="java.lang.Integer" resultType="java.lang.Double">
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 3;
 	</select>
-	
 	<!-- 获取单个人充值汇总 -->
 	<select id="getTotalRecharge" parameterType="java.lang.Integer" resultType="java.lang.Double">
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 2;
@@ -172,14 +171,10 @@
 	<select id="getTotalAward" parameterType="java.lang.Integer" resultType="java.lang.Double">
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 1;
 	</select>
-	
-	<!-- 个人钱包总金额 -->
-	<select id="getTotalRest" parameterType="java.lang.Integer" resultType="java.lang.Double">
-		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId};
-	</select>
+ 
 	
 	<select id="findByUserId" parameterType="java.lang.Integer"  resultType="pd">
-		SELECT * FROM dl_user_account WHERE user_id = #{userId} ;
+		SELECT * FROM dl_user_account WHERE user_id = #{userId} order by last_time DESC;
 	</select>
 	
 	<select id="listPageForReward"  parameterType="page" resultType="pd">

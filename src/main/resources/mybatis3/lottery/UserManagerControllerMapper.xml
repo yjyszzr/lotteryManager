@@ -172,7 +172,18 @@
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-		dl_user.user_id,user_name,mobile,nickname,reg_time,last_time,real_name,id_code,dl_user.user_status,reg_from
+		dl_user.user_id,
+		dl_user.user_money,
+		dl_user.user_money_limit,
+		user_name,
+		mobile,
+		nickname,
+		reg_time,
+		last_time,
+		real_name,
+		id_code,
+		dl_user.user_status,
+		reg_from
 		from 
 		<include refid="tableName"></include>
 		left join dl_user_real on dl_user_real.user_id = dl_user.user_id 

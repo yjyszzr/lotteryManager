@@ -1,24 +1,15 @@
 package com.fh.controller.lottery.usermanagercontroller;
 
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.http.util.TextUtils;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.config.URLConfig;
@@ -30,10 +21,8 @@ import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
-import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
-import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.RandomUtil;
 import com.fh.util.SmsUtil;
@@ -44,9 +33,9 @@ import com.fh.util.SmsUtil;
 @Controller
 @RequestMapping(value = "/usermanagercontroller")
 public class UserManagerControllerController extends BaseController {
-	
+
 	private final static String USER_SESSION_PREFIX = "US:";
-	
+
 	String menuUrl = "usermanagercontroller/list.do"; // 菜单地址(权限用)
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
@@ -56,11 +45,11 @@ public class UserManagerControllerController extends BaseController {
 	private UserRealManagerService userrealmanagerService;
 	@Resource(name = "userbankmanagerService")
 	private UserBankManagerService userbankmanagerService;
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
+	@Resource
+	private StringRedisTemplate stringRedisTemplate;
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
-	
+
 	@Resource(name = "redisDaoImpl")
 	private RedisDaoImpl redisDaoImpl;
 
@@ -187,14 +176,6 @@ public class UserManagerControllerController extends BaseController {
 					valA = 0d;
 				}
 				pData.put("atotal", valA);
-				// 获取个人总金额
-				Double valRest = useraccountmanagerService.getTotalRestByUserId(userId);
-				if (valRest == null) {
-					valRest = 0d;
-				}
-				pData.put("resttotal", valRest);
-				// System.out.println("用户：" + userId + " 总资金额：" + val + " 充值金额:"
-				// +valR);
 			}
 		}
 		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_list");
@@ -251,134 +232,6 @@ public class UserManagerControllerController extends BaseController {
 		return mv;
 	}
 
-	/**
-	 * 批量删除
-	 * 
-	 * @param
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/deleteAll")
-	@ResponseBody
-	public Object deleteAll() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "批量删除UserManagerController");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-			return null;
-		} // 校验权限
-		PageData pd = new PageData();
-		Map<String, Object> map = new HashMap<String, Object>();
-		pd = this.getPageData();
-		List<PageData> pdList = new ArrayList<PageData>();
-		String DATA_IDS = pd.getString("DATA_IDS");
-		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
-			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			usermanagercontrollerService.deleteAll(ArrayDATA_IDS);
-			pd.put("msg", "ok");
-		} else {
-			pd.put("msg", "no");
-		}
-		pdList.add(pd);
-		map.put("list", pdList);
-		return AppUtil.returnObject(pd, map);
-	}
-
-	/**
-	 * 导出到excel
-	 * 
-	 * @param
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/excel")
-	public ModelAndView exportExcel() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "导出UserManagerController到excel");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
-			return null;
-		}
-		ModelAndView mv = new ModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<String> titles = new ArrayList<String>();
-		titles.add("备注1"); // 1
-		titles.add("备注2"); // 2
-		titles.add("备注3"); // 3
-		titles.add("备注4"); // 4
-		titles.add("备注5"); // 5
-		titles.add("备注6"); // 6
-		titles.add("备注7"); // 7
-		titles.add("备注8"); // 8
-		titles.add("备注9"); // 9
-		titles.add("备注10"); // 10
-		titles.add("备注11"); // 11
-		titles.add("备注12"); // 12
-		titles.add("备注13"); // 13
-		titles.add("备注14"); // 14
-		titles.add("备注15"); // 15
-		titles.add("备注16"); // 16
-		titles.add("备注17"); // 17
-		titles.add("备注18"); // 18
-		titles.add("备注19"); // 19
-		titles.add("备注20"); // 20
-		titles.add("备注21"); // 21
-		titles.add("备注22"); // 22
-		titles.add("备注23"); // 23
-		titles.add("备注24"); // 24
-		titles.add("备注25"); // 25
-		titles.add("备注26"); // 26
-		titles.add("备注27"); // 27
-		titles.add("备注28"); // 28
-		titles.add("备注29"); // 29
-		titles.add("备注30"); // 30
-		titles.add("备注31"); // 31
-		dataMap.put("titles", titles);
-		List<PageData> varOList = usermanagercontrollerService.listAll(pd);
-		List<PageData> varList = new ArrayList<PageData>();
-		for (int i = 0; i < varOList.size(); i++) {
-			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("user_id").toString()); // 1
-			vpd.put("var2", varOList.get(i).getString("user_name")); // 2
-			vpd.put("var3", varOList.get(i).getString("mobile")); // 3
-			vpd.put("var4", varOList.get(i).getString("email")); // 4
-			vpd.put("var5", varOList.get(i).getString("password")); // 5
-			vpd.put("var6", varOList.get(i).getString("salt")); // 6
-			vpd.put("var7", varOList.get(i).getString("nickname")); // 7
-			vpd.put("var8", varOList.get(i).get("sex").toString()); // 8
-			vpd.put("var9", varOList.get(i).get("birthday").toString()); // 9
-			vpd.put("var10", varOList.get(i).getString("detail_address")); // 10
-			vpd.put("var11", varOList.get(i).getString("headimg")); // 11
-			vpd.put("var12", varOList.get(i).getString("user_money")); // 12
-			vpd.put("var13", varOList.get(i).getString("user_money_limit")); // 13
-			vpd.put("var14", varOList.get(i).getString("frozen_money")); // 14
-			vpd.put("var15", varOList.get(i).get("pay_point").toString()); // 15
-			vpd.put("var16", varOList.get(i).get("rank_point").toString()); // 16
-			vpd.put("var17", varOList.get(i).get("reg_time").toString()); // 17
-			vpd.put("var18", varOList.get(i).getString("reg_ip")); // 18
-			vpd.put("var19", varOList.get(i).get("last_time").toString()); // 19
-			vpd.put("var20", varOList.get(i).getString("last_ip")); // 20
-			vpd.put("var21", varOList.get(i).getString("mobile_supplier")); // 21
-			vpd.put("var22", varOList.get(i).getString("mobile_province")); // 22
-			vpd.put("var23", varOList.get(i).getString("mobile_city")); // 23
-			vpd.put("var24", varOList.get(i).getString("reg_from")); // 24
-			vpd.put("var25", varOList.get(i).getString("surplus_password")); // 25
-			vpd.put("var26", varOList.get(i).getString("pay_pwd_salt")); // 26
-			vpd.put("var27", varOList.get(i).get("user_status").toString()); // 27
-			vpd.put("var28", varOList.get(i).get("pass_wrong_count").toString()); // 28
-			vpd.put("var29", varOList.get(i).get("user_type").toString()); // 29
-			vpd.put("var30", varOList.get(i).getString("is_real")); // 30
-			vpd.put("var31", varOList.get(i).getString("user_remark")); // 31
-			varList.add(vpd);
-		}
-		dataMap.put("varList", varList);
-		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv, dataMap);
-		return mv;
-	}
-
-	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
-	}
-
 	@RequestMapping(value = "/toDetail")
 	public ModelAndView toDetail() throws Exception {
 		ModelAndView mv = getDetailView(null);
@@ -398,31 +251,36 @@ public class UserManagerControllerController extends BaseController {
 		pd = this.getPageData();
 
 		PageData rEntity = usermanagercontrollerService.findById(pd);
-		double allAmount = 0.0;
-		double user_money = Double.parseDouble(rEntity.get("user_money").toString());
-		double frozen_money = Double.parseDouble(rEntity.get("frozen_money").toString());
-		double user_money_limit = Double.parseDouble(rEntity.get("user_money_limit").toString());
-		allAmount = user_money + user_money_limit - frozen_money;
+		BigDecimal allAmount = new BigDecimal(0);
+		BigDecimal user_money = new BigDecimal(rEntity.getString("user_money"));
+
+		BigDecimal frozen_money = new BigDecimal(rEntity.getString("frozen_money"));
+		BigDecimal user_money_limit = new BigDecimal(rEntity.getString("user_money_limit"));
+		allAmount = user_money.add(user_money_limit).subtract(frozen_money);
+		// 总余额
 		pd.put("allAmount", allAmount);
+		// 用户可提现余额
 		pd.put("user_money", user_money);
 		// 红包
 		Double unUseBonus = usermanagercontrollerService.findUserBonusByUserId(pd);
-
 		int userId = Integer.parseInt(pd.get("user_id").toString());
 		List<PageData> userAccountList = useraccountmanagerService.findByUserId(userId);
+		// 充值总金额
 		double rechargeAllAmount = 0.0;
+		// 获奖金额
 		double rewardAllAmount = 0.0;
+		// 购票金额
 		double buyTicketAllAmount = 0.0;
 		for (int i = 0; i < userAccountList.size(); i++) {
 			PageData userAccountPd = new PageData();
 			userAccountPd = userAccountList.get(i);
 			int result = Integer.parseInt(userAccountPd.get("process_type").toString());
 			if (result == 1) {
-				rechargeAllAmount += Double.parseDouble(userAccountPd.get("process_type").toString());
+				rewardAllAmount += Double.parseDouble(userAccountPd.get("amount").toString());
 			} else if (result == 2) {
-				rewardAllAmount += Double.parseDouble(userAccountPd.get("process_type").toString());
+				rechargeAllAmount += Double.parseDouble(userAccountPd.get("amount").toString());
 			} else if (result == 3) {
-				buyTicketAllAmount += Double.parseDouble(userAccountPd.get("process_type").toString());
+				buyTicketAllAmount += Double.parseDouble(userAccountPd.get("amount").toString());
 			}
 		}
 		pd.put("unUseBonus", unUseBonus == null ? 0 : unUseBonus);
@@ -469,11 +327,11 @@ public class UserManagerControllerController extends BaseController {
 				}
 			}
 		}
-		
+
 		redisDaoImpl.delRedisKey(USER_SESSION_PREFIX + Integer.valueOf(userEntity.getString("user_id")));
-		
+
 		usermanagercontrollerService.edit(userEntity);
-		
+
 		mv = getDetailView(mv);
 		return mv;
 	}
@@ -516,7 +374,7 @@ public class UserManagerControllerController extends BaseController {
 		pd = this.getPageData();
 		String mobile = pd.getString("mobile");
 		String smsCode = pd.getString("smsCode");
-		RspSmsCodeEntity rspEntity = SmsUtil.sendMsgV3(mobile,smsCode,urlConfig.getServiceSmsUrl());
+		RspSmsCodeEntity rspEntity = SmsUtil.sendMsgV3(mobile, smsCode, urlConfig.getServiceSmsUrl());
 		pd.put("code", rspEntity.code);
 		pd.put("data", rspEntity.data);
 		pd.put("msg", rspEntity.msg);

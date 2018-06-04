@@ -94,38 +94,24 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 		dao.delete("UserAccountManagerMapper.deleteAll", ArrayDATA_IDS);
 	}
 
-	@Override
 	public Double getTotalConsumByUserId(Integer userId) throws Exception {
-		// TODO Auto-generated method stub
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalById", userId);
 	}
 
-	@Override
 	public Double getTotalRechargeByUserId(Integer userId) throws Exception {
-		// TODO Auto-generated method stub
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalRecharge", userId);
 	}
 
-	@Override
 	public Double getTotalAwardByUserId(Integer userId) throws Exception {
-		// TODO Auto-generated method stub
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalAward", userId);
 	}
 
-	@Override
-	public Double getTotalRestByUserId(Integer userId) throws Exception {
-		// TODO Auto-generated method stub
-		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalRest", userId);
-	}
-
 	@SuppressWarnings("unchecked")
-	@Override
 	public List<PageData> listForReward(Page page) throws Exception {
-		// TODO Auto-generated method stub
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.listPageForReward", page);
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
 	public List<PageData> findByUserId(int userId) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByUserId", userId);
 	}

@@ -104,15 +104,6 @@ public interface UserAccountManagerManager {
 	 */
 	public Double getTotalAwardByUserId(@Param("userId") Integer userId) throws Exception;
 
-	/****
-	 * 获取个人钱包余额
-	 * 
-	 * @param userId
-	 * @return
-	 * @throws Exception
-	 */
-	public Double getTotalRestByUserId(@Param("userId") Integer userId) throws Exception;
-
 	public List<PageData> listForReward(Page page) throws Exception;
 
 	public List<PageData> findByUserId(int userId) throws Exception;

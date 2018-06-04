@@ -52,13 +52,13 @@
 	                                	<label class=" no-padding-right" for="form-field-1">可使用红包金额：</label>
                                 	</td>
                                 	<td style="text-align: left;width:200px"  >
-	                                	<label class=" no-padding-right" for="form-field-1">${pd.unUseBonus}</label>
+	                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.unUseBonus)}</label>
 	                                </td>
                            		  	<td style="text-align: right;width:200px" >
 	                                	<label class=" no-padding-right" for="form-field-1">充值总金额：</label>
                            		  	</td>
                            		  	<td style="text-align: left;width:200px" >	
-	                                	<label class=" no-padding-right" for="form-field-1">${pd.rechargeAllAmount }</label>
+	                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.rechargeAllAmount) }</label>
                            		  	</td>
 							</tr>
 							<tr>
@@ -66,13 +66,13 @@
 	                                	<label class=" no-padding-right" for="form-field-1">奖金总金额：</label>
                                 	</td>
                                 	<td style="text-align: left;width:200px"  >
-	                                	<label class=" no-padding-right" for="form-field-1">${pd.rewardAllAmount}</label>
+	                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.rewardAllAmount)}</label>
 	                                </td>
 									<td style="text-align: right;width:200px">
 	                                	<label class=" no-padding-right" for="form-field-1">购彩总金额：</label>
                                 	</td>
                                 	<td style="text-align: left;width:200px"  >
-	                                	<label class=" no-padding-right" for="form-field-1">${pd.buyTicketAllAmount}</label>
+	                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(-pd.buyTicketAllAmount)}</label>
 	                                </td>
 							</tr>
 						</table>
@@ -81,12 +81,12 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center">交易时间</th>
 									<th class="center">交易类型</th>
-									<th class="center">收入</th>
-									<th class="center">支出</th>
+									<th class="center">金额</th>
 									<th class="center">账户余额</th>
 									<th class="center">可提现金额</th>
+									<th class="center">状态</th>
+									<th class="center">交易时间</th>
 								</tr>
 							</thead>
 													
@@ -98,12 +98,33 @@
 <%-- 									<c:if test="${QX.cha == 1 }"> --%>
 									<c:forEach items="${pd.userAccountList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
-											<td class='center'>${var.process_type}</td>
-											<td class='center'>${var.amount}</td>
-											<td class='center'>${var.amount}</td>
+											<td class='center'>
+													<c:choose>
+														<c:when test="${var.process_type == 1}">奖金</c:when>
+														<c:when test="${var.process_type == 2}">充值</c:when>
+														<c:when test="${var.process_type == 3}">购彩</c:when>
+														<c:when test="${var.process_type == 4}">提现</c:when>
+														<c:when test="${var.process_type == 5}">红包</c:when>
+														<c:when test="${var.process_type == 6}">账户回滚</c:when>
+														<c:when test="${var.process_type == 7}">购券</c:when>
+													</c:choose>
+										 	</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.amount < 0}">${-var.amount}</c:when>
+													<c:otherwise>${var.amount}</c:otherwise>
+												</c:choose> 
+											</td>
 											<td class="center">${var.cur_balance}</td>
 											<td class="center">${var.user_surplus}</td>
+											<td class="center"> 
+												<c:choose>
+													<c:when test="${var.status == 0}">未完成</c:when>
+													<c:when test="${var.status == 1}">成功</c:when>
+													<c:when test="${var.status == 2}">失败</c:when>
+												</c:choose>
+											</td>
+											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
 										</tr>
 									
 									</c:forEach>

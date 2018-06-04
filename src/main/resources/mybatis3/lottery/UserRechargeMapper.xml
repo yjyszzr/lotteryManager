@@ -97,15 +97,13 @@
 		SELECT
 			a.*,
 			b.user_name,
-			b.mobile,
-			c.account_sn 
+			b.mobile
 		FROM
 			dl_user_recharge a
 			LEFT JOIN dl_user b ON b.user_id = a.user_id
-			LEFT JOIN dl_user_account c ON a.recharge_sn = c.pay_id
 		WHERE 1=1
 		<if test="pd.account_sn != null and pd.account_sn != ''"> 
-			and c.account_sn  
+			and a.recharge_sn
 				LIKE CONCAT(CONCAT('%', #{pd.account_sn}),'%')
 		</if>
 		<if test="pd.mobile != null and pd.mobile != ''">
@@ -125,6 +123,7 @@
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
 			and a.pay_time &lt; #{pd.lastEnd1 }
 		</if>
+		order by a.pay_time DESC
 	</select>
 	
 	<!-- 列表(全部) -->
