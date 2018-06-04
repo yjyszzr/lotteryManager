@@ -166,11 +166,11 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">添加标签：</label>
 											                                <div class="col-sm-9">
 																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="related_team" type="radio"  <c:if test="${pd.related_team==1}">checked="checked"</c:if>   value = "1" class="ace" id="related_team_1" />
+																					<input  name="related_team" type="radio"  <c:if test="${pd.related_team==1}">checked="checked"</c:if>  value = "1" class="ace" id="related_team_1" />
 																					<span class="lbl">主队</span>
 																				</label>
 																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="related_team" type="radio"  <c:if test="${pd.related_team==2}">checked="checked"</c:if>    value = "2" class="ace" id="related_team_2" />
+																					<input name="related_team" type="radio"  <c:if test="${pd.related_team==2}">checked="checked"</c:if>   value = "2" class="ace" id="related_team_2" />
 																					<span class="lbl">客队</span>
 																				</label>
 											                                </div>
