@@ -51,21 +51,25 @@
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
-		<include refid="tableName"></include>
+			dl_complain
 		set 
-		is_read = #{is_read}
+			is_read = #{is_read},
+			reply = #{reply}
 		where 
-		id = #{id}
+			id = #{id}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 
-			id = #{id}
+		SELECT
+			c.*,
+			u.user_name,
+			u.mobile 
+		FROM
+			dl_complain c
+			LEFT JOIN dl_user u ON c.complainer = u.user_id 
+		WHERE
+			c.id = #{id}
 	</select>
 	
 	<!-- 列表 -->

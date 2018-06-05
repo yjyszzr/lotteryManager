@@ -1,4 +1,5 @@
 ﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -12,6 +13,27 @@
 <base href="<%=basePath%>">
 <!-- 下拉框 -->
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
+<style type="text/css">
+#xuxian{
+width:100%;
+height:0;
+border-bottom:#778899 1px dashed;
+overflow:hidden;
+}/*#778899表示灰色，边框宽度为一个像素，边框线型为虚线*/
+.news{
+overflow:hidden;
+}
+.news .reply {
+display:block;
+  float: left;
+  cursor:pointer;
+  }
+.news .userName {
+display:block;
+  float: right;
+  }
+
+</style>
 <!-- jsp文件头和头部 -->
 <%@ include file="../../system/index/top.jsp"%>
 <!-- 日期框 -->
@@ -104,13 +126,11 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:50px;">序号</th>
-									<th class="center">id</th>
 									<th class="center">投诉者</th>
 									<th class="center">电话</th>
-									<th class="center">投诉时间</th>
 									<th class="center" width="600px">投诉内容</th>
-									<th class="center">是否已读</th>
+									<th class="center">投诉时间</th>
+									<th class="center">回复内容</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -122,27 +142,48 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.id}</td>
-											<td class='center'>${var.user_name}</td>
-											<td class='center'>${var.mobile}</td>
-											<td class='center'>${DateUtil.toSDFTime(var.complain_time*1000)} </td>
-											<td class='center'>${var.complain_content}</td>
-											<td class='center'> 
-												<c:choose>
-													<c:when test="${var.is_read==0}"> 未读</c:when>
-													<c:when test="${var.is_read==1}"> 已读</c:when>
-												</c:choose>
+											<td class='center'  style = "width:5%">${var.user_name}</td>
+											<td class='center' style = "width:6%">${var.mobile}</td>
+											<td class='center' style = "width:30%">${var.complain_content}</td>
+											<td class='center' style = "width:10%">${DateUtil.toSDFTime(var.complain_time*1000)} </td>
+											<td class='center'>
+												<div>
+													<c:forEach items="${var.replyEntityList}" var="replyEntityList" varStatus = "vss">
+														<div  class="news">
+															<div class="reply" title="${replyEntityList.reply}">
+																	<c:choose>
+																	<c:when test="${fn:length(replyEntityList.reply)  <= 30 }">
+																		${replyEntityList.reply}
+																	</c:when>
+																	<c:otherwise>
+													 					 ${fn:substring(replyEntityList.reply,0,30)}...  
+																	</c:otherwise>
+																</c:choose>
+															</div>
+															<div  class="userName">
+																<lable style="color:red">
+																	${replyEntityList.userName}
+																	${DateUtil.toSDFTime(replyEntityList.time*1000)}
+																</lable>
+															</div>
+														<c:if test="${! vss.last}">
+															<div id="xuxian"></div>
+														</c:if>
+														</div>
+													</c:forEach>
+												</div>
 											</td>
-											<td class="center">
+											<td class="center" style = "width:10%">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-														<c:if test="${var.is_read==0}">
-															<a class="btn btn-xs btn-success" style="border-radius: 5px;"  title="置为已读" onclick="readOrUnread('1','${var.id}');">置为已读 </a>
+														<c:if test="${var.is_read==0 || empty var.is_read }">
+<%-- 															<a class="btn btn-xs btn-success" style="border-radius: 5px;"  title="置为已读" onclick="readOrUnread('1','${var.id}');">置为已读 </a> --%>
+															<a class="btn btn-xs btn-info" title="回复" style="border-radius: 5px;" onclick="edit('${var.id}');"> 回复</a>
 														</c:if>
+														<c:if test="${var.is_read == 1 }">--</c:if>
 													</c:if>
 												</div>
 											</td>
@@ -227,7 +268,28 @@
 					tosearch(0);
 				});
 		}
-		
+		//修改
+		function edit(Id){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="处理页面";
+			 diag.URL = '<%=basePath%>complain/goEdit.do?id='+Id;
+			 diag.Width = 800;
+			 diag.Height = 550;
+// 			 diag.Width = 450;
+// 			 diag.Height = 355;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = true;	//最大化按钮
+		     diag.ShowMinButton = true;		//最小化按钮 
+			 diag.CancelEvent = function(){ //关闭事件
+  				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 tosearch(0);
+				}  
+				diag.close();
+			 };
+			 diag.show();
+		}
 	</script>
 </body>
 </html>

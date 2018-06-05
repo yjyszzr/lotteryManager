@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.session.Session;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -19,10 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.User;
 import com.fh.service.lottery.complain.ComplainManager;
 import com.fh.util.AppUtil;
+import com.fh.util.Const;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -113,10 +118,36 @@ public class ComplainController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdForComplain = new PageData();
+		pdForComplain = complainService.findById(pd); // 根据ID读取
+		List<ReplyEntity> replyEntityList = new ArrayList<ReplyEntity>();
+		if (null != JSONObject.parseArray(pdForComplain.getString("reply"), ReplyEntity.class)) {
+			replyEntityList = JSONObject.parseArray(pdForComplain.getString("reply"), ReplyEntity.class);
+		}
+		ReplyEntity replyEntity = new ReplyEntity();
+		replyEntity.setReply(pd.getString("reply"));
+		replyEntity.setTime(DateUtilNew.getCurrentTimeLong());
+		Session session = Jurisdiction.getSession();
+		User user = (User) session.getAttribute(Const.SESSION_USER);
+		replyEntity.setUserName(user.getUSERNAME());
+		replyEntityList.add(replyEntity);
+		pd.put("reply", list2Json(replyEntityList).toString());
 		complainService.edit(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
+	}
+
+	public static JSONArray list2Json(List<ReplyEntity> list) {
+		JSONArray json = new JSONArray();
+		for (ReplyEntity rEntity : list) {
+			JSONObject jo = new JSONObject();
+			jo.put("userName", rEntity.getUserName());
+			jo.put("time", rEntity.getTime());
+			jo.put("reply", rEntity.getReply());
+			json.add(rEntity);
+		}
+		return json;
 	}
 
 	/**
@@ -156,6 +187,13 @@ public class ComplainController extends BaseController {
 
 		page.setPd(pd);
 		List<PageData> varList = complainService.list(page); // 列出Complain列表
+		for (int i = 0; i < varList.size(); i++) {
+			PageData pageData = new PageData();
+			pageData = varList.get(i);
+			List<ReplyEntity> replyEntityList = new ArrayList<ReplyEntity>();
+			replyEntityList = JSONObject.parseArray(pageData.getString("reply"), ReplyEntity.class);
+			varList.get(i).put("replyEntityList", replyEntityList);
+		}
 		mv.setViewName("lottery/complain/complain_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -192,6 +230,9 @@ public class ComplainController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = complainService.findById(pd); // 根据ID读取
+		List<ReplyEntity> varList = new ArrayList<ReplyEntity>();
+		varList = JSONObject.parseArray(pd.getString("reply"), ReplyEntity.class);
+		pd.put("varList", varList);
 		mv.setViewName("lottery/complain/complain_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
