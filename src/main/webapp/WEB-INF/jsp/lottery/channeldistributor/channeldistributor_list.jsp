@@ -54,7 +54,7 @@
 <%-- 								<c:if test="${QX.cha == 1 }"> --%>
 <!-- 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td> -->
 <%-- 								</c:if> --%>
-<%-- 								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if> --%>
+								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
 <!-- 							</tr> -->
 						</table>
 						<!-- 检索  -->
@@ -73,6 +73,9 @@
 									<th class="center">用户名</th>
 									<th class="center">渠道分销号</th>
 									<th class="center">电话</th>
+									<th class="center">领取人数</th>
+									<th class="center">登录人数</th>
+									<th class="center">购彩人数</th>
 									<th class="center">总销售额</th>
 									<th class="center">分销佣金比例</th>
 									<th class="center">销售提成</th>
@@ -101,6 +104,9 @@
 											<td class='center'><lable ><a href="<%=basePath%>/channeldistributor/goConsumerListByTime.do?distributorId=${var.channel_distributor_id}">${var.user_name} </a></lable></td>
 											<td class='center'>${var.channel_distributor_num}</td>
 											<td class='center'>${var.mobile}</td>
+											<td class='center'>${var.receiveNum}</td>
+											<td class='center'>${var.loginNum}</td>
+											<td class='center'>${var.buyLotteryNum}</td>
 											<td class='center'>${var.total_amount}</td>
 											<td class='center'>${var.distributor_commission_rate}%</td>
 											<td class='center'>${var.total_amount_extract}</td>

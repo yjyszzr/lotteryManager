@@ -94,4 +94,9 @@ public class ChannelDistributorService implements ChannelDistributorManager {
 		dao.delete("ChannelDistributorMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<PageData> listGroupUserId(PageData pda) throws Exception {
+		return (List<PageData>) dao.findForList("ChannelDistributorMapper.listGroupUserId", pda);
+	}
+
 }

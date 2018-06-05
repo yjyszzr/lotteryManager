@@ -151,24 +151,52 @@ public class ChannelDistributorController extends BaseController {
 		page.setPd(pd);
 		List<PageData> varList = channeldistributorService.list(page); // 列出ChannelDistributor列表
 		PageData pda = new PageData();
+		List<PageData> channeldistributorGroup = channeldistributorService.listGroupUserId(pda); // 按照用户Id分组
 		List<PageData> optionlogList = channeloptionlogService.listAll(pda);
+		List<PageData> consumerPd = channelconsumerService.listAll(pda);
 		for (int i = 0; i < varList.size(); i++) {
 			BigDecimal big = new BigDecimal(0);
 			PageData distributor = varList.get(i);
+			Integer loginNum = 0;
+			Integer inputNum = 0;
+			Integer receiveNum = 0;
+			Integer buyLotteryNum = 0;
 			for (int j = 0; j < optionlogList.size(); j++) {
-				PageData optionlog = varList.get(i);
+				PageData optionlog = optionlogList.get(j);
 				if (distributor.getString("channel_distributor_id").equals(optionlog.getString("distributor_id"))) {
 					if (null != optionlog.getString("option_amount") && !"".equals(optionlog.getString("option_amount"))) {
 						BigDecimal big_option_amount = new BigDecimal(optionlog.getString("option_amount"));
-						big.add(big_option_amount);
+						big = big.add(big_option_amount);
 					}
+					if (optionlog.getString("operation_node").equals("1")) {
+						loginNum += 1;
+					}
+				}
+			}
+			for (int k = 0; k < consumerPd.size(); k++) {
+				if (consumerPd.get(k).getString("channel_distributor_id").equals(varList.get(i).getString("channel_distributor_id"))) {
+					// 判断用户电话
+					inputNum += 1;
+					// 判断用户Id为不为空 来计数领没领取优惠券
+					if (consumerPd.get(k).getString("user_id") != null) {
+						receiveNum += 1;
+					}
+				}
+			}
+			for (int s = 0; s < channeldistributorGroup.size(); s++) {
+				if (channeldistributorGroup.get(s).getString("distributor_id").equals(varList.get(i).getString("channel_distributor_id"))) {
+					buyLotteryNum += 1;
 				}
 			}
 			BigDecimal distributorRate = new BigDecimal(distributor.getString("distributor_commission_rate"));
 			BigDecimal bg100 = new BigDecimal(100);
+			varList.get(i).put("loginNum", loginNum);// 登录量
+			varList.get(i).put("inputNum", inputNum);// 手机号输入量
+			varList.get(i).put("receiveNum", receiveNum);// 领取彩金量
+			varList.get(i).put("buyLotteryNum", buyLotteryNum);// 购彩量
 			varList.get(i).put("distributor_commission_rate", distributorRate.multiply(bg100));
 			varList.get(i).put("total_amount", big);
-			varList.get(i).put("total_amount_extract", big.multiply(distributorRate));
+			varList.get(i).put("total_amount_extract", big.multiply(distributorRate).doubleValue() + loginNum);
 		}
 		mv.setViewName("lottery/channeldistributor/channeldistributor_list");
 		mv.addObject("varList", varList);
@@ -273,33 +301,84 @@ public class ChannelDistributorController extends BaseController {
 		pd = this.getPageData();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("分销员Id"); // 1
-		titles.add("渠道Id"); // 2
-		titles.add("用户Id"); // 3
-		titles.add("用户名"); // 4
-		titles.add("渠道分销号"); // 5
-		titles.add("电话"); // 6
-		titles.add("分销佣金比例"); // 7
-		titles.add("渠道名称"); // 8
-		titles.add("添加时间"); // 9
-		titles.add("备注"); // 10
-		titles.add("是否删除"); // 11
+		titles.add("渠道名称"); // 1
+		titles.add("用户名"); // 2
+		titles.add("渠道分销号"); // 3
+		titles.add("电话"); // 4
+		titles.add("领取人数"); // 5
+		titles.add("登录人数"); // 6
+		titles.add("购彩人数"); // 7
+		titles.add("总销售额"); // 8
+		titles.add("佣金比例"); // 9
+		titles.add("销售提成"); // 10
+		titles.add("添加时间"); // 11
+		titles.add("备注"); // 12
 		dataMap.put("titles", titles);
 		List<PageData> varOList = channeldistributorService.listAll(pd);
+		PageData pda = new PageData();
+		List<PageData> channeldistributorGroup = channeldistributorService.listGroupUserId(pda); // 按照用户Id分组
+		List<PageData> optionlogList = channeloptionlogService.listAll(pda);
+		List<PageData> consumerPd = channelconsumerService.listAll(pda);
+		for (int i = 0; i < varOList.size(); i++) {
+			BigDecimal big = new BigDecimal(0);
+			PageData distributor = varOList.get(i);
+			Integer loginNum = 0;
+			Integer inputNum = 0;
+			Integer receiveNum = 0;
+			Integer buyLotteryNum = 0;
+			for (int j = 0; j < optionlogList.size(); j++) {
+				PageData optionlog = optionlogList.get(j);
+				if (distributor.getString("channel_distributor_id").equals(optionlog.getString("distributor_id"))) {
+					if (null != optionlog.getString("option_amount") && !"".equals(optionlog.getString("option_amount"))) {
+						BigDecimal big_option_amount = new BigDecimal(optionlog.getString("option_amount"));
+						big = big.add(big_option_amount);
+					}
+					if (optionlog.getString("operation_node").equals("1")) {
+						loginNum += 1;
+					}
+				}
+			}
+			for (int k = 0; k < consumerPd.size(); k++) {
+				if (consumerPd.get(k).getString("channel_distributor_id").equals(varOList.get(i).getString("channel_distributor_id"))) {
+					// 判断用户电话
+					inputNum += 1;
+					// 判断用户Id为不为空 来计数领没领取优惠券
+					if (consumerPd.get(k).getString("user_id") != null) {
+						receiveNum += 1;
+					}
+				}
+			}
+			for (int s = 0; s < channeldistributorGroup.size(); s++) {
+				if (channeldistributorGroup.get(s).getString("distributor_id").equals(varOList.get(i).getString("channel_distributor_id"))) {
+					buyLotteryNum += 1;
+				}
+			}
+			BigDecimal distributorRate = new BigDecimal(distributor.getString("distributor_commission_rate"));
+			BigDecimal bg100 = new BigDecimal(100);
+			varOList.get(i).put("loginNum", loginNum);// 登录量
+			varOList.get(i).put("inputNum", inputNum);// 手机号输入量
+			varOList.get(i).put("receiveNum", receiveNum);// 领取彩金量
+			varOList.get(i).put("buyLotteryNum", buyLotteryNum);// 购彩量
+			varOList.get(i).put("distributor_commission_rate", distributorRate.multiply(bg100));
+			varOList.get(i).put("total_amount", big);
+			varOList.get(i).put("total_amount_extract", big.multiply(distributorRate).doubleValue() + loginNum);
+		}
+
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("channel_distributor_id").toString()); // 1
-			vpd.put("var2", varOList.get(i).get("channel_id").toString()); // 2
-			vpd.put("var3", varOList.get(i).get("user_id").toString()); // 3
-			vpd.put("var4", varOList.get(i).getString("user_name")); // 4
-			vpd.put("var5", varOList.get(i).getString("channel_distributor_num")); // 5
-			vpd.put("var6", varOList.get(i).getString("mobile")); // 6
-			vpd.put("var7", varOList.get(i).getString("distributor_commission_rate")); // 7
-			vpd.put("var8", varOList.get(i).getString("channel_name")); // 8
-			vpd.put("var9", varOList.get(i).get("add_time").toString()); // 9
-			vpd.put("var10", varOList.get(i).getString("remark")); // 10
-			vpd.put("var11", varOList.get(i).get("deleted").toString()); // 11
+			vpd.put("var1", varOList.get(i).get("channel_name").toString()); // 1
+			vpd.put("var2", varOList.get(i).get("user_name").toString()); // 2
+			vpd.put("var3", varOList.get(i).get("channel_distributor_num").toString()); // 3
+			vpd.put("var4", varOList.get(i).getString("mobile")); // 4
+			vpd.put("var5", varOList.get(i).getString("receiveNum")); // 5
+			vpd.put("var6", varOList.get(i).getString("loginNum")); // 6
+			vpd.put("var7", varOList.get(i).getString("buyLotteryNum")); // 7
+			vpd.put("var8", varOList.get(i).getString("total_amount")); // 8
+			vpd.put("var9", varOList.get(i).getString("distributor_commission_rate") + "%"); // 9
+			vpd.put("var10", varOList.get(i).getString("total_amount_extract")); // 10
+			vpd.put("var11", DateUtil.toSDFTime(Integer.parseInt(varOList.get(i).getString("add_time")) * 1000)); // 11
+			vpd.put("var12", varOList.get(i).get("remark").toString()); // 12
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -318,8 +397,8 @@ public class ChannelDistributorController extends BaseController {
 	public ModelAndView goConsumerListByTime() throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
-		List<PageData> consumerPd = channelconsumerService.findByChannelId(pd);
 		pd = this.getPageData();
+		List<PageData> consumerPd = channelconsumerService.findByChannelId(pd);
 		List<PageData> pds = channeloptionlogService.goConsumerListByTime(pd); // 根据ID读取
 
 		if (pd.getString("distributorId") != null) {

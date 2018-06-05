@@ -108,6 +108,12 @@ public class ChannelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String rate = pd.getString("commission_rate");
+		if (!rate.equals("0")) {
+			BigDecimal bg = new BigDecimal(rate);
+			BigDecimal bg100 = new BigDecimal(100);
+			pd.put("commission_rate", bg.divide(bg100));
+		}
 		channelService.edit(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");

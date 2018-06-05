@@ -68,4 +68,6 @@ public interface ChannelDistributorManager {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
 
+	public List<PageData> listGroupUserId(PageData pda) throws Exception;
+
 }

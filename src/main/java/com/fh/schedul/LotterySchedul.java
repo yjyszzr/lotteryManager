@@ -48,7 +48,7 @@ public class LotterySchedul {
 		Calendar c = Calendar.getInstance();
 		// c.add(Calendar.HOUR_OF_DAY, -1);// 1小时前
 		c.add(Calendar.MINUTE, -1);// 减去一分钟
-		logger.info("每小时扫描一次===============扫描开始");
+		logger.info("每分钟扫描一次===============扫描开始");
 		int insertNum = 0;
 		List<PageData> channelOperationList = new ArrayList<PageData>();
 		List<PageData> userList = usermanagercontrollerService.findAll();
@@ -74,7 +74,7 @@ public class LotterySchedul {
 						channelOperationPageData.put("user_id", orderList.get(i).getString("user_id") == "" ? null : orderList.get(i).getString("user_id"));
 						channelOperationPageData.put("operation_node", "2");
 						channelOperationPageData.put("status", "1");
-						channelOperationPageData.put("source", "h5");
+						channelOperationPageData.put("source", orderList.get(i).getString("order_from") == "" ? null : orderList.get(i).getString("order_from"));
 						channelOperationPageData.put("option_amount", orderList.get(i).getString("money_paid") == "" ? null : orderList.get(i).getString("money_paid"));
 						channelOperationPageData.put("option_time", orderList.get(i).getString("ticket_time") == "" ? null : orderList.get(i).getString("ticket_time"));
 						channelOperationList.add(channelOperationPageData);

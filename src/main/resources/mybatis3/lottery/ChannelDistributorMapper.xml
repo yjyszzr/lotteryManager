@@ -101,6 +101,7 @@
 		<if test="pd.channel_id!= null and pd.channel_id != ''"> 
 			and channel_id = #{pd.channel_id}
 		</if>
+		order By add_time DESC
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -109,6 +110,18 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+		order By add_time DESC
+	</select>
+	
+	<select id="listGroupUserId" parameterType="pd" resultType="pd">
+	SELECT
+		* 
+	FROM
+		dl_channel_option_log 
+	WHERE
+		operation_node = 2 
+	GROUP BY
+		user_id
 	</select>
 	
 	<!-- 批量删除 -->

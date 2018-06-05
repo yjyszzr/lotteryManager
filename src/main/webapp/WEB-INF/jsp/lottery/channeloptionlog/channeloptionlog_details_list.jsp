@@ -1,4 +1,5 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="com.fh.util.DateUtil"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -104,7 +105,7 @@
 											<td class='center'><c:if test="${var.operation_node == 1}">注册</c:if> <c:if test="${var.operation_node == 2}">购彩</c:if></td>
 											<td class='center'><c:if test="${var.status == 1}">正常</c:if> <c:if test="${var.status == 2}">冻结</c:if></td>
 											<td class='center'>${var.option_amount}</td>
-											<td class='center'>${var.option_time}</td>
+											<td class='center'> ${DateUtil.toSDFTime(var.option_time*1000)}</td>
 											<td class='center'>${var.source}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
