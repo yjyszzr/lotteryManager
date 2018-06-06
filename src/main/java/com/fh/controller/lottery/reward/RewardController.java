@@ -1,5 +1,6 @@
 package com.fh.controller.lottery.reward;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -78,9 +79,10 @@ public class RewardController extends BaseController {
 		mv.setViewName("lottery/reward/reward_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("rewardAmount", rewardAmount);
+		BigDecimal bg = new BigDecimal(rewardAmount);
+		double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		mv.addObject("rewardAmount", f1);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-
 }

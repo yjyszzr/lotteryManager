@@ -144,7 +144,7 @@
 		from 
 		<include refid="tableName"></include>
 		where 
-		user_id = #{user_id}
+		user_id = #{user_id} order By status DESC
 	</select>
 	
 	

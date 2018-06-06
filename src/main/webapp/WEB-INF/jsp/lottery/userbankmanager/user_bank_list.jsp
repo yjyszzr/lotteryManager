@@ -11,6 +11,9 @@
 <html lang="en">
 	<head>
 	<base href="<%=basePath%>">
+	<style type="text/css">
+	.td_bg{background:url(<%=basePath%>static/images/mr.png) no-repeat;}
+	</style>
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../../system/index/top.jsp"%>
 	<!-- 日期框 -->
@@ -45,7 +48,12 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${pageDataList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'> ${var.real_name}</td>
+											<c:if test="${var.status }">
+												<td  class = "center td_bg">${var.real_name}</td>
+											</c:if>
+											<c:if test="${!var.status  }">
+												<td  class = "center">${var.real_name}</td>
+											</c:if>
 											<td class='center'>${var.card_no}</td>
 											<td class='center'><img src="${var.bank_logo}" style="width:90px;hight:30px"></td>
 											<td class='center'>${var.bank_name}</td>

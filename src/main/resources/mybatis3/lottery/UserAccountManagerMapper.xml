@@ -213,6 +213,7 @@
 				<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
 						AND o.amount   &lt;   #{pd.amountEnd} 
 				</if>
+				Order By a.pay_time DESC
 	</select>
 	
 </mapper>

@@ -108,6 +108,7 @@
 									<th class="center">投注金额</th>
 									<th class="center">中奖金额</th>
 									<th class="center">下单时间</th>
+									<th class="center">派奖时间</th>
 								</tr>
 							</thead>
 													
@@ -123,9 +124,10 @@
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
-											<td class='center'> ￥:${var.ticket_amount}元</td>
-											<td class='center'><lable style="color:red">￥:${var.amount}元</lable></td>
+											<td class='center'> ${var.ticket_amount}元</td>
+											<td class='center'>${var.amount}元</td>
 											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)} </td>
+											<td class='center'>${DateUtil.toSDFTime(var.award_time*1000)} </td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -147,7 +149,7 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-								总计:提现成功<lable style="color:red">￥:${rewardAmount}元</lable>
+								总计:提现成功${rewardAmount}元
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
