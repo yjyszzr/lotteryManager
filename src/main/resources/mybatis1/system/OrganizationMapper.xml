@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrganizationMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		pgt_organization
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		org_name,	
+		createby,	
+		create_time,	
+		updateby,	
+		update_time,	
+		org_id
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{org_name},	
+        #{createby},	
+        #{create_time},	
+        #{updateby},	
+        #{update_time}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        org_name,	
+		        createby,	
+		        create_time,	
+		        updateby,	
+		        update_time	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 新增-->
+	<insert id="saveOrgStore" parameterType="pd">
+		insert into 
+	    pgt_org_store
+		(
+		        org_id,	
+		        org_name,	
+		        store_sn,	
+		        store_name	
+		) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+            (#{item.org_id,jdbcType=INTEGER}, #{item.org_name,jdbcType=VARCHAR},#{item.store_sn,jdbcType=VARCHAR},#{item.store_name,jdbcType=VARCHAR})
+        </foreach>
+	</insert>
+	
+	<!-- 新增-->
+	<insert id="saveOrgUser" parameterType="pd">
+		insert into 
+	    pgt_org_user
+		(
+		        org_id,	
+		        org_name,	
+		        user_id,	
+		        username	
+		) values 
+		<foreach collection="list" item="item" index="index" separator=",">
+            (#{item.org_id,jdbcType=INTEGER}, #{item.org_name,jdbcType=VARCHAR},#{item.user_id,jdbcType=VARCHAR},#{item.username,jdbcType=VARCHAR})
+        </foreach>
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			org_id = #{org_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			org_name = #{org_name},
+			updateby = #{updateby},	
+		    update_time = #{update_time},	
+		org_id = org_id
+		where 
+		org_id = #{org_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			org_id = #{org_id}
+	</select>
+	
+	<!-- 通过组织名称获取数据 -->
+	<select id="findByOrgName" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			org_name = #{org_name}
+	</select>
+	
+	<!-- 通过组织机构id和仓库编码获取组织机构和仓库的关系数据 -->
+	<select id="listByPageData" parameterType="pd" resultType="pd">
+		select 
+		    org_store_id,
+			org_id,	
+	        org_name,	
+	        store_sn,	
+	        store_name	
+		from 
+		pgt_org_store
+		where 
+			org_id = #{org_id}
+	</select>
+	
+	<!-- 通过组织机构id和仓库编码获取组织机构和仓库的关系数据 -->
+	<select id="listUserByPageData" parameterType="pd" resultType="pd">
+		select 
+		    org_user_id,
+			org_id,	
+	        org_name,	
+	        user_id,	
+	        username	
+		from 
+		pgt_org_user
+		where 
+			org_id = #{org_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					org_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 通过UserId获取用户数据权限 -->
+	<select id="listDataRightsByUserId" parameterType="pd" resultType="pd">
+		select
+			distinct 	
+	        pos.store_sn,
+	        store.store_id,	
+	        pos.store_name,
+	        store.store_type_sort
+		from 
+		pgt_organization po
+		inner join pgt_org_store pos on pos.org_id = po.org_id
+		inner join pgt_org_user pou on pou.org_id = po.org_id
+		inner join szy_store store on store.store_sn = pos.store_sn
+		where pou.user_id = #{user_id}
+		group by pos.store_sn,store.store_id,pos.store_name,store.store_type_sort
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			org_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 通过组织机构Id批量删除组织机构和仓库关系表数据 -->
+	<delete id="deleteAllByOrgId" parameterType="String">
+		delete from
+		pgt_org_store
+		where 
+			org_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 通过组织机构Id批量删除组织机构和用户关系表数据 -->
+	<delete id="deleteAllUserByOrgId" parameterType="String">
+		delete from
+		pgt_org_user
+		where 
+			org_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

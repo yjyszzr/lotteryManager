@@ -63,6 +63,13 @@
 		where PARENT_ID = #{parentId} order by (MENU_ORDER+0) 
 	</select>
 	
+	<select id="listAllMenu"   resultMap="menuResultMap">
+		select  
+			<include refid="Field"></include>
+		from 
+			SYS_MENU order by (MENU_ORDER+0) 
+	</select>
+	
 	<!--通过菜单ID获取数据 -->
 	<select id="getMenuById" parameterType="pd" resultType="pd">
 		select  
