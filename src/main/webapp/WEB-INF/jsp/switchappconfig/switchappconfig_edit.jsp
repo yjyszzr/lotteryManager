@@ -79,7 +79,29 @@
 										<option value="c10035">乐视</option>	
 										<option value="c10036">应用宝</option>
 										<option value="c10037">木蚂蚁</option>
-										<option value="c10038">安智</option>																				
+										<option value="c10038">安智</option>	
+										
+										<option value="c16010">appstoreMJ</option>
+										<option value="c26010">googleMJ</option>
+										<option value="c20010">vivoMJ</option>
+										<option value="c20020">oppoMJ</option>
+										<option value="c20021">华为MJ</option>
+										<option value="c20022">阿里应用分发MJ</option>
+										<option value="c20023">魅族MJ</option>
+										<option value="c20024">金立MJ</option>
+										<option value="c20025">三星MJ</option>
+										<option value="c20027">小米MJ</option>
+										<option value="c20028">百度MJ</option>
+										<option value="c20029">360MJ</option>
+										<option value="c20030">锤子MJ</option>
+										<option value="c20031">联想MJ</option>
+										<option value="c20032">搜狗MJ</option>
+										<option value="c20033">机锋MJ</option>
+										<option value="c20034">应用汇MJ</option>
+										<option value="c20035">乐视MJ</option>	
+										<option value="c20036">应用宝MJ</option>
+										<option value="c20037">木蚂蚁MJ</option>
+										<option value="c20037">安智MJ</option>																				
 								  	</select>
 								</td>
 							</tr>
