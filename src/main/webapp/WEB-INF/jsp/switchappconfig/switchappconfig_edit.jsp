@@ -81,7 +81,7 @@
 										<option value="c10037">木蚂蚁</option>
 										<option value="c10038">安智</option>	
 										
-										<option value="c16010">appstoreMJ</option>
+										<option value="c26010">appstoreMJ</option>
 										<option value="c26010">googleMJ</option>
 										<option value="c20010">vivoMJ</option>
 										<option value="c20020">oppoMJ</option>
