@@ -28,6 +28,7 @@ import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.StringUtil;
 
 /**
  * 说明：渠道模块 创建人：FH Q313596790 创建时间：2018-05-18
@@ -138,6 +139,10 @@ public class ChannelController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
+		String channel_name = pd.getString("channel_name");
+		if (null != channel_name && !"".equals(channel_name)) {
+			pd.put("channel_name", channel_name.trim());
+		}
 		page.setPd(pd);
 		List<PageData> varList = channelService.list(page); // 列出Channel列表
 
@@ -148,11 +153,11 @@ public class ChannelController extends BaseController {
 			BigDecimal big = new BigDecimal(0);
 			PageData channel = varList.get(i);
 			for (int j = 0; j < optionlogList.size(); j++) {
-				PageData optionlog = varList.get(i);
+				PageData optionlog = optionlogList.get(j);
 				if (channel.getString("channel_id").equals(optionlog.getString("channel_id"))) {
 					if (null != optionlog.getString("option_amount") && !"".equals(optionlog.getString("option_amount"))) {
 						BigDecimal big_option_amount = new BigDecimal(optionlog.getString("option_amount"));
-						big.add(big_option_amount);
+						big = big.add(big_option_amount);
 					}
 				}
 			}
@@ -256,38 +261,57 @@ public class ChannelController extends BaseController {
 		pd = this.getPageData();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("渠道ID"); // 1
-		titles.add("渠道名称"); // 2
-		titles.add("渠道号"); // 3
+		titles.add("渠道名称"); // 1
+		titles.add("渠道号"); // 2
+		titles.add("总金额"); // 3
 		titles.add("佣金比例"); // 4
-		titles.add("渠道类型"); // 5
-		titles.add("渠道联系人"); // 6
-		titles.add("电话"); // 7
-		titles.add("地址"); // 8
-		titles.add("状态"); // 9
-		titles.add("时间"); // 10
-		titles.add("是否删除"); // 11
-		titles.add("备注"); // 12
+		titles.add("提成"); // 5
+		titles.add("渠道类型"); // 6
+		titles.add("渠道联系人"); // 7
+		titles.add("电话"); // 8
+		titles.add("地址"); // 9
+		// titles.add("时间"); // 10
 		dataMap.put("titles", titles);
-		List<PageData> varOList = channelService.listAll(pd);
-		List<PageData> varList = new ArrayList<PageData>();
-		for (int i = 0; i < varOList.size(); i++) {
+		List<PageData> varList = channelService.listAll(pd); // 列出Channel列表
+		List<PageData> excelList = new ArrayList<PageData>();
+
+		PageData pda = new PageData();
+		List<PageData> optionlogList = channeloptionlogService.listAll(pda);
+		for (int i = 0; i < varList.size(); i++) {
+			BigDecimal big = new BigDecimal(0);
+			PageData channel = varList.get(i);
+			for (int j = 0; j < optionlogList.size(); j++) {
+				PageData optionlog = optionlogList.get(j);
+				if (channel.getString("channel_id").equals(optionlog.getString("channel_id"))) {
+					if (null != optionlog.getString("option_amount") && !"".equals(optionlog.getString("option_amount"))) {
+						BigDecimal big_option_amount = new BigDecimal(optionlog.getString("option_amount"));
+						big = big.add(big_option_amount);
+					}
+				}
+			}
+			BigDecimal channelRate = new BigDecimal(StringUtil.isEmptyStr(channel.getString("commission_rate")) ? "0" : channel.getString("commission_rate"));
+			BigDecimal bg100 = new BigDecimal(100);
+			varList.get(i).put("commission_rate", channelRate.multiply(bg100));
+			varList.get(i).put("total_amount", big);
+			varList.get(i).put("total_amount_extract", big.multiply(channelRate));
+
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("channel_id").toString()); // 1
-			vpd.put("var2", varOList.get(i).getString("channel_name")); // 2
-			vpd.put("var3", varOList.get(i).getString("channel_num")); // 3
-			vpd.put("var4", varOList.get(i).get("commission_rate").toString()); // 4
-			vpd.put("var5", varOList.get(i).get("channel_type").toString()); // 5
-			vpd.put("var6", varOList.get(i).getString("channel_contact")); // 6
-			vpd.put("var7", varOList.get(i).getString("channel_mobile")); // 7
-			vpd.put("var8", varOList.get(i).getString("channel_address")); // 8
-			vpd.put("var9", varOList.get(i).get("channel_status").toString()); // 9
-			vpd.put("var10", varOList.get(i).get("add_time").toString()); // 10
-			vpd.put("var11", varOList.get(i).get("deleted").toString()); // 11
-			vpd.put("var12", varOList.get(i).getString("remark")); // 12
-			varList.add(vpd);
+			vpd.put("var1", varList.get(i).get("channel_name")); // 1
+			vpd.put("var2", varList.get(i).getString("channel_num")); // 2
+			vpd.put("var3", varList.get(i).getString("total_amount")); // 3
+			vpd.put("var4", varList.get(i).getString("commission_rate") + "%"); // 4
+			vpd.put("var5", varList.get(i).get("total_amount_extract").toString()); // 5
+			vpd.put("var6", "西安每一天便利店"); // 6
+			vpd.put("var7", varList.get(i).getString("channel_contact")); // 7
+			vpd.put("var8", varList.get(i).getString("channel_mobile")); // 8
+			vpd.put("var9", varList.get(i).get("channel_address")); // 9
+			// vpd.put("var10",
+			// DateUtil.toSDFTime(Integer.parseInt(varList.get(i).getString("add_time"))));
+			// // 10
+			excelList.add(vpd);
 		}
-		dataMap.put("varList", varList);
+
+		dataMap.put("varList", excelList);
 		ObjectExcelView erv = new ObjectExcelView();
 		mv = new ModelAndView(erv, dataMap);
 		return mv;

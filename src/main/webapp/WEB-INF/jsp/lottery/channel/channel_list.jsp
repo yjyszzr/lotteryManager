@@ -31,6 +31,36 @@
 						<!-- 检索  -->
 						<form action="channel/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
+						<tr style="margin:2px">
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												渠道名称:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="渠道名称" class="nav-search-input" id="channel_name" autocomplete="off" name="channel_name" value="${pd.channel_name}" />
+											</span>
+										</div>
+									</td>
+									
+									<c:if test="${QX.cha == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+											<span class="input-icon" style="width:80px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+											</span>
+											<span class="input-icon" style="width:43px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+											</span>
+										</td>
+									</c:if>
+								<c:if test="${QX.toExcel == 1 }">
+									<td style="vertical-align:top;padding-left:2px;">
+										<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出EXCEL" style="border-radius:5px;">  导出EXCEL</a>
+									</td>
+								</c:if>
+								</tr>
 <!-- 							<tr> -->
 <!-- 								<td> -->
 <!-- 									<div class="nav-search"> -->
@@ -53,7 +83,6 @@
 <%-- 								<c:if test="${QX.cha == 1 }"> --%>
 <!-- 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td> -->
 <%-- 								</c:if> --%>
-<%-- 								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if> --%>
 <!-- 							</tr> -->
 						</table>
 						<!-- 检索  -->
@@ -193,7 +222,15 @@
  
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+// 		function tosearch(){
+// 			top.jzts();
+// 			$("#Form").submit();
+// 		}
+		
+		function tosearch(status){
+			if(status==0){
+				$("#channel_name").val("");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}
