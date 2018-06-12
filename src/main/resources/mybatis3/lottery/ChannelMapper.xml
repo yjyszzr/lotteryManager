@@ -114,6 +114,12 @@
 				-->
 				)
 		</if>
+		<if test="pd.channel_name!= null and pd.channel_name != ''"> 
+					and channel_name  
+						LIKE CONCAT(CONCAT('%', #{pd.channel_name}),'%')
+		</if>
+		ORDER BY
+				CONVERT ( channel_name USING GBK ) ASC
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -122,6 +128,8 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+				ORDER BY
+				CONVERT ( channel_name USING GBK ) ASC
 	</select>
 	
 	<!-- 批量删除 -->
