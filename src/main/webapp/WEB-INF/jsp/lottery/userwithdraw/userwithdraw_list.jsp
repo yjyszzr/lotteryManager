@@ -138,7 +138,7 @@
 												</c:choose>
 											</td>
 											<td class='center'>${var.card_no}</td>
-											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)}</td>
+											<td class='center'>${var.pay_time==null ? DateUtil.toSDFTime(var.add_time*1000):DateUtil.toSDFTime(var.pay_time*1000)}</td>
 											<td class='center'>${var.bank_name}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
