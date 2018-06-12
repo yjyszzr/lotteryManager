@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.dto.ChannelDTO;
 import com.fh.service.switchappconfig.SwitchAppConfigManager;
 import com.fh.util.AppUtil;
 import com.fh.util.ObjectExcelView;
@@ -124,6 +125,17 @@ public class SwitchAppConfigController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		mv.setViewName("switchappconfig/switchappconfig_edit");
+		List<PageData> list = switchappconfigService.queryChannel();
+		
+		List<ChannelDTO> channelDTOList = new ArrayList<ChannelDTO>();
+		list.forEach(s->{
+			ChannelDTO channelDTO = new ChannelDTO();
+			channelDTO.setChannel(s.get("channel").toString());
+			channelDTO.setChannelName(s.get("channel_name").toString());
+			channelDTOList.add(channelDTO);
+		});
+		
+		mv.addObject("channelDTOList",channelDTOList);
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;

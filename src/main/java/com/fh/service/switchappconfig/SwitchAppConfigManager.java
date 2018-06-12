@@ -59,5 +59,6 @@ public interface SwitchAppConfigManager{
 	 */
 	public List<PageData> queryChannel()throws Exception;
 	
+	
 }
 

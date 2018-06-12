@@ -59,7 +59,10 @@
 								<td style="width:75px;text-align: right;padding-top: 13px;">渠道</td>
 								<td>
 								 	<select class="chosen-select form-control" name="channel" id="channel" value="${pd.channel}"  data-placeholder="请选择渠道" style="vertical-align:top;width: 120px;">
-										<option value="c16010">appstore</option>
+			           					<c:forEach var="channelDTO" items="${channelDTOList}">
+			        						<option value="${channelDTO.channel}">${channelDTO.channelName}</option>
+			        					</c:forEach>										
+									<!-- <option value="c16010">appstore</option>
 										<option value="c10010">google</option>
 										<option value="c10020">vivo</option>
 										<option value="c10021">oppo</option>
@@ -101,7 +104,7 @@
 										<option value="c20035">乐视MJ</option>	
 										<option value="c20036">应用宝MJ</option>
 										<option value="c20037">木蚂蚁MJ</option>
-										<option value="c20038">安智MJ</option>																				
+										<option value="c20038">安智MJ</option>	-->																			
 								  	</select>
 								</td>
 							</tr>

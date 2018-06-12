@@ -121,6 +121,7 @@
 		<include refid="tableName"></include>
 	</select>
 	
+	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
