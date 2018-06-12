@@ -133,7 +133,7 @@
 													<c:otherwise><lable style="color:orange">未完成</lable></c:otherwise>
 												</c:choose>
 											</td>
-											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)} </td>
+											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)} </td>
 										</tr>
 									</c:forEach>
 									</c:if>

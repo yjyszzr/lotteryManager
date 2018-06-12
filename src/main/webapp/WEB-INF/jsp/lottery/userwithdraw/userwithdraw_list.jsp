@@ -110,7 +110,7 @@
 									<th class="center">提现金额</th>
 									<th class="center">状态</th>
 									<th class="center">卡号</th>
-									<th class="center">提现时间</th>
+									<th class="center">申请提现时间</th>
 									<th class="center">银行名称</th>
 									<th class="center">操作</th>
 								</tr>
@@ -138,7 +138,7 @@
 												</c:choose>
 											</td>
 											<td class='center'>${var.card_no}</td>
-											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											<td class='center'>${var.bank_name}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
