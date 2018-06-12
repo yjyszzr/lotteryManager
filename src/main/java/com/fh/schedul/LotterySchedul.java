@@ -7,10 +7,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-
 import com.fh.service.lottery.channel.ChannelConsumerManager;
 import com.fh.service.lottery.channel.ChannelDistributorManager;
 import com.fh.service.lottery.channel.ChannelOptionLogManager;
@@ -19,8 +15,8 @@ import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager
 import com.fh.util.Logger;
 import com.fh.util.PageData;
 
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 public class LotterySchedul {
 	protected Logger logger = Logger.getLogger(this.getClass());
 	@Resource(name = "orderService")
@@ -42,7 +38,7 @@ public class LotterySchedul {
 	 * @Scheduled(cron = "0 0 * * * ?") *
 	 */
 	// 每分钟跑一次
-	@Scheduled(cron = "0 0/1 * * * ?")
+	// @Scheduled(cron = "0 0/1 * * * ?")
 	public void updateNewUserAndOrderToChannelOperationLog() throws Exception {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Calendar c = Calendar.getInstance();
