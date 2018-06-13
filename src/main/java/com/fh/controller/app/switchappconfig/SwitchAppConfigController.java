@@ -151,6 +151,19 @@ public class SwitchAppConfigController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = switchappconfigService.findById(pd);	//根据ID读取
+		
+		List<PageData> list = switchappconfigService.queryChannel();
+		
+		List<ChannelDTO> channelDTOList = new ArrayList<ChannelDTO>();
+		list.forEach(s->{
+			ChannelDTO channelDTO = new ChannelDTO();
+			channelDTO.setChannel(s.get("channel").toString());
+			channelDTO.setChannelName(s.get("channel_name").toString());
+			channelDTOList.add(channelDTO);
+		});
+		
+		mv.addObject("channelDTOList",channelDTOList);
+		
 		mv.setViewName("switchappconfig/switchappconfig_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
