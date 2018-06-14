@@ -92,9 +92,9 @@ float:left; width:200px;
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td style= "padding-left:440px; padding-top:10px; ">
-												<div class = "box1" ><span style="margin:15px;font-size:120%">${var.home_contry_name}</span>	<img src="${var.home_contry_pic}"   alt="${var.home_contry_name}"/></div>
+												<div class = "box1" ><span style="margin:15px;font-size:120%">${var.home_contry_name}</span>	<img src="${var.home_contry_pic}"  style="width:30px;hight:30px"   alt="${var.home_contry_name}"/></div>
 												<div  class = "box2"> <h5 style="color:red">VS</h5> </div>
-												<div  class = "box3">	<img src="${var.visitor_contry_pic}"   alt="${var.visitor_contry_name}"/><span style="margin:15px;font-size:120%">${var.visitor_contry_name}</span></div>
+												<div  class = "box3">	<img src="${var.visitor_contry_pic}" style="width:30px;hight:30px"   alt="${var.visitor_contry_name}"/><span style="margin:15px;font-size:120%">${var.visitor_contry_name}</span></div>
 										 	</td>
 											<td class='center'> 
 												<c:choose>

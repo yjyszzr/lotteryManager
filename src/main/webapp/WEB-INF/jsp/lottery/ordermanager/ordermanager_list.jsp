@@ -164,10 +164,14 @@
 												<c:when test="${var.order_status == 5}">已中奖</c:when>
 												<c:when test="${var.order_status == 6}">派奖中</c:when>
 												<c:when test="${var.order_status == 7}">已派奖</c:when>
-												<c:when test="${var.order_status == 8}">支付失败</c:when>
+												<c:when test="${var.order_status == 8}"><lable style ="color:red">支付失败</lable></c:when>
 											</c:choose>
 											</td>
-											<td class='center'><c:if test="${!empty var.pay_name}">${var.pay_name}/</c:if><c:if test="${ var.surplus > 0}">余额</c:if></td>
+											<td class='center'>
+												<c:if test="${!empty var.pay_name}">${var.pay_name}</c:if>
+												<c:if test="${ var.surplus > 0}">&nbsp余额</c:if>
+												<c:if test="${ var.bonus > 0}">&nbsp红包</c:if>
+											</td>
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.winning_money}</td>
 											<td class='center'>${var.bonus}</td>

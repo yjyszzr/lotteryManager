@@ -78,7 +78,7 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td style= "padding-left:560px; padding-top:10px; "><img src="${var.contry_pic}"   alt="${var.contry_name}"/><span style="margin:15px;font-size:120%">${var.contry_name}</span></td>
+											<td style= "padding-left:560px; padding-top:10px; "><img src="${var.contry_pic}" style="width:30px;hight:30px"  alt="${var.contry_name}"/><span style="margin:15px;font-size:120%">${var.contry_name}</span></td>
 											<td class='center'> 
 												<c:choose>
 															<c:when test="${var.bet_status == 0 }">开售</c:when>
