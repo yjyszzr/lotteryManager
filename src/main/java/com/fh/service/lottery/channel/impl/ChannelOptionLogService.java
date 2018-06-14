@@ -62,6 +62,16 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.datalistPage", page);
 	}
+	
+	/**
+	 * 列表(西安)
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> getOptionLogList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.datalistPageXA", page);
+	}
 
 	/**
 	 * 列表(全部)
@@ -103,5 +113,7 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	public int insertList(List<PageData> channelOperationList) throws Exception {
 		return (int) dao.save("ChannelOptionLogMapper.insertList", channelOperationList);
 	}
+
+	
 
 }

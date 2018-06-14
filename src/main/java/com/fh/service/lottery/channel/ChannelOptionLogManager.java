@@ -71,5 +71,13 @@ public interface ChannelOptionLogManager {
 	public List<PageData> goConsumerListByTime(PageData pd) throws Exception;
 
 	public int insertList(List<PageData> channelOperationList) throws Exception;
+	
+	/**
+	 * 列表(西安)
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> getOptionLogList(Page page) throws Exception;
 
 }

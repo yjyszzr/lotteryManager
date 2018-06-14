@@ -1,190 +1,271 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ChannelOptionLogMapper">
-	
+
 	<!--表名 -->
 	<sql id="tableName">
 		dl_channel_option_log
 	</sql>
-	
+
 	<!-- 字段 -->
 	<sql id="Field">
-		option_id,	
-		channel_id,	
-		distributor_id,	
-		user_id,	
-		user_name,	
-		id_card_num,	
-		true_name,	
-		mobile,	
-		operation_node,	
-		status,	
-		option_amount,	
-		option_time,	
+		option_id,
+		channel_id,
+		distributor_id,
+		user_id,
+		user_name,
+		id_card_num,
+		true_name,
+		mobile,
+		operation_node,
+		status,
+		option_amount,
+		option_time,
 		source
 	</sql>
-	
+
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-        #{option_id},	
-        #{channel_id},	
-        #{distributor_id},	
-        #{user_id},	
-        #{user_name},	
-        #{id_card_num},	
-        #{true_name},	
-        #{mobile},	
-        #{operation_node},	
-        #{status},	
-        #{option_amount},	
-        #{option_time},	
-        #{source}	
+		#{option_id},
+		#{channel_id},
+		#{distributor_id},
+		#{user_id},
+		#{user_name},
+		#{id_card_num},
+		#{true_name},
+		#{mobile},
+		#{operation_node},
+		#{status},
+		#{option_amount},
+		#{option_time},
+		#{source}
 	</sql>
-	
-	<!-- 新增-->
+
+	<!-- 新增 -->
 	<insert id="save" parameterType="pd">
-		insert into 
-	<include refid="tableName"></include>
+		insert into
+		<include refid="tableName"></include>
 		(
-		        option_id,	
-		        channel_id,	
-		        distributor_id,	
-		        user_id,	
-		        user_name,	
-		        id_card_num,	
-		        true_name,	
-		        mobile,	
-		        operation_node,	
-		        status,	
-		        option_amount,	
-		        option_time,	
-		        source	
+		option_id,
+		channel_id,
+		distributor_id,
+		user_id,
+		user_name,
+		id_card_num,
+		true_name,
+		mobile,
+		operation_node,
+		status,
+		option_amount,
+		option_time,
+		source
 		) values (
-	<include refid="FieldValue"></include>
+		<include refid="FieldValue"></include>
 		)
 	</insert>
-	<insert id="insertList"  parameterType="java.util.List">
-        insert into 
-        dl_channel_option_log(channel_id,	distributor_id,	 user_id,user_name,	id_card_num,true_name,mobile,operation_node,status,option_amount,option_time,source) 
-        	values   
-          <foreach collection ="list" item="item" index= "index" separator =",">
-                (
-                #{item.channel_id},
-                #{item.distributor_id},
-                #{item.user_id},
-                #{item.user_name},
-                #{item.id_card_num},
-                #{item.true_name},
-                #{item.mobile},
-                #{item.operation_node},
-                #{item.status},
-                #{item.option_amount},
-                #{item.option_time},
-                #{item.source}
-                )
-            </foreach >
+	<insert id="insertList" parameterType="java.util.List">
+		insert into
+		dl_channel_option_log(channel_id, distributor_id, user_id,user_name,
+		id_card_num,true_name,mobile,operation_node,status,option_amount,option_time,source)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.channel_id},
+			#{item.distributor_id},
+			#{item.user_id},
+			#{item.user_name},
+			#{item.id_card_num},
+			#{item.true_name},
+			#{item.mobile},
+			#{item.operation_node},
+			#{item.status},
+			#{item.option_amount},
+			#{item.option_time},
+			#{item.source}
+			)
+		</foreach>
 	</insert>
-	
-	<!-- 删除-->
+
+	<!-- 删除 -->
 	<delete id="delete" parameterType="pd">
 		delete from
 		<include refid="tableName"></include>
-		where 
-			option_id = #{option_id}
+		where
+		option_id = #{option_id}
 	</delete>
-	
+
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
 		<include refid="tableName"></include>
-		set 
-		   <trim suffixOverrides=",">
+		set
+		<trim suffixOverrides=",">
 			<if test="user_name != null and user_name != ''">
 				user_name = #{user_name},
 			</if>
 			<if test="id_card_num != null and id_card_num != ''">
-			id_card_num = #{id_card_num},
+				id_card_num = #{id_card_num},
 			</if>
 			<if test="true_name != null and true_name != ''">
-			true_name = #{true_name},
+				true_name = #{true_name},
 			</if>
 			<if test="mobile != null and mobile != ''">
-			mobile = #{mobile},
+				mobile = #{mobile},
 			</if>
 			<if test="mobile != null and mobile != ''">
-			operation_node = #{operation_node},
+				operation_node = #{operation_node},
 			</if>
 			<if test="status != null and status != ''">
-			status = #{status},
+				status = #{status},
 			</if>
 			<if test="option_amount != null and option_amount != ''">
-			option_amount = #{option_amount},
+				option_amount = #{option_amount},
 			</if>
 			<if test="option_time != null and option_time != ''">
-			option_time = #{option_time},
+				option_time = #{option_time},
 			</if>
 			<if test="source != null and source != ''">
-			source = #{source},
+				source = #{source},
 			</if>
-			</trim>
-		where 
+		</trim>
+		where
 		option_id = #{option_id}
 	</update>
-	
+
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
+		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
-		where 
-			option_id = #{option_id}
+		where
+		option_id = #{option_id}
 	</select>
-	
+
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		select 
-			*,
-			DATE_FORMAT( FROM_UNIXTIME( option_time ), '%Y-%m-%d %H:%i:%s' ) as operation_time 
-		 from 	
-			dl_channel_option_log
+		select
+		*,
+		DATE_FORMAT( FROM_UNIXTIME( option_time ), '%Y-%m-%d %H:%i:%s' ) as operation_time
+		from
+		dl_channel_option_log
 		where
-			distributor_id = #{pd.distributor_id}
+		distributor_id = #{pd.distributor_id}
+		and
+		DATE_FORMAT( FROM_UNIXTIME( option_time ), '%Y-%m-%d' ) = #{pd.option_time}
+	</select>
+	<!-- 列表(西安) -->
+	<select id="datalistPageXA" parameterType="page" resultType="pd">
+	SELECT con.add_time  as option_time ,
+				con.user_name ,
+				con.mobile  ,
+				chl.channel_name ,
+				chl.channel_id,
+				cdt.mobile as dis_name,
+				'10' as operation_node,
+				'' as option_amount,
+				''as option_amount_chl,
+				'' as option_amount_cdt 
+			FROM dl_channel_consumer con
+				 left join dl_channel_distributor cdt on con.channel_distributor_id = cdt.channel_distributor_id  
+				 left join dl_channel chl on cdt.channel_id = chl.channel_id
+ 			where  !ISNULL(con.user_id) and ISNULL(con.frist_login_time)
+ 			<if test="pd.operation_node != null and pd.operation_node != ''">
+ 				<if test="pd.operation_node != 10 ">
+ 					and 0=1
+ 				</if>
+ 			</if>
+ 			<if test="pd.channel_id != null and pd.channel_id != ''">
+				and chl.channel_id = #{pd.channel_id}
+			</if>
+ 			<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+				and con.add_time &gt; #{pd.lastStart1 }
+			</if>
+			<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+				and con.add_time &lt; #{pd.lastEnd1 }
+			</if>
+			<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
-			DATE_FORMAT( FROM_UNIXTIME( option_time ), '%Y-%m-%d' ) = #{pd.option_time}
+				(
+					chl.channel_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					cdt.mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				)
+			</if>
+ 			
+	UNION
+	SELECT  opt.option_time as option_time,
+		opt.user_name,
+		opt.mobile,
+		chl.channel_name,
+		chl.channel_id,
+		cdt.mobile as dis_name,
+		opt.operation_node,
+		opt.option_amount,
+		FORMAT(opt.option_amount*0.01,2) as option_amount_chl,
+		FORMAT(opt.option_amount*0.02,2) as option_amount_cdt
+
+		FROM dl_channel_option_log opt left join dl_channel chl on opt.channel_id = chl.channel_id
+		left join dl_channel_distributor cdt on opt.distributor_id = cdt.channel_distributor_id
+		WHERE 1 = 1
+		 
+		<if test="pd.channel_id != null and pd.channel_id != ''">
+			and chl.channel_id = #{pd.channel_id}
+		</if>
+		<if test="pd.operation_node != null and pd.operation_node != ''">
+			and opt.operation_node = #{pd.operation_node}
+		</if>
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+			and opt.option_time &gt; #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+			and opt.option_time &lt; #{pd.lastEnd1 }
+		</if>
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					chl.channel_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					cdt.mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				)
+		</if>
+
 	</select>
 	<!-- 列表 -->
-	<select id="goConsumerListByTime" parameterType="page" resultType="pd">
+	<select id="goConsumerListByTime" parameterType="page"
+		resultType="pd">
 		SELECT
-			COUNT( IF ( operation_node = 1, TRUE, NULL ) ) AS loginNum,
-			DATE( FROM_UNIXTIME( option_time ) ) AS optionTime,
-			SUM( option_amount ) AS optionAmount,
-			COUNT( DISTINCT user_id, IF ( operation_node = 2, TRUE, NULL ) ) AS buyNum 
+		COUNT( IF ( operation_node = 1, TRUE, NULL ) ) AS loginNum,
+		DATE( FROM_UNIXTIME( option_time ) ) AS optionTime,
+		SUM( option_amount ) AS optionAmount,
+		COUNT( DISTINCT user_id, IF ( operation_node = 2, TRUE, NULL ) ) AS buyNum
 		FROM
-			dl_channel_option_log 
+		dl_channel_option_log
 		WHERE
-			distributor_id = #{distributorId} 
+		distributor_id = #{distributorId}
 		GROUP BY
-			DAY ( FROM_UNIXTIME( option_time ) ) DESC;
+		DAY ( FROM_UNIXTIME( option_time ) ) DESC;
 	</select>
-	
+
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
-		where  status = 1 
+		where status = 1
 	</select>
-	
+
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
-		where 
-			option_id in
-		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                 #{item}
+		where
+		option_id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
 		</foreach>
 	</delete>
 </mapper>
