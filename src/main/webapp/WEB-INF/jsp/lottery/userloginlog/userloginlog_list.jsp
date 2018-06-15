@@ -90,7 +90,12 @@
 <%-- 											<td class='center'>${var.login_type}</td> --%>
 											<td class='center'>${var.login_ip}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.login_time*1000)}</td>
-											<td class='center'>${DateUtil.toSDFTime(var.logout_time*1000)}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${empty var.logout_time }">--</c:when>
+													<c:otherwise>${DateUtil.toSDFTime(var.logout_time*1000)}</c:otherwise>
+												</c:choose>
+											</td>
 <%-- 											<td class='center'>${var.plat}</td> --%>
 <%-- 											<td class='center'>${var.brand}</td> --%>
 											<td class='center'>
@@ -127,15 +132,16 @@
 											<c:choose>
 												<c:when test="${var.plat == 'android'}">
 													<c:choose>
-														<c:when test="${var.os == 19}">Android 4.4 (KitKat)</c:when>
-														<c:when test="${var.os == 20}">Android 4.4W (KitKat Wear)</c:when>
-														<c:when test="${var.os == 21}">Android 5.0 (Lollipop)</c:when>
-														<c:when test="${var.os == 22}">Android 5.1 (Lollipop)</c:when>
-														<c:when test="${var.os == 23}">Android 6.0 (Marshmallow)</c:when>
-														<c:when test="${var.os == 24}">Android 7.0 (Nougat)</c:when>
-														<c:when test="${var.os == 25}">Android 7.1.1 (Nougat)</c:when>
-														<c:when test="${var.os == 26}">Android 8.0 (Oreo)</c:when>
-														<c:when test="${var.os == 27}">Android 8.0 (Oreo)</c:when>
+														<c:when test="${var.os == '19'}">Android 4.4 (KitKat)</c:when>
+														<c:when test="${var.os == '20'}">Android 4.4W (KitKat Wear)</c:when>
+														<c:when test="${var.os == '21'}">Android 5.0 (Lollipop)</c:when>
+														<c:when test="${var.os == '22'}">Android 5.1 (Lollipop)</c:when>
+														<c:when test="${var.os == '23'}">Android 6.0 (Marshmallow)</c:when>
+														<c:when test="${var.os == '24'}">Android 7.0 (Nougat)</c:when>
+														<c:when test="${var.os == '25'}">Android 7.1.1 (Nougat)</c:when>
+														<c:when test="${var.os == '26'}">Android 8.0 (Oreo)</c:when>
+														<c:when test="${var.os == '27'}">Android 8.0 (Oreo)</c:when>
+														<c:otherwise>${var.os}</c:otherwise>
 													</c:choose>
 												</c:when>
 												<c:when test="${var.plat == 'iphone'}">	iOS ${var.os}</c:when>
