@@ -65,13 +65,13 @@
 <!-- 									<th class="center" style="width:35px;"> -->
 <!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
 <!-- 									</th> -->
-<!-- 									<th class="center" style="width:50px;">序号</th> -->
-									<th class="center">赛事Id</th>
+									<th class="center" style="width:50px;">序号</th>
+<!-- 									<th class="center">赛事Id</th> -->
 <!-- 									<th class="center">联赛id</th> -->
-									<th class="center">联赛名称</th>
 <!-- 									<th class="center">联赛简称</th> -->
 <!-- 									<th class="center">场次id</th> -->
 									<th class="center">场次</th>
+									<th class="center">联赛名称</th>
 <!-- 									<th class="center">主队id</th> -->
 									<th class="center">主队名称</th>
 <!-- 									<th class="center">主队简称</th> -->
@@ -105,13 +105,13 @@
 <!-- 											<td class='center'> -->
 <%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.match_id}" class="ace" /><span class="lbl"></span></label> --%>
 <!-- 											</td> -->
-<%-- 											<td class='center' style="width: 30px;">${vs.index+1}</td> --%>
-											<td class='center'>${var.match_id}</td>
+											<td class='center' style="width: 30px;">${vs.index+1}</td>
+<%-- 											<td class='center'>${var.match_id}</td> --%>
 <%-- 											<td class='center'>${var.league_id}</td> --%>
-											<td class='center'>${var.league_name}</td>
 <%-- 											<td class='center'>${var.league_addr}</td> --%>
 <%-- 											<td class='center'>${var.changci_id}</td> --%>
 											<td class='center'>${var.changci}</td>
+											<td class='center'>${var.league_name}</td>
 <%-- 											<td class='center'>${var.home_team_id}</td> --%>
 											<td class='center'>${var.home_team_name}</td>
 <%-- 											<td class='center'>${var.home_team_abbr}</td> --%>
@@ -151,6 +151,7 @@
 															<c:when test="${var.is_hot == 0 }"><a  onclick="updateStatus('${var.match_id}','1');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-warning" title="置为热门"   >置为热门</a></c:when>
 															<c:when test="${var.is_hot == 1 }"><a  onclick="updateStatus('${var.match_id}','0');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="撤销热门"   >撤销热门</a></c:when>
 														</c:choose>
+															 <a  onclick="toAnswer('${var.match_id}','${DateUtil.toTimeSubtraction(var.match_time)}');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="答题竞猜"   >答题竞猜</a> 
 													</c:if>
 												</div>
 											</td>
@@ -227,65 +228,17 @@
 			$("#Form").submit();
 		}
 		
-		$(function() {
-		
-			//日期框
-			$('.date-picker').datepicker({
-				autoclose: true,
-				todayHighlight: true
-			});
-			
-			//下拉框
-			if(!ace.vars['touch']) {
-				$('.chosen-select').chosen({allow_single_deselect:true}); 
-				$(window)
-				.off('resize.chosen')
-				.on('resize.chosen', function() {
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				}).trigger('resize.chosen');
-				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-					if(event_name != 'sidebar_collapsed') return;
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				});
-				$('#chosen-multiple-style .btn').on('click', function(e){
-					var target = $(this).find('input[type=radio]');
-					var which = parseInt(target.val());
-					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-					 else $('#form-field-select-4').removeClass('tag-input-style');
-				});
-			}
-			
-			
-			//复选框全选控制
-			var active_class = 'active';
-			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-				var th_checked = this.checked;//checkbox inside "TH" table header
-				$(this).closest('table').find('tbody > tr').each(function(){
-					var row = this;
-					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-				});
-			});
-		});
-		
-		//新增
-		function add(){
+		function toAnswer(matchId,saleOffTime){
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
-			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>footballmatchlottery/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Title ="答题竞猜";
+			 diag.URL = '<%=basePath%>questionsandanswers/goEdit.do?matchId='+matchId;
+			 diag.Width = 700;
+			 diag.Height = 610;
 			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮
+			 diag. ShowMaxButton = false;	//最大化按钮
+		     diag.ShowMinButton = false;		//最小化按钮
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 					 if('${page.currentPage}' == '0'){
@@ -299,7 +252,7 @@
 			 diag.show();
 		}
 		
-		//删除
+		
 		function updateStatus(Id,status){
 			var str = "";
 			if(status == 1){
@@ -339,51 +292,6 @@
 			 diag.show();
 		}
 		
-		//批量操作
-		function makeAll(msg){
-			bootbox.confirm(msg, function(result) {
-				if(result) {
-					var str = '';
-					for(var i=0;i < document.getElementsByName('ids').length;i++){
-					  if(document.getElementsByName('ids')[i].checked){
-					  	if(str=='') str += document.getElementsByName('ids')[i].value;
-					  	else str += ',' + document.getElementsByName('ids')[i].value;
-					  }
-					}
-					if(str==''){
-						bootbox.dialog({
-							message: "<span class='bigger-110'>您没有选择任何内容!</span>",
-							buttons: 			
-							{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
-						});
-						$("#zcheckbox").tips({
-							side:1,
-				            msg:'点这里全选',
-				            bg:'#AE81FF',
-				            time:8
-				        });
-						return;
-					}else{
-						if(msg == '确定要删除选中的数据吗?'){
-							top.jzts();
-							$.ajax({
-								type: "POST",
-								url: '<%=basePath%>footballmatchlottery/deleteAll.do?tm='+new Date().getTime(),
-						    	data: {DATA_IDS:str},
-								dataType:'json',
-								//beforeSend: validateData,
-								cache: false,
-								success: function(data){
-									 $.each(data.list, function(i, list){
-											tosearch();
-									 });
-								}
-							});
-						}
-					}
-				}
-			});
-		};
 		
 		//导出excel
 		function toExcel(){
