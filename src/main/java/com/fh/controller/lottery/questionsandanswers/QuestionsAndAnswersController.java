@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -71,6 +70,32 @@ public class QuestionsAndAnswersController extends BaseController {
 	}
 
 	/**
+	 * 更新问题答案
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/update")
+	public ModelAndView update(GuessingCompetitionEntity guessingCompetitionEntity) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "updateQuestionsAndAnswers");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return null;
+		} // 校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		// list转成json
+		String questionAndAnswersJson = JSONArray.fromObject(guessingCompetitionEntity.getQuestionAndAnswersEntityList()).toString();
+		pd.put("question_and_answer", questionAndAnswersJson);
+		pd.put("num_of_people", guessingCompetitionEntity.getNumOfPeople());
+		pd.put("status", 1);
+		questionsandanswersService.updateQuestionsAndAnswers(pd);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+
+	/**
 	 * 删除
 	 * 
 	 * @param out
@@ -95,10 +120,10 @@ public class QuestionsAndAnswersController extends BaseController {
 	 * @param
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public ModelAndView edit(GuessingCompetitionEntity guessingCompetitionEntity) throws Exception {
+	@RequestMapping(value = "/add")
+	public ModelAndView add(GuessingCompetitionEntity guessingCompetitionEntity) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "添加QuestionsAndAnswers");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
@@ -106,13 +131,10 @@ public class QuestionsAndAnswersController extends BaseController {
 		pd = this.getPageData();
 		// list转成json
 		String questionAndAnswersJson = JSONArray.fromObject(guessingCompetitionEntity.getQuestionAndAnswersEntityList()).toString();
-		// json转成list
-		JSONArray jsonArray = JSONArray.fromObject(questionAndAnswersJson);
-		List<QuestionAndAnswersEntity> questionAndAnswers = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
+		pd.put("id", 0);
 		pd.put("question_and_answer", questionAndAnswersJson);
 		pd.put("num_of_people", 0);
-		pd.put("id", 0);
-		pd.put("answer_status", 0);
+		pd.put("status", 0);
 		String endTime = pd.getString("endTime");
 		if (null != endTime && !"".equals(endTime)) {
 			pd.put("end_time", DateUtilNew.getMilliSecondsByStr(endTime));
@@ -121,7 +143,7 @@ public class QuestionsAndAnswersController extends BaseController {
 		if (null != startTime && !"".equals(startTime)) {
 			pd.put("start_time", DateUtilNew.getMilliSecondsByStr(startTime));
 		}
-		pd.put("create_time", DateUtilNew.getCurrentTimeLong());
+		pd.put("create_time", DateUtilNew.getCurrentTimeLong().toString());
 		questionsandanswersService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -161,16 +183,16 @@ public class QuestionsAndAnswersController extends BaseController {
 	 * @param
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/goAdd")
-	public ModelAndView goAdd() throws Exception {
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		mv.setViewName("lottery/questionsandanswers/questionsandanswers_edit");
-		mv.addObject("msg", "save");
-		mv.addObject("pd", pd);
-		return mv;
-	}
+	// @RequestMapping(value = "/goAdd")
+	// public ModelAndView goAdd() throws Exception {
+	// ModelAndView mv = this.getModelAndView();
+	// PageData pd = new PageData();
+	// pd = this.getPageData();
+	// mv.setViewName("lottery/questionsandanswers/questionsandanswers_edit");
+	// mv.addObject("msg", "save");
+	// mv.addObject("pd", pd);
+	// return mv;
+	// }
 
 	/**
 	 * 去修改页面
@@ -185,17 +207,33 @@ public class QuestionsAndAnswersController extends BaseController {
 		matchPd = footballmatchlotteryService.findById(matchPd);
 		PageData questionsandanswers = questionsandanswersService.findByMatchId(matchId);
 		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		pd = questionsandanswersService.findById(pd); // 根据ID读取
+		// PageData pd = new PageData();
+		// pd = this.getPageData();
+		// pd = questionsandanswersService.findById(pd); // 根据ID读取
 		if (questionsandanswers != null) {
-			mv.setViewName("lottery/questionsandanswers/questionsandanswers_detail");
+			mv.addObject("pd", questionsandanswers);
+			JSONArray jsonArray = JSONArray.fromObject(questionsandanswers.getString("question_and_answer"));
+			List<QuestionAndAnswersEntity> questionAndAnswers = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
+			mv.addObject("questionAndAnswerList", questionAndAnswers);
+			mv.addObject("msg", "update");
+			if (questionsandanswers.getString("status").equals("0")) {
+				// 草稿状态 如果是草稿状态 跳转到草稿状态 可再次编辑 也可上线
+				mv.setViewName("lottery/questionsandanswers/questionsandanswers_draft");
+			} else if (questionsandanswers.getString("status").equals("1")) {
+				// 发布(上线) 如果是发布状态 跳转到 回填答案页面(答案只可编辑一次)
+				mv.setViewName("lottery/questionsandanswers/questionsandanswers_backfillanswers");
+			} else if (questionsandanswers.getString("status").equals("2")) {
+				// 答案 回填 跳转到点击结束到结束状态
+				mv.setViewName("lottery/questionsandanswers/questionsandanswers_finish");
+			} else if (questionsandanswers.getString("status").equals("3")) {
+				// 结束 结束状态 只展示详情
+				mv.setViewName("lottery/questionsandanswers/questionsandanswers_detail");
+			}
 		} else {
 			mv.setViewName("lottery/questionsandanswers/questionsandanswers_edit");
+			mv.addObject("msg", "add");
 		}
-		mv.addObject("msg", "edit");
 		mv.addObject("matchPd", matchPd);
-		mv.addObject("pd", pd);
 		return mv;
 	}
 

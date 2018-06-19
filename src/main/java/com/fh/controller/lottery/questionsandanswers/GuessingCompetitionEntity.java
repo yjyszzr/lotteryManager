@@ -9,10 +9,32 @@ public class GuessingCompetitionEntity {
 	public String endTime;
 	public Integer scopeOfActivity;
 	public Integer bonusType;
+	public Integer numOfPeople;
 	public String guessingTitle;
 	public String bonusPool;
 	public String limitLotteryAmount;
 	public List<QuestionAndAnswersEntity> questionAndAnswersEntityList;
+
+	public GuessingCompetitionEntity(Integer id, Integer matchId, String startTime, String endTime, Integer scopeOfActivity, Integer bonusType, Integer numOfPeople, String guessingTitle, String bonusPool, String limitLotteryAmount, List<QuestionAndAnswersEntity> questionAndAnswersEntityList) {
+		super();
+		this.id = id;
+		this.matchId = matchId;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.scopeOfActivity = scopeOfActivity;
+		this.bonusType = bonusType;
+		this.numOfPeople = numOfPeople;
+		this.guessingTitle = guessingTitle;
+		this.bonusPool = bonusPool;
+		this.limitLotteryAmount = limitLotteryAmount;
+		this.questionAndAnswersEntityList = questionAndAnswersEntityList;
+	}
+
+	@Override
+	public String toString() {
+		return "GuessingCompetitionEntity [id=" + id + ", matchId=" + matchId + ", startTime=" + startTime + ", endTime=" + endTime + ", scopeOfActivity=" + scopeOfActivity + ", bonusType=" + bonusType + ", numOfPeople=" + numOfPeople + ", guessingTitle=" + guessingTitle + ", bonusPool=" + bonusPool + ", limitLotteryAmount=" + limitLotteryAmount + ", questionAndAnswersEntityList="
+				+ questionAndAnswersEntityList + "]";
+	}
 
 	public Integer getId() {
 		return id;
@@ -62,6 +84,14 @@ public class GuessingCompetitionEntity {
 		this.bonusType = bonusType;
 	}
 
+	public Integer getNumOfPeople() {
+		return numOfPeople;
+	}
+
+	public void setNumOfPeople(Integer numOfPeople) {
+		this.numOfPeople = numOfPeople;
+	}
+
 	public String getGuessingTitle() {
 		return guessingTitle;
 	}
@@ -91,24 +121,6 @@ public class GuessingCompetitionEntity {
 	}
 
 	public void setQuestionAndAnswersEntityList(List<QuestionAndAnswersEntity> questionAndAnswersEntityList) {
-		this.questionAndAnswersEntityList = questionAndAnswersEntityList;
-	}
-
-	@Override
-	public String toString() {
-		return "GuessingCompetitionEntity [id=" + id + ", matchId=" + matchId + ", startTime=" + startTime + ", endTime=" + endTime + ", scopeOfActivity=" + scopeOfActivity + ", bonusType=" + bonusType + ", guessingTitle=" + guessingTitle + ", bonusPool=" + bonusPool + ", limitLotteryAmount=" + limitLotteryAmount + ", questionAndAnswersEntityList=" + questionAndAnswersEntityList + "]";
-	}
-
-	public GuessingCompetitionEntity(Integer id, Integer matchId, String startTime, String endTime, Integer scopeOfActivity, Integer bonusType, String guessingTitle, String bonusPool, String limitLotteryAmount, List<QuestionAndAnswersEntity> questionAndAnswersEntityList) {
-		this.id = id;
-		this.matchId = matchId;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.scopeOfActivity = scopeOfActivity;
-		this.bonusType = bonusType;
-		this.guessingTitle = guessingTitle;
-		this.bonusPool = bonusPool;
-		this.limitLotteryAmount = limitLotteryAmount;
 		this.questionAndAnswersEntityList = questionAndAnswersEntityList;
 	}
 

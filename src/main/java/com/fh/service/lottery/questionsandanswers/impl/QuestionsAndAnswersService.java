@@ -106,4 +106,10 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 		return (PageData) dao.findForObject("QuestionsAndAnswersMapper.findByMatchId", matchId);
 	}
 
+	@Override
+	public void updateQuestionsAndAnswers(PageData pd) throws Exception {
+		dao.update("QuestionsAndAnswersMapper.updateQuestionsAndAnswers", pd);
+
+	}
+
 }

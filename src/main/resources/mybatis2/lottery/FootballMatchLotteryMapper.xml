@@ -159,6 +159,9 @@
 	from
 	dl_match 
 	where DATEDIFF(show_time,NOW()) &gt;= 0 and is_del = 0 and is_show=1 and TIMESTAMPDIFF(MINUTE, match_time, NOW()) &lt; 10
+			<if test="pd.league_name!= null and pd.league_name != ''"> 
+			and  league_name LIKE CONCAT(CONCAT('%', #{pd.league_name}),'%') 
+		</if>
   	 order by match_time
   </select>
 	

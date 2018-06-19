@@ -6,31 +6,21 @@
 	<sql id="tableName">
 		dl_questions_and_answers
 	</sql>
-	
-	<!-- 字段 -->
-	<sql id="Field">
-		id,	
-		match_id,	
-		start_time,	
-		end_time,	
-		scope_of_activity,	
-		limit_lottery_amount,	
-		bonus_pool,	
-		question_and_answer,	
-		num_of_people
-	</sql>
-	
+ 
 	<!-- 字段值 -->
 	<sql id="FieldValue">
         #{id},	
         #{match_id},	
         #{start_time},	
         #{end_time},	
+        #{create_time},	
         #{scope_of_activity},	
         #{limit_lottery_amount},	
         #{bonus_pool},	
         #{question_and_answer},	
-        #{num_of_people}	
+        #{num_of_people}	,
+        #{answer_status},
+        #{guessing_title}	
 	</sql>
 	
 	<!-- 新增-->
@@ -42,11 +32,14 @@
 		        match_id,	
 		        start_time,	
 		        end_time,	
+		        create_time,
 		        scope_of_activity,	
 		        limit_lottery_amount,	
 		        bonus_pool,	
 		        question_and_answer,	
-		        num_of_people	
+		        num_of_people,
+		        answer_status,
+		        guessing_title	
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -60,6 +53,17 @@
 			id = #{id}
 	</delete>
 	
+	<!-- 修改 -->
+	<update id="updateQuestionsAndAnswers" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			question_and_answer = #{question_and_answer},
+			answer_status  = #{answer_status},
+			num_of_people = #{num_of_people}
+		where 
+			id = #{id}
+	</update>
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
@@ -77,18 +81,14 @@
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
-		<include refid="Field"></include>
-		from 
+		select  * from 
 		<include refid="tableName"></include>
 		where 
 			id = #{id}
 	</select>
 	
 	<select id="findByMatchId" parameterType="Integer" resultType="pd">
-		select 
-		<include refid="Field"></include>
-		from 
+		select * from 
 		<include refid="tableName"></include>
 		where 
 			match_id = #{matchId}
@@ -96,9 +96,7 @@
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
+		select * from 
 		<include refid="tableName"></include>
 		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
@@ -115,9 +113,7 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
+		select * from 
 		<include refid="tableName"></include>
 	</select>
 	
@@ -131,6 +127,4 @@
                  #{item}
 		</foreach>
 	</delete>
-	
-	<!-- fh313596790qq(青苔) -->
 </mapper>

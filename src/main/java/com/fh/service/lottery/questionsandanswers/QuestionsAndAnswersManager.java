@@ -70,4 +70,6 @@ public interface QuestionsAndAnswersManager {
 
 	public PageData findByMatchId(Integer matchId) throws Exception;
 
+	public void updateQuestionsAndAnswers(PageData pd) throws Exception;
+
 }
