@@ -67,8 +67,8 @@
 									<th class="center" style="width:50px;">序号</th>
 <!-- 									<th class="center">id</th> -->
 									<th class="center">赛事</th>
-									<th class="center">起始时间</th>
-									<th class="center">结束时间</th>
+									<th class="center">答题开始时间</th>
+									<th class="center">答题结束时间</th>
 									<th class="center">所属活动</th>
 									<th class="center">状态</th>
 <!-- 									<th class="center">最低参与金额</th> -->
@@ -94,8 +94,19 @@
 											<td class='center'>${var.guessing_title}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.start_time*1000)}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.end_time*1000)}</td>
-											<td class='center'>${var.scope_of_activity}</td>
-											<td class='center'>${var.status}</td>
+											<td class='center'>
+											<c:choose>
+													<c:when test="${var.scope_of_activity ==1}">竞彩足球</c:when>
+													<c:otherwise>其他</c:otherwise>
+												</c:choose>
+											</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.status ==0}">草稿</c:when>
+													<c:when test="${var.status ==1}">已发布</c:when>
+													<c:when test="${var.status ==2}">完成</c:when>
+												</c:choose>
+											</td>
 <%-- 											<td class='center'>${var.limit_lottery_amount}</td> --%>
 <%-- 											<td class='center'>${var.bonus_pool}</td> --%>
 <%-- 											<td class='center'>${var.question_and_answer}</td> --%>
@@ -106,7 +117,19 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="进入详情即可编辑"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">详情</a>
+													<c:choose>
+															<c:when test="${var.status ==0}">
+																<a class="btn btn-xs btn-success" title="编辑"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">编辑</a>
+																<a class="btn btn-xs btn-danger" title="发布"   style="border-radius: 5px;"  onclick="updateStatus('${var.id}','1');" >发布</a>
+															</c:when>
+															<c:when test="${var.status ==1}">
+																<a class="btn btn-xs btn-danger" title="公布答案"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">公布答案</a>
+															</c:when>
+															<c:when test="${var.status ==2}">
+																<a class="btn btn-xs btn-orange" title="详情"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">详情</a>
+															</c:when>
+													</c:choose>
+<%-- 													<a class="btn btn-xs btn-success" title="进入详情即可编辑"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">详情</a> --%>
 													</c:if>
 												</div>
 											</td>
@@ -181,7 +204,18 @@
 			top.jzts();
 			$("#Form").submit();
 		}
- 
+		function updateStatus(Id,status){
+			bootbox.confirm("确定要发布该竞猜题吗?", function(result) {
+				if(result) {
+					top.jzts();
+					var url = "<%=basePath%>questionsandanswers/updateStatus.do?id="+Id+"&status="+status;
+					$.get(url,function(data){
+						tosearch();
+					});
+				}
+			});
+		}
+		
 		
 		//修改
 		function edit(matchId){

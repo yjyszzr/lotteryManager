@@ -72,4 +72,6 @@ public interface QuestionsAndAnswersManager {
 
 	public void updateQuestionsAndAnswers(PageData pd) throws Exception;
 
+	public void updateStatus(PageData pd) throws Exception;
+
 }

@@ -85,6 +85,24 @@
 		                                <div class="col-sm-5">  </div>
 	                                </td>
 							</tr>
+										<tr>
+									<td style="text-align: right;" >
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">参与人数：</label>
+                                	</td>
+                                	<td style="text-align: left;"    colspan="4">
+	                                	<div class="col-sm-4"> ${pd.num_of_people }&nbsp人 </div>
+	                                	<div class="col-sm-5"> </div>
+	                                </td>
+							</tr>
+										<tr>
+									<td style="text-align: right;" >
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">答案公布时间：</label>
+                                	</td>
+                                	<td style="text-align: left;"    colspan="4">
+	                                	<div class="col-sm-4"> ${DateUtil.toSDFTime(pd.answer_show_time*1000)}</div>
+	                                	<div class="col-sm-5"> </div>
+	                                </td>
+							</tr>
 							<c:forEach   items="${questionAndAnswerList}" var="questionAndAnswer" varStatus="questionAndAnswerStatus">
 							<c:choose>
 								<c:when test="${questionAndAnswerStatus.index == 0}">
@@ -95,7 +113,6 @@
 		                                	<td style="text-align: left;" >
 			                                	<div class="col-sm-4">
 			                                	${questionAndAnswer.questionSetting }
-				                                  	 	<input type="hidden" name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionSetting" value="${questionAndAnswer.questionSetting }"/> 
 		                                  	 	</div>
 			                                </td>
 		                                	<td  style="text-align: right;"  rowspan="${fn:length(questionAndAnswerList)}">
@@ -104,18 +121,26 @@
 		                                	<td  >
 		                                	<div class="col-sm-4">
 		                                	<label style="float:left;padding-left: 5px;padding-top:7px;">
-													<input  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerStatus1" type="radio"       value = "0" class="ace" id="answerStatus${questionAndAnswerStatus.index }1"   onclick="setSelectStatus(${questionAndAnswerStatus.index },1)"/>
+		                                	<input type="radio"   
+														<c:choose>
+															<c:when test="${questionAndAnswer.answerStatus1 ==1}">checked</c:when>
+															<c:when test="${questionAndAnswer.answerStatus1 ==0}">disabled</c:when>
+														</c:choose>
+													 class="ace"/>
 													<span class="lbl">${questionAndAnswer.answerSetting1 }</span>
-														 	<input type="hidden"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerSetting1" value = "${questionAndAnswer.answerSetting1 }"/>
 												</label>
 		                                	</div>
 			                                </td>
 		                                	<td>
 		                                	<div class="col-sm-4">
 		                                	<label style="float:left;padding-left: 5px;padding-top:7px;">
-													<input name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerStatus2"   type="radio"       value = "0" class="ace" id="answerStatus${questionAndAnswerStatus.index }2" onclick="setSelectStatus(${questionAndAnswerStatus.index },2)" />
+		                                	<input type="radio"   
+														<c:choose>
+															<c:when test="${questionAndAnswer.answerStatus2 ==1}">checked</c:when>
+															<c:when test="${questionAndAnswer.answerStatus2 ==0}">disabled</c:when>
+														</c:choose>
+													 class="ace"/>
 													<span class="lbl">${questionAndAnswer.answerSetting2 }</span>
-														 	<input type="hidden"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerSetting2" value = "${questionAndAnswer.answerSetting2 }"/>
 												</label>
 		                                	</div>
 			                                </td>
@@ -124,27 +149,32 @@
 								<c:when test="${questionAndAnswerStatus.index > 0}">
 									<tr>
 		                                	<td style="text-align: left;" >
-			                                	<div class="col-sm-4">
-			                                	${questionAndAnswer.questionSetting }
-			                                	<input type="hidden" name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionSetting" value="${questionAndAnswer.questionSetting }"/> 
-		                                  	 	</div>
+			                                	<div class="col-sm-4"> ${questionAndAnswer.questionSetting } </div>
 				                                <div class="col-sm-5">  </div>
 			                                </td>
 		                                	<td  >
 		                                	<div class="col-sm-4">
 		                                		<label style="float:left;padding-left: 5px;padding-top:7px;">
-													<input  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerStatus1" type="radio"       value = "0" class="ace" id="answerStatus${questionAndAnswerStatus.index }1"  onclick="setSelectStatus(${questionAndAnswerStatus.index },1)"/>
+													<input type="radio"   
+														<c:choose>
+															<c:when test="${questionAndAnswer.answerStatus1 ==1}">checked</c:when>
+															<c:when test="${questionAndAnswer.answerStatus1 ==0}">disabled</c:when>
+														</c:choose>
+													 class="ace"/>
 													<span class="lbl">${questionAndAnswer.answerSetting1 }</span>
-													<input type="hidden"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerSetting1" value = "${questionAndAnswer.answerSetting1 }"/>
 												</label>
 		                                	</div>
 			                                </td>
 		                                	<td   >
 		                                	<div class="col-sm-4">
 		                                		<label style="float:left;padding-left: 5px;padding-top:7px;">
-													<input  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerStatus2" type="radio"       value = "0" class="ace" id="answerStatus${questionAndAnswerStatus.index }2"  onclick="setSelectStatus(${questionAndAnswerStatus.index },2)"/>
+		                                			<input type="radio"   
+														<c:choose>
+															<c:when test="${questionAndAnswer.answerStatus2 ==1}">checked</c:when>
+															<c:when test="${questionAndAnswer.answerStatus2 ==0}">disabled</c:when>
+														</c:choose>
+													 class="ace"/>
 													<span class="lbl">${questionAndAnswer.answerSetting2}</span>
-													<input type="hidden"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerSetting2" value = "${questionAndAnswer.answerSetting2 }"/>
 												</label>
 		                                	</div>
 			                                </td>
@@ -152,23 +182,6 @@
 								</c:when>
 							</c:choose>
 						</c:forEach>
-							<tr>
-									<td style="text-align: right;" >
-	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">参与人数：</label>
-                                	</td>
-                                	<td style="text-align: left;"    colspan="4">
-	                                	<div class="col-sm-4">
-	                                  	 	<input type="text" id="numOfPeople"  name="numOfPeople" placeholder="0人"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/> &nbsp人
-	                               		</div>
-	                                	<div class="col-sm-5"> </div>
-	                                </td>
-							</tr>
-							<tr>
-								<td style="text-align: center;" colspan="20">
-										<a class="btn btn-mini btn-primary" onclick="saveQuestionAndAnswers();">保存</a>
-										<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
-								</td>
-							</tr>
 						</table>
 						</div>
 						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>

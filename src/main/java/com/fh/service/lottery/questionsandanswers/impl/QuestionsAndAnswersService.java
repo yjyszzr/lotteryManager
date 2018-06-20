@@ -109,7 +109,11 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 	@Override
 	public void updateQuestionsAndAnswers(PageData pd) throws Exception {
 		dao.update("QuestionsAndAnswersMapper.updateQuestionsAndAnswers", pd);
+	}
 
+	@Override
+	public void updateStatus(PageData pd) throws Exception {
+		dao.update("QuestionsAndAnswersMapper.updateStatus", pd);
 	}
 
 }

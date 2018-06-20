@@ -19,7 +19,7 @@
         #{bonus_pool},	
         #{question_and_answer},	
         #{num_of_people}	,
-        #{answer_status},
+        #{status},
         #{guessing_title}	
 	</sql>
 	
@@ -38,7 +38,7 @@
 		        bonus_pool,	
 		        question_and_answer,	
 		        num_of_people,
-		        answer_status,
+		        status,
 		        guessing_title	
 		) values (
 	<include refid="FieldValue"></include>
@@ -54,12 +54,21 @@
 	</delete>
 	
 	<!-- 修改 -->
+	<update id="updateStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status  = #{status}
+		where 
+			id = #{id}
+	</update>
 	<update id="updateQuestionsAndAnswers" parameterType="pd">
 		update
 		<include refid="tableName"></include>
 		set 
 			question_and_answer = #{question_and_answer},
-			answer_status  = #{answer_status},
+			status  = #{status},
+			answer_show_time  = #{answer_show_time},
 			num_of_people = #{num_of_people}
 		where 
 			id = #{id}

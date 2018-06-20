@@ -69,6 +69,18 @@ public class QuestionsAndAnswersController extends BaseController {
 		return mv;
 	}
 
+	@RequestMapping(value = "/updateStatus")
+	public void updateStatus(PrintWriter out) throws Exception {
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		questionsandanswersService.updateStatus(pd);
+		out.write("success");
+		out.close();
+	}
+
 	/**
 	 * 更新问题答案
 	 * 
@@ -85,10 +97,12 @@ public class QuestionsAndAnswersController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		// list转成json
+		if (pd.getString("status").equals("2")) {
+			pd.put("answer_show_time", DateUtilNew.getCurrentTimeLong());
+		}
 		String questionAndAnswersJson = JSONArray.fromObject(guessingCompetitionEntity.getQuestionAndAnswersEntityList()).toString();
 		pd.put("question_and_answer", questionAndAnswersJson);
 		pd.put("num_of_people", guessingCompetitionEntity.getNumOfPeople());
-		pd.put("status", 1);
 		questionsandanswersService.updateQuestionsAndAnswers(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -134,7 +148,6 @@ public class QuestionsAndAnswersController extends BaseController {
 		pd.put("id", 0);
 		pd.put("question_and_answer", questionAndAnswersJson);
 		pd.put("num_of_people", 0);
-		pd.put("status", 0);
 		String endTime = pd.getString("endTime");
 		if (null != endTime && !"".equals(endTime)) {
 			pd.put("end_time", DateUtilNew.getMilliSecondsByStr(endTime));
@@ -205,28 +218,25 @@ public class QuestionsAndAnswersController extends BaseController {
 		PageData matchPd = new PageData();
 		matchPd.put("match_id", matchId);
 		matchPd = footballmatchlotteryService.findById(matchPd);
-		PageData questionsandanswers = questionsandanswersService.findByMatchId(matchId);
+		PageData questionsAndAnswers = questionsandanswersService.findByMatchId(matchId);
 		ModelAndView mv = this.getModelAndView();
 		// PageData pd = new PageData();
 		// pd = this.getPageData();
 		// pd = questionsandanswersService.findById(pd); // 根据ID读取
-		if (questionsandanswers != null) {
-			mv.addObject("pd", questionsandanswers);
-			JSONArray jsonArray = JSONArray.fromObject(questionsandanswers.getString("question_and_answer"));
-			List<QuestionAndAnswersEntity> questionAndAnswers = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
-			mv.addObject("questionAndAnswerList", questionAndAnswers);
+		if (questionsAndAnswers != null) {
+			JSONArray jsonArray = JSONArray.fromObject(questionsAndAnswers.getString("question_and_answer"));
+			List<QuestionAndAnswersEntity> questionAndAnswerList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
+			mv.addObject("pd", questionsAndAnswers);
+			mv.addObject("questionAndAnswerList", questionAndAnswerList);
 			mv.addObject("msg", "update");
-			if (questionsandanswers.getString("status").equals("0")) {
+			if (questionsAndAnswers.getString("status").equals("0")) {
 				// 草稿状态 如果是草稿状态 跳转到草稿状态 可再次编辑 也可上线
 				mv.setViewName("lottery/questionsandanswers/questionsandanswers_draft");
-			} else if (questionsandanswers.getString("status").equals("1")) {
+			} else if (questionsAndAnswers.getString("status").equals("1")) {
 				// 发布(上线) 如果是发布状态 跳转到 回填答案页面(答案只可编辑一次)
 				mv.setViewName("lottery/questionsandanswers/questionsandanswers_backfillanswers");
-			} else if (questionsandanswers.getString("status").equals("2")) {
-				// 答案 回填 跳转到点击结束到结束状态
-				mv.setViewName("lottery/questionsandanswers/questionsandanswers_finish");
-			} else if (questionsandanswers.getString("status").equals("3")) {
-				// 结束 结束状态 只展示详情
+			} else if (questionsAndAnswers.getString("status").equals("2")) {
+				// 答案 回填 跳转到点击结束到完成状态
 				mv.setViewName("lottery/questionsandanswers/questionsandanswers_detail");
 			}
 		} else {

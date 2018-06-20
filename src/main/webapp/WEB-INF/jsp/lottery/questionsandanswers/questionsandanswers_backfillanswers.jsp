@@ -30,6 +30,7 @@
 					
 					<form action="questionsandanswers/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
+						<input type="hidden" name="status" id="status" value=""/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -165,8 +166,8 @@
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="20">
-										<a class="btn btn-mini btn-primary" onclick="saveQuestionAndAnswers();">保存</a>
-										<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+										<a class="btn btn-mini btn-primary" style="border-radius: 5px;" onclick="saveQuestionAndAnswers(2);">提交答案</a>
+										<a class="btn btn-mini btn-danger" style="border-radius: 5px;"  onclick="top.Dialog.close();">取消</a>
 								</td>
 							</tr>
 						</table>
@@ -210,7 +211,7 @@
 	        }  
 	    } 
 		//保存
-		function saveQuestionAndAnswers(){
+		function saveQuestionAndAnswers(status){
 			for(var q = 0 ; q < 6 ; q++){
 				var num = 0
 					num+= $("#answerStatus"+q+"1").val();
@@ -236,6 +237,7 @@
 				$("#numOfPeople").focus();
 			return false;
 			}
+			$("#status").val(status);
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

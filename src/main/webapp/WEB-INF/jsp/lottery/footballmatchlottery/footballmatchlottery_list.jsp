@@ -151,7 +151,11 @@
 															<c:when test="${var.is_hot == 0 }"><a  onclick="updateStatus('${var.match_id}','1');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-warning" title="置为热门"   >置为热门</a></c:when>
 															<c:when test="${var.is_hot == 1 }"><a  onclick="updateStatus('${var.match_id}','0');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="撤销热门"   >撤销热门</a></c:when>
 														</c:choose>
-															 <a  onclick="toAnswer('${var.match_id}','${DateUtil.toTimeSubtraction(var.match_time)}');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="答题竞猜"   >答题竞猜</a> 
+														<c:choose>
+															<c:when test="${var.qaStatus == 0 }"><a  onclick="toAnswer('${var.match_id}','${DateUtil.toTimeSubtraction(var.match_time)}');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="答题竞猜"   >答题竞猜</a> </c:when>
+															<c:when test="${var.qaStatus == 1 }"></c:when>
+														</c:choose>
+															 
 													</c:if>
 												</div>
 											</td>

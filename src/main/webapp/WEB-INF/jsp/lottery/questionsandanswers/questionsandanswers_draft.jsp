@@ -32,6 +32,7 @@
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<input type="hidden" name="endTime" id="endTime" value="${DateUtil.toTimeSubtraction(matchPd.match_time)}"/>
 						<input type="hidden" name="match_id" id="match_id" value="${matchPd.match_id}"/>
+						<input type="hidden" name="status" id="status" value=""/>
 						<input type="hidden" name="guessing_title" id="guessing_title" value="${matchPd.changci} ${matchPd.home_team_name} VS ${matchPd.visiting_team_name }（${matchPd.league_name}）"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
@@ -50,8 +51,8 @@
                                 	</td>
                                		<td style="text-align: left;"   colspan="4">
                                 		 <div class="col-sm-4">
-										    <select  name="scope_of_activity" id="scope_of_activity" style="width:140px;border-radius:5px !important">
-										        <option value="1" >竞彩足球</option>
+										    <select  name="scope_of_activity" id="scope_of_activity" style="width:140px;border-radius:5px !important" value ="${pd.scope_of_activity}">
+										        <option value="1" <c:if test="${pd.scope_of_activity == 1 }"> selected</c:if>>竞彩足球</option> 
 										    </select>
 										</div>
                                 		<div class="col-sm-5"> </div>
@@ -63,7 +64,7 @@
                                 	</td>
                                 	<td style="text-align: left;"    colspan="4">
 	                                	<div class="col-sm-4">
-	                                  	 	<input type="text" id="limit_lottery_amount"  name="limit_lottery_amount" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/> &nbsp元
+	                                  	 	<input type="text" id="limit_lottery_amount"  name="limit_lottery_amount"  value = "${pd.limit_lottery_amount}" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/> &nbsp元
 	                               		</div>
 	                                	<div class="col-sm-5"> </div>
 	                                </td>
@@ -74,7 +75,7 @@
                                 	</td>
                                 	<td  style="text-align: left;"    colspan="4">
 											<div class="col-sm-4">
-												<input name="startTime" id="startTime" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:140px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input name="startTime" id="startTime" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" value = "${DateUtil.toSDFTime(pd.start_time*1000)}" readonly="readonly" style="width:140px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
 												--  <lable style="color:red">${DateUtil.toTimeSubtraction(matchPd.match_time)}</lable>  结束竞猜
 											</div>
 	                                	<div class="col-sm-5"> </div>
@@ -86,129 +87,65 @@
                                 	</td>
                                 	<td style="text-align: left;"    colspan="4">
 	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="bonus_pool"  name="bonus_pool" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp元
+		                                  	 	<input type="text" id="bonus_pool"  name="bonus_pool" value = "${pd.bonus_pool }" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp元
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>
 							</tr>
-							
-							<tr>
-									<td style="text-align: right;" rowspan="6" >
-	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">题目设置：</label>
-                                	</td>
-                                	<td style="text-align: left;" >
-	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="questionSetting0"  name="questionAndAnswersEntityList[0].questionSetting" placeholder="题设1"   autocomplete="off"  value="" style="width:140px;border-radius:5px !important"/> 
-                                  	 	</div>
-	                                </td>
-                                	<td  style="text-align: right;"  rowspan="6">
-                                	<div class="col-sm-4"  control-label no-padding-right" for="form-field-1">回答设置：</div>
-	                                </td>
-                                	<td  >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting01"  name="questionAndAnswersEntityList[0].answerSetting1" placeholder="选项"  autocomplete="off"  value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-                                	<td   >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting02"  name="questionAndAnswersEntityList[0].answerSetting2" placeholder="选项"  autocomplete="off"    value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-							</tr>
-							<tr>
-                                	<td style="text-align: left;" >
-	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="questionSetting1"  name="questionAndAnswersEntityList[1].questionSetting" placeholder="题设2"   autocomplete="off"   value="" style="width:140px;border-radius:5px !important"/>
-                                  	 	</div>
-		                                <div class="col-sm-5">  </div>
-	                                </td>
-                                	<td  >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting11"  name="questionAndAnswersEntityList[1].answerSetting1" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-                                	<td   >
-                                	<div class="col-sm-4">
-                                			<input type="text" id="answerSetting12"  name="questionAndAnswersEntityList[1].answerSetting2" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-							</tr>
-							<tr>
-                                	<td style="text-align: left;" >
-	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="questionSetting2"  name="questionAndAnswersEntityList[2].questionSetting" placeholder="题设3"   autocomplete="off"   value=""  style="width:140px;border-radius:5px !important"/>
-                                  	 	</div>
-		                                <div class="col-sm-5">  </div>
-	                                </td>
-                                	<td  >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting21"  name="questionAndAnswersEntityList[2].answerSetting1" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-                                	<td   >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting22"  name="questionAndAnswersEntityList[2].answerSetting2" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-							</tr>
-							<tr>
-                                	<td style="text-align: left;" >
-	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="questionSetting3"  name="questionAndAnswersEntityList[3].questionSetting" placeholder="题设4"   autocomplete="off"   value="" style="width:140px;border-radius:5px !important"/>
-                                  	 	</div>
-		                                <div class="col-sm-5">  </div>
-	                                </td>
-                                	<td  >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting31"  name="questionAndAnswersEntityList[3].answerSetting1" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-                                	<td   >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting32"  name="questionAndAnswersEntityList[3].answerSetting2" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-							</tr>
-							<tr>
-                                	<td style="text-align: left;" >
-	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="questionSetting4"  name="questionAndAnswersEntityList[4].questionSetting" placeholder="题设5"   autocomplete="off"   value="" style="width:140px;border-radius:5px !important"/>
-                                  	 	</div>
-		                                <div class="col-sm-5">  </div>
-	                                </td>
-                                	<td  >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting41"  name="questionAndAnswersEntityList[4].answerSetting1" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-                                	<td   >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting42"  name="questionAndAnswersEntityList[4].answerSetting2" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-							</tr>
-							<tr>
-                                	<td style="text-align: left;" >
-	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="questionSetting5"  name="questionAndAnswersEntityList[5].questionSetting" placeholder="题设6"   autocomplete="off"   value=""  style="width:140px;border-radius:5px !important"/>
-                                  	 	</div>
-		                                <div class="col-sm-5">  </div>
-	                                </td>
-                                	<td  >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting51"  name="questionAndAnswersEntityList[5].answerSetting1" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-                                	<td   >
-                                	<div class="col-sm-4">
-                                		 	<input type="text" id="answerSetting52"  name="questionAndAnswersEntityList[5].answerSetting2" placeholder="选项"   autocomplete="off"   value=""  style="width:60px;border-radius:5px !important"/>
-                                	</div>
-	                                </td>
-							</tr>
+							<c:forEach    items="${questionAndAnswerList}" var="questionAndAnswer" varStatus="questionAndAnswerStatus">
+								<c:choose>
+									<c:when  test="${questionAndAnswerStatus.index == 0}">
+										<tr>
+												<td style="text-align: right;" rowspan="${fn:length(questionAndAnswerList)}" >
+				                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">题目设置：</label>
+			                                	</td>
+			                                	<td style="text-align: left;" >
+				                                	<div class="col-sm-4">
+					                                  	 	<input type="text" id="questionSetting${questionAndAnswerStatus.index}"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionSetting" placeholder="题设${questionAndAnswerStatus.index + 1}"   autocomplete="off"  value="${questionAndAnswer.questionSetting }" style="width:140px;border-radius:5px !important"/> 
+			                                  	 	</div>
+				                                </td>
+			                                	<td  style="text-align: right;"  rowspan="${fn:length(questionAndAnswerList)}">
+			                                	<div class="col-sm-4"  control-label no-padding-right" for="form-field-1">回答设置：</div>
+				                                </td>
+			                                	<td  >
+			                                	<div class="col-sm-4">
+			                                		 	<input type="text" id="answerSetting${questionAndAnswerStatus.index}1"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerSetting1" placeholder="选项"  autocomplete="off"  value="${questionAndAnswer.answerSetting1 }"  style="width:60px;border-radius:5px !important"/>
+			                                	</div>
+				                                </td>
+			                                	<td   >
+			                                	<div class="col-sm-4">
+			                                		 	<input type="text" id="answerSetting${questionAndAnswerStatus.index}2"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerSetting2" placeholder="选项"  autocomplete="off"    value="${questionAndAnswer.answerSetting2 }"  style="width:60px;border-radius:5px !important"/>
+			                                	</div>
+				                                </td>
+										</tr>
+									</c:when>
+									<c:when  test="${questionAndAnswerStatus.index > 0}">
+										<tr>
+			                                	<td style="text-align: left;" >
+				                                	<div class="col-sm-4">
+					                                  	 	<input type="text" id="questionSetting${questionAndAnswerStatus.index}"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionSetting" placeholder="题设${questionAndAnswerStatus.index + 1}"   autocomplete="off"   value="${questionAndAnswer.questionSetting }" style="width:140px;border-radius:5px !important"/>
+			                                  	 	</div>
+					                                <div class="col-sm-5">  </div>
+				                                </td>
+			                                	<td  >
+			                                	<div class="col-sm-4">
+			                                		 	<input type="text" id="answerSetting${questionAndAnswerStatus.index}1"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerSetting1" placeholder="选项"   autocomplete="off"   value="${questionAndAnswer.answerSetting1 }"  style="width:60px;border-radius:5px !important"/>
+			                                	</div>
+				                                </td>
+			                                	<td   >
+			                                	<div class="col-sm-4">
+			                                			<input type="text" id="answerSetting${questionAndAnswerStatus.index}2"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].answerSetting2" placeholder="选项"   autocomplete="off"   value="${questionAndAnswer.answerSetting2 }"  style="width:60px;border-radius:5px !important"/>
+			                                	</div>
+				                                </td>
+										</tr>
+									</c:when>
+								</c:choose>
+							</c:forEach>
 							<tr>
 								<td style="text-align: center;" colspan="20">
-										<a class="btn btn-mini btn-primary" onclick="saveQuestionAndAnswers();">保存</a>
-										<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+										<a class="btn btn-mini btn-primary" style="border-radius: 5px;" onclick="saveQuestionAndAnswers(1);">发布</a>
+										<a class="btn btn-mini btn-orange"  style="border-radius: 5px;" onclick="saveQuestionAndAnswers(0);">存草稿</a>
+										<a class="btn btn-mini btn-danger" style="border-radius: 5px;" onclick="top.Dialog.close();">取消</a>
 								</td>
 							</tr>
 						</table>
@@ -239,7 +176,7 @@
 		<script type="text/javascript">
 		$(top.hangge());
 		//保存
-		function saveQuestionAndAnswers(){
+		function saveQuestionAndAnswers(status){
 			if($("#limit_lottery_amount").val()==""){
 				$("#limit_lottery_amount").tips({
 					side:3,
@@ -294,6 +231,7 @@
 		 			}
 				}
 			}
+			$("#status").val(status);
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

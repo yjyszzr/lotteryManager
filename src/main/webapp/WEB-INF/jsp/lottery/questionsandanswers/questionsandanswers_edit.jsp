@@ -33,6 +33,7 @@
 						<input type="hidden" name="endTime" id="endTime" value="${DateUtil.toTimeSubtraction(matchPd.match_time)}"/>
 						<input type="hidden" name="match_id" id="match_id" value="${matchPd.match_id}"/>
 						<input type="hidden" name="guessing_title" id="guessing_title" value="${matchPd.changci} ${matchPd.home_team_name} VS ${matchPd.visiting_team_name }（${matchPd.league_name}）"/>
+						<input type="hidden" name="status" id="status" value=""/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -206,8 +207,9 @@
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="20">
-										<a class="btn btn-mini btn-primary" onclick="saveQuestionAndAnswers();">保存</a>
-										<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+										<a class="btn btn-mini btn-primary" style="border-radius: 5px;" onclick="saveQuestionAndAnswers(1);">发布</a>
+										<a class="btn btn-mini btn-orange"  style="border-radius: 5px;" onclick="saveQuestionAndAnswers(0);">存草稿</a>
+										<a class="btn btn-mini btn-danger" style="border-radius: 5px;" onclick="top.Dialog.close();">取消</a>
 								</td>
 							</tr>
 						</table>
@@ -293,6 +295,7 @@
 		 			}
 				}
 			}
+			$("#status").val(status);
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
