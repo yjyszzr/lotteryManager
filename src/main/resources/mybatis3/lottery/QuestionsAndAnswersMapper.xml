@@ -108,16 +108,11 @@
 		select * from 
 		<include refid="tableName"></include>
 		where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+		<if test="pd.guessing_title!= null and pd.guessing_title != ''"><!-- 关键词检索 -->
 			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+			 guessing_title LIKE CONCAT(CONCAT('%', #{pd.guessing_title}),'%')
 		</if>
+		order By create_time desc
 	</select>
 	
 	<!-- 列表(全部) -->

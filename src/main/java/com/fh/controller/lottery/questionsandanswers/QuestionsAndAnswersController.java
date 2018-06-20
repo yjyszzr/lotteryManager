@@ -177,9 +177,9 @@ public class QuestionsAndAnswersController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
+		String keywords = pd.getString("guessing_title"); // 关键词检索条件
 		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+			pd.put("guessing_title", keywords.trim());
 		}
 		page.setPd(pd);
 		List<PageData> varList = questionsandanswersService.list(page); // 列出QuestionsAndAnswers列表

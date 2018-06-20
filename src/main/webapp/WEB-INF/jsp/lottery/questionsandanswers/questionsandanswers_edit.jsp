@@ -32,7 +32,7 @@
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<input type="hidden" name="endTime" id="endTime" value="${DateUtil.toTimeSubtraction(matchPd.match_time)}"/>
 						<input type="hidden" name="match_id" id="match_id" value="${matchPd.match_id}"/>
-						<input type="hidden" name="guessing_title" id="guessing_title" value="${matchPd.changci} ${matchPd.home_team_name} VS ${matchPd.visiting_team_name }（${matchPd.league_name}）"/>
+						<input type="hidden" name="guessing_title" id="guessing_title" value="${matchPd.changci}${matchPd.home_team_name}VS${matchPd.visiting_team_name }（${matchPd.league_name}）"/>
 						<input type="hidden" name="status" id="status" value=""/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
@@ -240,7 +240,7 @@
 		<script type="text/javascript">
 		$(top.hangge());
 		//保存
-		function saveQuestionAndAnswers(){
+		function saveQuestionAndAnswers(status){
 			if($("#limit_lottery_amount").val()==""){
 				$("#limit_lottery_amount").tips({
 					side:3,

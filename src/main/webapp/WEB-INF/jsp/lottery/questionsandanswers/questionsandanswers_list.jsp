@@ -31,30 +31,56 @@
 						<!-- 检索  -->
 						<form action="questionsandanswers/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
-							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="">全部</option>
-									<option value="">1</option>
-									<option value="">2</option>
-								  	</select>
-								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
-							</tr>
+<!-- 							<tr> -->
+<!-- 								<td> -->
+<!-- 									<div class="nav-search"> -->
+<!-- 										<span class="input-icon"> -->
+<%-- 											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/> --%>
+<!-- 											<i class="ace-icon fa fa-search nav-search-icon"></i> -->
+<!-- 										</span> -->
+<!-- 									</div> -->
+<!-- 								</td> -->
+<!-- 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td> -->
+<!-- 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td> -->
+<!-- 								<td style="vertical-align:top;padding-left:2px;"> -->
+<!-- 								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;"> -->
+<!-- 									<option value=""></option> -->
+<!-- 									<option value="">全部</option> -->
+<!-- 									<option value="">1</option> -->
+<!-- 									<option value="">2</option> -->
+<!-- 								  	</select> -->
+<!-- 								</td> -->
+<%-- 								<c:if test="${QX.cha == 1 }"> --%>
+<!-- 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td> -->
+<%-- 								</c:if> --%>
+<%-- 								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if> --%>
+<!-- 							</tr> -->
+							
+								<tr style="margin:2px ">
+										<td>
+											<div class="nav-search">
+												<span class="input-icon" style="width:80px;text-align:right;">
+													赛事:
+												</span>
+												<span class="input-icon">
+													<input type="text" placeholder="	赛事" class="nav-search-input" id="guessing_title" autocomplete="off" name="guessing_title" value="${pd.guessing_title }"/>
+												</span>
+											</div>
+										</td>
+										<c:if test="${QX.cha == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+											<span class="input-icon" style="width:80px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+											</span>
+											<span class="input-icon" style="width:43px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+											</span>
+										</td>
+									</c:if>
+									</tr>
+							
 						</table>
 						<!-- 检索  -->
 					
@@ -200,10 +226,19 @@
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+// 		function tosearch(){
+// 			top.jzts();
+// 			$("#Form").submit();
+// 		}
+		
+		function tosearch(status){
+			if(status==0){
+				$("#guessing_title").val("");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}
+		
 		function updateStatus(Id,status){
 			bootbox.confirm("确定要发布该竞猜题吗?", function(result) {
 				if(result) {
