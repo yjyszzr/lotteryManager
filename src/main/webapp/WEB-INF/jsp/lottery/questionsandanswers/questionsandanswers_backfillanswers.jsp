@@ -97,6 +97,7 @@
 			                                	<div class="col-sm-4">
 			                                	${questionAndAnswer.questionSetting }
 				                                  	 	<input type="hidden" name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionSetting" value="${questionAndAnswer.questionSetting }"/> 
+				                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionNum" value="${questionAndAnswer.questionNum }"/> 
 		                                  	 	</div>
 			                                </td>
 		                                	<td  style="text-align: right;"  rowspan="${fn:length(questionAndAnswerList)}">
@@ -128,6 +129,7 @@
 			                                	<div class="col-sm-4">
 			                                	${questionAndAnswer.questionSetting }
 			                                	<input type="hidden" name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionSetting" value="${questionAndAnswer.questionSetting }"/> 
+			                                	<input type="hidden"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionNum" value="${questionAndAnswer.questionNum }"/> 
 		                                  	 	</div>
 				                                <div class="col-sm-5">  </div>
 			                                </td>

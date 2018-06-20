@@ -13,6 +13,7 @@ public class GuessingCompetitionEntity {
 	public String guessingTitle;
 	public String bonusPool;
 	public String limitLotteryAmount;
+
 	public List<QuestionAndAnswersEntity> questionAndAnswersEntityList;
 
 	public GuessingCompetitionEntity(Integer id, Integer matchId, String startTime, String endTime, Integer scopeOfActivity, Integer bonusType, Integer numOfPeople, String guessingTitle, String bonusPool, String limitLotteryAmount, List<QuestionAndAnswersEntity> questionAndAnswersEntityList) {

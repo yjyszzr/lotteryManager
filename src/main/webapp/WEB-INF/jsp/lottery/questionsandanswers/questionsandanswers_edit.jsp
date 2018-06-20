@@ -99,6 +99,7 @@
                                 	<td style="text-align: left;" >
 	                                	<div class="col-sm-4">
 		                                  	 	<input type="text" id="questionSetting0"  name="questionAndAnswersEntityList[0].questionSetting" placeholder="题设1"   autocomplete="off"  value="" style="width:140px;border-radius:5px !important"/> 
+		                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[0].questionNum" value="1"/> 
                                   	 	</div>
 	                                </td>
                                 	<td  style="text-align: right;"  rowspan="6">
@@ -119,6 +120,7 @@
                                 	<td style="text-align: left;" >
 	                                	<div class="col-sm-4">
 		                                  	 	<input type="text" id="questionSetting1"  name="questionAndAnswersEntityList[1].questionSetting" placeholder="题设2"   autocomplete="off"   value="" style="width:140px;border-radius:5px !important"/>
+		                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[1].questionNum" value="2"/> 
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>
@@ -137,6 +139,7 @@
                                 	<td style="text-align: left;" >
 	                                	<div class="col-sm-4">
 		                                  	 	<input type="text" id="questionSetting2"  name="questionAndAnswersEntityList[2].questionSetting" placeholder="题设3"   autocomplete="off"   value=""  style="width:140px;border-radius:5px !important"/>
+		                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[2].questionNum" value="3"/> 
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>
@@ -155,6 +158,7 @@
                                 	<td style="text-align: left;" >
 	                                	<div class="col-sm-4">
 		                                  	 	<input type="text" id="questionSetting3"  name="questionAndAnswersEntityList[3].questionSetting" placeholder="题设4"   autocomplete="off"   value="" style="width:140px;border-radius:5px !important"/>
+		                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[3].questionNum" value="4"/> 
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>
@@ -173,6 +177,7 @@
                                 	<td style="text-align: left;" >
 	                                	<div class="col-sm-4">
 		                                  	 	<input type="text" id="questionSetting4"  name="questionAndAnswersEntityList[4].questionSetting" placeholder="题设5"   autocomplete="off"   value="" style="width:140px;border-radius:5px !important"/>
+		                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[4].questionNum" value="5"/> 
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>
@@ -191,6 +196,7 @@
                                 	<td style="text-align: left;" >
 	                                	<div class="col-sm-4">
 		                                  	 	<input type="text" id="questionSetting5"  name="questionAndAnswersEntityList[5].questionSetting" placeholder="题设6"   autocomplete="off"   value=""  style="width:140px;border-radius:5px !important"/>
+		                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[5].questionNum" value="6"/> 
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>

@@ -27,35 +27,9 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							
 						<!-- 检索  -->
 						<form action="questionsandanswers/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
-<!-- 							<tr> -->
-<!-- 								<td> -->
-<!-- 									<div class="nav-search"> -->
-<!-- 										<span class="input-icon"> -->
-<%-- 											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/> --%>
-<!-- 											<i class="ace-icon fa fa-search nav-search-icon"></i> -->
-<!-- 										</span> -->
-<!-- 									</div> -->
-<!-- 								</td> -->
-<!-- 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td> -->
-<!-- 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td> -->
-<!-- 								<td style="vertical-align:top;padding-left:2px;"> -->
-<!-- 								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;"> -->
-<!-- 									<option value=""></option> -->
-<!-- 									<option value="">全部</option> -->
-<!-- 									<option value="">1</option> -->
-<!-- 									<option value="">2</option> -->
-<!-- 								  	</select> -->
-<!-- 								</td> -->
-<%-- 								<c:if test="${QX.cha == 1 }"> --%>
-<!-- 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td> -->
-<%-- 								</c:if> --%>
-<%-- 								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if> --%>
-<!-- 							</tr> -->
-							
 								<tr style="margin:2px ">
 										<td>
 											<div class="nav-search">
@@ -146,7 +120,7 @@
 													<c:choose>
 															<c:when test="${var.status ==0}">
 																<a class="btn btn-xs btn-success" title="编辑"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">编辑</a>
-																<a class="btn btn-xs btn-danger" title="发布"   style="border-radius: 5px;"  onclick="updateStatus('${var.id}','1');" >发布</a>
+																<a class="btn btn-xs btn-primary" title="发布"   style="border-radius: 5px;"  onclick="updateStatus('${var.id}','1');" >发布</a>
 															</c:when>
 															<c:when test="${var.status ==1}">
 																<a class="btn btn-xs btn-danger" title="公布答案"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">公布答案</a>
@@ -155,7 +129,6 @@
 																<a class="btn btn-xs btn-orange" title="详情"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">详情</a>
 															</c:when>
 													</c:choose>
-<%-- 													<a class="btn btn-xs btn-success" title="进入详情即可编辑"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">详情</a> --%>
 													</c:if>
 												</div>
 											</td>
@@ -225,12 +198,8 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
-		//检索
-// 		function tosearch(){
-// 			top.jzts();
-// 			$("#Form").submit();
-// 		}
 		
+		//检索
 		function tosearch(status){
 			if(status==0){
 				$("#guessing_title").val("");
@@ -238,7 +207,7 @@
 			top.jzts();
 			$("#Form").submit();
 		}
-		
+		//更新状态
 		function updateStatus(Id,status){
 			bootbox.confirm("确定要发布该竞猜题吗?", function(result) {
 				if(result) {
@@ -251,13 +220,12 @@
 			});
 		}
 		
-		
 		//修改
 		function edit(matchId){
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
-			 diag.Title ="编辑";
+			 diag.Title ="答题竞猜";
 			 diag.URL = '<%=basePath%>questionsandanswers/goEdit.do?matchId='+matchId;
 			 diag.Width = 700;
 			 diag.Height = 610;
@@ -266,14 +234,12 @@
 		     diag.ShowMinButton = false;		//最小化按钮 
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 tosearch();
+					 tosearch(1);
 				}
 				diag.close();
 			 };
 			 diag.show();
 		}
 	</script>
-
-
 </body>
 </html>

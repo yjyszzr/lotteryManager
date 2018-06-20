@@ -2,6 +2,10 @@ package com.fh.controller.lottery.questionsandanswers;
 
 public class QuestionAndAnswersEntity {
 	/**
+	 * 题号
+	 */
+	public Integer questionNum;
+	/**
 	 * 题设
 	 */
 	public String questionSetting;
@@ -21,6 +25,29 @@ public class QuestionAndAnswersEntity {
 	 * 答案2状态
 	 */
 	public Integer answerStatus2;
+
+	public QuestionAndAnswersEntity(Integer questionNum, String questionSetting, String answerSetting1, Integer answerStatus1, String answerSetting2, Integer answerStatus2) {
+		super();
+		this.questionNum = questionNum;
+		this.questionSetting = questionSetting;
+		this.answerSetting1 = answerSetting1;
+		this.answerStatus1 = answerStatus1;
+		this.answerSetting2 = answerSetting2;
+		this.answerStatus2 = answerStatus2;
+	}
+
+	@Override
+	public String toString() {
+		return "QuestionAndAnswersEntity [questionNum=" + questionNum + ", questionSetting=" + questionSetting + ", answerSetting1=" + answerSetting1 + ", answerStatus1=" + answerStatus1 + ", answerSetting2=" + answerSetting2 + ", answerStatus2=" + answerStatus2 + "]";
+	}
+
+	public Integer getQuestionNum() {
+		return questionNum;
+	}
+
+	public void setQuestionNum(Integer questionNum) {
+		this.questionNum = questionNum;
+	}
 
 	public String getQuestionSetting() {
 		return questionSetting;
@@ -59,19 +86,6 @@ public class QuestionAndAnswersEntity {
 	}
 
 	public void setAnswerStatus2(Integer answerStatus2) {
-		this.answerStatus2 = answerStatus2;
-	}
-
-	@Override
-	public String toString() {
-		return "QuestionAndAnswersEntity [questionSetting=" + questionSetting + ", answerSetting1=" + answerSetting1 + ", answerStatus1=" + answerStatus1 + ", answerSetting2=" + answerSetting2 + ", answerStatus2=" + answerStatus2 + "]";
-	}
-
-	public QuestionAndAnswersEntity(String questionSetting, String answerSetting1, Integer answerStatus1, String answerSetting2, Integer answerStatus2) {
-		this.questionSetting = questionSetting;
-		this.answerSetting1 = answerSetting1;
-		this.answerStatus1 = answerStatus1;
-		this.answerSetting2 = answerSetting2;
 		this.answerStatus2 = answerStatus2;
 	}
 

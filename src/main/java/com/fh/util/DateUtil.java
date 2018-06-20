@@ -255,7 +255,7 @@ public class DateUtil {
 
 	public static String toTimeSubtraction(String time) {
 		long dateLong = DateUtilNew.getMilliSecondsByStr(time);
-		dateLong = dateLong - 7 * 60;
+		dateLong = dateLong - 127 * 60;
 		return toSDFTime(dateLong * 1000);
 	}
 }

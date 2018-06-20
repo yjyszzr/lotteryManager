@@ -102,6 +102,7 @@
 			                                	<td style="text-align: left;" >
 				                                	<div class="col-sm-4">
 					                                  	 	<input type="text" id="questionSetting${questionAndAnswerStatus.index}"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionSetting" placeholder="题设${questionAndAnswerStatus.index + 1}"   autocomplete="off"  value="${questionAndAnswer.questionSetting }" style="width:140px;border-radius:5px !important"/> 
+					                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionNum" value="${questionAndAnswer.questionNum }"/> 
 			                                  	 	</div>
 				                                </td>
 			                                	<td  style="text-align: right;"  rowspan="${fn:length(questionAndAnswerList)}">
@@ -124,6 +125,7 @@
 			                                	<td style="text-align: left;" >
 				                                	<div class="col-sm-4">
 					                                  	 	<input type="text" id="questionSetting${questionAndAnswerStatus.index}"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionSetting" placeholder="题设${questionAndAnswerStatus.index + 1}"   autocomplete="off"   value="${questionAndAnswer.questionSetting }" style="width:140px;border-radius:5px !important"/>
+					                                  	 	<input type="hidden"  name="questionAndAnswersEntityList[${questionAndAnswerStatus.index}].questionNum" value="${questionAndAnswer.questionNum }"/> 
 			                                  	 	</div>
 					                                <div class="col-sm-5">  </div>
 				                                </td>
