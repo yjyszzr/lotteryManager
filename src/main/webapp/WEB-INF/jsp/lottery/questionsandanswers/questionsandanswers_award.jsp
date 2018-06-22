@@ -30,6 +30,7 @@
 					
 					<form action="questionsandanswers/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
+								<input type="hidden" name="status" id="status" value=""/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -90,20 +91,13 @@
 	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">参与人数：</label>
                                 	</td>
                                 	<td style="text-align: left;"    colspan="4">
-	                                	<div class="col-sm-4"> ${pd.num_of_people }&nbsp人 </div>
+	                                	<div class="col-sm-4"> 
+	                                	${pd.num_of_people }&nbsp人
+	                                	 </div>
 	                                	<div class="col-sm-5"> </div>
 	                                </td>
 							</tr>
 							<tr>
-									<td style="text-align: right;" >
-	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">获奖人数：</label>
-                                	</td>
-                                	<td style="text-align: left;"    colspan="4">
-	                                	<div class="col-sm-4"> ${pd.prizewinning_num }&nbsp人 </div>
-	                                	<div class="col-sm-5"> </div>
-	                                </td>
-							</tr>
-										<tr>
 									<td style="text-align: right;" >
 	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">答案公布时间：</label>
                                 	</td>
@@ -191,6 +185,24 @@
 								</c:when>
 							</c:choose>
 						</c:forEach>
+							<tr>
+									<td style="text-align: right;" >
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">获奖人数：</label>
+                                	</td>
+                                	<td style="text-align: left;"    colspan="4">
+	                                	<div class="col-sm-4"> 
+	                                	<input type="text" id="prizewinning_num"  name="prizewinning_num" value = "${pd.prizewinning_num }" placeholder="0人"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp人
+<!-- 	                                	${pd.num_of_people }&nbsp人 -->
+	                                	 </div>
+	                                	<div class="col-sm-5"> </div>
+	                                </td>
+							</tr>
+								<tr>
+								<td style="text-align: center;" colspan="20">
+										<a class="btn btn-mini btn-primary" style="border-radius: 5px;" onclick="awardToUser();">派奖</a>
+										<a class="btn btn-mini btn-danger" style="border-radius: 5px;"  onclick="top.Dialog.close();">取消</a>
+								</td>
+							</tr>
 						</table>
 						</div>
 						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
@@ -218,46 +230,19 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		<script type="text/javascript">
 		$(top.hangge());
-		function setSelectStatus(listIndex,buttonId){  
-			if(buttonId == 1){
-	            $("#answerStatus"+listIndex+buttonId).attr("checked",true);  
-	            $("#answerStatus"+listIndex+buttonId).val(1);
-	            $("#answerStatus"+listIndex+"2").attr("checked",false);  
-	            $("#answerStatus"+listIndex+"2").val(0);
-	        }else if(buttonId == 2){   
-	            $("#answerStatus"+listIndex+buttonId).attr("checked",true);  
-	            $("#answerStatus"+listIndex+buttonId).val(1);
-	            $("#answerStatus"+listIndex+"1").attr("checked",false);  
-	            $("#answerStatus"+listIndex+"1").val(0);
-	        }  
-	    } 
 		//保存
-		function saveQuestionAndAnswers(){
-			for(var q = 0 ; q < 6 ; q++){
-				var num = 0
-					num+= $("#answerStatus"+q+"1").val();
-					num+= $("#answerStatus"+q+"2").val();
-				if(num== 0){
-		 				$("#answerStatus"+q+"1").tips({
-		 					side:3,
-		 		            msg:'请选择答案',
-		 		            bg:'#AE81FF',
-		 		            time:2
-		 		        });
-		 				$("#answerStatus"+q+"1").focus();
-		 			return false;
-				}
-			}
-			if($("#numOfPeople").val()==""){
-				$("#numOfPeople").tips({
+		function awardToUser(){
+			if($("#prizewinning_num").val()==""){
+				$("#prizewinning_num").tips({
 					side:3,
 		            msg:'请输入人数',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#numOfPeople").focus();
+				$("#prizewinning_num").focus();
 			return false;
 			}
+			$("#status").val(3);
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

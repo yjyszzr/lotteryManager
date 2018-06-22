@@ -74,4 +74,8 @@ public interface QuestionsAndAnswersManager {
 
 	public void updateStatus(PageData pd) throws Exception;
 
+	public Integer findAwardNumByQuestionsId(Integer questionsId) throws Exception;
+
+	public void updateAward(PageData pd) throws Exception;
+
 }

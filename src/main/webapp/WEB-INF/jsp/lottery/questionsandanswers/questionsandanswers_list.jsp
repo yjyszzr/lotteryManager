@@ -67,6 +67,7 @@
 									<th class="center" style="width:50px;">序号</th>
 <!-- 									<th class="center">id</th> -->
 									<th class="center">赛事</th>
+									<th class="center">期次</th>
 									<th class="center">答题开始时间</th>
 									<th class="center">答题结束时间</th>
 									<th class="center">所属活动</th>
@@ -92,6 +93,7 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 <%-- 											<td class='center'>${var.id}</td> --%>
 											<td class='center'>${var.guessing_title}</td>
+											<td class='center'>${var.period}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.start_time*1000)}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.end_time*1000)}</td>
 											<td class='center'>
@@ -104,7 +106,8 @@
 												<c:choose>
 													<c:when test="${var.status ==0}">草稿</c:when>
 													<c:when test="${var.status ==1}">已发布</c:when>
-													<c:when test="${var.status ==2}">完成</c:when>
+													<c:when test="${var.status ==2}">已公布答案</c:when>
+													<c:when test="${var.status ==3}">已派奖</c:when>
 												</c:choose>
 											</td>
 <%-- 											<td class='center'>${var.limit_lottery_amount}</td> --%>
@@ -123,9 +126,17 @@
 																<a class="btn btn-xs btn-primary" title="发布"   style="border-radius: 5px;"  onclick="updateStatus('${var.id}','1');" >发布</a>
 															</c:when>
 															<c:when test="${var.status ==1}">
+															<c:if test="${var.end_time >= currentTime}">
+																<a class="btn btn-xs btn-danger" title="待公布答案"   style="border-radius: 5px;" >－－－－</a>
+															</c:if>
+															<c:if test="${var.end_time < currentTime}">
 																<a class="btn btn-xs btn-danger" title="公布答案"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">公布答案</a>
+															</c:if>
 															</c:when>
 															<c:when test="${var.status ==2}">
+																<a class="btn btn-xs btn-primary" title="派奖"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">派奖</a>
+															</c:when>
+															<c:when test="${var.status ==3}">
 																<a class="btn btn-xs btn-orange" title="详情"   style="border-radius: 5px;"  onclick="edit('${var.match_id}');">详情</a>
 															</c:when>
 													</c:choose>
@@ -228,7 +239,7 @@
 			 diag.Title ="答题竞猜";
 			 diag.URL = '<%=basePath%>questionsandanswers/goEdit.do?matchId='+matchId;
 			 diag.Width = 700;
-			 diag.Height = 610;
+			 diag.Height = 700;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = false;	//最大化按钮
 		     diag.ShowMinButton = false;		//最小化按钮 

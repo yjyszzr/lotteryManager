@@ -133,6 +133,24 @@ public class DateUtilNew {
 		return getCurrentDateTime(LocalDateTime.now(), datetimeFormat);
 	}
 
+	/**
+	 * 获取年月日 yyyy-MM-dd
+	 *
+	 * @return
+	 */
+	public static String getCurrentYearMonthDay() {
+		return getCurrentDateTime(LocalDateTime.now(), date_sdf);
+	}
+
+	/**
+	 * 获取年月日 yyyyMMdd
+	 *
+	 * @return
+	 */
+	public static String getCurrentyyyyMMdd() {
+		return getCurrentDateTime(LocalDateTime.now(), yyyyMMdd);
+	}
+
 	public static String getCurrentDateTime(LocalDateTime now, DateTimeFormatter pattern) {
 		return now.format(pattern);
 	}

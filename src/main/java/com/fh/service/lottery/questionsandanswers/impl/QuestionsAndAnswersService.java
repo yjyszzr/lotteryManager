@@ -1,11 +1,17 @@
 package com.fh.service.lottery.questionsandanswers.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
+
 import org.springframework.stereotype.Service;
 
+import com.fh.controller.lottery.questionsandanswers.QuestionAndAnswersEntity;
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.questionsandanswers.QuestionsAndAnswersManager;
@@ -116,4 +122,43 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 		dao.update("QuestionsAndAnswersMapper.updateStatus", pd);
 	}
 
+	@Override
+	public Integer findAwardNumByQuestionsId(Integer questionsId) throws Exception {
+		return (Integer) dao.findForObject("UserAccountManagerMapper.findAwardNumByQuestionsId", questionsId);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void updateAward(PageData pd) throws Exception {
+		// 查询所有该questionId下的用户答题
+		dao.update("QuestionsAndAnswersMapper.updateAward", pd);
+		PageData questionAndAnswers = (PageData) dao.findForObject("QuestionsAndAnswersMapper.findById", pd);
+		JSONArray jsonArray = JSONArray.fromObject(questionAndAnswers.getString("question_and_answer"));
+		List<QuestionAndAnswersEntity> questionAndAnswerList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
+		List<PageData> userAnswersInfoList = (List<PageData>) dao.findForList("QuestionsAndAnswersMapper.findByQuestionId", Integer.parseInt(pd.getString("id")));
+		// 比对结果更新答案状态
+		for (int i = 0; i < userAnswersInfoList.size(); i++) {
+			Integer flag = 1;
+			JSONArray userAnswersjsonArray = JSONArray.fromObject(userAnswersInfoList.get(i).get("user_answer"));
+			List<QuestionAndAnswersEntity> userAnswersJsonList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(userAnswersjsonArray, QuestionAndAnswersEntity.class);
+			for (int j = 0; j < questionAndAnswerList.size(); j++) {
+				if (!(questionAndAnswerList.get(j).getAnswerStatus1() == userAnswersJsonList.get(j).getAnswerStatus1() && questionAndAnswerList.get(j).getAnswerStatus2() == userAnswersJsonList.get(j).getAnswerStatus2())) {
+					flag = 0;
+					break;
+				}
+			}
+			userAnswersInfoList.get(i).put("get_award", flag);
+		}
+		List<PageData> awardList = new ArrayList<PageData>();
+		awardList = userAnswersInfoList.stream().filter(s -> s.getString("get_award").equals("1")).collect(Collectors.toList());
+		// 单个用户的奖金=奖金总金额/总人数
+		// 总人数=awardList.size()+questionAndAnswers.getString("prizewinning_num")
+		// 计算用户奖金进行派奖
+		int totalNum = awardList.size() + Integer.parseInt(questionAndAnswers.getString("prizewinning_num"));
+		BigDecimal bonusPool = new BigDecimal(questionAndAnswers.getString("bonus_pool"));
+		BigDecimal award = bonusPool.divide(new BigDecimal(totalNum));
+		for (int i = 0; i < awardList.size(); i++) {
+			awardList.get(i).put("bonus_amount", award);
+		}
+	}
 }

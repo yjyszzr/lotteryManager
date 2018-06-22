@@ -75,7 +75,8 @@
                                 	</td>
                                 	<td  style="text-align: left;"    colspan="4">
 											<div class="col-sm-4">
-												<input name="startTime" id="startTime" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:140px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input name="startTime" id="startTime" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:'#F{$dp.$D(\'txtEndDay\')}'})" readonly="readonly" style="width:140px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input  id="txtEndDay" type="hidden" value = "${DateUtil.toTimeSubtractionThreeHour(matchPd.match_time)}"/>
 												--  <lable style="color:red">${DateUtil.toTimeSubtraction(matchPd.match_time)}</lable>  结束竞猜
 											</div>
 	                                	<div class="col-sm-5"> </div>
@@ -88,6 +89,17 @@
                                 	<td style="text-align: left;"    colspan="4">
 	                                	<div class="col-sm-4">
 		                                  	 	<input type="text" id="bonus_pool"  name="bonus_pool" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp元
+                                  	 	</div>
+		                                <div class="col-sm-5">  </div>
+	                                </td>
+							</tr>
+							<tr>
+									<td style="text-align: right;" >
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">初始人数：</label>
+                                	</td>
+                                	<td style="text-align: left;"    colspan="4">
+	                                	<div class="col-sm-4">
+		                                  	 	<input type="text" id="num_of_people"  name="num_of_people" placeholder="0人"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp人
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>

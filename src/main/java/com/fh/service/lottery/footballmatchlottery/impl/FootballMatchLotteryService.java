@@ -12,6 +12,7 @@ import com.fh.dao.DaoSupport2;
 import com.fh.entity.Page;
 import com.fh.service.lottery.footballmatchlottery.FootballMatchLotteryManager;
 import com.fh.service.lottery.questionsandanswers.QuestionsAndAnswersManager;
+import com.fh.util.DateUtilNew;
 import com.fh.util.PageData;
 
 /**
@@ -76,6 +77,7 @@ public class FootballMatchLotteryService implements FootballMatchLotteryManager 
 		qandaList.forEach(item -> qandaMap.put(Integer.parseInt(item.getString("match_id")), item));
 		for (int i = 0; i < list.size(); i++) {
 			PageData qanda = qandaMap.get(Integer.parseInt(list.get(i).getString("match_id")));
+			list.get(i).put("match_time_integer", DateUtilNew.getMilliSecondsByStr(list.get(i).getString("match_time")));
 			if (qanda == null) {
 				list.get(i).put("qaStatus", 0);
 			} else {

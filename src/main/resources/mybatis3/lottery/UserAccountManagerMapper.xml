@@ -215,5 +215,7 @@
 				</if>
 				Order By a.pay_time DESC
 	</select>
-	
+	<select id="findAwardNumByQuestionsId"  parameterType="java.lang.Integer" resultType="java.lang.Integer">
+	select * from dl_questions_and_answers_user where  question_id = #{questionId} and  get_award = 1
+	</select>
 </mapper>

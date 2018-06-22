@@ -5,37 +5,18 @@ import java.util.List;
 public class GuessingCompetitionEntity {
 	public Integer id;
 	public Integer matchId;
-	public String startTime;
-	public String endTime;
+	public Integer startTime;
+	public Integer endTime;
 	public Integer scopeOfActivity;
-	public Integer bonusType;
 	public Integer numOfPeople;
 	public String guessingTitle;
 	public String bonusPool;
 	public String limitLotteryAmount;
-
+	public Integer answerShowTime;
+	public String period;
+	public Integer prizewinningNum;
+	public Integer awardTime;
 	public List<QuestionAndAnswersEntity> questionAndAnswersEntityList;
-
-	public GuessingCompetitionEntity(Integer id, Integer matchId, String startTime, String endTime, Integer scopeOfActivity, Integer bonusType, Integer numOfPeople, String guessingTitle, String bonusPool, String limitLotteryAmount, List<QuestionAndAnswersEntity> questionAndAnswersEntityList) {
-		super();
-		this.id = id;
-		this.matchId = matchId;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.scopeOfActivity = scopeOfActivity;
-		this.bonusType = bonusType;
-		this.numOfPeople = numOfPeople;
-		this.guessingTitle = guessingTitle;
-		this.bonusPool = bonusPool;
-		this.limitLotteryAmount = limitLotteryAmount;
-		this.questionAndAnswersEntityList = questionAndAnswersEntityList;
-	}
-
-	@Override
-	public String toString() {
-		return "GuessingCompetitionEntity [id=" + id + ", matchId=" + matchId + ", startTime=" + startTime + ", endTime=" + endTime + ", scopeOfActivity=" + scopeOfActivity + ", bonusType=" + bonusType + ", numOfPeople=" + numOfPeople + ", guessingTitle=" + guessingTitle + ", bonusPool=" + bonusPool + ", limitLotteryAmount=" + limitLotteryAmount + ", questionAndAnswersEntityList="
-				+ questionAndAnswersEntityList + "]";
-	}
 
 	public Integer getId() {
 		return id;
@@ -53,19 +34,19 @@ public class GuessingCompetitionEntity {
 		this.matchId = matchId;
 	}
 
-	public String getStartTime() {
+	public Integer getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime) {
+	public void setStartTime(Integer startTime) {
 		this.startTime = startTime;
 	}
 
-	public String getEndTime() {
+	public Integer getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(String endTime) {
+	public void setEndTime(Integer endTime) {
 		this.endTime = endTime;
 	}
 
@@ -75,14 +56,6 @@ public class GuessingCompetitionEntity {
 
 	public void setScopeOfActivity(Integer scopeOfActivity) {
 		this.scopeOfActivity = scopeOfActivity;
-	}
-
-	public Integer getBonusType() {
-		return bonusType;
-	}
-
-	public void setBonusType(Integer bonusType) {
-		this.bonusType = bonusType;
 	}
 
 	public Integer getNumOfPeople() {
@@ -117,15 +90,44 @@ public class GuessingCompetitionEntity {
 		this.limitLotteryAmount = limitLotteryAmount;
 	}
 
+	public Integer getAnswerShowTime() {
+		return answerShowTime;
+	}
+
+	public void setAnswerShowTime(Integer answerShowTime) {
+		this.answerShowTime = answerShowTime;
+	}
+
+	public String getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(String period) {
+		this.period = period;
+	}
+
+	public Integer getPrizewinningNum() {
+		return prizewinningNum;
+	}
+
+	public void setPrizewinningNum(Integer prizewinningNum) {
+		this.prizewinningNum = prizewinningNum;
+	}
+
+	public Integer getAwardTime() {
+		return awardTime;
+	}
+
+	public void setAwardTime(Integer awardTime) {
+		this.awardTime = awardTime;
+	}
+
 	public List<QuestionAndAnswersEntity> getQuestionAndAnswersEntityList() {
 		return questionAndAnswersEntityList;
 	}
 
 	public void setQuestionAndAnswersEntityList(List<QuestionAndAnswersEntity> questionAndAnswersEntityList) {
 		this.questionAndAnswersEntityList = questionAndAnswersEntityList;
-	}
-
-	public GuessingCompetitionEntity() {
 	}
 
 }

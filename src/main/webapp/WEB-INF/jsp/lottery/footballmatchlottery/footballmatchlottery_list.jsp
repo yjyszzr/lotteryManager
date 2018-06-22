@@ -153,7 +153,15 @@
 															<c:when test="${var.is_hot == 1 }"><a  onclick="updateStatus('${var.match_id}','0');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="撤销热门"   >撤销热门</a></c:when>
 														</c:choose>
 														<c:choose>
-															<c:when test="${var.qaStatus == 0 }"><a  onclick="toAnswer('${var.match_id}','${DateUtil.toTimeSubtraction(var.match_time)}');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="答题竞猜"   >答题竞猜</a> </c:when>
+															<c:when test="${var.qaStatus == 0 }">
+																<a  onclick="toAnswer('${var.match_id}','${DateUtil.toTimeSubtraction(var.match_time)}');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="答题竞猜"   >答题竞猜</a> 
+<%-- 															<c:if test="${var.match_time_integer <= currentDay}"> --%>
+<%-- 																<a  onclick="toAnswer('${var.match_id}','${DateUtil.toTimeSubtraction(var.match_time)}');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="答题竞猜"   >答题竞猜</a>  --%>
+<%-- 															</c:if> --%>
+<%-- 															<c:if test="${var.match_time_integer > currentDay}"> --%>
+<!-- 																<a style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" >－－－－</a>  -->
+<%-- 															</c:if> --%>
+															</c:when>
 															<c:when test="${var.qaStatus == 1 }"></c:when>
 														</c:choose>
 															 
@@ -161,7 +169,6 @@
 												</div>
 											</td>
 										</tr>
-									
 									</c:forEach>
 									</c:if>
 									<c:if test="${QX.cha == 0 }">
@@ -240,7 +247,7 @@
 			 diag.Title ="答题竞猜";
 			 diag.URL = '<%=basePath%>questionsandanswers/goEdit.do?matchId='+matchId;
 			 diag.Width = 700;
-			 diag.Height = 610;
+			 diag.Height = 660;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = false;	//最大化按钮
 		     diag.ShowMinButton = false;		//最小化按钮

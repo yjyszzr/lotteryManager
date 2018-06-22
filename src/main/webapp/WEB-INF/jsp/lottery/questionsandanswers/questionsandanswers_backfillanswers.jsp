@@ -86,6 +86,18 @@
 		                                <div class="col-sm-5">  </div>
 	                                </td>
 							</tr>
+											<tr>
+									<td style="text-align: right;" >
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">参与人数：</label>
+                                	</td>
+                                	<td style="text-align: left;"    colspan="4">
+	                                	<div class="col-sm-4">
+	                                		<lable style=" ">${pd.num_of_people }</lable>&nbsp人
+<!-- 	                                  	 	<input type="text" id="numOfPeople"  name="numOfPeople" placeholder="0人"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/> &nbsp人 -->
+	                               		</div>
+	                                	<div class="col-sm-5"> </div>
+	                                </td>
+							</tr>
 							<c:forEach   items="${questionAndAnswerList}" var="questionAndAnswer" varStatus="questionAndAnswerStatus">
 							<c:choose>
 								<c:when test="${questionAndAnswerStatus.index == 0}">
@@ -155,17 +167,6 @@
 								</c:when>
 							</c:choose>
 						</c:forEach>
-							<tr>
-									<td style="text-align: right;" >
-	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">参与人数：</label>
-                                	</td>
-                                	<td style="text-align: left;"    colspan="4">
-	                                	<div class="col-sm-4">
-	                                  	 	<input type="text" id="numOfPeople"  name="numOfPeople" placeholder="0人"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/> &nbsp人
-	                               		</div>
-	                                	<div class="col-sm-5"> </div>
-	                                </td>
-							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="20">
 										<a class="btn btn-mini btn-primary" style="border-radius: 5px;" onclick="saveQuestionAndAnswers(2);">提交答案</a>

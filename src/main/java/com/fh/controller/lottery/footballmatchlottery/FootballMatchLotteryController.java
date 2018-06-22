@@ -23,6 +23,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.footballmatchlottery.FootballMatchLotteryManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -142,12 +143,15 @@ public class FootballMatchLotteryController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("league_name", keywords.trim());
 		}
+
 		page.setPd(pd);
 		List<PageData> varList = footballmatchlotteryService.list(page); // 列出FootballMatchLottery列表
 		mv.setViewName("lottery/footballmatchlottery/footballmatchlottery_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		Long currentDay = DateUtilNew.getMilliSecondsByStr(DateUtilNew.getCurrentYearMonthDay() + " 23:59:59");
+		mv.addObject("currentDay", currentDay);
 		return mv;
 	}
 

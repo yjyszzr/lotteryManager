@@ -258,4 +258,10 @@ public class DateUtil {
 		dateLong = dateLong - 127 * 60;
 		return toSDFTime(dateLong * 1000);
 	}
+
+	public static String toTimeSubtractionThreeHour(String time) {
+		long dateLong = DateUtilNew.getMilliSecondsByStr(time);
+		dateLong = dateLong - 180 * 60;
+		return toSDFTime(dateLong * 1000);
+	}
 }

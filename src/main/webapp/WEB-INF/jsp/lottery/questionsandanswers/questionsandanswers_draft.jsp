@@ -92,6 +92,17 @@
 		                                <div class="col-sm-5">  </div>
 	                                </td>
 							</tr>
+							<tr>
+									<td style="text-align: right;" >
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">初始人数：</label>
+                                	</td>
+                                	<td style="text-align: left;"    colspan="4">
+	                                	<div class="col-sm-4">
+		                                  	 	<input type="text" id="num_of_people"  name="num_of_people" value = "${pd.num_of_people }" placeholder="0人"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp人
+                                  	 	</div>
+		                                <div class="col-sm-5">  </div>
+	                                </td>
+							</tr>
 							<c:forEach    items="${questionAndAnswerList}" var="questionAndAnswer" varStatus="questionAndAnswerStatus">
 								<c:choose>
 									<c:when  test="${questionAndAnswerStatus.index == 0}">

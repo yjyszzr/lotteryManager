@@ -102,8 +102,34 @@ public class QuestionsAndAnswersController extends BaseController {
 		}
 		String questionAndAnswersJson = JSONArray.fromObject(guessingCompetitionEntity.getQuestionAndAnswersEntityList()).toString();
 		pd.put("question_and_answer", questionAndAnswersJson);
-		pd.put("num_of_people", guessingCompetitionEntity.getNumOfPeople());
+		// pd.put("num_of_people", guessingCompetitionEntity.getNumOfPeople());
 		questionsandanswersService.updateQuestionsAndAnswers(pd);
+		mv.addObject("msg", "success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+
+	/**
+	 * 派奖
+	 * 
+	 * @param guessingCompetitionEntity
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateAward")
+	public ModelAndView updateAward() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "updateQuestionsAndAnswers");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return null;
+		} // 校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		// list转成json
+		if (pd.getString("status").equals("3")) {
+			pd.put("award_time", DateUtilNew.getCurrentTimeLong());
+		}
+		questionsandanswersService.updateAward(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -147,7 +173,7 @@ public class QuestionsAndAnswersController extends BaseController {
 		String questionAndAnswersJson = JSONArray.fromObject(guessingCompetitionEntity.getQuestionAndAnswersEntityList()).toString();
 		pd.put("id", 0);
 		pd.put("question_and_answer", questionAndAnswersJson);
-		pd.put("num_of_people", 0);
+		// pd.put("num_of_people", 0);
 		String endTime = pd.getString("endTime");
 		if (null != endTime && !"".equals(endTime)) {
 			pd.put("end_time", DateUtilNew.getMilliSecondsByStr(endTime));
@@ -157,6 +183,7 @@ public class QuestionsAndAnswersController extends BaseController {
 			pd.put("start_time", DateUtilNew.getMilliSecondsByStr(startTime));
 		}
 		pd.put("create_time", DateUtilNew.getCurrentTimeLong().toString());
+		pd.put("period", DateUtilNew.getCurrentyyyyMMdd() + "期");
 		questionsandanswersService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -186,6 +213,7 @@ public class QuestionsAndAnswersController extends BaseController {
 		mv.setViewName("lottery/questionsandanswers/questionsandanswers_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
+		mv.addObject("currentTime", DateUtilNew.getCurrentTimeLong());
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
@@ -226,19 +254,26 @@ public class QuestionsAndAnswersController extends BaseController {
 		if (questionsAndAnswers != null) {
 			JSONArray jsonArray = JSONArray.fromObject(questionsAndAnswers.getString("question_and_answer"));
 			List<QuestionAndAnswersEntity> questionAndAnswerList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
-			mv.addObject("pd", questionsAndAnswers);
-			mv.addObject("questionAndAnswerList", questionAndAnswerList);
-			mv.addObject("msg", "update");
 			if (questionsAndAnswers.getString("status").equals("0")) {
 				// 草稿状态 如果是草稿状态 跳转到草稿状态 可再次编辑 也可上线
 				mv.setViewName("lottery/questionsandanswers/questionsandanswers_draft");
+				mv.addObject("msg", "update");
 			} else if (questionsAndAnswers.getString("status").equals("1")) {
 				// 发布(上线) 如果是发布状态 跳转到 回填答案页面(答案只可编辑一次)
 				mv.setViewName("lottery/questionsandanswers/questionsandanswers_backfillanswers");
+				mv.addObject("msg", "update");
 			} else if (questionsAndAnswers.getString("status").equals("2")) {
+				// 答案回填 点击结束到派奖状态
+				Integer num = questionsandanswersService.findAwardNumByQuestionsId(Integer.parseInt(questionsAndAnswers.getString("id")));
+				questionsAndAnswers.put("prizewinning_num", num);
+				mv.addObject("msg", "updateAward");
+				mv.setViewName("lottery/questionsandanswers/questionsandanswers_award");
+			} else if (questionsAndAnswers.getString("status").equals("3")) {
 				// 答案 回填 跳转到点击结束到完成状态
 				mv.setViewName("lottery/questionsandanswers/questionsandanswers_detail");
 			}
+			mv.addObject("pd", questionsAndAnswers);
+			mv.addObject("questionAndAnswerList", questionAndAnswerList);
 		} else {
 			mv.setViewName("lottery/questionsandanswers/questionsandanswers_edit");
 			mv.addObject("msg", "add");

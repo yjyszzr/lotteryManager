@@ -20,6 +20,7 @@
         #{question_and_answer},	
         #{num_of_people}	,
         #{status},
+        #{period},
         #{guessing_title}	
 	</sql>
 	
@@ -39,6 +40,7 @@
 		        question_and_answer,	
 		        num_of_people,
 		        status,
+		        period,
 		        guessing_title	
 		) values (
 	<include refid="FieldValue"></include>
@@ -68,8 +70,17 @@
 		set 
 			question_and_answer = #{question_and_answer},
 			status  = #{status},
-			answer_show_time  = #{answer_show_time},
-			num_of_people = #{num_of_people}
+			answer_show_time  = #{answer_show_time} 
+		where 
+			id = #{id}
+	</update>
+	<update id="updateAward" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status  = #{status},
+			prizewinning_num = #{prizewinning_num},
+			award_time  = #{award_time} 
 		where 
 			id = #{id}
 	</update>
