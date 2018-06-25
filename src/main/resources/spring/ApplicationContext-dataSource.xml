@@ -194,6 +194,7 @@
         <property name="manualAuditUrl" value="${manualAuditUrl}"></property>
         <property name="manualRewardUrl" value="${manualRewardUrl}"></property>
         <property name="uploadURL" value="${uploadURL}"></property>
+        <property name="manualRewardToUserMoneyLimitUrl" value="${manualRewardToUserMoneyLimitUrl}"></property>
     </bean>
  	<!-- QQ313596790 -->
 </beans>

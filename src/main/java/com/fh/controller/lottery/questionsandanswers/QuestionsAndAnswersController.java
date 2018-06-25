@@ -118,7 +118,7 @@ public class QuestionsAndAnswersController extends BaseController {
 	 */
 	@RequestMapping(value = "/updateAward")
 	public ModelAndView updateAward() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "updateQuestionsAndAnswers");
+		logBefore(logger, Jurisdiction.getUsername() + "发布答案,比对用户答案,并且给用户派奖");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
 			return null;
 		} // 校验权限

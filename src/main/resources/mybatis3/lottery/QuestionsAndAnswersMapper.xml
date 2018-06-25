@@ -74,6 +74,17 @@
 		where 
 			id = #{id}
 	</update>
+	<update id="updateUserAwardStatusAndAmount" parameterType="pd">
+		update
+			dl_questions_and_answers_user
+		set 
+			get_award = #{get_award},
+			bonus_amount = #{bonus_amount},
+			award_time = #{award_time},
+			award_sn = #{award_sn}
+		where 
+			id = #{id}
+	</update>
 	<update id="updateAward" parameterType="pd">
 		update
 		<include refid="tableName"></include>

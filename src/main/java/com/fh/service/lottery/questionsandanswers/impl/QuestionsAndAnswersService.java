@@ -11,11 +11,16 @@ import net.sf.json.JSONArray;
 
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
+import com.fh.config.URLConfig;
+import com.fh.controller.lottery.order.ReqOrdeEntity;
 import com.fh.controller.lottery.questionsandanswers.QuestionAndAnswersEntity;
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.questionsandanswers.QuestionsAndAnswersManager;
+import com.fh.util.DateUtilNew;
 import com.fh.util.PageData;
+import com.fh.util.SNGenerator;
 
 /**
  * 说明： 竞猜答题 创建人：FH Q313596790 创建时间：2018-06-15
@@ -27,6 +32,9 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 
 	@Resource(name = "daoSupport3")
 	private DaoSupport3 dao;
+
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
 
 	/**
 	 * 新增
@@ -130,11 +138,12 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void updateAward(PageData pd) throws Exception {
-		// 查询所有该questionId下的用户答题
+		// 回填答案
 		dao.update("QuestionsAndAnswersMapper.updateAward", pd);
 		PageData questionAndAnswers = (PageData) dao.findForObject("QuestionsAndAnswersMapper.findById", pd);
 		JSONArray jsonArray = JSONArray.fromObject(questionAndAnswers.getString("question_and_answer"));
 		List<QuestionAndAnswersEntity> questionAndAnswerList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
+		// 查询所有该questionId下的用户答题
 		List<PageData> userAnswersInfoList = (List<PageData>) dao.findForList("QuestionsAndAnswersMapper.findByQuestionId", Integer.parseInt(pd.getString("id")));
 		// 比对结果更新答案状态
 		for (int i = 0; i < userAnswersInfoList.size(); i++) {
@@ -159,6 +168,35 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 		BigDecimal award = bonusPool.divide(new BigDecimal(totalNum));
 		for (int i = 0; i < awardList.size(); i++) {
 			awardList.get(i).put("bonus_amount", award);
+			String sn = SNGenerator.nextSN(1);// 生成订单号
+			// 生成订单号
+			awardList.get(i).put("award_sn", sn);
+			awardList.get(i).put("get_award", 1);// 状态为中奖
+			awardList.get(i).put("award_time", DateUtilNew.getCurrentTimeLong());
+			PageData getAwardUser = awardList.get(i);
+			// 添加用户中奖记录以及派奖时间
+
+			dao.update("QuestionsAndAnswersMapper.updateUserAwardStatusAndAmount", getAwardUser);
+			// 派奖
+
+			ReqOrdeEntity reqOrdeEntity = new ReqOrdeEntity();
+			reqOrdeEntity.orderSn = sn;
+			reqOrdeEntity.reward = award.doubleValue();
+			reqOrdeEntity.userId = Integer.valueOf(awardList.get(i).getString("user_id"));
+			reqOrdeEntity.userMoney = 0;
+			reqOrdeEntity.betMoney = 0;
+			Integer payTimeTmp = Integer.valueOf(awardList.get(i).getString("answer_time"));
+			String payTime = DateUtilNew.getCurrentTimeString(Long.valueOf(payTimeTmp), DateUtilNew.datetimeFormat);
+			reqOrdeEntity.betTime = payTime;
+
+			List<ReqOrdeEntity> userIdAndRewardList = new ArrayList<ReqOrdeEntity>();
+			userIdAndRewardList.add(reqOrdeEntity);
+			String value = "{'userIdAndRewardList':";
+			String reqStr = JSON.toJSONString(userIdAndRewardList);
+			String stra = value + reqStr + "}";
+			// ManualAuditUtil.ManualAuditUtil(stra,
+			// urlConfig.getManualRewardUrl(), true);
+
 		}
 	}
 }
