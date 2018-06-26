@@ -103,7 +103,12 @@ public class OrderManagerController extends BaseController {
 			List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
 			for (int j = 0; j < list.size(); j++) {
 				for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
-					nameStr += orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "," + list.get(j).getBetCells().get(j2).getCellOdds() + ";";
+					String fixOdds = orderDetailsList.get(i).getString("fix_odds");
+					if (fixOdds.equals("")) {
+						nameStr += orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】   ";
+					} else {
+						nameStr += orderDetailsList.get(i).getString("changci") + "[" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】   ";
+					}
 				}
 			}
 			orderDetailsList.get(i).put("list", nameStr);
@@ -151,7 +156,7 @@ public class OrderManagerController extends BaseController {
 		} else if (MatchPlayTypeEnum.PLAY_TYPE_CRS.getcode() == playCode) {
 			cathecticData = MatchResultCrsEnum.getName(cathecticStr);
 		} else if (MatchPlayTypeEnum.PLAY_TYPE_TTG.getcode() == playCode) {
-			cathecticData = cathecticStr;
+			cathecticData = cathecticStr + "球";
 		} else if (MatchPlayTypeEnum.PLAY_TYPE_HAFU.getcode() == playCode) {
 			cathecticData = MatchResultHafuEnum.getName(cathecticStr);
 		}
