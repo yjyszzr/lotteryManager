@@ -63,7 +63,7 @@ display:block;
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">时间:</td>
-								<td>${DateUtil.toSDFTime(var.complain_time*1000)}</td>
+								<td>${DateUtil.toSDFTime(pd.complain_time*1000)}</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">投诉内容:</td>

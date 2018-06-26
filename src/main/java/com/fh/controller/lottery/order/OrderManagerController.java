@@ -15,6 +15,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.dto.DlJcZqMatchCellDTO;
 import com.fh.entity.dto.MatchBetCellDTO;
+import com.fh.enums.MatchBetTypeEnum;
 import com.fh.enums.MatchPlayTypeEnum;
 import com.fh.enums.MatchResultCrsEnum;
 import com.fh.enums.MatchResultHadEnum;
@@ -93,6 +94,7 @@ public class OrderManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = ordermanagerService.findById(pd);
+		pd.put("pass_type", MatchBetTypeEnum.getName(pd.getString("pass_type")));
 		List<PageData> orderDetailsList = ordermanagerService.toDetail(pd); // 列出OrderManager列表
 		mv.setViewName("lottery/ordermanager/ordermanager_details");
 		mv.addObject("varList", orderDetailsList);
@@ -100,9 +102,8 @@ public class OrderManagerController extends BaseController {
 			String nameStr = "";
 			List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
 			for (int j = 0; j < list.size(); j++) {
-				list.get(j).getBetCells();
 				for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
-					nameStr = orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "," + list.get(j).getBetCells().get(j2).getCellOdds() + ";";
+					nameStr += orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "," + list.get(j).getBetCells().get(j2).getCellOdds() + ";";
 				}
 			}
 			orderDetailsList.get(i).put("list", nameStr);
