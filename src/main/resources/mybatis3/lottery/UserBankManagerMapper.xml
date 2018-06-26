@@ -144,7 +144,10 @@
 		from 
 		<include refid="tableName"></include>
 		where 
-		user_id = #{user_id} order By status DESC
+			user_id = #{user_id}  
+		and
+		is_delete = 0
+		order By status DESC
 	</select>
 	
 	

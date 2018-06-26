@@ -181,6 +181,7 @@
 		 SELECT
 		 	o.*, 
 			a.pay_time,
+			a.award_time,
 			a.ticket_amount,
 			b.user_name,
 			b.mobile,

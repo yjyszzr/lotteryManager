@@ -127,7 +127,12 @@
 											<td class='center'> ${var.ticket_amount}元</td>
 											<td class='center'>${var.amount}元</td>
 											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)} </td>
-											<td class='center'>${DateUtil.toSDFTime(var.award_time*1000)} </td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${empty var.award_time }">--</c:when>
+													<c:otherwise>${DateUtil.toSDFTime(var.award_time*1000)}</c:otherwise>
+												</c:choose>
+											 </td>
 										</tr>
 									</c:forEach>
 									</c:if>
