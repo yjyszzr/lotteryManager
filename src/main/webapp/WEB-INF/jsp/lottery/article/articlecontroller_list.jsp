@@ -80,7 +80,7 @@
 									</td>
 									<td >
 										<span class="input-icon" style="width:80px;text-align:right;">
-												发布时间:
+												创建时间:
 											</span>
 											<span  >
 												<input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
@@ -111,10 +111,10 @@
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">文章ID</th>
 									<th class="center" width="300px">文章标题</th>
-									<th class="center">发布时间</th>
 									<th class="center">文章状态</th>
 									<th class="center">作者</th>
 <!-- 									<th class="center">标签</th> -->
+									<th class="center">创建时间</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -141,7 +141,7 @@
 													<td title="${var.title}"> <a style="cursor:pointer;" onclick="toPreShow('${var.article_id}');">${fn:substring(var.title,0,20)}... </a></td>
 												</c:otherwise>
 											</c:choose>
-											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
+										
 											<td class='center'> 
 											<c:choose>
 													<c:when test="${var.status==1}">已发布</c:when>
@@ -152,6 +152,7 @@
 											</td>
 											<td class='center'>${var.author}</td>
 <%-- 											<td class='center'>${var.related_team}</td> --%>
+											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>

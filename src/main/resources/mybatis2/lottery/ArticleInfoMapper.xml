@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ArticleInfoMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		dl_article_info
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		date,	
+		content,	
+		title,	
+		source,	
+		create_time,
+		status
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{id},	
+        #{date},	
+        #{content},	
+        #{title},	
+        #{source},	
+        #{create_time},	
+        #{status}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        id,	
+		        date,	
+		        content,	
+		        title,	
+		        source,	
+		        create_time,
+		        status	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			date = #{date},
+			content = #{content},
+			title = #{title},
+			source = #{source},
+			create_time = #{create_time},
+			status = #{status}
+		where 
+			id = #{id}
+	</update>
+	<update id="updateStatus" parameterType="Integer">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = 1
+		where 
+			id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.source!= null and pd.source != ''"><!-- 关键词检索 -->
+			and  source LIKE CONCAT(CONCAT('%', #{pd.source}),'%')
+		</if>
+		<if test="pd.content!= null and pd.content != ''"><!-- 关键词检索 -->
+			and  content LIKE CONCAT(CONCAT('%', #{pd.content}),'%')
+		</if>
+		<if test="pd.title!= null and pd.title != ''"><!-- 关键词检索 -->
+			and  title LIKE CONCAT(CONCAT('%', #{pd.title}),'%')
+		</if>
+		order by create_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			 id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+</mapper>
