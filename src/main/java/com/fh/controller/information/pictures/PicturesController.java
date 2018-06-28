@@ -23,13 +23,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fh.common.TextConfig;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.information.pictures.PicturesManager;
 import com.fh.util.AppUtil;
-import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.DelAllFile;
 import com.fh.util.FileUpload;
@@ -52,6 +50,7 @@ public class PicturesController extends BaseController {
 
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
+
 	/**
 	 * 列表
 	 * 
@@ -112,9 +111,9 @@ public class PicturesController extends BaseController {
 	@RequestMapping(value = "/save")
 	@ResponseBody
 	public Object save(@RequestParam(required = false) MultipartFile file) throws Exception {
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
-			return null;
-		} // 校验权限
+		// if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+		// return null;
+		// } // 校验权限
 		logBefore(logger, Jurisdiction.getUsername() + "新增图片");
 		Map<String, String> map = new HashMap<String, String>();
 		String ffile = DateUtil.getDays(), fileName = "";
@@ -146,9 +145,9 @@ public class PicturesController extends BaseController {
 	@RequestMapping(value = "/fileUpload")
 	@ResponseBody
 	public Map<String, String> fileUpload(@RequestParam(required = false) MultipartFile file) throws Exception {
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
-			return null;
-		} // 校验权限
+		// if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+		// return null;
+		// } // 校验权限
 		logBefore(logger, Jurisdiction.getUsername() + "新增图片");
 		Map<String, String> map = new HashMap<String, String>();
 		String ffile = DateUtil.getDays(), fileName = "";
@@ -191,9 +190,9 @@ public class PicturesController extends BaseController {
 	@RequestMapping(value = "/fileUploadForWangEditor", method = RequestMethod.POST)
 	@ResponseBody
 	public Object fileUploadForWangEditor(@RequestParam(value = "myFileName") MultipartFile file) throws Exception {
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
-			return null;
-		} // 校验权限
+		// if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+		// return null;
+		// } // 校验权限
 		logBefore(logger, Jurisdiction.getUsername() + "新增图片");
 		String ffile = DateUtil.getDays(), fileName = "";
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
@@ -219,9 +218,9 @@ public class PicturesController extends BaseController {
 	 */
 	@RequestMapping(value = "/delete")
 	public void delete(PrintWriter out) throws Exception {
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-			return;
-		} // 校验权限
+		// if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+		// return;
+		// } // 校验权限
 		logBefore(logger, Jurisdiction.getUsername() + "删除图片");
 		PageData pd = new PageData();
 		if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
@@ -251,9 +250,9 @@ public class PicturesController extends BaseController {
 	@RequestMapping(value = "/edit")
 	public ModelAndView edit(HttpServletRequest request, @RequestParam(value = "tp", required = false) MultipartFile file, @RequestParam(value = "tpz", required = false) String tpz, @RequestParam(value = "PICTURES_ID", required = false) String PICTURES_ID, @RequestParam(value = "TITLE", required = false) String TITLE, @RequestParam(value = "MASTER_ID", required = false) String MASTER_ID,
 			@RequestParam(value = "BZ", required = false) String BZ) throws Exception {
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
-			return null;
-		} // 校验权限
+		// if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+		// return null;
+		// } // 校验权限
 		logBefore(logger, Jurisdiction.getUsername() + "修改图片");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();

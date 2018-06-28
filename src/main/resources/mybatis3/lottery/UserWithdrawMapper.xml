@@ -84,7 +84,8 @@
 		SELECT
 			a.*,
 			u_r.id_code,
-			u.mobile 
+			u.mobile,
+			u.user_money 
 		FROM
 			dl_user_withdraw a
 			LEFT JOIN dl_user_real u_r ON a.user_id = u_r.user_id

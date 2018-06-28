@@ -317,7 +317,6 @@
 			dataType:'json',
 			cache: false,
 			success: function(data){
-				alert(data.result)
 				 if("success" != data.result){
 					 $("#PHONE").tips({
 							side:3,

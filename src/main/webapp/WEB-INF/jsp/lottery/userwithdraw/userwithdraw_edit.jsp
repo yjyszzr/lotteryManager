@@ -85,7 +85,7 @@
 	                                	<label class=" no-padding-right" for="form-field-1">可提现金额：</label>
                            		  	</td>
                            		  	<td style="text-align: left;width:200px" >	
-	                                	<label class=" no-padding-right" for="form-field-1">${pd.amount }元</label>
+	                                	<label class=" no-padding-right" for="form-field-1">${pd.user_money }元</label>
                            		  	</td>
 							</tr>
 							<tr>
