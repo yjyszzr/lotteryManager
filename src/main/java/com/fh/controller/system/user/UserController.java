@@ -12,7 +12,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -438,7 +437,10 @@ public class UserController extends BaseController {
 			pd.put("ROLE_ID", userService.findByUsername(pd).getString("ROLE_ID")); // 对角色ID还原本人角色ID
 		}
 		if (pd.getString("PASSWORD") != null && !"".equals(pd.getString("PASSWORD"))) {
-			pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"), pd.getString("PASSWORD")).toString());
+			String passwd = MD5Utils.encrypt(pd.getString("PASSWORD").toString());// 将明文密码加密
+			// pd.put("PASSWORD", new SimpleHash("SHA-1",
+			// pd.getString("USERNAME"), pd.getString("PASSWORD")).toString());
+			pd.put("PASSWORD", passwd);
 		}
 		userService.editU(pd); // 执行修改
 		try {
@@ -621,7 +623,9 @@ public class UserController extends BaseController {
 				pd.put("NUMBER", listPd.get(i).getString("var0")); // 编号已存在就跳过
 				pd.put("PHONE", listPd.get(i).getString("var2")); // 手机号
 
-				pd.put("PASSWORD", new SimpleHash("SHA-1", USERNAME, "123").toString()); // 默认密码123
+				// pd.put("PASSWORD", new SimpleHash("SHA-1", USERNAME,
+				// "123").toString()); // 默认密码123
+				pd.put("PASSWORD", MD5Utils.encrypt("123456")); // 默认密码123
 				if (userService.findByUN(pd) != null) {
 					continue;
 				}
