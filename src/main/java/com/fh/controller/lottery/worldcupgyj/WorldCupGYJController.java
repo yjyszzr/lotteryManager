@@ -137,9 +137,9 @@ public class WorldCupGYJController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
+		String keywords = pd.getString("contry_name"); // 关键词检索条件
 		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+			pd.put("contry_name", keywords.trim());
 		}
 		page.setPd(pd);
 		List<PageData> varList = worldcupgyjService.list(page); // 列出WorldCupGYJ列表

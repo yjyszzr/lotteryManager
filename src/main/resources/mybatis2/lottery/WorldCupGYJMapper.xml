@@ -138,14 +138,12 @@
 		from 
 		<include refid="tableName"></include>
 		where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+		<if test="pd.contry_name!= null and pd.contry_name != ''"><!-- 关键词检索 -->
 			and
 				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					home_contry_name LIKE CONCAT(CONCAT('%', #{pd.contry_name}),'%')
 					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
+					visitor_contry_name LIKE CONCAT(CONCAT('%', #{pd.contry_name}),'%') 
 				)
 		</if>
 		order by sort_id DESC
@@ -172,8 +170,10 @@
 		<!-- 修改 -->
 	<update id="updateSellStatus" parameterType="pd">
 		update
-		<include refid="tableName"></include>
-		set  sell = #{sell} where  id = #{id}
+			<include refid="tableName"></include>
+		set  sell = #{sell}
+			<if test="id!= -1">
+				where  id = #{id}
+			</if>
 	</update>
-	<!-- fh313596790qq(青苔) -->
 </mapper>
