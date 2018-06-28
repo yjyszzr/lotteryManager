@@ -33,13 +33,23 @@
 						<form action="articleinfo/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr style="margin:2px ">
+<!-- 									<td> -->
+<!-- 										<div class="nav-search"> -->
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 												内容: -->
+<!-- 											</span> -->
+<!-- 											<span class="input-icon"> -->
+<%-- 												<input type="text" placeholder="内容" class="nav-search-input" id="content" autocomplete="off" name="content" value="${pd.content }"   /> --%>
+<!-- 											</span> -->
+<!-- 										</div> -->
+<!-- 									</td> -->
 									<td>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
-												内容:
+												标题:
 											</span>
 											<span class="input-icon">
-												<input type="text" placeholder="内容" class="nav-search-input" id="content" autocomplete="off" name="content" value="${pd.content }"   />
+												<input type="text" placeholder="标题" class="nav-search-input" id="title" autocomplete="off" name="title" value="${pd.title}" />
 											</span>
 										</div>
 									</td>
@@ -50,16 +60,6 @@
 											</span>
 											<span class="input-icon">
 												<input type="text" placeholder="来源" class="nav-search-input" id="source" autocomplete="off" name="source" value="${pd.source}" />
-											</span>
-										</div>
-									</td>
-									<td>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-												标题:
-											</span>
-											<span class="input-icon">
-												<input type="text" placeholder="标题" class="nav-search-input" id="title" autocomplete="off" name="title" value="${pd.title}" />
 											</span>
 										</div>
 									</td>
