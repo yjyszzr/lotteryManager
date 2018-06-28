@@ -338,7 +338,7 @@
                }
            };
       editor.create();
-      editor.txt.html('<p>${pd.content}</p>')
+      editor.txt.html("${pd.content}");
 //       editor.txt.append('${pd.content}');
 	
 	$(top.hangge());

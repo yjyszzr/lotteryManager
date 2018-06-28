@@ -97,7 +97,7 @@ public class ArticleInfoController extends BaseController {
 		List<PageData> varList = articleinfoService.list(page); // 列出ArticleInfo列表
 		mv.setViewName("lottery/articleinfo/articleinfo_list");
 		for (int i = 0; i < varList.size(); i++) {
-			String str = varList.get(i).getString("content");
+			String str = varList.get(i).getString("content").trim();
 			varList.get(i).put("contentSub", str);
 		}
 		mv.addObject("varList", varList);
@@ -121,9 +121,11 @@ public class ArticleInfoController extends BaseController {
 		mv.setViewName("lottery/articleinfo/articleinfo_edit");
 		mv.addObject("msg", "saveOrUpdate");
 		pd.put("list_style", 0);
-		String str = pd.getString("content");
+		pd.put("is_original", 2);
+		String str = pd.getString("content").trim();
+		str = str.replaceAll("\n", "");
 		str = str.replaceAll("\"", "”");
-		pd.put("content", str.replaceAll("\'", "’"));
+		pd.put("content", str);
 		mv.addObject("pd", pd);
 		return mv;
 	}

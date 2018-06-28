@@ -72,6 +72,7 @@ public class RewardController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
 			pageData = varList.get(i);
+			System.out.println(pageData);
 			if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
 				rewardAmount += Double.parseDouble(pageData.get("amount").toString());
 			}
@@ -81,7 +82,9 @@ public class RewardController extends BaseController {
 		mv.addObject("pd", pd);
 		BigDecimal bg = new BigDecimal(rewardAmount);
 		double f1 = bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-		mv.addObject("rewardAmount", f1);
+		mv.addObject("currentPageTotalAmount", f1);
+		double f2 = useraccountmanagerService.totalAwardForAll();
+		mv.addObject("rewardAmount", f2);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}

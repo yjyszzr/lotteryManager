@@ -88,7 +88,7 @@
 									<th class="center" style="width:50px;">序号</th>
 <!-- 									<th class="center">id</th> -->
 									<th class="center">标题</th>
-									<th class="center">内容</th>
+<!-- 									<th class="center">内容</th> -->
 									<th class="center">来源</th>
 									<th class="center">发布日期</th>
 									<th class="center">抓取时间</th>
@@ -115,14 +115,14 @@
 													<td title="${var.title}"> <a style="cursor:pointer;">${fn:substring(var.title,0,20)}... </a></td>
 												</c:otherwise>
 											</c:choose>
-											<c:choose>
-												<c:when test="${fn:length(var.contentSub)  <= 40}">
-													<td><a style="cursor:pointer;">${var.contentSub}</a></td>
-												</c:when>
-												<c:otherwise>
-													<td title="${var.contentSub}"><a style="cursor:pointer;">${fn:substring(var.contentSub,0,40)}...</a></td>
-												</c:otherwise>
-											</c:choose>
+<%-- 											<c:choose> --%>
+<%-- 												<c:when test="${fn:length(var.contentSub)  <= 40}"> --%>
+<%-- 													<td><a style="cursor:pointer;">${var.contentSub}</a></td> --%>
+<%-- 												</c:when> --%>
+<%-- 												<c:otherwise> --%>
+<%-- 													<td title="${var.contentSub}"><a style="cursor:pointer;">${fn:substring(var.contentSub,0,40)}...</a></td> --%>
+<%-- 												</c:otherwise> --%>
+<%-- 											</c:choose> --%>
 <%-- 											<td class='center'>${var.id}</td> --%>
 											<td class='center'>${var.source}</td>
 											<td class='center'>${var.date}</td>

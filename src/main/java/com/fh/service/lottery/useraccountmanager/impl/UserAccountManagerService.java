@@ -28,6 +28,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd) throws Exception {
 		dao.save("UserAccountManagerMapper.save", pd);
 	}
@@ -38,6 +39,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd) throws Exception {
 		dao.delete("UserAccountManagerMapper.delete", pd);
 	}
@@ -48,6 +50,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd) throws Exception {
 		dao.update("UserAccountManagerMapper.edit", pd);
 	}
@@ -58,6 +61,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @param page
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.datalistPage", page);
@@ -69,6 +73,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.listAll", pd);
@@ -80,6 +85,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.findById", pd);
 	}
@@ -90,30 +96,40 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("UserAccountManagerMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	@Override
 	public Double getTotalConsumByUserId(Integer userId) throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalById", userId);
 	}
 
+	@Override
 	public Double getTotalRechargeByUserId(Integer userId) throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalRecharge", userId);
 	}
 
+	@Override
 	public Double getTotalAwardByUserId(Integer userId) throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalAward", userId);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> listForReward(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.listPageForReward", page);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> findByUserId(int userId) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByUserId", userId);
 	}
 
+	@Override
+	public double totalAwardForAll() throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.totalAwardForAll", null);
+	}
 }

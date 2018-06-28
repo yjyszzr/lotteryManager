@@ -154,7 +154,7 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-								总计:提现成功${rewardAmount}元
+								总计:本页中奖金额￥${currentPageTotalAmount }元。累计中奖:￥${rewardAmount}元
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

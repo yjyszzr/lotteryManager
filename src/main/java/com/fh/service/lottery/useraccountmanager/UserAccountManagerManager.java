@@ -107,4 +107,6 @@ public interface UserAccountManagerManager {
 	public List<PageData> listForReward(Page page) throws Exception;
 
 	public List<PageData> findByUserId(int userId) throws Exception;
+
+	public double totalAwardForAll() throws Exception;
 }
