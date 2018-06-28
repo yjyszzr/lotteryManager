@@ -30,7 +30,7 @@
 						<!-- 检索  -->
 						<form action="channeloptionlog/list.do" method="post" name="Form" id="Form">
 							<input type="hidden" id="distributor_id" name="distributor_id" value="${pd.distributorId }" />
-						<table style="margin-top:5px;">
+						<table style="margin-top:5px;display:none">
 							<tr>
 								<td>
 									<div class="nav-search">
