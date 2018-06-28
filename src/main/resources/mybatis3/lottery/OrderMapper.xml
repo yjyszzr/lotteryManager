@@ -193,7 +193,7 @@
 			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
 		WHERE
-			o.order_status = 7
+			o.order_status = 6
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  
 				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
@@ -218,7 +218,7 @@
 		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
 			and o.winning_money &lt; #{pd.amountEnd }
 		</if>
-			
+			order by pay_time desc
 	</select>
 	<!-- 列表 -->
 	<select id="datalistPage1" parameterType="page" resultType="pd">
