@@ -118,26 +118,26 @@ public class PicturesController extends BaseController {
 		Map<String, String> map = new HashMap<String, String>();
 		String ffile = DateUtil.getDays(), fileName = "";
 		PageData pd = new PageData();
-		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
-			if (null != file && !file.isEmpty()) {
-				// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
-				// + ffile; // 文件上传路径
-				String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
-				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
-			} else {
-				System.out.println("上传失败");
-			}
-			pd.put("PICTURES_ID", this.get32UUID()); // 主键
-			pd.put("TITLE", "图片"); // 标题
-			pd.put("NAME", fileName); // 文件名
-			pd.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
-			pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
-			pd.put("MASTER_ID", "1"); // 附属与
-			pd.put("BZ", "图片管理处上传"); // 备注
-			// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
-			// + ffile + "/" + fileName);// 加水印
-			// picturesService.save(pd);
+		// if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+		if (null != file && !file.isEmpty()) {
+			// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
+			// + ffile; // 文件上传路径
+			String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
+			fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
+		} else {
+			System.out.println("上传失败");
 		}
+		pd.put("PICTURES_ID", this.get32UUID()); // 主键
+		pd.put("TITLE", "图片"); // 标题
+		pd.put("NAME", fileName); // 文件名
+		pd.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
+		pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
+		pd.put("MASTER_ID", "1"); // 附属与
+		pd.put("BZ", "图片管理处上传"); // 备注
+		// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
+		// + ffile + "/" + fileName);// 加水印
+		// picturesService.save(pd);
+		// }
 		map.put("result", "ok");
 		return AppUtil.returnObject(pd, map);
 	}
@@ -152,26 +152,26 @@ public class PicturesController extends BaseController {
 		Map<String, String> map = new HashMap<String, String>();
 		String ffile = DateUtil.getDays(), fileName = "";
 		PageData pd = new PageData();
-		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
-			if (null != file && !file.isEmpty()) {
-				// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
-				// + ffile; // 文件上传路径
-				String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
-				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
-			} else {
-				System.out.println("上传失败");
-			}
-			pd.put("PICTURES_ID", this.get32UUID()); // 主键
-			pd.put("TITLE", "图片"); // 标题
-			pd.put("NAME", fileName); // 文件名
-			pd.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
-			pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
-			pd.put("MASTER_ID", "1"); // 附属与
-			pd.put("BZ", "图片管理处上传"); // 备注
-			// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
-			// + ffile + "/" + fileName);// 加水印
-			// picturesService.save(pd);
+		// if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+		if (null != file && !file.isEmpty()) {
+			// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
+			// + ffile; // 文件上传路径
+			String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
+			fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
+		} else {
+			System.out.println("上传失败");
 		}
+		pd.put("PICTURES_ID", this.get32UUID()); // 主键
+		pd.put("TITLE", "图片"); // 标题
+		pd.put("NAME", fileName); // 文件名
+		pd.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
+		pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
+		pd.put("MASTER_ID", "1"); // 附属与
+		pd.put("BZ", "图片管理处上传"); // 备注
+		// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
+		// + ffile + "/" + fileName);// 加水印
+		// picturesService.save(pd);
+		// }
 		map.put("result", "true");
 		map.put("PICTURES_ID", this.get32UUID()); // 主键
 		map.put("TITLE", "图片"); // 标题
@@ -195,14 +195,14 @@ public class PicturesController extends BaseController {
 		// } // 校验权限
 		logBefore(logger, Jurisdiction.getUsername() + "新增图片");
 		String ffile = DateUtil.getDays(), fileName = "";
-		if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
-			if (null != file && !file.isEmpty()) {
-				String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
-				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
-			} else {
-				System.out.println("上传失败");
-			}
+		// if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+		if (null != file && !file.isEmpty()) {
+			String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
+			fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
+		} else {
+			System.out.println("上传失败");
 		}
+		// }
 		String data = urlConfig.getImgShowUrl() + "uploadImgs/" + ffile + "/" + fileName; // 路径
 		// String data = "{'errno':0,'data':['" + imgPath + "']}";
 		Map<String, String> map = new HashMap<String, String>();
@@ -223,13 +223,13 @@ public class PicturesController extends BaseController {
 		// } // 校验权限
 		logBefore(logger, Jurisdiction.getUsername() + "删除图片");
 		PageData pd = new PageData();
-		if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-			pd = this.getPageData();
-			if (Tools.notEmpty(pd.getString("PATH").trim())) {
-				DelAllFile.delFolder(PathUtil.getClasspath() + urlConfig.getUploadURL() + pd.getString("PATH")); // 删除图片
-			}
-			picturesService.delete(pd);
+		// if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+		pd = this.getPageData();
+		if (Tools.notEmpty(pd.getString("PATH").trim())) {
+			DelAllFile.delFolder(PathUtil.getClasspath() + urlConfig.getUploadURL() + pd.getString("PATH")); // 删除图片
 		}
+		picturesService.delete(pd);
+		// }
 		out.write("success");
 		out.close();
 	}
@@ -257,27 +257,27 @@ public class PicturesController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		if (Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
-			pd.put("PICTURES_ID", PICTURES_ID); // 图片ID
-			pd.put("TITLE", TITLE); // 标题
-			pd.put("MASTER_ID", MASTER_ID); // 属于ID
-			pd.put("BZ", BZ); // 备注
-			if (null == tpz) {
-				tpz = "";
-			}
-			String ffile = DateUtil.getDays(), fileName = "";
-			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + urlConfig.getUploadURL() + ffile; // 文件上传路径
-				fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
-				pd.put("PATH", ffile + "/" + fileName); // 路径
-				pd.put("NAME", fileName);
-			} else {
-				pd.put("PATH", tpz);
-			}
-			// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
-			// + ffile + "/" + fileName);// 加水印
-			picturesService.edit(pd); // 执行修改数据库
+		// if (Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+		pd.put("PICTURES_ID", PICTURES_ID); // 图片ID
+		pd.put("TITLE", TITLE); // 标题
+		pd.put("MASTER_ID", MASTER_ID); // 属于ID
+		pd.put("BZ", BZ); // 备注
+		if (null == tpz) {
+			tpz = "";
 		}
+		String ffile = DateUtil.getDays(), fileName = "";
+		if (null != file && !file.isEmpty()) {
+			String filePath = PathUtil.getClasspath() + urlConfig.getUploadURL() + ffile; // 文件上传路径
+			fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
+			pd.put("PATH", ffile + "/" + fileName); // 路径
+			pd.put("NAME", fileName);
+		} else {
+			pd.put("PATH", tpz);
+		}
+		// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
+		// + ffile + "/" + fileName);// 加水印
+		picturesService.edit(pd); // 执行修改数据库
+		// }
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -328,26 +328,26 @@ public class PicturesController extends BaseController {
 		PageData pd = new PageData();
 		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
-		if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-			List<PageData> pdList = new ArrayList<PageData>();
-			List<PageData> pathList = new ArrayList<PageData>();
-			String DATA_IDS = pd.getString("DATA_IDS");
-			if (null != DATA_IDS && !"".equals(DATA_IDS)) {
-				String ArrayDATA_IDS[] = DATA_IDS.split(",");
-				pathList = picturesService.getAllById(ArrayDATA_IDS);
-				for (int i = 0; i < pathList.size(); i++) {
-					if (Tools.notEmpty(pathList.get(i).getString("PATH").trim())) {
-						DelAllFile.delFolder(PathUtil.getClasspath() + urlConfig.getUploadURL() + pathList.get(i).getString("PATH"));// 删除图片
-					}
+		// if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+		List<PageData> pdList = new ArrayList<PageData>();
+		List<PageData> pathList = new ArrayList<PageData>();
+		String DATA_IDS = pd.getString("DATA_IDS");
+		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
+			String ArrayDATA_IDS[] = DATA_IDS.split(",");
+			pathList = picturesService.getAllById(ArrayDATA_IDS);
+			for (int i = 0; i < pathList.size(); i++) {
+				if (Tools.notEmpty(pathList.get(i).getString("PATH").trim())) {
+					DelAllFile.delFolder(PathUtil.getClasspath() + urlConfig.getUploadURL() + pathList.get(i).getString("PATH"));// 删除图片
 				}
-				picturesService.deleteAll(ArrayDATA_IDS);
-				pd.put("msg", "ok");
-			} else {
-				pd.put("msg", "no");
 			}
-			pdList.add(pd);
-			map.put("list", pdList);
+			picturesService.deleteAll(ArrayDATA_IDS);
+			pd.put("msg", "ok");
+		} else {
+			pd.put("msg", "no");
 		}
+		pdList.add(pd);
+		map.put("list", pdList);
+		// }
 		return AppUtil.returnObject(pd, map);
 	}
 
