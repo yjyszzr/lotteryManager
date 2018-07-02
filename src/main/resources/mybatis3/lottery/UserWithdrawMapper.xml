@@ -117,6 +117,9 @@
 		<if test="pd.withdrawal_sn != null and pd.withdrawal_sn != ''"> 
 			and a.withdrawal_sn  LIKE CONCAT(CONCAT('%', #{pd.withdrawal_sn}),'%')
 		</if>
+		<if test="pd.withdrawLimit != null and pd.withdrawLimit != ''"> 
+			and a.amount &gt; #{pd.withdrawLimit}
+		</if>
 		<if test="pd.mobile != null and pd.mobile != ''">
 			and b.mobile 
 			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
