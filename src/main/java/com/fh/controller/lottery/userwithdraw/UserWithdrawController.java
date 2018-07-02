@@ -1,6 +1,8 @@
 package com.fh.controller.lottery.userwithdraw;
 
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import com.fh.util.Jurisdiction;
 import com.fh.util.ManualAuditUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.StringUtil;
 
 /**
  * 说明：提现模块 创建人：FH Q313596790 创建时间：2018-05-02
@@ -242,8 +245,20 @@ public class UserWithdrawController extends BaseController {
 		pd = this.getPageData();
 		pd = userwithdrawService.findById(pd); // 根据ID读取
 		mv.setViewName("lottery/userwithdraw/userwithdraw_edit");
+		List<PageData> pageDataList = new ArrayList<PageData>();
+		BigDecimal awardAmount = new BigDecimal(BigInteger.ZERO);
+		if (!StringUtil.isEmptyStr(pd.getString("user_id"))) {
+			pageDataList = userwithdrawService.findByUserId(Integer.parseInt(pd.getString("user_id")));
+			for (int i = 0; i < pageDataList.size(); i++) {
+				BigDecimal bd = new BigDecimal(pageDataList.get(i).getString("amount"));
+				awardAmount = awardAmount.add(bd);
+			}
+		}
 		mv.addObject("msg", "manualAudit");
 		mv.addObject("pd", pd);
+		mv.addObject("pageDataList", pageDataList);
+		mv.addObject("awardAmount", awardAmount);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
 

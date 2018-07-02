@@ -133,12 +133,12 @@
 									<th class="center">用户名称</th>
 									<th class="center">手机号</th>
 									<th class="center">彩种名称</th>
-									<th class="center">订单状态</th>
 									<th class="center">支付方式</th>
 									<th class="center">投注金额</th>
 									<th class="center">中奖金额</th>
 									<th class="center">红包金额</th>
 									<th class="center">购彩时间</th>
+									<th class="center">订单状态</th>
 								</tr>
 							</thead>
 													
@@ -154,19 +154,6 @@
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
-											<td class='center'> 
-											<c:choose>
-												<c:when test="${var.order_status == 0}">待付款</c:when>
-												<c:when test="${var.order_status == 1}">待出票</c:when>
-												<c:when test="${var.order_status == 2}">出票失败</c:when>
-												<c:when test="${var.order_status == 3}">待开奖</c:when>
-												<c:when test="${var.order_status == 4}">未中奖</c:when>
-												<c:when test="${var.order_status == 5}">已中奖</c:when>
-												<c:when test="${var.order_status == 6}">派奖中</c:when>
-												<c:when test="${var.order_status == 7}">已派奖</c:when>
-												<c:when test="${var.order_status == 8}"><lable style ="color:red">支付失败</lable></c:when>
-											</c:choose>
-											</td>
 											<td class='center'>
 												<c:if test="${!empty var.pay_name}">${var.pay_name}</c:if>
 												<c:if test="${ var.surplus > 0}">&nbsp余额</c:if>
@@ -176,6 +163,19 @@
 											<td class='center'>${var.winning_money}</td>
 											<td class='center'>${var.bonus}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
+											<td class='center'> 
+												<c:choose>
+													<c:when test="${var.order_status == 0}">待付款</c:when>
+													<c:when test="${var.order_status == 1}">待出票</c:when>
+													<c:when test="${var.order_status == 2}">出票失败</c:when>
+													<c:when test="${var.order_status == 3}">待开奖</c:when>
+													<c:when test="${var.order_status == 4}">未中奖</c:when>
+													<c:when test="${var.order_status == 5}">已中奖</c:when>
+													<c:when test="${var.order_status == 6}">派奖中</c:when>
+													<c:when test="${var.order_status == 7}">已派奖</c:when>
+													<c:when test="${var.order_status == 8}"><lable style ="color:red">支付失败</lable></c:when>
+												</c:choose>
+											</td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -254,8 +254,29 @@
 		}
 			//订单详情页
 			function toDetail(orderId){
-				window.location.href='<%=basePath%>ordermanager/toDetail.do?order_id='+orderId;
+				 top.jzts();
+				 var diag = new top.Dialog();
+				 diag.Drag=true;
+				 diag.Title ="订单详情";
+				 diag.URL = '<%=basePath%>ordermanager/toDetail.do?order_id='+orderId;
+				 diag.Width = 1300;
+				 diag.Height = 320;
+				 diag.Modal = true;				//有无遮罩窗口
+				 diag. ShowMaxButton = false;	//最大化按钮
+			     diag.ShowMinButton = false;		//最小化按钮
+				 diag.CancelEvent = function(){ //关闭事件
+					 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+						 if('${page.currentPage}' == '0'){
+							 tosearch();
+						 }else{
+							 tosearch();
+						 }
+					}
+					diag.close();
+				 };
+				 diag.show();
 			}
+			
 			
 	</script>
 </body>

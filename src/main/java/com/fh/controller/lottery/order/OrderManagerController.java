@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
@@ -88,6 +89,7 @@ public class OrderManagerController extends BaseController {
 	}
 
 	@RequestMapping(value = "/toDetail")
+	@ResponseBody
 	public ModelAndView toDetail() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + " Order详情");
 		ModelAndView mv = this.getModelAndView();
@@ -96,8 +98,7 @@ public class OrderManagerController extends BaseController {
 		pd = ordermanagerService.findById(pd);
 		pd.put("pass_type", MatchBetTypeEnum.getName(pd.getString("pass_type")));
 		List<PageData> orderDetailsList = ordermanagerService.toDetail(pd); // 列出OrderManager列表
-		mv.setViewName("lottery/ordermanager/ordermanager_details");
-		mv.addObject("varList", orderDetailsList);
+
 		for (int i = 0; i < orderDetailsList.size(); i++) {
 			String nameStr = "";
 			List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
@@ -105,14 +106,16 @@ public class OrderManagerController extends BaseController {
 				for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
 					String fixOdds = orderDetailsList.get(i).getString("fix_odds");
 					if (list.get(j).getPlayType().equals("01")) {// 判断是不是<让球胜平负>,是的话添加上让球个数
-						nameStr += orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】   ";
+						nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
 					} else {
-						nameStr += orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】   ";
+						nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
 					}
 				}
 			}
 			orderDetailsList.get(i).put("list", nameStr);
 		}
+		mv.setViewName("lottery/ordermanager/ordermanager_details");
+		mv.addObject("varList", orderDetailsList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;

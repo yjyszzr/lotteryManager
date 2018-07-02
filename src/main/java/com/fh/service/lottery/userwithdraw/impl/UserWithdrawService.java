@@ -105,4 +105,10 @@ public class UserWithdrawService implements UserWithdrawManager {
 	public void updateRemarks(PageData pd) throws Exception {
 		dao.update("UserWithdrawMapper.updateRemarks", pd);
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> findByUserId(int userId) throws Exception {
+		return (List<PageData>) dao.findForList("UserWithdrawMapper.findByUserId", userId);
+	}
 }

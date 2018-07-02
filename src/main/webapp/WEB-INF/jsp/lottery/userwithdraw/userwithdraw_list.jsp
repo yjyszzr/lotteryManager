@@ -1,4 +1,5 @@
 ﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -112,6 +113,7 @@
 									<th class="center">卡号</th>
 									<th class="center">申请提现时间</th>
 									<th class="center">状态</th>
+									<th class="center">备注</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -140,7 +142,16 @@
 													<c:otherwise><lable style="color:orange;font-weight:bold">待审核</lable></c:otherwise>
 												</c:choose>
 											</td>
+											<c:choose>
+												<c:when test="${fn:length(var.remarks)  <= 5 }">
+													<td > ${var.remarks } </td>
+												</c:when>
+												<c:otherwise>
+													<td title="${var.remarks}"> <a style="cursor:pointer;">${fn:substring(var.remarks,0,5)}... </a></td>
+												</c:otherwise>
+											</c:choose>
 											
+<%-- 											<td class='center'>${var.remarks}</td> --%>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -241,8 +252,8 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>userwithdraw/goEdit.do?id='+Id;
-			 diag.Width =800;
-			 diag.Height = 280;
+			 diag.Width =1200;
+			 diag.Height = 680;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

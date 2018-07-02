@@ -85,7 +85,7 @@
 		set  
 			remarks = #{remarks}
 		where 
-		id = #{id}
+		withdrawal_sn = #{withdrawSn}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
@@ -94,7 +94,8 @@
 			a.*,
 			u_r.id_code,
 			u.mobile,
-			u.user_money 
+			u.user_money,
+			u.user_money_limit 
 		FROM
 			dl_user_withdraw a
 			LEFT JOIN dl_user_real u_r ON a.user_id = u_r.user_id
@@ -142,6 +143,13 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+	</select>
+<!-- 	根据用户Id查询 -->
+	<select id="findByUserId" parameterType="Integer" resultType="pd">
+		select * from 
+			dl_user_withdraw
+			where user_id = #{userId}
+			order by add_time desc
 	</select>
 	
 	<!-- 批量删除 -->

@@ -25,7 +25,7 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-					订单信息
+						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
@@ -70,8 +70,10 @@
 							</tbody>
 						</table>
 						</div>
+						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
+						</div>
 					</div>
-					方案详情
+					投注方案详情
 					<div  class="row">
 						<div class="col-xs-12">
 						<table   class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
