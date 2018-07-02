@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSON;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.lottery.thresholdvalue.ThresholdValueManager;
 import com.fh.service.lottery.userwithdraw.UserWithdrawManager;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
@@ -45,6 +46,9 @@ public class UserWithdrawController extends BaseController {
 	@Resource(name = "userwithdrawService")
 	private UserWithdrawManager userwithdrawService;
 
+	@Resource(name = "thresholdvalueService")
+	private ThresholdValueManager thresholdvalueService;
+	
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
 
@@ -153,10 +157,24 @@ public class UserWithdrawController extends BaseController {
 		if (null != lastEnd && !"".equals(lastEnd)) {
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		}
-		page.setPd(pd);
+		
 		double failAmount = 0;
 		double successAmount = 0;
 		double unfinished = 0;
+		double withdrawLimit = 0;
+		
+		List<PageData> thredHoldList = thresholdvalueService.list(page); 
+		PageData pd8Thread = null;
+		for(PageData pdThread:thredHoldList) {
+			if("8".equals(pdThread.get("business_id").toString())) {
+				pd8Thread = pdThread;
+				break;
+			}
+		}
+		
+		withdrawLimit = Double.parseDouble(pd8Thread.get("value").toString());
+		pd.put("withdrawLimit", withdrawLimit);
+		page.setPd(pd);
 		List<PageData> varList = userwithdrawService.list(page); // 列出UserWithdraw列表
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
