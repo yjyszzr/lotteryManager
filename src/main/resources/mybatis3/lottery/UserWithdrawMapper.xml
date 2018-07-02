@@ -74,7 +74,16 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			status = #{status}
+			status = #{status} 
+		where 
+		id = #{id}
+	</update>
+	<!-- 修改备注 -->
+	<update id="updateRemarks" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set  
+			remarks = #{remarks}
 		where 
 		id = #{id}
 	</update>
@@ -99,16 +108,13 @@
 		SELECT
 			a.*,
 			b.user_name,
-			b.mobile,
-			c.account_sn 
+			b.mobile 
 		FROM
 			dl_user_withdraw a
 			LEFT JOIN dl_user b ON b.user_id = a.user_id
-			LEFT JOIN dl_user_account c ON a.withdrawal_sn = c.pay_id
 		WHERE 1=1
-		<if test="pd.account_sn != null and pd.account_sn != ''"> 
-			and c.account_sn = #{pd.account_sn}
-			LIKE CONCAT(CONCAT('%', #{pd.account_sn}),'%')
+		<if test="pd.withdrawal_sn != null and pd.withdrawal_sn != ''"> 
+			and a.withdrawal_sn  LIKE CONCAT(CONCAT('%', #{pd.withdrawal_sn}),'%')
 		</if>
 		<if test="pd.mobile != null and pd.mobile != ''">
 			and b.mobile 

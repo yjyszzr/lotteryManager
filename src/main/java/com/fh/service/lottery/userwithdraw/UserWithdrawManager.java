@@ -67,4 +67,6 @@ public interface UserWithdrawManager {
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
+
+	public void updateRemarks(PageData pd) throws Exception;
 }

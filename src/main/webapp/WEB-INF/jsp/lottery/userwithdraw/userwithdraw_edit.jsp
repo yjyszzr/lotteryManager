@@ -75,31 +75,62 @@
 	                                </td>
 							</tr>
 							<tr>
-								<td style="text-align: right;width:200px" >
-	                                	<label class=" no-padding-right" for="form-field-1">提现金额：</label>
-                           		  	</td>
-                           		  	<td style="text-align: left;width:200px" >	
-	                                	<label class=" no-padding-right" for="form-field-1">${pd.amount }元</label>
-                           		  	</td>
-                           		  	<td style="text-align: right;width:200px" >
+								 	<td style="text-align: right;width:200px" >
 	                                	<label class=" no-padding-right" for="form-field-1">可提现金额：</label>
                            		  	</td>
                            		  	<td style="text-align: left;width:200px" >	
 	                                	<label class=" no-padding-right" for="form-field-1">${pd.user_money }元</label>
                            		  	</td>
+								<td style="text-align: right;width:200px" >
+	                                	<label class=" no-padding-right" for="form-field-1">提现金额：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >	
+	                                	<label class=" no-padding-right" for="form-field-1"><lable style="color:red;font-weight:bold">${pd.amount }元</lable></label>
+                           		  	</td>
 							</tr>
 							<tr>
-								<td style="text-align: center;width:200px" >
-								</td>
+								 	<td style="text-align: right;width:200px" >
+	                                	<label class=" no-padding-right" for="form-field-1">审核状态：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >	
+	                                	<label class=" no-padding-right" for="form-field-1">
+	                                	<c:choose>
+	                                		<c:when test="${pd.status == 1}"><lable style="color:green">通过</lable></c:when>
+	                                		<c:when test="${pd.status == 0}"><lable style="color:orange;font-weight:bold">待审核</lable></c:when>
+	                                		<c:when test="${pd.status == 2}"><lable style="color:red;font-weight:bold">拒绝</lable></c:when>
+	                                	</c:choose>
+	                                	</label>
+                           		  	</td>
 								<td style="text-align: right;width:200px" >
-									<a class="btn btn-mini btn-primary" onclick="toManualAudit('1','${pd.withdrawal_sn}');">通过</a>
-								</td>
-								<td style="text-align: left;width:200px" >
-									<a class="btn btn-mini btn-danger" onclick="toManualAudit('2','${pd.withdrawal_sn}');">拒绝</a>
-								</td>
-								<td style="text-align: center;width:200px" >
-								</td>
+	                                	<label class=" no-padding-right" for="form-field-1">备注：</label>
+                           		  	</td>
+                           		  	<td style="text-align: left;width:200px" >
+                           		  	<c:choose>
+                                		<c:when test="${pd.status == 0}">
+                                			<input type="text" name="remarks" id="remarks" value="${pd.remarks}" autocomplete="off"   placeholder="备注" style="border-radius:5px !important"  />
+                                		</c:when>
+                                		<c:otherwise>${pd.remarks }</c:otherwise>
+                                	</c:choose>	
+                           		  	
+<%-- 	                                	<label class=" no-padding-right" for="form-field-1"><lable style="color:red;font-weight:">${pd.amount }元</lable></label> --%>
+                           		  	</td>
 							</tr>
+							<c:choose>
+                                		<c:when test="${pd.status == 0}">
+	                                		<tr>
+												<td style="text-align: center;width:200px" >
+												</td>
+												<td style="text-align: right;width:200px" >
+													<a class="btn btn-mini btn-primary" onclick="toManualAudit('1','${pd.withdrawal_sn}');">通过</a>
+												</td>
+												<td style="text-align: left;width:200px" >
+													<a class="btn btn-mini btn-danger" onclick="toManualAudit('2','${pd.withdrawal_sn}');">拒绝</a>
+												</td>
+												<td style="text-align: center;width:200px" >
+												</td>
+											</tr>
+                                		</c:when>
+                           	</c:choose>
 						</table>
 						</div>
 						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>

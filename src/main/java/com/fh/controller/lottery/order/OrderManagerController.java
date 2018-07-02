@@ -104,10 +104,10 @@ public class OrderManagerController extends BaseController {
 			for (int j = 0; j < list.size(); j++) {
 				for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
 					String fixOdds = orderDetailsList.get(i).getString("fix_odds");
-					if (fixOdds.equals("")) {
-						nameStr += orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】   ";
+					if (list.get(j).getPlayType().equals("01")) {// 判断是不是<让球胜平负>,是的话添加上让球个数
+						nameStr += orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】   ";
 					} else {
-						nameStr += orderDetailsList.get(i).getString("changci") + "[" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】   ";
+						nameStr += orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】   ";
 					}
 				}
 			}
@@ -152,13 +152,21 @@ public class OrderManagerController extends BaseController {
 		int playCode = Integer.parseInt(playType);
 		String cathecticData = "";
 		if (MatchPlayTypeEnum.PLAY_TYPE_HHAD.getcode() == playCode || MatchPlayTypeEnum.PLAY_TYPE_HAD.getcode() == playCode) {
-			cathecticData = MatchResultHadEnum.getName(Integer.valueOf(cathecticStr));
+			if (playCode == 1) {
+				cathecticData += "【让球胜平负】";
+			} else {
+				cathecticData += "【胜平负】";
+			}
+			cathecticData += MatchResultHadEnum.getName(Integer.valueOf(cathecticStr));
 		} else if (MatchPlayTypeEnum.PLAY_TYPE_CRS.getcode() == playCode) {
-			cathecticData = MatchResultCrsEnum.getName(cathecticStr);
+			cathecticData += "【比分】";
+			cathecticData += MatchResultCrsEnum.getName(cathecticStr);
 		} else if (MatchPlayTypeEnum.PLAY_TYPE_TTG.getcode() == playCode) {
-			cathecticData = cathecticStr + "球";
+			cathecticData += "【总进球】";
+			cathecticData += cathecticStr + "球";
 		} else if (MatchPlayTypeEnum.PLAY_TYPE_HAFU.getcode() == playCode) {
-			cathecticData = MatchResultHafuEnum.getName(cathecticStr);
+			cathecticData += "【混合过关】";
+			cathecticData += MatchResultHafuEnum.getName(cathecticStr);
 		}
 		return cathecticData;
 	}

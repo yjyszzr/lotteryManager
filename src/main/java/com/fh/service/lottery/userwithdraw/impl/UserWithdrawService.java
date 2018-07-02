@@ -28,6 +28,7 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd) throws Exception {
 		dao.save("UserWithdrawMapper.save", pd);
 	}
@@ -38,6 +39,7 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd) throws Exception {
 		dao.delete("UserWithdrawMapper.delete", pd);
 	}
@@ -48,6 +50,7 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd) throws Exception {
 		dao.update("UserWithdrawMapper.edit", pd);
 	}
@@ -58,6 +61,7 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 * @param page
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserWithdrawMapper.datalistPage", page);
@@ -69,6 +73,7 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserWithdrawMapper.listAll", pd);
@@ -80,6 +85,7 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserWithdrawMapper.findById", pd);
 	}
@@ -90,7 +96,13 @@ public class UserWithdrawService implements UserWithdrawManager {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("UserWithdrawMapper.deleteAll", ArrayDATA_IDS);
+	}
+
+	@Override
+	public void updateRemarks(PageData pd) throws Exception {
+		dao.update("UserWithdrawMapper.updateRemarks", pd);
 	}
 }

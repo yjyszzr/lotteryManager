@@ -36,7 +36,7 @@
 												订单编号:
 											</span>
 											<span class="input-icon">
-												<input type="text" placeholder="订单编号" class="nav-search-input" id="account_sn" autocomplete="off" name="account_sn" value="${pd.account_sn }"/>
+												<input type="text" placeholder="订单编号" class="nav-search-input" id="withdrawal_sn" autocomplete="off" name="withdrawal_sn" value="${pd.withdrawal_sn }"/>
 											</span>
 										</div>
 									</td>
@@ -78,9 +78,9 @@
 												</span>
 										 	<select  name="status" id="status" data-placeholder="请选择" value="${pd.status }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
-											<option value="0" <c:if test="${pd.status!=NULL && pd.status!='' && pd.status == 0}">selected</c:if>>未完成</option>
-											<option value="1" <c:if test="${pd.status==1}">selected</c:if>>成功</option>
-											<option value="2" <c:if test="${pd.status==2}">selected</c:if>>失败</option>
+											<option value="0" <c:if test="${pd.status!=NULL && pd.status!='' && pd.status == 0}">selected</c:if>>待审核</option>
+											<option value="1" <c:if test="${pd.status==1}">selected</c:if>>通过</option>
+											<option value="2" <c:if test="${pd.status==2}">selected</c:if>>拒绝</option>
 										  	</select>
 										  	</div>
 									</td>
@@ -108,10 +108,10 @@
 									<th class="center">真实姓名</th>
 									<th class="center">电话</th>
 									<th class="center">提现金额</th>
-									<th class="center">状态</th>
+									<th class="center">银行名称</th>
 									<th class="center">卡号</th>
 									<th class="center">申请提现时间</th>
-									<th class="center">银行名称</th>
+									<th class="center">状态</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -124,22 +124,23 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.withdrawal_sn}</td>
+											<td class='center'>	<a title="详情" style="cursor:pointer" onclick="edit('${var.id}');">${var.withdrawal_sn}</a></td>
 <%-- 											<td class='center'>${var.withdrawal_sn}</td> --%>
 <%-- 											<td class='center'>${var.user_name}</td> --%>
 											<td class='center'>${var.real_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.amount}</td>
-												<td class='center'> 
-													<c:choose>
-													<c:when test="${var.status==1}">成功</c:when>
-													<c:when test="${var.status==2}"><lable style="color:red">失败</lable></c:when>
-													<c:otherwise><lable style="color:orange">未完成</lable></c:otherwise>
-												</c:choose>
-											</td>
+											<td class='center'>${var.bank_name}</td>
 											<td class='center'>${var.card_no}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
-											<td class='center'>${var.bank_name}</td>
+												<td class='center'> 
+													<c:choose>
+													<c:when test="${var.status==1}"><lable style="color:green">通过</lable></c:when>
+													<c:when test="${var.status==2}"><lable style="color:red;font-weight:bold">拒绝</lable></c:when>
+													<c:otherwise><lable style="color:orange;font-weight:bold">待审核</lable></c:otherwise>
+												</c:choose>
+											</td>
+											
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -148,13 +149,13 @@
 													<c:if test="${QX.edit == 1 }">
 														<c:choose>
 															<c:when test="${var.status == 0 }">
-																<a class="btn btn-xs btn-success" title="审核" onclick="edit('${var.id}');">审核</a>
+																<a class="btn btn-xs btn-success" title="审核" style="border-radius:5px;" onclick="edit('${var.id}');">审核</a>
 															</c:when>
 															<c:when test="${var.status == 1 }">
-																<lable  style="color:blue">审核完成</lable>
+																<a  title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a>
 															</c:when>
 															<c:when test="${var.status == 2 }">
-																<lable style="color:red">拒绝</lable>
+																<a title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a>
 															</c:when>
 														</c:choose>													
 													</c:if>
@@ -225,7 +226,7 @@
 			if(status==0){
 				$("#user_name").val("");
 				$("#mobile").val("");
-				$("#account_sn").val("");
+				$("#withdrawal_sn").val("");
 				$("#status").empty();
 				$("#lastStart").val("");
 				$("#lastEnd").val("");
@@ -241,7 +242,7 @@
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>userwithdraw/goEdit.do?id='+Id;
 			 diag.Width =800;
-			 diag.Height = 230;
+			 diag.Height = 280;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

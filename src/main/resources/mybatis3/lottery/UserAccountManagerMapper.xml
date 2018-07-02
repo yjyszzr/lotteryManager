@@ -199,10 +199,10 @@
 		WHERE
 			o.process_type = 1
 				<if test="pd.user_name!= null and pd.user_name != ''"> 
-						AND b.user_name LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+						AND u.user_name LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
 				</if>
 				<if test="pd.mobile!= null and pd.mobile != ''"> 
-						AND b.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+						AND u.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
 				</if>
 				<if test="pd.order_sn != null and pd.order_sn != ''"> 
 						AND o.order_sn LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
