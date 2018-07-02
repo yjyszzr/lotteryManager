@@ -73,7 +73,7 @@
 													<option value="4" <c:if test="${pd.order_status == 4}">selected</c:if>>未中奖</option>
 													<option value="5" <c:if test="${pd.order_status == 5}">selected</c:if>>已中奖</option>
 													<option value="6" <c:if test="${pd.order_status == 6}">selected</c:if>>派奖中</option>
-													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>已派奖</option>
+													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>审核中</option>
 													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option>
 										  	</select>
 										  	</div>
@@ -172,7 +172,7 @@
 													<c:when test="${var.order_status == 4}">未中奖</c:when>
 													<c:when test="${var.order_status == 5}">已中奖</c:when>
 													<c:when test="${var.order_status == 6}">派奖中</c:when>
-													<c:when test="${var.order_status == 7}">已派奖</c:when>
+													<c:when test="${var.order_status == 7}">审核中</c:when>
 													<c:when test="${var.order_status == 8}"><lable style ="color:red">支付失败</lable></c:when>
 												</c:choose>
 											</td>

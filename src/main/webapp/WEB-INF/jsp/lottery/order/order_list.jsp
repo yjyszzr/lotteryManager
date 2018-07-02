@@ -135,7 +135,7 @@
 													<c:when test="${var.order_status=='4'}">未中奖</c:when>
 													<c:when test="${var.order_status=='5'}">已中奖</c:when>
 													<c:when test="${var.order_status=='6'}">派奖中</c:when>
-													<c:when test="${var.order_status=='7'}">已派奖</c:when>
+													<c:when test="${var.order_status=='7'}">审核中</c:when>
 												</c:choose>
 											</td>
 											<td class='center'>${var.pay_name}</td>
@@ -145,8 +145,7 @@
 											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)}</td>
 											<td class='center'>
 											<c:choose>
-											<c:when test="${var.order_status=='7'}">已派奖</c:when>
-											<c:when test="${var.order_status=='6'}"><a class="btn btn-xs btn-success" title="派奖" style="border-radius: 5px;" onclick="toManualAward('${var.order_sn}');" >是</a></c:when>
+											<c:when test="${var.order_status=='7'}"><a class="btn btn-xs btn-success" title="派奖" style="border-radius: 5px;" onclick="toManualAward('${var.order_sn}');" >是</a></c:when>
 											</c:choose>
 											
 											</td>

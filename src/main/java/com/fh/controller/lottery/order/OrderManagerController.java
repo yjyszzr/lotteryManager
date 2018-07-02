@@ -101,14 +101,20 @@ public class OrderManagerController extends BaseController {
 
 		for (int i = 0; i < orderDetailsList.size(); i++) {
 			String nameStr = "";
-			List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
-			for (int j = 0; j < list.size(); j++) {
-				for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
-					String fixOdds = orderDetailsList.get(i).getString("fix_odds");
-					if (list.get(j).getPlayType().equals("01")) {// 判断是不是<让球胜平负>,是的话添加上让球个数
-						nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
-					} else {
-						nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
+			if (orderDetailsList.get(i).getString("changci").equals("T56") || orderDetailsList.get(i).getString("changci").equals("T57")) {
+				String ticketData = orderDetailsList.get(i).getString("ticket_data");
+				String[] splitsjb = ticketData.split("@");
+				nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("match_team") + "&nbsp" + "【" + splitsjb[1] + "】  </div>";
+			} else {
+				List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
+				for (int j = 0; j < list.size(); j++) {
+					for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
+						String fixOdds = orderDetailsList.get(i).getString("fix_odds");
+						if (list.get(j).getPlayType().equals("01")) {// 判断是不是<让球胜平负>,是的话添加上让球个数
+							nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
+						} else {
+							nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
+						}
 					}
 				}
 			}
