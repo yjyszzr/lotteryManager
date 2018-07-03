@@ -264,19 +264,52 @@
 			$("#Form").submit();
 		}
 		
-		
-		
 		function toConsumeDetail(userId){
-			window.location.href='<%=basePath%>usermanagercontroller/toConsumeDetail.do?user_id='+userId;
-		}
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="消费详情";
+			 diag.URL = '<%=basePath%>usermanagercontroller/toConsumeDetail.do?user_id='+userId;
+			 diag.Width = 800;
+			 diag.Height = 600;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = false;	//最大化按钮
+		     diag.ShowMinButton = false;		//最小化按钮 
+			 diag.CancelEvent = function(){ //关闭事件
+  				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 tosearch(0);
+				}  
+				diag.close();
+			 };
+			 diag.show();
+		}		
 		
- 
+		
+		function toDetail(userId){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="用户详情";
+			 diag.URL = '<%=basePath%>usermanagercontroller/toDetail.do?user_id='+userId;
+			 diag.Width = 800;
+			 diag.Height = 400;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = false;	//最大化按钮
+		     diag.ShowMinButton = false;		//最小化按钮 
+			 diag.CancelEvent = function(){ //关闭事件
+  				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 tosearch(0);
+				}  
+				diag.close();
+			 };
+			 diag.show();
+		}		
   
 		
-		//用户详情页
-		function toDetail(userId){
-			window.location.href='<%=basePath%>usermanagercontroller/toDetail.do?user_id='+userId;
-		}
+// 		//用户详情页
+// 		function toDetail(userId){
+<%-- 			window.location.href='<%=basePath%>usermanagercontroller/toDetail.do?user_id='+userId; --%>
+// 		}
 		
 	</script>
 

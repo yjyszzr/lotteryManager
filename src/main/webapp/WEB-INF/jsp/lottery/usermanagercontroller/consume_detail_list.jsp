@@ -30,53 +30,53 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							
+						<div id="zhongxin" style="padding-top: 13px;">
 						<form action="usermanagercontroller/list.do" method="post" name="Form" id="Form">
-					<table id="table_report" class="table table-striped table-bordered table-hover">
-							<tr>
-									<td style="text-align: right;width:200px">
-	                                	<label class=" no-padding-right" for="form-field-1">账户总金额：</label>
-                                	</td>
-                                	<td style="text-align: left;width:200px"  >
-	                                	<label class=" no-padding-right" for="form-field-1">${pd.allAmount}</label>
-	                                </td>
-                               		<td style="text-align: right;width:200px" >
-	                                	<label class=" no-padding-right" for="form-field-1">可提现金额：</label>
-                           		  	</td>
-                           		  	<td style="text-align: left;width:200px" >	
-	                                	<label class=" no-padding-right" for="form-field-1">${pd.user_money }</label>
-                           		  	</td>
-							</tr>
-							<tr>
-									<td style="text-align: right;width:200px">
-	                                	<label class=" no-padding-right" for="form-field-1">可使用红包金额：</label>
-                                	</td>
-                                	<td style="text-align: left;width:200px"  >
-	                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.unUseBonus)}</label>
-	                                </td>
-                           		  	<td style="text-align: right;width:200px" >
-	                                	<label class=" no-padding-right" for="form-field-1">充值总金额：</label>
-                           		  	</td>
-                           		  	<td style="text-align: left;width:200px" >	
-	                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.rechargeAllAmount) }</label>
-                           		  	</td>
-							</tr>
-							<tr>
-									<td style="text-align: right;width:200px">
-	                                	<label class=" no-padding-right" for="form-field-1">奖金总金额：</label>
-                                	</td>
-                                	<td style="text-align: left;width:200px"  >
-	                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.rewardAllAmount)}</label>
-	                                </td>
-									<td style="text-align: right;width:200px">
-	                                	<label class=" no-padding-right" for="form-field-1">购彩总金额：</label>
-                                	</td>
-                                	<td style="text-align: left;width:200px"  >
-	                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(-pd.buyTicketAllAmount)}</label>
-	                                </td>
-							</tr>
-						</table>
-					
+							<table id="table_report" class="table table-striped table-bordered table-hover">
+									<tr>
+											<td style="text-align: right;width:200px">
+			                                	<label class=" no-padding-right" for="form-field-1">账户总金额：</label>
+		                                	</td>
+		                                	<td style="text-align: left;width:200px"  >
+			                                	<label class=" no-padding-right" for="form-field-1">${pd.allAmount}</label>
+			                                </td>
+		                               		<td style="text-align: right;width:200px" >
+			                                	<label class=" no-padding-right" for="form-field-1">可提现金额：</label>
+		                           		  	</td>
+		                           		  	<td style="text-align: left;width:200px" >	
+			                                	<label class=" no-padding-right" for="form-field-1">${pd.user_money }</label>
+		                           		  	</td>
+									</tr>
+									<tr>
+											<td style="text-align: right;width:200px">
+			                                	<label class=" no-padding-right" for="form-field-1">可使用红包金额：</label>
+		                                	</td>
+		                                	<td style="text-align: left;width:200px"  >
+			                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.unUseBonus)}</label>
+			                                </td>
+		                           		  	<td style="text-align: right;width:200px" >
+			                                	<label class=" no-padding-right" for="form-field-1">充值总金额：</label>
+		                           		  	</td>
+		                           		  	<td style="text-align: left;width:200px" >	
+			                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.rechargeAllAmount) }</label>
+		                           		  	</td>
+									</tr>
+									<tr>
+											<td style="text-align: right;width:200px">
+			                                	<label class=" no-padding-right" for="form-field-1">奖金总金额：</label>
+		                                	</td>
+		                                	<td style="text-align: left;width:200px"  >
+			                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(pd.rewardAllAmount)}</label>
+			                                </td>
+											<td style="text-align: right;width:200px">
+			                                	<label class=" no-padding-right" for="form-field-1">购彩总金额：</label>
+		                                	</td>
+		                                	<td style="text-align: left;width:200px"  >
+			                                	<label class=" no-padding-right" for="form-field-1">${MoneyUtil.formatDouble(-pd.buyTicketAllAmount)}</label>
+			                                </td>
+									</tr>
+								</table>
+							
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
@@ -155,7 +155,8 @@
 						</form>
 					
 						</div>
-						<!-- /.col -->
+						      <div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
+					</div>
 					</div>
 					<!-- /.row -->
 				</div>

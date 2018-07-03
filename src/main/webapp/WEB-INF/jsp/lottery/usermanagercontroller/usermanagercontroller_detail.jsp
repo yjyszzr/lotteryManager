@@ -125,7 +125,7 @@
 								<tr>
 									<th class="center">银行卡号</th>
 									<th class="center">开户行</th>
-									<th class="center">状态</th>
+									<th class="center">是否默认卡</th>
 									<th class="center">绑定时间</th>
 									<th class="center">最近更新时间</th>
 									<th class="center">是否解绑</th>
@@ -140,10 +140,20 @@
 										<tr>
 											<td class='center'>${var.card_no}</td>
 											<td class='center'>${var.bank_name}</td>
-											<td class='center'>${var.status}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.status}">是</c:when>
+													<c:otherwise>否</c:otherwise>
+												</c:choose>
+											 </td>
 											<td class="center">${DateUtil.toDateStr(var.add_time*1000)}</td>
 											<td class="center">${DateUtil.toDateStr(var.last_time*1000)}</td>
-											<td class='center'>${var.is_delete}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.is_delete == 0 }">未解绑</c:when>
+													<c:otherwise>已解绑</c:otherwise>
+												</c:choose>
+											 </td>
 										</tr>
 									
 									</c:forEach>
@@ -173,6 +183,8 @@
 	<script src="static/ace/js/bootbox.js"></script>
 	
 	<script type="text/javascript">
+	$(top.hangge());//关闭加载状态
+	
 		function sendVerifyCode(user_id){
 			var diag = new top.Dialog();
 			 diag.Drag=true;
