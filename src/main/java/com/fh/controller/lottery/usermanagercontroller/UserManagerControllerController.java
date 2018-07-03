@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.http.util.TextUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -137,21 +136,31 @@ public class UserManagerControllerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String real_name = pd.getString("real_name"); // 关键词检索条件
+		if (null != real_name && !"".equals(real_name)) {
+			pd.put("real_name", real_name.trim());
 		}
-		String nameChosen = pd.getString("name_chosen");
-		if (!TextUtils.isEmpty(nameChosen) && !nameChosen.equals("0")) {
-			pd.put("name_chosen", nameChosen);
+		String id_code = pd.getString("id_code");
+		if (null != id_code && !"".equals(id_code)) {
+			pd.put("id_code", id_code.trim());
+		}
+		String mobile = pd.getString("mobile");
+		if (null != mobile && !"".equals(mobile)) {
+			pd.put("mobile", mobile);
+		}
+		String nickname = pd.getString("nickname");
+		if (null != nickname && !"".equals(nickname)) {
+			pd.put("nickname", nickname);
 		}
 		String lastStart = pd.getString("lastStart");
-		String lastEnd = pd.getString("lastEnd");
-		if (!TextUtils.isEmpty(lastStart) && !TextUtils.isEmpty(lastEnd)) {
+		if (null != lastStart && !"".equals(lastStart)) {
 			long start = DateUtilNew.getMilliSecondsByStr(lastStart);
+			pd.put("lastStart1", start);
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
 			long end = DateUtilNew.getMilliSecondsByStr(lastEnd);
-			pd.put("lastStart", start);
-			pd.put("lastEnd", end);
+			pd.put("lastEnd1", end);
 		}
 		page.setPd(pd);
 		List<PageData> varList = usermanagercontrollerService.list(page); // 列出UserManagerController列表

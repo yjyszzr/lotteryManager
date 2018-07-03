@@ -34,34 +34,106 @@
 							
 						<!-- 检索  -->
 						<form action="usermanagercontroller/list.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
-							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name_chosen" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="0">全部</option>
-									<option value="3">已实名</option>
-									<option value="4">未实名</option>
-									<option value="1">已锁定</option>
-									<option value="2">已冻结</option>
-								  	</select>
-								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
-							</tr>
-						</table>
+						
+						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
+								<tr style="margin:2px ">
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												真实姓名:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="真实姓名" class="nav-search-input" id="real_name" autocomplete="off" name="real_name" value="${pd.real_name }"  />
+											</span>
+										</div>
+									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												身份证号:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="身份证号" class="nav-search-input" id="id_code" autocomplete="off" name="id_code" value="${pd.id_code}" />
+											</span>
+										</div>
+									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												电话:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="电话" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}" />
+											</span>
+										</div>
+									</td>
+							
+									</tr>
+									<tr style="margin:2px">
+									<td >
+										<span class="input-icon" style="width:80px;text-align:right;">
+												注册时间:
+											</span>
+											<span  >
+												<input  name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input  name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+											</span>
+									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													状态:
+												</span>
+										 	<select  name="user_status" id="user_status" data-placeholder="请选择" value="${pd.user_status }" style="width:154px;border-radius:5px !important"  >
+											<option value="" selected>全部</option>
+											<option value="0" <c:if test="${pd.user_status!=NULL && pd.user_status!='' && pd.user_status == 0}">selected</c:if>>正常</option>
+											<option value="1" <c:if test="${pd.user_status==1}">selected</c:if>>锁定</option>
+											<option value="2" <c:if test="${pd.user_status==2}">selected</c:if>>冻结</option>
+										  	</select>
+										  	</div>
+									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													实名认证:
+												</span>
+										 	<select  name="is_real" id="is_real" data-placeholder="请选择" value="${pd.is_real }" style="width:154px;border-radius:5px !important"  >
+											<option value="" selected>全部</option>
+											<option value="0" <c:if test="${pd.is_real!=NULL && pd.is_real!='' && pd.is_real == 0}">selected</c:if>>未认证</option>
+											<option value="1" <c:if test="${pd.is_real==1}">selected</c:if>>已认证</option>
+										  	</select>
+										  	</div>
+									</td>
+									</tr>
+									<tr style="margin:2px">
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												昵称:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="昵称" class="nav-search-input" id="nickname" autocomplete="off" name="nickname" value="${pd.nickname}" />
+											</span>
+										</div>
+									</td>
+									<c:if test="${QX.cha == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+											<span class="input-icon" style="width:80px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+											</span>
+											<span class="input-icon" style="width:43px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+											</span>
+										</td>
+									</c:if>
+								</tr>
+							</table> 
+						
+						
+						
+						
 						<!-- 检索  -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
@@ -171,62 +243,29 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="static/ace/js/My97DatePicker/WdatePicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+		function tosearch(status){
+			if(status==0){
+				$("#real_name").val("");
+				$("#mobile").val("");
+				$("#id_code").val("");
+				$("#nickname").val("");
+				$("#user_status").empty();
+				$("#is_real").empty();
+				$("#lastStart").val("");
+				$("#lastEnd").val("");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}
-		$(function() {
 		
-			//日期框
-			$('.date-picker').datepicker({
-				autoclose: true,
-				todayHighlight: true
-			});
-			
-			//下拉框
-			if(!ace.vars['touch']) {
-				$('.chosen-select').chosen({allow_single_deselect:true}); 
-				$(window)
-				.off('resize.chosen')
-				.on('resize.chosen', function() {
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				}).trigger('resize.chosen');
-				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-					if(event_name != 'sidebar_collapsed') return;
-					$('.chosen-select').each(function() {
-						 var $this = $(this);
-						 $this.next().css({'width': $this.parent().width()});
-					});
-				});
-				$('#chosen-multiple-style .btn').on('click', function(e){
-					var target = $(this).find('input[type=radio]');
-					var which = parseInt(target.val());
-					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
-					 else $('#form-field-select-4').removeClass('tag-input-style');
-				});
-			}
-			
-			
-			//复选框全选控制
-			var active_class = 'active';
-			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){
-				var th_checked = this.checked;//checkbox inside "TH" table header
-				$(this).closest('table').find('tbody > tr').each(function(){
-					var row = this;
-					if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', true);
-					else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).prop('checked', false);
-				});
-			});
-		});
+		
+		
 		function toConsumeDetail(userId){
 			window.location.href='<%=basePath%>usermanagercontroller/toConsumeDetail.do?user_id='+userId;
 		}

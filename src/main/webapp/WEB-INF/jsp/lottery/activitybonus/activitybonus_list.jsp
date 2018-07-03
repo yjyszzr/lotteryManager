@@ -70,9 +70,9 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
+<!-- 									<th class="center" style="width:35px;"> -->
+<!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
+<!-- 									</th> -->
 <!-- 									<th class="center" style="width:50px;">序号</th> -->
 									<th class="center">ID</th>
 									<th class="center">券类型</th>
@@ -96,11 +96,11 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
-												<c:if test="${var.is_enable == 0 }"> 
-														<label class="pos-rel"><input type='checkbox' name='ids' value="${var.bonus_id}" class="ace" /><span class="lbl"></span></label>
-												</c:if>
-											</td>
+<!-- 											<td class='center'> -->
+<%-- 												<c:if test="${var.is_enable == 0 }">  --%>
+<%-- 														<label class="pos-rel"><input type='checkbox' name='ids' value="${var.bonus_id}" class="ace" /><span class="lbl"></span></label> --%>
+<%-- 												</c:if> --%>
+<!-- 											</td> -->
 											<td class='center'>${var.bonus_id}</td>
 											<td class='center'> 
 												<c:if test="${var.bonus_type==1 }">注册送红包</c:if>
@@ -197,7 +197,7 @@
 									<a class="btn btn-mini btn-success" onclick="add();" style="border-radius:5px ; width:50px">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" style="border-radius:5px ; width:70px" >批量删除</a>
+<!-- 									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" style="border-radius:5px ; width:70px" >批量删除</a> -->
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>

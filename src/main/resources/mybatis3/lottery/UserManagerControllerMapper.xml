@@ -172,59 +172,53 @@
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-		dl_user.user_id,
-		dl_user.user_money,
-		dl_user.user_money_limit,
-		user_name,
-		mobile,
-		nickname,
-		reg_time,
-		last_time,
-		real_name,
-		id_code,
-		dl_user.user_status,
-		reg_from
+		u.user_id,
+		u.user_money,
+		u.user_money_limit,
+		u.user_name,
+		u.mobile,
+		u.nickname,
+		u.reg_time,
+		u.last_time,
+		u_r.real_name,
+		u_r.id_code,
+		u.user_status,
+		u.reg_from
 		from 
-		<include refid="tableName"></include>
-		left join dl_user_real on dl_user_real.user_id = dl_user.user_id 
+		dl_user u
+		left join dl_user_real  u_r on u_r.user_id = u.user_id 
 		where 1=1 
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-				dl_user.user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				or
-				mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				or 
-				nickname LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-		 
-				)
-			 
+		<if test="pd.real_name!= null and pd.real_name != ''"> 
+			and u_r.real_name LIKE CONCAT(CONCAT('%', #{pd.real_name}),'%')
+ 		</if>
+		<if test="pd.id_code!= null and pd.id_code != ''"> 
+			and u_r.id_code LIKE CONCAT(CONCAT('%', #{pd.id_code}),'%')
+ 		</if>
+<!--  		电话 -->
+		<if test="pd.mobile!= null and pd.mobile != ''"> 
+				and u.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+ 		</if>
+<!--  		昵称 -->
+		<if test="pd.nickname!= null and pd.nickname != ''"> 
+				and u.nickname LIKE CONCAT(CONCAT('%', #{pd.nickname}),'%')
+ 		</if>
+<!-- 		时间 -->
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and  u.reg_time &gt; #{pd.lastStart1 }
 		</if>
-		<if test="pd.lastStart != null and pd.lastStart != '' and pd.lastEnd != null and pd.lastEnd != ''">
-			and
-			(
-				reg_time between #{pd.lastStart} and #{pd.lastEnd}
-			)
+<!-- 		时间 -->
+		<if test="pd.lastEnd1 != null and pd.lastEnd1!= ''"> 
+			and  u.reg_time &lt; #{pd.lastEnd1 }
 		</if>
-		<if test="pd.name_chosen != null and (pd.name_chosen == 1 or pd.name_chosen == 2)">
-			and
-			(
-				user_status = #{pd.name_chosen}
-			)
+<!-- 		状态 -->
+		<if test="pd.user_status != null and pd.user_status != ''">
+			and u.user_status = #{pd.user_status} 
 		</if>
-		<if test="pd.name_chosen != null and pd.name_chosen == 3">
-			and
-			(
-				is_real = 1
-			)
+<!-- 		实名认证 -->
+		<if test="pd.is_real != null and pd.is_real != ''">
+			and u.is_real = #{pd.is_real} 
 		</if>
-		<if test="pd.name_chosen != null and pd.name_chosen == 4">
-			and
-			(
-				is_real = 0
-			)
-		</if>
-		order by dl_user.reg_time DESC
+		order by u.reg_time DESC
 	</select>
 	
 	<!-- 列表(全部) -->
