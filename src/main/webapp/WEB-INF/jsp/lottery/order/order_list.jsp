@@ -106,10 +106,9 @@
 									<th class="center">手机号</th>
 									<th class="center">彩种</th>
 									<th class="center">订单状态</th>
-									<th class="center">支付方式</th>
 									<th class="center">投注金额</th>
+									<th class="center">支付</th>
 									<th class="center">中奖金额</th>
-									<th class="center">优惠券</th>
 									<th class="center">购彩时间</th>
 									<th class="center">是否派奖</th>
 								</tr>
@@ -138,10 +137,24 @@
 													<c:when test="${var.order_status=='7'}">审核中</c:when>
 												</c:choose>
 											</td>
-											<td class='center'>${var.pay_name}</td>
 											<td class='center'>${var.ticket_amount}</td>
+											<td class='center'>
+												<c:if test="${var.surplus !='0.00' }">
+												余额:${var.surplus }
+												</c:if>
+												<c:if test="${var.third_party_paid !='0.00' }">
+													<c:if test="${!empty var.pay_name }">
+														${var.pay_name}:${var.third_party_paid }
+													</c:if>
+													<c:if test="${empty var.pay_name }">
+														第三方:${var.third_party_paid }
+													</c:if>
+												</c:if>
+												<c:if test="${var.bonus !='0.00' }">
+													红包:${var.bonus }
+												</c:if>
+											</td>
 											<td class='center'>${var.winning_money}</td>
-											<td class='center'>${var.bonus}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.pay_time*1000)}</td>
 											<td class='center'>
 											<c:choose>

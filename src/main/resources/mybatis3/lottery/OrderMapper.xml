@@ -185,8 +185,10 @@
 			o.order_status,
 			o.pay_name,
 			o.ticket_amount,
+			o.third_party_paid,
 			o.winning_money,
 			o.bonus,
+			o.surplus,
 			o.pay_time 
 		FROM
 			dl_order o
@@ -232,10 +234,11 @@
 			l.lottery_classify_id,
 			o.order_status,
 			o.pay_name,
-			o.surplus,
 			o.ticket_amount,
 			o.winning_money,
 			o.bonus,
+			o.surplus,
+			o.third_party_paid,
 			o.add_time,
 			o.pay_time 
 		FROM
