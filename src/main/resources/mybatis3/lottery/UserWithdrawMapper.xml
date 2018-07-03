@@ -83,7 +83,11 @@
 		update
 		<include refid="tableName"></include>
 		set  
-			remarks = #{remarks}
+			remarks = #{remarks},
+			audit_time = #{audit_time},
+			auditor = #{auditor},
+			auditor_id = #{auditor_id},
+			status = 3
 		where 
 		withdrawal_sn = #{withdrawSn}
 	</update>
@@ -153,6 +157,16 @@
 			dl_user_withdraw
 			where user_id = #{userId}
 			order by add_time desc
+	</select>
+	
+	<select id="findTotalAwardById" parameterType="Integer" resultType="java.math.BigDecimal">
+		SELECT
+			SUM( amount ) amount 
+		FROM
+			dl_user_account 
+		WHERE
+			user_id = #{userId}
+			AND process_type = 1
 	</select>
 	
 	<!-- 批量删除 -->

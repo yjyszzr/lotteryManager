@@ -13,6 +13,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.axis.utils.SessionUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -25,9 +27,10 @@ import com.alibaba.fastjson.JSON;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.lottery.thresholdvalue.ThresholdValueManager;
+import com.fh.entity.system.User;
 import com.fh.service.lottery.userwithdraw.UserWithdrawManager;
 import com.fh.util.AppUtil;
+import com.fh.util.Const;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ManualAuditUtil;
@@ -46,9 +49,6 @@ public class UserWithdrawController extends BaseController {
 	@Resource(name = "userwithdrawService")
 	private UserWithdrawManager userwithdrawService;
 
-	@Resource(name = "thresholdvalueService")
-	private ThresholdValueManager thresholdvalueService;
-	
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
 
@@ -157,23 +157,10 @@ public class UserWithdrawController extends BaseController {
 		if (null != lastEnd && !"".equals(lastEnd)) {
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		}
-		
+
 		double failAmount = 0;
 		double successAmount = 0;
 		double unfinished = 0;
-		double withdrawLimit = 0;
-		
-		List<PageData> thredHoldList = thresholdvalueService.list(page); 
-		PageData pd8Thread = null;
-		for(PageData pdThread:thredHoldList) {
-			if("8".equals(pdThread.get("business_id").toString())) {
-				pd8Thread = pdThread;
-				break;
-			}
-		}
-		
-		withdrawLimit = Double.parseDouble(pd8Thread.get("value").toString());
-		pd.put("withdrawLimit", withdrawLimit);
 		page.setPd(pd);
 		List<PageData> varList = userwithdrawService.list(page); // 列出UserWithdraw列表
 		for (int i = 0; i < varList.size(); i++) {
@@ -242,6 +229,12 @@ public class UserWithdrawController extends BaseController {
 		} else if ("2".equals(status)) {// 状态为2的拒绝提现,
 			reqCashEntity.isPass = false;
 		}
+		SessionUtils.generateSession();
+		Session session = Jurisdiction.getSession();
+		User user = (User) session.getAttribute(Const.SESSION_USERROL);
+		pd.put("auditor_id", user.getUSER_ID());
+		pd.put("auditor", user.getUSERNAME());
+		pd.put("audit_time", DateUtilNew.getCurrentTimeLong());
 		userwithdrawService.updateRemarks(pd);
 		String reqStr = JSON.toJSONString(reqCashEntity);
 		ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getManualAuditUrl(), true);
@@ -267,10 +260,7 @@ public class UserWithdrawController extends BaseController {
 		BigDecimal awardAmount = new BigDecimal(BigInteger.ZERO);
 		if (!StringUtil.isEmptyStr(pd.getString("user_id"))) {
 			pageDataList = userwithdrawService.findByUserId(Integer.parseInt(pd.getString("user_id")));
-			for (int i = 0; i < pageDataList.size(); i++) {
-				BigDecimal bd = new BigDecimal(pageDataList.get(i).getString("amount"));
-				awardAmount = awardAmount.add(bd);
-			}
+			awardAmount = userwithdrawService.findTotalAwardById(Integer.parseInt(pd.getString("user_id")));
 		}
 		mv.addObject("msg", "manualAudit");
 		mv.addObject("pd", pd);

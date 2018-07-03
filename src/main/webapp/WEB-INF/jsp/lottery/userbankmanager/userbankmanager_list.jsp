@@ -30,28 +30,62 @@
 							
 						<!-- 检索  -->
 						<form action="userbankmanager/list.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
-							<tr>
-								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-								  	</select>
-								</td>
-								<c:if test="${QX.cha == 1 }">
-								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
-								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
+						<table  style="margin-top:5px;border-collapse:separate; border-spacing:10px;">
+								<tr style="margin:2px ">
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												真实姓名:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="真实姓名" class="nav-search-input" id="real_name" autocomplete="off" name="real_name" value="${pd.real_name }"  />
+											</span>
+										</div>
+									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												银行名称:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="银行名称" class="nav-search-input" id="bank_name" autocomplete="off" name="bank_name" value="${pd.bank_name}" />
+											</span>
+										</div>
+									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+												卡号:
+											</span>
+											<span class="input-icon">
+												<input type="text" placeholder="卡号" class="nav-search-input" id="card_no" autocomplete="off" name="card_no" value="${pd.card_no}" />
+											</span>
+										</div>
+									</td>
 							</tr>
+							<tr style="margin:2px">
+									<td >
+										<span class="input-icon" style="width:80px;text-align:right;">
+												添加时间:
+											</span>
+											<span>
+												<input  name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+												<input  name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+											</span>
+									</td>
+									<c:if test="${QX.cha == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+											<span class="input-icon" style="width:80px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+											</span>
+											<span class="input-icon" style="width:43px;"> </span>
+											<span>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+											</span>
+										</td>
+									</c:if>
+								</tr>
 						</table>
 						<!-- 检索  -->
 					
@@ -77,9 +111,9 @@
 										<tr>
 											<td class='center'>${var.user_id}</td>
 											<td class='center'><a onclick="toBankDetail('${var.user_id}');" style=" cursor:pointer;">${var.real_name}</a></td>
+											<td class='center'>${var.bank_name}</td>
 											<td class='center'>${var.card_no}</td>
 											<td class='center'><img src="${var.bank_logo}" style="width:90px;hight:30px"></td>
-											<td class='center'>${var.bank_name}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
 										</tr>
@@ -139,16 +173,24 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="static/ace/js/My97DatePicker/WdatePicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+		function tosearch(status){
+			if(status==0){
+				$("#bank_name").val("");
+				$("#card_no").val("");
+				$("#real_name").val("");
+				$("#lastStart").val("");
+				$("#lastEnd").val("");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}
+		
 		
 		//用户银行卡列表
 		function toBankDetail(userId){

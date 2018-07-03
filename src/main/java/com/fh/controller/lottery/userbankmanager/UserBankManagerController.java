@@ -23,6 +23,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.userbankmanager.UserBankManagerManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -114,9 +115,25 @@ public class UserBankManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
-			pd.put("keywords", keywords.trim());
+		String realName = pd.getString("real_name"); // 关键词检索条件
+		if (null != realName && !"".equals(realName)) {
+			pd.put("real_name", realName.trim());
+		}
+		String bankName = pd.getString("bank_name");
+		if (null != bankName && !"".equals(bankName)) {
+			pd.put("bank_name", bankName.trim());
+		}
+		String cardNo = pd.getString("card_no");
+		if (null != cardNo && !"".equals(cardNo)) {
+			pd.put("card_no", cardNo.trim());
+		}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		}
 		page.setPd(pd);
 		List<PageData> varList = userbankmanagerService.list(page); // 列出UserBankManager列表

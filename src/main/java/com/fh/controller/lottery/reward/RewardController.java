@@ -72,7 +72,6 @@ public class RewardController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
 			pageData = varList.get(i);
-			System.out.println(pageData);
 			if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
 				rewardAmount += Double.parseDouble(pageData.get("amount").toString());
 			}

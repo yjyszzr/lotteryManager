@@ -1,5 +1,6 @@
 package com.fh.service.lottery.userwithdraw.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -110,5 +111,10 @@ public class UserWithdrawService implements UserWithdrawManager {
 	@SuppressWarnings("unchecked")
 	public List<PageData> findByUserId(int userId) throws Exception {
 		return (List<PageData>) dao.findForList("UserWithdrawMapper.findByUserId", userId);
+	}
+
+	@Override
+	public BigDecimal findTotalAwardById(int userId) throws Exception {
+		return (BigDecimal) dao.findForObject("UserWithdrawMapper.findTotalAwardById", userId);
 	}
 }

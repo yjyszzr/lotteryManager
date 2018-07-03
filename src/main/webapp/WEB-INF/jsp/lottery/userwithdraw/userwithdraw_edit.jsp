@@ -41,7 +41,15 @@
 											<td style="text-align: right;width:200px" ><label class=" no-padding-right">总余额：</label></td>
 		                           		  	<td style="text-align: left;width:200px" ><label class=" no-padding-right">${pd.user_money_limit+pd.user_money }</label></td>
 										 	<td style="text-align: right;width:200px" ><label class=" no-padding-right">总中奖金额：</label></td>
-		                           		  	<td style="text-align: left;width:200px" ><label class=" no-padding-right">${awardAmount }元</label></td>
+		                           		  	<td style="text-align: left;width:200px" >
+		                           		  		<label class=" no-padding-right">
+		                           		  		<c:choose>
+		                           		  			<c:when test="${empty awardAmount }">0元</c:when>
+		                           		  			<c:when test="${!empty awardAmount }">${awardAmount }元</c:when>
+		                           		  		</c:choose>
+		                           		  			
+		                           		  		</label>
+	                           		  		</td>
 											<td style="text-align: right;width:200px" ><label class=" no-padding-right">当前可提现金额：</label></td>
 		                           		  	<td style="text-align: left;width:200px" ><label class=" no-padding-right">${pd.user_money }元</label></td>
 									</tr>
@@ -80,10 +88,19 @@
 			                                		<c:when test="${pd.status == 1}"><lable style="color:green">通过</lable></c:when>
 			                                		<c:when test="${pd.status == 0}"><lable style="color:orange;font-weight:bold">待审核</lable></c:when>
 			                                		<c:when test="${pd.status == 2}"><lable style="color:red;font-weight:bold">拒绝</lable></c:when>
+			                                		<c:when test="${pd.status == 3}"><lable style="color:gray;font-weight:bold">等待银行审批</lable></c:when>
 			                                	</c:choose>
 			                                	</label>
 		                           		  	</td>
 									</tr>
+									<c:if test="${pd.status != 0}">
+										<tr>
+		                           		  		<td style="text-align: right;width:200px" ><label class=" no-padding-right">审核人：</label></td>
+			                           		  	<td style="text-align: left;width:200px" ><label class=" no-padding-right"> ${pd.auditor }</label> 	</td>
+												<td style="text-align: right;width:200px" ><label class=" no-padding-right">审核时间：</label></td>
+			                           		  	<td style="text-align: left;width:200px" ><c:if test="${!empty pd.audit_time }"><label class=" no-padding-right" >${DateUtil.toSDFTime(pd.audit_time*1000) }</label></c:if> </td>
+										</tr>
+									</c:if>
 									<tr>
 											<td style="text-align: right;width:200px" ><label class=" no-padding-right">备注：</label></td>
 		                           		  	<td style="text-align: left;" colspan="3">
@@ -152,9 +169,10 @@
 											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											<td class='center'> 
 												<c:choose>
+													<c:when test="${var.status==0}"><lable style="color:orange;font-weight:bold">待审核</lable></c:when>
 													<c:when test="${var.status==1}"><lable style="color:green">通过</lable></c:when>
 													<c:when test="${var.status==2}"><lable style="color:red;font-weight:bold">拒绝</lable></c:when>
-													<c:otherwise><lable style="color:orange;font-weight:bold">待审核</lable></c:otherwise>
+													<c:when test="${var.status==3}"><lable style="color:red;font-weight:bold">审批中</lable></c:when>
 												</c:choose>
 											</td>
 											<c:choose>

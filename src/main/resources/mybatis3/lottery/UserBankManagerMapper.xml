@@ -98,21 +98,21 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
-		where 1=1 and status = 1 
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-				user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				or 
-				card_no LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				or
-				real_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+		where  status = 1 
+		<if test="pd.bank_name!= null and pd.bank_name != ''"> 
+			and bank_name LIKE CONCAT(CONCAT('%', #{pd.bank_name}),'%')
+		</if>
+		<if test="pd.card_no!= null and pd.card_no != ''"> 
+			and card_no LIKE CONCAT(CONCAT('%', #{pd.card_no}),'%')
+		</if>
+		<if test="pd.real_name!= null and pd.real_name != ''"> 
+			and real_name LIKE CONCAT(CONCAT('%', #{pd.real_name}),'%') 
+		</if>
+			<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and  add_time &gt; #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1!= ''"> 
+			and  add_time &lt; #{pd.lastEnd1 }
 		</if>
 		order by add_time DESC
 	</select>

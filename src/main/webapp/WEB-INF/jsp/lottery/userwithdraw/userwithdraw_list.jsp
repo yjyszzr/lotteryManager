@@ -82,6 +82,7 @@
 											<option value="0" <c:if test="${pd.status!=NULL && pd.status!='' && pd.status == 0}">selected</c:if>>待审核</option>
 											<option value="1" <c:if test="${pd.status==1}">selected</c:if>>通过</option>
 											<option value="2" <c:if test="${pd.status==2}">selected</c:if>>拒绝</option>
+											<option value="3" <c:if test="${pd.status==3}">selected</c:if>>正在审批</option>
 										  	</select>
 										  	</div>
 									</td>
@@ -137,9 +138,10 @@
 											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 												<td class='center'> 
 													<c:choose>
+													<c:when test="${var.status==0}"><lable style="color:orange;font-weight:bold">待审核</lable></c:when>
 													<c:when test="${var.status==1}"><lable style="color:green">通过</lable></c:when>
 													<c:when test="${var.status==2}"><lable style="color:red;font-weight:bold">拒绝</lable></c:when>
-													<c:otherwise><lable style="color:orange;font-weight:bold">待审核</lable></c:otherwise>
+													<c:when test="${var.status==3}"><lable style="color:gray;font-weight:bold">正在审批</lable></c:when>
 												</c:choose>
 											</td>
 											<c:choose>
@@ -159,15 +161,10 @@
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
 														<c:choose>
-															<c:when test="${var.status == 0 }">
-																<a class="btn btn-xs btn-success" title="审核" style="border-radius:5px;" onclick="edit('${var.id}');">审核</a>
-															</c:when>
-															<c:when test="${var.status == 1 }">
-																<a  title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a>
-															</c:when>
-															<c:when test="${var.status == 2 }">
-																<a title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a>
-															</c:when>
+															<c:when test="${var.status == 0 }"> <a class="btn btn-xs btn-success" title="审核" style="border-radius:5px;" onclick="edit('${var.id}');">审核</a></c:when>
+															<c:when test="${var.status == 1 }"><a  title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a></c:when>
+															<c:when test="${var.status == 2 }"><a title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a></c:when>
+															<c:when test="${var.status == 3 }"><a title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a></c:when>
 														</c:choose>													
 													</c:if>
 												</div>

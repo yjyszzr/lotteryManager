@@ -1,5 +1,6 @@
 package com.fh.service.lottery.userwithdraw;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.fh.entity.Page;
@@ -71,4 +72,6 @@ public interface UserWithdrawManager {
 	public void updateRemarks(PageData pd) throws Exception;
 
 	public List<PageData> findByUserId(int parseInt) throws Exception;
+
+	public BigDecimal findTotalAwardById(int parseInt) throws Exception;
 }
