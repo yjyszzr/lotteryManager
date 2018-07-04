@@ -185,6 +185,12 @@ public class UserManagerControllerController extends BaseController {
 					valA = 0d;
 				}
 				pData.put("atotal", valA);
+				// 提现总金额
+				Double totalWithdraw = useraccountmanagerService.totalWithdraw(userId);
+				if (totalWithdraw == null) {
+					totalWithdraw = 0d;
+				}
+				pData.put("totalWithdraw", totalWithdraw);
 			}
 		}
 		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_list");

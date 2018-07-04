@@ -96,6 +96,14 @@
 											</span>
 										</td>
 									</c:if>
+									<c:if test="${QX.toExcel == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+										<span class="input-icon" style="width:80px;"> </span>
+											<span>
+												<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:150px">导出到EXCEL </a>
+											</span>
+											</td>
+									</c:if>
 								</tr>
 							</table> <!-- 检索结束 -->
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
@@ -108,8 +116,8 @@
 									<th class="center">电话</th>
 									<th class="center">充值金额</th>
 									<th class="center">充值方式</th>
-									<th class="center">状态</th>
 									<th class="center">充值时间</th>
+									<th class="center">状态</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -126,6 +134,7 @@
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.amount}元</td>
 											<td class='center'>${var.payment_name}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)} </td>
 											<td class='center'> 
 													<c:choose>
 													<c:when test="${var.status==1}">成功</c:when>
@@ -133,7 +142,6 @@
 													<c:otherwise><lable style="color:orange">未完成</lable></c:otherwise>
 												</c:choose>
 											</td>
-											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)} </td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -202,7 +210,10 @@
 			top.jzts();
 			$("#Form").submit();
 		}
- 
+		//导出excel
+		function toExcel(){
+			window.location.href='<%=basePath%>userrecharge/excel.do';
+		}
 </script>
 </body>
 </html>

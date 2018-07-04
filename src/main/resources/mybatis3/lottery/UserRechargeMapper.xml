@@ -129,9 +129,13 @@
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
+ 			a.*,
+			b.user_name,
+			b.mobile
+		FROM
+			dl_user_recharge a
+		LEFT JOIN dl_user b ON b.user_id = a.user_id
+			order by a.add_time desc
 	</select>
 	
 	<!-- 批量删除 -->

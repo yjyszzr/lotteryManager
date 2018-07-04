@@ -12,6 +12,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -217,6 +220,7 @@ public class ChannelDistributorController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		List<PageData> userAll = usermanagercontrollerService.findAll();
 		mv.addObject("userAll", userAll);
+		mv.addObject("userListJson", userList2Json(userAll));
 		PageData pda = new PageData();
 		List<PageData> channelAll = channelService.listAll(pda);
 		mv.addObject("channelAll", channelAll);
@@ -225,6 +229,18 @@ public class ChannelDistributorController extends BaseController {
 		mv.addObject("channel_id", 0);
 		mv.addObject("user_id", 0);
 		return mv;
+	}
+
+	public static JSONArray userList2Json(List<PageData> userAll) {
+		JSONArray json = new JSONArray();
+		for (PageData user : userAll) {
+			JSONObject jo = new JSONObject();
+			jo.put("userId", user.getString("user_id"));
+			jo.put("userName", user.getString("user_name"));
+			jo.put("mobile", user.getString("mobile"));
+			json.add(jo);
+		}
+		return json;
 	}
 
 	/**

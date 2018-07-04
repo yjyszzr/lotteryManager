@@ -109,4 +109,6 @@ public interface UserAccountManagerManager {
 	public List<PageData> findByUserId(int userId) throws Exception;
 
 	public double totalAwardForAll() throws Exception;
+
+	public Double totalWithdraw(Integer userId) throws Exception;
 }

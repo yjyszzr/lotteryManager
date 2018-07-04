@@ -102,7 +102,8 @@
 								<td style="padding: 13px;"> <lable >
 									<c:choose>
 										<c:when test="${entity.user_status == 0 }">正常</c:when>
-										<c:when test="${entity.user_status == 1 }"><lable style = "color:red">冻结</c:when>
+										<c:when test="${entity.user_status == 1 }"><lable style = "color:red">锁定</c:when>
+										<c:when test="${entity.user_status == 2 }"><lable style = "color:red">冻结</c:when>
 									</c:choose>
 								 </lable></td>
 							</tr>

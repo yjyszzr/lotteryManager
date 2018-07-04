@@ -10,12 +10,8 @@
 <html lang="en">
 <head>
 <base href="<%=basePath%>">
-<!-- 下拉框 -->
-<link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
 <%@ include file="../../system/index/top.jsp"%>
-<!-- 日期框 -->
-<link rel="stylesheet" href="static/ace/css/datepicker.css" />
 </head>
 <body class="no-skin">
 

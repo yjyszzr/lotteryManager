@@ -31,6 +31,7 @@ import com.fh.entity.system.User;
 import com.fh.service.lottery.userwithdraw.UserWithdrawManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
+import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ManualAuditUtil;
@@ -161,6 +162,7 @@ public class UserWithdrawController extends BaseController {
 		double failAmount = 0;
 		double successAmount = 0;
 		double unfinished = 0;
+
 		page.setPd(pd);
 		List<PageData> varList = userwithdrawService.list(page); // 列出UserWithdraw列表
 		for (int i = 0; i < varList.size(); i++) {
@@ -317,35 +319,40 @@ public class UserWithdrawController extends BaseController {
 		pd = this.getPageData();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("ID"); // 1
-		titles.add("提现编号"); // 2
-		titles.add("用户ID"); // 3
-		titles.add("提现金额"); // 4
-		titles.add("账户ID"); // 5
-		titles.add("添加时间"); // 6
-		titles.add("状态"); // 7
-		titles.add("支付代码"); // 8
-		titles.add("卡号"); // 9
-		titles.add("提现时间"); // 10
-		titles.add("交易号"); // 11
-		titles.add("银行名称"); // 12
+		titles.add("提现编号"); //
+		titles.add("真实姓名"); //
+		titles.add("电话"); //
+		titles.add("提现金额"); //
+		titles.add("银行名称"); //
+		titles.add("卡号"); //
+		titles.add("申请提现时间"); //
+		titles.add("状态"); //
+		titles.add("备注"); //
 		dataMap.put("titles", titles);
 		List<PageData> varOList = userwithdrawService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("id").toString()); // 1
-			vpd.put("var2", varOList.get(i).getString("withdrawal_sn")); // 2
-			vpd.put("var3", varOList.get(i).get("user_id").toString()); // 3
+			vpd.put("var1", varOList.get(i).getString("withdrawal_sn")); // 1
+			vpd.put("var2", varOList.get(i).getString("real_name")); // 2
+			vpd.put("var3", varOList.get(i).getString("mobile")); // 3
 			vpd.put("var4", varOList.get(i).getString("amount")); // 4
-			vpd.put("var5", varOList.get(i).get("account_id").toString()); // 5
-			vpd.put("var6", varOList.get(i).get("add_time").toString()); // 6
-			vpd.put("var7", varOList.get(i).getString("status")); // 7
-			vpd.put("var8", varOList.get(i).getString("real_name")); // 8
-			vpd.put("var9", varOList.get(i).getString("card_no")); // 9
-			vpd.put("var10", varOList.get(i).get("pay_time").toString()); // 10
-			vpd.put("var11", varOList.get(i).getString("payment_id")); // 11
-			vpd.put("var12", varOList.get(i).getString("bank_name")); // 12
+			vpd.put("var5", varOList.get(i).getString("bank_name")); // 5
+			vpd.put("var6", varOList.get(i).getString("card_no")); // 6
+			BigDecimal big = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
+			BigDecimal big1000 = new BigDecimal(1000);
+			vpd.put("var7", DateUtil.toSDFTime(Long.parseLong(big.multiply(big1000).toString())));
+			String status = varOList.get(i).getString("status");
+			if (status.equals("0")) {
+				vpd.put("var8", "待审核"); // 8
+			} else if (status.equals("1")) {
+				vpd.put("var8", "通过"); // 8
+			} else if (status.equals("2")) {
+				vpd.put("var8", "拒绝"); // 8
+			} else {
+				vpd.put("var8", "正在审批"); // 8
+			}
+			vpd.put("var9", varOList.get(i).getString("remarks")); // 9
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

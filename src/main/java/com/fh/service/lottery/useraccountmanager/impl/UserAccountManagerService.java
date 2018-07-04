@@ -107,6 +107,11 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	}
 
 	@Override
+	public Double totalWithdraw(Integer userId) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.totalWithdraw", userId);
+	}
+
+	@Override
 	public Double getTotalRechargeByUserId(Integer userId) throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalRecharge", userId);
 	}

@@ -111,19 +111,31 @@
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		SELECT
-			a.*,
+			a.id,
+			a.withdrawal_sn,
+			a.user_id,
+			a.amount,
+			a.account_id,
+			a.add_time,
+			a.status,
+			a.real_name,
+			a.card_no,
+			a.pay_time,
+			a.payment_id,
+			a.bank_name,
+			a.remarks,
 			b.user_name,
 			b.mobile 
 		FROM
 			dl_user_withdraw a
 			LEFT JOIN dl_user b ON b.user_id = a.user_id
-		WHERE 1=1
+			where 1 = 1
 		<if test="pd.withdrawal_sn != null and pd.withdrawal_sn != ''"> 
 			and a.withdrawal_sn  LIKE CONCAT(CONCAT('%', #{pd.withdrawal_sn}),'%')
 		</if>
-		<if test="pd.withdrawLimit != null and pd.withdrawLimit != ''"> 
-			and a.amount &gt; #{pd.withdrawLimit}
-		</if>
+<!-- 		<if test="pd.withdrawLimit != null and pd.withdrawLimit != ''">  -->
+<!-- 			and a.amount &gt; #{pd.withdrawLimit} -->
+<!-- 		</if> -->
 		<if test="pd.mobile != null and pd.mobile != ''">
 			and b.mobile 
 			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
@@ -146,10 +158,26 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
+		SELECT
+			a.id,
+			a.withdrawal_sn,
+			a.user_id,
+			a.amount,
+			a.account_id,
+			a.add_time,
+			a.status,
+			a.real_name,
+			a.card_no,
+			a.pay_time,
+			a.payment_id,
+			a.bank_name,
+			a.remarks,
+			b.user_name,
+			b.mobile 
+		FROM
+			dl_user_withdraw a
+			LEFT JOIN dl_user b ON b.user_id = a.user_id
+		order by  add_time DESC
 	</select>
 <!-- 	根据用户Id查询 -->
 	<select id="findByUserId" parameterType="Integer" resultType="pd">

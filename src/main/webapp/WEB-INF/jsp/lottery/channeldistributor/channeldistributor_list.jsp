@@ -202,7 +202,7 @@
 		 diag.Title ="新增分销";
 		 diag.URL = '<%=basePath%>channeldistributor/goAdd.do?channel_id='+channel_id;
 		 diag.Width = 450;
-		 diag.Height = 355;
+		 diag.Height = 455;
 		 diag.Modal = true;				//有无遮罩窗口
 		 diag. ShowMaxButton = true;	//最大化按钮
 	     diag.ShowMinButton = true;		//最小化按钮
@@ -280,7 +280,7 @@
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>channeldistributor/goAdd.do';
 			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Height = 455;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -318,7 +318,7 @@
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>channeldistributor/goEdit.do?channel_distributor_id='+Id;
 			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Height = 455;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

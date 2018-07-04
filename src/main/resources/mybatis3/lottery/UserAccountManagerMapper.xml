@@ -141,10 +141,20 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
+			 SELECT
+		 	o.*, 
+			a.pay_time as pay_time,
+			a.award_time as award_time,
+			a.ticket_amount as ticket_amount,
+			u.user_name as user_name,
+			u.mobile as mobile,
+			c.lottery_name as lottery_name 
+		FROM
+			dl_user_account o
+			LEFT JOIN dl_order a ON o.order_sn = a.order_sn
+			LEFT JOIN dl_user u ON o.user_id = u.user_id
+			LEFT JOIN dl_lottery_classify c ON a.lottery_classify_id = c.lottery_classify_id 
+		order by a.pay_time desc
 	</select>
 	
 	<!-- 批量删除 -->
@@ -174,6 +184,15 @@
 	<!-- 累计获奖汇总 -->
 	<select id="totalAwardForAll"   resultType="java.lang.Double">
 		SELECT SUM(amount) FROM dl_user_account WHERE   process_type = 1;
+	</select>
+	<select id="totalWithdraw"  parameterType="java.lang.Integer"   resultType="java.lang.Double">
+		SELECT
+			SUM( amount ) AS amount 
+		FROM
+			dl_user_withdraw 
+		WHERE
+			user_id = #{userId} 
+			AND STATUS = 1
 	</select>
  
 	

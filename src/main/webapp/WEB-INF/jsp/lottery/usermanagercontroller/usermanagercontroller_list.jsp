@@ -14,12 +14,8 @@
 <html lang="en">
 <head>
 <base href="<%=basePath%>">
-<!-- 下拉框 -->
-<link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
 <%@ include file="../../system/index/top.jsp"%>
-<!-- 日期框 -->
-<link rel="stylesheet" href="static/ace/css/datepicker.css" />
 </head>
 <body class="no-skin">
 
@@ -147,10 +143,11 @@
 									<th class="center">累计消费</th>
 									<th class="center">累计充值</th>
 									<th class="center">累计中奖</th>
+									<th class="center">累计提现</th>
 									<th class="center">账户余额</th>
 									<th class="center">注册时间</th>
 									<th class="center">最后登录时间</th>
-									<th class="center">状态</th>
+<!-- 									<th class="center">状态</th> -->
 									<th class="center">注册来源</th>
 								</tr>
 							</thead>
@@ -170,16 +167,17 @@
 											<td class="center"><c:if test="${var.total == 0 }">${var.total }</c:if><c:if test="${var.total != 0 }"><a onclick="toConsumeDetail('${var.user_id}');" style=" cursor:pointer;" title="消费详情">${-var.total }</a></c:if></td>
 											<td class="center">${var.rtotal}</td>
 											<td class="center">${var.atotal}</td>
+											<td class="center">${var.totalWithdraw}</td>
 											<td class="center">${ var.user_money_limit + var.user_money }</td>
 											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
-											<td class='center'> 
-												<c:choose>
-													<c:when test="${var.user_status == 0 }">正常</c:when>
-													<c:when test="${var.user_status == 1 }"><lable style = "color:yellow">锁定</c:when>
-													<c:when test="${var.user_status == 2 }"><lable style = "color:red">冻结</c:when>
-												</c:choose>
-											</td>
+<!-- 											<td class='center'>  -->
+<%-- 												<c:choose> --%>
+<%-- 													<c:when test="${var.user_status == 0 }">正常</c:when> --%>
+<%-- 													<c:when test="${var.user_status == 1 }"><lable style = "color:yellow">锁定</c:when> --%>
+<%-- 													<c:when test="${var.user_status == 2 }"><lable style = "color:red">冻结</c:when> --%>
+<%-- 												</c:choose> --%>
+<!-- 											</td> -->
 											<td class='center'>${var.reg_from}</td>
 										</tr>
 									</c:forEach>
@@ -240,8 +238,6 @@
 	<script src="static/ace/js/bootbox.js"></script>
 	<!-- ace scripts -->
 	<script src="static/ace/js/ace/ace.js"></script>
-	<!-- 下拉框 -->
-	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
 	<script src="static/ace/js/My97DatePicker/WdatePicker.js"></script>
 	<!--提示框-->
@@ -304,15 +300,6 @@
 			 };
 			 diag.show();
 		}		
-  
-		
-// 		//用户详情页
-// 		function toDetail(userId){
-<%-- 			window.location.href='<%=basePath%>usermanagercontroller/toDetail.do?user_id='+userId; --%>
-// 		}
-		
 	</script>
-
-
 </body>
 </html>

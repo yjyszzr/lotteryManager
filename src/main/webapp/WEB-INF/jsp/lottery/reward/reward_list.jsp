@@ -93,6 +93,14 @@
 											</span>
 										</td>
 									</c:if>
+									<c:if test="${QX.toExcel == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+										<span class="input-icon" style="width:80px;"> </span>
+											<span>
+												<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:150px">导出到EXCEL </a>
+											</span>
+											</td>
+									</c:if>
 								</tr>
 							</table> <!-- 检索结束 -->
 						<!-- 检索  -->
@@ -120,7 +128,7 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.order_sn}</td>
+											<td class='center'><a onclick="toDetail('${var.order_sn}');" style=" cursor:pointer;">${var.order_sn}</td>
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
@@ -203,6 +211,37 @@
 			top.jzts();
 			$("#Form").submit();
 		}
+		
+		
+		//订单详情页
+		function toDetail(orderSn){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="订单详情";
+			 diag.URL = '<%=basePath%>reward/toDetail.do?orderSn='+orderSn;
+			 diag.Width = 1300;
+			 diag.Height = 320;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = false;	//最大化按钮
+		     diag.ShowMinButton = false;		//最小化按钮
+			 diag.CancelEvent = function(){ //关闭事件
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 if('${page.currentPage}' == '0'){
+						 tosearch();
+					 }else{
+						 tosearch();
+					 }
+				}
+				diag.close();
+			 };
+			 diag.show();
+		}
+		//导出excel
+		function toExcel(){
+			window.location.href='<%=basePath%>reward/excel.do';
+		}
+		
 	</script>
 </body>
 </html>
