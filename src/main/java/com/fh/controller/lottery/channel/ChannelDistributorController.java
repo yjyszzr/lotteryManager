@@ -36,6 +36,7 @@ import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.StringUtil;
 
 /**
  * 说明：渠道分销(店员) 创建人：FH Q313596790 创建时间：2018-05-18
@@ -393,7 +394,9 @@ public class ChannelDistributorController extends BaseController {
 			vpd.put("var8", varOList.get(i).getString("total_amount")); // 8
 			vpd.put("var9", varOList.get(i).getString("distributor_commission_rate") + "%"); // 9
 			vpd.put("var10", varOList.get(i).getString("total_amount_extract")); // 10
-			vpd.put("var11", DateUtil.toSDFTime(Integer.parseInt(varOList.get(i).getString("add_time")) * 1000)); // 11
+			BigDecimal big11 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
+			BigDecimal big1000 = new BigDecimal(1000);
+			vpd.put("var11", DateUtil.toSDFTime(Long.parseLong(big11.multiply(big1000).toString()))); // 7
 			vpd.put("var12", varOList.get(i).get("remark").toString()); // 12
 			varList.add(vpd);
 		}
