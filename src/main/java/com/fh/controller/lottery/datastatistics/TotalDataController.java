@@ -118,10 +118,10 @@ public class TotalDataController extends BaseController {
 			dateB = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		}else {
 			String day = pd.getString("fastCheck");
-			if(null == day && "".equals(day)) {
+			if(null == day || "".equals(day)) {
 				day = "7";
 			}
-			dateB = dateE.plusDays(-Integer.parseInt(day));
+			dateB = dateE.plusDays(0-Integer.parseInt(day));
 		}
 		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
 		if (null != lastEnd && !"".equals(lastEnd)) {

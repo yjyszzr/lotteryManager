@@ -47,14 +47,13 @@
 											value="${pd.lastEnd }" type="text"
 											data-date-format="yyyy-mm-dd" readonly="readonly"
 											style="width: 118px;" placeholder="注册结束日期" title="注册结束日期" /></td>
-										<td>快速查看：</td>
-										<td style="vertical-align: top; padding-left: 2px;"><select
-											class="chosen-select form-control" name="fastCheck" id="fastCheck"
-											data-placeholder="请选择"
-											style="vertical-align: top; width: 120px;">
+										<td>   快速查看：</td>
+										<td style="vertical-align: top; padding-left: 2px;">
+												<select name="fastCheck" id="fastCheck" data-placeholder="请选择" value="${pd.operation_node }" style="width: 100px; border-radius: 5px !important">
 												<option value="7">最近一周</option>
 												<option value="30">最近一月</option>
-										</select></td>	
+										</select>
+										 </td>	
 										<c:if test="${QX.cha == 1 }">
 											<td style="vertical-align: top; padding-left: 2px"><span
 												class="input-icon" style="width: 30px;"> </span> <a
