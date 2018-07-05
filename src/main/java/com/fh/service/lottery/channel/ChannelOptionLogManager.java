@@ -79,5 +79,6 @@ public interface ChannelOptionLogManager {
 	 * @throws Exception
 	 */
 	public List<PageData> getOptionLogList(Page page) throws Exception;
+	public List<PageData> getXACountYesterday(Page page) throws Exception;
 
 }

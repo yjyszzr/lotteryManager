@@ -69,8 +69,13 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	 * @param page
 	 * @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public List<PageData> getOptionLogList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.datalistPageXA", page);
+	}
+	@SuppressWarnings("unchecked")
+	public List<PageData> getXACountYesterday(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.getXACountYesterday", page);
 	}
 
 	/**

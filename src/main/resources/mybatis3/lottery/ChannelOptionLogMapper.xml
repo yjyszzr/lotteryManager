@@ -157,10 +157,11 @@
 	</select>
 	<!-- 列表(西安) -->
 	<select id="datalistPageXA" parameterType="page" resultType="pd">
+	select log.*,channel.channel_name from dl_channel channel left join (
 	SELECT con.add_time  as option_time ,
 				con.user_name ,
 				con.mobile  ,
-				chl.channel_name ,
+				chl.channel_name as channelname,
 				chl.channel_id,
 				cdt.mobile as dis_name,
 				'10' as operation_node,
@@ -198,7 +199,7 @@
 	SELECT  opt.option_time as option_time,
 		opt.user_name,
 		opt.mobile,
-		chl.channel_name,
+		chl.channel_name as channelname,
 		chl.channel_id,
 		cdt.mobile as dis_name,
 		opt.operation_node,
@@ -230,11 +231,56 @@
 					cdt.mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 				)
 		</if>
-
+		) log on channel.channel_id =  log.channel_id
+		where 1=1 
+		<if test="pd.channel_id != null and pd.channel_id != ''">
+			and channel.channel_id = #{pd.channel_id}
+		</if>
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and channel.channel_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		<if test="pd.operation_node != null and pd.operation_node != ''">
+			and log.operation_node = #{pd.operation_node}
+		</if>
+		order by log.option_time desc
+	</select>
+	<select id="getXACountYesterday" parameterType="page" resultType="pd">
+		select COALESCE(count(user_id),0) as count, 
+			'0' as operation_node 
+		from dl_channel_consumer 
+		where !ISNULL(user_id)  
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+			and add_time &gt; #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+			and add_time &lt; #{pd.lastEnd1 }
+		</if>
+		UNION
+		SELECT COALESCE(count(DISTINCT user_id),0) as count, 
+				operation_node 
+		from dl_channel_option_log 
+		where 1=1
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+			and option_time &gt; #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+			and option_time &lt; #{pd.lastEnd1 }
+		</if>
+		GROUP BY operation_node
+		UNION
+		SELECT COALESCE(sum(option_amount),0) as count,
+				'111' as operation_node
+		 from dl_channel_option_log  
+		 where 1=1
+		 <if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+			and option_time &gt; #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+			and option_time &lt; #{pd.lastEnd1 }
+		</if>
 	</select>
 	<!-- 列表 -->
-	<select id="goConsumerListByTime" parameterType="page"
-		resultType="pd">
+	<select id="goConsumerListByTime" parameterType="page" resultType="pd">
 		SELECT
 		COUNT( IF ( operation_node = 1, TRUE, NULL ) ) AS loginNum,
 		DATE( FROM_UNIXTIME( option_time ) ) AS optionTime,

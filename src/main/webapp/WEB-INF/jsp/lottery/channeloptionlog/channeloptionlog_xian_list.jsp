@@ -23,14 +23,14 @@
 	<div id="u14" class="ax_default _三级标题">
 		<div id="u14_div" class=""></div>
 		<div id="u14_text" class="text ">
-			<p>
-				<span>首页</span>
+			<p> <span style="width: 70px;"></span>
+				<span style="width: 70px;"><h4>首页</h4></span>
 			</p>
 		</div>
 	</div>
 	<div id="u15" class="ax_default line">
 		<img id="u15_img" class="img "
-			src="https://d2v8ggac1o0f6z.cloudfront.net/gsc/IBPCQD/73/9a/c3/739ac380b7614c9fb13134b7a3b724ed/images/首页/u15.png?token=4b2796afcc3c76ca6bd53ff1c5775cf5">
+			src="static/line.png">
 	</div>
 
 	<table border="0" style="border: 1px solid #000000;" cellpadding="0"
@@ -38,31 +38,32 @@
 		<tr>
 			<td style="padding:40px;"><div id="u32" class="ax_default _图片">
 					<img id="u32_img" height="150" width="150" class="img "
-						src="https://d26uhratvi024l.cloudfront.net/gsc/IBPCQD/73/9a/c3/739ac380b7614c9fb13134b7a3b724ed/images/首页/u32.png?token=aa67730d0807415c3448422254aadb38">
+						src="static/xian.png">
 				</div>
 			</td>
 			<td><table  width="400" height="250" >
 					<tr>
 
-						<td>昨日注册用户</td>
-						<td>${h }</td>
+						<td><h4>昨日注册用户</h4></td>
+						<td><h4>${h }</h4></td>
 						<td></td>
 					</tr>
 					<tr>
-						<td>昨日购彩总金额</td>
-						<td>${optionAmount }</td>
+						<td><h4>昨日购彩总金额</h4></td>
+						<td><h4>${optionAmount }</h4></td>
 						<td></td>
 					</tr>
 					<tr>
-						<td>昨日激活用户</td>
-						<td>${l }</td>
+						<td><h4>昨日激活用户</h4></td>
+						<td><h4>${l }</h4></td>
 						<td></td>
 					</tr>
 					<tr>
-						<td>昨日购彩用户</td>
-						<td>${m }</td>
-						<td><a
-							href="<%=basePath%>xiandata/list.do?lastStart=${pd.lastStart }&lastEnd=${pd.lastEnd }"><h3>查看详情</h3></a></td>
+						<td><h4>昨日购彩用户</h4></td>
+						<td><h4>${m }</h4></td>
+						<td><span class="input-icon" style="width: 70px;"> </span> </td>
+						<td>
+							<a href="<%=basePath%>xiandata/list.do?lastStart=${pd.lastStart }&lastEnd=${pd.lastEnd }"><h3>查看详情</h3></a></td>
 					</tr>
 				</table></td>
 		</tr>

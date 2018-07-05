@@ -58,12 +58,14 @@ public class ChannelXiAnDataController extends BaseController {
 			pd.put("operation_node", operation_node.trim());
 		}
 		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (pd.isEmpty()) {
+			lastStart = LocalDate.now().plusDays(-1).toString()+" 00:00:00";
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+			pd.put("lastStart",lastStart);
+		}
 		if (null != lastStart && !"".equals(lastStart)) {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
-		}else {
-			lastStart = LocalDate.now().plusDays(-1).toString();
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart+" 00:00:00"));
-		}
+		} 
 		String lastEnd = pd.getString("lastEnd"); // 结束检索条件
 		long dayTime = DateUtilNew.getMilliSecondsByStr(LocalDate.now().toString()+" 00:00:00");
 		if (null != lastEnd && !"".equals(lastEnd)) {
@@ -131,7 +133,9 @@ public class ChannelXiAnDataController extends BaseController {
 			}
 			
 			//用户统计
-			consumerSet.add(pageData.getString("user_name"));
+			if(null != pageData.get("mobile") && !"".equals(pageData.get("mobile"))){
+			consumerSet.add(pageData.getString("mobile"));
+			}
 			//门店列表
 //			if (null != pageData.get("channel_name") && !"".equals(pageData.get("channel_name"))) {
 //				if (null != pageData.get("channel_id") && !"".equals(pageData.get("channel_id"))) {
@@ -190,6 +194,7 @@ public class ChannelXiAnDataController extends BaseController {
 		if (null != keywords && !"".equals(keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
+		page.setShowCount(65000);//单页显示条数，为了全部导出应用
 		page.setPd(pd);
 		BigDecimal optionAmount = new BigDecimal(0);
 		BigDecimal optionAmountChl = new BigDecimal(0);
@@ -199,10 +204,10 @@ public class ChannelXiAnDataController extends BaseController {
 		List<PageData> varList = new ArrayList<PageData>();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("日期"); // 1
-		titles.add("用户名"); // 2
-		titles.add("手机号"); // 3
-		titles.add("所属门店"); // 4
+		titles.add("所属门店"); // 1
+		titles.add("日期"); // 2
+		titles.add("用户名"); // 3
+		titles.add("手机号"); // 4
 		titles.add("所属店员"); // 5
 		titles.add("节点"); // 6
 		titles.add("购彩金额"); // 7
@@ -211,14 +216,25 @@ public class ChannelXiAnDataController extends BaseController {
 		dataMap.put("titles", titles);
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("option_time").toString()); // 1
-			vpd.put("var2", varOList.get(i).get("user_name").toString()); // 2
-			vpd.put("var3", varOList.get(i).get("mobile").toString()); // 3
-			vpd.put("var4", varOList.get(i).get("channel_name").toString()); // 4
-			vpd.put("var5", varOList.get(i).getString("dis_name")); // 5
+			vpd.put("var1", varOList.get(i).get("channel_name").toString()); // 1
+			if (null != varOList.get(i).get("option_time") && !"".equals(varOList.get(i).get("option_time"))) {
+				vpd.put("var2", varOList.get(i).get("option_time").toString()); // 2
+			}
+			if (null != varOList.get(i).get("user_name") && !"".equals(varOList.get(i).get("user_name"))) {
+				vpd.put("var3", varOList.get(i).get("user_name").toString()); // 3
+			}
+			if (null != varOList.get(i).get("mobile") && !"".equals(varOList.get(i).get("mobile"))) {
+				vpd.put("var4", varOList.get(i).get("mobile").toString()); // 4
+			}
+			if (null != varOList.get(i).get("dis_name") && !"".equals(varOList.get(i).get("dis_name"))) {
+				vpd.put("var5", varOList.get(i).getString("dis_name")); // 5
+			}
 			//节点转换
 			if (null != varOList.get(i).get("operation_node") && !"".equals(varOList.get(i).get("operation_node"))) {
 				int node = new Integer(varOList.get(i).getString("operation_node"));
+				if(node==11) {
+					continue; // 6
+				}
 				if(node==10) {
 					vpd.put("var6", "领取"); // 6
 				}
@@ -249,7 +265,9 @@ public class ChannelXiAnDataController extends BaseController {
 			}
 			
 			//用户统计
-			consumerSet.add(varOList.get(i).getString("user_name"));
+			if(null != varOList.get(i).get("mobile") && !"".equals(varOList.get(i).get("mobile"))){
+				consumerSet.add(varOList.get(i).getString("mobile"));
+			}
 			varList.add(vpd);
 		}
 		PageData count = new PageData();
@@ -285,35 +303,34 @@ public class ChannelXiAnDataController extends BaseController {
 		pd.put("lastEnd", localDate+" 00:00:00");
 		pd.put("registerTime", LocalDate.now().plusDays(-1).toString());
 		page.setPd(pd);
-		
-		List<PageData> optionlogList = channeloptionlogService.getOptionLogList(page);
-		BigDecimal optionAmount = new BigDecimal(0);//昨日购彩金额总计 
+		List<PageData> optionlogList = channeloptionlogService.getXACountYesterday(page);
+		String optionAmount = "0";//昨日购彩金额总计 
 		int h = 0;//领取用户（页面显示注册）
 		int l = 0;//激活用户
 		int m = 0;//购彩用户
 		for (int i = 0; i < optionlogList.size(); i++) {
 			PageData pageData = new PageData();
 			pageData = optionlogList.get(i);
-			//金额
-			if (null != pageData.get("option_amount") && !"".equals(pageData.get("option_amount"))) {
-				BigDecimal Big1 = new BigDecimal(pageData.getString("option_amount"));
-				optionAmount = optionAmount.add(Big1);
-			}
-			//用户统计
+			  
 			if (null != pageData.get("operation_node") && !"".equals(pageData.get("operation_node"))) {
 				int node = new Integer(pageData.getString("operation_node"));
-				if(node==10) {
-					h=h+1;
+				String count = pageData.getString("count");
+				count = count.substring(0, count.length()-3);
+				if(node==0 ) {
+					h=Integer.parseInt(count);
 				}
 				if(node==1) {
-					l=l+1;
+					l=Integer.parseInt(count);
 				}
 				if(node==2) {
-					m=m+1;
+					m=Integer.parseInt(count); 
+				}
+				if(node==111) {
+					optionAmount=pageData.getString("count"); 
 				}
 			}
 			 
-		}
+		} 
 		mv.setViewName("lottery/channeloptionlog/channeloptionlog_xian_list");
 		mv.addObject("h", h);
 		mv.addObject("l", l);

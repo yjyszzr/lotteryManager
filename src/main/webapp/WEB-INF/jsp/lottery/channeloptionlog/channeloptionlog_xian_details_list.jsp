@@ -29,39 +29,38 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-
 							<!-- 检索  -->
 							<form action="xiandata/list.do" method="post" name="Form" id="Form">
+							<input type="hidden" id="defaultTime" name="defaultTime" value="123" />
 								<table style="margin-top: 5px;">
 									 
 									<tr style="margin: 2px">
 										<td>
 
 											<div class="nav-search">
-												<span class="input-icon"
-													style="width: 50px; text-align: right;"> 门店: </span> 
+												  门店:
 													<select name="channel_id" id="channel_id" data-placeholder="请选择" value="${pd.channel_id }" style="width: 154px; border-radius: 5px !important">
 														<option value="" selected="selected">全部</option>
 														<c:forEach items="${channelMap}" var="map" varStatus="vs">
 															<option value="${map.key}" <c:if test="${pd.channel_id == map.key}">selected</c:if>>${map.value }</option>
 														</c:forEach>
 													</select> 
-												<span class="input-icon" style="width: 50px; text-align: right;"> 节点: </span> 
-													<select name="operation_node" id="operation_node" data-placeholder="请选择" value="${pd.operation_node }" style="width: 154px; border-radius: 5px !important">
+												  节点:
+													<select name="operation_node" id="operation_node" data-placeholder="请选择" value="${pd.operation_node }" style="width: 70px; border-radius: 5px !important">
 													<option value="" selected="selected">全部</option>
 													<option value="10" <c:if test="${pd.operation_node == 10}">selected</c:if>>领取</option>
 													<option value="1" <c:if test="${pd.operation_node == 1}">selected</c:if>>激活</option>
 													<option value="2" <c:if test="${pd.operation_node == 2}">selected</c:if>>购彩</option>
 													</select> 
-												<span class="input-icon" style="width: 50px; text-align: right;"> 日期: </span> <span>
-													<input name="lastStart" id="lastStart" value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width: 74px; border-radius: 5px !important" placeholder="开始时间" title="开始时间" />
-													<input name="lastEnd" id="lastEnd" value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width: 74px; border-radius: 5px !important" placeholder="结束时间" title="结束时间" />
+												<span class="input-icon" style="width: 10px; text-align: right;"> </span>日期:  <span>
+													<input name="lastStart" id="lastStart" value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width: 150px; border-radius: 5px !important" placeholder="开始时间" title="开始时间" />
+													<input name="lastEnd" id="lastEnd" value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width: 150px; border-radius: 5px !important" placeholder="结束时间" title="结束时间" />
 												</span> 
-												<span class="input-icon" style="width: 30px;"> </span> 
-												<span class="input-icon"> <input type="text" placeholder="请输入店铺或店员名称" class="nav-search-input" id="keywords" autocomplete="off" name="keywords" value="${pd.keywords}" />
+												<span class="input-icon" style="width: 10px;"> </span> 
+												<span class="input-icon"> <input type="text" placeholder="输入店铺或店员名称" class="nav-search-input" id="keywords" autocomplete="off" name="keywords" value="${pd.keywords}" />
 												</span>
 												<c:if test="${QX.cha == 1 }">
-													<span class="input-icon" style="width: 30px;"> </span>
+													<span class="input-icon" style="width: 10px;"> </span>
 													<span> 
 														<a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="搜索" style="border-radius: 5px; color: blue !important; width: 50px">搜索</a>
 													</span>
@@ -88,10 +87,10 @@
 									style="margin-top: 5px;">
 									<thead>
 										<tr>
+											<th class="center">所属门店</th>
 											<th class="center">日期</th>
 											<th class="center">用户名</th>
 											<th class="center">手机号</th>
-											<th class="center">所属门店</th>
 											<th class="center">所属店员</th>
 											<th class="center">节点</th>
 											<th class="center">购彩金额</th>
@@ -108,10 +107,14 @@
 													<c:if test="${QX.cha == 1 }">
 														<c:forEach items="${varList}" var="var" varStatus="vs">
 															<tr>
-																<td class='center'>${DateUtil.toSDFTime(var.option_time*1000)}</td>
+																<td class='center'>${var.channel_name}</td>
+																<td class='center'>
+																<c:if test="${!empty var.option_time}">
+																${DateUtil.toSDFTime(var.option_time*1000)}
+																</c:if>
+																</td>
 																<td class='center'>${var.user_name}</td>
 																<td class='center'>${var.mobile}</td>
-																<td class='center'>${var.channel_name}</td>
 																<td class='center'>${var.dis_name}</td>
 																<td class='center'>${var.operation_node}</td>
 																<td class='center'>${var.option_amount}</td>
@@ -203,16 +206,11 @@
 			$("#Form").submit();
 		}
 		
-		 
-		
-		 
-		 
-		 
-		
 		//导出excel
 		function toExcel(){
 			//window.location.href='<%=basePath%>xiandata/excel.do';
 			 $("#Form").attr("action","xiandata/excel.do").submit();
+			 $("#Form").attr("action","xiandata/list.do");
 
 		}
 	</script>
