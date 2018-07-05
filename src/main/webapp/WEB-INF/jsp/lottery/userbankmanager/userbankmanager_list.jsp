@@ -94,9 +94,9 @@
 								<tr>
 									<th class="center">用户ID</th>
 									<th class="center">真实姓名</th>
-									<th class="center">银行卡号</th>
-									<th class="center">银行卡照片</th>
 									<th class="center">银行名称</th>
+									<th class="center">银行卡号</th>
+									<th class="center">银行卡logo</th>
 									<th class="center">添加时间</th>
 									<th class="center">最近修改</th>
 								</tr>
