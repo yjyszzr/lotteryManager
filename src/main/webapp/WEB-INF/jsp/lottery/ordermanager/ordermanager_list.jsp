@@ -154,25 +154,30 @@
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
-											<td class='center'>
-											<c:if test="${var.surplus !='0.00' }">
-												余额：	${var.surplus }
-												</c:if>
-												<c:if test="${var.third_party_paid !='0.00' }">
-													<c:if test="${!empty var.pay_name }">
-														${var.pay_name}：${var.third_party_paid }
-													</c:if>
-													<c:if test="${empty var.pay_name }">
-														第三方：${var.third_party_paid }
-													</c:if>
-												</c:if>
-												<c:if test="${var.bonus !='0.00' }">
-													红包：	${var.bonus }
-												</c:if>
-<%-- 												<c:if test="${!empty var.pay_name}">${var.pay_name}</c:if> --%>
-<%-- 												<c:if test="${ var.surplus > 0}">&nbsp余额</c:if> --%>
-<%-- 												<c:if test="${ var.bonus > 0}">&nbsp红包</c:if> --%>
-											</td>
+											<c:choose>
+												<c:when test="${var.order_status == 0 }"><td class='center'>--</td></c:when>
+												<c:otherwise>
+													<td class='center'>
+														<c:if test="${var.surplus !='0.00' }">
+														余额：	${var.surplus }
+														</c:if>
+														<c:if test="${var.third_party_paid !='0.00' }">
+															<c:if test="${!empty var.pay_name }">
+																${var.pay_name}：${var.third_party_paid }
+															</c:if>
+															<c:if test="${empty var.pay_name }">
+																第三方：${var.third_party_paid }
+															</c:if>
+														</c:if>
+														<c:if test="${var.bonus !='0.00' }">
+															红包：	${var.bonus }
+														</c:if>
+	<%-- 												<c:if test="${!empty var.pay_name}">${var.pay_name}</c:if> --%>
+	<%-- 												<c:if test="${ var.surplus > 0}">&nbsp余额</c:if> --%>
+	<%-- 												<c:if test="${ var.bonus > 0}">&nbsp红包</c:if> --%>
+													</td>
+												</c:otherwise>
+											</c:choose>
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.winning_money}</td>
 <%-- 											<td class='center'>${var.bonus}</td> --%>

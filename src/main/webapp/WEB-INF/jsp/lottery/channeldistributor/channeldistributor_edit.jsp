@@ -10,12 +10,10 @@
 <html lang="en">
 	<head>
 	<base href="<%=basePath%>">
-	<!-- 下拉框 -->
-	<link rel="stylesheet" href="static/ace/css/chosen.css" />
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../../system/index/top.jsp"%>
-	<!-- 日期框 -->
-	<link rel="stylesheet" href="static/ace/css/datepicker.css" />
+	<!-- 下拉框 -->
+<link rel="stylesheet" href="static/ace/css/chosen.css" />
 </head>
 <body class="no-skin">
 <!-- /section:basics/navbar.layout -->
@@ -30,13 +28,13 @@
 					<form action="channeldistributor/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="channel_distributor_id" id="channel_distributor_id" value="${pd.channel_distributor_id}"/>
 						<input type="hidden" name="channel_name" id="channel_name" value=""/>
-						<input type="hidden" name="user_name" id="user_name" value=""/>
+						<input type="hidden" name="mobile" id="mobile" value="${pd.mobile}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">渠道名称:</td>
 								<td>
-										<select name="channel_id" id="channel_id" value="${pd.channel_id }"  style="width:188px;">
+										<select  class="chosen-select form-control"    name="channel_id" id="channel_id" value="${pd.channel_id }"  style="width:98%;">
 												 	<option value ="0"  oldName=""   channelNum = ""  <c:if test="${channel_id == 0}">selected</c:if>>请选择</option>
 												 	<c:forEach var="channel" items="${channelAll }" >
 													     <option value="${channel.channel_id}"  oldName="${channel.channel_name}"   channelNum = "${channel.channel_num}" <c:if test="${pd.channel_id==channel.channel_id}">selected</c:if>>${channel.channel_name} </option>
@@ -46,31 +44,49 @@
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">渠道分销号:</td>
-								<td><input type="text" name="channel_distributor_num" id="channel_distributor_num" value="${pd.channel_distributor_num}" maxlength="60" placeholder="这里输入渠道分销号" title="渠道分销号" style="width:98%;"/></td>
+								<td><input type="text" name="channel_distributor_num" id="channel_distributor_num"  autocomplete="off"  value="${pd.channel_distributor_num}" maxlength="60" placeholder="这里输入渠道分销号" title="渠道分销号" style="width:98%;"/></td>
 							</tr>
+<!-- 							<tr> -->
+<!-- 								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td> -->
+<!-- 								 	<td>    -->
+<%-- 								 		<select  class="chosen-select form-control"   name="user_id"  id = "user_id" value="${pd.user_id }"  data-placeholder="请选择"   style="width:98%;"> --%>
+<%-- 												 	<option value ="0"    oldName=""  mobile="" <c:if test="${user_id == 0}">selected</c:if>>请选择</option> --%>
+<%-- 												 	<c:forEach var="user" items="${userAll }" > --%>
+<%-- 													    <option value="${user.user_id}"  oldName="${user.user_name}"  mobile="${user.mobile }" <c:if test="${pd.userId==user.user_id}">selected</c:if>>${user.user_name}<c:if test="${not empty user.real_name }">（${user.real_name}）</c:if></option> --%>
+<%-- 													</c:forEach> --%>
+<!-- 									    </select> -->
+<!-- 								    </td> -->
+<!-- 							</tr> -->
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">电话:</td>
 								 	<td>   
-								 		<select   name="user_id"  id = "user_id" value="${pd.user_id }"   style="width:188px;">
-												 	<option value ="0"    oldName=""  mobile="" <c:if test="${user_id == 0}">selected</c:if>>请选择</option>
+								 		<select  class="chosen-select form-control"   name="user_id"  id = "user_id" value="${pd.user_id }"   style="width:90%;">
+												 	<option value ="0"    oldName=""  mobile="" <c:if test="${pd.user_id == 0}">selected</c:if>>请选择</option>
 												 	<c:forEach var="user" items="${userAll }" >
-													    <option value="${user.user_id}"  oldName="${user.user_name}"  mobile="${user.mobile }" <c:if test="${pd.userId==user.user_id}">selected</c:if>>${user.user_name}<c:if test="${not empty user.real_name }">（${user.real_name}）</c:if></option>
+													    <option value="${user.user_id}"  oldName="${user.user_name}"   mobile="${user.mobile }"  <c:if test="${pd.user_id == user.user_id}">selected</c:if>>${user.mobile}</option>
 													</c:forEach>
 									    </select>
 								    </td>
 							</tr>
 						
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">电话:</td>
-								<td><input type="text" name="mobile" id="mobile" value="${pd.mobile}" maxlength="20" placeholder="这里输入电话" title="电话" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
+								
+								<td>
+									<input type="text" name="user_name" id="user_name" value="${pd.user_name}" placeholder="这里输入用户名"  style="width:98%;" readonly/>
+								</td>
 							</tr>
+<!-- 							<tr> -->
+<!-- 								<td style="width:75px;text-align: right;padding-top: 13px;">电话:</td> -->
+<%-- 								<td><input type="text" name="mobile" id="mobile" value="${pd.mobile}" maxlength="20" placeholder="这里输入电话" title="电话" style="width:98%;"/></td> --%>
+<!-- 							</tr> -->
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">分销佣金比例:</td>
-								<td><input  type="number" name="distributor_commission_rate" id="distributor_commission_rate" value="${pd.distributor_commission_rate}" maxlength="255" placeholder="这里输入分销佣金比例" title="分销佣金比例" style="width:90%;"/>%</td>
+								<td><input  type="number" name="distributor_commission_rate" autocomplete="off"  id="distributor_commission_rate" value="${pd.distributor_commission_rate}" maxlength="255" placeholder="这里输入分销佣金比例'%'"  style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">备注:</td>
-								<td><input type="text" name="remark" id="remark" value="${pd.remark}" maxlength="255" placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
+								<td><input type="text" name="remark" id="remark" value="${pd.remark}" maxlength="255" autocomplete="off"  placeholder="这里输入备注" title="备注" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -99,8 +115,6 @@
 	<%@ include file="../../system/index/foot.jsp"%>
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
-	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		<script type="text/javascript">
@@ -188,10 +202,35 @@
 			$("#zhongxin2").show();
 		}
 		
-		$(function() {
-			//日期框
-			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+	$(function() {
+			
+			//下拉框
+			if(!ace.vars['touch']) {
+				$('.chosen-select').chosen({allow_single_deselect:true}); 
+				$(window)
+				.off('resize.chosen')
+				.on('resize.chosen', function() {
+					$('.chosen-select').each(function() {
+						 var $this = $(this);
+						 $this.next().css({'width': $this.parent().width()});
+					});
+				}).trigger('resize.chosen');
+				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+					if(event_name != 'sidebar_collapsed') return;
+					$('.chosen-select').each(function() {
+						 var $this = $(this);
+						 $this.next().css({'width': $this.parent().width()});
+					});
+				});
+				$('#chosen-multiple-style .btn').on('click', function(e){
+					var target = $(this).find('input[type=radio]');
+					var which = parseInt(target.val());
+					if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
+					 else $('#form-field-select-4').removeClass('tag-input-style');
+				});
+			}
 		});
+		
 		</script>
 </body>
 </html>
