@@ -120,7 +120,8 @@
 						<div class="main_input_box">
 							<span class="add-on bg_lg">
 							<i><img height="37" src="static/login/user.png" /></i>
-							</span><input type="text" name="loginname" id="loginname" value="" placeholder="请输入手机号" autocomplete="off"  onkeyup="value=value.replace(/[^\d]/g,'')" />
+							</span>
+							<input type="text" name="loginname" id="loginname"  autocomplete="off"  placeholder="请输入手机号" autocomplete="off"  onkeyup="value=value.replace(/[^\d]/g,'')" />
 						</div>
 					</div>
 				</div>
@@ -129,25 +130,50 @@
 						<div class="main_input_box">
 							<span class="add-on bg_ly">
 							<i><img height="37" src="static/login/suo.png" /></i>
-							</span><input type="password" name="password" id="password" placeholder="请输入密码"  value="" autocomplete="off" />
+							</span>
+							<input type="password" name="password" id="password"  autocomplete="off"  placeholder="请输入密码" />
 						</div>
 					</div>
 				</div>
 				<div class="control-group">
-					<div  style="float:left;padding-left:10%;">
-						<div class="main_input_box " style="float: left;">
-							<span class="add-on bg_lr"><i><img height="37" src="static/login/shouji.png"  /></i></span>
+					<div class="controls">
+						<div class="main_input_box">
+							<span class="add-on bg_lr">
+								<i><img height="37" src="static/login/suo.png" /></i>
+							</span>
+								<input  type="text" name="code" id="code" placeholder="请输入手机验证码"  value=""  autocomplete="off"  style="height:30px; border:0px; display:inline-block; width:53%; line-height:28px;  margin-bottom:3px  !important;" autocomplete="off" style = "height:37px;float:left"/>
+								 <input type="button" onclick="sendMsgCode();" id="sendMsgBtn" value="获取验证码" style="background:#FFD700;padding: 0px; width: 22%;height: 38px !important;}" />  
 						</div>
-						<div style="float: left;" >
-							<input  type="text" name="code" id="code" placeholder="请输入手机验证码"  value=""  autocomplete="off" />
-						</div>
-						<div style="float: left; "  >
-						<span style="height:32px;  cursor:pointer;  " >
-						 <input type="button" onclick="sendMsgCode();" id="sendMsgBtn" value="获取验证码" style="float: left; background:#FFD700;padding: 0px; width: 90px;height: 40px !important;}" />  
-						</span>
-						</div>
+					</div>
 				</div>
+				<div class="control-group">
+					<div class="controls">
+						<div class="main_input_box">
+<!-- 							<span class="add-on bg_lr">  </span> -->
+							<div style="width:50px;display:inline-block;"></div>
+							<div style="width:54%;display:inline-block;"></div>
+<!-- 								<input  type="text" name="code" id="code" placeholder="请输入手机验证码"  value=""  autocomplete="off"  style="height:30px; border:0px; display:inline-block; width:53%; line-height:28px;  margin-bottom:3px  !important;" autocomplete="off" style = "height:37px;float:left"/> -->
+								 <input type="button" onclick="severCheck();" class="flip-link btn btn-info" id="to-recover" value = "登录" style="display:inline-block; background:#49afcd; width: 22%;height: 38px !important;}" />  
+						</div>
+					</div>
 				</div>
+<!-- 				<div class="control-group hidden"> -->
+<!--  					<div  style="float:left;padding-left:10%;">  -->
+<!-- 						<div class="controls"> -->
+<!-- 						<div class="main_input_box "  > -->
+<!-- 							<span class="add-on bg_lr"> -->
+<!-- 							<i><img height="37" src="static/login/shouji.png"  /></i></span> -->
+<!-- 					</div>   -->
+<!--  						<div style="float: left;" >   -->
+<!-- 							<input  type="text" name="code" id="code" placeholder="请输入手机验证码"  value=""  autocomplete="off" /> -->
+<!-- 						</div> -->
+<!-- 						<div style="float: left; "  > -->
+<!-- 						<span style="height:32px;  cursor:pointer;  " > -->
+<!-- 						 <input type="button" onclick="sendMsgCode();" id="sendMsgBtn" value="获取验证码" style="float: left; background:#FFD700;padding: 0px; width: 90px;height: 40px !important;}" />   -->
+<!-- 						</span> -->
+<!-- 						</div> -->
+<!-- 				</div> -->
+<!-- 				</div> -->
 				<!-- <div style="float:left;padding-left:10%;">
 					<div style="float: left;">
 						<input name="form-field-checkbox" id="saveid" type="checkbox"
@@ -157,8 +183,8 @@
 						<font color="white">记住密码</font>
 					</div> 
 				</div> -->
-				<div class="form-actions">
-					<div style="width:86%;padding-left:8%;">
+				<div class="form-actions hidden">
+					<div style="width:85%;padding-left:10%;" " >
 
 						<!-- <div style="float: left;padding-top:2px;">
 							<i><img src="static/login/yan.png" /></i>
@@ -173,7 +199,7 @@
 					<%-- 	<c:if test="${pd.isZhuce == 'yes' }">
 						<span class="pull-right"><a href="javascript:changepage(1);" class="btn btn-success">注册</a></span>
 						</c:if> --%>
-						<span class="pull-right"><a onclick="severCheck();" class="flip-link btn btn-info" id="to-recover">登录</a></span>
+<!-- 							<span class="pull-right"><a onclick="severCheck();" class="flip-link btn btn-info" id="to-recover">登录</a></span> -->
 					</div>
 				</div>
 			</form>
@@ -240,7 +266,7 @@
 					</div>
 				</div>
 				<div class="form-actions">
-					<div style="width:86%;padding-left:8%;">
+					<div style="width:86%;padding:13px;">
 
 						<!-- <div style="float: left;padding-top:2px;">
 							<i><img src="static/login/yan.png" /></i>
@@ -333,7 +359,18 @@
 	    settime(obj) }
 	    ,1000) 
 	}
-	
+	 /**
+	     *     使用方法
+	     * $(selector).tips({   //selector 为jquery选择器
+	     *  msg:'your messages!',    //你的提示消息  必填
+	     *  side:1,  //提示窗显示位置  1，2，3，4 分别代表 上右下左 默认为1（上） 可选
+	     *  color:'#FFF', //提示文字色 默认为白色 可选
+	     *  bg:'#F00',//提示窗背景色 默认为红色 可选
+	     *  time:2,//自动关闭时间 默认2秒 设置0则不自动关闭 可选
+	     *  x:0,//横向偏移  正数向右偏移 负数向左偏移 默认为0 可选
+	     *  y:0,//纵向偏移  正数向下偏移 负数向上偏移 默认为0 可选
+	     * })
+	     */
 		//服务器校验
 		function severCheck(){
 			if(check()){
@@ -356,30 +393,29 @@
 								side : 1,
 								msg : "用户名或密码有误",
 								bg : '#FF5080',
-								time : 15
+								time : 1
 							});
 							showfh();
 							$("#loginname").focus();
-						}
-						 else if("codeerror" == data.result){
+						}else if("codeerror" == data.result){
 							 $("#code").tips({
 								side : 1,
 								msg : "验证码输入有误",
 								bg : '#FF5080',
-								time : 15
+								time : 1
 							});
 							showfh();
 							$("#code").focus(); 
 						}
 						else{
-							$("#loginname").tips({
+							$("#code").tips({
 								side : 1,
-								msg : "缺少参数",
+								msg : "参数有误",
 								bg : '#FF5080',
-								time : 15
+								time : 1
 							});
 							showfh();
-							$("#loginname").focus();
+							$("#code").focus();
 						}
 					}
 				});
@@ -437,12 +473,23 @@
 				$("#password").focus();
 				return false;
 			}
+			if ($("#code").val() == "") {
+				$("#code").tips({
+					side : 2,
+					msg : '验证码不得为空',
+					bg : '#AE81FF',
+					time : 3
+				});
+				showfh();
+				$("#code").focus();
+				return false;
+			}
 
 			$("#loginbox").tips({
 				side : 1,
 				msg : '正在登录 , 请稍后 ...',
 				bg : '#68B500',
-				time : 10
+				time : 3
 			});
 
 			return true;
