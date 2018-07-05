@@ -32,8 +32,8 @@
 						<form action="channeloptionlog/list.do" method="post" name="Form" id="Form">
 							<input type="hidden" id="distributor_id" name="distributor_id" value="${distributor_id }" />
 							<input type="hidden" id="option_time" name="option_time" value="${option_time }" />
-						<table style="margin-top:5px;">
-							<tr>
+						<table style="margin-top:5px; display:none">
+							<tr >
 								<td>
 									<div class="nav-search">
 										<span class="input-icon">

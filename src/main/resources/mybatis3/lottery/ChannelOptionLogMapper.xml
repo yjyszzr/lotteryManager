@@ -302,6 +302,13 @@
 		<include refid="tableName"></include>
 		where status = 1
 	</select>
+	<!-- 真实姓名用户列表(全部) -->
+	<select id="findUserReal"   resultType="pd">
+		select
+			* 
+		from
+			dl_user_real
+	</select>
 
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">

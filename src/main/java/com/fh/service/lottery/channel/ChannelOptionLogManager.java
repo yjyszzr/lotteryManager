@@ -71,7 +71,7 @@ public interface ChannelOptionLogManager {
 	public List<PageData> goConsumerListByTime(PageData pd) throws Exception;
 
 	public int insertList(List<PageData> channelOperationList) throws Exception;
-	
+
 	/**
 	 * 列表(西安)
 	 * 
@@ -79,6 +79,9 @@ public interface ChannelOptionLogManager {
 	 * @throws Exception
 	 */
 	public List<PageData> getOptionLogList(Page page) throws Exception;
+
 	public List<PageData> getXACountYesterday(Page page) throws Exception;
+
+	public List<PageData> findUserReal() throws Exception;
 
 }

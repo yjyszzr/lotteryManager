@@ -211,85 +211,85 @@
 		</div>
 		</div>
 		<!-- 注册 -->
-		<div id="windows2" style="display: none;">
-		<div id="loginbox">
-			<form action="" method="post" name="loginForm" id="loginForm">
-				<div class="control-group normal_text">
-					<h3>
-						<!-- <img src="static/login/logo.png" alt="Logo" /> -->
-						彩小秘管理平台
-					</h3>
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<div class="main_input_box">
-							<span class="add-on bg_lg">
-							<i>用户</i>
-							</span><input type="text" name="USERNAME" id="USERNAME" value="" placeholder="请输入用户名" />
-						</div>
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<div class="main_input_box">
-							<span class="add-on bg_ly">
-							<i>密码</i>
-							</span><input type="password" name="PASSWORD" id="PASSWORD" placeholder="请输入密码"   value=""/>
-						</div>
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<div class="main_input_box">
-							<span class="add-on bg_ly">
-							<i>重输</i>
-							</span><input type="password" name="chkpwd" id="chkpwd" placeholder="请重新输入密码"   value=""/>
-						</div>
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<div class="main_input_box">
-							<span class="add-on bg_lg">
-							<i>姓名</i>
-							</span><input type="text" name="NAME" id="name" value="" placeholder="请输入姓名" />
-						</div>
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<div class="main_input_box">
-							<span class="add-on bg_lg">
-							<i>邮箱</i>
-							</span><input type="text" name="EMAIL" id="EMAIL" value="" placeholder="请输入邮箱" />
-						</div>
-					</div>
-				</div>
-				<div class="form-actions">
-					<div style="width:86%;padding:13px;">
+<!-- 		<div id="windows2" style="display: none;"> -->
+<!-- 		<div id="loginbox"> -->
+<!-- 			<form action="" method="post" name="loginForm" id="loginForm"> -->
+<!-- 				<div class="control-group normal_text"> -->
+<!-- 					<h3> -->
+<!-- 						<img src="static/login/logo.png" alt="Logo" /> -->
+<!-- 						彩小秘管理平台 -->
+<!-- 					</h3> -->
+<!-- 				</div> -->
+<!-- 				<div class="control-group"> -->
+<!-- 					<div class="controls"> -->
+<!-- 						<div class="main_input_box"> -->
+<!-- 							<span class="add-on bg_lg"> -->
+<!-- 							<i>用户</i> -->
+<!-- 							</span><input type="text" name="USERNAME" id="USERNAME" value="" placeholder="请输入用户名" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="control-group"> -->
+<!-- 					<div class="controls"> -->
+<!-- 						<div class="main_input_box"> -->
+<!-- 							<span class="add-on bg_ly"> -->
+<!-- 							<i>密码</i> -->
+<!-- 							</span><input type="password" name="PASSWORD" id="PASSWORD" placeholder="请输入密码"   value=""/> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="control-group"> -->
+<!-- 					<div class="controls"> -->
+<!-- 						<div class="main_input_box"> -->
+<!-- 							<span class="add-on bg_ly"> -->
+<!-- 							<i>重输</i> -->
+<!-- 							</span><input type="password" name="chkpwd" id="chkpwd" placeholder="请重新输入密码"   value=""/> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="control-group"> -->
+<!-- 					<div class="controls"> -->
+<!-- 						<div class="main_input_box"> -->
+<!-- 							<span class="add-on bg_lg"> -->
+<!-- 							<i>姓名</i> -->
+<!-- 							</span><input type="text" name="NAME" id="name" value="" placeholder="请输入姓名" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="control-group"> -->
+<!-- 					<div class="controls"> -->
+<!-- 						<div class="main_input_box"> -->
+<!-- 							<span class="add-on bg_lg"> -->
+<!-- 							<i>邮箱</i> -->
+<!-- 							</span><input type="text" name="EMAIL" id="EMAIL" value="" placeholder="请输入邮箱" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="form-actions"> -->
+<!-- 					<div style="width:86%;padding:13px;"> -->
 
-						<!-- <div style="float: left;padding-top:2px;">
-							<i><img src="static/login/yan.png" /></i>
-						</div>
-						<div style="float: left;" class="codediv">
-							<input type="text" name="rcode" id="rcode" class="login_code"
-								style="height:16px; padding-top:4px;" />
-						</div>
-						<div style="float: left;">
-							<i><img style="height:22px;" id="zcodeImg" alt="点击更换" title="点击更换" src="" /></i>
-						</div> -->
-						<span class="pull-right" style="padding-right:3%;"><a href="javascript:changepage(2);" class="btn btn-success">取消</a></span>
-						<span class="pull-right"><a onclick="register();" class="flip-link btn btn-info" id="to-recover">提交</a></span>
-					</div>
-				</div>
-			</form>
-			<div class="controls">
-				<div class="main_input_box">
-					<font color="white"><span id="nameerr">Copyright © 数字传奇 2018</span></font>
-				</div>
-			</div>
-		</div>
-		</div>
+<!-- 						<div style="float: left;padding-top:2px;">
+<!-- 							<i><img src="static/login/yan.png" /></i> -->
+<!-- 						</div> -->
+<!-- 						<div style="float: left;" class="codediv"> -->
+<!-- 							<input type="text" name="rcode" id="rcode" class="login_code" -->
+<!-- 								style="height:16px; padding-top:4px;" /> -->
+<!-- 						</div> -->
+<!-- 						<div style="float: left;"> -->
+<!-- 							<i><img style="height:22px;" id="zcodeImg" alt="点击更换" title="点击更换" src="" /></i> -->
+<!-- 						</div> --> 
+<!-- 						<span class="pull-right" style="padding-right:3%;"><a href="javascript:changepage(2);" class="btn btn-success">取消</a></span> -->
+<!-- 						<span class="pull-right"><a onclick="register();" class="flip-link btn btn-info" id="to-recover">提交</a></span> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</form> -->
+<!-- 			<div class="controls"> -->
+<!-- 				<div class="main_input_box"> -->
+<!-- 					<font color="white"><span id="nameerr">Copyright © 数字传奇 2018</span></font> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 		</div> -->
 		
 	</div>
 	<div id="templatemo_banner_slide" class="container_wapper">

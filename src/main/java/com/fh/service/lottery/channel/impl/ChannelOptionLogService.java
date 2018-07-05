@@ -28,6 +28,7 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd) throws Exception {
 		dao.save("ChannelOptionLogMapper.save", pd);
 	}
@@ -38,6 +39,7 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd) throws Exception {
 		dao.delete("ChannelOptionLogMapper.delete", pd);
 	}
@@ -48,6 +50,7 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd) throws Exception {
 		dao.update("ChannelOptionLogMapper.edit", pd);
 	}
@@ -58,21 +61,25 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	 * @param page
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.datalistPage", page);
 	}
-	
+
 	/**
 	 * 列表(西安)
 	 * 
 	 * @param page
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getOptionLogList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.datalistPageXA", page);
 	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getXACountYesterday(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.getXACountYesterday", page);
@@ -84,6 +91,7 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.listAll", pd);
@@ -95,6 +103,7 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("ChannelOptionLogMapper.findById", pd);
 	}
@@ -105,10 +114,12 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("ChannelOptionLogMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> goConsumerListByTime(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.goConsumerListByTime", pd);
@@ -119,6 +130,10 @@ public class ChannelOptionLogService implements ChannelOptionLogManager {
 		return (int) dao.save("ChannelOptionLogMapper.insertList", channelOperationList);
 	}
 
-	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> findUserReal() throws Exception {
+		return (List<PageData>) dao.findForList("ChannelOptionLogMapper.findUserReal", null);
+	}
 
 }

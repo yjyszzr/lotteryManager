@@ -124,6 +124,16 @@ public class ChannelOptionLogController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = channeloptionlogService.list(page); // 列出ChannelOptionLog列表
+		List<PageData> userRealList = channeloptionlogService.findUserReal();
+		Map<Integer, PageData> userRealMap = new HashMap<Integer, PageData>(userRealList.size());
+		userRealList.forEach(item -> userRealMap.put(Integer.parseInt(item.getString("user_id")), item));
+		for (int i = 0; i < varList.size(); i++) {
+			PageData pageData = userRealMap.get(Integer.parseInt(varList.get(i).getString("user_id")));
+			if (pageData != null) {
+				varList.get(i).put("id_card_num", pageData.getString("id_code"));
+				varList.get(i).put("true_name", pageData.getString("real_name"));
+			}
+		}
 		mv.setViewName("lottery/channeloptionlog/channeloptionlog_details_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
