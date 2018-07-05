@@ -148,10 +148,10 @@
 			and a.status = #{pd.status }
 		</if>
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-			and a.pay_time &gt; #{pd.lastStart1 }
+			and a.pay_time &gt;= #{pd.lastStart1 }
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-			and a.pay_time &lt; #{pd.lastEnd1 }
+			and a.pay_time &lt;= #{pd.lastEnd1 }
 		</if>
 		order by  pay_time DESC
 	</select>

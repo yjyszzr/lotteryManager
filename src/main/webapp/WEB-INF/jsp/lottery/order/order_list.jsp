@@ -74,8 +74,8 @@
 													奖金范围:
 												</span>
 										 	<span  >
-												<input name="amountStart" id="amountStart"  value="${pd.amountStart }" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
-												<input name="amountEnd" id="amountEnd"  value="${pd.amountEnd}" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
+												<input name="amountStart" id="amountStart"  autocomplete="off"   value="${pd.amountStart }" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
+												<input name="amountEnd" id="amountEnd" autocomplete="off"   value="${pd.amountEnd}" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
 											</span>
 									</td>								
 									<c:if test="${QX.cha == 1 }">

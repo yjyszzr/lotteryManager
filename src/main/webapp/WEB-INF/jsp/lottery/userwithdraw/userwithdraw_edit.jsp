@@ -106,7 +106,7 @@
 		                           		  	<td style="text-align: left;" colspan="3">
 			                           		  	<c:choose>
 			                                		<c:when test="${pd.status == 0}">
-			                                			<input type="text" name="remarks" id="remarks" value="${pd.remarks}" autocomplete="off"   placeholder="备注" style="width:98%;border-radius:5px !important"  />
+			                                			<input type="text" name="remarks" id="remarks" maxlength="198" value="${pd.remarks}" autocomplete="off"   placeholder="备注" style="width:98%;border-radius:5px !important"  />
 			                                		</c:when>
 			                                		<c:otherwise>${pd.remarks }</c:otherwise>
 			                                	</c:choose>	

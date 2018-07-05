@@ -224,16 +224,16 @@
 				LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
 		</if>
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-			and o.pay_time &gt; #{pd.lastStart }
+			and o.pay_time &gt;= #{pd.lastStart }
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-			and o.pay_time &lt; #{pd.lastEnd1 }
+			and o.pay_time &lt;= #{pd.lastEnd1 }
 		</if>
 		<if test="pd.amountStart != null and pd.amountStart != ''"> 
-			and o.winning_money &gt; #{pd.amountStart }
+			and o.winning_money &gt;= #{pd.amountStart }
 		</if>
 		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
-			and o.winning_money &lt; #{pd.amountEnd }
+			and o.winning_money &lt;= #{pd.amountEnd }
 		</if>
 			order by pay_time desc
 	</select>

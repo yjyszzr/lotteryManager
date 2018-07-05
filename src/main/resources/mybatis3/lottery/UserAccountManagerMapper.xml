@@ -230,16 +230,16 @@
 						AND o.order_sn LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
 				</if>
 				<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-						AND a.pay_time &gt; #{pd.lastStart1} 
+						AND a.pay_time &gt;= #{pd.lastStart1} 
 				</if>
 				<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-						AND a.pay_time &lt; #{pd.lastEnd1} 
+						AND a.pay_time &lt;= #{pd.lastEnd1} 
 				</if>
 				<if test="pd.amountStart != null and pd.amountStart != ''"> 
-						AND o.amount   &gt;  #{pd.amountStart} 
+						AND o.amount   &gt;=  #{pd.amountStart} 
 				</if>
 				<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
-						AND o.amount   &lt;   #{pd.amountEnd} 
+						AND o.amount   &lt;=   #{pd.amountEnd} 
 				</if>
 				Order By a.pay_time DESC
 	</select>
@@ -258,10 +258,10 @@
 					and ua.process_type = #{pd.process_type}
 				</if>
 				<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-						AND ua.add_time &gt; #{pd.lastStart1} 
+						AND ua.add_time &gt;= #{pd.lastStart1} 
 				</if>
 				<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-						AND ua.add_time &lt; #{pd.lastEnd1} 
+						AND ua.add_time &lt;= #{pd.lastEnd1} 
 				</if>
 				<if test="pd.device_channel != null and pd.device_channel != ''"> 
 						AND us.device_channel =#{pd.device_channel} 
