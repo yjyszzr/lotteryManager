@@ -168,7 +168,42 @@
 		where 
 			user_id = #{user_id}
 	</select>
-	
+		<!-- 设备渠道注册人数汇总列表 -->
+	<select id="remainUserCount" parameterType="page" resultType="pd">
+		SELECT COUNT(DISTINCT u.user_id) as count
+ 		from dl_user u left join dl_user_login_log l on u.user_id = l.user_id 
+		where 1=1
+			<if test="pd.dayStart != null and pd.dayStart != ''"> 
+				AND DATE_FORMAT(ADDDATE(FROM_UNIXTIME(u.reg_time),#{pd.dayStart}),"%Y-%m-%d") &lt;= DATE_FORMAT(FROM_UNIXTIME(l.login_time),"%Y-%m-%d")
+			</if>
+			<if test="pd.dayEnd != null and pd.dayEnd != ''"> 
+				AND DATE_FORMAT(ADDDATE(FROM_UNIXTIME(u.reg_time),#{pd.dayEnd}),"%Y-%m-%d") &gt;= DATE_FORMAT(FROM_UNIXTIME(l.login_time),"%Y-%m-%d")
+			</if> 
+			<if test="pd.regTime != null and pd.regTime != ''"> 
+				AND DATE_FORMAT(FROM_UNIXTIME(u.reg_time),"%Y-%m-%d")=#{pd.regTime}
+			</if>
+ 
+	</select>
+	<!-- 设备渠道注册人数汇总列表 -->
+	<select id="marketlistPage" parameterType="page" resultType="pd">
+		SELECT  count(DISTINCT u.user_id) as count_user,
+				p.channel_name as phone_channel,
+				u.device_channel,
+				DATE_FORMAT( FROM_UNIXTIME( u.reg_time ), '%Y-%m-%d' ) as date ,
+				count( DISTINCT o.user_id) as count_Order,
+				COALESCE(sum(o.ticket_amount),0) as amountSum
+		from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
+						left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 ) ) o on o.user_id=u.user_id 
+						and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), '%Y-%m-%d' ) =DATE_FORMAT( FROM_UNIXTIME( u.reg_time ), '%Y-%m-%d' )
+		where 1=1 
+			<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+					AND u.reg_time &gt; #{pd.lastStart1} 
+			</if>
+			<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+					AND u.reg_time &lt; #{pd.lastEnd1} 
+			</if>
+		group by date,p.channel_name
+	</select>
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
@@ -220,13 +255,81 @@
 		</if>
 		order by u.reg_time DESC
 	</select>
-	
+	<!-- 列表 -->
+	<select id="datalistPageTwo" parameterType="page" resultType="pd">
+		select
+		dl_user.user_id,
+		dl_user.user_money,
+		dl_user.user_money_limit,
+		user_name,
+		mobile,
+		nickname,
+		reg_time,
+		last_time,
+		real_name,
+		id_code,
+		dl_user.user_status,
+		reg_from,
+		ph.channel_name as mobile_supplier,
+		pc.channel_name as device_channel,
+		sex*1 as sex
+		from 
+		<include refid="tableName"></include>
+		left join dl_user_real on dl_user_real.user_id = dl_user.user_id 
+		left join dl_phone_channel ph on dl_user.mobile_supplier = ph.id
+		left join dl_phone_channel pc on pc.channel = dl_user.device_channel
+		where 1=1 
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				dl_user.user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or 
+				nickname LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		 
+				)
+			 
+		</if>
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+					AND reg_time &gt; #{pd.lastStart1} 
+			</if>
+			<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+					AND reg_time &lt; #{pd.lastEnd1} 
+			</if>
+		<if test="pd.name_chosen != null and (pd.name_chosen == 1 or pd.name_chosen == 2)">
+			and
+			(
+				user_status = #{pd.name_chosen}
+			)
+		</if>
+		<if test="pd.name_chosen != null and pd.name_chosen == 3">
+			and
+			(
+				is_real = 1
+			)
+		</if>
+		<if test="pd.name_chosen != null and pd.name_chosen == 4">
+			and
+			(
+				is_real = 0
+			)
+		</if>
+		order by dl_user.reg_time DESC
+	</select>
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+		where 1=1 
+		<if test="lastStart1 != null and lastStart1 != ''"> 
+					AND reg_time &gt; #{lastStart1} 
+			</if>
+			<if test="lastEnd1 != null and lastEnd1 != ''"> 
+					AND reg_time &lt; #{lastEnd1} 
+			</if>
 	</select>
 	
 	<!-- 批量删除 -->
@@ -266,5 +369,65 @@
 		FROM
 			dl_user a
 			LEFT JOIN dl_user_real b ON a.user_id = b.user_id
+	</select>
+		
+	<!-- 认证并购彩 -->
+	<select id="getRealAndOrder" parameterType="pd" resultType="pd">
+		 SELECT COALESCE(count(distinct od.user_id),0) as count,
+				COALESCE(sum(od.ticket_amount),0) as amount
+		 FROM   dl_user_real ur left join  dl_order od on 
+				ur.user_id = od.user_id 
+				and DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
+		 where   od.order_status in ('3','4','5','6','7')
+				and  ur.add_time &gt; #{pd.lastStart1} and  ur.add_time &lt; #{pd.lastEnd1} 
+	</select>
+	
+	<!-- 注册并认证用户统计（购彩） -->
+	<select id="getRealAndRegister" parameterType="pd" resultType="pd">
+		
+		SELECT  COALESCE(count(distinct us.user_id),0) as count,
+				COALESCE(sum(od.ticket_amount),0) as amount
+		FROM dl_user us left join  dl_user_real ur on us.user_id = ur.user_id left join  dl_order od on 
+			us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
+		where DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d')
+				and  od.order_status in ('3','4','5','6','7')
+				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
+	</select>
+	
+	<!-- 注册并充值  -->
+	<select id="getRegisterAndRecharge" parameterType="pd" resultType="pd">
+		
+		 SELECT COALESCE(count(distinct us.user_id),0) as count,
+				COALESCE(sum(ur.amount),0) as amount
+ 		 from dl_user us left join dl_user_recharge ur on us.user_id=ur.user_id 
+ 		 where  DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d')
+ 		 and ur.status=1
+				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
+	</select>
+	
+	<!-- 注册并购彩  -->
+	<select id="getRegisterAndOrder" parameterType="pd" resultType="pd">
+		
+		 SELECT COALESCE(count(distinct od.user_id),0) as count,
+				COALESCE(sum(od.ticket_amount),0) as amount
+		 FROM dl_user us  left join  dl_order od on 
+				us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
+		 where  od.order_status in ('3','4','5','6','7')
+				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
+	</select>
+	
+	<!-- 注册并购彩(复购) -->
+	<select id="getRegisterAndAgainOrder" parameterType="pd" resultType="pd">
+		SELECT count(user_id) AS count,COALESCE(sum(amount),0)  AS amount
+		from  (
+			SELECT count( DISTINCT od.order_sn ) AS count,
+	     			sum( od.ticket_amount ) AS amount ,
+	     			od.user_id
+			FROM dl_user us LEFT JOIN dl_order od ON us.user_id = od.user_id 
+				AND DATE_FORMAT( FROM_UNIXTIME( us.reg_time ), '%Y-%m-%d' ) = DATE_FORMAT( FROM_UNIXTIME( od.add_time ), '%Y-%m-%d' ) 
+			WHERE  od.order_status in ('3','4','5','6','7')
+				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
+			GROUP BY user_id HAVING count(od.order_sn)>1
+			)a
 	</select>
 </mapper>

@@ -62,6 +62,10 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.datalistPage", page);
 	}
+	@SuppressWarnings("unchecked")
+	public List<PageData> listDetailTwo(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.datalistPage", page);
+	}
 
 	/**
 	 * 列表(全部)
@@ -109,4 +113,54 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public List<PageData> findAll() throws Exception {
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.findAll", null);
 	}
+
+	@SuppressWarnings("unchecked")
+	public List<PageData> getMarketList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.marketlistPage", page);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PageData> getRemainUserCount(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.remainUserCount", page);
+	}
+	/**注册并认证统计（购彩）
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getRealAndRegister(Page page) throws Exception {
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRealAndRegister", page);
+	}
+	/**注册并充值
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getRegisterAndRecharge(Page page) throws Exception {
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRegisterAndRecharge", page);
+	}
+	/**注册并购彩
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getRegisterAndOrder(Page page) throws Exception {
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRegisterAndOrder", page);
+	}
+	
+	/**注册并购彩(复购)
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getRegisterAndAgainOrder(Page page) throws Exception {
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRegisterAndAgainOrder", page);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> getRealAndOrder(Page page) throws Exception {
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRealAndOrder", page);
+	}
+	
 }

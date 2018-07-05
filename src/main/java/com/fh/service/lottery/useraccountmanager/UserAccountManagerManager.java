@@ -111,4 +111,22 @@ public interface UserAccountManagerManager {
 	public double totalAwardForAll() throws Exception;
 
 	public Double totalWithdraw(Integer userId) throws Exception;
+
+	/****
+	 * 累计提现
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	public Double getTotalWithDrawalByUserId(@Param("userId") Integer userId) throws Exception;
+	/****
+	 * 根据操作类型返回列表
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> findByProcessType(Page page) throws Exception;
+
 }

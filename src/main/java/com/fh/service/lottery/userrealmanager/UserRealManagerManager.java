@@ -42,6 +42,7 @@ public interface UserRealManagerManager{
 	 */
 	public List<PageData> listAll(PageData pd)throws Exception;
 	
+	
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception

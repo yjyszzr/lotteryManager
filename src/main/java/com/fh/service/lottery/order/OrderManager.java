@@ -71,9 +71,17 @@ public interface OrderManager {
 	public PageData findByOrderSn(String orderSn) throws Exception;
 
 	public List<PageData> selectByTime(String format) throws Exception;
+	
+	public List<PageData> selectSuccessByTime(Page page) throws Exception;
 
 	public List<PageData> getOrderList(Page page) throws Exception;
 
 	public List<PageData> toDetail(PageData pd) throws Exception;
+	
+	public List<PageData> getFirstOrderList(Page page) throws Exception;
+	
+	public List<PageData> getAgainOrderList(Page page) throws Exception;
+	
+	public List<PageData> getOrderAndDetail(Page page) throws Exception;
 
 }

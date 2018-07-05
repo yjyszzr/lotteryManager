@@ -194,7 +194,10 @@
 			user_id = #{userId} 
 			AND STATUS = 1
 	</select>
- 
+ 	<!-- 累计体现汇总 -->
+	<select id="getTotalWithDrawal" parameterType="java.lang.Integer" resultType="java.lang.Double">
+		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 4;
+	</select>
 	
 	<select id="findByUserId" parameterType="java.lang.Integer"  resultType="pd">
 		SELECT * FROM dl_user_account WHERE user_id = #{userId} order by last_time DESC;
@@ -242,5 +245,27 @@
 	</select>
 	<select id="findAwardNumByQuestionsId"  parameterType="java.lang.Integer" resultType="java.lang.Integer">
 	select * from dl_questions_and_answers_user where  question_id = #{questionId} and  get_award = 1
+	</select>
+	<select id="findByProcessType"  parameterType="page" resultType="pd">
+		 SELECT
+		 	COALESCE(count(DISTINCT ua.user_id),0) as userCount,
+		 	COALESCE(sum(ua.amount),0) as amountSum,
+		 	ua.process_type
+		FROM
+			dl_user_account ua left join dl_user us on ua.user_id=us.user_id
+		WHERE 1 = 1 and ua.status=1 
+				<if test="pd.process_type!= null and pd.process_type != ''"> 
+					and ua.process_type = #{pd.process_type}
+				</if>
+				<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+						AND ua.add_time &gt; #{pd.lastStart1} 
+				</if>
+				<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+						AND ua.add_time &lt; #{pd.lastEnd1} 
+				</if>
+				<if test="pd.device_channel != null and pd.device_channel != ''"> 
+						AND us.device_channel =#{pd.device_channel} 
+				</if>
+		GROUP BY ua.process_type;
 	</select>
 </mapper>

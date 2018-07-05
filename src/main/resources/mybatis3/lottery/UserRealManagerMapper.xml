@@ -115,12 +115,17 @@
 	</select>
 	
 	<!-- 列表(全部) -->
-	<select id="listAll" parameterType="pd" resultType="pd">
+	<select id="listAll" parameterType="page" resultType="pd">
 		select
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+		<if test="lastStart1 != null and lastStart1 != '' and lastEnd1 != null and lastEnd1 != ''">
+			where  add_time between #{lastStart1} and #{lastEnd1}
+		</if>
 	</select>
+	
+
 	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">

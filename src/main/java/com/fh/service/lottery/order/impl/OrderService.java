@@ -103,6 +103,10 @@ public class OrderService implements OrderManager {
 	public List<PageData> selectByTime(String format) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.selectByTime", format);
 	}
+	@SuppressWarnings("unchecked")
+	public List<PageData> selectSuccessByTime(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.selectSuccessByTime", page);
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<PageData> getOrderList(Page page) throws Exception {
@@ -112,5 +116,26 @@ public class OrderService implements OrderManager {
 	@SuppressWarnings("unchecked")
 	public List<PageData> toDetail(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.toDetail", pd);
+	}
+	/**
+	 * 首购订单
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> getFirstOrderList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getFirstOrderList", page);
+	}
+	
+	/**
+	 * 复购订单
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> getAgainOrderList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getAgainOrderList", page);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> getOrderAndDetail(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getOrderAndDetail", page);
 	}
 }

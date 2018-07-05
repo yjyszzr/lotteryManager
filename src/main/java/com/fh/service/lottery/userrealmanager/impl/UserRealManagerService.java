@@ -78,5 +78,6 @@ public class UserRealManagerService implements UserRealManagerManager{
 		dao.delete("UserRealManagerMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	
 }
 

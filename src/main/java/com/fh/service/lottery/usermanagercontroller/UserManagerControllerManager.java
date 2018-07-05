@@ -46,6 +46,7 @@ public interface UserManagerControllerManager {
 	 * @throws Exception
 	 */
 	public List<PageData> list(Page page) throws Exception;
+	public List<PageData> listDetailTwo(Page page) throws Exception;
 
 	/**
 	 * 列表(全部)
@@ -76,5 +77,36 @@ public interface UserManagerControllerManager {
 	public Double findUserBonusByUserId(PageData pd) throws Exception;
 
 	public List<PageData> findAll() throws Exception;
-
+	
+	public List<PageData> getMarketList(Page page) throws Exception;
+	
+	public List<PageData> getRemainUserCount(Page page) throws Exception;
+	/**认证并购彩
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> getRealAndOrder(Page page)throws Exception;
+	/**注册并认证统计（购彩）
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> getRealAndRegister(Page page)throws Exception;
+	
+	/**注册并充值
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> getRegisterAndRecharge(Page page)throws Exception;
+	
+	/**注册并购彩
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> getRegisterAndOrder(Page page)throws Exception;
+	
+	/**注册并购彩(复购)
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> getRegisterAndAgainOrder(Page page)throws Exception;
 }
