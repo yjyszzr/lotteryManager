@@ -1,6 +1,5 @@
 package com.fh.controller.lottery.datastatistics;
 
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
@@ -12,17 +11,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.apache.http.util.TextUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
-import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
-import com.fh.entity.sms.RspSmsCodeEntity;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
@@ -31,8 +25,6 @@ import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
-import com.fh.util.RandomUtil;
-import com.fh.util.SmsUtil;
 
 /**
  * 说明：市场数据
@@ -40,8 +32,6 @@ import com.fh.util.SmsUtil;
 @Controller
 @RequestMapping(value = "/marketdata")
 public class MarketDataController extends BaseController {
-
-	private final static String USER_SESSION_PREFIX = "US:";
 
 	String menuUrl = "marketdata/list.do"; // 菜单地址(权限用)
 	@Resource(name = "usermanagercontrollerService")
@@ -52,13 +42,7 @@ public class MarketDataController extends BaseController {
 	private UserRealManagerService userrealmanagerService;
 	@Resource(name = "userbankmanagerService")
 	private UserBankManagerService userbankmanagerService;
-	@Resource
-	private StringRedisTemplate stringRedisTemplate;
-	@Resource(name = "urlConfig")
-	private URLConfig urlConfig;
-
-	@Resource(name = "redisDaoImpl")
-	private RedisDaoImpl redisDaoImpl;
+ 
 
 	 
 

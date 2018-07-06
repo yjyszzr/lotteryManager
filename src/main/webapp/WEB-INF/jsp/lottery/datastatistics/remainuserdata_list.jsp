@@ -34,6 +34,7 @@
 							
 						<!-- 检索  -->
 						<form action="remainuserdata/list.do" method="post" name="Form" id="Form">
+						<input type="hidden" name="dateType" id="dateType">
 						<table style="margin-top:5px;">
 							<tr>
 							<td><span class="input-icon" style="width: 270px;"> </span>日期：</td>
@@ -43,20 +44,23 @@
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align: top; padding-left: 2px">
 									<span class="input-icon" style="width: 30px;"> </span> 
-									<a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="搜索"
-												style="border-radius: 5px; color: blue !important; width: 50px">搜索</a>
+									<a class="btn btn-light btn-xs blue" onclick="tosearch(0);" title="日"
+												style="border-radius: 5px; color: blue !important; width: 50px">日</a>
 									</td>
 								</c:if>
-								<td style="vertical-align: top; padding-left: 2px">
-								<span class="input-icon" style="width: 30px;"> </span>
-								 <a class="btn btn-light btn-xs blue" onclick="tosearch(0);" title="清空"
-											style="border-radius: 5px; color: blue !important; width: 50px">清空</a>
-								</td>
-								<c:if test="${QX.toExcel == 1 }">
-								<td style="vertical-align: top; padding-left: 2px;">
-								<span class="input-icon" style="width: 30px;"> </span> 
-								<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL"
-									style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></td>
+								<c:if test="${QX.cha == 1 }">
+									<td style="vertical-align: top; padding-left: 2px">
+									<span class="input-icon" style="width: 30px;"> </span> 
+									<a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="周"
+												style="border-radius: 5px; color: blue !important; width: 50px">周</a>
+									</td>
+								</c:if>
+								<c:if test="${QX.cha == 1 }">
+									<td style="vertical-align: top; padding-left: 2px">
+									<span class="input-icon" style="width: 30px;"> </span> 
+									<a class="btn btn-light btn-xs blue" onclick="tosearch(2);" title="月"
+												style="border-radius: 5px; color: blue !important; width: 50px">月</a>
+									</td>
 								</c:if>
 							</tr>
 						</table>
@@ -67,14 +71,23 @@
 								<tr>
 									<th class="center">日期</th>
 									<th class="center">注册数</th>
-									<th class="center">第2天</th>
-									<th class="center">第3天</th>
-									<th class="center">第4天</th>
-									<th class="center">第5天</th>
-									<th class="center">第6天</th>
-									<th class="center">第7天</th>
-									<th class="center">第15天</th>
-									<th class="center">第30天</th>
+									<th class="center">第2${pd.type }</th>
+									<th class="center">第3${pd.type }</th>
+									<th class="center">第4${pd.type }</th>
+									<th class="center">第5${pd.type }</th>
+									<th class="center">第6${pd.type }</th>
+									<th class="center">第7${pd.type }</th>
+									<c:if test="${!empty pd.typeForDay}">
+									<th class="center">第15${pd.type }</th>
+									<th class="center">第30${pd.type }</th>
+									</c:if>
+									<c:if test="${empty pd.typeForDay}">
+									<th class="center">第8${pd.type }</th>
+									<th class="center">第9${pd.type }</th>
+									<th class="center">第10${pd.type }</th>
+									<th class="center">第11${pd.type }</th>
+									<th class="center">第12${pd.type }</th>
+									</c:if>
 								</tr>
 							</thead>
 													
@@ -93,8 +106,17 @@
 											<td class='center'>${var.count5 }<c:if test="${!empty var.count5}">%</c:if></td>
 											<td class='center'>${var.count6 }<c:if test="${!empty var.count6}">%</c:if></td>
 											<td class='center'>${var.count7 }<c:if test="${!empty var.count7}">%</c:if></td>
+											<c:if test="${!empty pd.typeForDay}">
 											<td class='center'>${var.count15 }<c:if test="${!empty var.count15}">%</c:if></td>
 											<td class='center'>${var.count30 }<c:if test="${!empty var.count30}">%</c:if></td>
+											</c:if>
+											<c:if test="${empty pd.typeForDay}">
+											<td class='center'>${var.count8 }<c:if test="${!empty var.count8}">%</c:if></td>
+											<td class='center'>${var.count9 }<c:if test="${!empty var.count9}">%</c:if></td>
+											<td class='center'>${var.count10 }<c:if test="${!empty var.count10}">%</c:if></td>
+											<td class='center'>${var.count11 }<c:if test="${!empty var.count11}">%</c:if></td>
+											<td class='center'>${var.count12 }<c:if test="${!empty var.count12}">%</c:if></td>
+											</c:if>
 										
 										</tr>
 									</c:forEach>
@@ -166,8 +188,13 @@
 		//检索
 		function tosearch(status){
 			if (status == 0) {
-				$("#lastStart").val("");
-				$("#lastEnd").val("");
+				$("#dateType").val("0");
+			}
+			if (status == 1) {
+				$("#dateType").val("1");
+			}
+			if (status == 2) {
+				$("#dateType").val("2");
 			}
 			top.jzts();
 			$("#Form").submit();

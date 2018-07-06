@@ -1,14 +1,10 @@
 package com.fh.controller.lottery.datastatistics;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.lottery.channel.ChannelOptionLogManager;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
@@ -33,13 +28,15 @@ import com.fh.util.PageData;
 @RequestMapping(value = "/totaldata")
 public class TotalDataController extends BaseController {
 
-	String menuUrl = "totaldata/list.do"; // 西安后台管理数据
+	String menuUrl = "totaldata/list.do"; // 
 	@Resource(name = "useraccountmanagerService")
 	private UserAccountManagerService useraccountmanagerService;
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
 	@Resource(name = "orderService")
 	private OrderManager ordermanagerService;
+	
+	
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "用户操作列表TotalDataController");

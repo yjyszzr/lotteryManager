@@ -3,6 +3,7 @@ package com.fh.controller.lottery.datastatistics;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -61,8 +62,24 @@ public class RemainUserDataController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		if (pd.isEmpty()) {
+			pd.put("dateType","2");
+		}
+		List<PageData> varList = new ArrayList<PageData>();
+		if(pd.getString("dateType").endsWith("0")) {
+			varList = getDataListForDay(page,pd);
+			pd.put("type","天");
+			pd.put("typeForDay","true");
+		}
+		if(pd.getString("dateType").endsWith("1")) {
+			varList = getDataListForWeek(page,pd);
+			pd.put("type","周");
+		}
+		if(pd.getString("dateType").endsWith("2")) {
+			varList = getDataListForMonth(page,pd);
+			pd.put("type","月");
+		}
 		
-		List<PageData> varList = getDataList(page,pd);
 		mv.setViewName("lottery/datastatistics/remainuserdata_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -75,7 +92,7 @@ public class RemainUserDataController extends BaseController {
 	 * 
 	 * @param
 	 * @throws Exception
-	 */
+	 *
 	@RequestMapping(value = "/excel")
 	public ModelAndView exportExcel(Page page) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "导出MarketData到excel");
@@ -173,21 +190,32 @@ public class RemainUserDataController extends BaseController {
 		return mv;
 	}
 	
-	/**
+	**
 	 * 获得数据集合
 	 * 
 	 * @param page  
 	 * @param pd   
 	 * @throws Exception
 	 */
-	public List<PageData> getDataList(Page page,PageData pd) throws Exception {
-		LocalDate dateNow = LocalDate.now();
+	public List<PageData> getDataListForDay(Page page,PageData pd) throws Exception {
+		LocalDate dateE = LocalDate.now();
+		LocalDate dateB = LocalDate.now();
 		
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			dateE = LocalDate.parse(lastEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			dateB = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}else {
+			dateB = dateE.plusDays(-6);
+		}
+		int days = (int) (dateE.toEpochDay()-dateB.toEpochDay());
 		List<PageData> varList = new ArrayList<PageData>();
-
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < days; i++) {
 			PageData pageData = new PageData(); 
-			LocalDate time = dateNow.plusDays(-i);//当天的前i天
+			LocalDate time = dateE.plusDays(-i);//当天的前i天
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(time+" 23:59:59"));
 			page.setPd(pd);
@@ -197,15 +225,98 @@ public class RemainUserDataController extends BaseController {
 			pageData.put("date", time);
 			pageData.put("count_user", userCount);
 			
-			pageData.put("count2", getCount(time,"1","1",userCount));
-			pageData.put("count3", getCount(time,"2","2",userCount));
-			pageData.put("count4", getCount(time,"3","3",userCount));
-			pageData.put("count5", getCount(time,"4","4",userCount));
-			pageData.put("count6", getCount(time,"5","5",userCount));
-			pageData.put("count7", getCount(time,"6","6",userCount));
-			pageData.put("count15", getCount(time,"7","14",userCount));
-			pageData.put("count30", getCount(time,"15","29",userCount));
+			pageData.put("count2", getCount(time,null,1,1,userCount));
+			pageData.put("count3", getCount(time,null,2,2,userCount));
+			pageData.put("count4", getCount(time,null,3,3,userCount));
+			pageData.put("count5", getCount(time,null,4,4,userCount));
+			pageData.put("count6", getCount(time,null,5,5,userCount));
+			pageData.put("count7", getCount(time,null,6,6,userCount));
+			pageData.put("count15", getCount(time,null,7,14,userCount));
+			pageData.put("count30", getCount(time,null,15,29,userCount));
 			varList.add(pageData);
+			}			
+		}
+		return varList;
+	}
+	public List<PageData> getDataListForWeek(Page page,PageData pd) throws Exception {
+		LocalDate dateNow = LocalDate.now();
+		LocalDate weekStart = LocalDate.now();
+		LocalDate weekEnd = LocalDate.now();
+		
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			LocalDateTime start = LocalDateTime.parse(lastStart+" 00:00:00",DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+			int week = start.getDayOfWeek().getValue();
+			weekStart = start.toLocalDate().plusDays(1-week);
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			LocalDateTime start = LocalDateTime.parse(lastEnd+" 00:00:00",DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+			int week = start.getDayOfWeek().getValue();
+			weekEnd = start.toLocalDate().plusDays(1-week);
+		}
+		int days = (int) (weekEnd.toEpochDay()-weekStart.toEpochDay())/7;
+		if((int) (weekEnd.toEpochDay()-weekStart.toEpochDay()+1)%7>0) {
+			days = days + 1;
+		}
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < days; i++) {
+			PageData pageData = new PageData(); 
+			LocalDate time = weekStart.plusDays(i*7);//当天的前i天
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(time.plusDays(6)+" 23:59:59"));
+			page.setPd(pd);
+			List<PageData> userList = usermanagercontrollerService.listAll(pd);
+			int userCount = userList.size();
+			if(userCount!=0) {
+				pageData.put("date", time+"/"+time.plusDays(6));
+				pageData.put("count_user", userCount);
+				int WEEK = 7;
+				for (int j = 2; j <15 ; j++) {
+					pageData.put("count"+j, getCount(time,time.plusDays(6),WEEK*(j-1),WEEK*j-1,userCount));
+				}
+				varList.add(pageData);
+			}			
+		}
+		return varList;
+	}
+	public List<PageData> getDataListForMonth(Page page,PageData pd) throws Exception {
+		LocalDate dateNow = LocalDate.now();
+		LocalDate monthStart = LocalDate.now();
+		LocalDate monthEnd = LocalDate.now();
+		 
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			monthStart =  LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			monthEnd = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		int months = (int) Period.between(monthStart,monthEnd).getMonths();
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < months+1; i++) {
+			PageData pageData = new PageData(); 
+			LocalDate time = monthStart.plusMonths(i);//当天的前i天
+			LocalDate start = LocalDate.parse(time.toString().substring(0, 7)+"-01", DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+			LocalDate end = LocalDate.parse(time.toString().substring(0, 7)+"-"+time.lengthOfMonth(), DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(start+" 00:00:00"));
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(end+" 23:59:59"));
+			page.setPd(pd);
+			List<PageData> userList = usermanagercontrollerService.listAll(pd);
+			int userCount = userList.size();
+			if(userCount!=0) {
+				pageData.put("date", time.toString().substring(0, 7));
+				pageData.put("count_user", userCount);
+				int startDay=0;
+				int endDay=time.lengthOfMonth();
+				for (int j = 2; j <15 ; j++) {
+					startDay =endDay;
+					endDay =startDay + time.plusMonths(j-1).lengthOfMonth();
+					pageData.put("count"+j, getCount(start,end,startDay,endDay-1,userCount));
+					
+				}
+				varList.add(pageData);
 			}			
 		}
 		return varList;
@@ -219,8 +330,8 @@ public class RemainUserDataController extends BaseController {
 	 * @param userCount 注册日总人数
 	 * @throws Exception
 	 */
-	public BigDecimal getCount(LocalDate regTime,String start,String end,int userCount) throws Exception {
-		LocalDate regDate = regTime.plusDays(Integer.parseInt(start));
+	public BigDecimal getCount(LocalDate regTime,LocalDate endTime,int start,int end,int userCount) throws Exception {
+		LocalDate regDate = regTime.plusDays(start);
 		LocalDate nowDate = LocalDate.now();
 		int days = Period.between(regDate,nowDate).getDays();
 		int months = Period.between(regDate,nowDate).getMonths();
@@ -230,7 +341,12 @@ public class RemainUserDataController extends BaseController {
 		}
 		PageData pd = new PageData();
 		Page page = new Page();
-		pd.put("regTime", regTime.toString());
+		if(endTime==null) {
+			pd.put("regTime", regTime.toString());
+		}else {
+		pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(regTime+" 00:00:00"));
+		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(endTime+" 23:59:59"));
+		}
 		pd.put("dayStart", start);
 		pd.put("dayEnd",end);
 		page.setPd(pd);
