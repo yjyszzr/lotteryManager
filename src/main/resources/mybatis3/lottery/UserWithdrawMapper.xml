@@ -86,8 +86,7 @@
 			remarks = #{remarks},
 			audit_time = #{audit_time},
 			auditor = #{auditor},
-			auditor_id = #{auditor_id},
-			status = 3
+			auditor_id = #{auditor_id}
 		where 
 		withdrawal_sn = #{withdrawSn}
 	</update>
