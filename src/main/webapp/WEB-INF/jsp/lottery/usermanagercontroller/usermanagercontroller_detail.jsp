@@ -56,6 +56,14 @@
 			<button class="button" style="border-radius: 5px;"  onclick="unRealNameVerify('${entity.user_id}')">未认证</button> 
 		</c:otherwise>
 	</c:choose>
+	<div style="padding-top: 12px;">
+		<label class="col-sm-3 control-label no-padding-right" for="form-field-1">该用户的交易版终极开关：</label>
+		<div>
+		 	<input style="width:200px" type="range" min=0 max=2 step=1 id="myRange" maxlength="18" value="${entity.is_business}" onchange="myFunction('${entity.user_id}')">
+			<p id="demo"></p>
+		</div>
+	</div>
+	
 </div>
 
 <!-- /section:basics/navbar.layout -->
@@ -234,6 +242,41 @@
 		function unRealNameVerify(user_id){
 			alert("用户" + user_id +"实名信息已清除~");
 		}
+		
+		
+		function myFunction(user_id) {
+		    var x = document.getElementById("myRange").value;
+		    var text = ''
+		    var isBusiness = 1;
+		    switch(x){
+		       case '1': text='开';isBusiness=1; break;
+		       case '0': text='关';isBusiness=0; break;
+		       case '2': text='失效';isBusiness=2; break;
+		    }
+		    document.getElementById("demo").innerHTML = text;
+		    
+			bootbox.confirm("确定要改变开关信息吗?", function(result) {
+				if(result) {
+					var url = '<%=basePath%>usermanagercontroller/changeUserSwitch.do?is_business='+isBusiness+'&user_id='+user_id;
+					window.location.href = url;
+				}
+			});
+		}
+		
+		function myFunctionShow() {
+		    var x = document.getElementById("myRange").value;
+		    var text = ''
+		    var isBusiness = 1;
+		    switch(x){
+		       case '1': text='开'; break;
+		       case '0': text='关'; break;
+		       case '2': text='失效';break;
+		    }
+		    document.getElementById("demo").innerHTML = text;
+		}
+		myFunctionShow();
+		
+		
 	</script>
 
 </body>

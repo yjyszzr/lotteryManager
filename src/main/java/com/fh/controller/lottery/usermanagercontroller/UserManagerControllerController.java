@@ -122,6 +122,16 @@ public class UserManagerControllerController extends BaseController {
 		return mv;
 	}
 
+	@RequestMapping(value = "/changeUserSwitch")
+	public ModelAndView changeUserSwitch() throws Exception {
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		usermanagercontrollerService.changeUserSwitch(pd);
+		mv = getDetailView(mv);
+		return mv;
+	}
+	
 	/**
 	 * 列表
 	 * 
