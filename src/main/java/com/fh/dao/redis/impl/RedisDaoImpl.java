@@ -225,7 +225,7 @@ public class RedisDaoImpl extends AbstractBaseRedisDao<String, PageData> impleme
 	 * @return
 	 */
 	public Jedis getJedisByDBIndex(){
-		Properties pros = getPprVueTest();
+		Properties pros = getPprVue();
 		String isopen = pros.getProperty("redis.isopen");	//地址
 		String host = pros.getProperty("redis.host");		//地址
 		String port = pros.getProperty("redis.port");		//端口

@@ -39,6 +39,15 @@ public interface UserManagerControllerManager {
 	 */
 	public void edit(PageData pd) throws Exception;
 
+	
+	/**
+	 * 修改用户的交易开关
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void changeUserSwitch(PageData pd) throws Exception;
+	
 	/**
 	 * 列表
 	 * 

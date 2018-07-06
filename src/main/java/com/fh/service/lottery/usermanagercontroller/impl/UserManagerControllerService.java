@@ -53,6 +53,16 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	}
 
 	/**
+	 * 修改
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void changeUserSwitch(PageData pd) throws Exception {
+		dao.update("UserManagerControllerMapper.changeUserSwitch", pd);
+	}
+	
+	/**
 	 * 列表
 	 * 
 	 * @param page

@@ -39,7 +39,8 @@
 		pass_wrong_count,	
 		user_type,	
 		is_real,	
-		user_remark
+		user_remark,
+		is_business
 	</sql>
 	
 	<!-- 字段值 -->
@@ -74,7 +75,8 @@
         #{pass_wrong_count},	
         #{user_type},	
         #{is_real},	
-        #{user_remark}	
+        #{user_remark},
+        #{is_business}	
 	</sql>
 	
 	<!-- 新增-->
@@ -117,6 +119,13 @@
 	<include refid="FieldValue"></include>
 		)
 	</insert>
+	
+	<update id="changeUserSwitch" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set is_business = #{is_business}
+		where user_id = #{user_id}
+	</update>
 	
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
@@ -225,7 +234,8 @@
 		u_r.real_name,
 		u_r.id_code,
 		u.user_status,
-		u.reg_from
+		u.reg_from,
+		u.is_business
 		from 
 		dl_user u
 		left join dl_user_real  u_r on u_r.user_id = u.user_id 
