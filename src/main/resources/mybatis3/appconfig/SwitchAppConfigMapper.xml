@@ -64,12 +64,7 @@
 	<update id="edit" parameterType="pd">
 		update
 		<include refid="tableName"></include>
-		set 
-			version = #{version},
-			platform = #{platform},
-			business_type = #{business_type},
-			channel = #{channel},
-			turn_on = #{turn_on}
+		set turn_on = #{turn_on}
 		where 
 		id = #{id}
 	</update>

@@ -45,6 +45,14 @@ public class SwitchAppConfigService implements SwitchAppConfigManager{
 		dao.update("SwitchAppConfigMapper.edit", pd);
 	}
 	
+	/**修改开关
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void changeChannelSwitch(PageData pd)throws Exception{
+		dao.update("SwitchAppConfigMapper.changeChannelSwitch", pd);
+	}
+	
 	/**列表
 	 * @param page
 	 * @throws Exception

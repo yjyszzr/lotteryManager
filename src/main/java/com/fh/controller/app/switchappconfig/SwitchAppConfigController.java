@@ -72,6 +72,22 @@ public class SwitchAppConfigController extends BaseController {
 		out.write("success");
 		out.close();
 	}
+
+	
+	@RequestMapping(value="/changeChannelSwitch")
+	public ModelAndView changeChannelSwitch() throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"修改开关SwitchAppConfig");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		switchappconfigService.edit(pd);
+		mv.addObject("msg","success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	
 	
 	/**修改
 	 * @param
@@ -89,6 +105,8 @@ public class SwitchAppConfigController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+	
+	
 	
 	/**列表
 	 * @param page

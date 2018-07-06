@@ -12,6 +12,7 @@
 <html lang="en">
 <head>
 <base href="<%=basePath%>">
+<link rel="stylesheet" href="static/ace/css/bootstrap.css" />
 <!-- 下拉框 -->
 <link rel="stylesheet" href="static/ace/css/chosen.css" />
 <!-- jsp文件头和头部 -->
@@ -32,7 +33,7 @@
 							
 						<!-- 检索  -->
 						<form action="switchappconfig/list.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
+<%-- 						<table style="margin-top:5px;">
 							<tr>
 								<td>
 									<div class="nav-search">
@@ -46,7 +47,7 @@
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								</c:if>
 							</tr>
-						</table>
+						</table> --%>
 						
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
@@ -115,9 +116,11 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
-													</a>
+													<label>
+														<input name="switch-field-1" value = "修改开关" class="ace ace-switch ace-switch-3" type="button"   id="channelSwitch"   onclick="chanteChannelSwitch('${var.turn_on}','${var.id}')"/>
+														<span class="lbl"></span>
+													</label>
+													
 													</c:if>
 													<c:if test="${QX.del == 1 }">
 													<a class="btn btn-xs btn-danger" onclick="del('${var.id}');">
@@ -206,6 +209,11 @@
 
 	</div>
 	<!-- /.main-container -->
+    <script src="plugins/fhform/js/bootstrap.min.js?v=3.3.5"></script>
+    <script src="plugins/fhform/js/content.min.js?v=1.0.0"></script>
+    <script src="plugins/fhform/js/jquery-ui-1.10.4.min.js"></script>
+    <script src="plugins/fhform/js/beautifyhtml/beautifyhtml.js"></script>
+
 
 	<!-- basic scripts -->
 	<!-- 页面底部js¨ -->
@@ -309,6 +317,20 @@
 						tosearch();
 					});
 				}
+			});
+		}
+		
+		
+		function chanteChannelSwitch(turn,id){
+		    var turn_on = 0;
+			if(0 == turn){
+				turn_on = 1;
+			}else{
+				turn_on = 0;
+			}
+			var url = "<%=basePath%>switchappconfig/changeChannelSwitch.do?turn_on="+turn_on+"&id="+id;
+			$.get(url,function(data){
+				tosearch();
 			});
 		}
 		
