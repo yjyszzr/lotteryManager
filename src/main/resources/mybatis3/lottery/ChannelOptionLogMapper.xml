@@ -181,10 +181,10 @@
 				and chl.channel_id = #{pd.channel_id}
 			</if>
  			<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
-				and con.add_time &gt; #{pd.lastStart1 }
+				and con.add_time &gt;= #{pd.lastStart1 }
 			</if>
 			<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
-				and con.add_time &lt; #{pd.lastEnd1 }
+				and con.add_time &lt;= #{pd.lastEnd1 }
 			</if>
 			<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
@@ -218,10 +218,10 @@
 			and opt.operation_node = #{pd.operation_node}
 		</if>
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
-			and opt.option_time &gt; #{pd.lastStart1 }
+			and opt.option_time &gt;= #{pd.lastStart1 }
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
-			and opt.option_time &lt; #{pd.lastEnd1 }
+			and opt.option_time &lt;= #{pd.lastEnd1 }
 		</if>
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and

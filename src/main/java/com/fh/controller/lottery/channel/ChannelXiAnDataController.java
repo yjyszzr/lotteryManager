@@ -67,16 +67,18 @@ public class ChannelXiAnDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
 		} 
 		String lastEnd = pd.getString("lastEnd"); // 结束检索条件
-		long dayTime = DateUtilNew.getMilliSecondsByStr(LocalDate.now().toString()+" 00:00:00");
+		long dayTime = DateUtilNew.getMilliSecondsByStr(LocalDate.now().plusDays(-1).toString()+" 23:59:59");
 		if (null != lastEnd && !"".equals(lastEnd)) {
 			long endTime = DateUtilNew.getMilliSecondsByStr(lastEnd);
 			if(endTime>dayTime) {
 				pd.put("lastEnd1", dayTime);
+				pd.put("lastEnd", LocalDate.now().plusDays(-1).toString()+" 23:59:59");
 			}else {
 				pd.put("lastEnd1", endTime);
 			}
 		}else {
 			pd.put("lastEnd1", dayTime);
+			pd.put("lastEnd", LocalDate.now().plusDays(-1).toString()+" 23:59:59");
 		}
 		String keywords = pd.getString("keywords"); // 关键词检索条件
 		if (null != keywords && !"".equals(keywords)) {
@@ -300,7 +302,7 @@ public class ChannelXiAnDataController extends BaseController {
 		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(localDate+" 00:00:00"));//今天凌晨
 		//查询详情传参用
 		pd.put("lastStart", localDate.plusDays(-1)+" 00:00:00");
-		pd.put("lastEnd", localDate+" 00:00:00");
+		pd.put("lastEnd", localDate.plusDays(-1)+" 23:59:59");
 		pd.put("registerTime", LocalDate.now().plusDays(-1).toString());
 		page.setPd(pd);
 		List<PageData> optionlogList = channeloptionlogService.getXACountYesterday(page);
