@@ -30,59 +30,74 @@
 			<div class="main-content-inner">
 				<div class="page-content">
 					<div class="row">
-						<div class="col-xs-12"  style="overflow:scroll;">
+						<div class="col-xs-12" style="overflow:scroll;">
 							
 						<!-- 检索  -->
-						<form action="userdata/list.do" method="post" name="Form" id="Form">
+						<form action="orderplaydata/list.do" method="post" name="Form" id="Form">
+						<input type="hidden" name="dateType" id="dateType">
 						<table style="margin-top:5px;">
 							<tr>
-								<td><span class="input-icon" style="width: 270px;"> </span>日期：</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
+							<td><span class="input-icon" style="width: 270px;"> </span>日期：</td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
 								<td>至</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align: top; padding-left: 2px">
 									<span class="input-icon" style="width: 30px;"> </span> 
-									<a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="搜索"
-												style="border-radius: 5px; color: blue !important; width: 50px">搜索</a>
+									<a class="btn btn-light btn-xs blue" onclick="tosearch(0);" title="日"
+												style="border-radius: 5px; color: blue !important; width: 50px">日</a>
 									</td>
 								</c:if>
 								<td style="vertical-align: top; padding-left: 2px">
 								<span class="input-icon" style="width: 30px;"> </span>
-								 <a class="btn btn-light btn-xs blue" onclick="tosearch(0);" title="清空"
-											style="border-radius: 5px; color: blue !important; width: 50px">清空</a>
+								 <a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="周"
+											style="border-radius: 5px; color: blue !important; width: 50px">周</a>
 								</td>
 								<c:if test="${QX.toExcel == 1 }">
 								<td style="vertical-align: top; padding-left: 2px;">
 								<span class="input-icon" style="width: 30px;"> </span> 
-								<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL"
-									style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></td>
+								<a class="btn btn-light btn-xs blue" onclick="tosearch(2);" title="月"
+									style="border-radius: 5px; color: blue !important; width: 70px"> 月</a></td>
 								</c:if>
 							</tr>
 						</table>
 						<!-- 检索  -->
 					
-						<table id="simple-table" class="table table-striped table-bordered table-hover table-condensed" style="margin-top:5px;min-width:1500px;">	
+						<table id="simple-table" class="table table-striped table-bordered table-hover table-condensed" style="margin-top:5px;min-width:1500px;" >	
 							<thead>
 								<tr>
-									<th class="center">用户ID</th>
-									<th class="center">用户昵称</th>
-									<th class="center">级别</th>
-									<th class="center">手机号</th>
-									<th class="center">真实姓名</th>
-									<th class="center">身份证号</th>
-									<th class="center">性别</th>
-									<th class="center">年龄</th>
-									<th class="center">终端</th>
-									<th class="center">地域</th>
-									<th class="center">渠道</th>
-									<th class="center">累计消费</th>
-									<th class="center">累计充值</th>
-									<th class="center">累计中奖</th>
-									<th class="center">累计提现</th>
-									<th class="center">账户余额</th>
-									<th class="center">注册时间</th>
-									<th class="center">最后登录时间</th>
+									<th class='center' rowspan="2">时间</th>
+									
+									<th class='center' colspan="3">胜平负</th>
+									<th class='center' colspan="3">让球胜平负</th>
+									<th class='center' colspan="3">比分</th>
+									<th class='center' colspan="3">总进球</th>
+									<th class='center' colspan="3">半全场</th>
+									<th class='center' colspan="3">2选1</th>
+									<th class='center' colspan="3">混合投注</th>
+								</tr>
+								<tr>
+									<th class='center'>购彩用户数</th>
+									<th class='center'>购彩金额</th>
+									<th class='center'>订单数</th>
+									<th class='center'>购彩用户数</th>
+									<th class='center'>购彩金额</th>
+									<th class='center'>订单数</th>
+									<th class='center'>购彩用户数</th>
+									<th class='center'>购彩金额</th>
+									<th class='center'>订单数</th>
+									<th class='center'>购彩用户数</th>
+									<th class='center'>购彩金额</th>
+									<th class='center'>订单数</th>
+									<th class='center'>购彩用户数</th>
+									<th class='center'>购彩金额</th>
+									<th class='center'>订单数</th>
+									<th class='center'>购彩用户数</th>
+									<th class='center'>购彩金额</th>
+									<th class='center'>订单数</th>
+									<th class='center'>购彩用户数</th>
+									<th class='center'>购彩金额</th>
+									<th class='center'>订单数</th>
 								</tr>
 							</thead>
 													
@@ -93,25 +108,37 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td width="50" class='center'>${var.user_id}</td>
-											<td class='center'>${var.nickname}</td>
-											<td class='center'>*</td>
-											<td class='center'>${var.mobile}</td>
-											<td class="center">${var.real_name}</td>
-											<td style="word-wrap:break-word;" class="center">${var.id_code}</td>
-											<td class="center"><c:if test="${var.sex == 2 }">女</c:if><c:if test="${var.sex == 1 }">男</c:if></td>
-											<td class="center">21</td>
-											<td class="center">${var.mobile_supplier}</td>
-											<td class="center">beijing</td>
-											<td class="center">${var.device_channel}</td>
-											<td class="center">${var.total }</td>
-											<td class="center">${var.rtotal}</td>
-											<td class="center">${var.atotal}</td>
-											<td class="center">${var.wtotal}</td>
-											<td class="center">${ var.user_money_limit + var.user_money }</td>
-											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
-											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
+											<td class='center'>${var.date }</td>
+											
+											<td class='center'>${var.userCount2 }</td>
+											<td class='center'>${var.amount2 }</td>
+											<td class='center'>${var.orderCount2 }</td>
+											
+											<td class='center'>${var.userCount1 }</td>
+											<td class='center'>${var.amount1 }</td>
+											<td class='center'>${var.orderCount1 }</td>
+											
+											<td class='center'>${var.userCount3 }</td>
+											<td class='center'>${var.amount3 }</td>
+											<td class='center'>${var.orderCount3 }</td>
+											
+											<td class='center'>${var.userCount4 }</td>
+											<td class='center'>${var.amount4 }</td>
+											<td class='center'>${var.orderCount4 }</td>
+											
+											<td class='center'>${var.userCount5 }</td>
+											<td class='center'>${var.amount5 }</td>
+											<td class='center'>${var.orderCount5 }</td>
+											
+											<td class='center'>${var.userCount7 }</td>
+											<td class='center'>${var.amount7 }</td>
+											<td class='center'>${var.orderCount7 }</td>
+											
+											<td class='center'>${var.userCount6 }</td>
+											<td class='center'>${var.amount6 }</td>
+											<td class='center'>${var.orderCount6 }</td>
 											 
+										
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -180,18 +207,30 @@
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+		function tosearch(status){
+			if (status == 0) {
+				$("#dateType").val("0");
+			}
+			if (status == 1) {
+				$("#dateType").val("1");
+			}
+			if (status == 2) {
+				$("#dateType").val("2");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}
 		$(function() {
-		
 			//日期框
 			$('.date-picker').datepicker({
 				autoclose: true,
 				todayHighlight: true
 			});
 			
+			 $("#table").bootstrapTable('destroy').bootstrapTable({
+			        fixedColumns: true, 
+			        fixedNumber: 1 //固定列数
+			 });
 			//下拉框
 			if(!ace.vars['touch']) {
 				$('.chosen-select').chosen({allow_single_deselect:true}); 
@@ -220,7 +259,13 @@
 			
 			 
 		});
-		  
+		//导出excel
+		function toExcel(){
+			//window.location.href='<%=basePath%>orderplaydata/excel.do';
+			 $("#Form").attr("action","orderplaydata/excel.do").submit();
+			 $("#Form").attr("action","orderplaydata/list.do");
+
+		}
 		
 	</script>
 

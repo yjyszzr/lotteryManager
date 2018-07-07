@@ -138,4 +138,11 @@ public class OrderService implements OrderManager {
 	public List<PageData> getOrderAndDetail(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getOrderAndDetail", page);
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getOrderOfPlay(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getOrderOfPlay", page);
+
+	}
 }

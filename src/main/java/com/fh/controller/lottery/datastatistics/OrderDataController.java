@@ -138,7 +138,7 @@ public class OrderDataController extends BaseController {
 			}
 			vpd.put("var7", order_status); // 7
 			vpd.put("var8", list.get(i).getString("winning_money")); // 8
-			vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(list.get(i).getString("add_time"))*1000)); // 9
+			vpd.put("var9", list.get(i).getString("add_time")); // 9
 			vpd.put("var10",list.get(i).getString("award_time")); // 10
 			 
 			varList.add(vpd);

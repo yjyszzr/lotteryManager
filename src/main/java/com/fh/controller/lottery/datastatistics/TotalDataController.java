@@ -45,11 +45,23 @@ public class TotalDataController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		if (pd.isEmpty()) {
+			pd.put("dateType","0");
+		}
+		List<PageData> varList = new ArrayList<PageData>();
+		if(pd.getString("dateType").endsWith("0")) {
+			varList = getDataListForDay(page,pd);
+		}
+		if(pd.getString("dateType").endsWith("1")) {
+			varList = getDataListForWeek(page,pd);
+		}
+		if(pd.getString("dateType").endsWith("2")) {
+			varList = getDataListForMonth(page,pd);
+		}
 		
-		List<PageData> list = getDataList(page,pd);
 		 
 		mv.setViewName("lottery/datastatistics/totaldata_list");
-		mv.addObject("varList", list);
+		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
@@ -71,7 +83,16 @@ public class TotalDataController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		List<PageData> list = getDataList(page,pd);
+		List<PageData> list = new ArrayList<PageData>();
+		if(pd.getString("dateType").endsWith("0")) {
+			list = getDataListForDay(page,pd);
+		}
+		if(pd.getString("dateType").endsWith("1")) {
+			list = getDataListForWeek(page,pd);
+		}
+		if(pd.getString("dateType").endsWith("2")) {
+			list = getDataListForMonth(page,pd);
+		}
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
 		titles.add("日期"); // 1
@@ -106,7 +127,7 @@ public class TotalDataController extends BaseController {
 		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
-	public List<PageData> getDataList(Page page,PageData pd) throws Exception {
+	public List<PageData> getDataListForDay(Page page,PageData pd) throws Exception {
 		LocalDate dateB = LocalDate.now();
 		LocalDate dateE = LocalDate.now();
 		
@@ -169,5 +190,133 @@ public class TotalDataController extends BaseController {
 			 
 		}
 		return list;
+	}
+	public List<PageData> getDataListForWeek(Page page,PageData pd) throws Exception {
+		LocalDate dateNow = LocalDate.now();
+		int dayWeek = dateNow.getDayOfWeek().getValue();
+		LocalDate weekStart = dateNow.plusDays(1-dayWeek);
+		LocalDate weekEnd = dateNow.plusDays(7-dayWeek);
+		
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			LocalDate start = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			int week = start.getDayOfWeek().getValue();
+			weekStart = start.plusDays(1-week);
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			LocalDate start = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			int week = start.getDayOfWeek().getValue();
+			weekEnd = start.plusDays(7-week);
+		}
+		int days = (int) (weekEnd.toEpochDay()-weekStart.toEpochDay())/7;
+		if((int) (weekEnd.toEpochDay()-weekStart.toEpochDay())%7>0) {
+			days = days + 1;
+		}
+		List<PageData> list = new ArrayList<>();
+		for (int i = 0; i < days; i++) {
+			PageData countPage = new PageData(); 
+			LocalDate time = weekStart.plusDays(i*7);//当天的前i天
+			countPage.put("data",  time+"~"+time.plusDays(6));
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(time.plusDays(6)+" 23:59:59"));
+			page.setPd(pd);
+			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
+			List<PageData> listUserAccount = useraccountmanagerService.findByProcessType(page);
+			 
+			List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
+			int orderCount = orderList.size();
+			countPage.put("orderCount", orderCount);
+			if (listUserAccount.size() > 0) {
+				for (int j = 0; j < listUserAccount.size(); j++) {
+					PageData pageData = listUserAccount.get(j);
+					String processType = pageData.getString("process_type");
+					//购彩
+					if(processType.equals("3")) {
+						countPage.put("countBuy", Integer.parseInt(pageData.getString("userCount")));
+						countPage.put("amountBuy", new BigDecimal(pageData.getString("amountSum")).negate());
+					}
+					//充值
+					if(processType.equals("2")) {
+						countPage.put("countRecharge", Integer.parseInt(pageData.getString("userCount")));
+						countPage.put("amountRecharge", new BigDecimal(pageData.getString("amountSum")));
+					}
+					//提现
+					if(processType.equals("4")) {
+						countPage.put("amountWithDraw", new BigDecimal(pageData.getString("amountSum")).negate());
+					}
+					//中奖
+					if(processType.equals("1")) {
+						countPage.put("amountReward", new BigDecimal(pageData.getString("amountSum")));
+					}
+				}
+			}
+			countPage.put("register", registerList.size());
+			list.add(countPage);
+			
+		}
+		return list;
+	}
+	public List<PageData> getDataListForMonth(Page page,PageData pd) throws Exception {
+		LocalDate monthStart = LocalDate.now();
+		LocalDate monthEnd = LocalDate.now();
+		 
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			monthStart =  LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			monthEnd = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		int months = monthEnd.getMonthValue() - monthStart.getMonthValue();
+		int years = monthEnd.getYear() - monthStart.getYear();
+		if(years>0) {
+			months = months + 12*years;
+		}
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < months+1; i++) {
+			PageData countPage = new PageData(); 
+			LocalDate time = monthStart.plusMonths(i);//当天的前i天
+			LocalDate start = LocalDate.parse(time.toString().substring(0, 7)+"-01", DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+			LocalDate end = LocalDate.parse(time.toString().substring(0, 7)+"-"+time.lengthOfMonth(), DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(start+" 00:00:00"));
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(end+" 23:59:59"));
+			countPage.put("data",  time.toString().substring(0, 7));
+			page.setPd(pd);
+			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
+			List<PageData> listUserAccount = useraccountmanagerService.findByProcessType(page);
+			 
+			List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
+			int orderCount = orderList.size();
+			countPage.put("orderCount", orderCount);
+			if (listUserAccount.size() > 0) {
+				for (int j = 0; j < listUserAccount.size(); j++) {
+					PageData pageData = listUserAccount.get(j);
+					String processType = pageData.getString("process_type");
+					//购彩
+					if(processType.equals("3")) {
+						countPage.put("countBuy", Integer.parseInt(pageData.getString("userCount")));
+						countPage.put("amountBuy", new BigDecimal(pageData.getString("amountSum")).negate());
+					}
+					//充值
+					if(processType.equals("2")) {
+						countPage.put("countRecharge", Integer.parseInt(pageData.getString("userCount")));
+						countPage.put("amountRecharge", new BigDecimal(pageData.getString("amountSum")));
+					}
+					//提现
+					if(processType.equals("4")) {
+						countPage.put("amountWithDraw", new BigDecimal(pageData.getString("amountSum")).negate());
+					}
+					//中奖
+					if(processType.equals("1")) {
+						countPage.put("amountReward", new BigDecimal(pageData.getString("amountSum")));
+					}
+				}
+			}
+			countPage.put("register", registerList.size());
+			varList.add(countPage);
+		}
+		return varList;
 	}
 }

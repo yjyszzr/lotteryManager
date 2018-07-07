@@ -371,6 +371,39 @@
 		where o.add_time &gt; #{pd.lastStart1} and  o.add_time &lt; #{pd.lastEnd1}
 		ORDER BY add_time
 	</select>
+	<!-- 数据统计中-彩票数据 -->
+	<select id="getOrderOfPlay" parameterType="page" resultType="pd">
+		SELECT  
+		<if test="pd.groupDay != null and pd.groupDay != ''"> 
+		 DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) as date,
+		 </if>
+		 <if test="pd.groupMonth != null and pd.groupMonth != ''"> 
+		 DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m" ) as date,
+		 </if>
+					lpc.play_name as playName,
+					lpc.lottery_play_classify_id as classify,
+					count(distinct o.user_id) as userCount,
+					count(o.order_sn) as orderCount,
+					sum(o.ticket_amount) as amount
+		FROM dl_order o LEFT JOIN dl_order_detail d on o.order_id = d.order_id 
+						LEFT JOIN dl_lottery_play_classify lpc on o.lottery_play_classify_id=lpc.lottery_play_classify_id
+	  where order_status in ('3','4','5','6','7') and  lpc.lottery_play_classify_id != 8
+	  	<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &gt;= #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &lt;= #{pd.lastEnd1 }
+		</if>
+	  	<if test="pd.monthStart1 != null and pd.monthStart1 != ''"> 
+			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m" ) &gt;= #{pd.monthStart1 }
+		</if>
+		<if test="pd.monthEnd1 != null and pd.monthEnd1 != ''"> 
+			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m" ) &lt;= #{pd.monthEnd1 }
+		</if>
+	  
+		GROUP BY date,lpc.play_name
+		ORDER BY date
+	</select>
 	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">

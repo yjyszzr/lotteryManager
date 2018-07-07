@@ -35,7 +35,7 @@
 								id="Form">
 								<table style="margin-top: 5px;">
 									<tr>
-										<td><span class="input-icon" style="width: 270px;"> </span>日期：</td>
+										<td><span class="input-icon" style="width: 50px;"> </span>日期：</td>
 										<td style="padding-left: 2px;"><input
 											class="span10 date-picker" name="lastStart" id="lastStart"
 											value="${pd.lastStart }" type="text"
@@ -75,6 +75,17 @@
 												style="border-radius: 5px; color: blue !important; width: 70px">
 													导出EXCEL</a></td>
 										</c:if>
+										<td><span class="input-icon"  style="width: 30px;"></span>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="0" <c:if test="${pd.dateType == 0}">checked</c:if> > 日
+											</label>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="1" <c:if test="${pd.dateType == 1}">checked</c:if>> 周
+											</label>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="2" <c:if test="${pd.dateType == 2}">checked</c:if>> 月
+											</label>
+										</td>
 									</tr>
 								</table>
 								<!-- 检索  -->

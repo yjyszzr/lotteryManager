@@ -63,7 +63,7 @@ public class RemainUserDataController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		if (pd.isEmpty()) {
-			pd.put("dateType","2");
+			pd.put("dateType","0");
 		}
 		List<PageData> varList = new ArrayList<PageData>();
 		if(pd.getString("dateType").endsWith("0")) {
@@ -88,108 +88,6 @@ public class RemainUserDataController extends BaseController {
 	}
 	
 	/**
-	 * 导出到excel
-	 * 
-	 * @param
-	 * @throws Exception
-	 *
-	@RequestMapping(value = "/excel")
-	public ModelAndView exportExcel(Page page) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "导出MarketData到excel");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
-			return null;
-		}
-		ModelAndView mv = new ModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		List<PageData> list = getDataList(page,pd);
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<String> titles = new ArrayList<String>();
-		titles.add("渠道"); // 1
-		titles.add("日期"); // 2
-		titles.add("安装量"); // 3
-		titles.add("注册数"); // 4
-		titles.add("购彩数"); // 5
-		titles.add("购彩金额"); // 6
-		titles.add("人均购彩金额"); // 7
-		titles.add("次日留存"); // 8
-		titles.add("3日留存"); // 9
-		titles.add("7日留存"); // 10
-		titles.add("15日留存"); // 11
-		titles.add("30日留存"); // 12
-		titles.add("90日留存"); // 13
-		titles.add("180日留存"); // 14
-		titles.add("360日留存"); // 15
-		dataMap.put("titles", titles);
-		 
-		List<PageData> varList = new ArrayList<PageData>();
-		for (int i = 0; i < list.size(); i++) {
-			PageData vpd = new PageData();
-			vpd.put("var1", list.get(i).getString("phone_channel")); // 1
-			vpd.put("var2", list.get(i).getString("date")); // 2
-			vpd.put("var3", "*"); // 3
-			String count_user = list.get(i).getString("count_user");
-			String amountSum = list.get(i).getString("amountSum");
-			vpd.put("var4", count_user); // 4
-			vpd.put("var5", list.get(i).getString("count_Order")); // 5
-			vpd.put("var6", amountSum); // 6
-			if(count_user.equals("0")) { // 7
-				vpd.put("var7", "0");
-			}else {
-				BigDecimal amount = new BigDecimal(amountSum);
-				BigDecimal count = new BigDecimal(count_user);
-				amount.divide(count, 2,BigDecimal.ROUND_HALF_DOWN);
-				vpd.put("var7", amount);
-			}
-			
-			if(list.get(i).getString("count2")=="") {     // 8
-				vpd.put("var8", ""); 
-			}else {
-				vpd.put("var8", list.get(i).getString("count2")+"%"); 
-			}
-			if(list.get(i).getString("count3")=="") {     // 9
-				vpd.put("var9", ""); 
-			}else {
-				vpd.put("var9", list.get(i).getString("count3")+"%"); 
-			}
-			if(list.get(i).getString("count7")=="") {     // 10
-				vpd.put("var10", ""); 
-			}else {
-				vpd.put("var10", list.get(i).getString("count7")+"%"); 
-			}
-			if(list.get(i).getString("count15")=="") {     // 11
-				vpd.put("var11", ""); 
-			}else {
-				vpd.put("var11", list.get(i).getString("count15")+"%"); 
-			}
-			if(list.get(i).getString("count30")=="") {     //12
-				vpd.put("var12", ""); 
-			}else {
-				vpd.put("var12", list.get(i).getString("count30")+"%"); 
-			}
-			if(list.get(i).getString("count90")=="") {     // 13
-				vpd.put("var13", ""); 
-			}else {
-				vpd.put("var13", list.get(i).getString("count90")+"%"); 
-			}
-			if(list.get(i).getString("count180")=="") {     // 14
-				vpd.put("var14", ""); 
-			}else {
-				vpd.put("var14", list.get(i).getString("count180")+"%"); 
-			}
-			if(list.get(i).getString("count360")=="") {     // 15
-				vpd.put("var15", ""); 
-			}else {
-				vpd.put("var15", list.get(i).getString("count360")+"%"); 
-			}
-			varList.add(vpd);
-		}
-		dataMap.put("varList", varList);
-		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv, dataMap);
-		return mv;
-	}
-	
 	**
 	 * 获得数据集合
 	 * 
@@ -211,6 +109,8 @@ public class RemainUserDataController extends BaseController {
 		}else {
 			dateB = dateE.plusDays(-6);
 		}
+		pd.put("lastStart", dateB);
+		pd.put("lastEnd", dateE);
 		int days = (int) (dateE.toEpochDay()-dateB.toEpochDay());
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < days; i++) {
@@ -240,23 +140,24 @@ public class RemainUserDataController extends BaseController {
 	}
 	public List<PageData> getDataListForWeek(Page page,PageData pd) throws Exception {
 		LocalDate dateNow = LocalDate.now();
-		LocalDate weekStart = LocalDate.now();
-		LocalDate weekEnd = LocalDate.now();
+		int dayWeek = dateNow.getDayOfWeek().getValue();
+		LocalDate weekStart = dateNow.plusDays(1-dayWeek);
+		LocalDate weekEnd = dateNow.plusDays(7-dayWeek);
 		
 		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
 		if (null != lastStart && !"".equals(lastStart)) {
-			LocalDateTime start = LocalDateTime.parse(lastStart+" 00:00:00",DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+			LocalDate start = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 			int week = start.getDayOfWeek().getValue();
-			weekStart = start.toLocalDate().plusDays(1-week);
+			weekStart = start.plusDays(1-week);
 		}
 		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
 		if (null != lastEnd && !"".equals(lastEnd)) {
-			LocalDateTime start = LocalDateTime.parse(lastEnd+" 00:00:00",DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+			LocalDate start = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 			int week = start.getDayOfWeek().getValue();
-			weekEnd = start.toLocalDate().plusDays(1-week);
+			weekEnd = start.plusDays(7-week);
 		}
 		int days = (int) (weekEnd.toEpochDay()-weekStart.toEpochDay())/7;
-		if((int) (weekEnd.toEpochDay()-weekStart.toEpochDay()+1)%7>0) {
+		if((int) (weekEnd.toEpochDay()-weekStart.toEpochDay())%7>0) {
 			days = days + 1;
 		}
 		List<PageData> varList = new ArrayList<PageData>();
@@ -269,7 +170,7 @@ public class RemainUserDataController extends BaseController {
 			List<PageData> userList = usermanagercontrollerService.listAll(pd);
 			int userCount = userList.size();
 			if(userCount!=0) {
-				pageData.put("date", time+"/"+time.plusDays(6));
+				pageData.put("date", time+"~"+time.plusDays(6));
 				pageData.put("count_user", userCount);
 				int WEEK = 7;
 				for (int j = 2; j <15 ; j++) {
@@ -281,7 +182,6 @@ public class RemainUserDataController extends BaseController {
 		return varList;
 	}
 	public List<PageData> getDataListForMonth(Page page,PageData pd) throws Exception {
-		LocalDate dateNow = LocalDate.now();
 		LocalDate monthStart = LocalDate.now();
 		LocalDate monthEnd = LocalDate.now();
 		 
@@ -293,7 +193,11 @@ public class RemainUserDataController extends BaseController {
 		if (null != lastEnd && !"".equals(lastEnd)) {
 			monthEnd = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		}
-		int months = (int) Period.between(monthStart,monthEnd).getMonths();
+		int months = monthEnd.getMonthValue() - monthStart.getMonthValue();
+		int years = monthEnd.getYear() - monthStart.getYear();
+		if(years>0) {
+			months = months + 12*years;
+		}
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < months+1; i++) {
 			PageData pageData = new PageData(); 

@@ -26,7 +26,7 @@ import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /**
- * 说明：市场数据
+ * 说明：注册购彩
  */
 @Controller
 @RequestMapping(value = "/firstagaindata")
@@ -56,8 +56,23 @@ public class FirstAgainDataController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		
-		List<PageData> varList = getDataList(page,pd);
+		if (pd.isEmpty()) {
+			pd.put("dateType","0");
+		}
+		List<PageData> varList = new ArrayList<PageData>();
+		if(pd.getString("dateType").endsWith("0")) {
+			pd.put("type","天");
+			pd.put("typeForDay","true");
+			varList = getDataListForDay(page,pd);
+		}
+		if(pd.getString("dateType").endsWith("1")) {
+			varList = getDataListForWeek(page,pd);
+			pd.put("type","周");
+		}
+		if(pd.getString("dateType").endsWith("2")) {
+			varList = getDataListForMonth(page,pd);
+			pd.put("type","月");
+		}
 		mv.setViewName("lottery/datastatistics/firstagaindata_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -80,7 +95,20 @@ public class FirstAgainDataController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		List<PageData> list = getDataList(page,pd);
+		if (pd.isEmpty()) {
+			pd.put("dateType","0");
+		}
+		List<PageData> list = new ArrayList<PageData>();
+		if(pd.getString("dateType").endsWith("0")) {
+			list = getDataListForDay(page,pd);
+			pd.put("type","天");
+		}
+		if(pd.getString("dateType").endsWith("1")) {
+			list = getDataListForWeek(page,pd);
+		}
+		if(pd.getString("dateType").endsWith("2")) {
+			list = getDataListForMonth(page,pd);
+		}
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
 		titles.add("日期"); // 1
@@ -146,7 +174,7 @@ public class FirstAgainDataController extends BaseController {
 	 * @param pd   
 	 * @throws Exception
 	 */
-	public List<PageData> getDataList(Page page,PageData pd) throws Exception {
+	public List<PageData> getDataListForDay(Page page,PageData pd) throws Exception {
 		LocalDate dateB = LocalDate.now();
 		LocalDate dateE = LocalDate.now();
 		
@@ -161,79 +189,147 @@ public class FirstAgainDataController extends BaseController {
 		int days = (int) (dateE.toEpochDay()-dateB.toEpochDay());
 		List<PageData> list = new ArrayList<>();
 		for (int i = 0; i < days+1; i++) {
-			PageData pageData = new PageData(); 
 			LocalDate date = dateE.plusDays(-i);//当天的前i天
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
-			//注册用户
-			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
-			//首/复购统计
-			page.setPd(pd);
-			List<PageData> firstList = ordermanagerService.getFirstOrderList(page);
-			List<PageData> againList = ordermanagerService.getAgainOrderList(page);
-			pageData.put("date", date);
-			pageData.put("registerCount", registerList.size());
-			pageData.put("firstCount", firstList.get(0).getString("count"));
-			pageData.put("firstAmount", firstList.get(0).getString("amount"));
-			pageData.put("againCount", againList.get(0).getString("count"));
-			pageData.put("againAmount", againList.get(0).getString("amount"));
-			
-			//充值统计
-			String process_type = "2"; // 充值
-			pd.put("process_type", process_type);
-			page.setPd(pd);
-			List<PageData> listRecharge = useraccountmanagerService.findByProcessType(page);
-			int countRecharge = 0;
-			BigDecimal amountRecharge = new BigDecimal(0);
-			if (listRecharge.size() > 0) {
-				countRecharge = Integer.parseInt(listRecharge.get(0).getString("userCount"));
-				amountRecharge = new BigDecimal(listRecharge.get(0).getString("amountSum"));
-			}
-			pageData.put("countRecharge", countRecharge);
-			pageData.put("amountRecharge", amountRecharge);
-			//认证统计
-			List<PageData> userRealList = userrealmanagerService.listAll(pd);
-			pageData.put("realCount", userRealList.size());
-			
-			//注册并认证用户数
-			List<PageData> realOrderList = usermanagercontrollerService.getRealAndOrder(page);
-			pageData.put("realOrderCount", realOrderList.get(0).getString("count"));
-			pageData.put("realOrderAmount", realOrderList.get(0).getString("amount"));
-			
-			//注册并认证用户数
-			List<PageData> registerRealList = usermanagercontrollerService.getRealAndRegister(page);
-			pageData.put("registerRealCount", registerRealList.get(0).getString("count"));
-			pageData.put("registerRealAmount", registerRealList.get(0).getString("amount"));
-			
-			//注册并充值
-			List<PageData> registerRechargeList = usermanagercontrollerService.getRegisterAndRecharge(page);
-			pageData.put("registerRechargeCount", registerRechargeList.get(0).getString("count"));
-			pageData.put("registerRechargeAmount", registerRechargeList.get(0).getString("amount"));
-			
-			//注册并购彩
-			List<PageData> registerOrderList = usermanagercontrollerService.getRegisterAndOrder(page);
-			pageData.put("registerOrderCount", registerOrderList.get(0).getString("count"));
-			pageData.put("registerOrderAmount", registerOrderList.get(0).getString("amount"));
-			
-			//注册并购彩(复购)
-			List<PageData> registerAgainOrderList = usermanagercontrollerService.getRegisterAndAgainOrder(page);
-			pageData.put("registerAgainOrderCount", registerAgainOrderList.get(0).getString("count"));
-			pageData.put("registerAgainOrderAmount", registerAgainOrderList.get(0).getString("amount"));
+			PageData pageData = getData(page,pd,date,date,date.toString());
 			list.add(pageData);
-			//注册-购彩转化率
-			BigDecimal rA = new BigDecimal(registerOrderList.get(0).getString("count")+"00");
-			BigDecimal rB = new BigDecimal(registerList.size());
-			if(rB.compareTo(BigDecimal.ZERO)!=0) {
-			pageData.put("percentA",rA.divide(rB, 2,BigDecimal.ROUND_HALF_DOWN)+"%");
-			}
-			//注册首购后复购转化率
-			BigDecimal oA = new BigDecimal(registerAgainOrderList.get(0).getString("count")+"00");
-			BigDecimal oB = new BigDecimal(registerOrderList.get(0).getString("count"));
-			if(oB.compareTo(BigDecimal.ZERO)!=0) {
-			pageData.put("percentB",oA.divide(oB, 2,BigDecimal.ROUND_HALF_DOWN)+"%");
-			}
 		}
 		return list;
 	}
-	 
+	
+	public List<PageData> getDataListForWeek(Page page,PageData pd) throws Exception {
+		LocalDate dateNow = LocalDate.now();
+		int dayWeek = dateNow.getDayOfWeek().getValue();
+		LocalDate weekStart = dateNow.plusDays(1-dayWeek);
+		LocalDate weekEnd = dateNow.plusDays(7-dayWeek);
+		
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			LocalDate start = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			int week = start.getDayOfWeek().getValue();
+			weekStart = start.plusDays(1-week);
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			LocalDate start = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			int week = start.getDayOfWeek().getValue();
+			weekEnd = start.plusDays(7-week);
+		}
+		int days = (int) (weekEnd.toEpochDay()-weekStart.toEpochDay())/7;
+		if((int) (weekEnd.toEpochDay()-weekStart.toEpochDay())%7>0) {
+			days = days + 1;
+		}
+		List<PageData> list = new ArrayList<PageData>();
+		for (int i = 0; i < days; i++) {
+			LocalDate time = weekStart.plusDays(i*7);//当天的前i天
+			PageData pageData = getData(page,pd,time,time.plusDays(6),time+"~"+time.plusDays(6));
+			list.add(pageData);
+		}
+		return list;
+	}
+	
+	public List<PageData> getDataListForMonth(Page page,PageData pd) throws Exception {
+		LocalDate monthStart = LocalDate.now();
+		LocalDate monthEnd = LocalDate.now();
+		 
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			monthStart =  LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			monthEnd = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		int months = monthEnd.getMonthValue() - monthStart.getMonthValue();
+		int years = monthEnd.getYear() - monthStart.getYear();
+		if(years>0) {
+			months = months + 12*years;
+		}
+		List<PageData> list = new ArrayList<>();
+		for (int i = 0; i < months+1; i++) {
+			LocalDate time = monthStart.plusMonths(i);//当天的前i天
+			LocalDate start = LocalDate.parse(time.toString().substring(0, 7)+"-01", DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+			LocalDate end = LocalDate.parse(time.toString().substring(0, 7)+"-"+time.lengthOfMonth(), DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+			PageData pageData = getData(page,pd,start,end.plusDays(6),time.toString().substring(0, 7));
+			list.add(pageData);
+		}
+		return list;
+	}
+	/**
+	 * 数据处理
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	public PageData getData(Page page,PageData pd,LocalDate dateStart,LocalDate dateEnd,String dateName) throws Exception {
+		PageData pageData = new PageData(); 
+		pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(dateStart+" 00:00:00"));
+		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(dateEnd+" 23:59:59"));
+		//注册用户
+		List<PageData> registerList = usermanagercontrollerService.listAll(pd);
+		//首/复购统计
+		page.setPd(pd);
+		List<PageData> firstList = ordermanagerService.getFirstOrderList(page);
+		List<PageData> againList = ordermanagerService.getAgainOrderList(page);
+		pageData.put("date", dateName);
+		pageData.put("registerCount", registerList.size());
+		pageData.put("firstCount", firstList.get(0).getString("count"));
+		pageData.put("firstAmount", firstList.get(0).getString("amount"));
+		pageData.put("againCount", againList.get(0).getString("count"));
+		pageData.put("againAmount", againList.get(0).getString("amount"));
+		
+		//充值统计
+		String process_type = "2"; // 充值
+		pd.put("process_type", process_type);
+		page.setPd(pd);
+		List<PageData> listRecharge = useraccountmanagerService.findByProcessType(page);
+		int countRecharge = 0;
+		BigDecimal amountRecharge = new BigDecimal(0);
+		if (listRecharge.size() > 0) {
+			countRecharge = Integer.parseInt(listRecharge.get(0).getString("userCount"));
+			amountRecharge = new BigDecimal(listRecharge.get(0).getString("amountSum"));
+		}
+		pageData.put("countRecharge", countRecharge);
+		pageData.put("amountRecharge", amountRecharge);
+		//认证统计
+		List<PageData> userRealList = userrealmanagerService.listAll(pd);
+		pageData.put("realCount", userRealList.size());
+		
+		//注册并认证用户数
+		List<PageData> realOrderList = usermanagercontrollerService.getRealAndOrder(page);
+		pageData.put("realOrderCount", realOrderList.get(0).getString("count"));
+		pageData.put("realOrderAmount", realOrderList.get(0).getString("amount"));
+		
+		//注册并认证用户数
+		List<PageData> registerRealList = usermanagercontrollerService.getRealAndRegister(page);
+		pageData.put("registerRealCount", registerRealList.get(0).getString("count"));
+		pageData.put("registerRealAmount", registerRealList.get(0).getString("amount"));
+		
+		//注册并充值
+		List<PageData> registerRechargeList = usermanagercontrollerService.getRegisterAndRecharge(page);
+		pageData.put("registerRechargeCount", registerRechargeList.get(0).getString("count"));
+		pageData.put("registerRechargeAmount", registerRechargeList.get(0).getString("amount"));
+		
+		//注册并购彩
+		List<PageData> registerOrderList = usermanagercontrollerService.getRegisterAndOrder(page);
+		pageData.put("registerOrderCount", registerOrderList.get(0).getString("count"));
+		pageData.put("registerOrderAmount", registerOrderList.get(0).getString("amount"));
+		
+		//注册并购彩(复购)
+		List<PageData> registerAgainOrderList = usermanagercontrollerService.getRegisterAndAgainOrder(page);
+		pageData.put("registerAgainOrderCount", registerAgainOrderList.get(0).getString("count"));
+		pageData.put("registerAgainOrderAmount", registerAgainOrderList.get(0).getString("amount"));
+		//注册-购彩转化率
+		BigDecimal rA = new BigDecimal(registerOrderList.get(0).getString("count")+"00");
+		BigDecimal rB = new BigDecimal(registerList.size());
+		if(rB.compareTo(BigDecimal.ZERO)!=0) {
+		pageData.put("percentA",rA.divide(rB, 2,BigDecimal.ROUND_HALF_DOWN)+"%");
+		}
+		//注册首购后复购转化率
+		BigDecimal oA = new BigDecimal(registerAgainOrderList.get(0).getString("count")+"00");
+		BigDecimal oB = new BigDecimal(registerOrderList.get(0).getString("count"));
+		if(oB.compareTo(BigDecimal.ZERO)!=0) {
+		pageData.put("percentB",oA.divide(oB, 2,BigDecimal.ROUND_HALF_DOWN)+"%");
+		}
+		return pageData;
+	}
 }

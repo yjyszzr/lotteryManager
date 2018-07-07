@@ -30,7 +30,7 @@
 			<div class="main-content-inner">
 				<div class="page-content">
 					<div class="row">
-						<div class="col-xs-12">
+						<div class="col-xs-12"  style="overflow:scroll;">
 							
 						<!-- 检索  -->
 						<form action="firstagaindata/list.do" method="post" name="Form" id="Form">
@@ -58,11 +58,22 @@
 								<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL"
 									style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></td>
 								</c:if>
+								<td><span class="input-icon"  style="width: 30px;"></span>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="0" <c:if test="${pd.dateType == 0}">checked</c:if> > 日
+											</label>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="1" <c:if test="${pd.dateType == 1}">checked</c:if>> 周
+											</label>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="2" <c:if test="${pd.dateType == 2}">checked</c:if>> 月
+											</label>
+										</td>
 							</tr>
 						</table>
 						<!-- 检索  -->
 					
-						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
+						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;min-width:1500px;">	
 							<thead>
 								<tr>
 									<th class="center">日期</th>

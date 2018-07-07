@@ -205,7 +205,12 @@
 		SELECT  count(DISTINCT u.user_id) as count_user,
 				p.channel_name as phone_channel,
 				u.device_channel,
-				DATE_FORMAT( FROM_UNIXTIME( u.reg_time ), '%Y-%m-%d' ) as date ,
+				<if test="pd.groupDay != null and pd.groupDay != ''"> 
+		 			DATE_FORMAT( FROM_UNIXTIME( u.reg_time ), "%Y-%m-%d" ) as date,
+		 		</if>
+		 		<if test="pd.groupMonth != null and pd.groupMonth != ''"> 
+		 			DATE_FORMAT( FROM_UNIXTIME( u.reg_time ), "%Y-%m" ) as date,
+		 		</if>
 				count( DISTINCT o.user_id) as count_Order,
 				COALESCE(sum(o.ticket_amount),0) as amountSum
 		from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
@@ -213,12 +218,17 @@
 						and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), '%Y-%m-%d' ) =DATE_FORMAT( FROM_UNIXTIME( u.reg_time ), '%Y-%m-%d' )
 		where 1=1 
 			<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-					AND u.reg_time &gt; #{pd.lastStart1} 
+					AND u.reg_time &gt;= #{pd.lastStart1} 
 			</if>
 			<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-					AND u.reg_time &lt; #{pd.lastEnd1} 
+					AND u.reg_time &lt;= #{pd.lastEnd1} 
 			</if>
+		<if test="pd.groupWeek == null or pd.groupDay == ''"> 
 		group by date,p.channel_name
+		</if>
+		<if test="pd.groupWeek != null and pd.groupDay != ''"> 
+		group by p.channel_name
+		</if>
 	</select>
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
