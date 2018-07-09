@@ -53,11 +53,7 @@
 								<span class="input-icon" style="width: 30px;"> </span>
 									<a class="btn btn-light btn-xs blue" onclick="tosearch(0);" title="清空" style="border-radius: 5px; color: blue !important; width: 50px">清空</a>
 								</td>
-								<c:if test="${QX.toExcel == 1 }">
-								<td style="vertical-align:top;padding-left:2px;">
-								<span class="input-icon" style="width: 30px;"> </span>
-									<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL" style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a>
-								</td></c:if>
+								
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -86,7 +82,7 @@
 							</tbody>
 						</table>
 						</form>
-					
+					<div id="main" style="height:350px"></div>
 						</div>
 						<!-- /.col -->
 					</div>
@@ -179,7 +175,127 @@
 			
 		 
 	</script>
+	<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+	<script type="text/javascript">
+		// 路径配置
+		require.config({
+			paths : {
+				echarts : 'http://echarts.baidu.com/build/dist'
+			}
+		});
 
+		// 使用
+		require([ 'echarts', 'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+		], function(ec) {
+			// 基于准备好的dom，初始化echarts图表
+			var myChart = ec.init(document.getElementById('main'));
+
+			var option = {
+				title : {
+					text : '购彩金额',
+					subtext : '金额单位（元）'
+				},
+				tooltip : {
+					trigger : 'axis'
+				},
+				legend : {
+					data : [ '今日', '一周前', '一月前' ]
+				},
+				calculable : true,
+				xAxis : [ {
+					type : 'category',
+					name : '时间',
+					boundaryGap : false,
+					data : [ '0:00', '1:00', '2:00', '3:00', '4:00', '5:00',
+							'6:00', '7:00', '8:00', '9:00', '10:00', '11:00',
+							'12:00', '13:00', '14:00', '15:00', '16:00',
+							'17:00', '18:00', '19:00', '20:00', '21:00',
+							'22:00', '23:00' ]
+
+				} ],
+				yAxis : [ {
+					type : 'value',
+					name : '',
+					axisLabel : {
+						formatter : '{value} ￥'
+					}
+				} ],
+				series : [ {
+					name : '今日',
+					type : 'line',
+					data : [ ${pdt.d0 },${pdt.d1 }	,${pdt.d2 }	,${pdt.d3 }	,${pdt.d4 }	,${pdt.d5 }	,
+							${pdt.d6 }	,${pdt.d7 }	,${pdt.d8 }	,${pdt.d9 }	,${pdt.d10 },${pdt.d11 } ,
+							${pdt.d12 } ,${pdt.d13 } ,${pdt.d14 } ,${pdt.d15 }	,${pdt.d16 } ,${pdt.d17 } ,
+							${pdt.d18 } ,${pdt.d19 } ,${pdt.d20 } ,${pdt.d21 }	,${pdt.d22 } ,${pdt.d23 }
+							],
+					markPoint : {
+						data : [ {
+							type : 'max',
+							name : '最大值'
+						}, {
+							type : 'min',
+							name : '最小值'
+						} ]
+					},
+					markLine : {
+						data : [ {
+							type : 'average',
+							name : '平均值'
+						} ]
+					}
+				}, {
+					name : '一周前',
+					type : 'line',
+					data : [ ${pdt.w0 },${pdt.w1 }	,${pdt.w2 }	,${pdt.w3 }	,${pdt.w4 }	,${pdt.w5 }	,
+						${pdt.w6 }	,${pdt.w7 }	,${pdt.w8 }	,${pdt.w9 }	,${pdt.w10 },${pdt.w11 } ,
+						${pdt.w12 } ,${pdt.w13 } ,${pdt.w14 } ,${pdt.w15 }	,${pdt.w16 } ,${pdt.w17 } ,
+						${pdt.w18 } ,${pdt.w19 } ,${pdt.w20 } ,${pdt.w21 }	,${pdt.w22 } ,${pdt.w23 }
+						],
+					markPoint : {
+						data : [ {
+							type : 'max',
+							name : '最大值'
+						}, {
+							type : 'min',
+							name : '最小值'
+						} ]
+					},
+					markLine : {
+						data : [ {
+							type : 'average',
+							name : '平均值'
+						} ]
+					}
+				}, {
+					name : '一月前',
+					type : 'line',
+					data : [ ${pdt.m0 },${pdt.m1 }	,${pdt.m2 }	,${pdt.m3 }	,${pdt.m4 }	,${pdt.m5 }	,
+						${pdt.m6 }	,${pdt.m7 }	,${pdt.m8 }	,${pdt.m9 }	,${pdt.m10 },${pdt.m11 } ,
+						${pdt.m12 } ,${pdt.m13 } ,${pdt.m14 } ,${pdt.m15 }	,${pdt.m16 } ,${pdt.m17 } ,
+						${pdt.m18 } ,${pdt.m19 } ,${pdt.m20 } ,${pdt.m21 }	,${pdt.m22 } ,${pdt.m23 }
+						],
+					markPoint : {
+						data : [ {
+							type : 'max',
+							name : '最大值'
+						}, {
+							type : 'min',
+							name : '最小值'
+						} ]
+					},
+					markLine : {
+						data : [ {
+							type : 'average',
+							name : '平均值'
+						} ]
+					}
+				} ]
+			};
+
+			// 为echarts对象加载数据 
+			myChart.setOption(option);
+		});
+	</script>
 
 </body>
 </html>

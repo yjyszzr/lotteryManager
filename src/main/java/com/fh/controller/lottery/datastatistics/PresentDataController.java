@@ -1,16 +1,8 @@
 package com.fh.controller.lottery.datastatistics;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
@@ -19,16 +11,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.service.lottery.channel.ChannelDistributorManager;
-import com.fh.service.lottery.channel.ChannelManager;
-import com.fh.service.lottery.channel.ChannelOptionLogManager;
-import com.fh.service.lottery.channel.impl.ChannelDistributorService;
-import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
+import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
-import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 @Controller
@@ -38,8 +25,8 @@ public class PresentDataController extends BaseController {
 	String menuUrl = "present/list.do"; // 西安后台管理数据
 	@Resource(name = "useraccountmanagerService")
 	private UserAccountManagerService useraccountmanagerService;
-	@Resource(name = "channeloptionlogService")
-	private ChannelOptionLogManager channeloptionlogService;
+	@Resource(name = "orderService")
+	private OrderManager ordermanagerService;
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
 	
@@ -98,7 +85,7 @@ public class PresentDataController extends BaseController {
 			amountRecharge = new BigDecimal(listRecharge.get(0).getString("amountSum"));
 		}
 		
-		
+		PageData pdt = getDataForHour(page,pd);
 		mv.setViewName("lottery/datastatistics/presentdata_list");
 		mv.addObject("register", registerList.size());
 		mv.addObject("countBuy", countBuy);
@@ -106,60 +93,48 @@ public class PresentDataController extends BaseController {
 		mv.addObject("countRecharge", countRecharge);
 		mv.addObject("amountRecharge", amountRecharge);
 		mv.addObject("pd", pd);
+		mv.addObject("pdt",pdt);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 
 	}
 
-	/**
-	 * 导出到excel
-	 * 
-	 * @param
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/excel")
-	public ModelAndView exportExcel() throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "导出ChannelXiAn到excel");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
-			return null;
+	public PageData getDataForHour(Page page,PageData pd) throws Exception {
+		PageData pdt = new PageData();
+		LocalDate todayDate = LocalDate.now();
+		LocalDate weekDate = todayDate.plusWeeks(-1);
+		LocalDate monthDate = todayDate.plusMonths(-1);
+		for (int i = 0; i < 24; i++) {
+			if(i<10) {
+				pd.put("dayHour", todayDate+" 0"+i);
+			}else {
+				pd.put("dayHour", todayDate+" "+i);
+			}
+			page.setPd(pd);
+			List<PageData> list = ordermanagerService.getAmountForDayHour(page);
+			pdt.put("d"+i, list.get(0).getString("amount"));
 		}
-		ModelAndView mv = new ModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<String> titles = new ArrayList<String>();
-		titles.add("日期"); // 1
-		titles.add("用户名"); // 2
-		titles.add("手机号"); // 3
-		titles.add("所属门店"); // 4
-		titles.add("所属店员"); // 5
-		titles.add("节点"); // 6
-		titles.add("购彩金额"); // 7
-		titles.add("门店提成"); // 8
-		titles.add("店员提成"); // 9
-		dataMap.put("titles", titles);
-		Page page = new Page();
-		page.setPd(pd);
-		BigDecimal optionAmount = new BigDecimal(0);
-		BigDecimal optionAmountChl = new BigDecimal(0);
-		BigDecimal optionAmountCdt = new BigDecimal(0);
-		HashSet<String> consumerSet = new HashSet<String>();
-		List<PageData> dataList = useraccountmanagerService.findByProcessType(page);
-		List<PageData> varList = new ArrayList<PageData>();
-		PageData count = new PageData();
-		count.put("var1", "合计"); // 1
-		count.put("var2", consumerSet.size()); // 2
-		count.put("var3", ""); // 3
-		count.put("var4", ""); // 4
-		count.put("var5", ""); // 5
-		count.put("var7", optionAmount); // 7
-		count.put("var8", optionAmountChl); // 8
-		count.put("var9", optionAmountCdt); // 9
-		varList.add(count);
-		dataMap.put("varList", varList);
-		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv, dataMap);
-		return mv;
+		for (int i = 0; i < 24; i++) {
+			if(i<10) {
+				pd.put("dayHour", weekDate+" 0"+i);
+			}else {
+				pd.put("dayHour", weekDate+" "+i);
+			}
+			page.setPd(pd);
+			List<PageData> list = ordermanagerService.getAmountForDayHour(page);
+			pdt.put("w"+i, list.get(0).getString("amount"));
+		}
+		for (int i = 0; i < 24; i++) {
+			if(i<10) {
+				pd.put("dayHour", monthDate+" 0"+i);
+			}else {
+				pd.put("dayHour", monthDate+" "+i);
+			}
+			page.setPd(pd);
+			List<PageData> list = ordermanagerService.getAmountForDayHour(page);
+			pdt.put("m"+i, list.get(0).getString("amount"));
+		}
+		return pdt;
 	}
 
 }

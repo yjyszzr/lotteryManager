@@ -145,4 +145,11 @@ public class OrderService implements OrderManager {
 		return (List<PageData>) dao.findForList("OrderMapper.getOrderOfPlay", page);
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getAmountForDayHour(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getAmountForDayHour", page);
+		
+	}
 }

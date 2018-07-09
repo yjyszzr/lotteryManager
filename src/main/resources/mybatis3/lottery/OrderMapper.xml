@@ -404,7 +404,12 @@
 		GROUP BY date,lpc.play_name
 		ORDER BY date
 	</select>
-	
+	<select id="getAmountForDayHour"  parameterType="page" resultType="pd">
+	SELECT COALESCE(sum( ticket_amount ),0) as amount
+    FROM dl_order 
+		where order_status in ('3','4','5','6','7') and 
+		DATE_FORMAT( FROM_UNIXTIME( add_time ), '%Y-%m-%d %H' ) = #{pd.dayHour }
+	</select>
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
