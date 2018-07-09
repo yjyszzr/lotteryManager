@@ -234,9 +234,10 @@ public class UserWithdrawController extends BaseController {
 		SessionUtils.generateSession();
 		Session session = Jurisdiction.getSession();
 		User user = (User) session.getAttribute(Const.SESSION_USERROL);
-		pd.put("auditor_id", user.getUSER_ID());
-		pd.put("auditor", user.getUSERNAME());
+		pd.put("remarks", pd.getString("remarks"));
 		pd.put("audit_time", DateUtilNew.getCurrentTimeLong());
+		pd.put("auditor", user.getUSERNAME());
+		pd.put("auditor_id", user.getUSER_ID());
 		userwithdrawService.updateRemarks(pd);
 		String reqStr = JSON.toJSONString(reqCashEntity);
 		ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getManualAuditUrl(), true);
