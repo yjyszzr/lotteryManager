@@ -25,6 +25,7 @@
 					
 					<form action="worldcupmanager/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
+						<input type="hidden" name="status" id="status" value="1"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -46,7 +47,7 @@
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
-									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
+									<a class="btn btn-mini btn-primary" onclick="save();">开奖</a>
 									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 								</td>
 							</tr>

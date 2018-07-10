@@ -113,7 +113,7 @@
 																<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');" style="border-radius: 5px;cursor:pointer;" >编辑</a>
 															</c:when>
 															<c:when test="${var.status == '1'}">
-																<a class="btn btn-xs btn-danger" title="派奖" onclick="edit('${var.id}');" style="border-radius: 5px;cursor:pointer;" >派奖</a>
+																<a class="btn btn-xs btn-danger" title="派奖" onclick="rewardToUser('${var.id}');" style="border-radius: 5px;cursor:pointer;" >派奖</a>
 															</c:when>
 															<c:when test="${var.status == '2'}">
 																已派奖
@@ -205,7 +205,7 @@
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
-			 diag.Title ="编辑";
+			 diag.Title ="开奖";
 			 diag.URL = '<%=basePath%>worldcupmanager/goEdit.do?id='+Id;
 			 diag.Width = 450;
 			 diag.Height = 265;
@@ -221,14 +221,38 @@
 			 diag.show();
 		}
 		
-		
 		//开奖
 		function openThePrize(Id){
-			var status = 0;
-			bootbox.confirm("确定要开奖吗?", function(result) {
+			$.ajax({
+				url:"<%=basePath%>worldcupmanager/checkThePrizeIsNull.do",
+                type:"post",
+                data:{id:Id},
+                success:function(data){
+                	if(data == "false"){
+                		alert("该比赛结果为空不能开奖!")
+                	}else if(data == "true"){
+						var status = 0;
+						bootbox.confirm("确定要开奖吗?", function(result) {
+							if(result) {
+								top.jzts();
+								var url = "<%=basePath%>worldcupmanager/updateUserRewardStatus.do?id="+Id+"&status="+ status;
+								$.get(url,function(data){
+									tosearch();
+								});
+							}
+						});
+                	}
+                } 
+            }); 
+		}
+		
+		
+		function rewardToUser(Id){
+			var status = 2;  //状态2为已派奖
+			bootbox.confirm("确定要派奖吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>worldcupmanager/openThePrize.do?id="+Id+"&status="+ status;
+					var url = "<%=basePath%>worldcupmanager/rewardToUser.do?id="+Id+"&status="+ status;
 					$.get(url,function(data){
 						tosearch();
 					});

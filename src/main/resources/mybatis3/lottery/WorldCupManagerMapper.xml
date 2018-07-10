@@ -71,24 +71,64 @@
 			status = #{status},
 			auditor_id = #{auditor_id},
 			auditor = #{auditor},
-			audit_time = #{audit_time}
+			audit_time = #{audit_time},
+			average = #{average},
+			people_num = #{people_num}
 		where 
 		id = #{id}
 	</update>
 	
 	<!-- 修改 -->
-	<update id="updateWorldUserPlanStatus" parameterType="pd">
+	<update id="updateWorldUserPlanStatusAndAmount" parameterType="pd">
 		update
 			dl_world_cup_plan
 			 <trim prefix="set" suffixOverrides=",">
 				<if test="status_16 != null and status_16 != ''" >status_16 = #{status_16},</if>
+				<if test="reward_amount_16 != null and reward_amount_16 != ''" >reward_amount_16 = #{reward_amount_16},</if>
 				<if test="status_8 != null and status_8 != ''" >status_8 = #{status_8},</if>
+				<if test="reward_amount_8 != null and reward_amount_8 != ''" >reward_amount_8 = #{reward_amount_8},</if>
 				<if test="status_4 != null and status_4 != ''" >status_4 = #{status_4},</if>
+				<if test="reward_amount_4 != null and reward_amount_4 != ''" >reward_amount_4 = #{reward_amount_4},</if>
 				<if test="status_gyj != null and status_gyj != ''" >status_gyj = #{status_gyj},</if>
+				<if test="reward_amount_gyj != null and reward_amount_gyj != ''" >reward_amount_gyj = #{reward_amount_gyj},</if>
 				<if test="status_gj != null and status_gj != ''" >status_gj = #{status_gj},</if>
+				<if test="reward_amount_gj != null and reward_amount_gj != ''" >reward_amount_gj = #{reward_amount_gj},</if>
 				<if test="status_all_true != null and status_all_true != ''" >status_all_true = #{status_all_true},</if>
+				<if test="reward_amount_all_true != null and reward_amount_all_true != ''" >reward_amount_all_true = #{reward_amount_all_true},</if>
 				<if test="is_open != null and is_open != ''" >is_open = #{is_open},</if>
 			 </trim>
+		where 
+			id = #{id}
+	</update>
+	<update id="updateWorldUserPlanRewardTime" parameterType="pd">
+		update
+			dl_world_cup_plan
+			 <trim prefix="set" suffixOverrides=",">
+				<if test="reward_time_16 != null and reward_time_16 != ''" >reward_time_16 = #{reward_time_16},</if>
+				<if test="reward_time_8 != null and reward_time_8 != ''" >reward_time_8 = #{reward_time_8},</if>
+				<if test="reward_time_4 != null and reward_time_4 != ''" >reward_time_4 = #{reward_time_4},</if>
+				<if test="reward_time_gyj != null and reward_time_gyj != ''" >reward_time_gyj = #{reward_time_gyj},</if>
+				<if test="reward_time_gj != null and reward_time_gj != ''" >reward_time_gj = #{reward_time_gj},</if>
+				<if test="reward_time_all_true != null and reward_time_all_true != ''" >reward_time_all_true = #{reward_time_all_true},</if>
+			 </trim>
+		where 
+			id = #{id}
+	</update>
+	<update id="updateWorldUserRewadAccountTimeAndStatus" parameterType="pd">
+		update
+			  dl_world_cup_user_reward_account 
+	  	set
+		  	status = #{status},
+		  	reward_time = #{reward_time} 
+		where 
+			id = #{id}
+	</update>
+	
+	<update id="updateRewardPoolStatus" parameterType="pd">
+		update
+			  dl_world_cup_reward_pool 
+	  	set
+		  	status = #{status}
 		where 
 			id = #{id}
 	</update>
@@ -174,7 +214,38 @@
 	<select id = "findWorldCupUserPlan" parameterType="pd" resultType="pd">
 		select * from dl_world_cup_plan
 	</select>
+<!-- 	插入 -->
+	<insert id="addWcUserRewardAccount"  parameterType="pd">
+	insert  into  
+		dl_world_cup_user_reward_account (
+			id,
+			wc_plan_id,
+			reward_sn,
+			amount,
+			status	,
+			reward_time,
+			remark,
+			prize_value,
+			user_id
+		)values (
+			#{id},
+			#{wc_plan_id},
+			#{reward_sn},
+			#{amount},
+			#{status},
+			#{reward_time},
+			#{remark},
+			#{prize_value},
+			#{user_id}
+		)
+	</insert>
 	
-	
-	
+	<select id="findUserRewardAccountByPrizeValue" parameterType="pd" resultType="pd"> 
+		select
+			* 
+		from
+			dl_world_cup_user_reward_account
+		where 
+			prize_value = #{prize_value}
+	</select>
 </mapper>

@@ -73,4 +73,8 @@ public interface WorldCupManagerManager {
 
 	public void openThePrize(PageData pd, Map<Integer, Map<String, Integer>> map) throws Exception;
 
+	public void updateUserRewardStatus(PageData pd, Map<Integer, Map<String, Integer>> map) throws Exception;
+
+	public void rewardToUser(PageData pd) throws Exception;
+
 }

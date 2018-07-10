@@ -152,7 +152,7 @@
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
 			and a.pay_time &lt;= #{pd.lastEnd1 }
 		</if>
-		order by  pay_time DESC
+		order by  a.add_time DESC
 	</select>
 	
 	<!-- 列表(全部) -->
