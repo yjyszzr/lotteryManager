@@ -133,85 +133,98 @@ public class WorldCupManagerService implements WorldCupManagerManager {
 			for (String cell : cells) {
 				String[] split = cell.split("\\|");
 				int prizeInt = Integer.parseInt(split[0]);
-				if (prizeValue != 0 && prizeValue == prizeInt) { // 对比奖项16强||8强||4强||2强||1强
-					Map<String, Integer> contrysMap = map.get(prizeInt);
-					String[] contrys = split[1].split(",");
-					for (int j = 0; j < contrys.length; j++) {
-						String[] contry = contrys[j].split(":");
-						if (contrysMap.get(contry[0]) == null || contrysMap.get(contry[0]) != Integer.parseInt(contry[1])) { // 拿赢得比赛的国家队Id跟用户投注国家队Id作比较
-							flag = false;
-							break;
+				if (prizeValue != 0) { // 对比奖项16强||8强||4强||2强||1强
+					if (prizeValue == prizeInt) {
+						Map<String, Integer> contrysMap = map.get(prizeInt);
+						String[] contrys = split[1].split(",");
+						for (int j = 0; j < contrys.length; j++) {
+							String[] contry = contrys[j].split(":");
+							if (contrysMap.get(contry[0]) == null || contrysMap.get(contry[0]) != Integer.parseInt(contry[1])) { // 拿赢得比赛的国家队Id跟用户投注国家队Id作比较
+								flag = false;
+								break;
+							}
+						}
+						if (flag) {
+							pageDataForStatusAndAmount.put("id", pageDataList.get(i).getString("id"));// 添加用户Id
+							pageDataForStatusAndAmount.put("is_open", 1);// 开奖
+							if (prizeInt == 16) {
+								pageDataForStatusAndAmount.put("status_16", 1);
+								pageDataForStatusAndAmount.put("reward_amount_16", pd.getString("average"));
+							} else if (prizeInt == 8) {
+								pageDataForStatusAndAmount.put("status_8", 1);
+								pageDataForStatusAndAmount.put("reward_amount_8", pd.getString("average"));
+							} else if (prizeInt == 4) {
+								pageDataForStatusAndAmount.put("status_4", 1);
+								pageDataForStatusAndAmount.put("reward_amount_4", pd.getString("average"));
+							} else if (prizeInt == 2) {
+								pageDataForStatusAndAmount.put("status_gyj", 1);
+								pageDataForStatusAndAmount.put("reward_amount_gyj", pd.getString("average"));
+							} else if (prizeInt == 1) {
+								pageDataForStatusAndAmount.put("status_gj", 1);
+								pageDataForStatusAndAmount.put("reward_amount_gj", pd.getString("average"));
+							}
+							pageDataListForStatusAndAmount.add(pageDataForStatusAndAmount);
+							logger.info("更新用户" + prizeInt + "强中奖信息============================================" + pageDataForStatusAndAmount);
+							dao.update("WorldCupManagerMapper.updateWorldUserPlanStatusAndAmount", pageDataForStatusAndAmount);
+							// 记录用户中奖到wc_user_reward_Account表
+							PageData wcUserRewardAccount = new PageData();
+							wcUserRewardAccount.put("id", 0);
+							wcUserRewardAccount.put("wc_plan_id", pageDataForStatusAndAmount.getString("id"));
+							String sn = SNGenerator.nextSN(9);// 生成订单号
+							wcUserRewardAccount.put("reward_sn", sn);
+							wcUserRewardAccount.put("user_id", pageDataList.get(i).getString("user_id"));
+							wcUserRewardAccount.put("status", 0);
+							wcUserRewardAccount.put("amount", pd.getString("average"));
+							wcUserRewardAccount.put("prize_value", prizeInt);
+							wcUserRewardAccount.put("remark", "世界杯" + prizeInt + "强");
+							dao.update("WorldCupManagerMapper.addWcUserRewardAccount", wcUserRewardAccount);
+							logger.info("记录用户中奖到wc_user_reward_Account===============================" + wcUserRewardAccount);
 						}
 					}
-					if (flag) {
-						pageDataForStatusAndAmount.put("id", pageDataList.get(i).getString("id"));// 添加用户Id
-						pageDataForStatusAndAmount.put("is_open", 1);// 开奖
-						if (prizeInt == 16) {
-							pageDataForStatusAndAmount.put("status_16", 1);
-							pageDataForStatusAndAmount.put("reward_amount_16", pd.getString("average"));
-						} else if (prizeInt == 8) {
-							pageDataForStatusAndAmount.put("status_8", 1);
-							pageDataForStatusAndAmount.put("reward_amount_8", pd.getString("average"));
-						} else if (prizeInt == 4) {
-							pageDataForStatusAndAmount.put("status_4", 1);
-							pageDataForStatusAndAmount.put("reward_amount_4", pd.getString("average"));
-						} else if (prizeInt == 2) {
-							pageDataForStatusAndAmount.put("status_gyj", 1);
-							pageDataForStatusAndAmount.put("reward_amount_gyj", pd.getString("average"));
-						} else if (prizeInt == 1) {
-							pageDataForStatusAndAmount.put("status_gj", 1);
-							pageDataForStatusAndAmount.put("reward_amount_gj", pd.getString("average"));
-						}
-						pageDataListForStatusAndAmount.add(pageDataForStatusAndAmount);
-						logger.info("更新用户" + prizeInt + "强中奖信息============================================" + pageDataForStatusAndAmount);
-						dao.update("WorldCupManagerMapper.updateWorldUserPlanStatusAndAmount", pageDataForStatusAndAmount);
-						// 记录用户中奖到wc_user_reward_Account表
-						PageData wcUserRewardAccount = new PageData();
-						wcUserRewardAccount.put("id", 0);
-						wcUserRewardAccount.put("wc_plan_id", pageDataForStatusAndAmount.getString("id"));
-						String sn = SNGenerator.nextSN(9);// 生成订单号
-						wcUserRewardAccount.put("reward_sn", sn);
-						wcUserRewardAccount.put("user_id", pageDataList.get(i).getString("user_id"));
-						wcUserRewardAccount.put("status", 0);
-						wcUserRewardAccount.put("amount", pd.getString("average"));
-						wcUserRewardAccount.put("prize_value", prizeInt);
-						wcUserRewardAccount.put("remark", "世界杯" + prizeInt + "强");
-						dao.update("WorldCupManagerMapper.addWcUserRewardAccount", wcUserRewardAccount);
-						logger.info("记录用户中奖到wc_user_reward_Account===============================" + wcUserRewardAccount);
-					}
-				} else if (prizeValue == 0) {
+				}
+			}
+			if (prizeValue == 0) {
+				// 证明是从16强开始竞猜的
+				if (map.get(16) != null) {
 					// 获取终极大奖的奖项
-					Map<String, Integer> contrysMap = map.get(prizeInt);
-					String[] contrys = split[1].split(",");
-					for (int j = 0; j < contrys.length; j++) {
-						String[] contry = contrys[j].split(":");
-						// 拿赢得比赛的国家队Id跟用户投注国家队Id作比较
-						if (contrysMap.get(contry[0]) == null && contrysMap.get(contry[0]) == Integer.parseInt(contry[1])) {
-							flag = true;
+					for (String cell : cells) {
+						String[] split = cell.split("\\|");
+						int prizeInt = Integer.parseInt(split[0]);
+						Map<String, Integer> contrysMap = map.get(prizeInt);
+						String[] contrys = split[1].split(",");
+						for (int j = 0; j < contrys.length; j++) {
+							String[] contry = contrys[j].split(":");
+							// 拿赢得比赛的国家队Id跟用户投注国家队Id作比较
+							if (contrysMap.get(contry[0]) == null || contrysMap.get(contry[0]) != Integer.parseInt(contry[1])) {
+								flag = false;
+								break;
+							}
 						}
 					}
-					if (flag) {
-						pageDataForStatusAndAmount.put("id", pageDataList.get(i).getString("id"));
-						pageDataForStatusAndAmount.put("status_all_true", 1);
-						pageDataForStatusAndAmount.put("is_open", 1);
-						pageDataForStatusAndAmount.put("reward_amount_all_true", pd.getString("average"));
-						pageDataListForStatusAndAmount.add(pageDataForStatusAndAmount);
-						logger.info("更新用户终极中奖信息============================================" + pageDataForStatusAndAmount);
-						dao.update("WorldCupManagerMapper.updateWorldUserPlanStatusAndAmount", pageDataForStatusAndAmount);
-						// 记录用户中奖到wc_user_reward_Account表
-						PageData wcUserRewardAccount = new PageData();
-						wcUserRewardAccount.put("id", 0);
-						wcUserRewardAccount.put("wc_plan_id", pageDataForStatusAndAmount.getString("id"));
-						wcUserRewardAccount.put("user_id", pageDataList.get(i).getString("user_id"));
-						String sn = SNGenerator.nextSN(9);// 生成订单号
-						wcUserRewardAccount.put("reward_sn", sn);
-						wcUserRewardAccount.put("status", 0);
-						wcUserRewardAccount.put("amount", pd.getString("average"));
-						wcUserRewardAccount.put("prize_value", prizeValue);
-						wcUserRewardAccount.put("remark", "世界杯终极大奖");
-						dao.update("WorldCupManagerMapper.addWcUserRewardAccount", wcUserRewardAccount);
-						logger.info("记录用户中奖到wc_user_reward_Account===============================" + wcUserRewardAccount);
-					}
+				} else {
+					flag = false;
+				}
+				if (flag) {
+					pageDataForStatusAndAmount.put("id", pageDataList.get(i).getString("id"));
+					pageDataForStatusAndAmount.put("status_all_true", 1);
+					pageDataForStatusAndAmount.put("is_open", 1);
+					pageDataForStatusAndAmount.put("reward_amount_all_true", pd.getString("average"));
+					pageDataListForStatusAndAmount.add(pageDataForStatusAndAmount);
+					logger.info("更新用户终极中奖信息============================================" + pageDataForStatusAndAmount);
+					dao.update("WorldCupManagerMapper.updateWorldUserPlanStatusAndAmount", pageDataForStatusAndAmount);
+					// 记录用户中奖到wc_user_reward_Account表
+					PageData wcUserRewardAccount = new PageData();
+					wcUserRewardAccount.put("id", 0);
+					wcUserRewardAccount.put("wc_plan_id", pageDataForStatusAndAmount.getString("id"));
+					wcUserRewardAccount.put("user_id", pageDataList.get(i).getString("user_id"));
+					String sn = SNGenerator.nextSN(9);// 生成订单号
+					wcUserRewardAccount.put("reward_sn", sn);
+					wcUserRewardAccount.put("status", 0);
+					wcUserRewardAccount.put("amount", pd.getString("average"));
+					wcUserRewardAccount.put("prize_value", prizeValue);
+					wcUserRewardAccount.put("remark", "世界杯终极大奖");
+					dao.update("WorldCupManagerMapper.addWcUserRewardAccount", wcUserRewardAccount);
+					logger.info("记录用户中奖到wc_user_reward_Account===============================" + wcUserRewardAccount);
 				}
 			}
 		}
@@ -233,51 +246,64 @@ public class WorldCupManagerService implements WorldCupManagerManager {
 			for (String cell : cells) {
 				String[] split = cell.split("\\|");
 				int prizeInt = Integer.parseInt(split[0]);
-				if (prizeValue != 0 && prizeValue == prizeInt) { // 对比奖项16强||8强||4强||2强||1强
-					Map<String, Integer> contrysMap = map.get(prizeInt);
-					String[] contrys = split[1].split(",");
-					for (int j = 0; j < contrys.length; j++) {
-						String[] contry = contrys[j].split(":");
-						if (contrysMap.get(contry[0]) == null || contrysMap.get(contry[0]) != Integer.parseInt(contry[1])) { // 拿赢得比赛的国家队Id跟用户投注国家队Id作比较
-							flag = false;
-							break;
+				if (prizeValue != 0) { // 对比奖项16强||8强||4强||2强||1强
+					if (prizeValue == prizeInt) {
+						Map<String, Integer> contrysMap = map.get(prizeInt);
+						String[] contrys = split[1].split(",");
+						for (int j = 0; j < contrys.length; j++) {
+							String[] contry = contrys[j].split(":");
+							if (contrysMap.get(contry[0]) == null || contrysMap.get(contry[0]) != Integer.parseInt(contry[1])) { // 拿赢得比赛的国家队Id跟用户投注国家队Id作比较
+								flag = false;
+								break;
+							}
+						}
+						if (flag) {
+							pageDataForStatusAndAmount.put("id", pageDataList.get(i).getString("id"));// 添加用户Id
+							if (prizeInt == 16) {
+								pageDataForStatusAndAmount.put("status_16", 1);
+							} else if (prizeInt == 8) {
+								pageDataForStatusAndAmount.put("status_8", 1);
+							} else if (prizeInt == 4) {
+								pageDataForStatusAndAmount.put("status_4", 1);
+							} else if (prizeInt == 2) {
+								pageDataForStatusAndAmount.put("status_gyj", 1);
+							} else if (prizeInt == 1) {
+								pageDataForStatusAndAmount.put("status_gj", 1);
+							}
+							pageDataListForStatusAndAmount.add(pageDataForStatusAndAmount);
+							logger.info("更新用户" + prizeInt + "强中奖状态============================================" + pageDataForStatusAndAmount);
+							dao.update("WorldCupManagerMapper.updateWorldUserPlanStatusAndAmount", pageDataForStatusAndAmount);
 						}
 					}
-					if (flag) {
-						pageDataForStatusAndAmount.put("id", pageDataList.get(i).getString("id"));// 添加用户Id
-						if (prizeInt == 16) {
-							pageDataForStatusAndAmount.put("status_16", 1);
-						} else if (prizeInt == 8) {
-							pageDataForStatusAndAmount.put("status_8", 1);
-						} else if (prizeInt == 4) {
-							pageDataForStatusAndAmount.put("status_4", 1);
-						} else if (prizeInt == 2) {
-							pageDataForStatusAndAmount.put("status_gyj", 1);
-						} else if (prizeInt == 1) {
-							pageDataForStatusAndAmount.put("status_gj", 1);
-						}
-						pageDataListForStatusAndAmount.add(pageDataForStatusAndAmount);
-						logger.info("更新用户" + prizeInt + "强中奖状态============================================" + pageDataForStatusAndAmount);
-						dao.update("WorldCupManagerMapper.updateWorldUserPlanStatusAndAmount", pageDataForStatusAndAmount);
-					}
-				} else if (prizeValue == 0) {
-					// 获取终极大奖的奖项
-					Map<String, Integer> contrysMap = map.get(prizeInt);
-					String[] contrys = split[1].split(",");
-					for (int j = 0; j < contrys.length; j++) {
-						String[] contry = contrys[j].split(":");
-						// 拿赢得比赛的国家队Id跟用户投注国家队Id作比较
-						if (contrysMap.get(contry[0]) == null && contrysMap.get(contry[0]) == Integer.parseInt(contry[1])) {
-							flag = true;
+				}
+			}
+			if (prizeValue == 0) {
+				// 证明是从16强开始竞猜的
+				if (map.get(16) != null) {
+					for (String cell : cells) {
+						String[] split = cell.split("\\|");
+						int prizeInt = Integer.parseInt(split[0]);
+						// 获取终极大奖的奖项
+						Map<String, Integer> contrysMap = map.get(prizeInt);
+						String[] contrys = split[1].split(",");
+						for (int j = 0; j < contrys.length; j++) {
+							String[] contry = contrys[j].split(":");
+							// 拿赢得比赛的国家队Id跟用户投注国家队Id作比较
+							if (contrysMap.get(contry[0]) == null || contrysMap.get(contry[0]) != Integer.parseInt(contry[1])) {
+								flag = false;
+								break;
+							}
 						}
 					}
-					if (flag) {
-						pageDataForStatusAndAmount.put("id", pageDataList.get(i).getString("id"));
-						pageDataForStatusAndAmount.put("status_all_true", 1);
-						pageDataListForStatusAndAmount.add(pageDataForStatusAndAmount);
-						logger.info("更新用户终极中奖状态============================================" + pageDataForStatusAndAmount);
-						dao.update("WorldCupManagerMapper.updateWorldUserPlanStatusAndAmount", pageDataForStatusAndAmount);
-					}
+				} else {
+					flag = false;
+				}
+				if (flag) {
+					pageDataForStatusAndAmount.put("id", pageDataList.get(i).getString("id"));
+					pageDataForStatusAndAmount.put("status_all_true", 1);
+					pageDataListForStatusAndAmount.add(pageDataForStatusAndAmount);
+					logger.info("更新用户终极中奖状态============================================" + pageDataForStatusAndAmount);
+					dao.update("WorldCupManagerMapper.updateWorldUserPlanStatusAndAmount", pageDataForStatusAndAmount);
 				}
 			}
 		}
@@ -342,5 +368,10 @@ public class WorldCupManagerService implements WorldCupManagerManager {
 		logger.info("请求reqStr===========================" + reqStr);
 		ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getManualRewardToUserMoneyLimitUrl(), true);
 
+	}
+
+	@Override
+	public void updateAllIsOpen() throws Exception {
+		dao.update("WorldCupManagerMapper.updateAllIsOpen", null);
 	}
 }

@@ -248,4 +248,8 @@
 		where 
 			prize_value = #{prize_value}
 	</select>
+	
+	<update id="updateAllIsOpen">
+		update dl_world_cup_plan set is_open = 1;
+	</update>
 </mapper>

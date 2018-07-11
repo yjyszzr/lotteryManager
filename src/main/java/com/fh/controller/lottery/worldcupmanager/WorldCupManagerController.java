@@ -49,9 +49,6 @@ public class WorldCupManagerController extends BaseController {
 	@RequestMapping(value = "/checkThePrizeIsNull")
 	public void checkThePrizeIsNull(PrintWriter out) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "检查是否为空 ----方法为:checkThePrizeIsNull");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-			return;
-		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		Map<Integer, Map<String, Integer>> cupMap = getWorldCupMap(pd);
@@ -78,6 +75,64 @@ public class WorldCupManagerController extends BaseController {
 				out.write("false");
 			}
 		}
+		out.close();
+	}
+
+	/**
+	 * 检查所有预设奖项结果是否有空值
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/checkAllPrizeIsNull")
+	public void checkAllPrizeIsNull(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "检查所有预设奖项结果是否有空值 ----方法为:checkAllPrizeIsNull");
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		Map<Integer, Map<String, Integer>> cupMap = getWorldCupMap(pd);
+		List<PageData> pageList = worldcupmanagerService.listAll(pd);
+		boolean flag = true;
+		for (int i = 0; i < pageList.size(); i++) {
+			Integer value = Integer.parseInt(pageList.get(i).getString("prize_value"));
+			if (value != 0) {
+				Map<String, Integer> map = cupMap.get(value);
+				if (map.isEmpty()) {
+					flag = false;
+					break;
+				}
+			}
+		}
+		if (flag) {
+			out.write("true");
+		} else {
+			out.write("false");
+		}
+		out.close();
+	}
+
+	/**
+	 * 计算并更新用户中奖状态
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateUserAllRewardStatus")
+	public void updateUserAllRewardStatus(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "更新用户的所有奖项的中奖状态");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		Map<Integer, Map<String, Integer>> map = getWorldCupMap(pd);
+		List<PageData> pageList = worldcupmanagerService.listAll(pd);
+		for (int i = 0; i < pageList.size(); i++) {
+			pd = pageList.get(i);
+			worldcupmanagerService.updateUserRewardStatus(pd, map);
+		}
+		// 更新所有用户的开奖状态 即:isOpen = 1
+		worldcupmanagerService.updateAllIsOpen();
+		out.write("success");
 		out.close();
 	}
 
@@ -212,6 +267,7 @@ public class WorldCupManagerController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = worldcupmanagerService.list(page); // 列出WorldCupManager列表
+		int numStatus = 0;
 		for (int i = 0; i < varList.size(); i++) {
 			Integer prizeValue = Integer.parseInt(varList.get(i).getString("prize_value"));
 			PageData pada = new PageData();
@@ -229,9 +285,14 @@ public class WorldCupManagerController extends BaseController {
 					varList.get(i).put("average", big.divide(bigPeopleNum, MathContext.DECIMAL128).setScale(2, RoundingMode.HALF_EVEN));
 				}
 			}
+			Integer status = Integer.parseInt(varList.get(i).getString("status"));
+			if (status == -1) {
+				numStatus++;
+			}
 		}
 		mv.setViewName("lottery/worldcupmanager/worldcupmanager_list");
 		mv.addObject("varList", varList);
+		mv.addObject("numStatus", numStatus == varList.size() ? 0 : 1);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
