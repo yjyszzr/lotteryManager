@@ -107,12 +107,6 @@ public class SwitchAppConfigService implements SwitchAppConfigManager{
 	public List<PageData> querySwitchAppConfig(PageData pd) throws Exception {
 		return (List<PageData>)dao.findForObject("SwitchAppConfigMapper.querySwitchAppConfig", pd);
 	}
-
-	@Override
-	public List<PageData> switchappconfigService(PageData pd) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 }
 
