@@ -79,6 +79,16 @@
 			id = #{id}
 	</select>
 	
+	
+	<!-- 通过查询条件获取数据 -->
+	<select id="querySwitchAppConfig" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where version = #{version} and platform =  #{platform} and  channel = #{channel} 
+	</select>
+	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
