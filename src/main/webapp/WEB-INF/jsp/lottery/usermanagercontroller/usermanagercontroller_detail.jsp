@@ -254,13 +254,15 @@
 		       case '2': text='失效';isBusiness=2; break;
 		    }
 		    document.getElementById("demo").innerHTML = text;
+			var url = '<%=basePath%>usermanagercontroller/changeUserSwitch.do?is_business='+isBusiness+'&user_id='+user_id;
+			window.location.href = url;
 		    
-			bootbox.confirm("确定要改变开关信息吗?", function(result) {
+/* 			bootbox.confirm("确定要改变开关信息吗?", function(result) {
 				if(result) {
-					var url = '<%=basePath%>usermanagercontroller/changeUserSwitch.do?is_business='+isBusiness+'&user_id='+user_id;
-					window.location.href = url;
+
+					
 				}
-			});
+			}); */
 		}
 		
 		function myFunctionShow() {
