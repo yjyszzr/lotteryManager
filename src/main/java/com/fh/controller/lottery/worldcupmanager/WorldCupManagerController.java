@@ -2,6 +2,8 @@ package com.fh.controller.lottery.worldcupmanager;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,7 +146,8 @@ public class WorldCupManagerController extends BaseController {
 		// 获取该奖项的总金额 根据人数计算平均中奖金额
 		BigDecimal big = new BigDecimal(pdForAverage.getString("quota"));
 		BigDecimal bigNum = new BigDecimal(pd.getString("people_num"));
-		BigDecimal average = big.divide(bigNum, 2);
+		// MathContext context = MathContext.DECIMAL128;
+		BigDecimal average = big.divide(bigNum, MathContext.DECIMAL128).setScale(2, RoundingMode.HALF_EVEN);
 		pd.put("average", average);// 设置平均值
 		pd.put("prize_value", pdForAverage.getString("prize_value"));// 设置奖项枚举值
 		pd.put("audit_time", DateUtilNew.getCurrentTimeLong());// 审核时间
@@ -223,7 +226,7 @@ public class WorldCupManagerController extends BaseController {
 					varList.get(i).put("average", 0);
 				} else {
 					BigDecimal bigPeopleNum = new BigDecimal(peopleNum.toString());
-					varList.get(i).put("average", big.divide(bigPeopleNum, 2).doubleValue());
+					varList.get(i).put("average", big.divide(bigPeopleNum, MathContext.DECIMAL128).setScale(2, RoundingMode.HALF_EVEN));
 				}
 			}
 		}
@@ -256,7 +259,7 @@ public class WorldCupManagerController extends BaseController {
 			pd.put("average", 0);
 		} else {
 			BigDecimal bigPeopleNum = new BigDecimal(peopleNum.toString());
-			pd.put("average", big.divide(bigPeopleNum, 2).doubleValue());
+			pd.put("average", big.divide(bigPeopleNum, MathContext.DECIMAL128).setScale(2, RoundingMode.HALF_EVEN));
 		}
 		mv.setViewName("lottery/worldcupmanager/worldcupmanager_edit");
 		mv.addObject("msg", "openThePrize");
