@@ -48,6 +48,12 @@ public interface SwitchAppConfigManager{
 	 */
 	public PageData findById(PageData pd)throws Exception;
 	
+	/**通过id获取数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData queryChannelByCondition(PageData pd)throws Exception;
+	
 	/**批量删除
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
@@ -58,6 +64,12 @@ public interface SwitchAppConfigManager{
 	 * 查询渠道
 	 */
 	public List<PageData> queryChannel()throws Exception;
+
+	/**查询开关
+	 * @param pd
+	 * @throws Exception
+	 */
+	List<PageData> querySwitchAppConfig(PageData pd) throws Exception;
 	
 	
 }

@@ -50,6 +50,12 @@ public class SwitchAppConfigController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		
+//		List<PageData> pageDataList = switchappconfigService.querySwitchAppConfig(pd);
+//		if(pageDataList.size() <= 0) {
+//
+//		}
+		
 //		pd.put("id_id", this.get32UUID());	//主键
 		pd.put("id", "0");	//备注1
 		switchappconfigService.save(pd);
