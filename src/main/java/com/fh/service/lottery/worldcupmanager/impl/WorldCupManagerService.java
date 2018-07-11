@@ -294,20 +294,27 @@ public class WorldCupManagerService implements WorldCupManagerManager {
 		List<PageData> dataList = (List<PageData>) dao.findForList("WorldCupManagerMapper.findUserRewardAccountByPrizeValue", pd);
 		List<ReqOrdeEntity> userIdAndRewardList = new ArrayList<ReqOrdeEntity>();
 		for (int i = 0; i < dataList.size(); i++) {
+			ReqOrdeEntity reqOrdeEntity = new ReqOrdeEntity();
 			PageData pageData = new PageData();
 			pageData.put("id", dataList.get(i).getString("wc_plan_id"));
 			if (pd.getString("prize_value").equals("0")) {
 				pageData.put("reward_time_all_true", DateUtilNew.getCurrentTimeLong());
+				reqOrdeEntity.note = "世界杯推演活动终极大奖";
 			} else if (pd.getString("prize_value").equals("1")) {
 				pageData.put("reward_time_gj", DateUtilNew.getCurrentTimeLong());
+				reqOrdeEntity.note = "世界杯推演活动冠军大奖";
 			} else if (pd.getString("prize_value").equals("2")) {
 				pageData.put("reward_time_gyj", DateUtilNew.getCurrentTimeLong());
+				reqOrdeEntity.note = "世界杯推演活动冠亚军大奖";
 			} else if (pd.getString("prize_value").equals("4")) {
 				pageData.put("reward_time_4", DateUtilNew.getCurrentTimeLong());
+				reqOrdeEntity.note = "世界杯推演活动4强大奖";
 			} else if (pd.getString("prize_value").equals("8")) {
 				pageData.put("reward_time_8", DateUtilNew.getCurrentTimeLong());
+				reqOrdeEntity.note = "世界杯推演活动8强大奖";
 			} else if (pd.getString("prize_value").equals("16")) {
 				pageData.put("reward_time_16", DateUtilNew.getCurrentTimeLong());
+				reqOrdeEntity.note = "世界杯推演活动16强大奖";
 			}
 			dao.update("WorldCupManagerMapper.updateWorldUserPlanRewardTime", pageData);
 			// 更新派奖记录中的时间以及状态
@@ -316,14 +323,12 @@ public class WorldCupManagerService implements WorldCupManagerManager {
 			userRewadAccount.put("status", 1);
 			userRewadAccount.put("reward_time", DateUtilNew.getCurrentTimeLong());
 			dao.update("WorldCupManagerMapper.updateWorldUserRewadAccountTimeAndStatus", userRewadAccount);
-			ReqOrdeEntity reqOrdeEntity = new ReqOrdeEntity();
 			reqOrdeEntity.orderSn = dataList.get(i).getString("reward_sn");
 			reqOrdeEntity.reward = Double.parseDouble(dataList.get(i).getString("amount"));
 			reqOrdeEntity.userId = Integer.valueOf(dataList.get(i).getString("user_id"));
 			reqOrdeEntity.userMoney = 0;
 			reqOrdeEntity.betMoney = 0;
-			String payTime = DateUtilNew.getCurrentTimeString(Long.valueOf(userRewadAccount.getString("reward_time")), DateUtilNew.datetimeFormat);
-			reqOrdeEntity.betTime = payTime;
+			reqOrdeEntity.betTime = DateUtilNew.getCurrentTimeString(Long.valueOf(userRewadAccount.getString("reward_time")), DateUtilNew.datetimeFormat);
 			userIdAndRewardList.add(reqOrdeEntity);
 		}
 		// 更新该奖设的状态
