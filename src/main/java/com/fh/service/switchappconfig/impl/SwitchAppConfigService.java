@@ -96,6 +96,17 @@ public class SwitchAppConfigService implements SwitchAppConfigManager{
 		return (List<PageData>)dao.findForList("SwitchAppConfigMapper.findChannels", "");
 
 	}
+
+	@Override
+	public PageData queryChannelByCondition(PageData pd) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<PageData> querySwitchAppConfig(PageData pd) throws Exception {
+		return (List<PageData>)dao.findForObject("SwitchAppConfigMapper.querySwitchAppConfig", pd);
+	}
 	
 }
 

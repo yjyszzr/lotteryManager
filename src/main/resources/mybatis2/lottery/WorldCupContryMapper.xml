@@ -1,40 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="SwitchAppConfigMapper">
+<mapper namespace="WorldCupContryMapper">
 	
 	<!--表名 -->
 	<sql id="tableName">
-		dl_switch_config
+		dl_world_cup_contry
 	</sql>
 	
 	<!-- 字段 -->
 	<sql id="Field">
 		id,	
-		version,	
-		platform,	
-		business_type,	
-		channel,
-		turn_on
+		country_id,	
+		contry_name,	
+		contry_pic,	
+		is_16,	
+		is_8,	
+		is_4,	
+		is_2,	
+		is_1
 	</sql>
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
         #{id},	
-        #{version},	
-        #{platform},	
-        #{business_type},
-        #{turn_on},
-        #{channel}
+        #{country_id},	
+        #{contry_name},	
+        #{contry_pic},	
+        #{is_16},	
+        #{is_8},	
+        #{is_4},	
+        #{is_2},	
+        #{is_1}	
 	</sql>
-	
-
-	<!-- 通过ID获取数据 -->
-	<select id="findChannels" resultType="pd">
-		select id,channel,channel_name
-		from 
-		dl_phone_channel
-	</select>
-	
 	
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
@@ -42,11 +39,14 @@
 	<include refid="tableName"></include>
 		(
 		        id,	
-		        version,	
-		        platform,	
-		        business_type,	
-		        turn_on,
-		        channel
+		        country_id,	
+		        contry_name,	
+		        contry_pic,	
+		        is_16,	
+		        is_8,	
+		        is_4,	
+		        is_2,	
+		        is_1	
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -64,7 +64,16 @@
 	<update id="edit" parameterType="pd">
 		update
 		<include refid="tableName"></include>
-		set turn_on = #{turn_on}
+		set 
+			id = #{id},
+			country_id = #{country_id},
+			contry_name = #{contry_name},
+			contry_pic = #{contry_pic},
+			is_16 = #{is_16},
+			is_8 = #{is_8},
+			is_4 = #{is_4},
+			is_2 = #{is_2},
+			is_1 = #{is_1}
 		where 
 		id = #{id}
 	</update>
@@ -79,33 +88,13 @@
 			id = #{id}
 	</select>
 	
-	
-	<!-- 通过查询条件获取数据 -->
-	<select id="querySwitchAppConfig" parameterType="pd" resultType="pd">
-		select 
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where version = #{version} and platform =  #{platform} and  channel = #{channel} 
-	</select>
-	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-			sc.id,	
-			sc.version,	
-			sc.platform,	
-			sc.business_type,	
-			pc.channel,
-			pc.channel_name,
-			sc.turn_on
+		<include refid="Field"></include>
 		from 
-		dl_switch_config sc
-		left join
-		dl_phone_channel pc
-		on sc.channel = pc.channel
+		<include refid="tableName"></include>
 		where 1=1
-		order by sc.version desc
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -126,7 +115,6 @@
 		<include refid="tableName"></include>
 	</select>
 	
-	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
@@ -137,6 +125,4 @@
                  #{item}
 		</foreach>
 	</delete>
-	
-	<!-- fh313596790qq(青苔) -->
 </mapper>

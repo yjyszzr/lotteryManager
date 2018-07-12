@@ -141,7 +141,7 @@
 							<span class="add-on bg_lr">
 								<i><img height="37" src="static/login/suo.png" /></i>
 							</span>
-								<input  type="text" name="code" id="code" placeholder="请输入手机验证码"  value=""  autocomplete="off"  style="height:30px; border:0px; display:inline-block; width:53%; line-height:28px;  margin-bottom:3px  !important;" autocomplete="off" style = "height:37px;float:left"/>
+								<input  type="text" name="code" id="code" placeholder="请输入手机验证码"  value="123456"  autocomplete="off"  style="height:30px; border:0px; display:inline-block; width:53%; line-height:28px;  margin-bottom:3px  !important;" autocomplete="off" style = "height:37px;float:left"/>
 								 <input type="button" onclick="sendMsgCode();" id="sendMsgBtn" value="获取验证码" style="background:#FFD700;padding: 0px; width: 22%;height: 38px !important;}" />  
 						</div>
 					</div>

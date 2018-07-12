@@ -1,16 +1,16 @@
-package com.fh.service.switchappconfig;
+package com.fh.service.lottery.worldcupcontry;
 
 import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /** 
- * 说明： app配置接口
+ * 说明： 世界杯推演接口
  * 创建人：FH Q313596790
- * 创建时间：2018-04-16
+ * 创建时间：2018-07-09
  * @version
  */
-public interface SwitchAppConfigManager{
+public interface WorldCupContryManager{
 
 	/**新增
 	 * @param pd
@@ -48,29 +48,11 @@ public interface SwitchAppConfigManager{
 	 */
 	public PageData findById(PageData pd)throws Exception;
 	
-	/**通过id获取数据
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData queryChannelByCondition(PageData pd)throws Exception;
-	
 	/**批量删除
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
-	
-	/**
-	 * 查询渠道
-	 */
-	public List<PageData> queryChannel()throws Exception;
-
-	/**查询开关
-	 * @param pd
-	 * @throws Exception
-	 */
-	List<PageData> querySwitchAppConfig(PageData pd) throws Exception;
-	
 	
 }
 

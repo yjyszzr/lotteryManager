@@ -371,6 +371,12 @@ public class UserManagerControllerController extends BaseController {
 			userEntity.put("is_real", 0);
 		}
 		usermanagercontrollerService.edit(userEntity);
+		
+		PageData updateRealPd = new PageData();
+		updateRealPd.put("is_delete", 1);
+		updateRealPd.put("user_id", Integer.valueOf(userEntity.getString("user_id")));
+		userrealmanagerService.edit(updateRealPd);
+		
 		mv = getDetailView(mv);
 		return mv;
 	}

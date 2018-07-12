@@ -20,7 +20,8 @@
 		address_info,	
 		status,	
 		add_time,	
-		reason,	
+		reason,
+		is_delete,	
 		real_id
 	</sql>
 	
@@ -37,7 +38,8 @@
         #{address_info},	
         #{status},	
         #{add_time},	
-        #{reason}	
+        #{reason},
+        #{is_delete}
 	</sql>
 	
 	<!-- 新增-->
@@ -75,9 +77,9 @@
 		update
 		<include refid="tableName"></include>
 		set 
-		real_id = real_id
+		is_delete = #{is_delete}
 		where 
-		real_id = #{real_id}
+		user_id = #{user_id}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
@@ -87,7 +89,7 @@
 		from 
 		<include refid="tableName"></include>
 		where 
-			user_id = #{user_id}
+			user_id = #{user_id} and is_delete = 0
 	</select>
 	
 	<!-- 列表 -->
