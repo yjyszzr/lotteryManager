@@ -356,9 +356,10 @@
 	</select>
 	<!-- 数据统计中-订单数据 -->
 	<select id="getOrderAndDetail" parameterType="page" resultType="pd">
-		SELECT   o.user_id,
+		SELECT  o.order_sn, 
+				o.user_id,
 				lpc.play_name,
-				d.match_id  ,
+				GROUP_CONCAT(d.match_id) as match_id  ,
 				o.pass_type,
 				o.cathectic  ,
 				o.ticket_amount ,
@@ -369,6 +370,7 @@
 		FROM dl_order o LEFT JOIN dl_order_detail d on o.order_id = d.order_id 
 						LEFT JOIN dl_lottery_play_classify lpc on o.lottery_play_classify_id=lpc.lottery_play_classify_id
 		where o.add_time &gt; #{pd.lastStart1} and  o.add_time &lt; #{pd.lastEnd1}
+		GROUP BY order_sn
 		ORDER BY add_time
 	</select>
 	<!-- 数据统计中-彩票数据 -->
@@ -385,24 +387,16 @@
 					count(distinct o.user_id) as userCount,
 					count(o.order_sn) as orderCount,
 					sum(o.ticket_amount) as amount
-		FROM dl_order o LEFT JOIN dl_order_detail d on o.order_id = d.order_id 
-						LEFT JOIN dl_lottery_play_classify lpc on o.lottery_play_classify_id=lpc.lottery_play_classify_id
+		FROM dl_order o  LEFT JOIN dl_lottery_play_classify lpc on o.lottery_play_classify_id=lpc.lottery_play_classify_id
 	  where order_status in ('3','4','5','6','7') and  lpc.lottery_play_classify_id != 8
 	  	<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
 			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &gt;= #{pd.lastStart1 }
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
 			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &lt;= #{pd.lastEnd1 }
-		</if>
-	  	<if test="pd.monthStart1 != null and pd.monthStart1 != ''"> 
-			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m" ) &gt;= #{pd.monthStart1 }
-		</if>
-		<if test="pd.monthEnd1 != null and pd.monthEnd1 != ''"> 
-			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m" ) &lt;= #{pd.monthEnd1 }
-		</if>
+		</if> 
 	  
-		GROUP BY date,lpc.play_name
-		ORDER BY date
+		GROUP BY date,lpc.play_name 
 	</select>
 	<select id="getAmountForDayHour"  parameterType="page" resultType="pd">
 	SELECT COALESCE(sum( ticket_amount ),0) as amount
@@ -410,6 +404,49 @@
 		where order_status in ('3','4','5','6','7') and 
 		DATE_FORMAT( FROM_UNIXTIME( add_time ), '%Y-%m-%d %H' ) = #{pd.dayHour }
 	</select>
+	
+	<select id="getMatchAmountByTime"  parameterType="page" resultType="pd">
+	SELECT det.match_id, sum( a.amount ) as  amount
+	FROM dl_order_detail det RIGHT JOIN (
+		SELECT o.order_id, sum( o.ticket_amount ) / ( count( o.order_sn ) * count( o.order_sn ) ) AS amount 
+		FROM dl_order o LEFT JOIN dl_order_detail d ON o.order_id = d.order_id 
+		WHERE DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &gt;= #{pd.lastStart1 }
+				AND DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &lt;= #{pd.lastEnd1 }
+				AND o.order_status IN ( '3', '4', '5', '6', '7' ) 
+				AND d.changci NOT IN ('T56','T57')
+		GROUP BY o.order_sn 
+		) a ON a.order_id = det.order_id 
+	GROUP BY det.match_id
+	UNION
+	SELECT det.changci as match_id, sum( a.amount ) as  amount
+	FROM dl_order_detail det RIGHT JOIN ( 
+		SELECT o.order_id, sum( o.ticket_amount ) AS amount 
+		FROM dl_order o LEFT JOIN dl_order_detail d ON o.order_id = d.order_id 
+		WHERE DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &gt;= #{pd.lastStart1 }
+				AND DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &lt;= #{pd.lastEnd1 }
+				AND o.order_status IN ( '3', '4', '5', '6', '7' ) 
+				AND d.changci IN ('T56','T57')
+		GROUP BY o.order_sn 
+		) a ON a.order_id = det.order_id 
+	GROUP BY det.changci
+	</select>
+	
+	<select id="getTotalAmountByTime"  parameterType="page" resultType="pd">
+	select COALESCE(count(DISTINCT o.user_id),0) as userCount,
+			COALESCE(sum(o.ticket_amount),0) as amountSum
+	from dl_order o left join dl_user u on o.user_id = u.user_id
+	where o.order_status in ( '3', '4', '5', '6', '7' ) 
+	<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &gt;= #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &lt;= #{pd.lastEnd1 }
+		</if>  
+		<if test="pd.UserID != null and pd.UserID != ''"> 
+			and u.user_id=#{pd.UserID }
+		</if>
+	</select>
+	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from

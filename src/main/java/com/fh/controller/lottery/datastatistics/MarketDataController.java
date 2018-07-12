@@ -254,15 +254,15 @@ public class MarketDataController extends BaseController {
 			pageData = userList.get(i);
 			LocalDate date = LocalDate.parse(pageData.getString("date"),DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 			int userCount = Integer.parseInt(pageData.getString("count_user"));
-			
-			pageData.put("count2", getCount(date,null,1,1,userCount));
-			pageData.put("count3", getCount(date,null,2,2,userCount));
-			pageData.put("count7", getCount(date,null,3,6,userCount));
-			pageData.put("count15", getCount(date,null,7,14,userCount));
-			pageData.put("count30", getCount(date,null,15,29,userCount));
-			pageData.put("count90", getCount(date,null,30,89,userCount));
-			pageData.put("count180", getCount(date,null,90,179,userCount));
-			pageData.put("count360", getCount(date,null,180,359,userCount));
+			String device_channel = pageData.getString("device_channel");
+			pageData.put("count2", getCount(date,null,1,1,userCount,device_channel));
+			pageData.put("count3", getCount(date,null,2,2,userCount,device_channel));
+			pageData.put("count7", getCount(date,null,3,6,userCount,device_channel));
+			pageData.put("count15", getCount(date,null,7,14,userCount,device_channel));
+			pageData.put("count30", getCount(date,null,15,29,userCount,device_channel));
+			pageData.put("count90", getCount(date,null,30,89,userCount,device_channel));
+			pageData.put("count180", getCount(date,null,90,179,userCount,device_channel));
+			pageData.put("count360", getCount(date,null,180,359,userCount,device_channel));
 			pageData.put("nowDate", LocalDate.now());
 			
 			userList.set(i, pageData);
@@ -303,9 +303,10 @@ public class MarketDataController extends BaseController {
 				PageData pageData = userList.get(k);
 				int userCount = Integer.parseInt(pageData.getString("count_user"));
 				pageData.put("date", time+"~"+time.plusDays(6));
+				String device_channel = pageData.getString("device_channel");
 				int WEEK = 7;
 				for (int j = 2; j <15 ; j++) {
-					pageData.put("count"+j, getCount(time,time.plusDays(6),WEEK*(j-1),WEEK*j-1,userCount));
+					pageData.put("count"+j, getCount(time,time.plusDays(6),WEEK*(j-1),WEEK*j-1,userCount,device_channel));
 				}
 				varList.add(pageData);	
 			}
@@ -344,10 +345,11 @@ public class MarketDataController extends BaseController {
 				int userCount = Integer.parseInt(pageData.getString("count_user"));
 				int startDay=0;
 				int endDay=time.lengthOfMonth();
+				String device_channel = pageData.getString("device_channel");
 				for (int j = 2; j <15 ; j++) {
 					startDay =endDay;
 					endDay =startDay + time.plusMonths(j-1).lengthOfMonth();
-					pageData.put("count"+j, getCount(start,end,startDay,endDay-1,userCount));
+					pageData.put("count"+j, getCount(start,end,startDay,endDay-1,userCount,device_channel));
 				}
 			varList.add(pageData);
 			}
@@ -363,7 +365,7 @@ public class MarketDataController extends BaseController {
 	 * @param userCount 注册日总人数
 	 * @throws Exception
 	 */
-	public BigDecimal getCount(LocalDate regTime,LocalDate endTime,int start,int end,int userCount) throws Exception {
+	public BigDecimal getCount(LocalDate regTime,LocalDate endTime,int start,int end,int userCount,String device_channel) throws Exception {
 		LocalDate regDate = regTime.plusDays(start);
 		LocalDate nowDate = LocalDate.now();
 		int days = Period.between(regDate,nowDate).getDays();
@@ -382,12 +384,13 @@ public class MarketDataController extends BaseController {
 		}
 		pd.put("dayStart", start);
 		pd.put("dayEnd",end);
+		pd.put("device_channel",device_channel);
 		page.setPd(pd);
 		List<PageData> count = usermanagercontrollerService.getRemainUserCount(page);
 		String remainCount = count.get(0).getString("count");
 		BigDecimal userc = new BigDecimal(userCount);
 		BigDecimal remainc = new BigDecimal(remainCount+"00");
 		
-		return remainc.divide(userc, 2,BigDecimal.ROUND_HALF_DOWN);
+		return remainc.divide(userc, 2,BigDecimal.ROUND_HALF_UP);
 	}
 }

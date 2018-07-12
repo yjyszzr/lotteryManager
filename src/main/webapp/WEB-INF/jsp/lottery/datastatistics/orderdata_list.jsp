@@ -64,6 +64,7 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
+									<th class="center">订单号</th>
 									<th class="center">用户ID</th>
 									<th class="center">购彩彩种</th>
 									<th class="center">赛事种类</th>
@@ -84,6 +85,7 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
+											<td class='center'>${var.order_sn }</td>
 											<td class='center'>${var.user_id }</td>
 											<td class='center'>${var.play_name }</td>
 											<td class='center'>${var.match_name }</td>

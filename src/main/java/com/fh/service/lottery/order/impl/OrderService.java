@@ -152,4 +152,18 @@ public class OrderService implements OrderManager {
 		return (List<PageData>) dao.findForList("OrderMapper.getAmountForDayHour", page);
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getMatchAmountByTime(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getMatchAmountByTime", page);
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getTotalAmountByTime(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getTotalAmountByTime", page);
+		
+	}
 }

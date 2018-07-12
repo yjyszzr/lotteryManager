@@ -111,10 +111,10 @@ public class TotalDataController extends BaseController {
 		for (int i = 0; i < list.size(); i++) {
 			PageData vpd = new PageData();
 			vpd.put("var1", list.get(i).getString("data")); // 1
-			vpd.put("var2", list.get(i).getString("countBuy")); // 2
-			vpd.put("var3", list.get(i).getString("amountBuy")); // 3
-			vpd.put("var4", list.get(i).getString("countRecharge")); // 4
-			vpd.put("var5", list.get(i).getString("amountRecharge")); // 5
+			vpd.put("var2", list.get(i).getString("amountBuy")); // 2
+			vpd.put("var3", list.get(i).getString("countBuy")); // 3
+			vpd.put("var4", list.get(i).getString("amountRecharge")); // 4
+			vpd.put("var5", list.get(i).getString("countRecharge")); // 5
 			vpd.put("var6", list.get(i).getString("amountWithDraw")); // 6
 			vpd.put("var7", list.get(i).getString("amountReward")); // 7
 			vpd.put("var8", list.get(i).getString("orderCount")); // 8
@@ -157,6 +157,16 @@ public class TotalDataController extends BaseController {
 			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
 			List<PageData> listUserAccount = useraccountmanagerService.findByProcessType(page);
 			 
+			//购彩
+			PageData pdAM = new PageData();
+			Page pageAm = new Page();
+			pdAM.put("lastStart1", date.toString());
+			pdAM.put("lastEnd1", date.toString());
+			pageAm.setPd(pdAM);
+			List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
+			countPage.put("countBuy", Integer.parseInt(totalAM.get(0).getString("userCount")));
+			countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")));
+				
 			List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
 			int orderCount = orderList.size();
 			countPage.put("orderCount", orderCount);
@@ -164,11 +174,6 @@ public class TotalDataController extends BaseController {
 				for (int j = 0; j < listUserAccount.size(); j++) {
 					PageData pageData = listUserAccount.get(j);
 					String processType = pageData.getString("process_type");
-					//购彩
-					if(processType.equals("3")) {
-						countPage.put("countBuy", Integer.parseInt(pageData.getString("userCount")));
-						countPage.put("amountBuy", new BigDecimal(pageData.getString("amountSum")).negate());
-					}
 					//充值
 					if(processType.equals("2")) {
 						countPage.put("countRecharge", Integer.parseInt(pageData.getString("userCount")));
@@ -221,6 +226,16 @@ public class TotalDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(time.plusDays(6)+" 23:59:59"));
 			page.setPd(pd);
+			//购彩
+			PageData pdAM = new PageData();
+			Page pageAm = new Page();
+			pdAM.put("lastStart1", time.toString());
+			pdAM.put("lastEnd1", time.plusDays(6).toString());
+			pageAm.setPd(pdAM);
+			List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
+			countPage.put("countBuy", Integer.parseInt(totalAM.get(0).getString("userCount")));
+			countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")).negate());
+			
 			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
 			List<PageData> listUserAccount = useraccountmanagerService.findByProcessType(page);
 			 
@@ -287,6 +302,16 @@ public class TotalDataController extends BaseController {
 			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
 			List<PageData> listUserAccount = useraccountmanagerService.findByProcessType(page);
 			 
+			//购彩
+			PageData pdAM = new PageData();
+			Page pageAm = new Page();
+			pdAM.put("lastStart1", start.toString());
+			pdAM.put("lastEnd1", end.toString());
+			pageAm.setPd(pdAM);
+			List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
+			countPage.put("countBuy", Integer.parseInt(totalAM.get(0).getString("userCount")));
+			countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")).negate());
+			
 			List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
 			int orderCount = orderList.size();
 			countPage.put("orderCount", orderCount);

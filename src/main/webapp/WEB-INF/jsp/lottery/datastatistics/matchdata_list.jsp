@@ -30,16 +30,16 @@
 			<div class="main-content-inner">
 				<div class="page-content">
 					<div class="row">
-						<div class="col-xs-12"  style="overflow:scroll;">
+						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="userdata/list.do" method="post" name="Form" id="Form">
+						<form action="matchdata/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
-								<td><span class="input-icon" style="width: 270px;"> </span>日期：</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
+							<td><span class="input-icon" style="width: 150px;"> </span>日期：</td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
 								<td>至</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align: top; padding-left: 2px">
 									<span class="input-icon" style="width: 30px;"> </span> 
@@ -58,31 +58,31 @@
 								<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL"
 									style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></td>
 								</c:if>
+								<td>
+									<span class="input-icon"  style="width: 30px;"></span>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="0" <c:if test="${pd.dateType == 0}">checked</c:if> > 日
+											</label>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="1" <c:if test="${pd.dateType == 1}">checked</c:if>> 周
+											</label>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="2" <c:if test="${pd.dateType == 2}">checked</c:if>> 月
+											</label>
+										</td>
 							</tr>
 						</table>
 						<!-- 检索  -->
 					
-						<table id="simple-table" class="table table-striped table-bordered table-hover table-condensed" style="margin-top:5px;min-width:1500px;">	
+						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center">用户ID</th>
-									<th class="center">用户昵称</th>
-									<th class="center">级别</th>
-									<th class="center">手机号</th>
-									<th class="center">真实姓名</th>
-									<th class="center">身份证号</th>
-									<th class="center">性别</th>
-									<th class="center">年龄</th>
-									<th class="center">终端</th>
-									<th class="center">地域</th>
-									<th class="center">渠道</th>
-									<th class="center">累计消费</th>
-									<th class="center">累计充值</th>
-									<th class="center">累计中奖</th>
-									<th class="center">累计提现</th>
-									<th class="center">账户余额</th>
-									<th class="center">注册时间</th>
-									<th class="center">最后登录时间</th>
+									<th class="center">日期</th>
+									<th class="center">赛事种类</th>
+									<th class="center">投注金额</th>
+									<th class="center">总金额</th>
+									<th class="center">占比</th>
+									 
 								</tr>
 							</thead>
 													
@@ -91,28 +91,26 @@
 							<c:choose>
 								<c:when test="${not empty varList}">
 									<c:if test="${QX.cha == 1 }">
-									<c:forEach items="${varList}" var="var" varStatus="vs">
+									<c:forEach items="${varList}" var="list" varStatus="vs">
+										<c:forEach items="${list}" var="var" varStatus="vs">
+									<c:if test="${not empty var.value.date}">
 										<tr>
-											<td width="50" class='center'>${var.user_id}</td>
-											<td class='center'>${var.nickname}</td>
-											<td class='center'>*</td>
-											<td class='center'>${var.mobile}</td>
-											<td class="center">${var.real_name}</td>
-											<td style="word-wrap:break-word;" class="center">${var.id_code}</td>
-											<td class="center"><c:if test="${var.sex == 2 }">女</c:if><c:if test="${var.sex == 1 }">男</c:if></td>
-											<td class="center">${var.age}</td>
-											<td class="center">${var.mobile_supplier}</td>
-											<td class="center"></td>
-											<td class="center">${var.device_channel}</td>
-											<td class="center">${var.total }</td>
-											<td class="center">${var.rtotal}</td>
-											<td class="center">${var.atotal}</td>
-											<td class="center">${var.wtotal}</td>
-											<td class="center">${ var.user_money_limit + var.user_money }</td>
-											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
-											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
-											 
+											<td class='center'>${var.value.date }</td>
+											<td class='center'>
+											${var.value.matchName }
+											</td>
+											<td class='center'> 
+											<fmt:formatNumber type="number" value="${var.value.amount }" maxFractionDigits="2"/>
+											</td>
+											<td class='center'>  
+											<fmt:formatNumber type="number" value="${list['amountSum'].amountSum }" maxFractionDigits="2"/>
+											</td> 
+											<td class='center'>  
+											<fmt:formatNumber type="number" value="${var.value.amount/list['amountSum'].amountSum *100 }" maxFractionDigits="2"/>%
+											</td>
 										</tr>
+										</c:if>
+										</c:forEach>
 									</c:forEach>
 									</c:if>
 									<c:if test="${QX.cha == 0 }">
@@ -180,7 +178,11 @@
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+		function tosearch(status){
+			if (status == 0) {
+				$("#lastStart").val("");
+				$("#lastEnd").val("");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}
@@ -223,8 +225,8 @@
 		//导出excel
 		function toExcel(){
 			//window.location.href='<%=basePath%>matchdata/excel.do';
-			 $("#Form").attr("action","userdata/excel.do").submit();
-			 $("#Form").attr("action","userdata/list.do");
+			 $("#Form").attr("action","matchdata/excel.do").submit();
+			 $("#Form").attr("action","matchdata/list.do");
 
 		}
 		
