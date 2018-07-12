@@ -195,6 +195,13 @@ public class OrderDataController extends BaseController {
 				PageData matchDate = matchService.findById(pdm);
 				if(matchDate!=null) {
 					matchNM = matchNM + matchDate.getString("league_addr");
+				}else {
+					String matchName = pdm.getString("changci");
+					if (matchName.equals("T56")) {
+						matchNM =matchNM + "世界杯冠军";
+					} else {
+						matchNM =matchNM + "世界杯冠亚军";
+					}
 				}
 				if(j+1<matchs.length) {
 					matchNM = matchNM + ",";

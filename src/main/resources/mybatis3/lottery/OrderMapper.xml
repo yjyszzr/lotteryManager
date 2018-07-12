@@ -360,6 +360,7 @@
 				o.user_id,
 				lpc.play_name,
 				GROUP_CONCAT(d.match_id) as match_id  ,
+				d.changci,
 				o.pass_type,
 				o.cathectic  ,
 				o.ticket_amount ,
@@ -418,9 +419,9 @@
 		) a ON a.order_id = det.order_id 
 	GROUP BY det.match_id
 	UNION
-	SELECT det.changci as match_id, sum( a.amount ) as  amount
+	SELECT det.changci as match_id, sum( a.amount )  as  amount
 	FROM dl_order_detail det RIGHT JOIN ( 
-		SELECT o.order_id, sum( o.ticket_amount ) AS amount 
+		SELECT o.order_id, sum( o.ticket_amount ) / ( count( o.order_sn ) * count( o.order_sn ) )  AS amount 
 		FROM dl_order o LEFT JOIN dl_order_detail d ON o.order_id = d.order_id 
 		WHERE DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &gt;= #{pd.lastStart1 }
 				AND DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &lt;= #{pd.lastEnd1 }
