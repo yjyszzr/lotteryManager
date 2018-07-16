@@ -64,7 +64,7 @@
 	</delete>
 	
 	<update id="updateUserBankDelete" parameterType="pd">
-		update dl_user_bank set is_delete = 1 where user_id = #{user_id}
+		update dl_user_bank set is_delete = 1 where user_id = #{user_id} and is_delete = 0
 	</update>
 	
 	<!-- 修改 -->

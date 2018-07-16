@@ -307,7 +307,7 @@
 		select
 			* 
 		from
-			dl_user_real
+			dl_user_real where is_delete = 0
 	</select>
 
 	<!-- 批量删除 -->

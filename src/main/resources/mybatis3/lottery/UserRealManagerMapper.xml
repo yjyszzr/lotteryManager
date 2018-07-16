@@ -69,7 +69,7 @@
 		delete from
 		<include refid="tableName"></include>
 		where 
-			real_id = #{real_id}
+			real_id = #{real_id} and is_delete = 0
 	</delete>
 	
 	<!-- 修改 -->
@@ -98,7 +98,7 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
-		where 1=1
+		where 1=1 and is_delete = 0
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -122,8 +122,9 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+		where 1=1 and is_delete = 0
 		<if test="lastStart1 != null and lastStart1 != '' and lastEnd1 != null and lastEnd1 != ''">
-			where  add_time between #{lastStart1} and #{lastEnd1}
+			add_time between #{lastStart1} and #{lastEnd1}
 		</if>
 	</select>
 	
@@ -133,7 +134,7 @@
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
-		where 
+		where is_delete = 0 and
 			real_id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                  #{item}

@@ -252,7 +252,7 @@
 		from 
 		dl_user u
 		left join dl_user_real  u_r on u_r.user_id = u.user_id 
-		where 1=1 
+		where 1=1 and u_r.is_delete = 0
 		<if test="pd.real_name!= null and pd.real_name != ''"> 
 			and u_r.real_name LIKE CONCAT(CONCAT('%', #{pd.real_name}),'%')
  		</if>
@@ -308,7 +308,7 @@
 		left join dl_user_real on dl_user_real.user_id = dl_user.user_id 
 		left join dl_phone_channel ph on dl_user.mobile_supplier = ph.id
 		left join dl_phone_channel pc on pc.channel = dl_user.device_channel
-		where 1=1 
+		where 1=1 and dl_user_real.is_delete = 0
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -399,6 +399,7 @@
 		FROM
 			dl_user a
 			LEFT JOIN dl_user_real b ON a.user_id = b.user_id
+		where b.is_delete = 0
 	</select>
 		
 	<!-- 认证并购彩 -->
@@ -410,6 +411,7 @@
 				and DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
 		 where   od.order_status in ('3','4','5','6','7')
 				and  ur.add_time &gt; #{pd.lastStart1} and  ur.add_time &lt; #{pd.lastEnd1} 
+				and ur.is_delete = 0
 	</select>
 	
 	<!-- 注册并认证用户统计（购彩） -->
@@ -422,6 +424,7 @@
 		where DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d')
 				and  od.order_status in ('3','4','5','6','7')
 				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
+				and  ur.is_delete = 0
 	</select>
 	
 	<!-- 注册并充值  -->
