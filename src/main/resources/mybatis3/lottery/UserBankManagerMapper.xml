@@ -63,6 +63,10 @@
 			id = #{id}
 	</delete>
 	
+	<update id="updateUserBankDelete" parameterType="pd">
+		update dl_user_bank set is_delete = 1 where user_id = #{user_id}
+	</update>
+	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update

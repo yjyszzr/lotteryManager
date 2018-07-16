@@ -42,7 +42,17 @@ public class UserBankManagerService implements UserBankManagerManager {
 	public void delete(PageData pd) throws Exception {
 		dao.delete("UserBankManagerMapper.delete", pd);
 	}
-
+	
+	/**
+	 * 删除
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void updateUserBankDelete(PageData pd) throws Exception {
+		dao.update("UserBankManagerMapper.updateUserBankDelete", pd);
+	}
+	
 	/**
 	 * 修改
 	 * 

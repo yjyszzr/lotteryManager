@@ -376,6 +376,14 @@ public class UserManagerControllerController extends BaseController {
 		updateRealPd.put("is_delete", 1);
 		updateRealPd.put("user_id", Integer.valueOf(userEntity.getString("user_id")));
 		userrealmanagerService.edit(updateRealPd);
+			
+		PageData queryBankPd = new PageData();
+		queryBankPd.put("user_id", Integer.valueOf(userEntity.getString("user_id")));
+		List<PageData> userBankpdList = userbankmanagerService.listAllByUser(queryBankPd);
+		for(PageData updateBank:userBankpdList) {
+			updateBank.put("user_id", Integer.valueOf(userEntity.getString("user_id")));
+			userbankmanagerService.updateUserBankDelete(updateBank);
+		}
 		
 		mv = getDetailView(mv);
 		return mv;
