@@ -29,6 +29,15 @@ public interface UserBankManagerManager {
 	public void delete(PageData pd) throws Exception;
 
 	/**
+	 * 删除銀行卡
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void updateUserBankDelete(PageData pd) throws Exception;
+	
+	
+	/**
 	 * 修改
 	 * 
 	 * @param pd
