@@ -77,4 +77,6 @@ public interface WorldCupManagerManager {
 
 	public void rewardToUser(PageData pd) throws Exception;
 
+	public void updateAllIsOpen() throws Exception;
+
 }

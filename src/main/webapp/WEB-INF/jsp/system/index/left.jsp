@@ -36,8 +36,7 @@
 						<span class="btn btn-danger"></span>
 					</div>
 				</div>-->
-
-				<ul class="nav nav-list">
+				<ul class="nav nav-list"  style="overflow:scroll; width:190px;overflow-x:hidden;  height:720px;" >
 					<li class="">
 						<a href="main/index">
 							<i class="menu-icon fa fa-tachometer"></i>
@@ -45,8 +44,6 @@
 						</a>
 						<b class="arrow"></b>
 					</li>
-
-
 				<c:forEach items="${menuList}" var="menu1">
 				<c:if test="${menu1.hasMenu && '1' == menu1.MENU_STATE}">
 					<li class=""  id="lm${menu1.MENU_ID }">
@@ -114,9 +111,7 @@
 					</li>
 				</c:if>
 				</c:forEach>
-
 				</ul><!-- /.nav-list -->
-
 				<!-- #section:basics/sidebar.layout.minimize -->
 				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
 					<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>

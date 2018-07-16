@@ -3,6 +3,7 @@ package com.fh.controller.lottery.channel;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +24,7 @@ import com.fh.service.lottery.channel.ChannelDistributorManager;
 import com.fh.service.lottery.channel.ChannelManager;
 import com.fh.service.lottery.channel.ChannelOptionLogManager;
 import com.fh.service.lottery.channel.impl.ChannelDistributorService;
+import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -220,7 +222,7 @@ public class ChannelXiAnDataController extends BaseController {
 			PageData vpd = new PageData();
 			vpd.put("var1", varOList.get(i).get("channel_name").toString()); // 1
 			if (null != varOList.get(i).get("option_time") && !"".equals(varOList.get(i).get("option_time"))) {
-				vpd.put("var2", varOList.get(i).get("option_time").toString()); // 2
+				vpd.put("var2",DateUtil.toSDFTime(Long.parseLong(varOList.get(i).getString("option_time"))*1000)); // 2
 			}
 			if (null != varOList.get(i).get("user_name") && !"".equals(varOList.get(i).get("user_name"))) {
 				vpd.put("var3", varOList.get(i).get("user_name").toString()); // 3
@@ -274,9 +276,9 @@ public class ChannelXiAnDataController extends BaseController {
 		}
 		PageData count = new PageData();
 		count.put("var1", "合计"); // 1
-		count.put("var2", consumerSet.size()); // 2
+		count.put("var2", ""); // 2
 		count.put("var3", ""); // 3
-		count.put("var4", ""); // 4
+		count.put("var4", "用户数："+consumerSet.size()); // 4
 		count.put("var5", ""); // 5
 		count.put("var7", optionAmount); // 7
 		count.put("var8", optionAmountChl); // 8

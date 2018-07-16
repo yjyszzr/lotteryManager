@@ -75,6 +75,139 @@ public class OrderPlayDataController extends BaseController {
 		return mv;
 	}
 
+
+	/**
+	 * 导出到excel
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/excel")
+	public ModelAndView exportExcel(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "导出OrderPlayData到excel");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+			return null;
+		}
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		List<String> titles = new ArrayList<String>();
+		titles.add("时间"); // 1
+		titles.add("购彩用户数（胜平负）"); // 2
+		titles.add("购彩金额（胜平负）"); // 3
+		titles.add("订单数（胜平负）"); // 4
+		titles.add("购彩用户数（让球胜平负）"); // 5
+		titles.add("购彩金额（让球胜平负）"); // 6
+		titles.add("订单数（让球胜平负）"); // 7
+		titles.add("购彩用户数（比分）"); // 8
+		titles.add("购彩金额（比分）"); // 9
+		titles.add("订单数（比分）"); // 10
+		titles.add("购彩用户数（总进球）"); // 11
+		titles.add("购彩金额（总进球）"); // 12
+		titles.add("订单数（总进球）"); // 13
+		titles.add("购彩用户数（半全场）"); // 14
+		titles.add("购彩金额（半全场）"); // 15
+		titles.add("订单数（半全场）"); // 16
+		titles.add("购彩用户数（2选1）"); // 17
+		titles.add("购彩金额（2选1）"); // 18
+		titles.add("订单数（2选1）"); // 19
+		titles.add("购彩用户数（混合投注）"); // 20
+		titles.add("购彩金额（混合投注）"); // 21
+		titles.add("订单数（混合投注）"); // 22
+		List<PageData> list = new ArrayList<PageData>();
+		if (pd.getString("dateType").endsWith("0")) {
+			pd.put("groupDay", "true");
+			list = getDataListForDay(page, pd);
+		}
+		if (pd.getString("dateType").endsWith("1")) {
+			pd.put("groupDay", "true");
+			list = getDataListForWeek(page, pd);
+		}
+		if (pd.getString("dateType").endsWith("2")) {
+			pd.put("groupMonth", "true");
+			list = getDataListForMonth(page, pd);
+		}
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("titles", titles);
+		 
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < list.size(); i++) {
+			PageData vpd = new PageData();
+			PageData pdt = list.get(i);
+			vpd.put("var1", pdt.getString("date")); // 1
+			if (null != pdt.getString("userCount2") && !"".equals(pdt.getString("userCount2"))) {
+				vpd.put("var2", list.get(i).getString("userCount2")); // 2
+			}
+			if (null != pdt.getString("amount2") && !"".equals(pdt.getString("amount2"))) {
+				vpd.put("var3", list.get(i).getString("amount2")); // 3
+			}
+			if (null != pdt.getString("orderCount2") && !"".equals(pdt.getString("orderCount2"))) {
+				vpd.put("var4", list.get(i).getString("orderCount2")); // 4
+			}
+			if (null != pdt.getString("userCount1") && !"".equals(pdt.getString("userCount1"))) {
+				vpd.put("var5", list.get(i).getString("userCount1")); // 5
+			}
+			if (null != pdt.getString("amount1") && !"".equals(pdt.getString("amount1"))) {
+				vpd.put("var6", list.get(i).getString("amount1")); // 6
+			}
+			if (null != pdt.getString("orderCount1") && !"".equals(pdt.getString("orderCount1"))) {
+				vpd.put("var7", list.get(i).getString("orderCount1")); // 7
+			}
+			if (null != pdt.getString("userCount3") && !"".equals(pdt.getString("userCount3"))) {
+				vpd.put("var8", list.get(i).getString("userCount3")); // 8
+			}
+			if (null != pdt.getString("amount3") && !"".equals(pdt.getString("amount3"))) {
+				vpd.put("var9", list.get(i).getString("amount3")); // 9
+			}
+			if (null != pdt.getString("orderCount3") && !"".equals(pdt.getString("orderCount3"))) {
+				vpd.put("var10", list.get(i).getString("orderCount3")); // 10
+			}
+			if (null != pdt.getString("userCount4") && !"".equals(pdt.getString("userCount4"))) {
+				vpd.put("var11", list.get(i).getString("userCount4")); // 11
+			}
+			if (null != pdt.getString("amount4") && !"".equals(pdt.getString("amount4"))) {
+				vpd.put("var12", list.get(i).getString("amount4")); // 12
+			}
+			if (null != pdt.getString("orderCount4") && !"".equals(pdt.getString("orderCount4"))) {
+				vpd.put("var13", list.get(i).getString("orderCount4")); // 13
+			}
+			if (null != pdt.getString("userCount5") && !"".equals(pdt.getString("userCount5"))) {
+				vpd.put("var14", list.get(i).getString("userCount5")); // 14
+			}
+			if (null != pdt.getString("amount5") && !"".equals(pdt.getString("amount5"))) {
+				vpd.put("var15", list.get(i).getString("amount5")); // 15
+			}
+			if (null != pdt.getString("orderCount5") && !"".equals(pdt.getString("orderCount5"))) {
+				vpd.put("var16", list.get(i).getString("orderCount5")); // 16
+			}
+			if (null != pdt.getString("userCount7") && !"".equals(pdt.getString("userCount7"))) {
+				vpd.put("var17", list.get(i).getString("userCount7")); // 17
+			}
+			if (null != pdt.getString("amount7") && !"".equals(pdt.getString("amount7"))) {
+				vpd.put("var18", list.get(i).getString("amount7")); // 18
+			}
+			if (null != pdt.getString("orderCount7") && !"".equals(pdt.getString("orderCount7"))) {
+				vpd.put("var19", list.get(i).getString("orderCount7")); // 19
+			}
+			if (null != pdt.getString("userCount6") && !"".equals(pdt.getString("userCount6"))) {
+				vpd.put("var20", list.get(i).getString("userCount6")); // 20
+			}
+			if (null != pdt.getString("amount6") && !"".equals(pdt.getString("amount6"))) {
+				vpd.put("var21", list.get(i).getString("amount6")); // 21
+			}
+			if (null != pdt.getString("orderCount6") && !"".equals(pdt.getString("orderCount6"))) {
+				vpd.put("var22", list.get(i).getString("orderCount6")); // 22
+			}
+			
+			varList.add(vpd);
+		}
+		dataMap.put("varList", varList);
+		ObjectExcelView erv = new ObjectExcelView();
+		mv = new ModelAndView(erv, dataMap);
+		return mv;
+	}
+	
+	
 	/**
 	 * 获得数据集合
 	 * 

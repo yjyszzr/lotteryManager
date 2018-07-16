@@ -87,5 +87,9 @@ public interface OrderManager {
 	public List<PageData> getOrderOfPlay(Page page) throws Exception;
 	
 	public List<PageData> getAmountForDayHour(Page page) throws Exception;
+	
+	public List<PageData> getMatchAmountByTime(Page page) throws Exception;
+	
+	public List<PageData> getTotalAmountByTime(Page page) throws Exception;
 
 }

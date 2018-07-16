@@ -50,31 +50,27 @@ public class PresentDataController extends BaseController {
 			mv.addObject("now", "今日");
 		}
 		if (null != lastStart && !"".equals(lastStart)) {
-			lastStart = lastStart+" 00:00:00";
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart+" 00:00:00"));
 		}  
 		if (null != lastEnd && !"".equals(lastEnd)) {
-			lastEnd = lastEnd+" 23:59:59";
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd+" 23:59:59"));
 		} else {
-			lastEnd = LocalDate.now()+" 23:59:59";
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(LocalDate.now()+" 23:59:59"));
 		}
-		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		//注册统计
 		page.setPd(pd);
 		List<PageData> registerList = usermanagercontrollerService.listAll(pd);
-		//购彩统计
-		String process_type = "3"; // 购彩
-		pd.put("process_type", process_type);
-		page.setPd(pd);
-		List<PageData> listBuy = useraccountmanagerService.findByProcessType(page);
-		int countBuy = 0;
-		BigDecimal amountBuy = new BigDecimal(0);
-		if (listBuy.size() > 0) {
-			countBuy = Integer.parseInt(listBuy.get(0).getString("userCount"));
-			amountBuy = new BigDecimal(listBuy.get(0).getString("amountSum"));
-		}
+		//购彩
+		PageData pdAM = new PageData();
+		Page pageAm = new Page();
+		pdAM.put("lastStart1", lastStart);
+		pdAM.put("lastEnd1", lastEnd);
+		pageAm.setPd(pdAM);
+		List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
+		int countBuy = Integer.parseInt(totalAM.get(0).getString("userCount"));
+		BigDecimal amountBuy = new BigDecimal(totalAM.get(0).getString("amountSum"));
 		//充值统计
-		process_type = "2"; // 充值
+		String process_type = "2"; // 充值
 		pd.put("process_type", process_type);
 		page.setPd(pd);
 		List<PageData> listRecharge = useraccountmanagerService.findByProcessType(page);
@@ -89,7 +85,7 @@ public class PresentDataController extends BaseController {
 		mv.setViewName("lottery/datastatistics/presentdata_list");
 		mv.addObject("register", registerList.size());
 		mv.addObject("countBuy", countBuy);
-		mv.addObject("amountBuy", amountBuy.negate());
+		mv.addObject("amountBuy", amountBuy);
 		mv.addObject("countRecharge", countRecharge);
 		mv.addObject("amountRecharge", amountRecharge);
 		mv.addObject("pd", pd);

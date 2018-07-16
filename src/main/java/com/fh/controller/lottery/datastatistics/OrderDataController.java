@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -173,18 +174,43 @@ public class OrderDataController extends BaseController {
 		page.setPd(pd);
 		List<PageData> list = ordermanagerService.getOrderAndDetail(page);
 		for (int i = 0; i < list.size(); i++) { 
-			String pass_type = MatchBetTypeEnum.getName(list.get(i).getString("pass_type"));
+			String pass_type = "";
+			String[] types = list.get(i).getString("pass_type").split(",");
+			for(int j = 0; j < types.length; j++) {
+				pass_type =pass_type + MatchBetTypeEnum.getName(types[j]);
+				if(j+1<types.length) {
+					pass_type = pass_type + ",";
+				}
+			}
 			Long add_time = Long.parseLong(list.get(i).getString("add_time"));
 			String award_time = list.get(i).getString("award_time");
 			if(award_time!="") {
 				list.get(i).put("award_time", DateUtil.toSDFTime(Long.parseLong(award_time)*1000));
 			}
-			PageData matchDate = matchService.findById(list.get(i));
-			list.get(i).put("pass_type", pass_type);
-			if(matchDate!=null) {
-			list.get(i).put("match_name", matchDate.getString("league_addr"));
+			String[] matchs = list.get(i).getString("match_id").split(",");
+			String matchNM = "";
+			for(int j = 0; j < matchs.length; j++) {
+				PageData pdm = new PageData();
+				pdm.put("match_id", matchs[j]);
+				PageData matchDate = matchService.findById(pdm);
+				if(matchDate!=null) {
+					matchNM = matchNM + matchDate.getString("league_addr");
+				}else {
+					String matchName = pdm.getString("changci");
+					if (matchName.equals("T56")) {
+						matchNM =matchNM + "世界杯冠军";
+					} else {
+						matchNM =matchNM + "世界杯冠亚军";
+					}
+				}
+				if(j+1<matchs.length) {
+					matchNM = matchNM + ",";
+				}
 			}
+			list.get(i).put("pass_type", pass_type);
+			list.get(i).put("match_name", matchNM);
 			list.get(i).put("add_time", DateUtil.toSDFTime(add_time*1000));
+			list.get(i).put("order_sn", list.get(i).getString("order_sn"));
 		}
 		return list;
 	}

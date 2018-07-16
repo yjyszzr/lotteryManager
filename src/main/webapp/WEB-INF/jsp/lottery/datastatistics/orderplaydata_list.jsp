@@ -34,7 +34,7 @@
 							
 						<!-- 检索  -->
 						<form action="orderplaydata/list.do" method="post" name="Form" id="Form">
-						<input type="hidden" name="dateType" id="dateType">
+						<input type="hidden" name="dateType" id="dateType" value="${pd.dateType }">
 						<table style="margin-top:5px;">
 							<tr>
 							<td><span class="input-icon" style="width: 270px;"> </span>日期：</td>
@@ -53,11 +53,16 @@
 								 <a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="周"
 											style="border-radius: 5px; color: blue !important; width: 50px">周</a>
 								</td>
-								<c:if test="${QX.toExcel == 1 }">
 								<td style="vertical-align: top; padding-left: 2px;">
 								<span class="input-icon" style="width: 30px;"> </span> 
 								<a class="btn btn-light btn-xs blue" onclick="tosearch(2);" title="月"
-									style="border-radius: 5px; color: blue !important; width: 70px"> 月</a></td>
+									style="border-radius: 5px; color: blue !important; width: 50px"> 月</a></td>
+									
+								<c:if test="${QX.toExcel == 1 }">
+								<td style="vertical-align: top; padding-left: 2px;">
+								<span class="input-icon" style="width: 30px;"> </span> 
+								<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出"
+									style="border-radius: 5px; color: blue !important; width: 70px"> 导出Excel</a></td>
 								</c:if>
 							</tr>
 						</table>

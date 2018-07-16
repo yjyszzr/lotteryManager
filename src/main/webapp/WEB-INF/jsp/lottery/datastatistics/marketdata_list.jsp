@@ -117,7 +117,13 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>${var.phone_channel }</td>
+											<td class='center'>
+											
+											${var.phone_channel }
+											<c:if test="${empty var.phone_channel}">
+											${var.device_channel }
+											</c:if>
+											</td>
 											<td class='center'>${var.date }</td>
 											<td class='center'>*</td>
 											<td class='center'>${var.count_user }</td>

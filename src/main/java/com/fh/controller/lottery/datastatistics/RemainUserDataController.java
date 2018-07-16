@@ -259,6 +259,6 @@ public class RemainUserDataController extends BaseController {
 		BigDecimal userc = new BigDecimal(userCount);
 		BigDecimal remainc = new BigDecimal(remainCount+"00");
 		
-		return remainc.divide(userc, 2,BigDecimal.ROUND_HALF_DOWN);
+		return remainc.divide(userc, 2,BigDecimal.ROUND_HALF_UP);
 	}
 }

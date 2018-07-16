@@ -26,6 +26,19 @@
 							
 						<!-- 检索  -->
 						<form action="worldcupmanager/list.do" method="post" name="Form" id="Form">
+						<c:if test="${numStatus == 0 }">
+						<table style="margin-top:5px;">
+							<tr>
+								<td>
+									<div class="nav-search">
+										<span class="input-icon">
+											<a class="btn btn-light btn-xs blue" onclick="openAllPrize();"  title="一键开奖"  style="border-radius:5px;color:blue !important; width:120px">一键开奖</a>
+										</span>
+									</div>
+								</td>
+							</tr>
+						</table>
+						</c:if>
 						<table style="margin-top:5px;display:none">
 							<tr>
 								<td>
@@ -119,7 +132,8 @@
 																已派奖
 															</c:when>
 															<c:when test="${var.status == '-1'}">
-																<a class="btn btn-xs btn-orange" title="开奖" onclick="openThePrize('${var.id}');" style="border-radius: 5px;cursor:pointer;" >开奖</a>
+															待开奖
+<%-- 																<a class="btn btn-xs btn-orange" title="开奖" onclick="openThePrize('${var.id}');" style="border-radius: 5px;cursor:pointer;" >开奖</a> --%>
 															</c:when>
 														</c:choose>
 													</c:if>
@@ -221,21 +235,20 @@
 			 diag.show();
 		}
 		
-		//开奖
-		function openThePrize(Id){
+		//全部开奖
+		function openAllPrize(){
 			$.ajax({
-				url:"<%=basePath%>worldcupmanager/checkThePrizeIsNull.do",
+				url:"<%=basePath%>worldcupmanager/checkAllPrizeIsNull.do",
                 type:"post",
-                data:{id:Id},
                 success:function(data){
                 	if(data == "false"){
-                		alert("该比赛结果为空不能开奖!")
+                		alert("比赛结果有为空项，不能开奖!")
                 	}else if(data == "true"){
 						var status = 0;
 						bootbox.confirm("确定要开奖吗?", function(result) {
 							if(result) {
 								top.jzts();
-								var url = "<%=basePath%>worldcupmanager/updateUserRewardStatus.do?id="+Id+"&status="+ status;
+								var url = "<%=basePath%>worldcupmanager/updateUserAllRewardStatus.do";
 								$.get(url,function(data){
 									tosearch();
 								});
@@ -245,6 +258,31 @@
                 } 
             }); 
 		}
+		
+		//开奖
+// 		function openThePrize(Id){
+// 			$.ajax({
+<%-- 				url:"<%=basePath%>worldcupmanager/checkThePrizeIsNull.do", --%>
+//                 type:"post",
+//                 data:{id:Id},
+//                 success:function(data){
+//                 	if(data == "false"){
+//                 		alert("该比赛结果为空不能开奖!")
+//                 	}else if(data == "true"){
+// 						var status = 0;
+// 						bootbox.confirm("确定要开奖吗?", function(result) {
+// 							if(result) {
+// 								top.jzts();
+<%-- 								var url = "<%=basePath%>worldcupmanager/updateUserRewardStatus.do?id="+Id+"&status="+ status; --%>
+// 								$.get(url,function(data){
+// 									tosearch();
+// 								});
+// 							}
+// 						});
+//                 	}
+//                 } 
+//             }); 
+// 		}
 		
 		
 		function rewardToUser(Id){

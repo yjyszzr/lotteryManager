@@ -199,6 +199,9 @@
 			<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
 					AND u.reg_time &lt; #{pd.lastEnd1} 
 			</if>
+			<if test="pd.device_channel != null and pd.device_channel != ''"> 
+					AND u.device_channel = #{pd.device_channel} 
+			</if>
 	</select>
 	<!-- 设备渠道注册人数汇总列表 -->
 	<select id="marketlistPage" parameterType="page" resultType="pd">
