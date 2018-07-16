@@ -96,7 +96,18 @@ public class OrderManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = ordermanagerService.findById(pd);
-		pd.put("pass_type", MatchBetTypeEnum.getName(pd.getString("pass_type")));
+		String passType = pd.getString("pass_type");
+		String[] passTypeArr = passType.split(",");
+		String passTypeStr = "";
+		for (int i = 0; i < passTypeArr.length; i++) {
+			passTypeStr += MatchBetTypeEnum.getName(passTypeArr[i]) + ",";
+		}
+		int indx = passTypeStr.lastIndexOf(",");
+		if (indx != -1) {
+			passTypeStr = passTypeStr.substring(0, indx) + passTypeStr.substring(indx + 1, passTypeStr.length());
+		}
+
+		pd.put("pass_type", passTypeStr);
 		List<PageData> orderDetailsList = ordermanagerService.toDetail(pd); // 列出OrderManager列表
 
 		for (int i = 0; i < orderDetailsList.size(); i++) {
