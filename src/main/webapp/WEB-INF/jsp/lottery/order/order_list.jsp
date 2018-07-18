@@ -117,7 +117,7 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.order_sn}</td>
+											<td class='center'><a onclick="toDetail('${var.order_id}');" style=" cursor:pointer;">${var.order_sn}</a></td>
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
@@ -246,6 +246,33 @@
 					}
 			});
 		}
+		
+		//订单详情页
+		function toDetail(orderId){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="订单详情";
+			 diag.URL = '<%=basePath%>ordermanager/toDetail.do?order_id='+orderId;
+			 diag.Width = 1300;
+			 diag.Height = 320;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = false;	//最大化按钮
+		     diag.ShowMinButton = false;		//最小化按钮
+			 diag.CancelEvent = function(){ //关闭事件
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 if('${page.currentPage}' == '0'){
+						 tosearch();
+					 }else{
+						 tosearch();
+					 }
+				}
+				diag.close();
+			 };
+			 diag.show();
+		}
+		
+		
 	</script>
 
 

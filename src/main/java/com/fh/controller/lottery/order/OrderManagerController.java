@@ -7,11 +7,13 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fh.common.ProjectConstant;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.dto.DlJcZqMatchCellDTO;
@@ -81,9 +83,15 @@ public class OrderManagerController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = ordermanagerService.getOrderList(page); // 列出OrderManager列表
+		Double allAmountD = 0D;
+		for (int i = 0; i < varList.size(); i++) {
+			allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
+			allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
+		}
 		mv.setViewName("lottery/ordermanager/ordermanager_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
+		mv.addObject("allAmount", allAmountD);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
@@ -130,6 +138,19 @@ public class OrderManagerController extends BaseController {
 				}
 			}
 			orderDetailsList.get(i).put("list", nameStr);
+			String matchResult = orderDetailsList.get(i).getString("match_result");
+			String matchResultStr = "";
+			List<String> matchResults = null;
+			if (StringUtils.isNotEmpty(matchResult) && !ProjectConstant.ORDER_MATCH_RESULT_CANCEL.equals(matchResult)) {
+				matchResults = Arrays.asList(matchResult.split(";"));
+				for (String matchStr : matchResults) {
+					String rstPlayType = matchStr.substring(0, matchStr.indexOf("|"));
+					String rstPlayCells = matchStr.substring(matchStr.lastIndexOf("|") + 1);
+					matchResultStr = getCathecticData(rstPlayType, rstPlayCells);
+				}
+			}
+			orderDetailsList.get(i).put("matchResultStr", matchResultStr);
+
 		}
 		mv.setViewName("lottery/ordermanager/ordermanager_details");
 		mv.addObject("varList", orderDetailsList);

@@ -211,7 +211,7 @@
 		</foreach>
 	</delete>
 	
-	<select id = "findWorldCupUserPlan" parameterType="pd" resultType="pd">
+	<select id = "findWorldCupUserPlan" resultType="pd">
 		select * from dl_world_cup_plan
 	</select>
 <!-- 	插入 -->

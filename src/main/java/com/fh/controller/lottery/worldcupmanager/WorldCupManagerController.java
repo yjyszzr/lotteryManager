@@ -208,7 +208,11 @@ public class WorldCupManagerController extends BaseController {
 		pd.put("audit_time", DateUtilNew.getCurrentTimeLong());// 审核时间
 		pd.put("auditor_id", user.getUSER_ID());// 审核人ID
 		pd.put("auditor", user.getUSERNAME());// 审核人名称
-		worldcupmanagerService.openThePrize(pd, worldCupResultMap);
+		try {
+			worldcupmanagerService.openThePrize(pd, worldCupResultMap);
+		} catch (Exception e) {
+			logger.error("异常信息:>>>>>>>>>>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!!!!!!!>>>>>>>>>>>>>>>>>>>>>>>>>>>=" + e);
+		}
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;

@@ -81,6 +81,7 @@
 								<tr>
 									<th class="center">投注内容</th>
 									<th class="center">是否设胆</th>
+									<th class="center">比赛结果</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -94,6 +95,7 @@
 													<c:when test="${var.is_dan == 1}">是</c:when>
 												</c:choose>
 											</td>
+											<td class='center'>${var.matchResultStr}</td>
 										</tr>
 										</c:forEach>
 									</c:if>

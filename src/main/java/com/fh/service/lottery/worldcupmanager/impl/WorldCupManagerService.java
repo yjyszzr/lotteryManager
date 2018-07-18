@@ -229,6 +229,7 @@ public class WorldCupManagerService implements WorldCupManagerManager {
 			}
 		}
 		logger.info("中奖用户" + pageDataListForStatusAndAmount.size() + "个,==============中奖用户为" + pageDataListForStatusAndAmount);
+		logger.info("dao.update.WorldCupManagerMapper.edit>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>=" + pd);
 		dao.update("WorldCupManagerMapper.edit", pd);
 	}
 
