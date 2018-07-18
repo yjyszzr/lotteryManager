@@ -26,6 +26,7 @@ import com.fh.util.PageData;
 import com.fh.util.Jurisdiction;
 import com.fh.util.Tools;
 import com.fh.service.lottery.activity.ActivityManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 
 /** 
  * 说明：活动管理
@@ -39,7 +40,8 @@ public class ActivityController extends BaseController {
 	String menuUrl = "activity/list.do"; //菜单地址(权限用)
 	@Resource(name="activityService")
 	private ActivityManager activityService;
-	
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -58,6 +60,7 @@ public class ActivityController extends BaseController {
 		pd.put("start_time", start);
 		pd.put("end_time", end);
 		activityService.save(pd);
+		ACLOG.save("1", "1", "活动管理："+pd.getString("act_name"), "活动名称："+pd.getString("act_name"));
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -77,7 +80,13 @@ public class ActivityController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = activityService.findById(pd);
 		activityService.updateByKey(pd);
+		if(pd.getString("isFinish").equals("0")) {
+			ACLOG.save("1", "0", "活动管理："+pdOld.getString("act_name"), "置为上架");
+		}else {
+			ACLOG.save("1", "0", "活动管理："+pdOld.getString("act_name"), "置为下架");
+		}
 		out.write("success");
 		out.close();
 	}
@@ -93,7 +102,9 @@ public class ActivityController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = activityService.findById(pd);
 		activityService.delete(pd);
+		ACLOG.save("1", "2", "活动管理："+pdOld.getString("act_name"), pdOld.toString());
 		out.write("success");
 		out.close();
 	}
@@ -109,7 +120,7 @@ public class ActivityController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		
+		PageData pdOld = activityService.findById(pd);
 		String lastStart = pd.getString("start_time");
 		String lastEnd = pd.getString("end_time");
 		long start = DateUtilNew.getMilliSecondsByStr(lastStart);
@@ -118,6 +129,7 @@ public class ActivityController extends BaseController {
 		pd.put("end_time", end);		
 		
 		activityService.edit(pd);
+		ACLOG.saveByObject("1", "活动管理："+pdOld.getString("act_name"), pdOld, pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -195,6 +207,7 @@ public class ActivityController extends BaseController {
 		if(null != DATA_IDS && !"".equals(DATA_IDS)){
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			activityService.deleteAll(ArrayDATA_IDS);
+			ACLOG.save("1", "2", "活动管理：批量删除","id："+ DATA_IDS);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");

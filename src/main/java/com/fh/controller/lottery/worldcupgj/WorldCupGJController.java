@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.worldcupgj.WorldCupGJManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
@@ -37,7 +38,8 @@ public class WorldCupGJController extends BaseController {
 	String menuUrl = "worldcupgj/list.do"; // 菜单地址(权限用)
 	@Resource(name = "worldcupgjService")
 	private WorldCupGJManager worldcupgjService;
-
+	@Resource(name = "userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 保存
 	 * 
@@ -97,6 +99,16 @@ public class WorldCupGJController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		worldcupgjService.updateSellStatus(pd);
+		String actionObj ="：一键开/停售";
+		if(!pd.getString("id").equals("-1")) {
+			PageData pdOld = worldcupgjService.findById(pd);
+			actionObj =  "："+pdOld.getString("contry_name");
+		}
+		if(pd.getString("sell").equals("1")) {
+			ACLOG.save("1", "0", "冠军竞猜"+actionObj, "置为停售");
+		}else {
+			ACLOG.save("1", "0", "冠军竞猜"+actionObj, "置为开售");
+		}
 		out.write("success");
 		out.close();
 	}

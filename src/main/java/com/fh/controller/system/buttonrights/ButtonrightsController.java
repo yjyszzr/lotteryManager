@@ -23,6 +23,7 @@ import com.fh.util.AppUtil;
 import com.fh.util.PageData;
 import com.fh.util.Jurisdiction;
 import com.fh.util.Tools;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.system.buttonrights.ButtonrightsManager;
 import com.fh.service.system.fhbutton.FhbuttonManager;
 import com.fh.service.system.fhlog.FHlogManager;
@@ -46,6 +47,8 @@ public class ButtonrightsController extends BaseController {
 	private FhbuttonManager fhbuttonService;
 	@Resource(name="fhlogService")
 	private FHlogManager FHLOG;
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	
 	/**列表
 	 * @throws Exception
@@ -95,14 +98,20 @@ public class ButtonrightsController extends BaseController {
 		Map<String,String> map = new HashMap<String,String>();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("FHBUTTON_ID", pd.getString("BUTTON_ID"));
+		PageData buttonP = fhbuttonService.findById(pd);
 		String errInfo = "success";
+		Role role = roleService.getRoleById(pd.getString("ROLE_ID"));
 		if(null != buttonrightsService.findById(pd)){	//判断关联表是否有数据 是:删除/否:新增
 			buttonrightsService.delete(pd);		//删除
 			FHLOG.save(Jurisdiction.getUsername(), "删除按钮权限"+pd);
+			//日志记录
+			ACLOG.save("1","0","按钮权限:" + role.getROLE_NAME(), "关闭:"+buttonP.getString("NAME")); 
 		}else{
 			pd.put("RB_ID", this.get32UUID());	//主键
 			buttonrightsService.save(pd);		//新增
 			FHLOG.save(Jurisdiction.getUsername(), "新增按钮权限pd"+pd);
+			ACLOG.save("1","0","按钮权限:" + role.getROLE_NAME(), "开启:"+buttonP.getString("NAME")); 
 		}
 		map.put("result", errInfo);
 		return AppUtil.returnObject(new PageData(), map);

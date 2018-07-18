@@ -18,6 +18,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.information.pictures.PicturesManager;
 import com.fh.service.lottery.article.ArticleControllerManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -39,7 +40,9 @@ public class ArticleControllerController extends BaseController {
 
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
-
+	
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 保存
 	 * 
@@ -72,8 +75,11 @@ public class ArticleControllerController extends BaseController {
 			pd.put("article_id", 0);
 			pd.put("match_id", 0);
 			articlecontrollerService.save(pd);
+			ACLOG.save("1", "1", "文章管理："+pd.getString("title"), "标题："+pd.getString("title"));
 		} else {
+			PageData pdOld = articlecontrollerService.findById(pd);
 			articlecontrollerService.edit(pd);
+			ACLOG.saveByObject("1", "文章管理："+pdOld.getString("title"), pdOld, pd);
 		}
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
@@ -219,7 +225,9 @@ public class ArticleControllerController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = articlecontrollerService.findById(pd);
 		articlecontrollerService.delete(pd);
+		ACLOG.save("1", "2", "文章管理："+pdOld.getString("title"), pdOld.getString("article_id"));
 		out.write("success");
 		out.close();
 	}
@@ -238,8 +246,30 @@ public class ArticleControllerController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = articlecontrollerService.findById(pd);
 		pd.put("stick_time", DateUtilNew.getCurrentTimeLong());
 		articlecontrollerService.updateByKey(pd);
+		if(pd.get("status") ==null) {
+			if(pd.getString("is_stick").equals("0")) {
+				ACLOG.save("1", "0", "文章管理："+pdOld.getString("title"),"取消置顶");
+			}else {
+				ACLOG.save("1", "0", "文章管理："+pdOld.getString("title"),"置顶");
+			}
+		}else {
+			if(pd.getString("status").equals("1")) {
+				ACLOG.save("1", "0", "文章管理："+pdOld.getString("title"),"上架");
+			}
+			if(pd.getString("status").equals("2") && !pdOld.getString("status").equals("4")) {
+				ACLOG.save("1", "0", "文章管理："+pdOld.getString("title"),"下架");
+			}
+			if(pd.getString("status").equals("4")) {
+				ACLOG.save("1", "0", "文章管理："+pdOld.getString("title"),"过期");
+			}
+			if(pd.getString("status").equals("2") && pdOld.getString("status").equals("4")) {
+				ACLOG.save("1", "0", "文章管理："+pdOld.getString("title"),"恢复");
+			}
+			 
+		}
 		out.write("success");
 		out.close();
 	}
@@ -265,6 +295,7 @@ public class ArticleControllerController extends BaseController {
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			articlecontrollerService.deleteAll(ArrayDATA_IDS);
+			ACLOG.save("1", "2", "文章管理：批量删除","id："+ DATA_IDS);
 			pd.put("msg", "ok");
 		} else {
 			pd.put("msg", "no");

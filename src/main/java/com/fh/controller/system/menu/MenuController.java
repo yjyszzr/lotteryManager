@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.Menu;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.system.fhlog.FHlogManager;
 import com.fh.service.system.menu.MenuManager;
 import com.fh.util.AppUtil;
@@ -39,6 +40,8 @@ public class MenuController extends BaseController {
 	private MenuManager menuService;
 	@Resource(name="fhlogService")
 	private FHlogManager FHLOG;
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	
 	/**
 	 * 显示菜单列表
@@ -105,8 +108,10 @@ public class MenuController extends BaseController {
 			menu.setMENU_ID(String.valueOf(Integer.parseInt(menuService.findMaxId(pd).get("MID").toString())+1));
 			menu.setMENU_ICON("menu-icon fa fa-leaf black");//默认菜单图标
 			menuService.saveMenu(menu); //保存菜单
+			ACLOG.save("1","1","菜单:" + pd.getString("MENU_NAME"), "id:"+menu.getMENU_ID()); 
 			FHLOG.save(Jurisdiction.getUsername(), "新增菜单"+menu.getMENU_NAME());
 		} catch(Exception e){
+			ACLOG.save("0","1","菜单:" + pd.getString("MENU_NAME"),"id:"+ menu.getMENU_ID()); 
 			logger.error(e.toString(), e);
 			mv.addObject("msg","failed");
 		}
@@ -126,15 +131,20 @@ public class MenuController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername()+"删除菜单");
 		Map<String,String> map = new HashMap<String,String>();
 		String errInfo = "";
+		PageData pd = new PageData();
+		pd.put("MENU_ID", MENU_ID);
+		PageData oldPd = menuService.getMenuById(pd);
 		try{
 			if(menuService.listSubMenuByParentId(MENU_ID).size() > 0){//判断是否有子菜单，是：不允许删除
 				errInfo = "false";
 			}else{
 				menuService.deleteMenuById(MENU_ID);
+				ACLOG.save("1","2","菜单:" + oldPd.getString("MENU_NAME"), oldPd.toString()); 
 				FHLOG.save(Jurisdiction.getUsername(), "删除菜单ID"+MENU_ID);
 				errInfo = "success";
 			}
 		} catch(Exception e){
+			ACLOG.save("0","2","菜单:" + oldPd.getString("MENU_NAME"), oldPd.toString()); 
 			logger.error(e.toString(), e);
 		}
 		map.put("result", errInfo);
@@ -174,17 +184,22 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="/edit")
-	public ModelAndView edit(Menu menu)throws Exception{
+	public ModelAndView edit()throws Exception{
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		logBefore(logger, Jurisdiction.getUsername()+"修改菜单");
 		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		PageData oldPd = menuService.getMenuById(pd);
 		try{
-			menuService.edit(menu);
-			FHLOG.save(Jurisdiction.getUsername(), "修改菜单"+menu.getMENU_NAME());
+			menuService.edit(pd);
+			ACLOG.saveByObject("1","菜单：" + pd.getString("MENU_NAME"), oldPd, pd); 
+			FHLOG.save(Jurisdiction.getUsername(), "修改菜单"+pd.getString("MENU_NAME"));
 		} catch(Exception e){
+			ACLOG.saveByObject("0","菜单：" + pd.getString("MENU_NAME"), oldPd, pd); 
 			logger.error(e.toString(), e);
 		}
-		mv.setViewName("redirect:/menu.do?MSG='change'&MENU_ID="+menu.getPARENT_ID()); //保存成功跳转到列表页面
+		mv.setViewName("redirect:/menu.do?MSG='change'&MENU_ID="+pd.getString("PARENT_ID")); //保存成功跳转到列表页面
 		return mv;
 	}
 	

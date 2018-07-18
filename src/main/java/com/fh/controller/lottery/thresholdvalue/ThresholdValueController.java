@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.thresholdvalue.ThresholdValueManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -37,7 +38,8 @@ public class ThresholdValueController extends BaseController {
 	String menuUrl = "thresholdvalue/list.do"; // 菜单地址(权限用)
 	@Resource(name = "thresholdvalueService")
 	private ThresholdValueManager thresholdvalueService;
-
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 保存
 	 * 
@@ -58,6 +60,7 @@ public class ThresholdValueController extends BaseController {
 		// pd.put("business_id", "0"); // 业务ID
 		// pd.put("describtion", ""); // 描述
 		thresholdvalueService.save(pd);
+		ACLOG.save("1", "1", "阈值管理", "描述："+pd.getString("describtion"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -77,7 +80,9 @@ public class ThresholdValueController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = thresholdvalueService.findById(pd);
 		thresholdvalueService.delete(pd);
+		ACLOG.save("1", "2", "阈值管理："+pdOld.getString("describtion"), pdOld.toString());
 		out.write("success");
 		out.close();
 	}
@@ -97,7 +102,9 @@ public class ThresholdValueController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = thresholdvalueService.findById(pd);
 		thresholdvalueService.edit(pd);
+		ACLOG.saveByObject("1", "阈值管理："+pdOld.getString("describtion"), pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -186,6 +193,7 @@ public class ThresholdValueController extends BaseController {
 		if (null != DATA_IDS && !"".equals(DATA_IDS)) {
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			thresholdvalueService.deleteAll(ArrayDATA_IDS);
+			ACLOG.save("1", "2", "按钮管理：批量删除","id："+ DATA_IDS);
 			pd.put("msg", "ok");
 		} else {
 			pd.put("msg", "no");

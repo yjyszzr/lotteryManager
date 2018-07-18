@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserActionLogMapper">
+
+	<!--表名 -->
+	<sql id="tableName">
+		dl_user_action_log
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		user_id,
+		user_name,
+		action_type,
+		action_status,
+		action_ip,
+		action_time,
+		action_object,
+		action_text
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{user_id},
+		#{user_name},
+		#{action_type},
+		#{action_status},
+		#{action_ip},
+		#{action_time},
+		#{action_object},
+		#{action_text}
+	</sql>
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		id,
+		user_id,
+		user_name,
+		action_type,
+		action_status,
+		action_ip,
+		action_time,
+		action_object,
+		action_text
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		SELECT
+		user_id,	
+		user_name,	
+		action_type,	
+		action_status,	
+		action_ip,	
+		action_time,	
+		LEFT(action_object,15) as action_object,
+		action_object as detailObj,	
+		LEFT(action_text,15) as action_text,
+		action_text  as detail
+		FROM
+		dl_user_action_log  
+		WHERE 1 = 1
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and action_time &gt;= #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and action_time &lt;= #{pd.lastEnd1 }
+		</if>
+		<if test="pd.action_type != null and pd.action_type != ''"> 
+			and action_type = #{pd.action_type }
+		</if>
+		ORDER BY
+		action_time DESC
+	</select>
+
+
+</mapper>

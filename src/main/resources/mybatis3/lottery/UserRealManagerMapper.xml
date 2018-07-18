@@ -124,7 +124,7 @@
 		<include refid="tableName"></include>
 		where 1=1 and is_delete = 0
 		<if test="lastStart1 != null and lastStart1 != '' and lastEnd1 != null and lastEnd1 != ''">
-			add_time between #{lastStart1} and #{lastEnd1}
+		and	add_time between #{lastStart1} and #{lastEnd1}
 		</if>
 	</select>
 	

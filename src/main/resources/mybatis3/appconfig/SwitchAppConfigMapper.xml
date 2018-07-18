@@ -72,11 +72,20 @@
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 
-		<include refid="Field"></include>
+		sc.id,	
+		sc.version,	
+		sc.platform,	
+		sc.business_type,	
+		sc.channel,
+		pc.channel_name,
+		sc.turn_on
 		from 
-		<include refid="tableName"></include>
+		dl_switch_config sc
+		left join
+		dl_phone_channel pc
+		on sc.channel = pc.channel
 		where 
-			id = #{id}
+			sc.id = #{id}
 	</select>
 	
 	

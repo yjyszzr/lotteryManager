@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.Menu;
 import com.fh.entity.system.Role;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.fhlog.FHlogManager;
 import com.fh.service.system.role.RoleManager;
@@ -53,7 +54,8 @@ public class RoleController extends BaseController {
 	private AppuserManager appuserService;
 	@Resource(name="fhlogService")
 	private FHlogManager FHLOG;
-	
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/** 进入权限首页
 	 * @param 
 	 * @return
@@ -130,8 +132,10 @@ public class RoleController extends BaseController {
 			pd.put("CHA_QX", "0");	//查看权限
 			roleService.add(pd);
 			FHLOG.save(Jurisdiction.getUsername(), "新增角色:"+pd.getString("ROLE_NAME"));
+			ACLOG.save("1","1","角色:" + pd.getString("ROLE_NAME"), "id:"+pd.getString("ROLE_ID")); 
 		} catch(Exception e){
 			logger.error(e.toString(), e);
+			ACLOG.save("0","1","角色:" + pd.getString("ROLE_NAME"), ""); 
 			mv.addObject("msg","failed");
 		}
 		mv.setViewName("save_result");
@@ -170,13 +174,16 @@ public class RoleController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername()+"修改角色");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
+		pd = this.getPageData();
+		PageData oldPd = roleService.findObjectById(pd);
 		try{
-			pd = this.getPageData();
 			roleService.edit(pd);
 			FHLOG.save(Jurisdiction.getUsername(), "修改角色:"+pd.getString("ROLE_NAME"));
+			ACLOG.saveByObject("1","角色:" + pd.getString("ROLE_NAME"), oldPd, pd); 
 			mv.addObject("msg","success");
 		} catch(Exception e){
 			logger.error(e.toString(), e);
+			ACLOG.saveByObject("0","角色:" + pd.getString("ROLE_NAME"), oldPd, pd); 
 			mv.addObject("msg","failed");
 		}
 		mv.setViewName("save_result");
@@ -196,6 +203,7 @@ public class RoleController extends BaseController {
 		Map<String,String> map = new HashMap<String,String>();
 		PageData pd = new PageData();
 		String errInfo = "";
+		Role role = roleService.getRoleById(ROLE_ID);
 		try{
 			pd.put("ROLE_ID", ROLE_ID);
 			List<Role> roleList_z = roleService.listAllRolesByPId(pd);		//列出此部门的所有下级
@@ -207,12 +215,14 @@ public class RoleController extends BaseController {
 				if(userlist.size() > 0 || appuserlist.size() > 0){						//此角色已被使用就不能删除
 					errInfo = "false2";
 				}else{
-				roleService.deleteRoleById(ROLE_ID);	//执行删除
-				FHLOG.save(Jurisdiction.getUsername(), "删除角色ID为:"+ROLE_ID);
-				errInfo = "success";
+					roleService.deleteRoleById(ROLE_ID);	//执行删除
+					FHLOG.save(Jurisdiction.getUsername(), "删除角色ID为:"+ROLE_ID);
+					ACLOG.save("1","2","角色:" + role.getROLE_NAME(), role.getROLE_NAME()); 
+					errInfo = "success";
 				}
 			}
 		} catch(Exception e){
+			ACLOG.save("0","2","角色:" + role.getROLE_NAME(), role.getROLE_NAME()); 
 			logger.error(e.toString(), e);
 		}
 		map.put("result", errInfo);
@@ -255,14 +265,20 @@ public class RoleController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){} //校验权限
 		logBefore(logger, Jurisdiction.getUsername()+"修改菜单权限");
 		FHLOG.save(Jurisdiction.getUsername(), "修改角色菜单权限，角色ID为:"+ROLE_ID);
+		List<Menu> menuList = menuService.listAllMenuQx("0");	//获取所有菜单
+		
 		PageData pd = new PageData();
 		try{
 			if(null != menuIds && !"".equals(menuIds.trim())){
 				BigInteger rights = RightsHelper.sumRights(Tools.str2StrArray(menuIds));//用菜单ID做权处理
 				Role role = roleService.getRoleById(ROLE_ID);	//通过id获取角色对象
+				String roleRights = role.getRIGHTS();	
 				role.setRIGHTS(rights.toString());
 				roleService.updateRoleRights(role);				//更新当前角色菜单权限
 				pd.put("rights",rights.toString());
+				//日志记录
+				String text= changeMenu(menuList,"",roleRights,rights.toString()); 
+				ACLOG.save("1","1","权限管理:" + role.getROLE_NAME(),text); 
 			}else{
 				Role role = new Role();
 				role.setRIGHTS("");
@@ -277,6 +293,7 @@ public class RoleController extends BaseController {
 			out.write("success");
 			out.close();
 		} catch(Exception e){
+			ACLOG.save("1","1","权限管理:" + ROLE_ID,""); 
 			logger.error(e.toString(), e);
 		}
 	}
@@ -329,6 +346,28 @@ public class RoleController extends BaseController {
 			this.readMenu(menuList.get(i).getSubMenu(), roleRights);					//是：继续排查其子菜单
 		}
 		return menuList;
+	}
+	
+	/**根据角色权限处理权限状态(递归处理)
+	 * @param menuList：传入的总菜单
+	 * @param oldRights：加密的权限字符串
+	 * @param newRights：修改后加密的权限字符串
+	 * @return
+	 */
+	public String changeMenu(List<Menu> menuList,String returnText,String oldRights,String newRights){
+		for(int i=0;i<menuList.size();i++){
+			boolean ob =  RightsHelper.testRights(oldRights, menuList.get(i).getMENU_ID());
+			boolean nb =  RightsHelper.testRights(newRights, menuList.get(i).getMENU_ID());
+			if(ob!=nb) {
+				if(ob) {
+					returnText = returnText +"取消："+menuList.get(i).getMENU_NAME()+",";
+				}else {
+					returnText = returnText +"新增："+menuList.get(i).getMENU_NAME()+",";
+				}
+			}
+			returnText = this.changeMenu(menuList.get(i).getSubMenu(),returnText, oldRights,newRights);					//是：继续排查其子菜单
+		}
+		return returnText;
 	}
 	
 	/**

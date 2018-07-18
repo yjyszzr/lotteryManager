@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.footballmatchlottery.FootballMatchLotteryManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -38,6 +39,8 @@ public class FootballMatchLotteryController extends BaseController {
 	String menuUrl = "footballmatchlottery/list.do"; // 菜单地址(权限用)
 	@Resource(name = "footballmatchlotteryService")
 	private FootballMatchLotteryManager footballmatchlotteryService;
+	@Resource(name = "userActionLogService")
+	private UserActionLogService ACLOG;
 
 	/**
 	 * 保存
@@ -100,6 +103,12 @@ public class FootballMatchLotteryController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		footballmatchlotteryService.updateStatus(pd);
+		PageData pdOld = footballmatchlotteryService.findById(pd);
+		if(pd.getString("is_hot").equals("1")) {
+			ACLOG.save("1", "0", "赛事管理："+pdOld.getString("changci")+pdOld.getString("league_name"), "置为热门");
+		}else {
+			ACLOG.save("1", "0", "赛事管理："+pdOld.getString("changci")+pdOld.getString("league_name"), "撤销热门");
+		}
 		out.write("success");
 		out.close();
 	}

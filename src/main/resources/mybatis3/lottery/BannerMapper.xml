@@ -155,7 +155,7 @@
 				is_show = #{is_show}
 			</if>
 		where 
-			id= #{banner_id}
+			id= #{id}
 	</update>
 	<!-- fh313596790qq(青苔) -->
 </mapper>

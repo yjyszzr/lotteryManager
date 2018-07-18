@@ -29,6 +29,7 @@ import com.fh.service.lottery.channel.ChannelConsumerManager;
 import com.fh.service.lottery.channel.ChannelDistributorManager;
 import com.fh.service.lottery.channel.ChannelManager;
 import com.fh.service.lottery.channel.ChannelOptionLogManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtil;
@@ -60,7 +61,8 @@ public class ChannelDistributorController extends BaseController {
 
 	@Resource(name = "channelService")
 	private ChannelManager channelService;
-
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 保存
 	 * 
@@ -89,6 +91,7 @@ public class ChannelDistributorController extends BaseController {
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong()); // 添加时间
 		pd.put("deleted", "0"); // 是否删除
 		channeldistributorService.save(pd);
+		ACLOG.save("1", "1", "分销管理："+pd.getString("channel_name"), "分销号："+pd.getString("channel_distributor_num"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -108,7 +111,9 @@ public class ChannelDistributorController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = channeldistributorService.findById(pd);
 		channeldistributorService.delete(pd);
+		ACLOG.save("1","2", "分销管理:"+pdOld.getString("channel_distributor_num"), pdOld.toString());
 		out.write("success");
 		out.close();
 	}
@@ -128,7 +133,9 @@ public class ChannelDistributorController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = channeldistributorService.findById(pd);
 		channeldistributorService.edit(pd);
+		ACLOG.saveByObject("1", "分销管理:"+pd.getString("channel_name"), pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;

@@ -25,6 +25,7 @@ import com.fh.util.AppUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.Jurisdiction;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.system.fhlog.FHlogManager;
 
 /** 
@@ -39,7 +40,8 @@ public class FHlogController extends BaseController {
 	String menuUrl = "fhlog/list.do"; //菜单地址(权限用)
 	@Resource(name="fhlogService")
 	private FHlogManager fhlogService;
-	
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**删除
 	 * @param out
 	 * @throws Exception
@@ -48,9 +50,12 @@ public class FHlogController extends BaseController {
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除FHlog");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		PageData pdOld = new PageData();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pdOld = fhlogService.findById(pd);
 		fhlogService.delete(pd);
+		ACLOG.save("1","2","日志管理:" + pdOld.getString("USERNAME"),"id:"+ pdOld.toString()); 
 		out.write("success");
 		out.close();
 	}

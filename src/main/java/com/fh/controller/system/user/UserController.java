@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.Role;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.system.fhlog.FHlogManager;
 import com.fh.service.system.menu.MenuManager;
 import com.fh.service.system.role.RoleManager;
@@ -61,7 +62,8 @@ public class UserController extends BaseController {
 	private MenuManager menuService;
 	@Resource(name = "fhlogService")
 	private FHlogManager FHLOG;
-
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 显示用户列表
 	 * 
@@ -150,8 +152,10 @@ public class UserController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername() + "删除user");
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = userService.findById(pd);
 		userService.deleteU(pd);
 		FHLOG.save(Jurisdiction.getUsername(), "删除系统用户：" + pd);
+		ACLOG.save("1", "2", "系统用户："+pdOld.getString("USERNAME"), pdOld.toString());
 		out.write("success");
 		out.close();
 	}
@@ -208,6 +212,7 @@ public class UserController extends BaseController {
 		if (null == userService.findByUsername(pd)) { // 判断用户名是否存在
 			userService.saveU(pd); // 执行保存
 			FHLOG.save(Jurisdiction.getUsername(), "新增系统用户：" + pd.getString("USERNAME"));
+			ACLOG.save("1", "1", "系统用户："+pd.getString("USERNAME"), "用户名："+pd.getString("USERNAME"));
 			mv.addObject("msg", "success");
 		} else {
 			mv.addObject("msg", "failed");
@@ -423,6 +428,7 @@ public class UserController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = userService.findById(pd);
 		if (!Jurisdiction.getUsername().equals(pd.getString("USERNAME"))) { // 如果当前登录用户修改用户资料提交的用户名非本人
 			if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
 				return null;
@@ -445,6 +451,7 @@ public class UserController extends BaseController {
 		userService.editU(pd); // 执行修改
 		try {
 			FHLOG.save(Jurisdiction.getUsername(), "修改系统用户：" + pd.getString("USERNAME"));
+			ACLOG.saveByObject("1", "系统用户："+pdOld.getString("NAME"), pdOld, pd);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e);
@@ -474,7 +481,8 @@ public class UserController extends BaseController {
 		String USER_IDS = pd.getString("USER_IDS");
 		if (null != USER_IDS && !"".equals(USER_IDS)) {
 			String ArrayUSER_IDS[] = USER_IDS.split(",");
-			userService.deleteAllU(ArrayUSER_IDS);
+//			userService.deleteAllU(ArrayUSER_IDS);
+			ACLOG.save("1", "2", "系统用户：批量删除","id："+ USER_IDS);
 			pd.put("msg", "ok");
 		} else {
 			pd.put("msg", "no");

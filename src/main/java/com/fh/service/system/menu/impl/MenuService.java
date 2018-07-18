@@ -84,8 +84,8 @@ public class MenuService implements MenuManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public void edit(Menu menu) throws Exception {
-		dao.update("MenuMapper.updateMenu", menu);
+	public void edit(PageData pd) throws Exception {
+		dao.update("MenuMapper.updateMenu", pd);
 	}
 
 	/**

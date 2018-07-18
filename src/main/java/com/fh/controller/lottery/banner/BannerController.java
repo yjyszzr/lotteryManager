@@ -18,6 +18,7 @@ import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.banner.BannerManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -36,7 +37,8 @@ public class BannerController extends BaseController {
 	
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
-
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 保存
 	 * 
@@ -62,6 +64,7 @@ public class BannerController extends BaseController {
 		pd.put("end_time", end);
 		pd.put("create_time", DateUtilNew.getCurrentTimeLong()); // 创建时间
 		bannerService.save(pd);
+		ACLOG.save("1", "1", "Banner管理："+pd.getString("id"), "标题："+pd.getString("banner_name"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -81,7 +84,9 @@ public class BannerController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = bannerService.findById(pd);
 		bannerService.delete(pd);
+		ACLOG.save("1", "2", "Banner管理："+pd.getString("id"), "标题："+pd.getString("banner_name"));
 		out.write("success");
 		out.close();
 	}
@@ -101,6 +106,7 @@ public class BannerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = bannerService.findById(pd);
 		String lastStart = pd.getString("start_time");
 		String lastEnd = pd.getString("end_time");
 		long start = DateUtilNew.getMilliSecondsByStr(lastStart);
@@ -108,6 +114,7 @@ public class BannerController extends BaseController {
 		pd.put("start_time", start);
 		pd.put("end_time", end);
 		bannerService.edit(pd);
+		ACLOG.saveByObject("1", "Banner管理："+pdOld.getString("banner_name"), pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -238,7 +245,21 @@ public class BannerController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = bannerService.findById(pd);
 		bannerService.updateByKey(pd);
+		if(pd.getString("is_show").equals("1")) {
+			ACLOG.save("1", "0", "Banner管理："+pdOld.getString("banner_name"), "发布");
+		}
+		if(pd.getString("is_show").equals("0")) { 
+			if(pdOld.getString("is_show").equals("2")) {
+				ACLOG.save("1", "0", "Banner管理："+pdOld.getString("banner_name"), "恢复过期");
+			}else {
+				ACLOG.save("1", "0", "Banner管理："+pdOld.getString("banner_name"), "置为过期");
+			}
+		}
+		if(pd.getString("is_show").equals("2")) { 
+			ACLOG.save("1", "0", "Banner管理："+pdOld.getString("banner_name"), "置为删除");
+		}
 		out.write("success");
 		out.close();
 	}

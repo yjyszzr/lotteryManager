@@ -48,7 +48,7 @@ public interface MenuManager {
 	 * @param menu
 	 * @throws Exception
 	 */
-	public void edit(Menu menu) throws Exception;
+	public void edit(PageData pd) throws Exception;
 	
 	/**
 	 * @param pd

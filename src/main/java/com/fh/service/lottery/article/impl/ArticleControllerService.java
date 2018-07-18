@@ -99,7 +99,7 @@ public class ArticleControllerService implements ArticleControllerManager {
 
 	@Override
 	public void updateByKey(PageData pd) throws Exception {
-		dao.findForObject("ArticleControllerMapper.updateByKey", pd);
+		dao.update("ArticleControllerMapper.updateByKey", pd);
 
 	}
 

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.dto.ChannelDTO;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.switchappconfig.SwitchAppConfigManager;
 import com.fh.util.AppUtil;
 import com.fh.util.ObjectExcelView;
@@ -38,6 +39,8 @@ public class SwitchAppConfigController extends BaseController {
 	String menuUrl = "switchappconfig/list.do"; //菜单地址(权限用)
 	@Resource(name="switchappconfigService")
 	private SwitchAppConfigManager switchappconfigService;
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	
 	/**保存
 	 * @param
@@ -59,6 +62,7 @@ public class SwitchAppConfigController extends BaseController {
 //		pd.put("id_id", this.get32UUID());	//主键
 		pd.put("id", "0");	//备注1
 		switchappconfigService.save(pd);
+		ACLOG.save("1", "1", "APP开关",pd.getString("version")+"-"+pd.getString("channel"));
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -74,7 +78,9 @@ public class SwitchAppConfigController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = switchappconfigService.findById(pd);
 		switchappconfigService.delete(pd);
+		ACLOG.save("1", "2", "APP开关",pdOld.getString("version")+"-"+pdOld.getString("channel_name"));
 		out.write("success");
 		out.close();
 	}
@@ -87,7 +93,13 @@ public class SwitchAppConfigController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = switchappconfigService.findById(pd);
 		switchappconfigService.edit(pd);
+		if(pd.getString("turn_on").equals("1")) {
+			ACLOG.save("1", "0", "APP开关："+pdOld.getString("version")+"-"+pdOld.getString("channel_name"),"开启");
+		}else {
+			ACLOG.save("1", "0", "APP开关："+pdOld.getString("version")+"-"+pdOld.getString("channel_name"),"关闭");
+		}
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -106,7 +118,9 @@ public class SwitchAppConfigController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = switchappconfigService.findById(pd);
 		switchappconfigService.edit(pd);
+		ACLOG.saveByObject("1", "APP开关："+pdOld.getString("version")+"-"+pdOld.getString("channel_name"), pdOld, pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -211,6 +225,7 @@ public class SwitchAppConfigController extends BaseController {
 		if(null != DATA_IDS && !"".equals(DATA_IDS)){
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			switchappconfigService.deleteAll(ArrayDATA_IDS);
+			ACLOG.save("1", "2", "APP开关：批量删除","id："+ DATA_IDS);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -261,4 +276,6 @@ public class SwitchAppConfigController extends BaseController {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
 	}
+	
+	 
 }

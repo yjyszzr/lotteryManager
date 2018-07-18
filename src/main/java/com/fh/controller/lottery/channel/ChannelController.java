@@ -24,6 +24,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.channel.ChannelManager;
 import com.fh.service.lottery.channel.ChannelOptionLogManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -42,7 +43,8 @@ public class ChannelController extends BaseController {
 	private ChannelManager channelService;
 	@Resource(name = "channeloptionlogService")
 	private ChannelOptionLogManager channeloptionlogService;
-
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 保存
 	 * 
@@ -70,6 +72,7 @@ public class ChannelController extends BaseController {
 		pd.put("add_time", "0"); // 时间
 		pd.put("deleted", "0"); // 是否删除
 		channelService.save(pd);
+		ACLOG.save("1", "1", "渠道管理："+pd.getString("channel_name"), "渠道号："+pd.getString("channel_num"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -89,7 +92,9 @@ public class ChannelController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = channelService.findById(pd);
 		channelService.delete(pd);
+		ACLOG.save("1","2", "渠道管理:"+pdOld.getString("channel_name"), pdOld.toString());
 		out.write("success");
 		out.close();
 	}
@@ -109,6 +114,7 @@ public class ChannelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = channelService.findById(pd);
 		String rate = pd.getString("commission_rate");
 		if (!rate.equals("0")) {
 			BigDecimal bg = new BigDecimal(rate);
@@ -116,6 +122,7 @@ public class ChannelController extends BaseController {
 			pd.put("commission_rate", bg.divide(bg100));
 		}
 		channelService.edit(pd);
+		ACLOG.saveByObject("1", "渠道管理:"+pd.getString("channel_name"), pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;

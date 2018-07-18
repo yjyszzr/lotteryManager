@@ -406,7 +406,7 @@
 			});
 		};
  function editStatus(status,id){
-	var url = "<%=basePath%>banner/onOrOffLine.do?banner_id="+id+"&is_show="+status;
+	var url = "<%=basePath%>banner/onOrOffLine.do?id="+id+"&is_show="+status;
 	$.get(url,function(data){
 		tosearch(0);
 	});

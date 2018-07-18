@@ -25,6 +25,7 @@ import com.fh.util.AppUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.Jurisdiction;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.system.fhbutton.FhbuttonManager;
 
 /** 
@@ -39,7 +40,8 @@ public class FhbuttonController extends BaseController {
 	String menuUrl = "fhbutton/list.do"; //菜单地址(权限用)
 	@Resource(name="fhbuttonService")
 	private FhbuttonManager fhbuttonService;
-	
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -53,6 +55,7 @@ public class FhbuttonController extends BaseController {
 		pd = this.getPageData();
 		pd.put("FHBUTTON_ID", this.get32UUID());	//主键
 		fhbuttonService.save(pd);
+		ACLOG.save("1", "1", "按钮管理："+pd.getString("NAME"), "按钮名称："+pd.getString("NAME"));
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -68,7 +71,9 @@ public class FhbuttonController extends BaseController {
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = fhbuttonService.findById(pd);
 		fhbuttonService.delete(pd);
+		ACLOG.save("1", "2", "按钮管理："+pdOld.getString("NAME"), pdOld.toString());
 		out.write("success");
 		out.close();
 	}
@@ -84,7 +89,9 @@ public class FhbuttonController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = fhbuttonService.findById(pd);
 		fhbuttonService.edit(pd);
+		ACLOG.saveByObject("1", "按钮管理："+pdOld.getString("NAME"), pdOld, pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -161,6 +168,7 @@ public class FhbuttonController extends BaseController {
 		if(null != DATA_IDS && !"".equals(DATA_IDS)){
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
 			fhbuttonService.deleteAll(ArrayDATA_IDS);
+			ACLOG.save("1", "2", "按钮管理：批量删除","id："+ DATA_IDS);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");

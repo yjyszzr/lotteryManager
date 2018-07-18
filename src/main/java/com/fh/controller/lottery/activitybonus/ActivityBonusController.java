@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -38,7 +39,8 @@ public class ActivityBonusController extends BaseController {
 	String menuUrl = "activitybonus/list.do"; // 菜单地址(权限用)
 	@Resource(name = "activitybonusService")
 	private ActivityBonusManager activitybonusService;
-
+	@Resource(name="userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 保存
 	 * 
@@ -71,6 +73,7 @@ public class ActivityBonusController extends BaseController {
 		pd.put("is_delete", "0"); // id
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong()); // id
 		activitybonusService.save(pd);
+		ACLOG.save("1", "1", "优惠券管理：新增优惠券", "金额："+pd.getString("bonus_amount"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -90,7 +93,9 @@ public class ActivityBonusController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = activitybonusService.findById(pd);
 		activitybonusService.delete(pd);
+		ACLOG.save("1", "2", "优惠券管理：删除优惠券", pdOld.toString());
 		out.write("success");
 		out.close();
 	}
@@ -110,7 +115,9 @@ public class ActivityBonusController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData pdOld = activitybonusService.findById(pd);
 		activitybonusService.edit(pd);
+		ACLOG.saveByObject("1", "优惠券管理：修改优惠券", pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -125,6 +132,11 @@ public class ActivityBonusController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		activitybonusService.edit(pd);
+		if(pd.getString("is_enable").equals("1")) {
+			ACLOG.save("1","0", "优惠券管理："+pd.getString("bonus_id"), "置为上架");
+		}else {
+			ACLOG.save("1","0", "优惠券管理："+pd.getString("bonus_id"), "置为下架");
+		}
 		out.write("success");
 		out.close();
 	}
