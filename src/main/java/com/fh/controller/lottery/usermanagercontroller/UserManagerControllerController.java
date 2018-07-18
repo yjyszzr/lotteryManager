@@ -17,6 +17,7 @@ import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
 import com.fh.entity.sms.RspSmsCodeEntity;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
@@ -51,7 +52,8 @@ public class UserManagerControllerController extends BaseController {
 
 	@Resource(name = "redisDaoImpl")
 	private RedisDaoImpl redisDaoImpl;
-
+	@Resource(name = "userActionLogService")
+	private UserActionLogService ACLOG;
 	/**
 	 * 保存
 	 * 
@@ -343,12 +345,15 @@ public class UserManagerControllerController extends BaseController {
 		pd = this.getPageData();
 		String op = pd.getString("op");
 		PageData userEntity = usermanagercontrollerService.findById(pd);
+		String text ="";
 		if (userEntity != null) {
 			if (op != null) {
 				if (op.equals("frozen")) {
 					userEntity.put("user_status", UserManagerControllerManager.STATUS_FREEN);
+					text = "冻结账号";
 				} else {
 					userEntity.put("user_status", UserManagerControllerManager.STATUS_NORMAL);
+					text = "解冻账号";
 				}
 			}
 		}
@@ -356,7 +361,7 @@ public class UserManagerControllerController extends BaseController {
 		redisDaoImpl.delRedisKey(USER_SESSION_PREFIX + Integer.valueOf(userEntity.getString("user_id")));
 
 		usermanagercontrollerService.edit(userEntity);
-
+		ACLOG.save("1", "0", "用户列表："+userEntity.getString("user_id")+" "+userEntity.getString("nickname"), text);
 		mv = getDetailView(mv);
 		return mv;
 	}
@@ -384,7 +389,7 @@ public class UserManagerControllerController extends BaseController {
 			updateBank.put("user_id", Integer.valueOf(userEntity.getString("user_id")));
 			userbankmanagerService.updateUserBankDelete(updateBank);
 		}
-		
+		ACLOG.save("1", "0", "用户列表："+userEntity.getString("user_id")+" "+userEntity.getString("nickname"), "清除实名认证");
 		mv = getDetailView(mv);
 		return mv;
 	}

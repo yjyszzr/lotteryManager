@@ -82,7 +82,7 @@ public class ActivityController extends BaseController {
 		pd = this.getPageData();
 		PageData pdOld = activityService.findById(pd);
 		activityService.updateByKey(pd);
-		if(pd.getString("isFinish").equals("0")) {
+		if(pd.getString("is_finish").equals("0")) {
 			ACLOG.save("1", "0", "活动管理："+pdOld.getString("act_name"), "置为上架");
 		}else {
 			ACLOG.save("1", "0", "活动管理："+pdOld.getString("act_name"), "置为下架");
