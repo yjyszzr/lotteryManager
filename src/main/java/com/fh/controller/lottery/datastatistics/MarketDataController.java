@@ -160,6 +160,9 @@ public class MarketDataController extends BaseController {
 		for (int i = 0; i < list.size(); i++) {
 			PageData vpd = new PageData();
 			vpd.put("var1", list.get(i).getString("phone_channel")); // 1
+			if(list.get(i).getString("phone_channel") == "") {
+				vpd.put("var1", list.get(i).getString("device_channel")); // 1
+			}
 			vpd.put("var2", list.get(i).getString("date")); // 2
 			vpd.put("var3", "*"); // 3
 			String count_user = list.get(i).getString("count_user");
@@ -172,8 +175,7 @@ public class MarketDataController extends BaseController {
 			}else {
 				BigDecimal amount = new BigDecimal(amountSum);
 				BigDecimal count = new BigDecimal(count_user);
-				amount.divide(count, 2,BigDecimal.ROUND_HALF_DOWN);
-				vpd.put("var7", amount);
+				vpd.put("var7", amount.divide(count, 2,BigDecimal.ROUND_HALF_DOWN));
 			}
 			
 			if(list.get(i).getString("count2")=="") {     // 8

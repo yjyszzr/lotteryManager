@@ -37,9 +37,9 @@
 						<table style="margin-top:5px;">
 							<tr>
 								<td><span class="input-icon" style="width: 270px;"> </span>日期：</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
 								<td>至</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align: top; padding-left: 2px">
 									<span class="input-icon" style="width: 30px;"> </span> 
@@ -101,9 +101,14 @@
 											<td style="word-wrap:break-word;" class="center">${var.id_code}</td>
 											<td class="center"><c:if test="${var.sex == 2 }">女</c:if><c:if test="${var.sex == 1 }">男</c:if></td>
 											<td class="center">${var.age}</td>
-											<td class="center">${var.mobile_supplier}</td>
-											<td class="center"></td>
-											<td class="center">${var.device_channel}</td>
+											<td class="center">${var.brand}</td>
+											<td class="center">${var.area}</td>
+											<td class="center">
+											${var.phone_channel }
+											<c:if test="${empty var.phone_channel}">
+											${var.device_channel }
+											</c:if>
+											</td>
 											<td class="center">${var.total }</td>
 											<td class="center">${var.rtotal}</td>
 											<td class="center">${var.atotal}</td>

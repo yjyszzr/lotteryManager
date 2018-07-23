@@ -137,9 +137,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	public double totalAwardForAll() throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.totalAwardForAll", null);
 	}
-	public Double getTotalWithDrawalByUserId(Integer userId) throws Exception {
-		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalWithDrawal", userId);
-	}
+	 
 	@SuppressWarnings("unchecked")
 	public List<PageData> findByProcessType(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByProcessType", page);

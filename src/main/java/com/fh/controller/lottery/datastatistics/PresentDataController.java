@@ -29,7 +29,9 @@ public class PresentDataController extends BaseController {
 	private OrderManager ordermanagerService;
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
-	
+
+	private PageData pdt = null;
+
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "用户操作列表PresentDataController");
@@ -41,26 +43,25 @@ public class PresentDataController extends BaseController {
 
 		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
 		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
-		
-		 
+
 		if (pd.isEmpty()) {
 			lastStart = LocalDate.now().toString();
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart+" 00:00:00"));
-			pd.put("lastStart",lastStart);
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart + " 00:00:00"));
+			pd.put("lastStart", lastStart);
 			mv.addObject("now", "今日");
 		}
 		if (null != lastStart && !"".equals(lastStart)) {
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart+" 00:00:00"));
-		}  
-		if (null != lastEnd && !"".equals(lastEnd)) {
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd+" 23:59:59"));
-		} else {
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(LocalDate.now()+" 23:59:59"));
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart + " 00:00:00"));
 		}
-		//注册统计
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd + " 23:59:59"));
+		} else {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(LocalDate.now() + " 23:59:59"));
+		}
+		// 注册统计
 		page.setPd(pd);
 		List<PageData> registerList = usermanagercontrollerService.listAll(pd);
-		//购彩
+		// 购彩
 		PageData pdAM = new PageData();
 		Page pageAm = new Page();
 		pdAM.put("lastStart1", lastStart);
@@ -69,7 +70,7 @@ public class PresentDataController extends BaseController {
 		List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
 		int countBuy = Integer.parseInt(totalAM.get(0).getString("userCount"));
 		BigDecimal amountBuy = new BigDecimal(totalAM.get(0).getString("amountSum"));
-		//充值统计
+		// 充值统计
 		String process_type = "2"; // 充值
 		pd.put("process_type", process_type);
 		page.setPd(pd);
@@ -80,8 +81,8 @@ public class PresentDataController extends BaseController {
 			countRecharge = Integer.parseInt(listRecharge.get(0).getString("userCount"));
 			amountRecharge = new BigDecimal(listRecharge.get(0).getString("amountSum"));
 		}
-		
-		PageData pdt = getDataForHour(page,pd);
+
+		PageData pdh = getDataForHour(page, pd);
 		mv.setViewName("lottery/datastatistics/presentdata_list");
 		mv.addObject("register", registerList.size());
 		mv.addObject("countBuy", countBuy);
@@ -89,48 +90,52 @@ public class PresentDataController extends BaseController {
 		mv.addObject("countRecharge", countRecharge);
 		mv.addObject("amountRecharge", amountRecharge);
 		mv.addObject("pd", pd);
-		mv.addObject("pdt",pdt);
+		mv.addObject("pdt", pdt);
+		mv.addObject("pdh", pdh);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 
 	}
 
-	public PageData getDataForHour(Page page,PageData pd) throws Exception {
-		PageData pdt = new PageData();
+	public PageData getDataForHour(Page page, PageData pd) throws Exception {
+		PageData pdh = new PageData();
 		LocalDate todayDate = LocalDate.now();
 		LocalDate weekDate = todayDate.plusWeeks(-1);
 		LocalDate monthDate = todayDate.plusMonths(-1);
 		for (int i = 0; i < 24; i++) {
-			if(i<10) {
-				pd.put("dayHour", todayDate+" 0"+i);
-			}else {
-				pd.put("dayHour", todayDate+" "+i);
+			if (i < 10) {
+				pd.put("dayHour", todayDate + " 0" + i);
+			} else {
+				pd.put("dayHour", todayDate + " " + i);
 			}
 			page.setPd(pd);
 			List<PageData> list = ordermanagerService.getAmountForDayHour(page);
-			pdt.put("d"+i, list.get(0).getString("amount"));
+			pdh.put("d" + i, list.get(0).getString("amount"));
 		}
-		for (int i = 0; i < 24; i++) {
-			if(i<10) {
-				pd.put("dayHour", weekDate+" 0"+i);
-			}else {
-				pd.put("dayHour", weekDate+" "+i);
+		if (pdt == null) {
+			pdt = new PageData();
+			for (int i = 0; i < 24; i++) {
+				if (i < 10) {
+					pd.put("dayHour", weekDate + " 0" + i);
+				} else {
+					pd.put("dayHour", weekDate + " " + i);
+				}
+				page.setPd(pd);
+				List<PageData> list = ordermanagerService.getAmountForDayHour(page);
+				pdt.put("w" + i, list.get(0).getString("amount"));
 			}
-			page.setPd(pd);
-			List<PageData> list = ordermanagerService.getAmountForDayHour(page);
-			pdt.put("w"+i, list.get(0).getString("amount"));
-		}
-		for (int i = 0; i < 24; i++) {
-			if(i<10) {
-				pd.put("dayHour", monthDate+" 0"+i);
-			}else {
-				pd.put("dayHour", monthDate+" "+i);
+			for (int i = 0; i < 24; i++) {
+				if (i < 10) {
+					pd.put("dayHour", monthDate + " 0" + i);
+				} else {
+					pd.put("dayHour", monthDate + " " + i);
+				}
+				page.setPd(pd);
+				List<PageData> list = ordermanagerService.getAmountForDayHour(page);
+				pdt.put("m" + i, list.get(0).getString("amount"));
 			}
-			page.setPd(pd);
-			List<PageData> list = ordermanagerService.getAmountForDayHour(page);
-			pdt.put("m"+i, list.get(0).getString("amount"));
 		}
-		return pdt;
+		return pdh;
 	}
 
 }

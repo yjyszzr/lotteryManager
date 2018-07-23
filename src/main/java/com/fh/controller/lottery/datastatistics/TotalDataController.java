@@ -166,6 +166,7 @@ public class TotalDataController extends BaseController {
 			List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
 			countPage.put("countBuy", Integer.parseInt(totalAM.get(0).getString("userCount")));
 			countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")));
+			countPage.put("amountReward", new BigDecimal(totalAM.get(0).getString("winningSum")));
 				
 			List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
 			int orderCount = orderList.size();
@@ -183,10 +184,7 @@ public class TotalDataController extends BaseController {
 					if(processType.equals("4")) {
 						countPage.put("amountWithDraw", new BigDecimal(pageData.getString("amountSum")).negate());
 					}
-					//中奖
-					if(processType.equals("1")) {
-						countPage.put("amountReward", new BigDecimal(pageData.getString("amountSum")));
-					}
+					 
 				}
 			}
 			countPage.put("register", registerList.size());

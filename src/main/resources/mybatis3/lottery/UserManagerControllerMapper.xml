@@ -243,15 +243,22 @@
 		u.mobile,
 		u.nickname,
 		u.reg_time,
+		u.reg_ip,
 		u.last_time,
 		u_r.real_name,
 		u_r.id_code,
 		u.user_status,
 		u.reg_from,
+		p.channel_name as phone_channel,
+		u.device_channel,
+		log.brand,
 		u.is_business
 		from 
 		dl_user u
 		left join dl_user_real  u_r on u_r.user_id = u.user_id 
+		left join dl_phone_channel p on u.device_channel = p.channel
+		left join (SELECT user_id,brand from dl_user_login_log where   brand !='' GROUP BY user_id HAVING  min(login_time)
+					) log on log.user_id = u.user_id
 		where 1=1 and u_r.is_delete = 0
 		<if test="pd.real_name!= null and pd.real_name != ''"> 
 			and u_r.real_name LIKE CONCAT(CONCAT('%', #{pd.real_name}),'%')

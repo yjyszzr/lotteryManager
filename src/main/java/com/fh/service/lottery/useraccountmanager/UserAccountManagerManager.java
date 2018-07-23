@@ -110,8 +110,6 @@ public interface UserAccountManagerManager {
 
 	public double totalAwardForAll() throws Exception;
 
-	public Double totalWithdraw(Integer userId) throws Exception;
-
 	/****
 	 * 累计提现
 	 * 
@@ -119,7 +117,8 @@ public interface UserAccountManagerManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public Double getTotalWithDrawalByUserId(@Param("userId") Integer userId) throws Exception;
+	public Double totalWithdraw(Integer userId) throws Exception;
+
 	/****
 	 * 根据操作类型返回列表
 	 * 

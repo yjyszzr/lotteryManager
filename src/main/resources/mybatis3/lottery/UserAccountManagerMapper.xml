@@ -194,10 +194,8 @@
 			user_id = #{userId} 
 			AND STATUS = 1
 	</select>
- 	<!-- 累计体现汇总 -->
-	<select id="getTotalWithDrawal" parameterType="java.lang.Integer" resultType="java.lang.Double">
-		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 4;
-	</select>
+ 	<!-- 累计提现汇总 -->
+	 
 	
 	<select id="findByUserId" parameterType="java.lang.Integer"  resultType="pd">
 		SELECT * FROM dl_user_account WHERE user_id = #{userId} order by last_time DESC;

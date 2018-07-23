@@ -223,10 +223,10 @@
 				series : [ {
 					name : '今日',
 					type : 'line',
-					data : [ ${pdt.d0 },${pdt.d1 }	,${pdt.d2 }	,${pdt.d3 }	,${pdt.d4 }	,${pdt.d5 }	,
-							${pdt.d6 }	,${pdt.d7 }	,${pdt.d8 }	,${pdt.d9 }	,${pdt.d10 },${pdt.d11 } ,
-							${pdt.d12 } ,${pdt.d13 } ,${pdt.d14 } ,${pdt.d15 }	,${pdt.d16 } ,${pdt.d17 } ,
-							${pdt.d18 } ,${pdt.d19 } ,${pdt.d20 } ,${pdt.d21 }	,${pdt.d22 } ,${pdt.d23 }
+					data : [ ${pdh.d0 },${pdh.d1 }	,${pdh.d2 }	,${pdh.d3 }	,${pdh.d4 }	,${pdh.d5 }	,
+							${pdh.d6 }	,${pdh.d7 }	,${pdh.d8 }	,${pdh.d9 }	,${pdh.d10 },${pdh.d11 } ,
+							${pdh.d12 } ,${pdh.d13 } ,${pdh.d14 } ,${pdh.d15 }	,${pdh.d16 } ,${pdh.d17 } ,
+							${pdh.d18 } ,${pdh.d19 } ,${pdh.d20 } ,${pdh.d21 }	,${pdh.d22 } ,${pdh.d23 }
 							],
 					markPoint : {
 						data : [ {
@@ -291,10 +291,13 @@
 					}
 				} ]
 			};
-
+			var d = new Date();
+			var h = d.getHours() + 1;
+			option.xAxis[0].data.splice(h,24-h);
 			// 为echarts对象加载数据 
 			myChart.setOption(option);
 		});
+		
 	</script>
 
 </body>
