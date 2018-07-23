@@ -38,7 +38,7 @@
 									<tr style="margin: 2px">
 										<td>
 											<div class="nav-search">
-												  节点: 
+												  操作类型: 
 												  <select name="action_type" id="action_type" data-placeholder="请选择" value="${pd.action_type }"
 													style="width: 70px; border-radius: 5px !important">
 													<option value="" selected="selected">全部</option>
