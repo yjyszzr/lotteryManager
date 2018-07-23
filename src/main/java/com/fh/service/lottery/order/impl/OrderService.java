@@ -28,6 +28,7 @@ public class OrderService implements OrderManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void save(PageData pd) throws Exception {
 		dao.save("OrderMapper.save", pd);
 	}
@@ -38,6 +39,7 @@ public class OrderService implements OrderManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void delete(PageData pd) throws Exception {
 		dao.delete("OrderMapper.delete", pd);
 	}
@@ -48,6 +50,7 @@ public class OrderService implements OrderManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public void edit(PageData pd) throws Exception {
 		dao.update("OrderMapper.edit", pd);
 	}
@@ -58,6 +61,7 @@ public class OrderService implements OrderManager {
 	 * @param page
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.datalistPage", page);
@@ -69,6 +73,7 @@ public class OrderService implements OrderManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> listAll(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.listAll", pd);
@@ -80,6 +85,7 @@ public class OrderService implements OrderManager {
 	 * @param pd
 	 * @throws Exception
 	 */
+	@Override
 	public PageData findById(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("OrderMapper.findById", pd);
 	}
@@ -90,6 +96,7 @@ public class OrderService implements OrderManager {
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
+	@Override
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("OrderMapper.deleteAll", ArrayDATA_IDS);
 	}
@@ -99,35 +106,43 @@ public class OrderService implements OrderManager {
 		return (PageData) dao.findForObject("OrderMapper.findByOrderSn", orderSn);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> selectByTime(String format) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.selectByTime", format);
 	}
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> selectSuccessByTime(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.selectSuccessByTime", page);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getOrderList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.datalistPage1", page);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> toDetail(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.toDetail", pd);
 	}
+
 	/**
 	 * 首购订单
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getFirstOrderList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getFirstOrderList", page);
 	}
-	
+
 	/**
 	 * 复购订单
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getAgainOrderList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getAgainOrderList", page);
@@ -145,25 +160,35 @@ public class OrderService implements OrderManager {
 		return (List<PageData>) dao.findForList("OrderMapper.getOrderOfPlay", page);
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getAmountForDayHour(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getAmountForDayHour", page);
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getMatchAmountByTime(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getMatchAmountByTime", page);
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getTotalAmountByTime(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getTotalAmountByTime", page);
-		
+
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> findPayLogList(List<PageData> varList) throws Exception {
+		String[] orderSns = new String[varList.size()];
+		for (int i = 0; i < varList.size(); i++) {
+			orderSns[i] = varList.get(i).getString("order_sn");
+		}
+		return (List<PageData>) dao.findForList("OrderMapper.findAllPayLog", orderSns);
 	}
 }

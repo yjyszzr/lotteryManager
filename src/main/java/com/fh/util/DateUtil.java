@@ -264,4 +264,9 @@ public class DateUtil {
 		dateLong = dateLong - 180 * 60;
 		return toSDFTime(dateLong * 1000);
 	}
+
+	public static Integer toTimeSubtraction30Day(Integer dateLong) {
+		return dateLong = dateLong - 60 * 30 * 60;
+		// return toSSDFTime(dateLong * 1000);
+	}
 }

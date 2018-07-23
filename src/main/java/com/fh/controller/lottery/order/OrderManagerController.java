@@ -1,8 +1,11 @@
 package com.fh.controller.lottery.order;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -24,9 +27,12 @@ import com.fh.enums.MatchResultCrsEnum;
 import com.fh.enums.MatchResultHadEnum;
 import com.fh.enums.MatchResultHafuEnum;
 import com.fh.service.lottery.order.OrderManager;
+import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
+import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.StringUtil;
 
 /**
  * 说明：订单管理 创建时间：2018-06-01
@@ -83,8 +89,13 @@ public class OrderManagerController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = ordermanagerService.getOrderList(page); // 列出OrderManager列表
+		List<PageData> payLogList = ordermanagerService.findPayLogList(varList);
+		Map<String, PageData> payLogMap = new HashMap<String, PageData>(payLogList.size());
+		payLogList.forEach(item -> payLogMap.put(item.getString("order_sn"), item));
 		Double allAmountD = 0D;
 		for (int i = 0; i < varList.size(); i++) {
+			PageData pageData = payLogMap.get(varList.get(i).getString("order_sn"));
+			varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
 			allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
 			allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
 		}
@@ -210,5 +221,98 @@ public class OrderManagerController extends BaseController {
 			cathecticData += MatchResultHafuEnum.getName(cathecticStr);
 		}
 		return cathecticData;
+	}
+
+	/**
+	 * 导出到excel
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/excel")
+	public ModelAndView exportExcel() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "导出订单到excel");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+			return null;
+		}
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		List<String> titles = new ArrayList<String>();
+		titles.add("订单编号"); // 1
+		titles.add("用户昵称"); // 2
+		titles.add("电话"); // 3
+		titles.add("彩种"); // 4
+		titles.add("投注金额"); // 5
+		titles.add("余额支付"); // 6
+		titles.add("红包支付"); // 7
+		titles.add("第三方支付"); // 8
+		titles.add("中奖金额"); // 9
+		titles.add("购彩时间"); // 10
+		titles.add("订单状态"); // 11
+		titles.add("回执单号"); // 12
+		dataMap.put("titles", titles);
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
+
+		String orderStatusFor = pd.getString("order_status");
+		if ("".equals(orderStatusFor) && "".equals(lastEnd) && "".equals(lastStart)) {
+			pd.put("lastStart1", DateUtil.toTimeSubtraction30Day(DateUtilNew.getCurrentTimeLong()));
+		}
+
+		List<PageData> varOList = ordermanagerService.listAll(pd);
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < varOList.size(); i++) {
+			PageData vpd = new PageData();
+			vpd.put("var1", varOList.get(i).getString("order_sn")); // 1
+			vpd.put("var2", varOList.get(i).getString("user_name")); // 2
+			vpd.put("var3", varOList.get(i).getString("mobile")); // 3
+			vpd.put("var4", varOList.get(i).getString("lottery_name")); // 4
+			vpd.put("var5", varOList.get(i).getString("ticket_amount") + "元"); // 5
+			vpd.put("var6", varOList.get(i).getString("surplus") + "元"); // 6
+			vpd.put("var7", varOList.get(i).getString("bonus") + "元"); // 6
+			String payName = varOList.get(i).getString("pay_name");
+			String thirdPartyPaid = varOList.get(i).getString("third_party_paid");
+			vpd.put("var8", thirdPartyPaid.equals("") ? "0元" : payName.equals("") ? "第三方:" + varOList.get(i).getString("third_party_paid") + "元" : payName + varOList.get(i).getString("third_party_paid") + "元"); // 6
+			vpd.put("var9", varOList.get(i).getString("winning_money") + "元"); // 6
+			BigDecimal big1000 = new BigDecimal(1000);
+			BigDecimal big8 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
+			vpd.put("var10", DateUtil.toSDFTime(Long.parseLong(big8.multiply(big1000).toString()))); // 8
+			String orderStatus = varOList.get(i).getString("order_status");
+			String orderStatusStr = "";
+			if (orderStatus.equals("0")) {
+				orderStatusStr = "待付款";
+			} else if (orderStatus.equals("1")) {
+				orderStatusStr = "待出票";
+			} else if (orderStatus.equals("2")) {
+				orderStatusStr = "出票失败";
+			} else if (orderStatus.equals("3")) {
+				orderStatusStr = "待开奖";
+			} else if (orderStatus.equals("4")) {
+				orderStatusStr = "未中奖";
+			} else if (orderStatus.equals("5")) {
+				orderStatusStr = "已中奖";
+			} else if (orderStatus.equals("6")) {
+				orderStatusStr = "派奖中";
+			} else if (orderStatus.equals("7")) {
+				orderStatusStr = "审核中";
+			} else if (orderStatus.equals("8")) {
+				orderStatusStr = "支付失败";
+			}
+			vpd.put("var11", orderStatusStr); // 11
+			vpd.put("var12", varOList.get(i).getString("pay_order_sn")); // 12
+			varList.add(vpd);
+		}
+		dataMap.put("varList", varList);
+		ObjectExcelView erv = new ObjectExcelView();
+		mv = new ModelAndView(erv, dataMap);
+		return mv;
 	}
 }

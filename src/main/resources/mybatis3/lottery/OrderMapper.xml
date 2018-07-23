@@ -298,12 +298,48 @@
 		order  by 	o.add_time desc
 	</select>
 	
+	<select id="findAllPayLog" resultType="pd">
+		select * from dl_pay_log where order_sn in 
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
+		select 
+			o.order_id,
+			o.order_sn,
+			u.user_id,
+			u.user_name,
+			u.mobile,
+			l.lottery_name,
+			l.lottery_classify_id,
+			o.order_status,
+			o.pay_name,
+			o.ticket_amount,
+			o.winning_money,
+			o.bonus,
+			o.surplus,
+			o.third_party_paid,
+			o.add_time,
+			o.pay_time,
+			p.pay_order_sn 
+		FROM
+			dl_order o
+			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
+			LEFT JOIN dl_user u ON o.user_id = u.user_id  
+			LEFT JOIN dl_pay_log p ON o.order_sn = p.order_sn  
+			
+		WHERE 1 = 1
+			<if test="lastStart1 != null and lastStart1 != ''"> 
+			and o.add_time &gt; #{lastStart1 }
+		</if>
+		<if test="lastEnd1 != null and lastEnd1 != ''"> 
+			and o.add_time &lt; #{lastEnd1 }
+		</if>
+		<if test="order_status != null and order_status != ''"> 
+			and o.order_status = #{order_status }
+		</if>
 	</select>
 	
 	<select id="selectByTime" parameterType="String" resultType="pd">

@@ -121,6 +121,14 @@
 											</span>
 										</td>
 									</c:if>
+									<c:if test="${QX.toExcel == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+										<span class="input-icon" style="width:80px;"> </span>
+											<span>
+												<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:150px">导出到EXCEL </a>
+											</span>
+											</td>
+									</c:if>
 								</tr>
 							</table>
 						<!-- 检索  -->
@@ -130,6 +138,7 @@
 								<tr>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">订单编号</th>
+									<th class="center">回执编号</th>
 									<th class="center">用户名称</th>
 									<th class="center">手机号</th>
 									<th class="center">彩种名称</th>
@@ -151,6 +160,7 @@
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'><a onclick="toDetail('${var.order_id}');" style=" cursor:pointer;">${var.order_sn}</a></td>
+											<td class='center'>${var.pay_order_sn}</td>
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
@@ -296,6 +306,21 @@
 				 diag.show();
 			}
 			
+			//导出excel
+			function toExcel(){
+				var lastStart = $("#lastStart").val();
+				var lastEnd = $("#lastEnd").val();
+				var orderStatus = $("#order_status").val();
+				if(lastStart =="" && lastEnd == ""  && orderStatus == "" ){
+					bootbox.confirm("<h4><strong>温馨提示</strong></h4><br><h5>&nbsp&nbsp默认导出30天的数据，</h5><br><h5>&nbsp&nbsp您可以按照<span style='color:red'>时间</span>和<span style='color:red'>状态</span>筛选导出！</h5>", function(result) {
+						if(result) {
+							window.location.href='<%=basePath%>ordermanager/excel.do';
+						}
+					});
+				}else{
+				window.location.href='<%=basePath%>ordermanager/excel.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&order_status='+orderStatus;
+				}
+			}
 			
 	</script>
 </body>

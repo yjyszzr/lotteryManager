@@ -71,25 +71,27 @@ public interface OrderManager {
 	public PageData findByOrderSn(String orderSn) throws Exception;
 
 	public List<PageData> selectByTime(String format) throws Exception;
-	
+
 	public List<PageData> selectSuccessByTime(Page page) throws Exception;
 
 	public List<PageData> getOrderList(Page page) throws Exception;
 
 	public List<PageData> toDetail(PageData pd) throws Exception;
-	
+
 	public List<PageData> getFirstOrderList(Page page) throws Exception;
-	
+
 	public List<PageData> getAgainOrderList(Page page) throws Exception;
-	
+
 	public List<PageData> getOrderAndDetail(Page page) throws Exception;
-	
+
 	public List<PageData> getOrderOfPlay(Page page) throws Exception;
-	
+
 	public List<PageData> getAmountForDayHour(Page page) throws Exception;
-	
+
 	public List<PageData> getMatchAmountByTime(Page page) throws Exception;
-	
+
 	public List<PageData> getTotalAmountByTime(Page page) throws Exception;
+
+	public List<PageData> findPayLogList(List<PageData> varList) throws Exception;
 
 }
