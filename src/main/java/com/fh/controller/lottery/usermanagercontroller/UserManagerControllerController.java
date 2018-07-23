@@ -351,15 +351,13 @@ public class UserManagerControllerController extends BaseController {
 				if (op.equals("frozen")) {
 					userEntity.put("user_status", UserManagerControllerManager.STATUS_FREEN);
 					text = "冻结账号";
+					redisDaoImpl.delRedisKey(USER_SESSION_PREFIX + Integer.valueOf(userEntity.getString("user_id")));
 				} else {
 					userEntity.put("user_status", UserManagerControllerManager.STATUS_NORMAL);
 					text = "解冻账号";
 				}
 			}
 		}
-
-		redisDaoImpl.delRedisKey(USER_SESSION_PREFIX + Integer.valueOf(userEntity.getString("user_id")));
-
 		usermanagercontrollerService.edit(userEntity);
 		ACLOG.save("1", "0", "用户列表："+userEntity.getString("user_id")+" "+userEntity.getString("nickname"), text);
 		mv = getDetailView(mv);
