@@ -74,4 +74,10 @@ public interface UserWithdrawManager {
 	public List<PageData> findByUserId(int parseInt) throws Exception;
 
 	public BigDecimal findTotalAwardById(int parseInt) throws Exception;
+	/**
+	 * 总提现金额和人数
+	 *  
+	 * @throws Exception
+	 */
+	public PageData findTotalWithDraw(PageData pd) throws Exception;
 }

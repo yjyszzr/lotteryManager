@@ -117,4 +117,14 @@ public class UserWithdrawService implements UserWithdrawManager {
 	public BigDecimal findTotalAwardById(int userId) throws Exception {
 		return (BigDecimal) dao.findForObject("UserWithdrawMapper.findTotalAwardById", userId);
 	}
+	/**
+	 * 总提现金额和人数
+	 *  
+	 * @throws Exception
+	 */
+	@Override
+	public PageData findTotalWithDraw(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("UserWithdrawMapper.findTotalWithDraw", pd);
+
+	}
 }

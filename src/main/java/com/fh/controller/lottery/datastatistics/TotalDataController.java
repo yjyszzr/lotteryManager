@@ -19,6 +19,8 @@ import com.fh.entity.Page;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.service.lottery.userrecharge.impl.UserRechargeService;
+import com.fh.service.lottery.userwithdraw.impl.UserWithdrawService;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -35,6 +37,10 @@ public class TotalDataController extends BaseController {
 	private UserManagerControllerManager usermanagercontrollerService;
 	@Resource(name = "orderService")
 	private OrderManager ordermanagerService;
+	@Resource(name = "userwithdrawService")
+	private UserWithdrawService userwithdrawService;
+	@Resource(name = "userrechargeService")
+	private UserRechargeService userrechargeService;
 	
 	
 	@RequestMapping(value = "/list")
@@ -155,7 +161,6 @@ public class TotalDataController extends BaseController {
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
 			page.setPd(pd);
 			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
-			List<PageData> listUserAccount = useraccountmanagerService.findByProcessType(page);
 			 
 			//购彩
 			PageData pdAM = new PageData();
@@ -171,22 +176,12 @@ public class TotalDataController extends BaseController {
 			List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
 			int orderCount = orderList.size();
 			countPage.put("orderCount", orderCount);
-			if (listUserAccount.size() > 0) {
-				for (int j = 0; j < listUserAccount.size(); j++) {
-					PageData pageData = listUserAccount.get(j);
-					String processType = pageData.getString("process_type");
-					//充值
-					if(processType.equals("2")) {
-						countPage.put("countRecharge", Integer.parseInt(pageData.getString("userCount")));
-						countPage.put("amountRecharge", new BigDecimal(pageData.getString("amountSum")));
-					}
-					//提现
-					if(processType.equals("4")) {
-						countPage.put("amountWithDraw", new BigDecimal(pageData.getString("amountSum")).negate());
-					}
-					 
-				}
-			}
+			
+			PageData withdrawPD = userwithdrawService.findTotalWithDraw(pd);
+			countPage.put("amountWithDraw", new BigDecimal(withdrawPD.getString("amountSum")));
+			PageData rechargePD = userrechargeService.findTotalRecharge(pd);
+			countPage.put("countRecharge", Integer.parseInt(rechargePD.getString("userCount")));
+			countPage.put("amountRecharge", new BigDecimal(rechargePD.getString("amountSum")));
 			countPage.put("register", registerList.size());
 			list.add(countPage);
 			
@@ -224,6 +219,8 @@ public class TotalDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(time.plusDays(6)+" 23:59:59"));
 			page.setPd(pd);
+			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
+			 
 			//购彩
 			PageData pdAM = new PageData();
 			Page pageAm = new Page();
@@ -232,38 +229,18 @@ public class TotalDataController extends BaseController {
 			pageAm.setPd(pdAM);
 			List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
 			countPage.put("countBuy", Integer.parseInt(totalAM.get(0).getString("userCount")));
-			countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")).negate());
-			
-			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
-			List<PageData> listUserAccount = useraccountmanagerService.findByProcessType(page);
-			 
+			countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")));
+			countPage.put("amountReward", new BigDecimal(totalAM.get(0).getString("winningSum")));
+				
 			List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
 			int orderCount = orderList.size();
 			countPage.put("orderCount", orderCount);
-			if (listUserAccount.size() > 0) {
-				for (int j = 0; j < listUserAccount.size(); j++) {
-					PageData pageData = listUserAccount.get(j);
-					String processType = pageData.getString("process_type");
-					//购彩
-					if(processType.equals("3")) {
-						countPage.put("countBuy", Integer.parseInt(pageData.getString("userCount")));
-						countPage.put("amountBuy", new BigDecimal(pageData.getString("amountSum")).negate());
-					}
-					//充值
-					if(processType.equals("2")) {
-						countPage.put("countRecharge", Integer.parseInt(pageData.getString("userCount")));
-						countPage.put("amountRecharge", new BigDecimal(pageData.getString("amountSum")));
-					}
-					//提现
-					if(processType.equals("4")) {
-						countPage.put("amountWithDraw", new BigDecimal(pageData.getString("amountSum")).negate());
-					}
-					//中奖
-					if(processType.equals("1")) {
-						countPage.put("amountReward", new BigDecimal(pageData.getString("amountSum")));
-					}
-				}
-			}
+			
+			PageData withdrawPD = userwithdrawService.findTotalWithDraw(pd);
+			countPage.put("amountWithDraw", new BigDecimal(withdrawPD.getString("amountSum")));
+			PageData rechargePD = userrechargeService.findTotalRecharge(pd);
+			countPage.put("countRecharge", Integer.parseInt(rechargePD.getString("userCount")));
+			countPage.put("amountRecharge", new BigDecimal(rechargePD.getString("amountSum")));
 			countPage.put("register", registerList.size());
 			list.add(countPage);
 			
@@ -298,7 +275,6 @@ public class TotalDataController extends BaseController {
 			countPage.put("data",  time.toString().substring(0, 7));
 			page.setPd(pd);
 			List<PageData> registerList = usermanagercontrollerService.listAll(pd);
-			List<PageData> listUserAccount = useraccountmanagerService.findByProcessType(page);
 			 
 			//购彩
 			PageData pdAM = new PageData();
@@ -308,35 +284,18 @@ public class TotalDataController extends BaseController {
 			pageAm.setPd(pdAM);
 			List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
 			countPage.put("countBuy", Integer.parseInt(totalAM.get(0).getString("userCount")));
-			countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")).negate());
-			
+			countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")));
+			countPage.put("amountReward", new BigDecimal(totalAM.get(0).getString("winningSum")));
+				
 			List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
 			int orderCount = orderList.size();
 			countPage.put("orderCount", orderCount);
-			if (listUserAccount.size() > 0) {
-				for (int j = 0; j < listUserAccount.size(); j++) {
-					PageData pageData = listUserAccount.get(j);
-					String processType = pageData.getString("process_type");
-					//购彩
-					if(processType.equals("3")) {
-						countPage.put("countBuy", Integer.parseInt(pageData.getString("userCount")));
-						countPage.put("amountBuy", new BigDecimal(pageData.getString("amountSum")).negate());
-					}
-					//充值
-					if(processType.equals("2")) {
-						countPage.put("countRecharge", Integer.parseInt(pageData.getString("userCount")));
-						countPage.put("amountRecharge", new BigDecimal(pageData.getString("amountSum")));
-					}
-					//提现
-					if(processType.equals("4")) {
-						countPage.put("amountWithDraw", new BigDecimal(pageData.getString("amountSum")).negate());
-					}
-					//中奖
-					if(processType.equals("1")) {
-						countPage.put("amountReward", new BigDecimal(pageData.getString("amountSum")));
-					}
-				}
-			}
+			
+			PageData withdrawPD = userwithdrawService.findTotalWithDraw(pd);
+			countPage.put("amountWithDraw", new BigDecimal(withdrawPD.getString("amountSum")));
+			PageData rechargePD = userrechargeService.findTotalRecharge(pd);
+			countPage.put("countRecharge", Integer.parseInt(rechargePD.getString("userCount")));
+			countPage.put("amountRecharge", new BigDecimal(rechargePD.getString("amountSum")));
 			countPage.put("register", registerList.size());
 			varList.add(countPage);
 		}

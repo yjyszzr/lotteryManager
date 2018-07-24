@@ -126,8 +126,8 @@
 											<td class='center'>${var.registerOrderAmount }</td>
 											<td class='center'>${var.registerAgainOrderCount }</td>
 											<td class='center'>${var.registerAgainOrderAmount }</td>
-											<td class='center'>${var.percentA }</td>
-											<td class='center'>${var.percentB }</td>
+											<td class='center'>${var.percentA }<c:if test="${empty var.percentA}">0.00%</c:if></td>
+											<td class='center'>${var.percentB }<c:if test="${empty var.percentB}">0.00%</c:if></td>
 										
 										</tr>
 									</c:forEach>

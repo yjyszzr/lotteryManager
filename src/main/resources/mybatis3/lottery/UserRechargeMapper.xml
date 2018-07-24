@@ -138,6 +138,21 @@
 			order by a.add_time desc
 	</select>
 	
+	<select id="findTotalRecharge" parameterType="pd" resultType="pd">
+		SELECT
+			COALESCE(count(DISTINCT user_id),0) as userCount,
+		 	COALESCE(sum(amount),0) as amountSum
+		FROM
+			dl_user_recharge 
+		WHERE status = '1'
+			<if test="lastStart1 != null and lastStart1 != ''"> 
+			and add_time &gt;= #{lastStart1 }
+			</if>
+			<if test="lastEnd1 != null and lastEnd1 != ''"> 
+			and add_time &lt;= #{lastEnd1 }
+			</if>
+	</select>
+	
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from

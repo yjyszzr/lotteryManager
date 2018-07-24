@@ -95,5 +95,14 @@ public class UserRechargeService implements UserRechargeManager {
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception {
 		dao.delete("UserRechargeMapper.deleteAll", ArrayDATA_IDS);
 	}
+	/**
+	 * 总充值金额和人数
+	 * 
+	 * @throws Exception
+	 */
+	@Override
+	public PageData findTotalRecharge(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("UserRechargeMapper.findTotalRecharge", pd);
+	}
 
 }

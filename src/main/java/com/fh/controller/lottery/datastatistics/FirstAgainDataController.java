@@ -158,7 +158,12 @@ public class FirstAgainDataController extends BaseController {
 			vpd.put("var19", list.get(i).getString("registerAgainOrderAmount")); // 19
 			vpd.put("var20", list.get(i).getString("percentA")); // 20
 			vpd.put("var21", list.get(i).getString("percentB")); // 21
-			 
+			if(vpd.get("var20").equals("")) {
+				vpd.put("var20", list.get(i).getString("0.00%")); // 20
+			}
+			if(vpd.get("var21").equals("")) {
+				vpd.put("var21", list.get(i).getString("0.00%")); // 20
+			}
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -294,7 +299,7 @@ public class FirstAgainDataController extends BaseController {
 		List<PageData> userRealList = userrealmanagerService.listAll(pd);
 		pageData.put("realCount", userRealList.size());
 		
-		//注册并认证用户数
+		//认证并购彩用户数
 		List<PageData> realOrderList = usermanagercontrollerService.getRealAndOrder(page);
 		pageData.put("realOrderCount", realOrderList.get(0).getString("count"));
 		pageData.put("realOrderAmount", realOrderList.get(0).getString("amount"));

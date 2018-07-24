@@ -153,28 +153,36 @@ public class OrderService implements OrderManager {
 	public List<PageData> getOrderAndDetail(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getOrderAndDetail", page);
 	}
-
+	/**
+	 * 彩票数据（玩法分组）
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getOrderOfPlay(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getOrderOfPlay", page);
 
 	}
-
+	/**
+	 * 根据小时汇总（折线图用）
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getAmountForDayHour(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getAmountForDayHour", page);
 
 	}
-
+	/**
+	 * 赛事统计
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getMatchAmountByTime(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getMatchAmountByTime", page);
 
 	}
-
+	/**
+	 * 根据时间汇总购彩人数、实付金额、红包金额、订单金额
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getTotalAmountByTime(Page page) throws Exception {
@@ -190,5 +198,13 @@ public class OrderService implements OrderManager {
 			orderSns[i] = varList.get(i).getString("order_sn");
 		}
 		return (List<PageData>) dao.findForList("OrderMapper.findAllPayLog", orderSns);
+	}
+	/**
+	 * 金额根据订单状态分组汇总
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PageData> getGroupByOrderStatus(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getGroupByOrderStatus", page);
 	}
 }

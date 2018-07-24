@@ -14,6 +14,7 @@ import com.fh.entity.Page;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.service.lottery.userrecharge.impl.UserRechargeService;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
@@ -23,12 +24,12 @@ import com.fh.util.PageData;
 public class PresentDataController extends BaseController {
 
 	String menuUrl = "present/list.do"; // 西安后台管理数据
-	@Resource(name = "useraccountmanagerService")
-	private UserAccountManagerService useraccountmanagerService;
 	@Resource(name = "orderService")
 	private OrderManager ordermanagerService;
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
+	@Resource(name = "userrechargeService")
+	private UserRechargeService userrechargeService;
 
 	private PageData pdt = null;
 
@@ -70,17 +71,10 @@ public class PresentDataController extends BaseController {
 		List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
 		int countBuy = Integer.parseInt(totalAM.get(0).getString("userCount"));
 		BigDecimal amountBuy = new BigDecimal(totalAM.get(0).getString("amountSum"));
-		// 充值统计
-		String process_type = "2"; // 充值
-		pd.put("process_type", process_type);
-		page.setPd(pd);
-		List<PageData> listRecharge = useraccountmanagerService.findByProcessType(page);
-		int countRecharge = 0;
-		BigDecimal amountRecharge = new BigDecimal(0);
-		if (listRecharge.size() > 0) {
-			countRecharge = Integer.parseInt(listRecharge.get(0).getString("userCount"));
-			amountRecharge = new BigDecimal(listRecharge.get(0).getString("amountSum"));
-		}
+		
+		PageData rechargePD = userrechargeService.findTotalRecharge(pd);
+		String  countRecharge = rechargePD.getString("userCount");
+		String amountRecharge = rechargePD.getString("amountSum");
 
 		PageData pdh = getDataForHour(page, pd);
 		mv.setViewName("lottery/datastatistics/presentdata_list");

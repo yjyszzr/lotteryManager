@@ -365,7 +365,8 @@
 		<!-- 数据统计中-首购订单 -->
 	<select id="getFirstOrderList" parameterType="page" resultType="pd">
 		SELECT COALESCE(count(DISTINCT user_id),0) as count,
-			 	COALESCE(sum(ticket_amount),0) as amount
+			 	COALESCE(sum(money_paid),0) as amount,
+			 	COALESCE(sum(ticket_amount),0) as amountTicket
 		from dl_order   
 		where order_sn in 
 			(SELECT  order_sn from dl_order 
@@ -375,7 +376,8 @@
 	<!-- 数据统计中-复购订单 -->
 	<select id="getAgainOrderList" parameterType="page" resultType="pd">
 		SELECT 	COALESCE(count(DISTINCT user_id),0) as count,
-				COALESCE(sum(ticket_amount),0) as amount
+				COALESCE(sum(money_paid),0) as amount,
+			 	COALESCE(sum(ticket_amount),0) as amountTicket
 		from dl_order   
 		where order_sn not in 
 				(SELECT 	order_sn from dl_order 
@@ -424,9 +426,10 @@
 					lpc.lottery_play_classify_id as classify,
 					count(distinct o.user_id) as userCount,
 					count(o.order_sn) as orderCount,
-					sum(o.ticket_amount) as amount
+					sum(o.ticket_amount) as amount,
+					sum(o.money_paid) as paidAmount
 		FROM dl_order o  LEFT JOIN dl_lottery_play_classify lpc on o.lottery_play_classify_id=lpc.lottery_play_classify_id
-	  where order_status in ('3','4','5','6','7') and  lpc.lottery_play_classify_id != 8
+	  where order_status in ('3','4','5','6','7') 
 	  	<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
 			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &gt;= #{pd.lastStart1 }
 		</if>
@@ -472,7 +475,9 @@
 	<select id="getTotalAmountByTime"  parameterType="page" resultType="pd">
 	select COALESCE(count(DISTINCT o.user_id),0) as userCount,
 			COALESCE(sum(o.ticket_amount),0) as amountSum,
-			COALESCE(sum(o.winning_money),0) as winningSum
+			COALESCE(sum(o.winning_money),0) as winningSum,
+			COALESCE(sum(o.money_paid),0) as paidSum,
+			COALESCE(sum(o.bonus),0) as bonusSum
 	from dl_order o left join dl_user u on o.user_id = u.user_id
 	where o.order_status in ( '3', '4', '5', '6', '7' ) 
 	<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
@@ -484,6 +489,22 @@
 		<if test="pd.UserID != null and pd.UserID != ''"> 
 			and u.user_id=#{pd.UserID }
 		</if>
+	</select>
+	<!-- 订单状态:0-待付款,1-待出票,2-出票失败3-待开奖4-未中将5-已中奖6-派奖中7-审核中8-支付失败 -->
+	<select id="getGroupByOrderStatus"  parameterType="page" resultType="pd">
+	SELECT
+		COALESCE(sum(ticket_amount),0) as amountSum,
+		COALESCE(sum(money_paid),0) as paidSum,
+		order_status as status
+	FROM dl_order 
+	where 1=1
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and DATE_FORMAT( FROM_UNIXTIME( add_time ), "%Y-%m-%d" ) &gt;= #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and DATE_FORMAT( FROM_UNIXTIME( add_time ), "%Y-%m-%d" ) &lt;= #{pd.lastEnd1 }
+		</if>  
+		GROUP BY order_status
 	</select>
 	
 	<!-- 批量删除 -->

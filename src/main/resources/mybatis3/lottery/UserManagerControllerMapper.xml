@@ -412,7 +412,8 @@
 	<!-- 认证并购彩 -->
 	<select id="getRealAndOrder" parameterType="pd" resultType="pd">
 		 SELECT COALESCE(count(distinct od.user_id),0) as count,
-				COALESCE(sum(od.ticket_amount),0) as amount
+				COALESCE(sum(od.money_paid),0) as amount,
+				COALESCE(sum(od.ticket_amount),0) as amountTicket
 		 FROM   dl_user_real ur left join  dl_order od on 
 				ur.user_id = od.user_id 
 				and DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
@@ -425,7 +426,8 @@
 	<select id="getRealAndRegister" parameterType="pd" resultType="pd">
 		
 		SELECT  COALESCE(count(distinct us.user_id),0) as count,
-				COALESCE(sum(od.ticket_amount),0) as amount
+				COALESCE(sum(od.money_paid),0) as amount,
+				COALESCE(sum(od.ticket_amount),0) as amountTicket
 		FROM dl_user us left join  dl_user_real ur on us.user_id = ur.user_id left join  dl_order od on 
 			us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
 		where DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d')
@@ -449,7 +451,8 @@
 	<select id="getRegisterAndOrder" parameterType="pd" resultType="pd">
 		
 		 SELECT COALESCE(count(distinct od.user_id),0) as count,
-				COALESCE(sum(od.ticket_amount),0) as amount
+				COALESCE(sum(od.money_paid),0) as amount,
+				COALESCE(sum(od.ticket_amount),0) as amountTicket
 		 FROM dl_user us  left join  dl_order od on 
 				us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
 		 where  od.order_status in ('3','4','5','6','7')
@@ -461,7 +464,8 @@
 		SELECT count(user_id) AS count,COALESCE(sum(amount),0)  AS amount
 		from  (
 			SELECT count( DISTINCT od.order_sn ) AS count,
-	     			sum( od.ticket_amount ) AS amount ,
+	     			sum( od.money_paid ) AS amount ,
+	     			sum( od.ticket_amount ) AS amountTicket ,
 	     			od.user_id
 			FROM dl_user us LEFT JOIN dl_order od ON us.user_id = od.user_id 
 				AND DATE_FORMAT( FROM_UNIXTIME( us.reg_time ), '%Y-%m-%d' ) = DATE_FORMAT( FROM_UNIXTIME( od.add_time ), '%Y-%m-%d' ) 
