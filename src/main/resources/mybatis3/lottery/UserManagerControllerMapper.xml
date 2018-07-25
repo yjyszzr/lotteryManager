@@ -235,31 +235,31 @@
 	</select>
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		select
-		u.user_id,
-		u.user_money,
-		u.user_money_limit,
-		u.user_name,
-		u.mobile,
-		u.nickname,
-		u.reg_time,
-		u.reg_ip,
-		u.last_time,
-		u_r.real_name,
-		u_r.id_code,
-		u.user_status,
-		u.reg_from,
-		p.channel_name as phone_channel,
-		u.device_channel,
-		log.brand,
-		u.is_business
-		from 
-		dl_user u
-		left join dl_user_real  u_r on u_r.user_id = u.user_id 
-		left join dl_phone_channel p on u.device_channel = p.channel
-		left join (SELECT user_id,brand from dl_user_login_log where   brand !='' GROUP BY user_id HAVING  min(login_time)
-					) log on log.user_id = u.user_id
-		where 1=1 and u_r.is_delete = 0
+		SELECT
+			u.user_id,
+			u.user_money,
+			u.user_money_limit,
+			u.user_name,
+			u.mobile,
+			u.nickname,
+			u.reg_time,
+			u.reg_ip,
+			u.last_time,
+			u_r.real_name,
+			u_r.id_code,
+			u.user_status,
+			u.reg_from,
+			p.channel_name AS phone_channel,
+			u.device_channel,
+			log.brand,
+			u.is_business 
+		FROM
+			dl_user u
+			LEFT JOIN (select * from dl_user_real where is_delete = 0) u_r ON u_r.user_id = u.user_id
+			LEFT JOIN dl_phone_channel p ON u.device_channel = p.channel
+			LEFT JOIN ( SELECT user_id, brand FROM dl_user_login_log WHERE brand != '' GROUP BY user_id HAVING min( login_time ) ) log ON log.user_id = u.user_id 
+		WHERE
+			1 = 1 
 		<if test="pd.real_name!= null and pd.real_name != ''"> 
 			and u_r.real_name LIKE CONCAT(CONCAT('%', #{pd.real_name}),'%')
  		</if>
