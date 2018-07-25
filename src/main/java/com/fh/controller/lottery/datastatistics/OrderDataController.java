@@ -1,11 +1,9 @@
 package com.fh.controller.lottery.datastatistics;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.enums.MatchBetTypeEnum;
-import com.fh.service.lottery.match.MatchManager;
 import com.fh.service.lottery.match.impl.MatchService;
 import com.fh.service.lottery.order.OrderManager;
-import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
-import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
-import com.fh.service.lottery.userrealmanager.UserRealManagerManager;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -84,6 +78,7 @@ public class OrderDataController extends BaseController {
 		List<PageData> list = getDataList(page,pd);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
+		titles.add("订单号"); // 0
 		titles.add("用户ID"); // 1
 		titles.add("购彩彩种"); // 2
 		titles.add("赛事种类"); // 3
@@ -99,12 +94,13 @@ public class OrderDataController extends BaseController {
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < list.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", list.get(i).getString("user_id")); // 1
-			vpd.put("var2", list.get(i).getString("play_name")); // 2
-			vpd.put("var3", list.get(i).getString("match_name")); // 3
-			vpd.put("var4", list.get(i).getString("pass_type")); // 5
-			vpd.put("var5", list.get(i).getString("cathectic")); // 5
-			vpd.put("var6", list.get(i).getString("ticket_amount")); // 6
+			vpd.put("var1", list.get(i).getString("order_sn")); // 0
+			vpd.put("var2", list.get(i).getString("user_id")); // 1
+			vpd.put("var3", list.get(i).getString("play_name")); // 2
+			vpd.put("var4", list.get(i).getString("match_name")); // 3
+			vpd.put("var5", list.get(i).getString("pass_type")); // 5
+			vpd.put("var6", list.get(i).getString("cathectic")); // 5
+			vpd.put("var7", list.get(i).getString("ticket_amount")); // 6
 			String order_status = list.get(i).getString("order_status");
 			switch (order_status) {
 			case "0":
@@ -137,10 +133,10 @@ public class OrderDataController extends BaseController {
 			default:
 				break;
 			}
-			vpd.put("var7", order_status); // 7
-			vpd.put("var8", list.get(i).getString("winning_money")); // 8
-			vpd.put("var9", list.get(i).getString("add_time")); // 9
-			vpd.put("var10",list.get(i).getString("award_time")); // 10
+			vpd.put("var8", order_status); // 7
+			vpd.put("var9", list.get(i).getString("winning_money")); // 8
+			vpd.put("var10", list.get(i).getString("add_time")); // 9
+			vpd.put("var11",list.get(i).getString("award_time")); // 10
 			 
 			varList.add(vpd);
 		}

@@ -315,7 +315,7 @@
 		left join dl_user_real on dl_user_real.user_id = dl_user.user_id 
 		left join dl_phone_channel ph on dl_user.mobile_supplier = ph.id
 		left join dl_phone_channel pc on pc.channel = dl_user.device_channel
-		where 1=1 and dl_user_real.is_delete = 0
+		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
