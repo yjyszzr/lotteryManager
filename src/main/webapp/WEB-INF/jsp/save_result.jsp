@@ -25,6 +25,8 @@
 			document.getElementById('zhongxin').style.display = 'none';
 			top.Dialog.close();
 		}else{
+			alert(msg);
+			document.getElementById('zhongxin').style.display = 'none';
 			top.Dialog.close();
 		}
 	</script>

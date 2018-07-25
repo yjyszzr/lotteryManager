@@ -26,18 +26,22 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
+import com.fh.controller.lottery.actionlog.ActionLogController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.userwithdraw.UserWithdrawManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
+import com.fh.util.JsonUtils;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ManualAuditUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.StringUtil;
+import com.google.gson.JsonObject;
 
 /**
  * 说明：提现模块 创建人：FH Q313596790 创建时间：2018-05-02
@@ -52,6 +56,8 @@ public class UserWithdrawController extends BaseController {
 
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
+	@Resource(name = "userActionLogService")
+	private UserActionLogService ACLOG;
 
 	/**
 	 * 保存
@@ -133,7 +139,7 @@ public class UserWithdrawController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/list")
-	public ModelAndView list(Page page) throws Exception {
+	public ModelAndView list(Page page,ModelAndView mvv) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "列表UserWithdraw");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -222,14 +228,17 @@ public class UserWithdrawController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String acText = "";
 		String sendData = pd.getString("withdrawSn");
 		String status = pd.getString("status");
 		ReqCashEntity reqCashEntity = new ReqCashEntity();
 		reqCashEntity.withdrawSn = sendData;
 		if ("1".equals(status)) { // 状态为1的走审核通过接口
 			reqCashEntity.isPass = true;
+			acText = "通过";
 		} else if ("2".equals(status)) {// 状态为2的拒绝提现,
 			reqCashEntity.isPass = false;
+			acText = "拒绝";
 		}
 		SessionUtils.generateSession();
 		Session session = Jurisdiction.getSession();
@@ -240,8 +249,18 @@ public class UserWithdrawController extends BaseController {
 		pd.put("auditor_id", user.getUSER_ID());
 		userwithdrawService.updateRemarks(pd);
 		String reqStr = JSON.toJSONString(reqCashEntity);
-		ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getManualAuditUrl(), true);
-		mv.addObject("msg", "success");
+		String result = ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getManualAuditUrl(), true);
+		if(!pd.getString("remarks").equals("") && pd.get("remarks") != null) {
+			acText = acText+"  备注："+pd.getString("remarks");
+		}
+		JsonObject json = JsonUtils.NewStringToJsonObject(result);
+		if(json.get("code").getAsString().equals("0")) {
+			ACLOG.save("1", "0", "提现明细：审核"+sendData, acText);
+			mv.addObject("msg","success");
+		}else {
+			ACLOG.save("0", "0", "提现明细：审核"+sendData, acText);
+			mv.addObject("msg",json.get("msg").getAsString());
+		}
 		mv.setViewName("save_result");
 		return mv;
 	}

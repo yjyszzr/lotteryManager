@@ -26,13 +26,16 @@ import com.fh.controller.base.BaseController;
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.order.OrderManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
+import com.fh.util.JsonUtils;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ManualAuditUtil;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.google.gson.JsonObject;
 
 /**
  * 说明：订单模块 创建人：FH Q313596790 创建时间：2018-05-03
@@ -47,6 +50,8 @@ public class OrderController extends BaseController {
 	
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
+	@Resource(name = "userActionLogService")
+	private UserActionLogService ACLOG;
 
 	/**
 	 * 保存
@@ -414,8 +419,16 @@ public class OrderController extends BaseController {
 			String value = "{'userIdAndRewardList':";
 			String reqStr = JSON.toJSONString(userIdAndRewardList);
 			String stra = value + reqStr + "}";
-			ManualAuditUtil.ManualAuditUtil(stra, urlConfig.getManualRewardUrl(), true);
-			mv.addObject("msg", "success");
+			String result = ManualAuditUtil.ManualAuditUtil(stra, urlConfig.getManualRewardUrl(), true);
+			JsonObject json = JsonUtils.NewStringToJsonObject(result);
+			if(json.get("code").getAsString().equals("0")) {
+				ACLOG.save("1", "0", "大额手动派奖:"+orderSn, "操作：是。金额："+reward);
+				mv.addObject("msg","success");
+			}else {
+				ACLOG.save("0", "0", "大额手动派奖:"+orderSn, "操作：是。金额："+reward);
+				mv.addObject("msg",json.get("msg").getAsString());
+			}
+			
 			mv.setViewName("save_result");
 			return mv;
 		}
