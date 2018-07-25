@@ -1,6 +1,5 @@
 package com.fh.service.lottery.useractionlog.impl;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -9,7 +8,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.fh.dao.DaoSupport3;
+import com.fh.dao.DaoSupport;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
 import com.fh.service.lottery.useractionlog.UserActionLogManager;
@@ -26,8 +25,8 @@ import com.fh.util.PageData;
 @Service("userActionLogService")
 public class UserActionLogService implements UserActionLogManager {
 
-	@Resource(name = "daoSupport3")
-	private DaoSupport3 dao;
+	@Resource(name = "daoSupport")
+	private DaoSupport dao;
 
 	/**
 	 * 新增

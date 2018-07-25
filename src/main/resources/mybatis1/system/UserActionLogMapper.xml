@@ -4,7 +4,7 @@
 
 	<!--表名 -->
 	<sql id="tableName">
-		dl_user_action_log
+		SYS_ACTIONLOG
 	</sql>
 
 	<!-- 字段 -->
@@ -68,7 +68,7 @@
 		LEFT(action_text,15) as action_text,
 		action_text  as detail
 		FROM
-		dl_user_action_log  
+		SYS_ACTIONLOG  
 		WHERE 1 = 1
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
 			and action_time &gt;= #{pd.lastStart1 }
