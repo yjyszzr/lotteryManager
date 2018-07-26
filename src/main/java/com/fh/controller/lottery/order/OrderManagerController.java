@@ -217,7 +217,7 @@ public class OrderManagerController extends BaseController {
 			cathecticData += "【总进球】";
 			cathecticData += cathecticStr + "球";
 		} else if (MatchPlayTypeEnum.PLAY_TYPE_HAFU.getcode() == playCode) {
-			cathecticData += "【混合过关】";
+			cathecticData += "【半全场】";
 			cathecticData += MatchResultHafuEnum.getName(cathecticStr);
 		}
 		return cathecticData;
