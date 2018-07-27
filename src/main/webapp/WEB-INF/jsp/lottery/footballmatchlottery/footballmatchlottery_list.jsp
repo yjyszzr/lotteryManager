@@ -153,7 +153,7 @@
 															<c:when test="${var.is_hot == 1 }"><a  onclick="updateStatus('${var.match_id}','0');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="撤销热门"   >撤销热门</a></c:when>
 														</c:choose>
 														<c:choose>
-															<c:when test="${var.qaStatus == 1111110 }"><!-- 正常状态 (qaStatus == 0 )-->
+															<c:when test="${var.qaStatus == 0 }"><!-- 正常状态 (qaStatus == 0 )-->
 																<a  onclick="toAnswer('${var.match_id}','${DateUtil.toTimeSubtraction(var.match_time)}');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="答题竞猜"   >答题竞猜</a> 
 <%-- 															<c:if test="${var.match_time_integer <= currentDay}"> --%>
 <%-- 																<a  onclick="toAnswer('${var.match_id}','${DateUtil.toTimeSubtraction(var.match_time)}');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-blue" title="答题竞猜"   >答题竞猜</a>  --%>

@@ -5,8 +5,8 @@ import java.util.List;
 public class GuessingCompetitionEntity {
 	public Integer id;
 	public Integer matchId;
-	public Integer startTime;
-	public Integer endTime;
+	public String startTime;
+	public String endTime;
 	public Integer scopeOfActivity;
 	public Integer numOfPeople;
 	public String guessingTitle;
@@ -16,6 +16,16 @@ public class GuessingCompetitionEntity {
 	public String period;
 	public Integer prizewinningNum;
 	public Integer awardTime;
+	public Integer status;
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	public List<QuestionAndAnswersEntity> questionAndAnswersEntityList;
 
 	public Integer getId() {
@@ -34,19 +44,19 @@ public class GuessingCompetitionEntity {
 		this.matchId = matchId;
 	}
 
-	public Integer getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Integer startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public Integer getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Integer endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 

@@ -173,7 +173,12 @@ public class QuestionsAndAnswersController extends BaseController {
 		String questionAndAnswersJson = JSONArray.fromObject(guessingCompetitionEntity.getQuestionAndAnswersEntityList()).toString();
 		pd.put("id", 0);
 		pd.put("question_and_answer", questionAndAnswersJson);
-		// pd.put("num_of_people", 0);
+		pd.put("num_of_people", guessingCompetitionEntity.getNumOfPeople());
+		pd.put("guessing_title", guessingCompetitionEntity.getGuessingTitle());
+		pd.put("bonus_pool", guessingCompetitionEntity.getBonusPool());
+		pd.put("limit_lottery_amount", guessingCompetitionEntity.getLimitLotteryAmount());
+		pd.put("scope_of_activity", guessingCompetitionEntity.getScopeOfActivity());
+		pd.put("match_id", guessingCompetitionEntity.getMatchId());
 		String endTime = pd.getString("endTime");
 		if (null != endTime && !"".equals(endTime)) {
 			pd.put("end_time", DateUtilNew.getMilliSecondsByStr(endTime));

@@ -31,8 +31,8 @@
 					<form action="questionsandanswers/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<input type="hidden" name="endTime" id="endTime" value="${DateUtil.toTimeSubtraction(matchPd.match_time)}"/>
-						<input type="hidden" name="match_id" id="match_id" value="${matchPd.match_id}"/>
-						<input type="hidden" name="guessing_title" id="guessing_title" value="${matchPd.changci}${matchPd.home_team_name}VS${matchPd.visiting_team_name }（${matchPd.league_name}）"/>
+						<input type="hidden" name="matchId" id="matchId" value="${matchPd.match_id}"/>
+						<input type="hidden" name="guessingTitle" id="guessingTitle" value="${matchPd.changci}${matchPd.home_team_name}VS${matchPd.visiting_team_name }（${matchPd.league_name}）"/>
 						<input type="hidden" name="status" id="status" value=""/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
@@ -51,7 +51,7 @@
                                 	</td>
                                		<td style="text-align: left;"   colspan="4">
                                 		 <div class="col-sm-4">
-										    <select  name="scope_of_activity" id="scope_of_activity" style="width:140px;border-radius:5px !important">
+										    <select  name="scopeOfActivity" id="scopeOfActivity" style="width:140px;border-radius:5px !important">
 										        <option value="1" >竞彩足球</option>
 										    </select>
 										</div>
@@ -64,7 +64,7 @@
                                 	</td>
                                 	<td style="text-align: left;"    colspan="4">
 	                                	<div class="col-sm-4">
-	                                  	 	<input type="text" id="limit_lottery_amount"  name="limit_lottery_amount" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/> &nbsp元
+	                                  	 	<input type="text" id="limitLotteryAmount"  name="limitLotteryAmount" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/> &nbsp元
 	                               		</div>
 	                                	<div class="col-sm-5"> </div>
 	                                </td>
@@ -88,7 +88,7 @@
                                 	</td>
                                 	<td style="text-align: left;"    colspan="4">
 	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="bonus_pool"  name="bonus_pool" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp元
+		                                  	 	<input type="text" id="bonusPool"  name="bonusPool" placeholder="0元"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp元
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>
@@ -99,7 +99,7 @@
                                 	</td>
                                 	<td style="text-align: left;"    colspan="4">
 	                                	<div class="col-sm-4">
-		                                  	 	<input type="text" id="num_of_people"  name="num_of_people" placeholder="0人"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp人
+		                                  	 	<input type="text" id="numOfPeople"  name="numOfPeople" placeholder="0人"   autocomplete="off"   onkeyup="value=value.replace(/[^\d]/g,'')" style="width:140px;border-radius:5px !important"/>&nbsp人
                                   	 	</div>
 		                                <div class="col-sm-5">  </div>
 	                                </td>
@@ -259,14 +259,14 @@
 		$(top.hangge());
 		//保存
 		function saveQuestionAndAnswers(status){
-			if($("#limit_lottery_amount").val()==""){
-				$("#limit_lottery_amount").tips({
+			if($("#limitLotteryAmount").val()==""){
+				$("#limitLotteryAmount").tips({
 					side:3,
 		            msg:'请输入最低参与金额',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#limit_lottery_amount").focus();
+				$("#limitLotteryAmount").focus();
 			return false;
 			}
 			if($("#startTime").val()==""){
@@ -279,14 +279,14 @@
 // 				$("#startTime").focus();
 			return false;
 			}
-			if($("#bonus_pool").val()==""){
-				$("#bonus_pool").tips({
+			if($("#bonusPool").val()==""){
+				$("#bonusPool").tips({
 					side:3,
 		            msg:'请输入奖池初始金额',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#bonus_pool").focus();
+				$("#bonusPool").focus();
 			return false;
 			}
 			for(var q = 0 ; q < 6 ; q++){

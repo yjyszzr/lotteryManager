@@ -253,6 +253,18 @@ public class DateUtil {
 		return sdfTime.format(new Date(time));
 	}
 
+	/**
+	 * 提前两小时零七分钟
+	 * 
+	 * @param time
+	 * @return
+	 */
+	public static long toTimeSubtractionLong(String time) {
+		long dateLong = DateUtilNew.getMilliSecondsByStr(time);
+		dateLong = dateLong - 127 * 60;
+		return dateLong * 1000;
+	}
+
 	public static String toTimeSubtraction(String time) {
 		long dateLong = DateUtilNew.getMilliSecondsByStr(time);
 		dateLong = dateLong - 127 * 60;
