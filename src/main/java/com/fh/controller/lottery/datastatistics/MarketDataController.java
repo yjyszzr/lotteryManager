@@ -247,29 +247,33 @@ public class MarketDataController extends BaseController {
 		}else {
 			dateB = dateE.plusDays(-6);
 		}
-		pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(dateB+" 00:00:00"));
-		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(dateE+" 23:59:59"));
-		page.setPd(pd);
-		List<PageData> userList = usermanagercontrollerService.getMarketList(page);
-		for (int i = 0; i < userList.size(); i++) {
+		int days = (int) (dateE.toEpochDay()-dateB.toEpochDay());
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < days+1; i++) {
 			PageData pageData = new PageData();
-			pageData = userList.get(i);
-			LocalDate date = LocalDate.parse(pageData.getString("date"),DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-			int userCount = Integer.parseInt(pageData.getString("count_user"));
-			String device_channel = pageData.getString("device_channel");
-			pageData.put("count2", getCount(date,null,1,1,userCount,device_channel));
-			pageData.put("count3", getCount(date,null,2,2,userCount,device_channel));
-			pageData.put("count7", getCount(date,null,3,6,userCount,device_channel));
-			pageData.put("count15", getCount(date,null,7,14,userCount,device_channel));
-			pageData.put("count30", getCount(date,null,15,29,userCount,device_channel));
-			pageData.put("count90", getCount(date,null,30,89,userCount,device_channel));
-			pageData.put("count180", getCount(date,null,90,179,userCount,device_channel));
-			pageData.put("count360", getCount(date,null,180,359,userCount,device_channel));
-			pageData.put("nowDate", LocalDate.now());
-			
-			userList.set(i, pageData);
+			LocalDate date = dateE.plusDays(-i);//当天的前i天
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
+			page.setPd(pd);
+			List<PageData> userList = usermanagercontrollerService.getMarketList(page);
+			for (int k = 0; k < userList.size(); k++) {
+				pageData = userList.get(k);
+				pageData.put("date", date);
+				int userCount = Integer.parseInt(pageData.getString("count_user"));
+				String device_channel = pageData.getString("device_channel");
+				pageData.put("count2", getCount(date, null, 1, 1, userCount, device_channel));
+				pageData.put("count3", getCount(date, null, 2, 2, userCount, device_channel));
+				pageData.put("count7", getCount(date, null, 3, 6, userCount, device_channel));
+				pageData.put("count15", getCount(date, null, 7, 14, userCount, device_channel));
+				pageData.put("count30", getCount(date, null, 15, 29, userCount, device_channel));
+				pageData.put("count90", getCount(date, null, 30, 89, userCount, device_channel));
+				pageData.put("count180", getCount(date, null, 90, 179, userCount, device_channel));
+				pageData.put("count360", getCount(date, null, 180, 359, userCount, device_channel));
+				pageData.put("nowDate", LocalDate.now());
+				varList.add(pageData);
+			}
 		}
-		return userList;
+		return varList;
 	}
 	
 	public List<PageData> getDataListForWeek(Page page,PageData pd) throws Exception {
