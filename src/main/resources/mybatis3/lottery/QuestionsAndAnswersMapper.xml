@@ -64,6 +64,15 @@
 		where 
 			id = #{id}
 	</update>
+	<!-- 更新用户答案状态 -->
+	<update id="updateUserAnswersStatus" parameterType="pd">
+		update
+		dl_questions_and_answers_user
+		set 
+			get_award = #{get_award}
+		where 
+			id = #{id}
+	</update>
 	<update id="updateQuestionsAndAnswers" parameterType="pd">
 		update
 		<include refid="tableName"></include>
@@ -141,6 +150,13 @@
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select * from 
 		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="findByQuestionId" parameterType="Integer" resultType="pd">
+		select * from 
+		dl_questions_and_answers_user
+		where question_id = ${question_id}
 	</select>
 	
 	<!-- 批量删除 -->
