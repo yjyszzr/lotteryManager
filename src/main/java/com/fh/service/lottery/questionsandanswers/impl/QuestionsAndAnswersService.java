@@ -19,6 +19,7 @@ import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.questionsandanswers.QuestionsAndAnswersManager;
 import com.fh.util.DateUtilNew;
+import com.fh.util.ManualAuditUtil;
 import com.fh.util.PageData;
 import com.fh.util.SNGenerator;
 
@@ -122,6 +123,31 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 
 	@Override
 	public void updateQuestionsAndAnswers(PageData pd) throws Exception {
+		PageData questionAndAnswers = (PageData) dao.findForObject("QuestionsAndAnswersMapper.findById", pd);
+		JSONArray jsonArray = JSONArray.fromObject(questionAndAnswers.getString("question_and_answer"));
+		@SuppressWarnings("unchecked")
+		List<QuestionAndAnswersEntity> questionAndAnswerList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
+		// 查询所有该questionId下的用户答题
+		PageData pdA = new PageData();
+		pdA.put("question_id", Integer.parseInt(pd.getString("id")));
+		@SuppressWarnings("unchecked")
+		List<PageData> userAnswersInfoList = (List<PageData>) dao.findForList("QuestionsAndAnswersMapper.findByQuestionId", pdA);
+		for (int i = 0; i < userAnswersInfoList.size(); i++) {
+			PageData pageData = new PageData();
+			Integer flag = 1;
+			JSONArray userAnswersjsonArray = JSONArray.fromObject(userAnswersInfoList.get(i).get("user_answer"));
+			@SuppressWarnings("unchecked")
+			List<QuestionAndAnswersEntity> userAnswersJsonList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(userAnswersjsonArray, QuestionAndAnswersEntity.class);
+			for (int j = 0; j < questionAndAnswerList.size(); j++) {
+				if (!(questionAndAnswerList.get(j).getAnswerStatus1().equals(userAnswersJsonList.get(j).getAnswerStatus1()) && questionAndAnswerList.get(j).getAnswerStatus2().equals(userAnswersJsonList.get(j).getAnswerStatus2()))) {
+					flag = 0;
+					break;
+				}
+			}
+			userAnswersInfoList.get(i).put("get_award", flag);
+			pageData = userAnswersInfoList.get(i);
+			dao.update("QuestionsAndAnswersMapper.updateUserAnswersStatus", pageData);
+		}
 		dao.update("QuestionsAndAnswersMapper.updateQuestionsAndAnswers", pd);
 	}
 
@@ -141,44 +167,30 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 		// 回填答案
 		dao.update("QuestionsAndAnswersMapper.updateAward", pd);
 		PageData questionAndAnswers = (PageData) dao.findForObject("QuestionsAndAnswersMapper.findById", pd);
-		JSONArray jsonArray = JSONArray.fromObject(questionAndAnswers.getString("question_and_answer"));
-		List<QuestionAndAnswersEntity> questionAndAnswerList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
 		// 查询所有该questionId下的用户答题
-		List<PageData> userAnswersInfoList = (List<PageData>) dao.findForList("QuestionsAndAnswersMapper.findByQuestionId", Integer.parseInt(pd.getString("id")));
-		// 比对结果更新答案状态
-		for (int i = 0; i < userAnswersInfoList.size(); i++) {
-			Integer flag = 1;
-			JSONArray userAnswersjsonArray = JSONArray.fromObject(userAnswersInfoList.get(i).get("user_answer"));
-			List<QuestionAndAnswersEntity> userAnswersJsonList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(userAnswersjsonArray, QuestionAndAnswersEntity.class);
-			for (int j = 0; j < questionAndAnswerList.size(); j++) {
-				if (!(questionAndAnswerList.get(j).getAnswerStatus1() == userAnswersJsonList.get(j).getAnswerStatus1() && questionAndAnswerList.get(j).getAnswerStatus2() == userAnswersJsonList.get(j).getAnswerStatus2())) {
-					flag = 0;
-					break;
-				}
-			}
-			userAnswersInfoList.get(i).put("get_award", flag);
-		}
+		PageData pdA = new PageData();
+		pdA.put("question_id", Integer.parseInt(pd.getString("id")));
+		List<PageData> userAnswersInfoList = (List<PageData>) dao.findForList("QuestionsAndAnswersMapper.findByQuestionId", pdA);
 		List<PageData> awardList = new ArrayList<PageData>();
 		awardList = userAnswersInfoList.stream().filter(s -> s.getString("get_award").equals("1")).collect(Collectors.toList());
-		// 单个用户的奖金=奖金总金额/总人数
-		// 总人数=awardList.size()+questionAndAnswers.getString("prizewinning_num")
 		// 计算用户奖金进行派奖
-		int totalNum = awardList.size() + Integer.parseInt(questionAndAnswers.getString("prizewinning_num"));
+		int totalNum = Integer.parseInt(questionAndAnswers.getString("prizewinning_num"));
 		BigDecimal bonusPool = new BigDecimal(questionAndAnswers.getString("bonus_pool"));
-		BigDecimal award = bonusPool.divide(new BigDecimal(totalNum));
+		// 单个用户的奖金=奖金总金额/总人数
+		BigDecimal award = bonusPool.divide(new BigDecimal(totalNum), 2, BigDecimal.ROUND_HALF_DOWN);
+		List<ReqOrdeEntity> userIdAndRewardList = new ArrayList<ReqOrdeEntity>(awardList.size());
 		for (int i = 0; i < awardList.size(); i++) {
 			awardList.get(i).put("bonus_amount", award);
 			String sn = SNGenerator.nextSN(1);// 生成订单号
 			// 生成订单号
 			awardList.get(i).put("award_sn", sn);
-			awardList.get(i).put("get_award", 1);// 状态为中奖
+			awardList.get(i).put("get_award", 2);// 0为未中奖,1为中奖,2状态为派奖
 			awardList.get(i).put("award_time", DateUtilNew.getCurrentTimeLong());
 			PageData getAwardUser = awardList.get(i);
 			// 添加用户中奖记录以及派奖时间
-
 			dao.update("QuestionsAndAnswersMapper.updateUserAwardStatusAndAmount", getAwardUser);
-			// 派奖
 
+			// 组装派奖数据
 			ReqOrdeEntity reqOrdeEntity = new ReqOrdeEntity();
 			reqOrdeEntity.orderSn = sn;
 			reqOrdeEntity.reward = award.doubleValue();
@@ -188,15 +200,11 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 			Integer payTimeTmp = Integer.valueOf(awardList.get(i).getString("answer_time"));
 			String payTime = DateUtilNew.getCurrentTimeString(Long.valueOf(payTimeTmp), DateUtilNew.datetimeFormat);
 			reqOrdeEntity.betTime = payTime;
-
-			List<ReqOrdeEntity> userIdAndRewardList = new ArrayList<ReqOrdeEntity>();
+			reqOrdeEntity.note = "全民竞猜获奖" + award.doubleValue() + "元！";
 			userIdAndRewardList.add(reqOrdeEntity);
-			String value = "{'userIdAndRewardList':";
-			String reqStr = JSON.toJSONString(userIdAndRewardList);
-			String stra = value + reqStr + "}";
-			// ManualAuditUtil.ManualAuditUtil(stra,
-			// urlConfig.getManualRewardUrl(), true);
-
 		}
+		// 拼接,派奖到不可提现余额
+		String reqStr = "{'userIdAndRewardList':" + JSON.toJSONString(userIdAndRewardList) + "}";
+		ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getManualRewardToUserMoneyLimitUrl(), true);
 	}
 }

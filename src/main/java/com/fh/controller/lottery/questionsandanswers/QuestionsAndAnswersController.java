@@ -258,6 +258,7 @@ public class QuestionsAndAnswersController extends BaseController {
 		// pd = questionsandanswersService.findById(pd); // 根据ID读取
 		if (questionsAndAnswers != null) {
 			JSONArray jsonArray = JSONArray.fromObject(questionsAndAnswers.getString("question_and_answer"));
+			@SuppressWarnings("unchecked")
 			List<QuestionAndAnswersEntity> questionAndAnswerList = (List<QuestionAndAnswersEntity>) JSONArray.toCollection(jsonArray, QuestionAndAnswersEntity.class);
 			if (questionsAndAnswers.getString("status").equals("0")) {
 				// 草稿状态 如果是草稿状态 跳转到草稿状态 可再次编辑 也可上线
