@@ -1,5 +1,5 @@
-﻿<%@page import="com.fh.util.DateUtil"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="com.fh.util.DateUtil"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -16,6 +16,17 @@
 <%@ include file="../../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<style typestyletype="text/css">
+	.a{
+		font-size:12px;
+		height:25px;
+		background-color:#f3d82c;
+		border-radius: 5px;
+		padding:4px;
+		margin-left:2px;
+		float:left;
+}
+</style>
 
 </head>
 <body class="no-skin">
@@ -30,7 +41,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="lotteryclassify/list.do" method="post" name="Form" id="Form">
+						<form action="ticketchannel/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;display:none">
 							<tr>
 								<td>
@@ -62,18 +73,12 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-<!-- 									<th class="center" style="width:35px;"> -->
-<!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
-<!-- 									</th> -->
 									<th class="center" style="width:50px;">序号</th>
-<!-- 									<th class="center">id</th> -->
-									<th class="center">彩种名称</th>
-									<th class="center">彩种logo</th>
-									<th class="center">排序</th>
+									<th class="center">渠道名称</th>
+									<th class="center">渠道编码</th>
+									<th class="center">所售彩种</th>
 									<th class="center">状态</th>
-									<th class="center">是否展示</th>
 									<th class="center">创建时间</th>
-									<th class="center">跳转链接</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -85,37 +90,35 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-<!-- 											<td class='center'> -->
-<%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.lottery_classify_id}" class="ace" /><span class="lbl"></span></label> --%>
-<!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-<%-- 											<td class='center'>${var.lottery_classify_id}</td> --%>
-											<td class='center'>${var.lottery_name}</td>
-											<td class='center'><img src="${var.lottery_img}" width="24px" hight="24px"/></td>
-											<td class='center'>${var.sort}</td>
+											<td class='center'>${var.channel_name}</td>
+											<td class='center'>${var.channel_code}</td>
+											<td class='center'><div  class="a">高频彩</div><div  class="a">数字彩</div></td>
 											<td class='center'>
 												<c:choose>
-													<c:when test="${var.status==0}"> 售卖 </c:when>
-													<c:when test="${var.status==1}"> 停售 </c:when>
+													<c:when test="${var.channel_status==0}">启用</c:when>
+													<c:when test="${var.channel_status==1}">关闭</c:when>
 													<c:otherwise>--</c:otherwise>
 												</c:choose>
 											</td>
-											<td class='center'> 
-												<c:choose>
-													<c:when test="${var.is_show==0}">不显示</c:when>
-													<c:when test="${var.is_show==1}">显示</c:when>
-													<c:otherwise>--</c:otherwise>
-												</c:choose>
-											</td>
-											<td class='center'>${DateUtil.toSDFTime(var.create_time*1000)}</td>
-											<td class='center'>${var.redirect_url}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
-													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.lottery_classify_id}');"  style="border-radius: 5px;" >编辑</a>
+														<c:choose>
+															<c:when test="${var.channel_status==0}">
+																<a class="btn btn-xs btn-danger" title="停用" style="border-radius: 5px;" onclick="updateStatus('${var.id}','${var.channel_status}');">停用</a>
+															</c:when>
+															<c:when test="${var.channel_status==1}">
+																<a class="btn btn-xs btn-success" title="启用" style="border-radius: 5px;" onclick="updateStatus('${var.id}','${var.channel_status}');">启用</a>
+															</c:when>
+															<c:otherwise>--</c:otherwise>
+														</c:choose>
+													
+													
 													</c:if>
 												</div>
 											</td>
@@ -140,11 +143,6 @@
 						<div class="page-header position-relative">
 						<table style="width:100%;">
 							<tr>
-								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();"   style="border-radius: 5px;" >新增</a>
-									</c:if>
-								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>
@@ -242,9 +240,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="新增";
-			 diag.URL = '<%=basePath%>lotteryclassify/goAdd.do';
+			 diag.URL = '<%=basePath%>ticketchannel/goAdd.do';
 			 diag.Width = 450;
-			 diag.Height = 365;
+			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -266,7 +264,26 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>lotteryclassify/delete.do?lottery_classify_id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>ticketchannel/delete.do?id="+Id+"&tm="+new Date().getTime();
+					$.get(url,function(data){
+						tosearch();
+					});
+				}
+			});
+		}
+		
+		//停用启用
+		function updateStatus(Id,status){
+			var str ="";
+			if(status == 1){
+			str="<h4 style='color:green'>温馨提示</h4><hr>&nbsp;&nbsp;&nbsp;确定要启用吗?"
+			}else 	if(status == 0){
+			str="<h4  style='color:green'>温馨提示</h4><hr>&nbsp;&nbsp;&nbsp;确定要停用吗?<br>&nbsp;&nbsp;&nbsp;停用后会将所有彩种停售！"
+			}
+			bootbox.confirm(str, function(result) {
+				if(result) {
+					top.jzts();
+					var url = "<%=basePath%>ticketchannel/updateStatus.do?id="+Id+"&channelStatus="+status;
 					$.get(url,function(data){
 						tosearch();
 					});
@@ -280,9 +297,9 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>lotteryclassify/goEdit.do?lottery_classify_id='+Id;
+			 diag.URL = '<%=basePath%>ticketchannel/goEdit.do?id='+Id;
 			 diag.Width = 450;
-			 diag.Height = 365;
+			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
@@ -324,7 +341,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>lotteryclassify/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>ticketchannel/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,
@@ -343,7 +360,7 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>lotteryclassify/excel.do';
+			window.location.href='<%=basePath%>ticketchannel/excel.do';
 		}
 	</script>
 

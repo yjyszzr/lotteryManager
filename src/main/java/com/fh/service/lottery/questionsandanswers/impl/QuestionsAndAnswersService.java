@@ -123,6 +123,7 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 
 	@Override
 	public void updateQuestionsAndAnswers(PageData pd) throws Exception {
+		dao.update("QuestionsAndAnswersMapper.updateQuestionsAndAnswers", pd);
 		PageData questionAndAnswers = (PageData) dao.findForObject("QuestionsAndAnswersMapper.findById", pd);
 		JSONArray jsonArray = JSONArray.fromObject(questionAndAnswers.getString("question_and_answer"));
 		@SuppressWarnings("unchecked")
@@ -148,7 +149,7 @@ public class QuestionsAndAnswersService implements QuestionsAndAnswersManager {
 			pageData = userAnswersInfoList.get(i);
 			dao.update("QuestionsAndAnswersMapper.updateUserAnswersStatus", pageData);
 		}
-		dao.update("QuestionsAndAnswersMapper.updateQuestionsAndAnswers", pd);
+
 	}
 
 	@Override
