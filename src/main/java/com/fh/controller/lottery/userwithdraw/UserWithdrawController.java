@@ -258,6 +258,7 @@ public class UserWithdrawController extends BaseController {
 			ACLOG.save("1", "0", "提现明细：审核"+sendData, acText);
 			mv.addObject("msg","success");
 		}else {
+			acText = acText +"异常：code:"+json.get("code").getAsString()+",msg:"+json.get("msg").getAsString();
 			ACLOG.save("0", "0", "提现明细：审核"+sendData, acText);
 			mv.addObject("msg",json.get("msg").getAsString());
 		}
