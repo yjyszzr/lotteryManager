@@ -101,4 +101,9 @@ public class TicketChannelService implements TicketChannelManager {
 		dao.delete("TicketChannelMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	@Override
+	public void updateStatus(PageData pd) throws Exception {
+		dao.update("TicketChannelMapper.updateStatus", pd);
+	}
+
 }

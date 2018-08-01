@@ -93,11 +93,15 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.channel_name}</td>
 											<td class='center'>${var.channel_code}</td>
-											<td class='center'><div  class="a">高频彩</div><div  class="a">数字彩</div></td>
+											<td class='center'>
+												<c:forEach items="${var.lotteryList}"  var="lottery">
+													<div  class="a">${lottery.lottery_classify_name }</div>
+												</c:forEach>
+											</td>
 											<td class='center'>
 												<c:choose>
-													<c:when test="${var.channel_status==0}">启用</c:when>
-													<c:when test="${var.channel_status==1}">关闭</c:when>
+													<c:when test="${var.channel_status==0}">已启用</c:when>
+													<c:when test="${var.channel_status==1}">已停用</c:when>
 													<c:otherwise>--</c:otherwise>
 												</c:choose>
 											</td>
@@ -110,10 +114,10 @@
 													<c:if test="${QX.edit == 1 }">
 														<c:choose>
 															<c:when test="${var.channel_status==0}">
-																<a class="btn btn-xs btn-danger" title="停用" style="border-radius: 5px;" onclick="updateStatus('${var.id}','${var.channel_status}');">停用</a>
+																<a class="btn btn-xs btn-danger" title="停用" style="border-radius: 5px;" onclick="updateStatus('${var.id}','1');">停用</a>
 															</c:when>
 															<c:when test="${var.channel_status==1}">
-																<a class="btn btn-xs btn-success" title="启用" style="border-radius: 5px;" onclick="updateStatus('${var.id}','${var.channel_status}');">启用</a>
+																<a class="btn btn-xs btn-success" title="启用" style="border-radius: 5px;" onclick="updateStatus('${var.id}','0');">启用</a>
 															</c:when>
 															<c:otherwise>--</c:otherwise>
 														</c:choose>
@@ -276,14 +280,14 @@
 		function updateStatus(Id,status){
 			var str ="";
 			if(status == 1){
-			str="<h4 style='color:green'>温馨提示</h4><hr>&nbsp;&nbsp;&nbsp;确定要启用吗?"
-			}else 	if(status == 0){
 			str="<h4  style='color:green'>温馨提示</h4><hr>&nbsp;&nbsp;&nbsp;确定要停用吗?<br>&nbsp;&nbsp;&nbsp;停用后会将所有彩种停售！"
+			}else 	if(status == 0){
+			str="<h4 style='color:green'>温馨提示</h4><hr>&nbsp;&nbsp;&nbsp;确定要启用吗?<br>&nbsp;&nbsp;&nbsp;启用后所有彩种将会启用！"
 			}
 			bootbox.confirm(str, function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>ticketchannel/updateStatus.do?id="+Id+"&channelStatus="+status;
+					var url = "<%=basePath%>ticketchannel/updateStatus.do?id="+Id+"&channel_status="+status;
 					$.get(url,function(data){
 						tosearch();
 					});

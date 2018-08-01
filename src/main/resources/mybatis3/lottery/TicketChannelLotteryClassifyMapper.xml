@@ -80,18 +80,38 @@
 		update
 		<include refid="tableName"></include>
 		set 
+			ticket_channel_id = #{ticket_channel_id},
 			ticket_channel_name = #{ticket_channel_name},
+			lottery_classify_id = #{lottery_classify_id},
 			lottery_classify_name = #{lottery_classify_name},
 			game = #{game},
 			min_bet_amount = #{min_bet_amount},
 			max_bet_amount = #{max_bet_amount},
 			sale_end_time = #{sale_end_time},
 			matchine_open_time = #{matchine_open_time},
-			matchine_close_time = #{matchine_close_time},
-			status = #{status},
-			add_time = #{add_time}
+			matchine_close_time = #{matchine_close_time}
 		where 
 		id = #{id}
+	</update>
+	
+	<!-- 批量修改根据出票渠道Id -->
+	<update id="updateStatusByTicketChannelId" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = #{channel_status}
+		where 
+			ticket_channel_id = #{id}
+	</update>
+	
+	<!-- 修改 -->
+	<update id="updateStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = #{status}
+		where 
+			id = #{id}
 	</update>
 	
 	<!-- 通过ID获取数据 -->

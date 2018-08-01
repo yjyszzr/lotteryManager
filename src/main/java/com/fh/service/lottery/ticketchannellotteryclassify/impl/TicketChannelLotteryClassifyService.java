@@ -101,4 +101,14 @@ public class TicketChannelLotteryClassifyService implements TicketChannelLottery
 		dao.delete("TicketChannelLotteryClassifyMapper.deleteAll", ArrayDATA_IDS);
 	}
 
+	@Override
+	public void updateStatusByTicketChannelId(PageData pd) throws Exception {
+		dao.update("TicketChannelLotteryClassifyMapper.updateStatusByTicketChannelId", pd);
+	}
+
+	@Override
+	public void updateStatus(PageData pd) throws Exception {
+		dao.update("TicketChannelLotteryClassifyMapper.updateStatus", pd);
+	}
+
 }

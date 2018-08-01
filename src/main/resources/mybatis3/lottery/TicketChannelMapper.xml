@@ -81,6 +81,16 @@
 		id = #{id}
 	</update>
 	
+	<!-- 停用启用 -->
+	<update id="updateStatus" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			channel_status = #{channel_status}
+		where 
+			id = #{id}
+	</update>
+	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 

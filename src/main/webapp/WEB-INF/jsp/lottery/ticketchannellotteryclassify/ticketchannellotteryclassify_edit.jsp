@@ -33,11 +33,29 @@
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">出票公司名称:</td>
-								<td><input type="text" name="ticket_channel_name" id="ticket_channel_name" value="${pd.ticket_channel_name}" maxlength="255" placeholder="这里输入出票公司名称" title="出票公司名称" style="width:98%;"/></td>
+								<td>
+									<select  id="ticket_channel" style="width:98%;">
+									        	<option value="" selected>请选择</option>
+									    	<c:forEach items="${ticketchannelList}" var="ticketchannel">
+									        	<option value="${ticketchannel.id }"   <c:if test="${ticketchannel.id == pd.ticket_channel_id }">selected</c:if>>${ticketchannel.channel_name }</option>
+									    	</c:forEach>
+									    </select>
+									<input type="hidden" name="ticket_channel_name" id="ticket_channel_name" value="${pd.ticket_channel_name}" />
+									<input type="hidden" name="ticket_channel_id" id = "ticket_channel_id" value="${pd.ticket_channel_id}" />
+								</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">彩种名称:</td>
-								<td><input type="text" name="lottery_classify_name" id="lottery_classify_name" value="${pd.lottery_classify_name}" maxlength="255" placeholder="这里输入彩种名称" title="彩种名称" style="width:98%;"/></td>
+								<td>
+									    <select id="lottery_classify"  style="width:98%;">
+									        	<option value="" selected>请选择</option>
+									    	<c:forEach items="${lotteryclassifyList}" var="lotteryclassify">
+									        		<option  value="${lotteryclassify.lottery_classify_id }"   <c:if test="${lotteryclassify.lottery_classify_id == pd.lottery_classify_id }">selected</c:if>>${lotteryclassify.lottery_name }</option>
+									    	</c:forEach>
+									    </select>
+									<input type="hidden" name="lottery_classify_name" id="lottery_classify_name" value="${pd.lottery_classify_name}"/>
+									<input type="hidden" name="lottery_classify_id"  id="lottery_classify_id"  value="${pd.lottery_classify_id}"/>
+								</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">彩种编码:</td>
@@ -57,19 +75,15 @@
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">开机时间:</td>
-								<td><input type="number" name="matchine_open_time" id="matchine_open_time" value="${pd.matchine_open_time}" maxlength="32" placeholder="这里输入开机时间" title="开机时间" style="width:98%;"/></td>
+								<td>
+								<input name="matchine_open_time" id="matchine_open_time"  value="${pd.matchine_open_time }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'HH:mm:ss'})" readonly="readonly" style="width:98%;" placeholder="开机时间" title="开机时间"/>
+								</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">关机时间:</td>
-								<td><input type="number" name="matchine_close_time" id="matchine_close_time" value="${pd.matchine_close_time}" maxlength="32" placeholder="这里输入关机时间" title="关机时间" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">状态:</td>
-								<td><input type="number" name="status" id="status" value="${pd.status}" maxlength="32" placeholder="这里输入状态" title="状态" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">创建时间:</td>
-								<td><input type="number" name="add_time" id="add_time" value="${pd.add_time}" maxlength="32" placeholder="这里输入创建时间" title="创建时间" style="width:98%;"/></td>
+								<td>
+								<input name="matchine_close_time" id="matchine_close_time"  value="${pd.matchine_close_time }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'HH:mm:ss'})" readonly="readonly" style="width:98%;" placeholder="关机时间" title="关机时间"/>
+								</td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -99,7 +113,7 @@
 	<!-- 下拉框 -->
 	<script src="static/ace/js/chosen.jquery.js"></script>
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<script src="static/ace/js/My97DatePicker/WdatePicker.js"></script>
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 		<script type="text/javascript">
@@ -186,26 +200,6 @@
 				$("#matchine_close_time").focus();
 			return false;
 			}
-			if($("#status").val()==""){
-				$("#status").tips({
-					side:3,
-		            msg:'请输入状态',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#status").focus();
-			return false;
-			}
-			if($("#add_time").val()==""){
-				$("#add_time").tips({
-					side:3,
-		            msg:'请输入创建时间',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#add_time").focus();
-			return false;
-			}
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
@@ -215,6 +209,21 @@
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
 		});
+		
+		$("#lottery_classify").change(function(){
+			   var lotteryClassifyId = $('#lottery_classify option:selected').val();//选择的value
+			   var lotteryClassifyName = $('#lottery_classify option:selected').text();//选中的文本
+		    $("#lottery_classify_id").val(lotteryClassifyId);
+		    $("#lottery_classify_name").val(lotteryClassifyName);
+		});
+		
+		$("#ticket_channel").change(function(){
+		    var ticketChannelId= $("#ticket_channel option:selected").val();
+		    var ticketChannelName= $("#ticket_channel option:selected").text();
+		    $("#ticket_channel_id").val(ticketChannelId);
+		    $("#ticket_channel_name").val(ticketChannelName);
+		});
+		
 		</script>
 </body>
 </html>
