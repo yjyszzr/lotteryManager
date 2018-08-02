@@ -33,9 +33,9 @@
 							
 						<!-- 检索  -->
 						<form action="switchappconfig/list.do" method="post" name="Form" id="Form">
-<%-- 						<table style="margin-top:5px;">
+						<table style="margin-top:5px;">
 							<tr>
-								<td>
+ 								<td>
 									<div class="nav-search">
 										<span class="input-icon">
 											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
@@ -43,11 +43,43 @@
 										</span>
 									</div>
 								</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">版本号:</td>
+								<td>
+								 	<select class="chosen-select form-control" name="version" id="version" value="${pd.version}"  data-placeholder="请选择版本号" style="vertical-align:top;width: 120px;">
+			           					<c:forEach var="version" items="${versionList}">
+			           						<option selected="selected"></option>
+			        						<option value="${version}">${version}</option>
+			        					</c:forEach>																												
+								  	</select>
+								</td>
+								
+								<td style="width:75px;text-align: right;padding-top: 13px;">系统:</td>
+								<td>
+								 	<select class="chosen-select form-control" name="platform" id="platform" value="${pd.platform}"  data-placeholder="请选择系统" style="vertical-align:top;width: 120px;">
+			           					<c:forEach var="systemDTO" items="${paltformList}">
+			           						<option selected="selected"></option>
+			        						<option value="${systemDTO.platform}">
+			        								${systemDTO.sysName}
+			        						</option>
+			        					</c:forEach>																												
+								  	</select>
+								</td>
+								
+								<td style="width:75px;text-align: right;padding-top: 13px;">渠道号:</td>
+								<td>
+								 	<select class="chosen-select form-control" name="channel" id="channel" value="${pd.channel}"  data-placeholder="请选择渠道号" style="vertical-align:top;width: 120px;">
+			           					<c:forEach var="channel" items="${channelList}">
+			           						<option selected="selected"></option>
+			        						<option value="${channel}">${channel}</option>
+			        					</c:forEach>																												
+								  	</select>
+								</td>
+								
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								</c:if>
 							</tr>
-						</table> --%>
+						</table>
 						
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	

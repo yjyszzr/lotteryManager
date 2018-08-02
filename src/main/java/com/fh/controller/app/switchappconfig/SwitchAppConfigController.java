@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.annotation.Resource;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.dto.AppSelectDTO;
 import com.fh.entity.dto.ChannelDTO;
+import com.fh.entity.dto.SystemDTO;
+import com.fh.entity.system.Dictionaries;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.switchappconfig.SwitchAppConfigManager;
 import com.fh.util.AppUtil;
@@ -67,6 +72,38 @@ public class SwitchAppConfigController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+	
+	/**获取连级数据
+	 * @return
+	 */
+//	@RequestMapping(value="/getSwitchAppLevels")
+//	@ResponseBody
+//	public Object getLevels(){
+//		Map<String,Object> map = new HashMap<String,Object>();
+//		String errInfo = "success";
+//		PageData pd = new PageData();
+//		try{
+//			pd = this.getPageData();
+//			String DICTIONARIES_ID = pd.getString("DICTIONARIES_ID");
+//			DICTIONARIES_ID = Tools.isEmpty(DICTIONARIES_ID)?"0":DICTIONARIES_ID;
+//			List<Dictionaries>	varList = dictionariesService.listSubDictByParentId(DICTIONARIES_ID); //用传过来的ID获取此ID下的子列表数据
+//			List<PageData> pdList = new ArrayList<PageData>();
+//			for(Dictionaries d :varList){
+//				PageData pdf = new PageData();
+//				pdf.put("DICTIONARIES_ID", d.getDICTIONARIES_ID());
+//				pdf.put("NAME", d.getNAME());
+//				pdList.add(pdf);
+//			}
+//			map.put("list", pdList);	
+//		} catch(Exception e){
+//			errInfo = "error";
+//			logger.error(e.toString(), e);
+//		}
+//		map.put("result", errInfo);				//返回结果
+//		return AppUtil.returnObject(new PageData(), map);
+//	}
+//	
+	
 	
 	/**删除
 	 * @param out
@@ -143,14 +180,57 @@ public class SwitchAppConfigController extends BaseController {
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
+		String version = pd.getString("version");
+		if(null != version && !"".equals(version)){
+			pd.put("version", version.trim());
+		}
+		String platform = pd.getString("platform");
+		if(null != platform && !"".equals(platform)){
+			pd.put("platform", platform.trim());
+		}
+		String channel = pd.getString("channel");
+		if(null != channel && !"".equals(channel)){
+			pd.put("channel", channel.trim());
+		}
 		page.setPd(pd);
 		List<PageData>	varList = switchappconfigService.list(page);	//列出SwitchAppConfig列表
 		
+		AppSelectDTO appSelectDTO = this.querySelectData();
+		
 		mv.setViewName("switchappconfig/switchappconfig_list");
 		mv.addObject("varList", varList);
+		mv.addObject("versionList", appSelectDTO.getVersionList());
+		mv.addObject("paltformList", appSelectDTO.getPaltformList());
+		mv.addObject("channelList", appSelectDTO.getChannelList());
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
+	}
+	
+	/**
+	 * 查询下拉数据
+	 * @throws Exception
+	 */
+	public AppSelectDTO querySelectData() throws Exception {
+		Page page = new Page();
+		AppSelectDTO appSelectDTO = new AppSelectDTO();
+		List<PageData>	varList = switchappconfigService.list(page);
+		List<String> versionList = varList.stream().map(s->s.getString("version")).distinct().collect(Collectors.toList());
+		List<SystemDTO> paltformList = new ArrayList<>();
+		SystemDTO sysDtoiOS = new SystemDTO();
+		sysDtoiOS.setSysName("苹果");
+		sysDtoiOS.setPlatform("0");
+		SystemDTO sysDtoAndroid = new SystemDTO();
+		sysDtoAndroid.setSysName("安卓");
+		sysDtoAndroid.setPlatform("1");
+		paltformList.add(sysDtoiOS);
+		paltformList.add(sysDtoAndroid);
+		
+		List<String> channelList = varList.stream().map(s->s.getString("channel")).distinct().collect(Collectors.toList());
+		appSelectDTO.setVersionList(versionList);
+		appSelectDTO.setChannelList(channelList);
+		appSelectDTO.setPaltformList(paltformList);
+		return appSelectDTO;
 	}
 	
 	/**去新增页面
