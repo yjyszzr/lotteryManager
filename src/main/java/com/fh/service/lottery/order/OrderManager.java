@@ -79,6 +79,10 @@ public interface OrderManager {
 	public List<PageData> toDetail(PageData pd) throws Exception;
 
 	public List<PageData> getFirstOrderList(Page page) throws Exception;
+	
+	public List<PageData> getFirstOrderAllList(Page page) throws Exception;
+	
+	public List<PageData> getOldUserOrderList(Page page) throws Exception;
 
 	public List<PageData> getAgainOrderList(Page page) throws Exception;
 

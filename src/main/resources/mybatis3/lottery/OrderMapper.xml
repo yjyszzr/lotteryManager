@@ -362,7 +362,7 @@
 		WHERE
 		 order_id = #{order_id}
 	</select>
-		<!-- 数据统计中-首购订单 -->
+	<!-- 数据统计中-首购订单 -->
 	<select id="getFirstOrderList" parameterType="page" resultType="pd">
 		SELECT COALESCE(count(DISTINCT user_id),0) as count,
 			 	COALESCE(sum(money_paid),0) as amount,
@@ -372,6 +372,32 @@
 			(SELECT  order_sn from dl_order 
 			where order_status in ('3','4','5','6','7') GROUP BY user_id 
 			HAVING min(add_time) &gt; #{pd.lastStart1} and  min(add_time) &lt; #{pd.lastEnd1} );
+	</select>
+	<!-- 新增购彩用户 -->
+	<select id="getFirstOrderAllList" parameterType="page" resultType="pd">
+		SELECT COALESCE(count(DISTINCT user_id),0) as count,
+			 	COALESCE(sum(money_paid),0) as amount,
+			 	COALESCE(sum(ticket_amount),0) as amountTicket
+		from dl_order   
+		where user_id in 
+			(SELECT  user_id from dl_order 
+			where order_status in ('3','4','5','6','7') GROUP BY user_id 
+			HAVING min(add_time) &gt; #{pd.lastStart1} and  min(add_time) &lt; #{pd.lastEnd1} )
+			and add_time &gt; #{pd.lastStart1} and  add_time &lt; #{pd.lastEnd1}
+			and order_status in ('3','4','5','6','7');
+	</select>
+	<!-- 老用户购彩 -->
+	<select id="getOldUserOrderList" parameterType="page" resultType="pd">
+		SELECT COALESCE(count(DISTINCT user_id),0) as count,
+			 	COALESCE(sum(money_paid),0) as amount,
+			 	COALESCE(sum(ticket_amount),0) as amountTicket
+		from dl_order   
+		where user_id not in 
+			(SELECT  user_id from dl_order 
+			where order_status in ('3','4','5','6','7') GROUP BY user_id 
+			HAVING min(add_time) &gt; #{pd.lastStart1} and  min(add_time) &lt; #{pd.lastEnd1} )
+			and add_time &gt; #{pd.lastStart1} and  add_time &lt; #{pd.lastEnd1}
+			and order_status in ('3','4','5','6','7');
 	</select>
 	<!-- 数据统计中-复购订单 -->
 	<select id="getAgainOrderList" parameterType="page" resultType="pd">
