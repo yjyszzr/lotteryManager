@@ -89,15 +89,17 @@ public class OrderManagerController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = ordermanagerService.getOrderList(page); // 列出OrderManager列表
-		List<PageData> payLogList = ordermanagerService.findPayLogList(varList);
-		Map<String, PageData> payLogMap = new HashMap<String, PageData>(payLogList.size());
-		payLogList.forEach(item -> payLogMap.put(item.getString("order_sn"), item));
 		Double allAmountD = 0D;
-		for (int i = 0; i < varList.size(); i++) {
-			PageData pageData = payLogMap.get(varList.get(i).getString("order_sn"));
-			varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
-			allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
-			allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
+		if (varList.size() > 0) {
+			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);
+			Map<String, PageData> payLogMap = new HashMap<String, PageData>(payLogList.size());
+			payLogList.forEach(item -> payLogMap.put(item.getString("order_sn"), item));
+			for (int i = 0; i < varList.size(); i++) {
+				PageData pageData = payLogMap.get(varList.get(i).getString("order_sn"));
+				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
+				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
+				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
+			}
 		}
 		mv.setViewName("lottery/ordermanager/ordermanager_list");
 		mv.addObject("varList", varList);

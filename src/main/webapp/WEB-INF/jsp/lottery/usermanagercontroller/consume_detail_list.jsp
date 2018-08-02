@@ -83,6 +83,7 @@
 								<tr>
 									<th class="center">交易类型</th>
 									<th class="center">金额</th>
+									<th class="center">支付明细</th>
 									<th class="center">账户余额</th>
 									<th class="center">可提现金额</th>
 									<th class="center">状态</th>
@@ -115,6 +116,49 @@
 													<c:otherwise>${var.amount}</c:otherwise>
 												</c:choose> 
 											</td>
+									<c:choose> 
+										<c:when test="${var.process_type  != 3 }"><td class='center'>--</td></c:when> 
+										<c:otherwise>  
+											<c:choose>
+												<c:when test="${var.order.order_status == 0 }"><td class='center'>--</td></c:when>
+												<c:otherwise>
+													<td class='center'>
+														<c:if test="${var.order.surplus !='0.00' }">
+														余额：	${var.order.surplus }
+														</c:if>
+														<c:if test="${var.order.third_party_paid !='0.00' }">
+															<c:if test="${!empty var.order.pay_name }">
+																${var.order.pay_name}：${var.order.third_party_paid }
+															</c:if>
+															<c:if test="${empty var.order.pay_name }">
+																第三方：${var.order.third_party_paid }
+															</c:if>
+														</c:if>
+														<c:if test="${var.order.bonus !='0.00' }">
+															红包：	${var.order.bonus }
+														</c:if>
+	<%-- 												<c:if test="${!empty var.pay_name}">${var.pay_name}</c:if> --%>
+	<%-- 												<c:if test="${ var.surplus > 0}">&nbsp余额</c:if> --%>
+	<%-- 												<c:if test="${ var.bonus > 0}">&nbsp红包</c:if> --%>
+													</td>
+												</c:otherwise>
+											</c:choose>
+													</c:otherwise>  
+											</c:choose>
+<%-- 											<c:choose> --%>
+<%-- 												<c:when test="${var.process_type  != 3 }"><td class='center'>--</td></c:when> --%>
+<%-- 												<c:otherwise> --%>
+<!-- 														<td class='center'> -->
+<%-- 													<c:choose> --%>
+<%-- 															<c:when test="${var.payment_name == 0}">支付宝支付：</c:when> --%>
+<%-- 															<c:when test="${var.payment_name == 1}">微信支付：</c:when> --%>
+<%-- 															<c:when test="${var.payment_name == 2}">余额支付：</c:when> --%>
+<%-- 															<c:when test="${var.payment_name == 3}">混合支付：</c:when> --%>
+<%-- 															<c:when test="${var.payment_name == 4}">融宝支付：</c:when> --%>
+<%-- 													</c:choose> --%>
+<!-- 														</td> -->
+<%-- 												</c:otherwise> --%>
+<%-- 											</c:choose> --%>
 											<td class="center">${var.cur_balance}</td>
 											<td class="center">${var.user_surplus}</td>
 											<td class="center"> 

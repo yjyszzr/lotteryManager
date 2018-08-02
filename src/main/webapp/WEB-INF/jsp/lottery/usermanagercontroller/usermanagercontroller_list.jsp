@@ -6,9 +6,7 @@
 
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -145,6 +143,7 @@
 									<th class="center">累计中奖</th>
 									<th class="center">累计提现</th>
 									<th class="center">账户余额</th>
+									<th class="center">可提现余额</th>
 									<th class="center">注册时间</th>
 									<th class="center">最后登录时间</th>
 <!-- 									<th class="center">状态</th> -->
@@ -169,6 +168,7 @@
 											<td class="center">${var.atotal}</td>
 											<td class="center">${var.totalWithdraw}</td>
 											<td class="center">${ var.user_money_limit + var.user_money }</td>
+											<td class="center">${var.user_money}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
 <!-- 											<td class='center'>  -->
@@ -266,7 +266,7 @@
 			 diag.Drag=true;
 			 diag.Title ="消费详情";
 			 diag.URL = '<%=basePath%>usermanagercontroller/toConsumeDetail.do?user_id='+userId;
-			 diag.Width = 800;
+			 diag.Width = 1200;
 			 diag.Height = 600;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = false;	//最大化按钮

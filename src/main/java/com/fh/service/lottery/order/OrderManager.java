@@ -95,4 +95,6 @@ public interface OrderManager {
 	public List<PageData> findPayLogList(List<PageData> varList) throws Exception;
 
 	public List<PageData> getGroupByOrderStatus(Page page) throws Exception;
+
+	public List<PageData> findByUserId(int userId) throws Exception;
 }

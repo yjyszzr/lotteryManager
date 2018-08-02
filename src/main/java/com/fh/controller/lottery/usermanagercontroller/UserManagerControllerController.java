@@ -2,7 +2,9 @@ package com.fh.controller.lottery.usermanagercontroller;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -16,6 +18,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
 import com.fh.entity.sms.RspSmsCodeEntity;
+import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
@@ -37,23 +40,33 @@ public class UserManagerControllerController extends BaseController {
 	private final static String USER_SESSION_PREFIX = "US:";
 
 	String menuUrl = "usermanagercontroller/list.do"; // 菜单地址(权限用)
+
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
+
 	@Resource(name = "useraccountmanagerService")
 	private UserAccountManagerManager useraccountmanagerService;
+
 	@Resource(name = "userrealmanagerService")
 	private UserRealManagerService userrealmanagerService;
+
 	@Resource(name = "userbankmanagerService")
 	private UserBankManagerService userbankmanagerService;
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
+
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
 
 	@Resource(name = "redisDaoImpl")
 	private RedisDaoImpl redisDaoImpl;
+
 	@Resource(name = "userActionLogService")
 	private UserActionLogService ACLOG;
+
+	@Resource(name = "orderService")
+	private OrderManager ordermanagerService;
+
 	/**
 	 * 保存
 	 * 
@@ -133,7 +146,7 @@ public class UserManagerControllerController extends BaseController {
 		mv = getDetailView(mv);
 		return mv;
 	}
-	
+
 	/**
 	 * 列表
 	 * 
@@ -291,6 +304,9 @@ public class UserManagerControllerController extends BaseController {
 		// 红包
 		Double unUseBonus = usermanagercontrollerService.findUserBonusByUserId(pd);
 		int userId = Integer.parseInt(pd.get("user_id").toString());
+		List<PageData> orderList = ordermanagerService.findByUserId(userId);
+		Map<String, PageData> orderMap = new HashMap<String, PageData>();
+		orderList.forEach(item -> orderMap.put(item.getString("order_sn"), item));
 		List<PageData> userAccountList = useraccountmanagerService.findByUserId(userId);
 		// 充值总金额
 		double rechargeAllAmount = 0.0;
@@ -307,7 +323,11 @@ public class UserManagerControllerController extends BaseController {
 			} else if (result == 2) {
 				rechargeAllAmount += Double.parseDouble(userAccountPd.get("amount").toString());
 			} else if (result == 3) {
+				PageData orderPd = new PageData();
+				String orderSn = userAccountPd.get("order_sn").toString();
+				orderPd = orderMap.get(orderSn);
 				buyTicketAllAmount += Double.parseDouble(userAccountPd.get("amount").toString());
+				userAccountList.get(i).put("order", orderPd);
 			}
 		}
 		pd.put("unUseBonus", unUseBonus == null ? 0 : unUseBonus);
@@ -345,7 +365,7 @@ public class UserManagerControllerController extends BaseController {
 		pd = this.getPageData();
 		String op = pd.getString("op");
 		PageData userEntity = usermanagercontrollerService.findById(pd);
-		String text ="";
+		String text = "";
 		if (userEntity != null) {
 			if (op != null) {
 				if (op.equals("frozen")) {
@@ -359,7 +379,7 @@ public class UserManagerControllerController extends BaseController {
 			}
 		}
 		usermanagercontrollerService.edit(userEntity);
-		ACLOG.save("1", "0", "用户列表："+userEntity.getString("user_id")+" "+userEntity.getString("nickname"), text);
+		ACLOG.save("1", "0", "用户列表：" + userEntity.getString("user_id") + " " + userEntity.getString("nickname"), text);
 		mv = getDetailView(mv);
 		return mv;
 	}
@@ -374,20 +394,20 @@ public class UserManagerControllerController extends BaseController {
 			userEntity.put("is_real", 0);
 		}
 		usermanagercontrollerService.edit(userEntity);
-		
+
 		PageData updateRealPd = new PageData();
 		updateRealPd.put("is_delete", 1);
 		updateRealPd.put("user_id", Integer.valueOf(userEntity.getString("user_id")));
 		userrealmanagerService.edit(updateRealPd);
-			
+
 		PageData queryBankPd = new PageData();
 		queryBankPd.put("user_id", Integer.valueOf(userEntity.getString("user_id")));
 		List<PageData> userBankpdList = userbankmanagerService.listAllByUser(queryBankPd);
-		for(PageData updateBank:userBankpdList) {
+		for (PageData updateBank : userBankpdList) {
 			updateBank.put("user_id", Integer.valueOf(userEntity.getString("user_id")));
 			userbankmanagerService.updateUserBankDelete(updateBank);
 		}
-		ACLOG.save("1", "0", "用户列表："+userEntity.getString("user_id")+" "+userEntity.getString("nickname"), "清除实名认证");
+		ACLOG.save("1", "0", "用户列表：" + userEntity.getString("user_id") + " " + userEntity.getString("nickname"), "清除实名认证");
 		mv = getDetailView(mv);
 		return mv;
 	}

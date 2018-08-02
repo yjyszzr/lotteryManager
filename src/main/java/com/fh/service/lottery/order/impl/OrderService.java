@@ -153,6 +153,7 @@ public class OrderService implements OrderManager {
 	public List<PageData> getOrderAndDetail(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getOrderAndDetail", page);
 	}
+
 	/**
 	 * 彩票数据（玩法分组）
 	 */
@@ -162,6 +163,7 @@ public class OrderService implements OrderManager {
 		return (List<PageData>) dao.findForList("OrderMapper.getOrderOfPlay", page);
 
 	}
+
 	/**
 	 * 根据小时汇总（折线图用）
 	 */
@@ -171,6 +173,7 @@ public class OrderService implements OrderManager {
 		return (List<PageData>) dao.findForList("OrderMapper.getAmountForDayHour", page);
 
 	}
+
 	/**
 	 * 赛事统计
 	 */
@@ -180,6 +183,7 @@ public class OrderService implements OrderManager {
 		return (List<PageData>) dao.findForList("OrderMapper.getMatchAmountByTime", page);
 
 	}
+
 	/**
 	 * 根据时间汇总购彩人数、实付金额、红包金额、订单金额
 	 */
@@ -199,6 +203,7 @@ public class OrderService implements OrderManager {
 		}
 		return (List<PageData>) dao.findForList("OrderMapper.findAllPayLog", orderSns);
 	}
+
 	/**
 	 * 金额根据订单状态分组汇总
 	 */
@@ -206,5 +211,13 @@ public class OrderService implements OrderManager {
 	@Override
 	public List<PageData> getGroupByOrderStatus(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getGroupByOrderStatus", page);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> findByUserId(int userId) throws Exception {
+		PageData pd = new PageData();
+		pd.put("userId", userId);
+		return (List<PageData>) dao.findForList("OrderMapper.findByUserId", pd);
 	}
 }

@@ -517,6 +517,7 @@
                  #{item}
 		</foreach>
 	</delete>
-	
-	<!-- fh313596790qq(青苔) -->
+	<select id="findByUserId"   resultType="pd">
+		select * from dl_order where user_id = #{userId}
+	</select>
 </mapper>
