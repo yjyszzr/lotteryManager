@@ -61,50 +61,7 @@
 								 	<select class="chosen-select form-control" name="channel" id="channel" value="${pd.channel}"  data-placeholder="请选择渠道" style="vertical-align:top;width: 120px;">
 			           					<c:forEach var="channelDTO" items="${channelDTOList}">
 			        						<option value="${channelDTO.channel}">${channelDTO.channelName}</option>
-			        					</c:forEach>										
-									<!-- <option value="c16010">appstore</option>
-										<option value="c10010">google</option>
-										<option value="c10020">vivo</option>
-										<option value="c10021">oppo</option>
-										<option value="c10022">华为</option>
-										<option value="c10023">阿里应用分发</option>
-										<option value="c10024">魅族</option>
-										<option value="c10025">金立</option>
-										<option value="c10026">三星</option>
-										<option value="c10027">小米</option>
-										<option value="c10028">百度</option>
-										<option value="c10029">360</option>
-										<option value="c10030">锤子</option>
-										<option value="c10031">联想</option>
-										<option value="c10032">搜狗</option>
-										<option value="c10033">机锋</option>
-										<option value="c10034">应用汇</option>
-										<option value="c10035">乐视</option>	
-										<option value="c10036">应用宝</option>
-										<option value="c10037">木蚂蚁</option>
-										<option value="c10038">安智</option>	
-										
-										<option value="c26010">appstoreMJ</option>
-										<option value="c20010">googleMJ</option>
-										<option value="c20020">vivoMJ</option>
-										<option value="c20021">oppoMJ</option>
-										<option value="c20022">华为MJ</option>
-										<option value="c20023">阿里应用分发MJ</option>
-										<option value="c20024">魅族MJ</option>
-										<option value="c20025">金立MJ</option>
-										<option value="c20026">三星MJ</option>
-										<option value="c20027">小米MJ</option>
-										<option value="c20028">百度MJ</option>
-										<option value="c20029">360MJ</option>
-										<option value="c20030">锤子MJ</option>
-										<option value="c20031">联想MJ</option>
-										<option value="c20032">搜狗MJ</option>
-										<option value="c20033">机锋MJ</option>
-										<option value="c20034">应用汇MJ</option>
-										<option value="c20035">乐视MJ</option>	
-										<option value="c20036">应用宝MJ</option>
-										<option value="c20037">木蚂蚁MJ</option>
-										<option value="c20038">安智MJ</option>	-->																			
+			        					</c:forEach>																												
 								  	</select>
 								</td>
 							</tr>

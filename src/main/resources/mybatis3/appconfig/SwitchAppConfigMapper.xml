@@ -114,17 +114,32 @@
 		dl_phone_channel pc
 		on sc.channel = pc.channel
 		where 1=1
-		order by sc.version desc
+		
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				sc.version  
+				LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+				pc.channel_name  
+				LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or
+				pc.channel
+				LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')					 
 		</if>
+		<if test="pd.version != null and pd.version != ''"> 
+			and sc.version = #{pd.version}
+		</if>
+		<if test="pd.platform != null and pd.platform != ''"> 
+			and sc.platform = #{pd.platform}
+		</if>
+		<if test="pd.channel != null and pd.channel != ''"> 
+			and pc.channel = #{pd.channel}
+		</if>
+		<if test="pd.channel_name != null and pd.channel_name != ''"> 
+			and pc.channel_name = #{pd.channel_name}
+		</if>
+		
+		order by sc.version desc
 	</select>
 	
 	<!-- 列表(全部) -->

@@ -375,10 +375,12 @@ public class ReportFormDataController extends BaseController {
 		if(rB.compareTo(BigDecimal.ZERO)!=0) {
 		pageData.put("data30",rA.divide(rB, 2,BigDecimal.ROUND_HALF_DOWN)+"%");
 		}
-		List<PageData> firstList = ordermanagerService.getFirstOrderList(page);
+		//新增购彩用户
+		List<PageData> firstList = ordermanagerService.getFirstOrderAllList(page);
 		pageData.put("data31", firstList.get(0).getString("count"));
 		pageData.put("data32", firstList.get(0).getString("amount"));
-		List<PageData> againList = ordermanagerService.getAgainOrderList(page);
+		//老用户购彩
+		List<PageData> againList = ordermanagerService.getOldUserOrderList(page);
 		pageData.put("data34", againList.get(0).getString("count"));
 		pageData.put("data35", againList.get(0).getString("amount"));
 		
