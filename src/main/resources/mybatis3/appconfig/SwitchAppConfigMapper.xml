@@ -98,6 +98,16 @@
 		where version = #{version} and platform =  #{platform} and  channel = #{channel} 
 	</select>
 	
+	<!-- 查找所有app的名称 -->
+	<select id="listAppName" parameterType="pd"  resultType="pd">
+		select * from dl_app
+	</select>	
+	
+	<!-- 通过app_code_name获取数据 -->
+	<select id="listSubDictByParentId" parameterType="pd" resultType="pd">
+		select  *  from  dl_phone_channel where  app_code_name = #{app_code_name}
+	</select>
+	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select

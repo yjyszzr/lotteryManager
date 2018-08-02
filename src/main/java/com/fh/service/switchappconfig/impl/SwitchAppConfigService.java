@@ -1,9 +1,11 @@
 package com.fh.service.switchappconfig.impl;
 
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
-import com.fh.dao.DaoSupport;
+
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.switchappconfig.SwitchAppConfigManager;
@@ -52,6 +54,29 @@ public class SwitchAppConfigService implements SwitchAppConfigManager{
 	public void changeChannelSwitch(PageData pd)throws Exception{
 		dao.update("SwitchAppConfigMapper.changeChannelSwitch", pd);
 	}
+
+	/**
+	 * 查找所有appName
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAppName(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("SwitchAppConfigMapper.listAppName",pd);
+	}	
+	
+	/**
+	 * 通过ID获取其子级列表
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listSubDictByParentId(String parentId) throws Exception {
+		return (List<PageData>) dao.findForList("SwitchAppConfigMapper.listSubDictByParentId", parentId);
+	}
+	
 	
 	/**列表
 	 * @param page
@@ -105,8 +130,14 @@ public class SwitchAppConfigService implements SwitchAppConfigManager{
 
 	@Override
 	public List<PageData> querySwitchAppConfig(PageData pd) throws Exception {
-		return (List<PageData>)dao.findForObject("SwitchAppConfigMapper.querySwitchAppConfig", pd);
+		return (List<PageData>)dao.findForList("SwitchAppConfigMapper.querySwitchAppConfig", pd);
 	}
+
+	@Override
+	public List<PageData> listByAppCodeName(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("SwitchAppConfigMapper.listAppName",pd);
+	}
+
 	
 }
 

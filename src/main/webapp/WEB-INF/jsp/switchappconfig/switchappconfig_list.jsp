@@ -38,14 +38,14 @@
  								<td>
 									<div class="nav-search">
 										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+											<input style="width:375px" type="text" placeholder="模糊搜索支持渠道名称,渠道号,版本号" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="模糊搜索支持渠道名称,渠道号,版本号"/>
 											<i class="ace-icon fa fa-search nav-search-icon"></i>
 										</span>
 									</div>
 								</td>
-								<td style="width:75px;text-align: right;padding-top: 13px;">版本号:</td>
+								<td style="width:75px;text-align: right;padding-top: 3px;">版本号:</td>
 								<td>
-								 	<select class="chosen-select form-control" name="version" id="version" value="${pd.version}"  data-placeholder="请选择版本号" style="vertical-align:top;width: 120px;">
+								 	<select class="chosen-select form-control" name="version" id="version" value="${pd.version}" class="nav-search-input"  data-placeholder="请选择版本号" style="vertical-align:top;width: 120px;">
 			           					<c:forEach var="version" items="${versionList}">
 			           						<option selected="selected"></option>
 			        						<option value="${version}">${version}</option>
@@ -53,9 +53,9 @@
 								  	</select>
 								</td>
 								
-								<td style="width:75px;text-align: right;padding-top: 13px;">系统:</td>
+								<td style="width:75px;text-align: right;padding-top: 3px;">系统:</td>
 								<td>
-								 	<select class="chosen-select form-control" name="platform" id="platform" value="${pd.platform}"  data-placeholder="请选择系统" style="vertical-align:top;width: 120px;">
+								 	<select class="chosen-select form-control" name="platform" id="platform" value="${pd.platform}" class="nav-search-input"  data-placeholder="请选择系统" style="vertical-align:top;width: 120px;">
 			           					<c:forEach var="systemDTO" items="${paltformList}">
 			           						<option selected="selected"></option>
 			        						<option value="${systemDTO.platform}">
@@ -67,7 +67,7 @@
 								
 								<td style="width:75px;text-align: right;padding-top: 13px;">渠道号:</td>
 								<td>
-								 	<select class="chosen-select form-control" name="channel" id="channel" value="${pd.channel}"  data-placeholder="请选择渠道号" style="vertical-align:top;width: 120px;">
+								 	<select class="chosen-select form-control" name="channel" id="channel" value="${pd.channel}" class="nav-search-input"  data-placeholder="请选择渠道号" style="vertical-align:top;width: 120px;">
 			           					<c:forEach var="channel" items="${channelList}">
 			           						<option selected="selected"></option>
 			        						<option value="${channel}">${channel}</option>

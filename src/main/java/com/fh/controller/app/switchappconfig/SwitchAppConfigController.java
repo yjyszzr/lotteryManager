@@ -59,17 +59,22 @@ public class SwitchAppConfigController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		
-//		List<PageData> pageDataList = switchappconfigService.querySwitchAppConfig(pd);
-//		if(pageDataList.size() <= 0) {
-//
-//		}
+		String points1 = pd.getString("points1");
+		String points2 = pd.getString("points2");
+		String points3 = pd.getString("points3");
+		pd.put("version", points1+"."+points2+"."+points3);
 		
-//		pd.put("id_id", this.get32UUID());	//主键
-		pd.put("id", "0");	//备注1
-		switchappconfigService.save(pd);
-		ACLOG.save("1", "1", "APP开关",pd.getString("version")+"-"+pd.getString("channel"));
-		mv.addObject("msg","success");
-		mv.setViewName("save_result");
+		List<PageData> pageDataList = switchappconfigService.querySwitchAppConfig(pd);
+		if(pageDataList == null || pageDataList.size() <= 0) {
+			pd.put("id", "0");	//备注1
+			switchappconfigService.save(pd);
+			ACLOG.save("1", "1", "APP开关",pd.getString("version")+"-"+pd.getString("channel"));
+			mv.addObject("msg","success");
+			mv.setViewName("save_result");
+		}else {
+			mv.addObject("msg","保存的app开关有重复,请检查");
+			mv.setViewName("save_result");
+		}
 		return mv;
 	}
 	
@@ -163,6 +168,46 @@ public class SwitchAppConfigController extends BaseController {
 		return mv;
 	}
 	
+	/**获取连级数据
+	 * @return
+	 */
+	@RequestMapping(value="/getLevels")
+	@ResponseBody
+	public Object getLevels(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		String errInfo = "success";
+		PageData pd = new PageData();
+		List<PageData>	varList = new ArrayList<>();
+		List<PageData> pdList = new ArrayList<PageData>();
+		try{
+			pd = this.getPageData();
+			String DICTIONARIES_ID = pd.getString("DICTIONARIES_ID");
+			if(Tools.isEmpty(DICTIONARIES_ID)) {
+				varList = switchappconfigService.listByAppCodeName(pd);
+				for(PageData d :varList){
+					PageData pdf = new PageData();
+					pdf.put("DICTIONARIES_ID", d.getString("app_code_name"));
+					pdf.put("NAME", d.getString("app_name"));
+					pdList.add(pdf);
+				}
+			}else {
+				varList = switchappconfigService.listSubDictByParentId(DICTIONARIES_ID); //用传过来的ID获取此ID下的子列表数据
+				for(PageData d :varList){
+					PageData pdf = new PageData();
+					pdf.put("DICTIONARIES_ID", d.getString("channel"));
+					pdf.put("NAME", d.getString("channel_name"));
+					pdList.add(pdf);
+				}
+			}
+
+			map.put("list", pdList);	
+		} catch(Exception e){
+			errInfo = "error";
+			logger.error(e.toString(), e);
+		}
+		map.put("result", errInfo);				//返回结果
+		return AppUtil.returnObject(new PageData(), map);
+	}
 	
 	
 	/**列表

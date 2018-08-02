@@ -2,6 +2,7 @@ package com.fh.service.switchappconfig;
 
 import java.util.List;
 import com.fh.entity.Page;
+import com.fh.entity.system.Dictionaries;
 import com.fh.util.PageData;
 
 /** 
@@ -35,6 +36,23 @@ public interface SwitchAppConfigManager{
 	 * @throws Exception
 	 */
 	public List<PageData> list(Page page)throws Exception;
+	
+	/**
+	 * 通过AppCodeName获取其子级列表
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listByAppCodeName(PageData pd) throws Exception;
+	
+	
+	/**
+	 * 通过ID获取其子级列表
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listSubDictByParentId(String parentId) throws Exception;
 	
 	/**列表(全部)
 	 * @param pd
