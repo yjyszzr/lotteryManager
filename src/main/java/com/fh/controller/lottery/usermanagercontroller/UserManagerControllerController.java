@@ -142,7 +142,10 @@ public class UserManagerControllerController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData userEntity = usermanagercontrollerService.findById(pd);
 		usermanagercontrollerService.changeUserSwitch(pd);
+		String text ="is_business: "+userEntity.getString("is_business")+ " -> "+pd.getString("is_business");
+		ACLOG.save("1", "0", "用户列表：交易版开关  "+pd.getString("user_id"), text);
 		mv = getDetailView(mv);
 		return mv;
 	}
