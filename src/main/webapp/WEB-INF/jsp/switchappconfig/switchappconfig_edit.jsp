@@ -37,9 +37,9 @@
 <%-- 								<input type="text" name="version" id="version" value="${pd.version}" maxlength="10" placeholder="这里输入app版本号,格式x.x.x" title="app版本号" style="width:98%;"/>
  --%>								
 								<td> 
-								<input type="number" name="points1" id="points1" min="0" step="1"  max="10" value=0 />
+								<input type="number" name="points1" id="points1" min=0 step=1  max=10 value=0 />
 								.
-								<input type="number" name="points2" id="points2" min="0" step="1"  max="10" value=0 />
+								<input type="number" name="points2" id="points2" min=0 step=1  max=10 value=0 />
 								.
 								<input type="number" name="points3" id="points3" min="0" step="1"  max="10" value=0 />
 								

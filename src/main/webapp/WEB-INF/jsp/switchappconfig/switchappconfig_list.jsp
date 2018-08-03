@@ -92,7 +92,8 @@
 									<th class="center">app版本号</th>
 									<th class="center">平台</th>
 									<th class="center">业务版本</th>
-									<th class="center">渠道</th>
+									<th class="center">渠道名称</th>
+									<th class="center">渠道号</th>
 									<th class="center">开关</th>
 									<th class="center">操作</th>
 								</tr>
@@ -131,6 +132,7 @@
 												</c:choose>													
 											</td>
 											<td class='center'>${var.channel_name}</td>
+											<td class='center'>${var.channel}</td>
 											
 											<td class='center'>
 											<c:choose>
