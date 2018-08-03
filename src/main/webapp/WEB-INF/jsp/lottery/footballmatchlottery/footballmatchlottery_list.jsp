@@ -4,9 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +65,7 @@
 <!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
 <!-- 									</th> -->
 									<th class="center" style="width:50px;">序号</th>
-<!-- 									<th class="center">赛事Id</th> -->
+									<th class="center">赛事Id</th>
 <!-- 									<th class="center">联赛id</th> -->
 <!-- 									<th class="center">联赛简称</th> -->
 <!-- 									<th class="center">场次id</th> -->
@@ -107,7 +105,7 @@
 <%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.match_id}" class="ace" /><span class="lbl"></span></label> --%>
 <!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-<%-- 											<td class='center'>${var.match_id}</td> --%>
+											<td class='center'>${var.match_id}</td>
 <%-- 											<td class='center'>${var.league_id}</td> --%>
 <%-- 											<td class='center'>${var.league_addr}</td> --%>
 <%-- 											<td class='center'>${var.changci_id}</td> --%>
