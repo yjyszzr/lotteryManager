@@ -169,7 +169,7 @@ public class OrderService implements OrderManager {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getOrderAndDetail(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("OrderMapper.getOrderAndDetail", page);
+		return (List<PageData>) dao.findForList("OrderMapper.getOrderAndDetailBylistPage", page);
 	}
 
 	/**

@@ -420,7 +420,7 @@
 			and add_time  &gt; #{pd.lastStart1} and  add_time &lt; #{pd.lastEnd1}
 	</select>
 	<!-- 数据统计中-订单数据 -->
-	<select id="getOrderAndDetail" parameterType="page" resultType="pd">
+	<select id="getOrderAndDetailBylistPage" parameterType="page" resultType="pd">
 		SELECT  o.order_sn, 
 				o.user_id,
 				lpc.play_name,
@@ -489,10 +489,12 @@
 		</if> lpc.play_name 
 	</select>
 	<select id="getAmountForDayHour"  parameterType="page" resultType="pd">
-	SELECT COALESCE(sum( ticket_amount ),0) as amount
+	SELECT COALESCE(sum( ticket_amount ),0) as amount,
+			DATE_FORMAT( FROM_UNIXTIME( add_time ), '%H' ) as time
     FROM dl_order 
 		where order_status in ('3','4','5','6','7') and 
-		DATE_FORMAT( FROM_UNIXTIME( add_time ), '%Y-%m-%d %H' ) = #{pd.dayHour }
+		DATE_FORMAT( FROM_UNIXTIME( add_time ), '%Y-%m-%d' ) = #{pd.dayHour }
+		GROUP BY time 
 	</select>
 	
 	<select id="getMatchAmountByTime"  parameterType="page" resultType="pd">
