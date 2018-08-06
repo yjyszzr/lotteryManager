@@ -138,6 +138,10 @@ public class SwitchAppConfigService implements SwitchAppConfigManager{
 		return (List<PageData>) dao.findForList("SwitchAppConfigMapper.listAppName",pd);
 	}
 
-	
+	@Override
+	public List<PageData> queryList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("SwitchAppConfigMapper.queryList",page);
+	}
+
 }
 

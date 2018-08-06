@@ -35,6 +35,9 @@
 		dl_phone_channel
 	</select>
 	
+	<select id="queryList" resultType="pd">
+		select * from dl_switch_config	
+	</select>
 	
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">

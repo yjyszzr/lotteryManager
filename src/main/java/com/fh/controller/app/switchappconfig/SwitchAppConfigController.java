@@ -259,7 +259,7 @@ public class SwitchAppConfigController extends BaseController {
 	public AppSelectDTO querySelectData() throws Exception {
 		Page page = new Page();
 		AppSelectDTO appSelectDTO = new AppSelectDTO();
-		List<PageData>	varList = switchappconfigService.list(page);
+		List<PageData>	varList = switchappconfigService.queryList(page);
 		List<String> versionList = varList.stream().map(s->s.getString("version")).distinct().collect(Collectors.toList());
 		List<SystemDTO> paltformList = new ArrayList<>();
 		SystemDTO sysDtoiOS = new SystemDTO();

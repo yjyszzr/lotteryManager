@@ -37,6 +37,14 @@ public interface SwitchAppConfigManager{
 	 */
 	public List<PageData> list(Page page)throws Exception;
 	
+	
+	/**列表
+	 * @param page
+	 * @throws Exception
+	 */
+	public List<PageData> queryList(Page page)throws Exception;
+	
+	
 	/**
 	 * 通过AppCodeName获取其子级列表
 	 * @param parentId
