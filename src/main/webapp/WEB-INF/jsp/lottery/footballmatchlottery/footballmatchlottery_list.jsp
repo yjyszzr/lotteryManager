@@ -38,7 +38,7 @@
 													联赛名称:
 												</span>
 												<span class="input-icon">
-													<input type="text" placeholder="	联赛名称" class="nav-search-input" id="league_name" autocomplete="off" name="league_name" value="${pd.league_name }"/>
+													<input type="text" placeholder="联赛名称" class="nav-search-input" id="league_name" autocomplete="off" name="league_name" value="${pd.league_name }"/>
 												</span>
 											</div>
 										</td>
@@ -66,7 +66,7 @@
 <!-- 									</th> -->
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">赛事Id</th>
-<!-- 									<th class="center">联赛id</th> -->
+ 									<th class="center">联赛Id</th>
 <!-- 									<th class="center">联赛简称</th> -->
 <!-- 									<th class="center">场次id</th> -->
 									<th class="center">场次</th>
@@ -106,7 +106,7 @@
 <!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.match_id}</td>
-<%-- 											<td class='center'>${var.league_id}</td> --%>
+ 											<td class='center'>${var.league_id}</td>
 <%-- 											<td class='center'>${var.league_addr}</td> --%>
 <%-- 											<td class='center'>${var.changci_id}</td> --%>
 											<td class='center'>${var.changci}</td>
