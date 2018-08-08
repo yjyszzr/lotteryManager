@@ -80,6 +80,7 @@
 							<thead>
 								<tr>
 									<th class="center">投注内容</th>
+									<th class="center">主队/客队</th>
 									<th class="center">是否设胆</th>
 									<th class="center">比赛结果</th>
 								</tr>
@@ -89,13 +90,19 @@
 										<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>${var.list}</td>
+											<td class='center'>${var.match_team}</td>
 											<td class='center'>
 												<c:choose>
 													<c:when test="${var.is_dan == 0}">否</c:when>
 													<c:when test="${var.is_dan == 1}">是</c:when>
 												</c:choose>
 											</td>
-											<td class='center'>${var.matchResultStr}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${empty var.matchResultStr}">--</c:when>
+													<c:otherwise>${var.matchResultStr}</c:otherwise>
+												</c:choose>
+											</td>
 										</tr>
 										</c:forEach>
 									</c:if>
