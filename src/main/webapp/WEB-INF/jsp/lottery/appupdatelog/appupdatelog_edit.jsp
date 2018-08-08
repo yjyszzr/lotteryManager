@@ -32,9 +32,45 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注1:</td>
-								<td><input type="number" name="id" id="id" value="${pd.id}" maxlength="32" placeholder="这里输入备注1" title="备注1" style="width:98%;"/></td>
+								<td style="width:100px;text-align: right;padding-top: 13px;">渠道号*</td>
+								<td>
+									<select name="app_name" id="app_name" onchange="change1(this.value)">
+		                                <option>app名称必选</option>     					 
+		                          	</select>
+		                        </td>
+		                        <td>
+		                          	<select id="channel" name="channel">
+								 		<option>app下载渠道必选</option>                       
+                      				</select>
+								</td>
 							</tr>
+							<tr>
+								<td style="width:100px;text-align: right;padding-top: 13px;">app新版本号*</td>
+								<td colspan="2"> 
+								<input type="number" name="points1" id="points1" min=0 step=1  max=10 value=0 />
+								.
+								<input type="number" name="points2" id="points2" min=0 step=1  max=10 value=0 />
+								.
+								<input type="number" name="points3" id="points3" min="0" step="1"  max="10" value=0 />
+								
+								</td>
+							</tr>
+							<tr>
+								<td style="width:100px;text-align: right;padding-top: 13px;">更新日志*</td>
+								<td colspan="2">
+									<input type="text" name="text1" id="text1" value="${pd.text1}" maxlength="32" placeholder="这里输入升级日志,请只输入文字" title="更新日志1" style="width:98%;"/>
+									<input type="text" name="text2" id="text2" value="${pd.text2}" maxlength="32" placeholder="这里输入升级日志,请只输入文字" title="更新日志2" style="width:98%;"/>
+									<input type="text" name="text2" id="text2" value="${pd.text2}" maxlength="32" placeholder="这里输入升级日志,请只输入文字" title="更新日志2" style="width:98%;"/>
+									<input type="text" name="text4" id="text4" value="${pd.text4}" maxlength="32" placeholder="这里输入升级日志,请只输入文字" title="更新日志4" style="width:98%;"/>
+								</td>
+							</tr>
+							<tr>
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
+								<div class="col-sm-9">
+								   <span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');"  id="showOnePhoto"> app上传</span>  
+								</div>
+							</tr>
+							
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
@@ -89,6 +125,42 @@
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
 		});
+		
+		//初始第一级
+		$(function() {
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>switchappconfig/getLevels.do?tm='+new Date().getTime(),
+		    	data: {},
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					$("#app_name").html('<option>app名称必选</option>');
+					 $.each(data.list, function(i, dvar){
+							$("#app_name").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
+					 });
+				}
+			});
+		});
+		//第一级值改变事件(初始第二级)
+		function change1(value){
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>switchappconfig/getLevels.do?tm='+new Date().getTime(),
+		    	data: {DICTIONARIES_ID:value},
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					$("#channel").html('<option>app下载渠道必选</option>');
+					 $.each(data.list, function(i, dvar){
+							$("#channel").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
+					 });
+				}
+			});
+		}
+		
+		
+		
 		</script>
 </body>
 </html>

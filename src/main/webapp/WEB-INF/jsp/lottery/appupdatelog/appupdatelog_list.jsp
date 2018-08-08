@@ -35,27 +35,16 @@
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
-									<div class="nav-search">
-										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
-											<i class="ace-icon fa fa-search nav-search-icon"></i>
-										</span>
-									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="">全部</option>
-									<option value="">1</option>
-									<option value="">2</option>
-								  	</select>
+									<select name="app_name" id="app_name" onchange="change1(this.value)">
+		                                <option>app名称必选</option>     					 
+		                          	</select>
+		                          	<select id="channel" name="channel">
+								 		<option>app下载渠道必选</option>                       
+                      				</select>
 								</td>
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								</c:if>
-								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td></c:if>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -67,13 +56,12 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">备注1</th>
-									<th class="center">备注2</th>
-									<th class="center">备注3</th>
-									<th class="center">备注4</th>
-									<th class="center">备注5</th>
-									<th class="center">备注6</th>
-									<th class="center">备注7</th>
+									<th class="center">app名称</th>
+									<th class="center">版本号</th>
+									<th class="center">下载地址</th>
+									<th class="center">更新日志</th>
+									<th class="center">更新时间</th>
+									<th class="center">是否强制更新</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -89,7 +77,6 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.id}</td>
 											<td class='center'>${var.app_code_name}</td>
 											<td class='center'>${var.version}</td>
 											<td class='center'>${var.download_url}</td>
@@ -268,8 +255,8 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>appupdatelog/goAdd.do';
-			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Width = 850;
+			 diag.Height = 655;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -365,6 +352,39 @@
 				}
 			});
 		};
+		
+		//初始第一级
+ 		$(function() {
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>switchappconfig/getLevels.do?tm='+new Date().getTime(),
+		    	data: {},
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					$("#app_name").html('<option>app名称必选</option>');
+					 $.each(data.list, function(i, dvar){
+							$("#app_name").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
+					 });
+				}
+			});
+		});
+		//第一级值改变事件(初始第二级)
+		function change1(value){
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>switchappconfig/getLevels.do?tm='+new Date().getTime(),
+		    	data: {DICTIONARIES_ID:value},
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					$("#channel").html('<option>app下载渠道必选</option>');
+					 $.each(data.list, function(i, dvar){
+							$("#channel").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
+					 });
+				}
+			});
+		}
 		
 		//导出excel
 		function toExcel(){

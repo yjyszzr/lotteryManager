@@ -1,12 +1,15 @@
 package com.fh.service.lottery.appupdatelog.impl;
 
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
-import com.fh.dao.DaoSupport;
+
+import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
-import com.fh.util.PageData;
 import com.fh.service.lottery.appupdatelog.AppUpdateLogManager;
+import com.fh.util.PageData;
 
 /** 
  * 说明： 版本升级管理
@@ -17,8 +20,8 @@ import com.fh.service.lottery.appupdatelog.AppUpdateLogManager;
 @Service("appupdatelogService")
 public class AppUpdateLogService implements AppUpdateLogManager{
 
-	@Resource(name = "daoSupport")
-	private DaoSupport dao;
+	@Resource(name = "daoSupport3")
+	private DaoSupport3 dao;
 	
 	/**新增
 	 * @param pd

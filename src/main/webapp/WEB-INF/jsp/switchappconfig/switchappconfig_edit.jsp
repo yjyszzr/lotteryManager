@@ -34,8 +34,6 @@
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:90px;text-align: right;padding-top: 13px;">app版本号*</td>
-<%-- 								<input type="text" name="version" id="version" value="${pd.version}" maxlength="10" placeholder="这里输入app版本号,格式x.x.x" title="app版本号" style="width:98%;"/>
- --%>								
 								<td> 
 								<input type="number" name="points1" id="points1" min=0 step=1  max=10 value=0 />
 								.
