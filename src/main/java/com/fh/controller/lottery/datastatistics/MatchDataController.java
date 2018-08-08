@@ -173,13 +173,18 @@ public class MatchDataController extends BaseController {
 			pd.put("lastEnd1", time.toString());
 			page.setPd(pd);
 			List<PageData> list = ordermanagerService.getMatchAmountByTime(page);
-			Map<String, PageData> map = new HashMap<>();
 			BigDecimal amountSUM = new BigDecimal(0);
 			if (list.size() > 0) {
+				Map<String, PageData> map = new HashMap<>();
+				Map<String, PageData> matchMap = new HashMap<>();
 				for (PageData pad : list) {
-					PageData matchDate = matchService.findById(pad);
+					PageData matchDate = matchMap.get(pad.getString("match_id"));
+					if (matchDate == null) {
+						matchDate = matchService.findById(pad);
+					}
 					BigDecimal padSum = new BigDecimal(pad.getString("amount"));
 					if (matchDate != null) {
+						matchMap.put(matchDate.getString("match_id"), matchDate);
 						String leagueNM = matchDate.getString("league_id");
 						PageData pageNew = map.get(leagueNM);
 						if (pageNew != null) {

@@ -169,7 +169,8 @@ public class OrderDataController extends BaseController {
 		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(dateE+" 23:59:59"));
 		page.setPd(pd);
 		List<PageData> list = ordermanagerService.getOrderAndDetail(page);
-		for (int i = 0; i < list.size(); i++) { 
+		Map<String, PageData> matchMap = new HashMap<>();
+		for (int i = 0; i < list.size(); i++) {
 			String pass_type = "";
 			String[] types = list.get(i).getString("pass_type").split(",");
 			for(int j = 0; j < types.length; j++) {
@@ -188,8 +189,12 @@ public class OrderDataController extends BaseController {
 			for(int j = 0; j < matchs.length; j++) {
 				PageData pdm = new PageData();
 				pdm.put("match_id", matchs[j]);
-				PageData matchDate = matchService.findById(pdm);
+				PageData matchDate = matchMap.get(pdm.getString("match_id"));
+				if (matchDate == null) {
+					matchDate = matchService.findById(pdm);
+				}
 				if(matchDate!=null) {
+					matchMap.put(matchDate.getString("match_id"), matchDate);
 					matchNM = matchNM + matchDate.getString("league_addr");
 				}else {
 					String matchName = pdm.getString("changci");
