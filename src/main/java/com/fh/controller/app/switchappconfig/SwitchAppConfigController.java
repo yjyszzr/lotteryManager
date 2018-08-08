@@ -217,7 +217,7 @@ public class SwitchAppConfigController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表SwitchAppConfig");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -259,7 +259,7 @@ public class SwitchAppConfigController extends BaseController {
 	public AppSelectDTO querySelectData() throws Exception {
 		Page page = new Page();
 		AppSelectDTO appSelectDTO = new AppSelectDTO();
-		List<PageData>	varList = switchappconfigService.list(page);
+		List<PageData>	varList = switchappconfigService.queryList(page);
 		List<String> versionList = varList.stream().map(s->s.getString("version")).distinct().collect(Collectors.toList());
 		List<SystemDTO> paltformList = new ArrayList<>();
 		SystemDTO sysDtoiOS = new SystemDTO();
