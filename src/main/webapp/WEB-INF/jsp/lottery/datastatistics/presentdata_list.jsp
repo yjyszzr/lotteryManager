@@ -82,7 +82,11 @@
 							</tbody>
 						</table>
 						</form>
-					<div id="main" style="height:350px"></div>
+							<div id="main" style="height:350px"></div>
+		<!-- 				<div>
+								<p class="btn btn-light btn-xs blue" style="border-radius: 5px; color: blue !important; width: 30px;float:left;" id="demo" ></p>
+				 				<input style="width:300px;" type="range" min=1 max=24 step=1 id="myRange"  value="24" onchange="myFunction()"/>
+							</div>  -->	
 						</div>
 						<!-- /.col -->
 					</div>
@@ -177,13 +181,20 @@
 	</script>
 	<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
 	<script type="text/javascript">
+  
+ //       setInterval(function() {
+ //       	$('#demo').html($('#myRange').val()-1);
+ //       });
+  
+
 		// 路径配置
 		require.config({
 			paths : {
 				echarts : 'http://echarts.baidu.com/build/dist'
 			}
 		});
-
+		
+//		function myFunction(){
 		// 使用
 		require([ 'echarts', 'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
 		], function(ec) {
@@ -291,13 +302,14 @@
 					}
 				} ]
 			};
-			var d = new Date();
-			var h = d.getHours() + 1;
-			option.xAxis[0].data.splice(h,24-h);
+//			var d = new Date();
+//			var h = $('#myRange').val();
+//			option.xAxis[0].data.splice(h,24-h);
 			// 为echarts对象加载数据 
 			myChart.setOption(option);
 		});
-		
+//		}
+//		myFunction();
 	</script>
 
 </body>
