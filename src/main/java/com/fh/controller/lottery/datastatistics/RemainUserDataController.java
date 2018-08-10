@@ -24,7 +24,9 @@ import com.fh.controller.base.BaseController;
 import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
 import com.fh.entity.sms.RspSmsCodeEntity;
+import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
@@ -44,9 +46,10 @@ public class RemainUserDataController extends BaseController {
 
 
 	String menuUrl = "remainuser/list.do";  
+	@Resource(name = "orderService")
+	private OrderManager ordermanagerService;
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
-	 
 
 	/**
 	 * 列表
@@ -119,20 +122,20 @@ public class RemainUserDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(time+" 23:59:59"));
 			page.setPd(pd);
-			List<PageData> userList = usermanagercontrollerService.listAll(pd);
-			int userCount = userList.size();
+			List<PageData> firstList = ordermanagerService.getFirstOrderList(page);
+			int userCount = Integer.parseInt(firstList.get(0).getString("count"));
 			if(userCount!=0) {
 			pageData.put("date", time);
 			pageData.put("count_user", userCount);
 			
-			pageData.put("count2", getCount(time,null,1,1,userCount));
-			pageData.put("count3", getCount(time,null,2,2,userCount));
-			pageData.put("count4", getCount(time,null,3,3,userCount));
-			pageData.put("count5", getCount(time,null,4,4,userCount));
-			pageData.put("count6", getCount(time,null,5,5,userCount));
-			pageData.put("count7", getCount(time,null,6,6,userCount));
-			pageData.put("count15", getCount(time,null,7,14,userCount));
-			pageData.put("count30", getCount(time,null,15,29,userCount));
+			pageData.put("count2", getCount(time,time,1,1,userCount));
+			pageData.put("count3", getCount(time,time,2,2,userCount));
+			pageData.put("count4", getCount(time,time,3,3,userCount));
+			pageData.put("count5", getCount(time,time,4,4,userCount));
+			pageData.put("count6", getCount(time,time,5,5,userCount));
+			pageData.put("count7", getCount(time,time,6,6,userCount));
+			pageData.put("count15", getCount(time,time,7,14,userCount));
+			pageData.put("count30", getCount(time,time,15,29,userCount));
 			varList.add(pageData);
 			}			
 		}
@@ -167,8 +170,8 @@ public class RemainUserDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(time.plusDays(6)+" 23:59:59"));
 			page.setPd(pd);
-			List<PageData> userList = usermanagercontrollerService.listAll(pd);
-			int userCount = userList.size();
+			List<PageData> firstList = ordermanagerService.getFirstOrderList(page);
+			int userCount = Integer.parseInt(firstList.get(0).getString("count"));
 			if(userCount!=0) {
 				pageData.put("date", time+"~"+time.plusDays(6));
 				pageData.put("count_user", userCount);
@@ -207,8 +210,8 @@ public class RemainUserDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(start+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(end+" 23:59:59"));
 			page.setPd(pd);
-			List<PageData> userList = usermanagercontrollerService.listAll(pd);
-			int userCount = userList.size();
+			List<PageData> firstList = ordermanagerService.getFirstOrderList(page);
+			int userCount = Integer.parseInt(firstList.get(0).getString("count"));
 			if(userCount!=0) {
 				pageData.put("date", time.toString().substring(0, 7));
 				pageData.put("count_user", userCount);
@@ -235,30 +238,31 @@ public class RemainUserDataController extends BaseController {
 	 * @throws Exception
 	 */
 	public BigDecimal getCount(LocalDate regTime,LocalDate endTime,int start,int end,int userCount) throws Exception {
-		LocalDate regDate = regTime.plusDays(start);
+		LocalDate startDate = regTime.plusDays(start);
+		LocalDate endDate = regTime.plusDays(end);
 		LocalDate nowDate = LocalDate.now();
-		int days = Period.between(regDate,nowDate).getDays();
-		int months = Period.between(regDate,nowDate).getMonths();
-		int years = Period.between(regDate,nowDate).getYears();
+		int days = Period.between(startDate,nowDate).getDays();
+		int months = Period.between(startDate,nowDate).getMonths();
+		int years = Period.between(startDate,nowDate).getYears();
 		if(days<0 || months<0 || years<0) {
 			return null;
 		}
 		PageData pd = new PageData();
 		Page page = new Page();
-		if(endTime==null) {
-			pd.put("regTime", regTime.toString());
-		}else {
+		 
 		pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(regTime+" 00:00:00"));
 		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(endTime+" 23:59:59"));
-		}
-		pd.put("dayStart", start);
-		pd.put("dayEnd",end);
+		 
+		pd.put("lastStart2", DateUtilNew.getMilliSecondsByStr(startDate+" 00:00:00"));
+		pd.put("lastEnd2",DateUtilNew.getMilliSecondsByStr(endDate+" 23:59:59"));
 		page.setPd(pd);
 		List<PageData> count = usermanagercontrollerService.getRemainUserCount(page);
 		String remainCount = count.get(0).getString("count");
 		BigDecimal userc = new BigDecimal(userCount);
 		BigDecimal remainc = new BigDecimal(remainCount+"00");
-		
+		if(userc.compareTo(BigDecimal.ZERO)==0) {
+			return userc;
+		}
 		return remainc.divide(userc, 2,BigDecimal.ROUND_HALF_UP);
 	}
 }

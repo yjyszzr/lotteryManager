@@ -36,10 +36,40 @@
 						<form action="userdata/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
-								<td><span class="input-icon" style="width: 270px;"> </span>日期：</td>
+								<td><span class="input-icon" style="width: 30px;"> </span>累计消费：</td>
+								<td style="padding-left:2px;"><input   name="totalStart" id="totalStart"  value="${pd.totalStart }" type="number"  
+									 style="width:118px;border-radius: 5px !important;"  /></td>
+								<td>—</td>
+								<td style="padding-left:2px;"><input   name="totalEnd" id="totalEnd"  value="${pd.totalEnd }" type="number" 
+									 style="width:118px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 30px;"> </span>累计充值：</td>
+								<td style="padding-left:2px;"><input   name="rtotalStart" id="rtotalStart"  value="${pd.rtotalStart }" type="number"  
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td>—</td>
+								<td style="padding-left:2px;"><input   name="rtotalEnd" id="rtotalEnd"  value="${pd.rtotalEnd }" type="number" 
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 30px;"> </span>日期：</td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
 								<td>至</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+							</tr> 
+							<tr>	
+								<td><span class="input-icon" style="width: 30px;"> </span>累计中奖：</td>
+								<td style="padding-left:2px;"><input   name="atotalStart" id="atotalStart"  value="${pd.atotalStart }" type="number"  
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td>—</td>
+								<td style="padding-left:2px;"><input   name="atotalEnd" id="atotalEnd"  value="${pd.atotalEnd }" type="number" 
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 30px;"> </span>账户余额：</td>
+								<td style="padding-left:2px;"><input   name="moneyStart" id="moneyStart"  value="${pd.moneyStart }" type="number"  
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td>—</td>
+								<td style="padding-left:2px;"><input   name="moneyEnd" id="moneyEnd"  value="${pd.moneyEnd }" type="number" 
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 30px;"> </span>手机号：</td>
+								<td style="padding-left:2px;"><input   name="mobile" id="mobile"  value="${pd.mobile }" type="number"  
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 30px;"> </span></td>
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align: top; padding-left: 2px">
 									<span class="input-icon" style="width: 30px;"> </span> 
@@ -185,7 +215,20 @@
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
-		function tosearch(){
+		function tosearch(status){
+			if (status == 0) {
+				$("#totalStart").val("");
+				$("#totalEnd").val("");
+				$("#rtotalStart").val("");
+				$("#rtotalEnd").val("");
+				$("#lastStart").val("");
+				$("#lastEnd").val("");
+				$("#atotalStart").val("");
+				$("#atotalEnd").val("");
+				$("#moneyStart").val("");
+				$("#moneyEnd").val("");
+				$("#mobile").val("");
+			}
 			top.jzts();
 			$("#Form").submit();
 		}

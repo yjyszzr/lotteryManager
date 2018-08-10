@@ -58,6 +58,11 @@
 								<a class="btn btn-light btn-xs blue" onclick="tosearch(2);" title="月"
 									style="border-radius: 5px; color: blue !important; width: 50px"> 月</a></td>
 									
+								<td style="vertical-align: top; padding-left: 2px;">
+								<span class="input-icon" style="width: 30px;"> </span> 
+								<a class="btn btn-light btn-xs blue" onclick="tosearch(3);" title="区间"
+									style="border-radius: 5px; color: blue !important; width: 50px"> 区间</a></td>
+									
 								<c:if test="${QX.toExcel == 1 }">
 								<td style="vertical-align: top; padding-left: 2px;">
 								<span class="input-icon" style="width: 30px;"> </span> 
@@ -221,6 +226,9 @@
 			}
 			if (status == 2) {
 				$("#dateType").val("2");
+			}
+			if (status == 3) {
+				$("#dateType").val("3");
 			}
 			top.jzts();
 			$("#Form").submit();

@@ -30,7 +30,7 @@ import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /**
- * 说明：市场数据
+ * 说明：赛事统计
  */
 @Controller
 @RequestMapping(value = "/matchdata")
@@ -61,16 +61,16 @@ public class MatchDataController extends BaseController {
 			pd.put("dateType", "0");
 		}
 		if (pd.getString("dateType").endsWith("0")) {
-			pd.put("groupDay", "true");
 			varList = getDataListForDay(page, pd);
 		}
 		if (pd.getString("dateType").endsWith("1")) {
-			pd.put("groupDay", "true");
 			varList = getDataListForWeek(page, pd);
 		}
 		if (pd.getString("dateType").endsWith("2")) {
-			pd.put("groupMonth", "true");
 			varList = getDataListForMonth(page, pd);
+		}
+		if (pd.getString("dateType").endsWith("3")) {
+			varList = getDataListForTime(page, pd);
 		}
 		mv.setViewName("lottery/datastatistics/matchdata_list");
 		mv.addObject("varList", varList);
@@ -113,6 +113,9 @@ public class MatchDataController extends BaseController {
 			pd.put("groupMonth", "true");
 			list = getDataListForMonth(page, pd);
 		}
+		if (pd.getString("dateType").endsWith("3")) {
+			list = getDataListForTime(page, pd);
+		}
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("titles", titles);
 
@@ -141,7 +144,7 @@ public class MatchDataController extends BaseController {
 	}
 
 	/**
-	 * 获得数据集合
+	 * 日汇总获得数据集合
 	 * 
 	 * @param page
 	 * @param pd
@@ -167,59 +170,26 @@ public class MatchDataController extends BaseController {
 		List<Map> varList = new ArrayList<Map>();
 
 		for (int i = 0; i < days + 1; i++) {
-			PageData pageData = new PageData();
 			LocalDate time = dateE.plusDays(-i);// 当天的前i天
 			pd.put("lastStart1", time.toString());
 			pd.put("lastEnd1", time.toString());
 			page.setPd(pd);
 			List<PageData> list = ordermanagerService.getMatchAmountByTime(page);
-			BigDecimal amountSUM = new BigDecimal(0);
 			if (list.size() > 0) {
-				Map<String, PageData> map = new HashMap<>();
-				Map<String, PageData> matchMap = new HashMap<>();
-				for (PageData pad : list) {
-					PageData matchDate = matchMap.get(pad.getString("match_id"));
-					if (matchDate == null) {
-						matchDate = matchService.findById(pad);
-					}
-					BigDecimal padSum = new BigDecimal(pad.getString("amount"));
-					if (matchDate != null) {
-						matchMap.put(matchDate.getString("match_id"), matchDate);
-						String leagueNM = matchDate.getString("league_id");
-						PageData pageNew = map.get(leagueNM);
-						if (pageNew != null) {
-							BigDecimal amBefore = new BigDecimal(pageNew.getString("amount"));
-							pageNew.put("amount", amBefore.add(padSum));
-							map.put(leagueNM, pageNew);
-						} else {
-							pad.put("date", time);
-							pad.put("matchName", matchDate.getString("league_addr"));
-							map.put(leagueNM, pad);
-						}
-
-					} else {
-						pad.put("date", time);
-						String matchName = pad.getString("match_id");
-						if (matchName.equals("T56")) {
-							matchName = "世界杯冠军";
-						} else {
-							matchName = "世界杯冠亚军";
-						}
-						pad.put("matchName", matchName);
-						map.put(matchName, pad);
-					}
-					amountSUM = amountSUM.add(padSum);
-					PageData SUM = new PageData();
-					SUM.put("amountSum", amountSUM);
-					map.put("amountSum", SUM);
-				}
-				pd.put("amountSum", amountSUM);
+				Map<String, PageData> map = initVarList(list,pd,time.toString());
+				 
 				varList.add(map);
 			}
 		}
 		return varList;
 	}
-
+	/**
+	 * 周汇总获得数据集合
+	 * 
+	 * @param page
+	 * @param pd
+	 * @throws Exception
+	 */
 	public List<Map> getDataListForWeek(Page page, PageData pd) throws Exception {
 		LocalDate dateNow = LocalDate.now();
 		int dayWeek = dateNow.getDayOfWeek().getValue();
@@ -244,54 +214,25 @@ public class MatchDataController extends BaseController {
 		}
 		List<Map> varList = new ArrayList<Map>();
 		for (int i = 0; i < days; i++) {
-			PageData pageData = new PageData();
 			LocalDate time = weekStart.plusDays(i * 7);// 当天的前i天
 			pd.put("lastStart1", time.toString());
 			pd.put("lastEnd1", time.plusDays(6).toString());
 			page.setPd(pd);
 			List<PageData> list = ordermanagerService.getMatchAmountByTime(page);
-			Map<String, PageData> map = new HashMap<>();
-			BigDecimal amountSUM = new BigDecimal(0);
 			if (list.size() > 0) {
-				for (PageData pad : list) {
-					PageData matchDate = matchService.findById(pad);
-					BigDecimal padSum = new BigDecimal(pad.getString("amount"));
-					if (matchDate != null) {
-						String leagueNM = matchDate.getString("league_id");
-						PageData pageNew = map.get(leagueNM);
-						if (pageNew != null) {
-							BigDecimal amBefore = new BigDecimal(pageNew.getString("amount"));
-							pageNew.put("amount", amBefore.add(padSum));
-							map.put(leagueNM, pageNew);
-						} else {
-							pad.put("date", time + "：" + time.plusDays(6));
-							pad.put("matchName", matchDate.getString("league_addr"));
-							map.put(leagueNM, pad);
-						}
-
-					} else {
-						pad.put("date", time + "：" + time.plusDays(6));
-						String matchName = pad.getString("match_id");
-						if (matchName.equals("T56")) {
-							matchName = "世界杯冠军";
-						} else {
-							matchName = "世界杯冠亚军";
-						}
-						pad.put("matchName", matchName);
-						map.put(matchName, pad);
-					}
-					amountSUM = amountSUM.add(padSum);
-					PageData SUM = new PageData();
-					SUM.put("amountSum", amountSUM);
-					map.put("amountSum", SUM);
-				}
-				pd.put("amountSum", amountSUM);
+				Map<String, PageData> map = initVarList(list,pd,time + "：" + time.plusDays(6));
 				varList.add(map);
 			}
 		}
 		return varList;
 	}
-
+	/**
+	 * 月汇总获得数据集合
+	 * 
+	 * @param page
+	 * @param pd
+	 * @throws Exception
+	 */
 	public List<Map> getDataListForMonth(Page page, PageData pd) throws Exception {
 		List<Map> varList = new ArrayList<Map>();
 		LocalDate monthStart = LocalDate.now();
@@ -311,64 +252,95 @@ public class MatchDataController extends BaseController {
 			months = months + 12 * years;
 		}
 		for (int i = 0; i < months + 1; i++) {
-			PageData pageData = new PageData();
 			LocalDate time = monthStart.plusMonths(i);// 当天的前i天
 			pd.put("lastStart1", time.toString().substring(0, 7) + "-01");
 			pd.put("lastEnd1", time.toString().substring(0, 7) + "-" + time.lengthOfMonth());
 			page.setPd(pd);
 			List<PageData> list = ordermanagerService.getMatchAmountByTime(page);
-			Map<String, PageData> map = new HashMap<>();
-			BigDecimal amountSUM = new BigDecimal(0);
 			if (list.size() > 0) {
-				for (PageData pad : list) {
-					PageData matchDate = matchService.findById(pad);
-					BigDecimal padSum = new BigDecimal(pad.getString("amount"));
-					if (matchDate != null) {
-						String leagueNM = matchDate.getString("league_id");
-						PageData pageNew = map.get(leagueNM);
-						if (pageNew != null) {
-							BigDecimal amBefore = new BigDecimal(pageNew.getString("amount"));
-							pageNew.put("amount", amBefore.add(padSum));
-							map.put(leagueNM, pageNew);
-						} else {
-							pad.put("date", time.toString().substring(0, 7));
-							pad.put("matchName", matchDate.getString("league_addr"));
-							map.put(leagueNM, pad);
-						}
-
-					} else {
-						pad.put("date", time.toString().substring(0, 7));
-						String matchName = pad.getString("match_id");
-						if (matchName.equals("T56")) {
-							matchName = "世界杯冠军";
-						} else {
-							matchName = "世界杯冠亚军";
-						}
-						pad.put("matchName", matchName);
-						map.put(matchName, pad);
-					}
-					amountSUM = amountSUM.add(padSum);
-					PageData SUM = new PageData();
-					SUM.put("amountSum", amountSUM);
-					map.put("amountSum", SUM);
-				}
+				Map<String, PageData> map = initVarList(list,pd,time.toString().substring(0, 7));
 				varList.add(map);
 			}
 		}
 		return varList;
 	}
+	/**
+	 * 时间区间汇总获得数据集合
+	 * 
+	 * @param page
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<Map> getDataListForTime(Page page, PageData pd) throws Exception {
+		List<Map> varList = new ArrayList<Map>();
+		LocalDate timeStart = LocalDate.now();
+		LocalDate timeEnd = LocalDate.now();
+		
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			timeStart = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			timeEnd = LocalDate.parse(lastEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		pd.put("lastStart1", timeStart.toString());
+		pd.put("lastEnd1", timeEnd.toString());
+		page.setPd(pd);
+		List<PageData> list = ordermanagerService.getMatchAmountByTime(page);
+		if (list.size() > 0) {
+			Map<String, PageData> map = initVarList(list,pd,timeStart+""+timeEnd);
+			varList.add(map);
+		}
+		return varList;
+	}
 
-	// public PageData getMatchPageData(PageData pd) throws Exception {
-	// List<PageData> list = MATCHLIST;
-	// if (pd.getString("match_id").equals("T56") ||
-	// pd.getString("match_id").equals("T57")) {
-	// return null;
-	// }
-	// for (PageData data : list) {
-	// if (data.getString("match_id").equals(pd.getString("match_id"))) {
-	// return data;
-	// }
-	// }
-	// return null;
-	// }
+	 
+		
+	private Map<String, PageData> initVarList(List<PageData> list,PageData pd,String time)  throws Exception{
+		BigDecimal amountSUM = new BigDecimal(0);
+		Map<String, PageData> map = new HashMap<>();
+		Map<String, PageData> matchMap = new HashMap<>();
+		for (PageData pad : list) {
+			PageData matchDate = matchMap.get(pad.getString("match_id"));
+			if (matchDate == null) {
+				matchDate = matchService.findById(pad);
+			}
+			BigDecimal padSum = new BigDecimal(pad.getString("amount"));
+			if (matchDate != null) {
+				matchMap.put(matchDate.getString("match_id"), matchDate);
+				String leagueNM = matchDate.getString("league_id");
+				PageData pageNew = map.get(leagueNM);
+				if (pageNew != null) {
+					BigDecimal amBefore = new BigDecimal(pageNew.getString("amount"));
+					pageNew.put("amount", amBefore.add(padSum));
+					map.put(leagueNM, pageNew);
+				} else {
+					pad.put("date", time );
+					pad.put("matchName", matchDate.getString("league_addr"));
+					map.put(leagueNM, pad);
+				}
+
+			} else {
+				pad.put("date", time);
+				String matchName = pad.getString("match_id");
+				if (matchName.equals("T56")) {
+					matchName = "世界杯冠军";
+					pad.put("matchName", matchName);
+					map.put(matchName, pad);
+				} 
+				if (matchName.equals("T57")){
+					matchName = "世界杯冠亚军";
+					pad.put("matchName", matchName);
+					map.put(matchName, pad);
+				}
+			}
+			amountSUM = amountSUM.add(padSum);
+			PageData SUM = new PageData();
+			SUM.put("amountSum", amountSUM);
+			map.put("amountSum", SUM);
+		}
+		pd.put("amountSum", amountSUM);
+		return map;
+	}
 }

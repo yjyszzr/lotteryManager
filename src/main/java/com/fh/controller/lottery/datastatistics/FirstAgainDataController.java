@@ -61,17 +61,17 @@ public class FirstAgainDataController extends BaseController {
 		}
 		List<PageData> varList = new ArrayList<PageData>();
 		if(pd.getString("dateType").endsWith("0")) {
-			pd.put("type","天");
 			pd.put("typeForDay","true");
 			varList = getDataListForDay(page,pd);
 		}
 		if(pd.getString("dateType").endsWith("1")) {
 			varList = getDataListForWeek(page,pd);
-			pd.put("type","周");
 		}
 		if(pd.getString("dateType").endsWith("2")) {
 			varList = getDataListForMonth(page,pd);
-			pd.put("type","月");
+		}
+		if(pd.getString("dateType").endsWith("3")) {
+			varList = getDataListForTime(page,pd);
 		}
 		mv.setViewName("lottery/datastatistics/firstagaindata_list");
 		mv.addObject("varList", varList);
@@ -172,6 +172,30 @@ public class FirstAgainDataController extends BaseController {
 		return mv;
 	}
 	
+	/**
+	 * 获得数据集合
+	 * 
+	 * @param page  
+	 * @param pd   
+	 * @throws Exception
+	 */
+	public List<PageData> getDataListForTime(Page page,PageData pd) throws Exception {
+		LocalDate dateB = LocalDate.now();
+		LocalDate dateE = LocalDate.now();
+		
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			dateB = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			dateE = LocalDate.parse(lastEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		List<PageData> list = new ArrayList<>();
+		PageData pageData = getData(page,pd,dateB,dateE,dateB+"："+dateE);
+		list.add(pageData);
+		return list;
+	}
 	/**
 	 * 获得数据集合
 	 * 

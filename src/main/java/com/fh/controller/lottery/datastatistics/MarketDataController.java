@@ -64,21 +64,21 @@ public class MarketDataController extends BaseController {
 			pd.put("dateType","0");
 		}
 		List<PageData> varList = new ArrayList<PageData>();
-		if(pd.getString("dateType").endsWith("0")) {
-			pd.put("groupDay", "true");
+		if(pd.getString("dateType").equals("0")) {
 			pd.put("type","天");
 			pd.put("typeForDay","true");
 			varList = getDataListForDay(page,pd);
 		}
-		if(pd.getString("dateType").endsWith("1")) {
-			pd.put("groupWeek", "true");
+		if(pd.getString("dateType").equals("1")) {
 			pd.put("type","周");
 			varList = getDataListForWeek(page,pd);
 		}
-		if(pd.getString("dateType").endsWith("2")) {
-			pd.put("groupMonth", "true");
+		if(pd.getString("dateType").equals("2")) {
 			pd.put("type","月");
 			varList = getDataListForMonth(page,pd);
+		}
+		if(pd.getString("dateType").equals("3")) {
+			varList = getDataListForTime(page,pd);
 		}
 		mv.setViewName("lottery/datastatistics/marketdata_list");
 		mv.addObject("varList", varList);
@@ -111,8 +111,7 @@ public class MarketDataController extends BaseController {
 		titles.add("购彩金额"); // 6
 		titles.add("人均购彩金额"); // 7
 		List<PageData> list = new ArrayList<PageData>();
-		if(pd.getString("dateType").endsWith("0")) {
-			pd.put("groupDay", "true");
+		if(pd.getString("dateType").equals("0")) {
 			list = getDataListForDay(page,pd);
 			titles.add("次日留存"); // 8
 			titles.add("3日留存"); // 9
@@ -123,8 +122,7 @@ public class MarketDataController extends BaseController {
 			titles.add("180日留存"); // 14
 			titles.add("360日留存"); // 15
 		}
-		if(pd.getString("dateType").endsWith("1")) {
-			pd.put("groupWeek", "true");			
+		if(pd.getString("dateType").equals("1")) {
 			list = getDataListForWeek(page,pd);
 			titles.add("第2天留存"); // 8
 			titles.add("第3天留存"); // 9
@@ -138,8 +136,7 @@ public class MarketDataController extends BaseController {
 			titles.add("第11天留存"); // 17
 			titles.add("第12天留存"); // 18
 		}
-		if(pd.getString("dateType").endsWith("2")) {
-			pd.put("groupMonth", "true");			
+		if(pd.getString("dateType").equals("2")) {
 			list = getDataListForMonth(page,pd);
 			titles.add("第2周留存"); // 8
 			titles.add("第3周留存"); // 9
@@ -152,6 +149,9 @@ public class MarketDataController extends BaseController {
 			titles.add("第10周留存"); // 16
 			titles.add("第11周留存"); // 17
 			titles.add("第12周留存"); // 18
+		}
+		if(pd.getString("dateType").equals("3")) {
+			list = getDataListForTime(page,pd);
 		}
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("titles", titles);
@@ -233,6 +233,43 @@ public class MarketDataController extends BaseController {
 	 * @param pd   
 	 * @throws Exception
 	 */
+	public List<PageData> getDataListForTime(Page page,PageData pd) throws Exception {
+		LocalDate dateE = LocalDate.now();
+		LocalDate dateB = LocalDate.now();
+		
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			dateE = LocalDate.parse(lastEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			dateB = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		} 
+		List<PageData> varList = new ArrayList<PageData>();
+			PageData pageData = new PageData();
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(dateB+" 00:00:00"));
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(dateE+" 23:59:59"));
+			page.setPd(pd);
+			List<PageData> userList = usermanagercontrollerService.getMarketList(page);
+			for (int k = 0; k < userList.size(); k++) {
+				pageData = userList.get(k);
+				if(dateE.compareTo(dateB)==0) {
+					pageData.put("date", dateE);
+				}else {
+					pageData.put("date", dateB+"："+dateE);
+				}
+				int userCount = Integer.parseInt(pageData.getString("count_Order"));
+				varList.add(pageData);
+			}
+		return varList;
+	}
+	/**
+	 * 获得数据集合
+	 * 
+	 * @param page  
+	 * @param pd   
+	 * @throws Exception
+	 */
 	public List<PageData> getDataListForDay(Page page,PageData pd) throws Exception {
 		LocalDate dateE = LocalDate.now();
 		LocalDate dateB = LocalDate.now();
@@ -245,7 +282,7 @@ public class MarketDataController extends BaseController {
 		if (null != lastStart && !"".equals(lastStart)) {
 			dateB = LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		}else {
-			dateB = dateE.plusDays(-6);
+			dateB = dateE.plusDays(-1);
 		}
 		int days = (int) (dateE.toEpochDay()-dateB.toEpochDay());
 		List<PageData> varList = new ArrayList<PageData>();
@@ -259,16 +296,16 @@ public class MarketDataController extends BaseController {
 			for (int k = 0; k < userList.size(); k++) {
 				pageData = userList.get(k);
 				pageData.put("date", date);
-				int userCount = Integer.parseInt(pageData.getString("count_user"));
+				int userCount = Integer.parseInt(pageData.getString("count_Order"));
 				String device_channel = pageData.getString("device_channel");
-				pageData.put("count2", getCount(date, null, 1, 1, userCount, device_channel));
-				pageData.put("count3", getCount(date, null, 2, 2, userCount, device_channel));
-				pageData.put("count7", getCount(date, null, 3, 6, userCount, device_channel));
-				pageData.put("count15", getCount(date, null, 7, 14, userCount, device_channel));
-				pageData.put("count30", getCount(date, null, 15, 29, userCount, device_channel));
-				pageData.put("count90", getCount(date, null, 30, 89, userCount, device_channel));
-				pageData.put("count180", getCount(date, null, 90, 179, userCount, device_channel));
-				pageData.put("count360", getCount(date, null, 180, 359, userCount, device_channel));
+				pageData.put("count2", getCount(date, date, 1, 1, userCount, device_channel));
+				pageData.put("count3", getCount(date, date, 2, 2, userCount, device_channel));
+				pageData.put("count7", getCount(date, date, 3, 6, userCount, device_channel));
+				pageData.put("count15", getCount(date, date, 7, 14, userCount, device_channel));
+				pageData.put("count30", getCount(date, date, 15, 29, userCount, device_channel));
+				pageData.put("count90", getCount(date, date, 30, 89, userCount, device_channel));
+				pageData.put("count180", getCount(date, date, 90, 179, userCount, device_channel));
+				pageData.put("count360", getCount(date, date, 180, 359, userCount, device_channel));
 				pageData.put("nowDate", LocalDate.now());
 				varList.add(pageData);
 			}
@@ -372,31 +409,32 @@ public class MarketDataController extends BaseController {
 	 * @throws Exception
 	 */
 	public BigDecimal getCount(LocalDate regTime,LocalDate endTime,int start,int end,int userCount,String device_channel) throws Exception {
-		LocalDate regDate = regTime.plusDays(start);
+		LocalDate startDate = regTime.plusDays(start);
+		LocalDate endDate = regTime.plusDays(end);
 		LocalDate nowDate = LocalDate.now();
-		int days = Period.between(regDate,nowDate).getDays();
-		int months = Period.between(regDate,nowDate).getMonths();
-		int years = Period.between(regDate,nowDate).getYears();
+		int days = Period.between(startDate,nowDate).getDays();
+		int months = Period.between(startDate,nowDate).getMonths();
+		int years = Period.between(startDate,nowDate).getYears();
 		if(days<0 || months<0 || years<0) {
 			return null;
 		}
 		PageData pd = new PageData();
 		Page page = new Page();
-		if(endTime==null) {
-			pd.put("regTime", regTime.toString());
-		}else {
+		 
 		pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(regTime+" 00:00:00"));
 		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(endTime+" 23:59:59"));
-		}
-		pd.put("dayStart", start);
-		pd.put("dayEnd",end);
+		 
+		pd.put("lastStart2", DateUtilNew.getMilliSecondsByStr(startDate+" 00:00:00"));
+		pd.put("lastEnd2",DateUtilNew.getMilliSecondsByStr(endDate+" 23:59:59"));
 		pd.put("device_channel",device_channel);
 		page.setPd(pd);
 		List<PageData> count = usermanagercontrollerService.getRemainUserCount(page);
 		String remainCount = count.get(0).getString("count");
 		BigDecimal userc = new BigDecimal(userCount);
 		BigDecimal remainc = new BigDecimal(remainCount+"00");
-		
+		if(userc.compareTo(BigDecimal.ZERO)==0) {
+			return userc;
+		}
 		return remainc.divide(userc, 2,BigDecimal.ROUND_HALF_UP);
 	}
 }

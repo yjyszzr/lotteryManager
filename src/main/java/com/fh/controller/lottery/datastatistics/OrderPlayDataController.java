@@ -28,7 +28,7 @@ import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
 /**
- * 说明：市场数据
+ * 说明：彩票数据
  */
 @Controller
 @RequestMapping(value = "/orderplaydata")
@@ -67,6 +67,10 @@ public class OrderPlayDataController extends BaseController {
 		if (pd.getString("dateType").endsWith("2")) {
 			pd.put("groupMonth", "true");
 			varList = getDataListForMonth(page, pd);
+		}
+		if (pd.getString("dateType").endsWith("3")) {
+			pd.put("groupTime", "true");
+			varList = getDataListForTime(page, pd);
 		}
 		mv.setViewName("lottery/datastatistics/orderplaydata_list");
 		mv.addObject("varList", varList);
@@ -126,6 +130,10 @@ public class OrderPlayDataController extends BaseController {
 		if (pd.getString("dateType").endsWith("2")) {
 			pd.put("groupMonth", "true");
 			list = getDataListForMonth(page, pd);
+		}
+		if (pd.getString("dateType").endsWith("3")) {
+			pd.put("groupTime", "true");
+			list = getDataListForTime(page, pd);
 		}
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("titles", titles);
@@ -288,6 +296,36 @@ public class OrderPlayDataController extends BaseController {
 				}
 				varList.add(pageData);
 			}
+		}
+		return varList;
+	}
+	
+	public List<PageData> getDataListForTime(Page page,PageData pd) throws Exception {
+		List<PageData> varList = new ArrayList<PageData>();
+		LocalDate timeStart = LocalDate.now();
+		LocalDate timeEnd = LocalDate.now();
+		
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			timeStart =  LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			timeEnd = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		PageData pageData = new PageData(); 
+		pd.put("lastStart1", timeStart.toString());
+		pd.put("lastEnd1", timeEnd.toString());
+		page.setPd(pd);
+		List<PageData> userList = ordermanagerService.getOrderOfPlay(page);
+		if (userList.size() > 0) {
+			pageData.put("date", timeStart+":"+ timeEnd);
+			for (int j = 0; j < userList.size(); j++) {
+				pageData.put("userCount" + userList.get(j).getString("classify"),userList.get(j).getString("userCount"));
+				pageData.put("orderCount" + userList.get(j).getString("classify"),userList.get(j).getString("orderCount"));
+				pageData.put("amount" + userList.get(j).getString("classify"), userList.get(j).getString("amount"));
+			}
+			varList.add(pageData);
 		}
 		return varList;
 	}

@@ -36,9 +36,45 @@
 						<form action="orderdata/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
-								<td> <span class="input-icon" style="width: 270px;"> </span> 下单时间：</td>
+								<td><span class="input-icon" style="width: 30px;"> </span>用户ID：</td>
+								<td style="padding-left:2px;"><input   name="userID" id="userID"  value="${pd.userID }" type="text"  
+								 	style="width:100px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 30px;"> </span> 投注金额：</td>
+								<td style="padding-left:2px;"><input   name="ticketStart" id="ticketStart"  value="${pd.ticketStart }" type="number"  
+									 style="width:118px;border-radius: 5px !important;"  /></td>
+								<td>—</td>
+								<td style="padding-left:2px;"><input   name="ticketEnd" id="ticketEnd"  value="${pd.ticketEnd }" type="number" 
+									 style="width:118px;border-radius: 5px !important;"  /></td>
+ 								<td> <span class="input-icon" style="width: 30px;"> </span> 下单时间：</td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
+								<td>—</td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+							</tr>
+							<tr>
+								<td><span class="input-icon" style="width: 30px;"> </span>投注状态:</td>
+								<td style="vertical-align: top; padding-left: 2px;">
+									<select name="statusCheck" id="statusCheck" data-placeholder="请选择" value="${pd.statusCheck }" style="width: 100px; border-radius: 5px !important">
+												<option value="" >全部</option>
+												<option value="0" <c:if test="${pd.statusCheck == '0'}">selected</c:if>>待付款</option>
+												<option value="1" <c:if test="${pd.statusCheck == '1'}">selected</c:if>>待出票</option>
+												<option value="2" <c:if test="${pd.statusCheck == '2'}">selected</c:if>>出票失败</option>
+												<option value="3" <c:if test="${pd.statusCheck == '3'}">selected</c:if>>待开奖</option>
+												<option value="4" <c:if test="${pd.statusCheck == '4'}">selected</c:if>>未中奖</option>
+												<option value="5" <c:if test="${pd.statusCheck == '5'}">selected</c:if>>已中奖</option>
+												<option value="6" <c:if test="${pd.statusCheck == '6'}">selected</c:if>>派奖中</option>
+												<option value="7" <c:if test="${pd.statusCheck == '7'}">selected</c:if>>已派奖</option>
+												<option value="8" <c:if test="${pd.statusCheck == '8'}">selected</c:if>>支付失败</option>
+										</select>
+								</td>	
+								<td><span class="input-icon" style="width: 30px;"> </span>中奖金额：</td>
+								<td style="padding-left:2px;"><input   name="winningStart" id="winningStart"  value="${pd.winningStart }" type="number"  
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td>—</td>
+								<td style="padding-left:2px;"><input   name="winningEnd" id="winningEnd"  value="${pd.winningEnd }" type="number" 
+								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 30px;"> </span>订单号：</td>
+								<td colspan="4"  style="padding-left:2px;"><input   name="orderSN" id="orderSN"  value="${pd.orderSN }" type="text"  
+								 	style="width:250px;border-radius: 5px !important;"  /></td>
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align: top; padding-left: 2px">
 									<span class="input-icon" style="width: 30px;"> </span> 
@@ -64,6 +100,7 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
+									<th class="center" style="width:50px;">序号</th>
 									<th class="center">订单号</th>
 									<th class="center">用户ID</th>
 									<th class="center">购彩彩种</th>
@@ -85,6 +122,7 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
+											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.order_sn }</td>
 											<td class='center'>${var.user_id }</td>
 											<td class='center'>${var.play_name }</td>
@@ -181,6 +219,13 @@
 			if (status == 0) {
 				$("#lastStart").val("");
 				$("#lastEnd").val("");
+				$("#userID").val("");
+				$("#ticketStart").val("");
+				$("#ticketEnd").val("");
+				$("#statusCheck").val("");
+				$("#winningStart").val("");
+				$("#winningEnd").val("");
+				$("#orderSN").val("");
 			}
 			top.jzts();
 			$("#Form").submit();

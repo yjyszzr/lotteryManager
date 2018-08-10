@@ -64,6 +64,9 @@ public class TotalDataController extends BaseController {
 		if(pd.getString("dateType").endsWith("2")) {
 			varList = getDataListForMonth(page,pd);
 		}
+		if(pd.getString("dateType").endsWith("3")) {
+			varList = getDataListForTime(page,pd);
+		}
 		
 		 
 		mv.setViewName("lottery/datastatistics/totaldata_list");
@@ -98,6 +101,9 @@ public class TotalDataController extends BaseController {
 		}
 		if(pd.getString("dateType").endsWith("2")) {
 			list = getDataListForMonth(page,pd);
+		}
+		if(pd.getString("dateType").endsWith("3")) {
+			list = getDataListForTime(page,pd);
 		}
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
@@ -299,6 +305,53 @@ public class TotalDataController extends BaseController {
 			countPage.put("register", registerList.size());
 			varList.add(countPage);
 		}
+		return varList;
+	}
+	public List<PageData> getDataListForTime(Page page,PageData pd) throws Exception {
+		LocalDate timeStart = LocalDate.now();
+		LocalDate timeEnd = LocalDate.now();
+		
+		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
+		if (null != lastStart && !"".equals(lastStart)) {
+			timeStart =  LocalDate.parse(lastStart, DateTimeFormatter.ofPattern("yyyy-MM-dd")); 
+		}
+		String lastEnd = pd.getString("lastEnd"); // 结束时间检索条件
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			timeEnd = LocalDate.parse(lastEnd,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		 
+		List<PageData> varList = new ArrayList<PageData>();
+		 
+		PageData countPage = new PageData(); 
+		pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(timeStart+" 00:00:00"));
+		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(timeEnd+" 23:59:59"));
+		countPage.put("data", timeStart+":"+ timeEnd);
+		page.setPd(pd);
+		List<PageData> registerList = usermanagercontrollerService.listAll(pd);
+		
+		//购彩
+		PageData pdAM = new PageData();
+		Page pageAm = new Page();
+		pdAM.put("lastStart1", timeStart.toString());
+		pdAM.put("lastEnd1", timeEnd.toString());
+		pageAm.setPd(pdAM);
+		List<PageData> totalAM = ordermanagerService.getTotalAmountByTime(pageAm);
+		countPage.put("countBuy", Integer.parseInt(totalAM.get(0).getString("userCount")));
+		countPage.put("amountBuy", new BigDecimal(totalAM.get(0).getString("amountSum")));
+		countPage.put("amountReward", new BigDecimal(totalAM.get(0).getString("winningSum")));
+		
+		List<PageData> orderList = ordermanagerService.selectSuccessByTime(page);
+		int orderCount = orderList.size();
+		countPage.put("orderCount", orderCount);
+		
+		PageData withdrawPD = userwithdrawService.findTotalWithDraw(pd);
+		countPage.put("amountWithDraw", new BigDecimal(withdrawPD.getString("amountSum")));
+		PageData rechargePD = userrechargeService.findTotalRecharge(pd);
+		countPage.put("countRecharge", Integer.parseInt(rechargePD.getString("userCount")));
+		countPage.put("amountRecharge", new BigDecimal(rechargePD.getString("amountSum")));
+		countPage.put("register", registerList.size());
+		varList.add(countPage);
+		 
 		return varList;
 	}
 }

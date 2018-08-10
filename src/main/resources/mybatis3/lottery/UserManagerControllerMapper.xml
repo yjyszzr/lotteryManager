@@ -177,9 +177,9 @@
 		where 
 			user_id = #{user_id}
 	</select>
-		<!-- 设备渠道注册人数汇总列表 -->
+		<!-- 用户留存 -->
 	<select id="remainUserCount" parameterType="page" resultType="pd">
-		SELECT COUNT(DISTINCT u.user_id) as count
+		<!--  SELECT COUNT(DISTINCT u.user_id) as count
  		from dl_user u left join dl_user_login_log l on u.user_id = l.user_id 
 		where 1=1
 			<if test="pd.regTime != null and pd.regTime != ''"> 
@@ -201,7 +201,26 @@
 			</if>
 			<if test="pd.device_channel != null and pd.device_channel != ''"> 
 					AND u.device_channel = #{pd.device_channel} 
+			</if> -->
+			<if test="pd.device_channel != null and pd.device_channel != ''"> 
+				SELECT  count(DISTINCT u.user_id) as count 
+				from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
+								left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 ) 
+								 AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1} 
+								) o on o.user_id=u.user_id 
+				where 1=1 AND u.reg_time &gt;= #{pd.lastStart1} AND u.reg_time &lt;= #{pd.lastEnd1} 
+					 	AND u.device_channel = #{pd.device_channel}  
+					 	AND u.user_id in (select user_id from dl_order where  order_status IN ( 3, 4, 5, 6, 7 ) 
+								 		AND add_time &gt;= #{pd.lastStart2}  AND add_time &lt;= #{pd.lastEnd2} )
 			</if>
+			<if test="pd.device_channel == null or pd.device_channel == ''"> 
+				select count(DISTINCT a.user_id) as count 
+				from ( SELECT user_id from dl_order where order_status in ('3','4','5','6','7') 
+						GROUP BY user_id HAVING  min(add_time) &gt;= #{pd.lastStart1} and min(add_time) &lt;= #{pd.lastEnd1} ) a 
+				where a.user_id in ( SELECT user_id from dl_order  where order_status in ('3','4','5','6','7') 
+						and add_time &gt;= #{pd.lastStart2} and add_time &lt;= #{pd.lastEnd2})
+			</if>
+			 
 	</select>
 	<!-- 设备渠道注册人数汇总列表 -->
 	<select id="marketlistPage" parameterType="page" resultType="pd">
@@ -319,28 +338,19 @@
 			 
 		</if>
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-					AND reg_time &gt; #{pd.lastStart1} 
-			</if>
-			<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-					AND reg_time &lt; #{pd.lastEnd1} 
-			</if>
-		<if test="pd.name_chosen != null and (pd.name_chosen == 1 or pd.name_chosen == 2)">
-			and
-			(
-				user_status = #{pd.name_chosen}
-			)
+					AND reg_time &gt;= #{pd.lastStart1} 
 		</if>
-		<if test="pd.name_chosen != null and pd.name_chosen == 3">
-			and
-			(
-				is_real = 1
-			)
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+					AND reg_time &lt;= #{pd.lastEnd1} 
 		</if>
-		<if test="pd.name_chosen != null and pd.name_chosen == 4">
-			and
-			(
-				is_real = 0
-			)
+		<if test="pd.moneyStart != null and pd.moneyStart != ''"> 
+					AND (dl_user.user_money+dl_user.user_money_limit) &gt;= #{pd.moneyStart} 
+		</if>
+		<if test="pd.moneyEnd != null and pd.moneyEnd != ''"> 
+					AND (dl_user.user_money+dl_user.user_money_limit) &lt;= #{pd.monelEnd} 
+		</if>
+		<if test="pd.mobile1 != null and pd.mobile1 != ''">
+			and	mobile = #{pd.mobile1}
 		</if>
 		order by dl_user.reg_time DESC
 	</select>

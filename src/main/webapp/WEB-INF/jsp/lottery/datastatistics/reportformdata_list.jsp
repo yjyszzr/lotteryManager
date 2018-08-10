@@ -101,14 +101,14 @@
 											<th class='center'>2选1</th><!-- 9 -->
 											<th class='center'>混合投注</th><!-- 10 -->
 											<th class='center'>世界杯</th><!-- 11 -->
-											<th class='center'>胜平负比例</th><!-- 12 -->
-											<th class='center'>让球胜平负比例</th><!-- 13 -->
-											<th class='center'>比分比例</th><!-- 14 -->
-											<th class='center'>总进球比例</th><!-- 15 -->
-											<th class='center'>半全场比例</th><!-- 16 -->
-											<th class='center'>2选1比例</th><!-- 17 -->
-											<th class='center'>混合投注比例</th><!-- 18 -->
-											<th class='center'>世界杯比例</th><!-- 19 -->
+											<!--<th class='center'>胜平负比例</th> 12 -->
+											<!--<th class='center'>让球胜平负比例</th> 13 -->
+											<!--<th class='center'>比分比例</th> 14 -->
+											<!--<th class='center'>总进球比例</th> 15 -->
+											<!--<th class='center'>半全场比例</th> 16 -->
+											<!--<th class='center'>2选1比例</th> 17 -->
+											<!--<th class='center'>混合投注比例</th> 18 -->
+											<!--<th class='center'>世界杯比例</th> 19 -->
 											<th class='center'>当${pd.day }购彩用户数</th><!-- 20 -->
 											<th class='center'>当${pd.day }提现金额</th><!-- 21 -->
 											<th class='center'>当${pd.day }充值金额</th><!-- 22 -->
@@ -151,7 +151,7 @@
 															<td class='center'>${var.ply6 }<c:if test="${ empty var.ply6}">0.00</c:if></td>
 															<td class='center'>${var.ply7 }<c:if test="${ empty var.ply7}">0.00</c:if></td>
 															<td class='center'>${var.ply8 }<c:if test="${ empty var.ply8}">0.00</c:if></td>
-															<td class='center'>
+															<!--<td class='center'>
 																<c:if test="${not empty var.ply2}">
 																<fmt:formatNumber type="number" value="${var.ply2/var.data3 *100 }" maxFractionDigits="2"/>%	
 																</c:if>			
@@ -214,7 +214,7 @@
 																<c:if test="${empty var.ply8}">
 																0.00%
 																</c:if>													
-															</td>
+															</td>-->
 															<td class='center'>${var.data20 }</td>
 															<td class='center'>${var.data21 }</td>
 															<td class='center'>${var.data22 }</td>

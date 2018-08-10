@@ -371,7 +371,7 @@
 		where order_sn in 
 			(SELECT  order_sn from dl_order 
 			where order_status in ('3','4','5','6','7') GROUP BY user_id 
-			HAVING min(add_time) &gt; #{pd.lastStart1} and  min(add_time) &lt; #{pd.lastEnd1} );
+			HAVING min(add_time) &gt;= #{pd.lastStart1} and  min(add_time) &lt;= #{pd.lastEnd1} );
 	</select>
 	<!-- 新增购彩用户 -->
 	<select id="getFirstOrderAllList" parameterType="page" resultType="pd">
@@ -382,8 +382,8 @@
 		where user_id in 
 			(SELECT  user_id from dl_order 
 			where order_status in ('3','4','5','6','7') GROUP BY user_id 
-			HAVING min(add_time) &gt; #{pd.lastStart1} and  min(add_time) &lt; #{pd.lastEnd1} )
-			and add_time &gt; #{pd.lastStart1} and  add_time &lt; #{pd.lastEnd1}
+			HAVING min(add_time) &gt;= #{pd.lastStart1} and  min(add_time) &lt;= #{pd.lastEnd1} )
+			and add_time &gt;= #{pd.lastStart1} and  add_time &lt;= #{pd.lastEnd1}
 			and order_status in ('3','4','5','6','7');
 	</select>
 	<!-- 老用户购彩 -->
@@ -395,8 +395,8 @@
 		where user_id not in 
 			(SELECT  user_id from dl_order 
 			where order_status in ('3','4','5','6','7') GROUP BY user_id 
-			HAVING min(add_time) &gt; #{pd.lastStart1} and  min(add_time) &lt; #{pd.lastEnd1} )
-			and add_time &gt; #{pd.lastStart1} and  add_time &lt; #{pd.lastEnd1}
+			HAVING min(add_time) &gt;= #{pd.lastStart1} and  min(add_time) &lt;= #{pd.lastEnd1} )
+			and add_time &gt;= #{pd.lastStart1} and  add_time &lt;= #{pd.lastEnd1}
 			and order_status in ('3','4','5','6','7');
 	</select>
 	<!-- 数据统计中-复购订单 -->
@@ -436,6 +436,27 @@
 		FROM dl_order o LEFT JOIN dl_order_detail d on o.order_id = d.order_id 
 						LEFT JOIN dl_lottery_play_classify lpc on o.lottery_play_classify_id=lpc.lottery_play_classify_id
 		where o.add_time &gt; #{pd.lastStart1} and  o.add_time &lt; #{pd.lastEnd1}
+			<if test="pd.orderSN != null and pd.orderSN != ''"> 
+				and o.order_sn = #{pd.orderSN }
+			</if>
+			<if test="pd.userID != null and pd.userID != ''"> 
+			 	and o.user_id = #{pd.userID }
+			</if>
+			<if test="pd.statusCheck != null and pd.statusCheck != ''"> 
+			 	and o.order_status = #{pd.statusCheck }
+			</if>
+			<if test="pd.ticketStart != null and pd.ticketStart != ''"> 
+			 	and o.ticket_amount &gt;= #{pd.ticketStart }
+			</if>
+			<if test="pd.ticketEnd != null and pd.ticketEnd != ''"> 
+			 	and o.ticket_amount &lt;= #{pd.ticketEnd }
+			</if>
+			<if test="pd.winningStart != null and pd.winningStart != ''"> 
+			 	and o.winning_money &gt;= #{pd.winningStart }
+			</if>
+			<if test="pd.winningEnd != null and pd.winningEnd != ''"> 
+			 	and o.winning_money &lt;= #{pd.winningEnd }
+			</if>
 		GROUP BY order_sn
 		ORDER BY add_time
 	</select>
@@ -462,8 +483,10 @@
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
 			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &lt;= #{pd.lastEnd1 }
 		</if> 
-	  
-		GROUP BY date,lpc.play_name 
+	    GROUP BY 
+		<if test="pd.groupTime == null or pd.groupTime == ''"> 
+			date,
+		</if> lpc.play_name 
 	</select>
 	<select id="getAmountForDayHour"  parameterType="page" resultType="pd">
 	SELECT COALESCE(sum( ticket_amount ),0) as amount

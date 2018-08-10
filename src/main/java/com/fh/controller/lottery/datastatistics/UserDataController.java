@@ -68,6 +68,10 @@ public class UserDataController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String mobileC = pd.getString("mobile");
+		if (null != mobileC && !"".equals(mobileC)) {
+			pd.put("mobile1", mobileC);
+		}
 		String lastStart = pd.getString("lastStart");
 		String lastEnd = pd.getString("lastEnd");
 		if (pd.isEmpty()) {
@@ -89,25 +93,45 @@ public class UserDataController extends BaseController {
 		page.setPd(pd);
 		List<PageData> varList = usermanagercontrollerService.listDetailTwo(page); // 列出UserManagerController列表
 		if (varList != null) {
-			for (int i = 0; i < varList.size(); i++) {
+			int size = varList.size();
+			for (int i = 0; i < size; i++) {
 				PageData pData = varList.get(i);
 				Integer userId = (int) pData.get("user_id");
+				// 获取个人充值总消费
 				Double val = useraccountmanagerService.getTotalConsumByUserId(userId);
 				if (val == null) {
 					val = 0d;
 				}
+					if(checkSumStart(pd,Math.abs(val),"totalStart") || checkSumStart(pd,Math.abs(val),"totalEnd")) {
+						varList.remove(i);
+						i--;
+						size--;
+						continue;
+					}
 				pData.put("total", Math.abs(val));
 				// 获取个人充值总金额
 				Double valR = useraccountmanagerService.getTotalRechargeByUserId(userId);
 				if (valR == null) {
 					valR = 0d;
 				}
+					if(checkSumStart(pd,valR,"rtotalStart") || checkSumStart(pd,valR,"rtotalEnd")) {
+						varList.remove(i);
+						i--;
+						size--;
+						continue;
+					}
 				pData.put("rtotal", valR);
 				// 获取个人获奖总金额
 				Double valA = useraccountmanagerService.getTotalAwardByUserId(userId);
 				if (valA == null) {
 					valA = 0d;
 				}
+					if(checkSumStart(pd,valA,"atotalStart") || checkSumStart(pd,valA,"atotalEnd")) {
+						varList.remove(i);
+						i--;
+						size--;
+						continue;
+					}
 				pData.put("atotal", valA);
 				// 获取个人累计提现
 				Double valW = useraccountmanagerService.totalWithdraw(userId);
@@ -142,6 +166,7 @@ public class UserDataController extends BaseController {
 				// pData.put("area", area);
 				// }
 			}
+			page.setTotalResult(size);
 		}
 		mv.setViewName("lottery/datastatistics/userdata_list");
 		mv.addObject("varList", varList);
@@ -186,6 +211,10 @@ public class UserDataController extends BaseController {
 		titles.add("最后登录时间"); // 18
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("titles", titles);
+		String mobileC = pd.getString("mobile");
+		if (null != mobileC && !"".equals(mobileC)) {
+			pd.put("mobile1", mobileC);
+		}
 		String lastStart = pd.getString("lastStart"); // 开始时间检索条件
 		if (null != lastStart && !"".equals(lastStart)) {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart+" 00:00:00"));
@@ -244,16 +273,25 @@ public class UserDataController extends BaseController {
 			if (val == null) {
 				val = 0d;
 			}
+				if(checkSumStart(pd,Math.abs(val),"totalStart") || checkSumStart(pd,Math.abs(val),"totalEnd")) {
+					continue;
+				}
 			// 获取个人充值总金额
 			Double valR = useraccountmanagerService.getTotalRechargeByUserId(userId);
 			if (valR == null) {
 				valR = 0d;
 			}
+				if(checkSumStart(pd,valR,"rtotalStart") || checkSumStart(pd,valR,"rtotalEnd")) {
+					continue;
+				}
 			// 获取个人获奖总金额
 			Double valA = useraccountmanagerService.getTotalAwardByUserId(userId);
 			if (valA == null) {
 				valA = 0d;
 			}
+				if(checkSumStart(pd,valA,"atotalStart") || checkSumStart(pd,valA,"atotalEnd")) {
+					continue;
+				}
 			// 获取个人累计提现
 			Double valW = useraccountmanagerService.totalWithdraw(userId);
 			if (valW == null) {
@@ -277,7 +315,7 @@ public class UserDataController extends BaseController {
 		return mv;
 	}
 
-	public static int IdNOToAge(String IdNO) {
+	public int IdNOToAge(String IdNO) {
 		int leh = IdNO.length();
 		String dates = "";
 		if (leh == 18) {
@@ -292,6 +330,25 @@ public class UserDataController extends BaseController {
 			return u;
 		}
 
+	}
+	
+	public boolean checkSumStart(PageData pd,Double val,String obj) {
+		if(null != pd.get(obj) && !"".equals(pd.get(obj))) {
+			Double total = Double.parseDouble(pd.getString(obj));
+			if(total > val ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean checkSumEnd(PageData pd,Double val,String obj) {
+		if(null != pd.get(obj) && !"".equals(pd.get(obj))) {
+			Double total = Double.parseDouble(pd.getString(obj));
+			if(total < val ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

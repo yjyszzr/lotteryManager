@@ -69,6 +69,9 @@
 											<label class="radio-inline">
 										  		<input type="radio" name="dateType" id="dateType" value="2" <c:if test="${pd.dateType == 2}">checked</c:if>> 月
 											</label>
+											<label class="radio-inline">
+										  		<input type="radio" name="dateType" id="dateType" value="3" <c:if test="${pd.dateType == 3}">checked</c:if>> 区间
+											</label>
 										</td>
 							</tr>
 						</table>
