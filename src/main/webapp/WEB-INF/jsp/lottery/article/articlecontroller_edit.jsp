@@ -51,17 +51,18 @@
 											                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>文章标题：</label>
 											                                <div class="col-sm-9">
 											                                <input type="hidden"  id="article_id"   name ="article_id" value="${pd.article_id}"/>
+											                                <input type="hidden"  id="extend_cat"   name ="extend_cat" value="${pd.extend_cat}"/>
 											                                <input type="hidden"  id="match_id"   name ="match_id" value="${pd.match_id}"/>
 											                                <input type="hidden"  id="content"  name="content"   value=""/>
 											                                <input type="hidden"  id="status"  name="status"   value=""/>
-											                                   <input type="text" id="title"  name="title" placeholder="文章标题" class="col-xs-10 col-sm-5"   value="${pd.title}"/>
+											                                   <input type="text" id="title"  name="title" placeholder="文章标题" class="col-xs-10 col-sm-5"   autocomplete="off"    value="${pd.title}"/>
 											                                </div>
 											                            </div>
 											                          
 											                           <div class="row"  style="padding:5px">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>作者：</label>
 																			<div class="col-sm-9">
-																				<input type="text" id="author" name="author" placeholder="作者" class="col-xs-10 col-sm-5"    value="${pd.author}"/>
+																				<input type="text" id="author" name="author" placeholder="作者" class="col-xs-10 col-sm-5"    autocomplete="off"    value="${pd.author}"/>
 																			</div>
 											                            </div>
 											                               <div class="row"  style="padding:5px">
@@ -89,7 +90,7 @@
 											                                </div>
 											                            </div>
 																			   	<input  type="file" id="fileUpload" name="file"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
-											                            <div class="slt1" >
+											                            <div class="row slt1"  style="padding:5px">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
 																			   <span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');"  id="showOnePhoto"> 单张上传</span>  
@@ -102,13 +103,12 @@
 																				</div>
 												                            </div>
 												                            
-									                                      <div class="slt2"   style="display:none;">
+									                                      <div  class="row slt2"  style="padding:5px;display:none;">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
 																			   <span class="btn btn-mini btn-primary" onclick="uploadThreePhoto()" id="showThirdPhoto"> 三张上传</span>  
 																			</div>
 											                            </div >
-											                            
 											                            	<div  class="slt2" >
 																				<div class="col-sm-3"></div>
 																				<div class="col-sm-9">
@@ -117,37 +117,23 @@
 																					<img id="photoShow3"    <c:if test="${not empty pd.article_thumb3_show}">src="${pd.article_thumb3_show}" width="100px",hight="50px"  </c:if>   alt="">
 																				</div>
 												                            </div>
-										                                <div class="slt3"   style="display:none;">
+										                                <div  class="row slt3"   style="padding:5px;display:none;">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">副标题：</label>
 																			<div class="col-sm-9">
-																			   <input type="text" id="summary" name="summary" placeholder="副标题" class="col-xs-10 col-sm-5"    value="${pd.summary}"/>
+																			   <input type="text" id="summary" name="summary" placeholder="副标题" class="col-xs-10 col-sm-5"    autocomplete="off"    value="${pd.summary}"/>
 																			</div>
 											                            </div >
 											                            
 											                               <div class="row"  style="padding:5px">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>内容分类：</label>
-											                                <div class="col-sm-9">
-																				<label style="float:left;padding-left: 8px;padding-top:7px;">
-																					<input  name="extend_cat" type="radio" checked <c:if test="${pd.extend_cat==1}">checked="checked"</c:if>  value = "1" class="ace" id="extend_cat1" />
-																					<span class="lbl">今日关注</span>
-																				</label>
-																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="extend_cat" type="radio"  <c:if test="${pd.extend_cat==2}">checked="checked"</c:if>  value = "2" class="ace" id="extend_cat2" />
-																					<span class="lbl">竞彩预测</span>
-																				</label>
-																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==3}">checked="checked"</c:if>  value = "3" class="ace" id="extend_cat3" />
-																					<span class="lbl">牛人分析</span>
-																				</label>
-																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==4}">checked="checked"</c:if>  value = "4" class="ace" id="extend_cat4" />
-																					<span class="lbl">世界杯</span>
-																				</label>																				
-																				<label style="float:left;padding-left: 5px;padding-top:7px;">
-																					<input name="extend_cat" type="radio" <c:if test="${pd.extend_cat==5}">checked="checked"</c:if>  value = "5" class="ace" id="extend_cat5" />
-																					<span class="lbl">其他</span>
-																				</label>
-											                                </div>
+																				<div class="col-sm-9">
+											                                	    <select id="article_classify" style ="width:42%">
+																				        	<option value="" selected>请选择</option>
+																					    	<c:forEach items="${articleclassifyList}" var="articleclassify">
+																					        		<option  value="${articleclassify.id }"   <c:if test="${articleclassify.id == pd.extend_cat }">selected</c:if>>${articleclassify.classify_name }</option>
+																					    	</c:forEach>
+																				    </select>
+																				    </div>
 											                            </div>
 											                                <div class="row"  style="padding:5px">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>是否原创：</label>
@@ -391,6 +377,15 @@
 			return false;
 			}
 		}
+		if($("#extend_cat").val()==""){
+			$("#article_classify").tips({
+				side:3,
+	            msg:'请选择分类',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+		return false;
+		}
 		var content = editor.txt.html();
 		    $("#content").val(content);
 		    $("#status").val(status);
@@ -481,6 +476,11 @@
 		});
 	}
 	
+	
+	$("#article_classify").change(function(){
+		   var articleClassifyId = $('#article_classify option:selected').val();//选择的value
+	    $("#extend_cat").val(articleClassifyId);
+	});
     </script>
 </body>
 </html>
