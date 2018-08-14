@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PhoneChannelMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		dl_phone_channel
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		channel,	
+		channel_name,	
+		app_code_name,	
+		article_classify_ids
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{id},	
+        #{channel},	
+        #{channel_name},	
+        #{app_code_name},	
+        #{article_classify_ids}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        id,	
+		        channel,	
+		        channel_name,	
+		        app_code_name,	
+		        article_classify_ids	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			channel = #{channel},
+			channel_name = #{channel_name},
+			app_code_name = #{app_code_name},
+			article_classify_ids = #{article_classify_ids}
+		where 
+		id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.channel != null and pd.channel != ''"> 
+			and channel  
+			LIKE CONCAT(CONCAT('%', #{pd.channel}),'%')
+		</if>
+		<if test="pd.channel_name != null and pd.channel_name != ''"> 
+			and channel_name  
+			LIKE CONCAT(CONCAT('%', #{pd.channel_name}),'%')
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+</mapper>
