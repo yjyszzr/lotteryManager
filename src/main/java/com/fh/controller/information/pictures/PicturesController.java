@@ -142,6 +142,27 @@ public class PicturesController extends BaseController {
 		return AppUtil.returnObject(pd, map);
 	}
 
+	@RequestMapping(value = "/apkFileUpload")
+	@ResponseBody
+	public Map<String, String> apkFileUpload(@RequestParam(required = false) MultipartFile file) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "新增apk");
+		Map<String, String> map = new HashMap<String, String>();
+		String ffile = DateUtil.getDays();
+		String fileName = file.getOriginalFilename();
+		if (null != file && !file.isEmpty()) {
+			String filePath = urlConfig.getUploadAppPackageUrl() + ffile; // 文件上传路径
+			fileName = FileUpload.fileUpApk(file, filePath, fileName); // 执行上传
+		} else {
+			map.put("result", "false");
+			return map;
+		}
+		map.put("result", "true");
+		String apkPath = urlConfig.getImgShowUrl() + "uploadFiles/appPackage/" + ffile + "/" + fileName; // 路径
+		map.put("apk_path", apkPath);
+		return map;
+	}
+	
+	
 	@RequestMapping(value = "/fileUpload")
 	@ResponseBody
 	public Map<String, String> fileUpload(@RequestParam(required = false) MultipartFile file) throws Exception {

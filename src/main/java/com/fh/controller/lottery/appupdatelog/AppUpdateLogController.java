@@ -3,14 +3,19 @@ package com.fh.controller.lottery.appupdatelog;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -19,10 +24,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fh.controller.app.switchappconfig.SwitchAppConfigController;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.dto.AppSelectDTO;
 import com.fh.service.lottery.appupdatelog.AppUpdateLogManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
+import com.fh.service.switchappconfig.SwitchAppConfigManager;
 import com.fh.util.AppUtil;
+import com.fh.util.DateUtil;
+import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
@@ -40,6 +51,12 @@ public class AppUpdateLogController extends BaseController {
 	@Resource(name="appupdatelogService")
 	private AppUpdateLogManager appupdatelogService;
 	
+	@Resource(name="switchappconfigService")
+	private SwitchAppConfigManager switchappconfigService;
+	
+	@Resource(name = "userActionLogService")
+	private UserActionLogService ACLOG;
+	
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -51,19 +68,41 @@ public class AppUpdateLogController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-//		pd.put("_id", this.get32UUID());	//主键
-		pd.put("app_code_name", "0");	//备注2
-		pd.put("version", "");	//备注3
-		pd.put("download_url", "");	//备注4
-		pd.put("update_log", "");	//备注5
-		pd.put("update_time", "0");	//备注6
-		pd.put("update_install", "0");	//备注7
+		String version = pd.getString("points1")+"."+pd.getString("points2")+"."+pd.getString("points3");
+		String updateLog = this.createUpdateLog(pd);
+		pd.put("app_code_name", pd.getString("app_name"));
+		pd.put("version", version);
+		pd.put("download_url", pd.getString("apk_path"));
+		pd.put("update_log", updateLog);
+		pd.put("update_time", DateUtilNew.getCurrentTimeLong());
+		pd.put("update_install", pd.getString("update_install"));
+		pd.put("channel", pd.getString("channel"));
 		appupdatelogService.save(pd);
-		mv.addObject("msg","success");
+		ACLOG.save("1", "1", "app升级管理,新增操作"+pd.getString("channel"), pd.toString());
+
+		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
 	}
 	
+	public String createUpdateLog(PageData pd) {
+		String retunStr = "";
+		List<String> strList = new ArrayList<>();
+		String text1 = pd.getString("text1").trim();
+		String text2 = pd.getString("text2").trim();
+		String text3 = pd.getString("text3").trim();
+		String text4 = pd.getString("text4").trim();
+		strList.add(text1);
+		strList.add(text2);
+		strList.add(text3);
+		strList.add(text4);
+		for(String str:strList) {
+			if(StringUtils.isNotEmpty(str)) {
+				retunStr += str+";";
+			}
+		}
+		return retunStr;
+	}
 	/**删除
 	 * @param out
 	 * @throws Exception
@@ -75,6 +114,7 @@ public class AppUpdateLogController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		appupdatelogService.delete(pd);
+		ACLOG.save("1", "1", "app升级管理,删除操作"+pd.getString("channel"), pd.toString());
 		out.write("success");
 		out.close();
 	}
@@ -90,7 +130,22 @@ public class AppUpdateLogController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		appupdatelogService.edit(pd);
+		PageData oldPd = appupdatelogService.findById(pd);
+		
+		String version = pd.getString("points1")+"."+pd.getString("points2")+"."+pd.getString("points3");
+		String updateLog = this.createUpdateLog(pd);
+		PageData newPd = new PageData();
+		newPd.put("app_code_name", pd.getString("app_name"));
+		newPd.put("channel", pd.getString("channel"));
+		newPd.put("version", version);
+		newPd.put("download_url", pd.getString("apk_path"));
+		newPd.put("update_log", updateLog);
+		newPd.put("update_time", DateUtilNew.getCurrentTimeLong());
+		newPd.put("update_install", pd.getString("update_install"));
+		newPd.put("id", Integer.valueOf(pd.getString("id")));
+		appupdatelogService.edit(newPd);
+		ACLOG.saveByObject("1", "app升级管理,编辑保存:" + pd.getString("channel"), oldPd, newPd);
+		
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -103,18 +158,42 @@ public class AppUpdateLogController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表AppUpdateLog");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
-		pd = this.getPageData();
+		pd = this.getPageData();//{app_name=, channel=c10020}
 		String keywords = pd.getString("keywords");				//关键词检索条件
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
 		List<PageData>	varList = appupdatelogService.list(page);	//列出AppUpdateLog列表
+		List<PageData>  appList = switchappconfigService.listByAppCodeName(pd);
+        Map<String, String> appMap = appList.stream().collect(Collectors.toMap(s->s.getString("app_code_name"), s->s.getString("app_name")));
+		List<PageData>  channelList = switchappconfigService.queryChannel();
+        Map<String, String> channelMap = channelList.stream().collect(Collectors.toMap(s->s.getString("channel"), s->s.getString("channel_name")));
+        
+//        pd.put("app_code_name", appMap.get(pd.get("app_code_name")));
+//        pd.put("channel_name", appMap.get(pd.get("channel")));
+        
+        List<PageData>	newVarList = new ArrayList<>();
+		for(PageData pdata:varList) {
+			String updateTime = pdata.getString("update_time");
+			String updateInstall = pdata.getString("update_install");
+			String appCodeName = pdata.getString("app_code_name");
+			String channel = pdata.getString("channel");
+			String appName = appMap.get(appCodeName);
+			String channelName = channelMap.get(channel);
+			pdata.put("id", pdata.getString("id"));
+			pdata.put("version", pdata.getString("version"));
+			pdata.put("app_name", appName);
+			pdata.put("channel_name", channelName);
+			pdata.put("update_install",updateInstall.equals("1")?"是":"否");
+			pdata.put("update_time", DateUtilNew.getTimeString(Integer.valueOf(updateTime),DateUtilNew.datetimeFormat));
+			newVarList.add(pdata);
+		}
+		
 		mv.setViewName("lottery/appupdatelog/appupdatelog_list");
-		mv.addObject("varList", varList);
+		mv.addObject("varList", newVarList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
@@ -145,6 +224,30 @@ public class AppUpdateLogController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = appupdatelogService.findById(pd);	//根据ID读取
+		
+		PageData queryPd = new PageData();
+		queryPd.put("channel", pd.getString("channel"));
+		List<PageData>  appList = switchappconfigService.listByAppCodeName(queryPd);
+        Map<String, String> appMap = appList.stream().collect(Collectors.toMap(s->s.getString("app_code_name"), s->s.getString("app_name")));
+		List<PageData>  channelList = switchappconfigService.queryChannel();
+        Map<String, String> channelMap = channelList.stream().collect(Collectors.toMap(s->s.getString("channel"), s->s.getString("channel_name")));
+        pd.put("channel_name", channelMap.get(pd.getString("channel")));
+        pd.put("app_name", appMap.get(pd.getString("app_code_name")));
+        
+        String version = pd.getString("version");
+        List<String> vList = Arrays.asList(version.split("\\."));
+        for(int i = 0 ; i < vList.size(); i++) {
+        	pd.put("points"+(i+1), vList.get(i));
+        }
+        
+        String updateLog = pd.getString("update_log");
+        List<String> logList = Arrays.asList(updateLog.split(";"));
+        for(int i = 0 ; i < logList.size(); i++) {
+        	 pd.put("text"+(i+1), logList.get(i));
+        }
+        
+        String downLoadUrl = pd.getString("download_url");
+        pd.put("apk_path", downLoadUrl);
 		mv.setViewName("lottery/appupdatelog/appupdatelog_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

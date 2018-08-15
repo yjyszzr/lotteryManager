@@ -8,6 +8,15 @@ public class URLConfig {
 	private String manualRewardUrl;
 	private String manualRewardToUserMoneyLimitUrl;
 	private String uploadURL;
+	private String uploadAppPackageUrl;
+	
+	public String getUploadAppPackageUrl() {
+		return uploadAppPackageUrl;
+	}
+
+	public void setUploadAppPackageUrl(String uploadAppPackageUrl) {
+		this.uploadAppPackageUrl = uploadAppPackageUrl;
+	}
 
 	public String getUploadURL() {
 		return uploadURL;

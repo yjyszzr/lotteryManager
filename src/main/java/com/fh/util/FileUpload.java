@@ -39,6 +39,21 @@ public class FileUpload {
 		return fileName+extName;
 	}
 	
+	/**上传apk文件
+	 * @param file 			//文件对象
+	 * @param filePath		//上传路径
+	 * @param fileName		//文件名
+	 * @return  文件名
+	 */
+	public static String fileUpApk(MultipartFile file, String filePath, String fileName){
+		try {
+			copyFile(file.getInputStream(), filePath, fileName);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return fileName;
+	}
+	
 	/**
 	 * 写文件到当前目录的upload目录中
 	 * @param in

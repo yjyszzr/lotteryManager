@@ -34,17 +34,30 @@
 						<form action="appupdatelog/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
+<%-- 							 	<td>
+									<div class="nav-search">
+										<span class="input-icon">
+											<input style="width:375px" type="text" placeholder="模糊搜索支持渠道号,版本号" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="模糊搜索支持渠道名称,渠道号,版本号"/>
+											<i class="ace-icon fa fa-search nav-search-icon"></i>
+										</span>
+									</div>
+								</td> --%>
+							
+								<td style="width:70px;">app名称:</td>
 								<td>
-									<select name="app_name" id="app_name" onchange="change1(this.value)">
-		                                <option>app名称必选</option>     					 
-		                          	</select>
-		                          	<select id="channel" name="channel">
-								 		<option>app下载渠道必选</option>                       
-                      				</select>
+									<select name="app_code_name" id="app_code_name" value="${pd.app_code_name}" title = "app名称必选" onchange="change1(this.value)">
+		                                <option ></option>     					 
+		                          	</select>									
 								</td>
-								<c:if test="${QX.cha == 1 }">
+								<td style="width:12px;"></td>
+								<td style="width:100px;">app下载渠道:</td>
+								<td>
+		                          	<select id="channel" title = "app下载渠道必选" value="${pd.channel}" name="channel">
+								 		<option></option>                       
+                      				</select>									
+								</td>
+								<td style="width:12px;"></td>
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								</c:if>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -57,6 +70,7 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">app名称</th>
+									<th class="center">渠道名称</th>
 									<th class="center">版本号</th>
 									<th class="center">下载地址</th>
 									<th class="center">更新日志</th>
@@ -70,34 +84,31 @@
 							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.app_code_name}</td>
+											<td class='center'>${var.app_name}</td>
+											<td class='center'>${var.channel_name}</td>
 											<td class='center'>${var.version}</td>
-											<td class='center'>${var.download_url}</td>
-											<td class='center'>${var.update_log}</td>
+											<td class='center'><a> ${var.download_url}</a></td>
+											<td class='center' style="WORD-WRAP: break-word">${var.update_log}</td>
 											<td class='center'>${var.update_time}</td>
 											<td class='center'>${var.update_install}</td>
 											<td class="center">
-												<c:if test="${QX.edit != 1 && QX.del != 1 }">
-												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
-												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${QX.edit == 1 }">
+<%-- 													<c:if test="${QX.edit == 1 }"> --%>
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
 													</a>
-													</c:if>
-													<c:if test="${QX.del == 1 }">
+<%-- 													</c:if> --%>
+<%-- 													<c:if test="${QX.del == 1 }"> --%>
 													<a class="btn btn-xs btn-danger" onclick="del('${var.id}');">
 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
-													</c:if>
+<%-- 													</c:if> --%>
 												</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline pos-rel">
@@ -106,7 +117,6 @@
 														</button>
 			
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
 															<li>
 																<a style="cursor:pointer;" onclick="edit('${var.id}');" class="tooltip-success" data-rel="tooltip" title="修改">
 																	<span class="green">
@@ -114,8 +124,6 @@
 																	</span>
 																</a>
 															</li>
-															</c:if>
-															<c:if test="${QX.del == 1 }">
 															<li>
 																<a style="cursor:pointer;" onclick="del('${var.id}');" class="tooltip-error" data-rel="tooltip" title="删除">
 																	<span class="red">
@@ -123,7 +131,6 @@
 																	</span>
 																</a>
 															</li>
-															</c:if>
 														</ul>
 													</div>
 												</div>
@@ -131,7 +138,6 @@
 										</tr>
 									
 									</c:forEach>
-									</c:if>
 									<c:if test="${QX.cha == 0 }">
 										<tr>
 											<td colspan="100" class="center">您无权查看</td>
@@ -150,12 +156,10 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
 									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
+ 									<c:if test="${QX.del == 1 }"> 
 									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
+									</c:if> 
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
@@ -257,8 +261,8 @@
 			 diag.URL = '<%=basePath%>appupdatelog/goAdd.do';
 			 diag.Width = 850;
 			 diag.Height = 655;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
+			 diag.Modal = true;			//有无遮罩窗口
+			 diag.ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
 			 diag.CancelEvent = function(){ //关闭事件
 				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
@@ -293,8 +297,8 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>appupdatelog/goEdit.do?id='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Width = 850;
+			 diag.Height = 655;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
@@ -362,9 +366,9 @@
 				dataType:'json',
 				cache: false,
 				success: function(data){
-					$("#app_name").html('<option>app名称必选</option>');
+					 //$("#app_name").html('<option>app名称必选</option>');
 					 $.each(data.list, function(i, dvar){
-							$("#app_name").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
+							$("#app_code_name").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
 					 });
 				}
 			});
@@ -378,7 +382,7 @@
 				dataType:'json',
 				cache: false,
 				success: function(data){
-					$("#channel").html('<option>app下载渠道必选</option>');
+					//$("#channel").html('<option>app下载渠道必选</option>');
 					 $.each(data.list, function(i, dvar){
 							$("#channel").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
 					 });

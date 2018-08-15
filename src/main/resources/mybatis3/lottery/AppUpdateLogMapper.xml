@@ -11,6 +11,7 @@
 	<sql id="Field">
 		id,	
 		app_code_name,	
+		channel,
 		version,	
 		download_url,	
 		update_log,	
@@ -22,6 +23,7 @@
 	<sql id="FieldValue">
         #{id},	
         #{app_code_name},	
+        #{channel}
         #{version},	
         #{download_url},	
         #{update_log},	
@@ -34,15 +36,21 @@
 		insert into 
 	<include refid="tableName"></include>
 		(
-		        id,	
 		        app_code_name,	
-		        version,	
+		        version,
+		        channel,	
 		        download_url,	
 		        update_log,	
 		        update_time,	
 		        update_install	
 		) values (
-	<include refid="FieldValue"></include>
+		        #{app_code_name},	
+		        #{version},
+		        #{channel},
+		        #{download_url},	
+		        #{update_log},	
+		        #{update_time},	
+		        #{update_install}
 		)
 	</insert>
 	
@@ -59,7 +67,13 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			id = #{id}
+		app_code_name = #{app_code_name},	
+        channel = #{channel},
+        version = #{version},	
+        download_url = #{download_url},	
+        update_log = #{update_log},	
+        update_time = #{update_time},	
+        update_install = #{update_install}
 		where 
 		id = #{id}
 	</update>
@@ -82,14 +96,22 @@
 		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				version  
+				LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+				channel
+				LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 		</if>
+		<if test="pd.channel != null and pd.channel != ''"> 
+			and channel = #{pd.channel}
+		</if>
+		<if test="pd.app_code_name != null and pd.app_code_name != ''"> 
+			and app_code_name = #{pd.app_code_name}
+		</if>
+		<if test="pd.id != null and pd.id != ''"> 
+			and id = #{id}
+		</if>
+		order by update_time desc,REPLACE(version,'.','') desc
 	</select>
 	
 	<!-- 列表(全部) -->
