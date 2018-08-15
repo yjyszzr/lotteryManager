@@ -152,14 +152,33 @@
 													<c:when test="${var.status==3}"><lable style="color:gray;font-weight:bold">正在审批</lable></c:when>
 												</c:choose>
 											</td>
+											
+											
 											<c:choose>
-												<c:when test="${fn:length(var.remarks)  <= 5 }">
-													<td > ${var.remarks } </td>
+												<c:when test="${empty var.log_code }">
+													<c:choose>
+														<c:when test="${fn:length(var.remarks)  <= 20 }">
+															<td > ${var.remarks } </td>
+														</c:when>
+														<c:otherwise>
+															<td title="${var.remarks}"> <a style="cursor:pointer;">${fn:substring(var.remarks,0,20)}... </a></td>
+														</c:otherwise>
+													</c:choose>
 												</c:when>
 												<c:otherwise>
-													<td title="${var.remarks}"> <a style="cursor:pointer;">${fn:substring(var.remarks,0,5)}... </a></td>
+													<c:choose>
+														<c:when test="${fn:length(var.log_name)  <= 20 }">
+															<td > ${var.log_name } </td>
+														</c:when>
+														<c:otherwise>
+															<td title="${var.log_name}"> <a style="cursor:pointer;">${fn:substring(var.log_name,0,20)}... </a></td>
+														</c:otherwise>
+													</c:choose>
 												</c:otherwise>
 											</c:choose>
+											
+											
+											
 											
 <%-- 											<td class='center'>${var.remarks}</td> --%>
 											<td class="center">

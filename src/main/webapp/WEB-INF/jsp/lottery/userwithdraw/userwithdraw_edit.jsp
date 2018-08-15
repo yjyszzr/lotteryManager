@@ -108,7 +108,12 @@
 			                                		<c:when test="${pd.status == 0}">
 			                                			<input type="text" name="remarks" id="remarks" maxlength="198" value="${pd.remarks}" autocomplete="off"   placeholder="备注" style="width:98%;border-radius:5px !important"  />
 			                                		</c:when>
-			                                		<c:otherwise>${pd.remarks }</c:otherwise>
+			                                		<c:otherwise>
+			                          					<c:choose>
+															<c:when test="${empty pd.log_code }">${pd.remarks}</c:when>
+															<c:otherwise>${pd.log_name}</c:otherwise>
+														</c:choose>
+												 	</c:otherwise>
 			                                	</c:choose>	
 		                           		  	</td>
 									</tr>

@@ -98,13 +98,16 @@
 			u_r.id_code,
 			u.mobile,
 			u.user_money,
-			u.user_money_limit 
+			u.user_money_limit,
+			c.log_code,
+			c.log_name 
 		FROM
 			dl_user_withdraw a
-			LEFT JOIN dl_user_real u_r ON a.user_id = u_r.user_id
+			LEFT JOIN    (select * from dl_user_real where is_delete = 0 )  u_r ON a.user_id = u_r.user_id
 			LEFT JOIN dl_user u ON a.user_id = u.user_id
+			LEFT JOIN (select * from dl_user_withdraw_log where log_code = 4   ) c ON a.withdrawal_sn = c.withdraw_sn 
 		WHERE 
-			id = #{id} and u_r.is_delete = 0
+			a.id = #{id}  
 	</select>
 	
 	<!-- 列表 -->
@@ -124,10 +127,13 @@
 			a.bank_name,
 			a.remarks,
 			b.user_name,
-			b.mobile 
+			b.mobile,
+			c.log_code,
+			c.log_name
 		FROM
 			dl_user_withdraw a
 			LEFT JOIN dl_user b ON b.user_id = a.user_id
+			LEFT JOIN (select * from dl_user_withdraw_log where log_code = 4) c ON a.withdrawal_sn = c.withdraw_sn
 			where 1 = 1
 		<if test="pd.withdrawal_sn != null and pd.withdrawal_sn != ''"> 
 			and a.withdrawal_sn  LIKE CONCAT(CONCAT('%', #{pd.withdrawal_sn}),'%')
