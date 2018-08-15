@@ -93,14 +93,14 @@
 											<th class="center">当${pd.day }实付购彩额</th><!-- 1 -->
 											<th class="center">当${pd.day }优惠券金额</th><!-- 2 -->
 											<th class="center">当${pd.day }订单金额</th><!-- 3 -->
-											<th class='center'>胜平负</th><!-- 4 -->
-											<th class='center'>让球胜平负</th><!-- 5 -->
-											<th class='center'>比分</th><!-- 6 -->
-											<th class='center'>总进球</th><!-- 7 -->
-											<th class='center'>半全场</th><!-- 8 -->
-											<th class='center'>2选1</th><!-- 9 -->
-											<th class='center'>混合投注</th><!-- 10 -->
-											<th class='center'>世界杯</th><!-- 11 -->
+											<!--<th class='center'>胜平负</th><!-- 4 -->
+											<!--<th class='center'>让球胜平负</th><!-- 5 -->
+											<!--<th class='center'>比分</th><!-- 6 -->
+											<!--<th class='center'>总进球</th><!-- 7 -->
+											<!--<th class='center'>半全场</th><!-- 8 -->
+											<!--<th class='center'>2选1</th><!-- 9 -->
+											<!--<th class='center'>混合投注</th><!-- 10 -->
+											<!--<th class='center'>世界杯</th><!-- 11 -->
 											<!--<th class='center'>胜平负比例</th> 12 -->
 											<!--<th class='center'>让球胜平负比例</th> 13 -->
 											<!--<th class='center'>比分比例</th> 14 -->
@@ -128,8 +128,8 @@
 											<th class='center'>老用户人均购彩金额</th><!-- 36 -->
 											<th class='center'>累计新增购彩用户数</th><!-- 37 -->
 											<th class='center'>总购彩金额</th><!-- 38 -->
-											<th class='center'>出票失败金额</th><!-- 39 -->
-											<th class='center'>支付失败金额</th><!-- 40 -->
+											<!--<th class='center'>出票失败金额</th><!-- 39 -->
+											<!--<th class='center'>支付失败金额</th><!-- 40 -->
 										</tr>
 									</thead>
 
@@ -143,7 +143,7 @@
 															<td class='center'>${var.data1 }</td>
 															<td class='center'>${var.data2 }</td>
 															<td class='center'>${var.data3 }</td>
-															<td class='center'>${var.ply2 }<c:if test="${ empty var.ply2}">0.00</c:if></td>
+															<!--<td class='center'>${var.ply2 }<c:if test="${ empty var.ply2}">0.00</c:if></td>
 															<td class='center'>${var.ply1 }<c:if test="${ empty var.ply1}">0.00</c:if></td>
 															<td class='center'>${var.ply3 }<c:if test="${ empty var.ply3}">0.00</c:if></td>
 															<td class='center'>${var.ply4 }<c:if test="${ empty var.ply4}">0.00</c:if></td>
@@ -249,8 +249,8 @@
 															</td>
 															<td class='center'>${var.data37 }</td>
 															<td class='center'>${var.data38 }</td>
-															<td class='center'>${var.data39 }</td>
-															<td class='center'>${var.data40 }</td>
+															<!--<td class='center'>${var.data39 }</td>-->
+															<!--<td class='center'>${var.data40 }</td>-->
 														</tr>
 													</c:forEach>
 												</c:if>

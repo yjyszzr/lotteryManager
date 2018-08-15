@@ -123,22 +123,22 @@ public class ReportFormDataController extends BaseController {
 		titles.add("当"+day+"实付购彩额"); //  2
 		titles.add("当"+day+"优惠券金额"); //  3
 		titles.add("当"+day+"订单金额"); //  4
-		titles.add("胜平负"); //  5
-		titles.add("让球胜平负"); //  6
-		titles.add("比分"); //  7
-		titles.add("总进球"); //  8
-		titles.add("半全场"); //  9
-		titles.add("2选1"); //  10
-		titles.add("混合投注"); //  11
-		titles.add("世界杯"); //  12
-		titles.add("胜平负比例"); //  13
-		titles.add("让球胜平负比例"); //  14
-		titles.add("比分比例"); //  15
-		titles.add("总进球比例"); //  16
-		titles.add("半全场比例"); //  17
-		titles.add("2选1比例"); //  18
-		titles.add("混合投注比例"); //  19
-		titles.add("世界杯比例"); //  20
+//		titles.add("胜平负"); //  5
+//		titles.add("让球胜平负"); //  6
+//		titles.add("比分"); //  7
+//		titles.add("总进球"); //  8
+//		titles.add("半全场"); //  9
+//		titles.add("2选1"); //  10
+//		titles.add("混合投注"); //  11
+//		titles.add("世界杯"); //  12
+//		titles.add("胜平负比例"); //  13
+//		titles.add("让球胜平负比例"); //  14
+//		titles.add("比分比例"); //  15
+//		titles.add("总进球比例"); //  16
+//		titles.add("半全场比例"); //  17
+//		titles.add("2选1比例"); //  18
+//		titles.add("混合投注比例"); //  19
+//		titles.add("世界杯比例"); //  20
 		titles.add("当"+day+"购彩用户数"); //  21
 		titles.add("当"+day+"提现金额"); //  22 
 		titles.add("当"+day+"充值金额"); //  23
@@ -158,8 +158,8 @@ public class ReportFormDataController extends BaseController {
 		titles.add("老用户人均购彩金额"); //  37
 		titles.add("累计新增购彩用户数"); //  38
 		titles.add("总购彩金额"); //  39
-		titles.add("出票失败金额"); //  40
-		titles.add("支付失败金额"); //  41
+//		titles.add("出票失败金额"); //  40
+//		titles.add("支付失败金额"); //  41
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("titles", titles);
 		 
@@ -171,22 +171,22 @@ public class ReportFormDataController extends BaseController {
 			vpd.put("var2", pdt.getString("data1")); // 2
 			vpd.put("var3", pdt.getString("data2")); // 3
 			vpd.put("var4", pdt.getString("data3")); // 4
-			vpd.put("var5", pdt.getString("ply2")); // 5
-			vpd.put("var6", pdt.getString("ply1")); // 6
-			vpd.put("var7", pdt.getString("ply3")); // 7
-			vpd.put("var8", pdt.getString("ply4")); // 8
-			vpd.put("var9", pdt.getString("ply5")); // 9
-			vpd.put("var10", pdt.getString("ply6")); // 10
-			vpd.put("var11", pdt.getString("ply7")); // 11
-			vpd.put("var12", pdt.getString("ply8")); // 12
-			vpd.put("var13", getPercent(pdt.getString("ply2"),pdt.getString("data3"))); // 13
-			vpd.put("var14", getPercent(pdt.getString("ply1"),pdt.getString("data3"))); // 14
-			vpd.put("var15", getPercent(pdt.getString("ply3"),pdt.getString("data3"))); // 15
-			vpd.put("var16", getPercent(pdt.getString("ply4"),pdt.getString("data3"))); // 16
-			vpd.put("var17", getPercent(pdt.getString("ply5"),pdt.getString("data3"))); // 17
-			vpd.put("var18", getPercent(pdt.getString("ply6"),pdt.getString("data3"))); // 18
-			vpd.put("var19", getPercent(pdt.getString("ply7"),pdt.getString("data3"))); // 19
-			vpd.put("var20", getPercent(pdt.getString("ply8"),pdt.getString("data3"))); // 20
+//			vpd.put("var5", pdt.getString("ply2")); // 5
+//			vpd.put("var6", pdt.getString("ply1")); // 6
+//			vpd.put("var7", pdt.getString("ply3")); // 7
+//			vpd.put("var8", pdt.getString("ply4")); // 8
+//			vpd.put("var9", pdt.getString("ply5")); // 9
+//			vpd.put("var10", pdt.getString("ply6")); // 10
+//			vpd.put("var11", pdt.getString("ply7")); // 11
+//			vpd.put("var12", pdt.getString("ply8")); // 12
+//			vpd.put("var13", getPercent(pdt.getString("ply2"),pdt.getString("data3"))); // 13
+//			vpd.put("var14", getPercent(pdt.getString("ply1"),pdt.getString("data3"))); // 14
+//			vpd.put("var15", getPercent(pdt.getString("ply3"),pdt.getString("data3"))); // 15
+//			vpd.put("var16", getPercent(pdt.getString("ply4"),pdt.getString("data3"))); // 16
+//			vpd.put("var17", getPercent(pdt.getString("ply5"),pdt.getString("data3"))); // 17
+//			vpd.put("var18", getPercent(pdt.getString("ply6"),pdt.getString("data3"))); // 18
+//			vpd.put("var19", getPercent(pdt.getString("ply7"),pdt.getString("data3"))); // 19
+//			vpd.put("var20", getPercent(pdt.getString("ply8"),pdt.getString("data3"))); // 20
 			
 			vpd.put("var21", pdt.getString("data20")); // 21
 			vpd.put("var22", pdt.getString("data21")); // 22
@@ -217,8 +217,8 @@ public class ReportFormDataController extends BaseController {
 			}
 			vpd.put("var38", pdt.getString("data37")); // 38
 			vpd.put("var39", pdt.getString("data38")); // 39
-			vpd.put("var40", pdt.getString("data39")); // 40
-			vpd.put("var41", pdt.getString("data40")); // 41
+//			vpd.put("var40", pdt.getString("data39")); // 40
+//			vpd.put("var41", pdt.getString("data40")); // 41
 			for(Object o :vpd.keySet()) {
 				if(vpd.get(o)==null || vpd.get(o).equals("")) {
 					vpd.put(o, "0.00");

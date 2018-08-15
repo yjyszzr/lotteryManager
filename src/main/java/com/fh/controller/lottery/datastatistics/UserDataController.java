@@ -102,7 +102,7 @@ public class UserDataController extends BaseController {
 				if (val == null) {
 					val = 0d;
 				}
-					if(checkSumStart(pd,Math.abs(val),"totalStart") || checkSumStart(pd,Math.abs(val),"totalEnd")) {
+					if(checkSumStart(pd,Math.abs(val),"totalStart") || checkSumEnd(pd,Math.abs(val),"totalEnd")) {
 						varList.remove(i);
 						i--;
 						size--;
@@ -114,7 +114,7 @@ public class UserDataController extends BaseController {
 				if (valR == null) {
 					valR = 0d;
 				}
-					if(checkSumStart(pd,valR,"rtotalStart") || checkSumStart(pd,valR,"rtotalEnd")) {
+					if(checkSumStart(pd,valR,"rtotalStart") || checkSumEnd(pd,valR,"rtotalEnd")) {
 						varList.remove(i);
 						i--;
 						size--;
@@ -126,7 +126,7 @@ public class UserDataController extends BaseController {
 				if (valA == null) {
 					valA = 0d;
 				}
-					if(checkSumStart(pd,valA,"atotalStart") || checkSumStart(pd,valA,"atotalEnd")) {
+					if(checkSumStart(pd,valA,"atotalStart") || checkSumEnd(pd,valA,"atotalEnd")) {
 						varList.remove(i);
 						i--;
 						size--;
