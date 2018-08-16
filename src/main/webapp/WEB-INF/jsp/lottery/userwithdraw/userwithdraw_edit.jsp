@@ -109,10 +109,8 @@
 			                                			<input type="text" name="remarks" id="remarks" maxlength="198" value="${pd.remarks}" autocomplete="off"   placeholder="备注" style="width:98%;border-radius:5px !important"  />
 			                                		</c:when>
 			                                		<c:otherwise>
-			                          					<c:choose>
-															<c:when test="${empty pd.log_code }">${pd.remarks}</c:when>
-															<c:otherwise>${pd.log_name}</c:otherwise>
-														</c:choose>
+															<c:if test="${!empty pd.remarks}"><span style="color:red">备注:</span>${pd.remarks}<br><hr></c:if>
+														    <c:if test="${!empty pd.log_name}"><span style="color:red">银行反馈备注:</span>${pd.log_name}</c:if>
 												 	</c:otherwise>
 			                                	</c:choose>	
 		                           		  	</td>
@@ -138,7 +136,7 @@
 							</form>
 							<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
-								<th colspan="9">
+								<th colspan="10">
                                 	<label class=" no-padding-right">最近提现纪录</label>
                                	</th>
                            <thead>
@@ -154,6 +152,7 @@
 									<th class="center">申请提现时间</th>
 									<th class="center">状态</th>
 									<th class="center">备注</th>
+									<th class="center">银行反馈备注</th>
 								</tr>
 							</thead>
 													
@@ -181,9 +180,18 @@
 												</c:choose>
 											</td>
 											<c:choose>
-												<c:when test="${fn:length(var.remarks)  <= 5 }"><td > ${var.remarks } </td></c:when>
-												<c:otherwise><td title="${var.remarks}"> <a style="cursor:pointer;">${fn:substring(var.remarks,0,5)}... </a></td></c:otherwise>
+												<c:when test="${fn:length(var.remarks)  <= 10 }"><td > ${var.remarks } </td></c:when>
+												<c:otherwise><td title="${var.remarks}"> <a style="cursor:pointer;">${fn:substring(var.remarks,0,10)}... </a></td></c:otherwise>
 											</c:choose>
+												<c:choose>
+														<c:when test="${fn:length(var.log_name)  <= 20 }">
+															<td > ${var.log_name } </td>
+														</c:when>
+														<c:otherwise>
+															<td title="${var.log_name}"> <a style="cursor:pointer;">${fn:substring(var.log_name,0,20)}... </a></td>
+														</c:otherwise>
+													</c:choose>
+											
 										</tr>
 									</c:forEach>
 									</c:if>

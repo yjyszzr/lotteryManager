@@ -123,6 +123,7 @@
 									<th class="center">申请提现时间</th>
 									<th class="center">状态</th>
 									<th class="center">备注</th>
+									<th class="center">银行反馈备注</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -154,8 +155,6 @@
 											</td>
 											
 											
-											<c:choose>
-												<c:when test="${empty var.log_code }">
 													<c:choose>
 														<c:when test="${fn:length(var.remarks)  <= 20 }">
 															<td > ${var.remarks } </td>
@@ -164,8 +163,7 @@
 															<td title="${var.remarks}"> <a style="cursor:pointer;">${fn:substring(var.remarks,0,20)}... </a></td>
 														</c:otherwise>
 													</c:choose>
-												</c:when>
-												<c:otherwise>
+												 
 													<c:choose>
 														<c:when test="${fn:length(var.log_name)  <= 20 }">
 															<td > ${var.log_name } </td>
@@ -174,8 +172,6 @@
 															<td title="${var.log_name}"> <a style="cursor:pointer;">${fn:substring(var.log_name,0,20)}... </a></td>
 														</c:otherwise>
 													</c:choose>
-												</c:otherwise>
-											</c:choose>
 											
 											
 											

@@ -184,12 +184,17 @@
 			LEFT JOIN dl_user b ON b.user_id = a.user_id
 		order by  add_time DESC
 	</select>
-<!-- 	根据用户Id查询 -->
+<!-- 	根据用户Id查询 --> 
 	<select id="findByUserId" parameterType="Integer" resultType="pd">
-		select * from 
-			dl_user_withdraw
-			where user_id = #{userId}
-			order by add_time desc
+		select 
+			a.*,
+			c.log_code,
+			c.log_name
+		from 
+			dl_user_withdraw a
+			LEFT JOIN (select * from dl_user_withdraw_log where log_code = 4   ) c ON a.withdrawal_sn = c.withdraw_sn 
+		where a.user_id = #{userId}
+		order by a.add_time desc
 	</select>
 	
 	<select id="findTotalAwardById" parameterType="Integer" resultType="java.math.BigDecimal">
