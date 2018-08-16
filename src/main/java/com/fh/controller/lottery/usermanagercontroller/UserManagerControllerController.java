@@ -2,6 +2,7 @@ package com.fh.controller.lottery.usermanagercontroller;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,24 +12,31 @@ import javax.annotation.Resource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSON;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
 import com.fh.entity.sms.RspSmsCodeEntity;
+import com.fh.enums.ThirdApiEnum;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
+import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
+import com.fh.util.NetWorkUtil;
 import com.fh.util.PageData;
 import com.fh.util.RandomUtil;
 import com.fh.util.SmsUtil;
+
+import net.sf.json.JSONObject;
 
 /**
  * 说明：用户列表 创建人：FH Q313596790 创建时间：2018-04-23
@@ -150,6 +158,75 @@ public class UserManagerControllerController extends BaseController {
 		return mv;
 	}
 
+	/**
+	 * 强制
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/realMobileList")
+	public ModelAndView realMobileList() throws Exception {
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		mv.setViewName("lottery/phonevalid/realmobilevalid");
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+	
+	@RequestMapping(value = "/realMobileValid")
+	@ResponseBody
+	public Object realMobileValid() throws Exception {
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String realName = pd.getString("real_name");
+		String mobile = pd.getString("real_mobile");
+		String idNo = pd.getString("id_no");
+    	try {
+			realName = URLDecoder.decode(realName, "UTF-8");
+		} catch (Exception e) {
+		}
+		String data = this.validPhone(realName, mobile, idNo);
+		Map<String,String> map = new HashMap<>();
+		map.put("data", data);
+		return map;
+	}
+	
+	
+	/**
+		key	是	string	在个人中心->我的数据,接口名称上方查看
+	 	realname	是	string	姓名，需要utf8 Urlencode
+	 	idcard	是	string	身份证号码
+	 	mobile	是	string	手机号码
+	 	type	否	int	1:返回手机运营商,不输入及其他值则不返回
+	 	showid	否	int	1:返回聚合订单号,不输入及其他值则不返回
+	 	province	否	int	1:返回手机号归属地，province,city,不输入不返回
+	 	detail	否	string	是否显示匹配详情码,传1显示，默认不显示
+	 */
+	public String validPhone(String realName,String mobile,String idNo){
+		String url = urlConfig.getJuheVerifyPhoneUrl();
+		String juheVeryPhoneKey = urlConfig.getJuhePhoneVerifyKey();
+		Map<String,String> params = new HashMap<String,String>();
+		params.put("key", juheVeryPhoneKey);
+		params.put("realname", realName);
+		params.put("idcard", idNo);
+		params.put("mobile", mobile);
+		params.put("type", "1");
+		params.put("showid", "1");
+		params.put("province", "1");
+		params.put("detail", "1");
+		String data = NetWorkUtil.doGet(url, params, "UTF-8");
+		JSONObject jo = JSONObject.fromObject(data);
+		if("0" == jo.getString("error_code")) {
+			JSONObject result = jo.getJSONObject("result");
+			String res = result.getString("res");
+			return ThirdApiEnum.getName(Integer.valueOf(res));
+		}else {
+			logger.error(data);
+			return data;
+		}
+	}
 	/**
 	 * 列表
 	 * 

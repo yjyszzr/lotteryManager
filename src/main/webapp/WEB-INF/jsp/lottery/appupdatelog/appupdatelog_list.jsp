@@ -45,15 +45,15 @@
 							
 								<td style="width:70px;">app名称:</td>
 								<td>
-									<select name="app_code_name" id="app_code_name" value="${pd.app_code_name}" title = "app名称必选" onchange="change1(this.value)">
-		                                <option ></option>     					 
+									<select name="app_code_name" id="app_code_name"  title = "app名称必选" onchange="change1(this.value)">
+		                                <option>app名称必选</option>    					 
 		                          	</select>									
 								</td>
 								<td style="width:12px;"></td>
 								<td style="width:100px;">app渠道名称:</td>
 								<td>
-		                          	<select id="channel" title = "app下载渠道必选" value="${pd.channel}" name="channel">
-								 		<option></option>                       
+		                          	<select id="channel" title = "app下载渠道必选"  name="channel">
+								 		<option>app下载渠道必选</option>                       
                       				</select>									
 								</td>
 								<td style="width:12px;"></td>
@@ -379,7 +379,7 @@
 				dataType:'json',
 				cache: false,
 				success: function(data){
-					//$("#channel").html('<option>app下载渠道必选</option>');
+					 $("#channel").html('<option>app下载渠道必选</option>');
 					 $.each(data.list, function(i, dvar){
 							$("#channel").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
 					 });

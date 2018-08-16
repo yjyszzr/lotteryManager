@@ -9,7 +9,25 @@ public class URLConfig {
 	private String manualRewardToUserMoneyLimitUrl;
 	private String uploadURL;
 	private String uploadAppPackageUrl;
+	private String juheVerifyPhoneUrl;
+	private String juhePhoneVerifyKey;
 	
+	public String getJuheVerifyPhoneUrl() {
+		return juheVerifyPhoneUrl;
+	}
+
+	public void setJuheVerifyPhoneUrl(String juheVerifyPhoneUrl) {
+		this.juheVerifyPhoneUrl = juheVerifyPhoneUrl;
+	}
+
+	public String getJuhePhoneVerifyKey() {
+		return juhePhoneVerifyKey;
+	}
+
+	public void setJuhePhoneVerifyKey(String juhePhoneVerifyKey) {
+		this.juhePhoneVerifyKey = juhePhoneVerifyKey;
+	}
+
 	public String getUploadAppPackageUrl() {
 		return uploadAppPackageUrl;
 	}

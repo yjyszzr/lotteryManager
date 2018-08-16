@@ -36,7 +36,7 @@
 								<td style="text-align: left;padding-top: 13px;">app名称:</td>
 								<td>
 									<select name="app_name" id="app_name"  onchange="change1(this.value)">
-										<option value="${pd.app_code_name}" >${pd.app_name}</option>
+										<option value="${pd.app_code_name}">${pd.app_name}</option>
 		                          	</select>
 		                        </td>
 		                        <td style="text-align: left;padding-top: 13px;">app渠道名称:</td>

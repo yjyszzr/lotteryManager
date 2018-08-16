@@ -196,7 +196,8 @@
         <property name="uploadURL" value="${uploadURL}"></property>
         <property name="manualRewardToUserMoneyLimitUrl" value="${manualRewardToUserMoneyLimitUrl}"></property>
         <property name="uploadAppPackageUrl" value="${uploadAppPackageUrl}"></property>
-        
+        <property name="juheVerifyPhoneUrl" value="${juheVerifyPhoneUrl}"></property>
+        <property name="juhePhoneVerifyKey" value="${juhePhoneVerifyKey}"></property>
     </bean>
  	<!-- QQ313596790 -->
 </beans>
