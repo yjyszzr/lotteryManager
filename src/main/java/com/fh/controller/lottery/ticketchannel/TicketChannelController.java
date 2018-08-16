@@ -24,6 +24,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.ticketchannel.TicketChannelManager;
 import com.fh.service.lottery.ticketchannellotteryclassify.TicketChannelLotteryClassifyManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -41,6 +42,8 @@ public class TicketChannelController extends BaseController {
 	private TicketChannelManager ticketchannelService;
 	@Resource(name = "ticketchannellotteryclassifyService")
 	private TicketChannelLotteryClassifyManager ticketchannellotteryclassifyService;
+	@Resource(name = "userActionLogService")
+	private UserActionLogService userActionLogService;
 
 	/**
 	 * 保存
@@ -60,6 +63,7 @@ public class TicketChannelController extends BaseController {
 		// pd.put("_id", this.get32UUID()); //主键
 		pd.put("id", "0"); // id
 		ticketchannelService.save(pd);
+		userActionLogService.save("1", "1", "出票渠道管理", "添出票渠道:" + pd.getString("channel_name"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -79,7 +83,9 @@ public class TicketChannelController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd = ticketchannelService.findById(pd);
 		ticketchannelService.delete(pd);
+		userActionLogService.save("1", "1", "出票渠道管理", "删除出票渠道,出票渠道为:" + pd.toString());
 		out.write("success");
 		out.close();
 	}
@@ -97,8 +103,11 @@ public class TicketChannelController extends BaseController {
 			return;
 		} // 校验权限
 		PageData pd = new PageData();
+		PageData pdOld = new PageData();
 		pd = this.getPageData();
+		pdOld = ticketchannelService.findById(pd);
 		ticketchannelService.updateStatus(pd);
+		userActionLogService.saveByObject("1", "出票渠道管理:" + pd.getString("classify_name"), pdOld, pd);
 		ticketchannellotteryclassifyService.updateStatusByTicketChannelId(pd);
 		out.write("success");
 		out.close();
@@ -119,7 +128,13 @@ public class TicketChannelController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+
+		PageData pdOld = new PageData();
+		pdOld = ticketchannelService.findById(pd);
 		ticketchannelService.edit(pd);
+		userActionLogService.saveByObject("1", "出票渠道管理:" + pd.getString("classify_name"), pdOld, pd);
+		ticketchannellotteryclassifyService.updateStatusByTicketChannelId(pd);
+
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;

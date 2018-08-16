@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.articleclassify.ArticleClassifyManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -38,6 +39,8 @@ public class ArticleClassifyController extends BaseController {
 	String menuUrl = "articleclassify/list.do"; // 菜单地址(权限用)
 	@Resource(name = "articleclassifyService")
 	private ArticleClassifyManager articleclassifyService;
+	@Resource(name = "userActionLogService")
+	private UserActionLogService userActionLogService;
 
 	/**
 	 * 保存
@@ -58,6 +61,7 @@ public class ArticleClassifyController extends BaseController {
 		pd.put("id", "0"); // id
 		pd.put("create_time", DateUtilNew.getCurrentTimeLong()); // 创建时间
 		articleclassifyService.save(pd);
+		userActionLogService.save("1", "1", "资讯分类管理", "添加资讯分类:" + pd.getString("classify_name"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -77,7 +81,9 @@ public class ArticleClassifyController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd = articleclassifyService.findById(pd);
 		articleclassifyService.delete(pd);
+		userActionLogService.save("1", "1", "资讯分类管理", "删除资讯分类,资讯分类为:" + pd.toString());
 		out.write("success");
 		out.close();
 	}
@@ -96,8 +102,11 @@ public class ArticleClassifyController extends BaseController {
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
+		PageData pdOld = new PageData();
 		pd = this.getPageData();
+		pdOld = articleclassifyService.findById(pd);
 		articleclassifyService.edit(pd);
+		userActionLogService.saveByObject("1", "资讯分类管理:" + pd.getString("classify_name"), pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;

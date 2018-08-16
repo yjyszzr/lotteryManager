@@ -24,6 +24,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.articleclassify.ArticleClassifyManager;
 import com.fh.service.lottery.phonechannel.PhoneChannelManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -41,6 +42,8 @@ public class PhoneChannelController extends BaseController {
 	private PhoneChannelManager phonechannelService;
 	@Resource(name = "articleclassifyService")
 	private ArticleClassifyManager articleclassifyService;
+	@Resource(name = "userActionLogService")
+	private UserActionLogService userActionLogService;
 
 	/**
 	 * 保存
@@ -60,6 +63,7 @@ public class PhoneChannelController extends BaseController {
 		// pd.put("_id", this.get32UUID()); //主键
 		pd.put("id", "0"); // id
 		phonechannelService.save(pd);
+		userActionLogService.save("1", "1", "APP资讯渠道管理", "添加移动端渠道:" + pd.getString("channel_name"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -79,7 +83,9 @@ public class PhoneChannelController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd = phonechannelService.findById(pd);
 		phonechannelService.delete(pd);
+		userActionLogService.save("1", "1", "APP资讯渠道管理", "删除APP资讯渠道:" + pd.toString());
 		out.write("success");
 		out.close();
 	}
@@ -97,9 +103,12 @@ public class PhoneChannelController extends BaseController {
 			return null;
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
+		PageData pdOld = new PageData();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pdOld = phonechannelService.findById(pd);
 		phonechannelService.edit(pd);
+		userActionLogService.saveByObject("1", "APP资讯渠道管理,修改App资讯渠道:" + pd.getString("channel_name"), pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;

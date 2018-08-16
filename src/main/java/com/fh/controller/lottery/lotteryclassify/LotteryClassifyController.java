@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.lotteryclassify.LotteryClassifyManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -38,6 +39,8 @@ public class LotteryClassifyController extends BaseController {
 	String menuUrl = "lotteryclassify/list.do"; // 菜单地址(权限用)
 	@Resource(name = "lotteryclassifyService")
 	private LotteryClassifyManager lotteryclassifyService;
+	@Resource(name = "userActionLogService")
+	private UserActionLogService userActionLogService;
 
 	/**
 	 * 保存
@@ -58,6 +61,7 @@ public class LotteryClassifyController extends BaseController {
 		pd.put("lottery_classify_id", "0"); // id
 		pd.put("create_time", DateUtilNew.getCurrentTimeLong()); // 创建时间
 		lotteryclassifyService.save(pd);
+		userActionLogService.save("1", "1", "彩种分类管理", "彩种添加分类:" + pd.getString("lottery_name"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -76,8 +80,11 @@ public class LotteryClassifyController extends BaseController {
 			return;
 		} // 校验权限
 		PageData pd = new PageData();
+
 		pd = this.getPageData();
+		pd = lotteryclassifyService.findById(pd);
 		lotteryclassifyService.delete(pd);
+		userActionLogService.save("1", "1", "彩种分类管理", "删除彩种分类,资讯分类为:" + pd.toString());
 		out.write("success");
 		out.close();
 	}
@@ -95,9 +102,12 @@ public class LotteryClassifyController extends BaseController {
 			return null;
 		} // 校验权限
 		ModelAndView mv = this.getModelAndView();
+		PageData pdOld = new PageData();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pdOld = lotteryclassifyService.findById(pd);
 		lotteryclassifyService.edit(pd);
+		userActionLogService.saveByObject("1", "彩种分类管理:" + pd.getString("lottery_name"), pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
