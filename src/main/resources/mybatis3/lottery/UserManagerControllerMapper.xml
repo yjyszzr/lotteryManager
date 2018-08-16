@@ -347,7 +347,7 @@
 					AND (dl_user.user_money+dl_user.user_money_limit) &gt;= #{pd.moneyStart} 
 		</if>
 		<if test="pd.moneyEnd != null and pd.moneyEnd != ''"> 
-					AND (dl_user.user_money+dl_user.user_money_limit) &lt;= #{pd.monelEnd} 
+					AND (dl_user.user_money+dl_user.user_money_limit) &lt;= #{pd.moneyEnd} 
 		</if>
 		<if test="pd.mobile1 != null and pd.mobile1 != ''">
 			and	mobile = #{pd.mobile1}
