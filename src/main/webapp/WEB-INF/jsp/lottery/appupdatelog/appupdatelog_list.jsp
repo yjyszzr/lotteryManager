@@ -50,7 +50,7 @@
 		                          	</select>									
 								</td>
 								<td style="width:12px;"></td>
-								<td style="width:100px;">app下载渠道:</td>
+								<td style="width:100px;">app渠道名称:</td>
 								<td>
 		                          	<select id="channel" title = "app下载渠道必选" value="${pd.channel}" name="channel">
 								 		<option></option>                       
@@ -65,9 +65,6 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">app名称</th>
 									<th class="center">渠道名称</th>
@@ -86,7 +83,7 @@
 								<c:when test="${not empty varList}">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
+											<td style="display:none" class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
@@ -157,9 +154,9 @@
 							<tr>
 								<td style="vertical-align:top;">
 									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
- 									<c:if test="${QX.del == 1 }"> 
+<%--  									<c:if test="${QX.del == 1 }"> 
 									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if> 
+									</c:if> --%> 
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

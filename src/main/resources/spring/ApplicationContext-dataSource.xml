@@ -195,6 +195,8 @@
         <property name="manualRewardUrl" value="${manualRewardUrl}"></property>
         <property name="uploadURL" value="${uploadURL}"></property>
         <property name="manualRewardToUserMoneyLimitUrl" value="${manualRewardToUserMoneyLimitUrl}"></property>
+        <property name="uploadAppPackageUrl" value="${uploadAppPackageUrl}"></property>
+        
     </bean>
  	<!-- QQ313596790 -->
 </beans>

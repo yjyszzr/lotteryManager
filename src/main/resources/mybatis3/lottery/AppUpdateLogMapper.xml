@@ -111,7 +111,7 @@
 		<if test="pd.id != null and pd.id != ''"> 
 			and id = #{id}
 		</if>
-		order by update_time desc,REPLACE(version,'.','') desc
+		order by app_code_name asc,update_time desc,REPLACE(version,'.','') desc
 	</select>
 	
 	<!-- 列表(全部) -->

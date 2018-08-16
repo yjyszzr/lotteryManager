@@ -39,7 +39,7 @@
 										<option value="${pd.app_code_name}" >${pd.app_name}</option>
 		                          	</select>
 		                        </td>
-		                        <td style="text-align: left;padding-top: 13px;">app下载渠道:</td>
+		                        <td style="text-align: left;padding-top: 13px;">app渠道名称:</td>
 		                        <td>
 		                          	<select id="channel"  name="channel">
 								 		<option value="${pd.channel}">${pd.channel_name}</option>                       
@@ -62,7 +62,7 @@
 								<td colspan="4">
 									<input type="text" name="text1" id="text1" value="${pd.text1}" maxlength="60" placeholder="升级说明" title="升级说明" style="width:98%;margin-bottom:4px;"/>
 									<input type="text" name="text2" id="text2" value="${pd.text2}" maxlength="60" placeholder="至少填一项" title="升级说明" style="width:98%;margin-bottom:4px;"/>
-									<input type="text" name="text3" id="text3" value="${pd.text3}" maxlength="60" placeholder="仅支持文字" title="升级说明" style="width:98%;margin-bottom:4px;"/>
+									<input type="text" name="text3" id="text3" value="${pd.text3}" maxlength="60" placeholder="结尾不要输入标点符号" title="升级说明" style="width:98%;margin-bottom:4px;"/>
 									<input type="text" name="text4" id="text4" value="${pd.text4}" maxlength="60" placeholder="简洁描述" title="升级说明" style="width:98%;margin-bottom:4px;"/>
 								</td>
 							</tr>
@@ -82,7 +82,7 @@
 									    </div>
 									</div>
 							</tr>
-							<tr rowspan="3">
+							<tr >
 								<td style="width:120px;text-align: right;padding-top: 13px;">apk路径*</td>
 								<td colspan="3">
 									<input  type="file" id="fileUpload" name="file"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
@@ -129,7 +129,6 @@
 		$(top.hangge());
 		//保存
 		function save(){
-			debugger;
 			if($("#app_name").val()=="" || $("#app_name").val()=="app名称必选"){
 				$("#app_name").tips({
 					side:3,
@@ -219,6 +218,32 @@
 			return false;
 			}
 			
+			//校验apk的正确性，通过apk的名称来判断正确的apk
+			var version = $("#points1").val()+"."+$("#points2").val()+"."+$("#points3").val();
+			var channel = $("#channel").val();
+			var dowLoadUrl = $("#apk_path").val();
+			if(dowLoadUrl.indexOf(version) < 0){
+				$("#points1").tips({
+					side:3,
+		            msg:'app新版本号与上传的包的版本号不一致，核对后重新上传包',
+		            bg:'#AE81FF',
+		            time:1
+		        });
+				$("#points1").focus();
+				return false;
+			}
+			
+			if(dowLoadUrl.indexOf(channel) < 0){
+				$("#channel").tips({
+					side:3,
+		            msg:'渠道号与上传的包的版本号不一致，请核对后重新上传包',
+		            bg:'#AE81FF',
+		            time:1
+		        });
+				$("#channel").focus();
+			return false;
+			}
+			
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
@@ -253,7 +278,7 @@
 				dataType:'json',
 				cache: false,
 				success: function(data){
-					 $("#channel").html('<option>app下载渠道必选</option>');
+/* 					 $("#channel").html('<option>app下载渠道必选</option>'); */
 					 $.each(data.list, function(i, dvar){
 							$("#channel").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
 					 });
