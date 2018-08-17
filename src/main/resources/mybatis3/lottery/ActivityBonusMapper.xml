@@ -24,6 +24,9 @@
 		is_enable,	
 		is_delete,	
 		add_time,	
+		recharge_start,
+		recharge_end,
+		recharge_chance,
 		exchange_points,	
 		exchange_goods_number
 	</sql>
@@ -45,6 +48,9 @@
         #{is_enable},	
         #{is_delete},	
         #{add_time},	
+        #{recharge_start},
+		#{recharge_end},
+		#{recharge_chance},
         #{exchange_points},	
         #{exchange_goods_number}	
 	</sql>
@@ -69,6 +75,9 @@
 		        is_enable,	
 		        is_delete,	
 		        add_time,	
+		        recharge_start,
+				recharge_end,
+				recharge_chance,
 		        exchange_points,	
 		        exchange_goods_number	
 		) values (

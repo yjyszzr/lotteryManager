@@ -81,6 +81,8 @@
 									<th class="center">彩种限制</th>
 									<th class="center">生效时间</th>
 									<th class="center">有效期</th>
+									<th class="center">冲值范围</th>
+									<th class="center">充值赠概率</th>									
 									<th class="center">发放数量</th>
 									<th class="center">已领取</th>
 									<th class="center">已使用</th>
@@ -105,6 +107,7 @@
 											<td class='center'> 
 												<c:if test="${var.bonus_type==1 }">注册送红包</c:if>
 												<c:if test="${var.bonus_type==2 }">西安活动红包</c:if>
+												<c:if test="${var.bonus_type==3 }">充值活动红包</c:if>
 											</td>
 											<td class='center'>${var.bonus_amount}</td>
 											<td class='center'>${var.min_goods_amount}</td>
@@ -112,7 +115,9 @@
 												<c:if test="${var.use_range==0 }">通用</c:if>
 											</td>
 											<td class='center'>领取后第${var.start_time}天</td>
-											<td class='center'>${var.end_time}天</td>
+											<td class='center'>${var.re}天</td>
+											<td class='center'>${var.recharge_start} ~ ${var.recharge_end}</td>
+											<td class='center'>${var.recharge_chance} </td>
 											<td class='center'>${var.bonus_number}</td>
 											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.use_count}</td>

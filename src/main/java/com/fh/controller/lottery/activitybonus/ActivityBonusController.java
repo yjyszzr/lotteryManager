@@ -2,6 +2,7 @@ package com.fh.controller.lottery.activitybonus;
 
 import java.io.PrintWriter;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.druid.util.StringUtils;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
@@ -67,6 +69,13 @@ public class ActivityBonusController extends BaseController {
 			pd.put("min_goods_amount", pd.getString("min_goods_amount"));
 		}
 
+		Number num = Float.parseFloat(pd.getString("recharge_chance"));
+		Integer rechargeChanceInt = num.intValue();
+		NumberFormat numberFormat = NumberFormat.getInstance();  
+		numberFormat.setMaximumFractionDigits(2);    
+		String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 * 100);  
+		pd.put("recharge_chance", rechargeChance);
+		
 		pd.put("bonus_id", "0"); // id
 		pd.put("receive_count", "0"); // id
 		pd.put("is_enable", "0"); // id
@@ -170,6 +179,18 @@ public class ActivityBonusController extends BaseController {
 			PageData pageData = new PageData();
 			pageData = varList.get(i);
 			String min_goods_amount = pageData.getString("min_goods_amount");
+			String bonusType =  pageData.getString("bonus_type");
+			if("3".equals(bonusType)) {
+				String rechargeChance = pageData.getString("recharge_chance");
+				Number num = Float.parseFloat(rechargeChance) * 100;
+				Integer rechargeChanceInt = num.intValue();
+				pageData.put("recharge_chance", rechargeChanceInt+"%");
+			}else {
+				pageData.put("recharge_chance", "~");
+				pageData.put("recharge_start", "");
+				pageData.put("recharge_end", "");
+			}
+			
 			if (null != min_goods_amount && !"".equals(min_goods_amount)) {
 				if (Double.parseDouble(min_goods_amount) == 0.00) {
 					pageData.put("min_goods_amount", "无门槛");
@@ -191,7 +212,6 @@ public class ActivityBonusController extends BaseController {
 					pageData.put("end_time", value);
 				}
 			}
-
 		}
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -247,6 +267,12 @@ public class ActivityBonusController extends BaseController {
 				pd.put("min_amount", 0);
 			}
 		}
+
+		String rechargeChance = pd.getString("recharge_chance");
+		Number num = Float.parseFloat(rechargeChance) * 100;
+		Integer rechargeChanceInt = num.intValue();
+		pd.put("recharge_chance", String.valueOf(rechargeChanceInt));
+		
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
