@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -18,18 +19,18 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.dto.AppSelectDTO;
 import com.fh.entity.dto.ChannelDTO;
 import com.fh.entity.dto.SystemDTO;
-import com.fh.entity.system.Dictionaries;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.switchappconfig.SwitchAppConfigManager;
 import com.fh.util.AppUtil;
+import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
 import com.fh.util.Tools;
 
 /** 

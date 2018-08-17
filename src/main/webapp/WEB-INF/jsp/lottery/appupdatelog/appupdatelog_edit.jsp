@@ -35,14 +35,14 @@
 								<td style="width:120px;text-align: right;padding-top: 13px;">渠道号*</td>
 								<td style="text-align: left;padding-top: 13px;">app名称:</td>
 								<td>
-									<select name="app_name" id="app_name"  onchange="change1(this.value)">
+									<select name="app_code_name" id="app_code_name"  onchange="change1(this.value)">
 										<option value="${pd.app_code_name}">${pd.app_name}</option>
 		                          	</select>
 		                        </td>
 		                        <td style="text-align: left;padding-top: 13px;">app渠道名称:</td>
 		                        <td>
 		                          	<select id="channel"  name="channel">
-								 		<option value="${pd.channel}">${pd.channel_name}</option>                       
+								 		<option value="${pd.channel}">${pd.channel_name}</option>                        
                       				</select>
 								</td>
 							</tr>
@@ -264,7 +264,7 @@
 				cache: false,
 				success: function(data){
 					 $.each(data.list, function(i, dvar){
-							$("#app_name").append("<option value="+dvar.DICTIONARIES_ID+"  >"+dvar.NAME+"</option>");
+							$("#app_code_name").append("<option value="+dvar.DICTIONARIES_ID+"  >"+dvar.NAME+"</option>");
 					 });
 				}
 			});
@@ -278,7 +278,7 @@
 				dataType:'json',
 				cache: false,
 				success: function(data){
-/* 					 $("#channel").html('<option>app下载渠道必选</option>'); */
+					 $("#channel").html('<option>app下载渠道必选</option>');
 					 $.each(data.list, function(i, dvar){
 							$("#channel").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
 					 });
@@ -301,6 +301,7 @@
 		        },
 		        error:function(data,status){
 		        	$("#loadingModal").modal('hide');
+		        	alert("上传失败,请检查");
 		        }
 		    });
 		  }
