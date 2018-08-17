@@ -36,24 +36,24 @@
 						<form action="orderdata/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
-								<td><span class="input-icon" style="width: 30px;"> </span>用户ID：</td>
+								<td><span class="input-icon" style="width: 70px;">用户ID： </span></td>
 								<td style="padding-left:2px;"><input   name="userID" id="userID"  value="${pd.userID }" type="text"  
-								 	style="width:100px;border-radius: 5px !important;"  /></td>
-								<td><span class="input-icon" style="width: 30px;"> </span> 投注金额：</td>
+								 	style="width:110px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 70px;"> 投注金额： </span></td>
 								<td style="padding-left:2px;"><input   name="ticketStart" id="ticketStart"  value="${pd.ticketStart }" type="number"  
 									 style="width:118px;border-radius: 5px !important;"  /></td>
 								<td>—</td>
 								<td style="padding-left:2px;"><input   name="ticketEnd" id="ticketEnd"  value="${pd.ticketEnd }" type="number" 
 									 style="width:118px;border-radius: 5px !important;"  /></td>
- 								<td> <span class="input-icon" style="width: 30px;"> </span> 下单时间：</td>
+ 								<td> <span class="input-icon" style="width: 70px;">下单时间： </span> </td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
 								<td>—</td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
 							</tr>
 							<tr>
-								<td><span class="input-icon" style="width: 30px;"> </span>投注状态:</td>
-								<td style="vertical-align: top; padding-left: 2px;">
-									<select name="statusCheck" id="statusCheck" data-placeholder="请选择" value="${pd.statusCheck }" style="width: 100px; border-radius: 5px !important">
+								<td><span class="input-icon" style="width: 70px;">投注状态: </span></td>
+								<td style="padding-left: 2px;">
+									<select name="statusCheck" id="statusCheck" data-placeholder="请选择" value="${pd.statusCheck }" style="width: 110px; border-radius: 5px !important">
 												<option value="" >全部</option>
 												<option value="0" <c:if test="${pd.statusCheck == '0'}">selected</c:if>>待付款</option>
 												<option value="1" <c:if test="${pd.statusCheck == '1'}">selected</c:if>>待出票</option>
@@ -66,13 +66,13 @@
 												<option value="8" <c:if test="${pd.statusCheck == '8'}">selected</c:if>>支付失败</option>
 										</select>
 								</td>	
-								<td><span class="input-icon" style="width: 30px;"> </span>中奖金额：</td>
+								<td><span class="input-icon" style="width: 70px;">中奖金额： </span></td>
 								<td style="padding-left:2px;"><input   name="winningStart" id="winningStart"  value="${pd.winningStart }" type="number"  
 								 	style="width:118px;border-radius: 5px !important;"  /></td>
 								<td>—</td>
 								<td style="padding-left:2px;"><input   name="winningEnd" id="winningEnd"  value="${pd.winningEnd }" type="number" 
 								 	style="width:118px;border-radius: 5px !important;"  /></td>
-								<td><span class="input-icon" style="width: 30px;"> </span>订单号：</td>
+								<td><span class="input-icon" style="width: 70px;">订单号： </span></td>
 								<td colspan="4"  style="padding-left:2px;"><input   name="orderSN" id="orderSN"  value="${pd.orderSN }" type="text"  
 								 	style="width:250px;border-radius: 5px !important;"  /></td>
 								<c:if test="${QX.cha == 1 }">

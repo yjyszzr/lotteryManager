@@ -350,7 +350,7 @@
 					AND (dl_user.user_money+dl_user.user_money_limit) &lt;= #{pd.moneyEnd} 
 		</if>
 		<if test="pd.mobile1 != null and pd.mobile1 != ''">
-			and	mobile = #{pd.mobile1}
+			and	mobile like CONCAT(CONCAT('%', #{pd.mobile1}),'%')
 		</if>
 		order by dl_user.reg_time DESC
 	</select>

@@ -36,42 +36,44 @@
 						<form action="userdata/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
-								<td><span class="input-icon" style="width: 30px;"> </span>累计消费：</td>
+								<td ><span class="input-icon" style="width: 70px;"> 累计消费：</span></td>
 								<td style="padding-left:2px;"><input   name="totalStart" id="totalStart"  value="${pd.totalStart }" type="number"  
-									 style="width:118px;border-radius: 5px !important;"  /></td>
+									 style="width:100px;border-radius: 5px !important;"  /></td>
 								<td>—</td>
 								<td style="padding-left:2px;"><input   name="totalEnd" id="totalEnd"  value="${pd.totalEnd }" type="number" 
-									 style="width:118px;border-radius: 5px !important;"  /></td>
-								<td><span class="input-icon" style="width: 30px;"> </span>累计充值：</td>
+									 style="width:100px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 70px;"> 累计充值：</span></td>
 								<td style="padding-left:2px;"><input   name="rtotalStart" id="rtotalStart"  value="${pd.rtotalStart }" type="number"  
-								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								 	style="width:100px;border-radius: 5px !important;"  /></td>
 								<td>—</td>
 								<td style="padding-left:2px;"><input   name="rtotalEnd" id="rtotalEnd"  value="${pd.rtotalEnd }" type="number" 
-								 	style="width:118px;border-radius: 5px !important;"  /></td>
-								<td><span class="input-icon" style="width: 30px;"> </span>日期：</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册开始日期" title="注册开始日期"/></td>
+								 	style="width:100px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 60px;"> 日期：</span></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:100px;" placeholder="注册开始日期" title="注册开始日期"/></td>
 								<td>至</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:118px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:100px;" placeholder="注册结束日期" title="注册结束日期"/></td>
+								<td><span class="input-icon" style="width: 30px;"> </span></td>
+								<td><span class="input-icon" style="width: 30px;"> </span></td>
 							</tr> 
 							<tr>	
-								<td><span class="input-icon" style="width: 30px;"> </span>累计中奖：</td>
+								<td><span class="input-icon" style="width: 70px;">累计中奖： </span></td>
 								<td style="padding-left:2px;"><input   name="atotalStart" id="atotalStart"  value="${pd.atotalStart }" type="number"  
-								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								 	style="width:100px;border-radius: 5px !important;"  /></td>
 								<td>—</td>
 								<td style="padding-left:2px;"><input   name="atotalEnd" id="atotalEnd"  value="${pd.atotalEnd }" type="number" 
-								 	style="width:118px;border-radius: 5px !important;"  /></td>
-								<td><span class="input-icon" style="width: 30px;"> </span>账户余额：</td>
+								 	style="width:100px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 70px;"> 账户余额：</span></td>
 								<td style="padding-left:2px;"><input   name="moneyStart" id="moneyStart"  value="${pd.moneyStart }" type="number"  
-								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								 	style="width:100px;border-radius: 5px !important;"  /></td>
 								<td>—</td>
 								<td style="padding-left:2px;"><input   name="moneyEnd" id="moneyEnd"  value="${pd.moneyEnd }" type="number" 
-								 	style="width:118px;border-radius: 5px !important;"  /></td>
-								<td><span class="input-icon" style="width: 30px;"> </span>手机号：</td>
-								<td style="padding-left:2px;"><input   name="mobile" id="mobile"  value="${pd.mobile }" type="number"  
-								 	style="width:118px;border-radius: 5px !important;"  /></td>
+								 	style="width:100px;border-radius: 5px !important;"  /></td>
+								<td><span class="input-icon" style="width: 70px;"> 手机号：</span></td>
+								<td style="padding-left:2px;"><input   name="mobile" id="mobile"  value="${pd.mobile }" type="text"  
+								 	style="width:100px;border-radius: 5px !important;"  /></td>
 								<td><span class="input-icon" style="width: 30px;"> </span></td>
 								<c:if test="${QX.cha == 1 }">
-									<td style="vertical-align: top; padding-left: 2px">
+									<td style="vertical-align: bottom;; padding-left: 2px">
 									<span class="input-icon" style="width: 30px;"> </span> 
 									<a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="搜索"
 												style="border-radius: 5px; color: blue !important; width: 50px">搜索</a>
