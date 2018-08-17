@@ -30,6 +30,7 @@
 					<form action="phonechannel/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<input type="hidden"  id="classify_ids"   name="article_classify_ids"  />
+						<input type="hidden"  id="sorts"   name="sorts"  />
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -48,12 +49,15 @@
 								<td style="width:75px;text-align: right;padding-top: 13px;">资讯类型:</td>
 								<td>
 									<c:forEach var="articleclassify" items="${articleclassifyList}" varStatus="row">	 	
-										<label style="margin: 5px">
+									<div style="width:60%;">
+										<label >
 								 			 <input type="checkbox" value="${articleclassify.id}"  <c:if test="${articleclassify.isCheck ==1}"> checked="checked" </c:if>  name ="article_classify" id ="article_classify" >${articleclassify.classify_name} 
 								 		 </label>
-								 		 <c:if test="${(row.index+1) % 4 ==0 }">
-								 			<br>
-								 		 </c:if>
+								 		 <input type="number"  value="${articleclassify.sort}" name ="sort" id ="sort" maxlength="2" placeholder="排序"  style="width:40%;float:right"/>
+								 			</div>
+								 			 <hr>
+<%-- 								 		 <c:if test="${(row.index+1) % 4 ==0 }"> --%>
+<%-- 								 		 </c:if> --%>
 									 </c:forEach>
 								</td>
 							</tr>
@@ -124,13 +128,17 @@
 			}
 			
 			   var obj = document.getElementsByName("article_classify"); 
+			   var objSort = document.getElementsByName("sort"); 
 			      var ids=''; 
+			      var sorts=''; 
 			      for(var i=0;i<obj.length;i++){
 			         if(obj[i].checked){
-			        	 ids+=obj[i].value+',';   
+			        	 ids+=obj[i].value+',';  
+			        	 sorts+=obj[i].value+':'+objSort[i].value+',';  
 			         }
 			      }
 			      $("#classify_ids").val(ids);
+			      $("#sorts").val(sorts);
 			if($("#classify_ids").val()==""){
 				$("#article_classify").tips({
 					side:3,

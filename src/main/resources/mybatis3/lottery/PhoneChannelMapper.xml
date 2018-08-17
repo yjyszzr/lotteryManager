@@ -13,7 +13,8 @@
 		channel,	
 		channel_name,	
 		app_code_name,	
-		article_classify_ids
+		article_classify_ids,
+		sorts
 	</sql>
 	
 	<!-- 字段值 -->
@@ -22,7 +23,8 @@
         #{channel},	
         #{channel_name},	
         #{app_code_name},	
-        #{article_classify_ids}	
+        #{article_classify_ids},	
+        #{sorts}	
 	</sql>
 	
 	<!-- 新增-->
@@ -34,7 +36,8 @@
 		        channel,	
 		        channel_name,	
 		        app_code_name,	
-		        article_classify_ids	
+		        article_classify_ids,
+		        sorts	
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -56,7 +59,8 @@
 			channel = #{channel},
 			channel_name = #{channel_name},
 			app_code_name = #{app_code_name},
-			article_classify_ids = #{article_classify_ids}
+			article_classify_ids = #{article_classify_ids},
+			sorts = #{sorts}
 		where 
 		id = #{id}
 	</update>

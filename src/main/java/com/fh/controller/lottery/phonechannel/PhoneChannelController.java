@@ -193,18 +193,30 @@ public class PhoneChannelController extends BaseController {
 		pd = this.getPageData();
 		pd = phonechannelService.findById(pd); // 根据ID读取
 		mv.setViewName("lottery/phonechannel/phonechannel_edit");
-		String str = pd.getString("article_classify_ids");
-		Map<String, PageData> pageDataMap = new HashMap<String, PageData>();
-
+		String idsStr = pd.getString("article_classify_ids");
+		String sortsStr = pd.getString("sorts");
 		List<PageData> articleclassifyList = articleclassifyService.listAll(pd);
-		articleclassifyList.forEach(s -> pageDataMap.put(s.getString("id"), s));
-		List<String> resultStr = Arrays.asList(str.split(","));
+		// Map<String, PageData> pageDataMap = new HashMap<String, PageData>();
+
+		// articleclassifyList.forEach(s -> pageDataMap.put(s.getString("id"),
+		// s));
+		List<String> idsList = Arrays.asList(idsStr.split(","));
+		List<String> sortsList = Arrays.asList(sortsStr.split(","));
 		for (int i = 0; i < articleclassifyList.size(); i++) {
 			PageData resultPageData = articleclassifyList.get(i);
 			articleclassifyList.get(i).put("isCheck", 0);
-			for (int j = 0; j < resultStr.size(); j++) {
-				if (resultPageData.getString("id").equals(resultStr.get(j))) {
+			for (int j = 0; j < idsList.size(); j++) {
+				if (resultPageData.getString("id").equals(idsList.get(j))) {
 					articleclassifyList.get(i).put("isCheck", 1);
+				}
+			}
+			for (int j = 0; j < sortsList.size(); j++) {
+				String[] sortArr = sortsList.get(j).split(":");
+				if (sortArr.length == 2) {
+					if (resultPageData.getString("id").equals(sortArr[0])) {
+						articleclassifyList.get(i).put("sort", sortArr[1]);
+
+					}
 				}
 			}
 		}
