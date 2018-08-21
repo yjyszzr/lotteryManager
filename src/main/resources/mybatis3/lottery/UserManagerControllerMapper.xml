@@ -316,13 +316,12 @@
 		id_code,
 		dl_user.user_status,
 		reg_from,
-		ph.channel_name as mobile_supplier,
-		pc.channel_name as device_channel,
+		pc.channel_name as phone_channel,
+		dl_user.device_channel, 
 		sex*1 as sex
 		from 
 		<include refid="tableName"></include>
 		left join dl_user_real on dl_user_real.user_id = dl_user.user_id 
-		left join dl_phone_channel ph on dl_user.mobile_supplier = ph.id
 		left join dl_phone_channel pc on pc.channel = dl_user.device_channel
 		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
