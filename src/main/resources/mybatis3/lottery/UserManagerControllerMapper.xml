@@ -223,7 +223,7 @@
 			 
 	</select>
 	<!-- 设备渠道注册人数汇总列表 -->
-	<select id="marketlistPage" parameterType="page" resultType="pd">
+	<select id="marketlist" parameterType="page" resultType="pd">
 		SELECT  count(DISTINCT u.user_id) as count_user,
 				p.channel_name as phone_channel,
 				u.device_channel,

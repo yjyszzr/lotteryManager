@@ -24,8 +24,7 @@
 		is_enable,	
 		is_delete,	
 		add_time,	
-		recharge_start,
-		recharge_end,
+		recharge_card_id,
 		recharge_chance,
 		exchange_points,	
 		exchange_goods_number
@@ -48,8 +47,7 @@
         #{is_enable},	
         #{is_delete},	
         #{add_time},	
-        #{recharge_start},
-		#{recharge_end},
+        #{recharge_card_id},
 		#{recharge_chance},
         #{exchange_points},	
         #{exchange_goods_number}	
@@ -75,8 +73,7 @@
 		        is_enable,	
 		        is_delete,	
 		        add_time,	
-		        recharge_start,
-				recharge_end,
+		        recharge_card_id,
 				recharge_chance,
 		        exchange_points,	
 		        exchange_goods_number	

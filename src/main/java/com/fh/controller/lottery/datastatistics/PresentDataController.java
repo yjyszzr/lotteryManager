@@ -32,6 +32,7 @@ public class PresentDataController extends BaseController {
 	private UserRechargeService userrechargeService;
 
 	private PageData pdt = null;
+	private LocalDate DATE = null;
 
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
@@ -96,38 +97,37 @@ public class PresentDataController extends BaseController {
 		LocalDate todayDate = LocalDate.now();
 		LocalDate weekDate = todayDate.plusWeeks(-1);
 		LocalDate monthDate = todayDate.plusMonths(-1);
+		pd.put("dayHour", todayDate.toString() );
+		page.setPd(pd);
+		List<PageData> listD = ordermanagerService.getAmountForDayHour(page);
 		for (int i = 0; i < 24; i++) {
-			if (i < 10) {
-				pd.put("dayHour", todayDate + " 0" + i);
-			} else {
-				pd.put("dayHour", todayDate + " " + i);
-			}
-			page.setPd(pd);
-			List<PageData> list = ordermanagerService.getAmountForDayHour(page);
-			pdh.put("d" + i, list.get(0).getString("amount"));
+			pdh.put("d"+i, "0");
 		}
-		if (pdt == null) {
+		listD.forEach(item->{
+			int h = Integer.parseInt(item.getString("time"));
+			pdh.put("d"+h,item.getString("amount"));
+		});
+		if (pdt == null || DATE.isBefore(todayDate)) {
+			DATE = todayDate;
 			pdt = new PageData();
 			for (int i = 0; i < 24; i++) {
-				if (i < 10) {
-					pd.put("dayHour", weekDate + " 0" + i);
-				} else {
-					pd.put("dayHour", weekDate + " " + i);
-				}
-				page.setPd(pd);
-				List<PageData> list = ordermanagerService.getAmountForDayHour(page);
-				pdt.put("w" + i, list.get(0).getString("amount"));
+				pdt.put("w"+i, "0");
+				pdt.put("m"+i, "0");
 			}
-			for (int i = 0; i < 24; i++) {
-				if (i < 10) {
-					pd.put("dayHour", monthDate + " 0" + i);
-				} else {
-					pd.put("dayHour", monthDate + " " + i);
-				}
-				page.setPd(pd);
-				List<PageData> list = ordermanagerService.getAmountForDayHour(page);
-				pdt.put("m" + i, list.get(0).getString("amount"));
-			}
+			pd.put("dayHour", weekDate.toString());
+			page.setPd(pd);
+			List<PageData> listW = ordermanagerService.getAmountForDayHour(page);
+			listW.forEach(item->{
+				int h = Integer.parseInt(item.getString("time"));
+				pdt.put("w"+h,item.getString("amount"));
+			}); 
+			pd.put("dayHour", monthDate.toString() );
+			page.setPd(pd);
+			List<PageData> listM = ordermanagerService.getAmountForDayHour(page);
+			listM.forEach(item->{
+				int h = Integer.parseInt(item.getString("time"));
+				pdt.put("m"+h,item.getString("amount"));
+			}); 
 		}
 		return pdh;
 	}

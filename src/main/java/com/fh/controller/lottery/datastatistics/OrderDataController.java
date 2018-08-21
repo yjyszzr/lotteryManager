@@ -75,6 +75,7 @@ public class OrderDataController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		page.setShowCount(65000);// 单页显示条数，为了全部导出应用
 		List<PageData> list = getDataList(page,pd);
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
@@ -190,11 +191,11 @@ public class OrderDataController extends BaseController {
 				PageData pdm = new PageData();
 				pdm.put("match_id", matchs[j]);
 				PageData matchDate = matchMap.get(pdm.getString("match_id"));
-				if (matchDate == null) {
+				if (matchDate == null && !matchMap.containsKey(pdm.getString("match_id"))) {
 					matchDate = matchService.findById(pdm);
+					matchMap.put(pdm.getString("match_id"), matchDate);
 				}
 				if(matchDate!=null) {
-					matchMap.put(matchDate.getString("match_id"), matchDate);
 					matchNM = matchNM + matchDate.getString("league_addr");
 				}else {
 					String matchName = pdm.getString("changci");
