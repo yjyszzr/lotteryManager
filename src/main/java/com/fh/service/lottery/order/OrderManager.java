@@ -79,9 +79,9 @@ public interface OrderManager {
 	public List<PageData> toDetail(PageData pd) throws Exception;
 
 	public List<PageData> getFirstOrderList(Page page) throws Exception;
-	
+
 	public List<PageData> getFirstOrderAllList(Page page) throws Exception;
-	
+
 	public List<PageData> getOldUserOrderList(Page page) throws Exception;
 
 	public List<PageData> getAgainOrderList(Page page) throws Exception;
@@ -101,4 +101,6 @@ public interface OrderManager {
 	public List<PageData> getGroupByOrderStatus(Page page) throws Exception;
 
 	public List<PageData> findByUserId(int userId) throws Exception;
+
+	public List<PageData> exportExcel(PageData pd) throws Exception;
 }

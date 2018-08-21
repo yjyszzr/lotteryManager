@@ -79,6 +79,12 @@ public class OrderService implements OrderManager {
 		return (List<PageData>) dao.findForList("OrderMapper.listAll", pd);
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> exportExcel(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.exportExcel", pd);
+	}
+
 	/**
 	 * 通过id获取数据
 	 * 
@@ -138,7 +144,7 @@ public class OrderService implements OrderManager {
 	public List<PageData> getFirstOrderList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getFirstOrderList", page);
 	}
-	
+
 	/**
 	 * 新增购彩用户
 	 */
@@ -147,7 +153,7 @@ public class OrderService implements OrderManager {
 	public List<PageData> getFirstOrderAllList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getFirstOrderAllList", page);
 	}
-	
+
 	/**
 	 * 新增购彩用户
 	 */

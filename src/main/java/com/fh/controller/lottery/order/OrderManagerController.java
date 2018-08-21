@@ -254,22 +254,14 @@ public class OrderManagerController extends BaseController {
 		titles.add("购彩时间"); // 10
 		titles.add("订单状态"); // 11
 		titles.add("回执单号"); // 12
+		titles.add("出票公司"); // 13
 		dataMap.put("titles", titles);
-		String lastStart = pd.getString("lastStart");
-		if (null != lastStart && !"".equals(lastStart)) {
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
-		}
-		String lastEnd = pd.getString("lastEnd");
-		if (null != lastEnd && !"".equals(lastEnd)) {
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		String selectionTime = pd.getString("selectionTime");
+		if (null == selectionTime || "".equals(selectionTime)) {
+			pd.put("selectionTime", DateUtilNew.getCurrentyyyyMMdd());
 		}
 
-		String orderStatusFor = pd.getString("order_status");
-		if ("".equals(orderStatusFor) && "".equals(lastEnd) && "".equals(lastStart)) {
-			pd.put("lastStart1", DateUtil.toTimeSubtraction30Day(DateUtilNew.getCurrentTimeLong()));
-		}
-
-		List<PageData> varOList = ordermanagerService.listAll(pd);
+		List<PageData> varOList = ordermanagerService.exportExcel(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
@@ -310,6 +302,7 @@ public class OrderManagerController extends BaseController {
 			}
 			vpd.put("var11", orderStatusStr); // 11
 			vpd.put("var12", varOList.get(i).getString("pay_order_sn")); // 12
+			vpd.put("var13", varOList.get(i).getString("channel_name")); // 13
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

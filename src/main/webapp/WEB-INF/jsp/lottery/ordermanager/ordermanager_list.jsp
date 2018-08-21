@@ -308,18 +308,21 @@
 			
 			//导出excel
 			function toExcel(){
-				var lastStart = $("#lastStart").val();
-				var lastEnd = $("#lastEnd").val();
-				var orderStatus = $("#order_status").val();
-				if(lastStart =="" && lastEnd == ""  && orderStatus == "" ){
-					bootbox.confirm("<h4><strong>温馨提示</strong></h4><br><h5>&nbsp&nbsp默认导出30天的数据，</h5><br><h5>&nbsp&nbsp您可以按照<span style='color:red'>时间</span>和<span style='color:red'>状态</span>筛选导出！</h5>", function(result) {
+// 				var lastStart = $("#lastStart").val();
+// 				var lastEnd = $("#lastEnd").val();
+// 				var orderStatus = $("#order_status").val();
+// 				if(lastStart =="" && lastEnd == ""  && orderStatus == "" ){
+					bootbox.confirm("<h4><strong>温馨提示</strong> </h4><hr><h5>&nbsp&nbsp默认导出今天的数据。</h5><br><h5>&nbsp&nbsp您可以按照<span style='color:red'>时间</span>筛选导出！</h5><br> &nbsp&nbsp<input id=\"selectionTime\"   type=\"text\" onfocus=\"WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})\" readonly=\"readonly\" style=\"width:186px;border-radius:5px !important\" placeholder=\"时间筛选\"/><br><br>", function(result) {
 						if(result) {
-							window.location.href='<%=basePath%>ordermanager/excel.do';
+							var selectionTime = $("#selectionTime").val();
+						    var items = selectionTime.split("-");
+						    var newStr = items.join("");
+							window.location.href='<%=basePath%>ordermanager/excel.do?selectionTime='+newStr;
 						}
 					});
-				}else{
-				window.location.href='<%=basePath%>ordermanager/excel.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&order_status='+orderStatus;
-				}
+// 				}else{
+<%-- 				window.location.href='<%=basePath%>ordermanager/excel.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&order_status='+orderStatus; --%>
+// 				}
 			}
 			
 	</script>
