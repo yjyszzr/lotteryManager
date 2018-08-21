@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -24,6 +25,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
+import com.fh.service.lottery.rechargecard.RechargeCardManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
@@ -43,6 +45,9 @@ public class ActivityBonusController extends BaseController {
 	private ActivityBonusManager activitybonusService;
 	@Resource(name="userActionLogService")
 	private UserActionLogService ACLOG;
+	@Resource(name="rechargecardService")
+	private RechargeCardManager rechargecardService;
+	
 	/**
 	 * 保存
 	 * 
@@ -73,7 +78,7 @@ public class ActivityBonusController extends BaseController {
 		Integer rechargeChanceInt = num.intValue();
 		NumberFormat numberFormat = NumberFormat.getInstance();  
 		numberFormat.setMaximumFractionDigits(2);    
-		String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 * 100);  
+		String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
 		pd.put("recharge_chance", rechargeChance);
 		
 		pd.put("bonus_id", "0"); // id
@@ -174,6 +179,7 @@ public class ActivityBonusController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData> varList = activitybonusService.list(page); // 列出ActivityBonus列表
+		Map<String,String> rechargeCardMap = this.createRechareCardMap();
 		mv.setViewName("lottery/activitybonus/activitybonus_list");
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = new PageData();
@@ -185,10 +191,10 @@ public class ActivityBonusController extends BaseController {
 				Number num = Float.parseFloat(rechargeChance) * 100;
 				Integer rechargeChanceInt = num.intValue();
 				pageData.put("recharge_chance", rechargeChanceInt+"%");
+				pageData.put("recharge_card_name", rechargeCardMap.get(String.valueOf(pageData.get("recharge_card_id"))));
 			}else {
 				pageData.put("recharge_chance", "~");
-				pageData.put("recharge_start", "");
-				pageData.put("recharge_end", "");
+				pageData.put("recharge_card_name", "~");
 			}
 			
 			if (null != min_goods_amount && !"".equals(min_goods_amount)) {
@@ -219,6 +225,20 @@ public class ActivityBonusController extends BaseController {
 		return mv;
 	}
 
+	/**
+	 * 查询充值卡
+	 * @return
+	 * @throws Exception 
+	 */
+	public Map<String,String> createRechareCardMap() throws Exception {
+		PageData pd = new PageData();
+		List<PageData> rechargeList = rechargecardService.listAll(pd);
+		Map<String,String> rechargeMap = new HashMap<String,String>();
+		for(PageData pageData:rechargeList) {
+			rechargeMap.put(pageData.getString("recharge_card_id"),pageData.getString("name"));
+		}
+		return rechargeMap;
+	}
 	/**
 	 * 去新增页面
 	 * 

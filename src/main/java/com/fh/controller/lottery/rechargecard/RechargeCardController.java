@@ -66,6 +66,29 @@ public class RechargeCardController extends BaseController {
 		return mv;
 	}
 	
+	/**获取连级数据
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/getRechargeCardList")
+	@ResponseBody
+	public Object getRechargeCardList() throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		List<PageData> varList = rechargecardService.listAll(pd);
+		List<PageData> pdList = new ArrayList<PageData>();
+		for(PageData d :varList){
+			PageData pdf = new PageData();
+			pdf.put("recharge_card_id", d.getString("recharge_card_id"));
+			pdf.put("recharge_card_name", d.getString("name"));
+			pdList.add(pdf);
+		}
+		map.put("list", pdList);	
+		return AppUtil.returnObject(new PageData(), map);
+	}
+	
+	
 	/**删除
 	 * @param out
 	 * @throws Exception
@@ -115,7 +138,6 @@ public class RechargeCardController extends BaseController {
 		}
 		page.setPd(pd);
 		List<PageData>	varList = rechargecardService.list(page);	//列出RechargeCard列表
-		
 		for(PageData pageData:varList) {
 			pageData.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("add_time"))), DateUtilNew.datetimeFormat));
 			if("0".equals(String.valueOf(pageData.get("type")))) {

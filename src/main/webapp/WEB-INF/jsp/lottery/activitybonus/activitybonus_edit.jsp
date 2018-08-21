@@ -97,26 +97,26 @@
                                 	</td>
                                 		<td style="text-align: left;" colspan="10">
 	                                		 <div class="col-sm-4">
-									    <select  name="bonus_type" id="bonus_type" value="${pd.bonus_type}" onchange="changeType(this.value)" style="width:204px;border-radius:5px !important">
-									        <option value="1" <c:if test="${pd.bonus_type==1}">selected</c:if> >注册送红包</option>
-											<option value="2" <c:if test="${pd.bonus_type==2}">selected</c:if> >西安活动红包</option>
-									        <option value="3" <c:if test="${pd.bonus_type==3}">selected</c:if> >充值送红包</option>
-									    </select>
-									</div>
+											    <select  name="bonus_type" id="bonus_type" value="${pd.bonus_type}" onchange="changeType(this.value)" style="width:204px;border-radius:5px !important">
+											        <option value="1" <c:if test="${pd.bonus_type==1}">selected</c:if> >注册送红包</option>
+													<option value="2" <c:if test="${pd.bonus_type==2}">selected</c:if> >西安活动红包</option>
+											        <option value="3" <c:if test="${pd.bonus_type==3}">selected</c:if> >充值送红包</option>
+											    </select>
+											</div>
 	                                	<div class="col-sm-5"> </div>
 	                                </td>
 							</tr>
 							
 							<tr id="range_tr" style="display: none;">
 									<td style="text-align: right;" colspan="10">
-	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">充值范围：</label>
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">充值卡名称：</label>
                                 	</td>
 									<td style="text-align: left;" colspan="10">
 										<div class="col-sm-4">
-											<input  name="recharge_start" type="number" title=">=" value="${pd.recharge_start}" min=0 step=1 class="ace" id="recharge_start" style="width:204px;border-radius:5px !important" />
-											~									             
-											<input  name="recharge_end" type="number" title = "<=" value="${pd.recharge_end}" min=1 step=1 class="ace" id="recharge_end" style="width:204px;border-radius:5px !important" />									
-                              	     	</div>
+					                        <select  name="recharge_card_id" id="recharge_card_id" value="${pd.recharge_card_id}"  style="width:204px;border-radius:5px !important">
+										        <option></option>
+										    </select>
+										</div>
                               	     </td>                        	
 							</tr>
 							<tr id="chance_tr" style="display: none;">
@@ -126,7 +126,7 @@
 									<td style="text-align: left;" colspan="10">
 										<div class="col-sm-4">
 	                                		<input type="number" name="recharge_chance" id="recharge_chance" value="${pd.recharge_chance}" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" min=1 step=1  max=100 style="width:204px;border-radius:5px !important" /> %
-                                		<div>
+                                		</div>
                                 	</td>                                	                                	
 							</tr>							
 							
@@ -197,61 +197,6 @@
 		            time:2
 		        });
 				$("#bonus_amount").focus();
-			return false;
-			}
-
-			if($("#recharge_start").val().indexOf(".") >= 0){
-				$("#recharge_start").tips({
-					side:3,
-		            msg:'冲值范围起不能为小数',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#recharge_start").focus();
-			return false;
-			}
-
-			if($("#recharge_end").val().indexOf(".") >= 0){
-				$("#recharge_end").tips({
-					side:3,
-		            msg:'冲值范围止不能为小数',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#recharge_end").focus();
-			return false;
-			}
-
-			if($("#recharge_start").val()=="" || $("#recharge_start").val() <= 0){
-				$("#recharge_start").tips({
-					side:3,
-		            msg:'请输入正确的冲值范围起',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#recharge_start").focus();
-			return false;
-			}
-
-			if($("#recharge_end").val()=="" || $("#recharge_end").val() <= 0){
-				$("#recharge_end").tips({
-					side:3,
-		            msg:'请输入正确的冲值范围止',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#recharge_end").focus();
-			return false;
-			}
-
-			if($("#recharge_end").val() <= $("#recharge_start").val() ){
-				$("#recharge_end").tips({
-					side:3,
-		            msg:'冲值范围止不能小于等于冲值范围起',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#recharge_end").focus();
 			return false;
 			}
 
@@ -343,6 +288,20 @@
 				var chance_style = document.getElementById('chance_tr').style;
 				range_style.display = 'table-row';
 				chance_style.display = 'table-row';
+
+				$.ajax({
+					type: "POST",
+					url: '<%=basePath%>rechargecard/getRechargeCardList.do?tm='+new Date().getTime(),
+		    		data: {},
+					dataType:'json',
+					cache: false,
+					success: function(data){
+							 $.each(data.list, function(i, dvar){
+									$("#recharge_card_id").append("<option value="+dvar.recharge_card_id+">"+dvar.recharge_card_name+"</option>");
+							 });
+					}
+				});
+
 			}else{
 				var range_style = document.getElementById('range_tr').style;
 				var chance_style = document.getElementById('chance_tr').style;

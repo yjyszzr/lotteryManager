@@ -37,7 +37,7 @@
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">充值卡名称:</td>
-								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="50" placeholder="这里输入充值卡名称" title="充值卡名称" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
+								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="50" placeholder="充值卡名称不能重复,给前端显示,例如:1000元" title="充值卡名称" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">充值卡描述:</td>
