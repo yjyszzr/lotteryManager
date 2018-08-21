@@ -126,7 +126,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 
 	@SuppressWarnings("unchecked")
 	public List<PageData> getMarketList(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("UserManagerControllerMapper.marketlistPage", page);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.marketlist", page);
 	}
 	
 	@SuppressWarnings("unchecked")
