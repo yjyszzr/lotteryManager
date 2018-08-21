@@ -339,12 +339,25 @@ public class ReportFormDataController extends BaseController {
 		pageData.put("data2", totalAM.get(0).getString("bonusSum"));
 		pageData.put("data3", totalAM.get(0).getString("amountSum"));
 		pageData.put("data20", totalAM.get(0).getString("userCount"));
+		pageData.put("data201", totalAM.get(0).getString("thirdSum"));
+		pageData.put("data202", totalAM.get(0).getString("surplusSum"));
+		pageData.put("data203", totalAM.get(0).getString("orderCount"));
 		
 		List<PageData> plyList = ordermanagerService.getOrderOfPlay(page); 
 		for (int j = 0; j < plyList.size(); j++) {
 			pageData.put("ply" + plyList.get(j).getString("classify"),plyList.get(j).getString("amount"));
 		}
-
+		//支付、出票失败金额
+		List<PageData> statusList = ordermanagerService.getGroupByOrderStatus(page);
+		for(PageData statusPD : statusList) {
+			if(statusPD.getString("status").equals("2")) {
+				pageData.put("data39", statusPD.getString("amountSum"));
+			}
+			if(statusPD.getString("status").equals("8")) {
+				pageData.put("data40", statusPD.getString("amountSum"));
+			}
+		}
+		
 		pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(start+" 00:00:00"));
 		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(end+" 23:59:59"));
 		PageData withdrawPD = userwithdrawService.findTotalWithDraw(pd);
@@ -387,15 +400,7 @@ public class ReportFormDataController extends BaseController {
 		pd.put("lastStart1", null);
 		pd.put("lastEnd1", end);
 		page.setPd(pd);
-		List<PageData> statusList = ordermanagerService.getGroupByOrderStatus(page);
-		for(PageData statusPD : statusList) {
-			if(statusPD.getString("status").equals("2")) {
-				pageData.put("data39", statusPD.getString("amountSum"));
-			}
-			if(statusPD.getString("status").equals("8")) {
-				pageData.put("data40", statusPD.getString("amountSum"));
-			}
-		}
+		
 		List<PageData> totalAMAll = ordermanagerService.getTotalAmountByTime(page);
 		pageData.put("data37", totalAMAll.get(0).getString("userCount"));
 		pageData.put("data38", totalAMAll.get(0).getString("amountSum"));

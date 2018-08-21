@@ -110,8 +110,13 @@
 											<!--<th class='center'>混合投注比例</th> 18 -->
 											<!--<th class='center'>世界杯比例</th> 19 -->
 											<th class='center'>当${pd.day }购彩用户数</th><!-- 20 -->
+											<th class='center'>当${pd.day }三方支付</th><!-- 201 -->
+											<th class='center'>当${pd.day }余额支付</th><!-- 202 -->
+											<th class='center'>当${pd.day }当日订单量</th><!-- 203 -->
 											<th class='center'>当${pd.day }提现金额</th><!-- 21 -->
 											<th class='center'>当${pd.day }充值金额</th><!-- 22 -->
+											<th class='center'>当${pd.day }出票失败金额</th><!-- 39 -->
+											<th class='center'>当${pd.day }支付失败金额</th><!-- 40 -->
 											<th class='center'>当${pd.day }新增的注册用户数</th><!-- 23 -->
 											<th class='center'>当${pd.day }新增注册并购彩用户数</th><!-- 24 -->
 											<th class='center'>当${pd.day }新增注册并认证用户数</th><!-- 25 -->
@@ -128,8 +133,6 @@
 											<th class='center'>老用户人均购彩金额</th><!-- 36 -->
 											<th class='center'>累计新增购彩用户数</th><!-- 37 -->
 											<th class='center'>总购彩金额</th><!-- 38 -->
-											<!--<th class='center'>出票失败金额</th><!-- 39 -->
-											<!--<th class='center'>支付失败金额</th><!-- 40 -->
 										</tr>
 									</thead>
 
@@ -216,9 +219,13 @@
 																</c:if>													
 															</td>-->
 															<td class='center'>${var.data20 }</td>
+															<td class='center'>${var.data201 }</td>
+															<td class='center'>${var.data202 }</td>
+															<td class='center'>${var.data203 }</td>
 															<td class='center'>${var.data21 }</td>
 															<td class='center'>${var.data22 }</td>
-															
+															<td class='center'>${var.data39 }</td>
+															<td class='center'>${var.data40 }</td>
 															<td class='center'>${var.data23 }</td>
 															<td class='center'>${var.data24 }</td>
 															<td class='center'>${var.data25 }</td>
@@ -249,8 +256,7 @@
 															</td>
 															<td class='center'>${var.data37 }</td>
 															<td class='center'>${var.data38 }</td>
-															<!--<td class='center'>${var.data39 }</td>-->
-															<!--<td class='center'>${var.data40 }</td>-->
+															
 														</tr>
 													</c:forEach>
 												</c:if>

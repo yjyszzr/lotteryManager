@@ -555,9 +555,12 @@
 	
 	<select id="getTotalAmountByTime"  parameterType="page" resultType="pd">
 	select COALESCE(count(DISTINCT o.user_id),0) as userCount,
+	 		COALESCE(count(DISTINCT o.order_id),0) as orderCount,
 			COALESCE(sum(o.ticket_amount),0) as amountSum,
 			COALESCE(sum(o.winning_money),0) as winningSum,
 			COALESCE(sum(o.money_paid),0) as paidSum,
+			COALESCE(sum(o.surplus),0) as surplusSum,
+			COALESCE(sum(o.third_party_paid),0) as thirdSum,
 			COALESCE(sum(o.bonus),0) as bonusSum
 	from dl_order o left join dl_user u on o.user_id = u.user_id
 	where o.order_status in ( '3', '4', '5', '6', '7' ) 
