@@ -139,7 +139,7 @@ public class AppUpdateLogController extends BaseController {
 		newPd.put("update_install", pd.getString("update_install"));
 		newPd.put("id", Integer.valueOf(pd.getString("id")));
 		appupdatelogService.edit(newPd);
-		ACLOG.saveByObject("1", "app升级管理,编辑保存:" + pd.getString("channel"), oldPd, newPd);
+		ACLOG.saveByObject("1", "app升级管理,修改保存:" + pd.getString("channel"), oldPd, newPd);
 		
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -166,9 +166,6 @@ public class AppUpdateLogController extends BaseController {
         Map<String, String> appMap = appList.stream().collect(Collectors.toMap(s->s.getString("app_code_name"), s->s.getString("app_name")));
 		List<PageData>  channelList = switchappconfigService.queryChannel();
         Map<String, String> channelMap = channelList.stream().collect(Collectors.toMap(s->s.getString("channel"), s->s.getString("channel_name")));
-        
-//        pd.put("app_code_name", appMap.get(pd.get("app_code_name")));
-//        pd.put("channel_name", appMap.get(pd.get("channel")));
         
         List<PageData>	newVarList = new ArrayList<>();
 		for(PageData pdata:varList) {

@@ -87,9 +87,6 @@
 														<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.act_id}');">
 															<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑">编辑</i>
 														</a>
-														<a class="btn btn-xs btn-danger" onclick="del('${var.act_id}');">
-															<i class="ace-icon fa fa-trash-o bigger-120" title="删除">删除</i>
-														</a>
 													</c:when>
 													
 													<c:when test="${var.is_finish==0}">
@@ -128,9 +125,6 @@
 								<td style="vertical-align:top;">
 									<c:if test="${QX.add == 1 }">
 									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
