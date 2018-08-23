@@ -25,6 +25,7 @@ import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
+import com.fh.service.lottery.lotteryclassify.LotteryClassifyManager;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.AppUtil;
@@ -52,6 +53,9 @@ public class OrderController extends BaseController {
 	private URLConfig urlConfig;
 	@Resource(name = "userActionLogService")
 	private UserActionLogService ACLOG;
+	
+	@Resource(name = "lotteryclassifyService")
+	private LotteryClassifyManager lotteryclassifyService;
 
 	/**
 	 * 保存
@@ -401,14 +405,22 @@ public class OrderController extends BaseController {
 		pd = this.getPageData();
 		String orderSn = pd.getString("orderSn");
 		PageData orderPd = orderService.findByOrderSn(orderSn);
+		
+		PageData querylotteryPd = new PageData();
+		querylotteryPd.put("lottery_classify_id", Integer.valueOf(orderPd.getString("lottery_classify_id")));
+		PageData lotteryPd = lotteryclassifyService.findById(querylotteryPd);
 		if (null != orderPd) {
 			double reward = Double.parseDouble(orderPd.getString("winning_money"));
 			int userId = Integer.parseInt(orderPd.getString("user_id"));
+			int lotteryClassifyId = Integer.valueOf(orderPd.getString("lottery_classify_id"));
+			String lotteryName = lotteryPd.getString("lottery_name");
 			ReqOrdeEntity reqOrdeEntity = new ReqOrdeEntity();
 			reqOrdeEntity.orderSn = orderSn;
 			reqOrdeEntity.reward = reward;
 			reqOrdeEntity.userId = userId;
 			reqOrdeEntity.userMoney = 0;
+			reqOrdeEntity.lotteryClassifyId = lotteryClassifyId;
+			reqOrdeEntity.lotteryName = lotteryName;
 			reqOrdeEntity.betMoney = Double.parseDouble(orderPd.getString("ticket_amount"));
 			Integer payTimeTmp = Integer.valueOf(orderPd.getString("pay_time"));
 			String payTime = DateUtilNew.getCurrentTimeString(Long.valueOf(payTimeTmp),DateUtilNew.datetimeFormat);
