@@ -140,8 +140,13 @@ public class ReportFormDataController extends BaseController {
 //		titles.add("混合投注比例"); //  19
 //		titles.add("世界杯比例"); //  20
 		titles.add("当"+day+"购彩用户数"); //  21
+		titles.add("当"+day+"三方支付"); //  201
+		titles.add("当"+day+"余额支付"); //  202
+		titles.add("当"+day+"当日订单量"); //  203
 		titles.add("当"+day+"提现金额"); //  22 
 		titles.add("当"+day+"充值金额"); //  23
+		titles.add("当"+day+"出票失败金额"); //  40
+		titles.add("当"+day+"支付失败金额"); //  41
 		titles.add("当"+day+"新增的注册用户数"); //  24
 		titles.add("当"+day+"新增的注册用户数"); //  25
 		titles.add("当"+day+"新增注册并认证用户数"); //  26
@@ -158,8 +163,7 @@ public class ReportFormDataController extends BaseController {
 		titles.add("老用户人均购彩金额"); //  37
 		titles.add("累计新增购彩用户数"); //  38
 		titles.add("总购彩金额"); //  39
-//		titles.add("出票失败金额"); //  40
-//		titles.add("支付失败金额"); //  41
+
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("titles", titles);
 		 
@@ -189,8 +193,13 @@ public class ReportFormDataController extends BaseController {
 //			vpd.put("var20", getPercent(pdt.getString("ply8"),pdt.getString("data3"))); // 20
 			
 			vpd.put("var21", pdt.getString("data20")); // 21
+			vpd.put("var201", pdt.getString("data201")); // 21
+			vpd.put("var202", pdt.getString("data202")); // 21
+			vpd.put("var203", pdt.getString("data203")); // 21
 			vpd.put("var22", pdt.getString("data21")); // 22
 			vpd.put("var23", pdt.getString("data22")); // 23
+			vpd.put("var40", pdt.getString("data39")); // 40
+			vpd.put("var41", pdt.getString("data40")); // 41
 			vpd.put("var24", pdt.getString("data23")); // 24
 			vpd.put("var25", pdt.getString("data24")); // 25
 			vpd.put("var26", pdt.getString("data25")); // 26
@@ -217,8 +226,7 @@ public class ReportFormDataController extends BaseController {
 			}
 			vpd.put("var38", pdt.getString("data37")); // 38
 			vpd.put("var39", pdt.getString("data38")); // 39
-//			vpd.put("var40", pdt.getString("data39")); // 40
-//			vpd.put("var41", pdt.getString("data40")); // 41
+
 			for(Object o :vpd.keySet()) {
 				if(vpd.get(o)==null || vpd.get(o).equals("")) {
 					vpd.put(o, "0.00");
