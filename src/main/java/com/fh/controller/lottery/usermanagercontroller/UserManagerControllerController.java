@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,6 +76,8 @@ public class UserManagerControllerController extends BaseController {
 
 	@Resource(name = "orderService")
 	private OrderManager ordermanagerService;
+	
+	private final static Logger logFac = LoggerFactory.getLogger(UserManagerControllerController.class);
 
 	/**
 	 * 保存
@@ -186,6 +190,7 @@ public class UserManagerControllerController extends BaseController {
     	try {
 			realName = URLDecoder.decode(realName, "UTF-8");
 		} catch (Exception e) {
+			logFac.error("姓名decode异常{}"+e);
 		}
 		String data = this.validPhone(realName, mobile, idNo);
 		Map<String,String> map = new HashMap<>();
@@ -218,10 +223,11 @@ public class UserManagerControllerController extends BaseController {
 		params.put("detail", "1");
 		String data = NetWorkUtil.doGet(url, params, "UTF-8");
 		JSONObject jo = JSONObject.fromObject(data);
-		if("0" == jo.getString("error_code")) {
+		if(0 == Integer.valueOf(jo.getString("error_code"))) {
+			logger.info(jo);
 			JSONObject result = jo.getJSONObject("result");
-			String res = result.getString("res");
-			return ThirdApiEnum.getName(Integer.valueOf(res));
+			String rescode = result.getString("rescode");
+			return ThirdApiEnum.getName(Integer.valueOf(rescode));
 		}else {
 			logger.error(data);
 			return data;

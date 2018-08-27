@@ -4,6 +4,7 @@ public enum ThirdApiEnum {
 	//聚合的定义参考https://www.juhe.cn/docs/api/id/208
 	/*"rescode":"24",输入detail为1时返回匹配详情码,11:匹配,21:姓名不匹配,22:身份证不匹配,
 	23:姓名身份证均不匹配,33:身份证和姓名不一致,24:不匹配,具体要素不匹配未知*/
+	mobile_match_all(1, "完全匹配"),
     mobile_match(11, "完全匹配"),
     name_not_match(21, "姓名不匹配手机号"),
     id_not_match(22, "身份证不匹配手机号"),
