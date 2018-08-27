@@ -11,5 +11,7 @@ public class ReqOrdeEntity {
 	public double betMoney;
 	public String betTime;
 	public String note;
+	public Integer lotteryClassifyId;
+	public String lotteryName;
 	public List<ReqOrdeEntity> userIdAndRewardList;
 }

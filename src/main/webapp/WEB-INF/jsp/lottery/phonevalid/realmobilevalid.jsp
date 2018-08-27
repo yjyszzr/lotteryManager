@@ -24,7 +24,7 @@
 .td1{-webkit-box-shadow:1px 1px 1px #00FFFF;-moz-box-shadow:1px 1px 1px #00FFFF;box-shadow:1px 1px 1px 1px #00FFFF;background:#FAEBD7;padding:10px;}
 .idInput{
  width: 24.95rem;
- height: 3.1rem;
+ height: 2.1rem;
  background: url(../img/input_bg.png) center / contain no-repeat;
  font-size: 1.6rem;
  color: #1b1920;
@@ -47,24 +47,31 @@
 							
 						<!-- 检索  -->
 						<form action="userrealmanager/realMobileValid.do" method="post" name="Form" id="Form">
-						<table class="table1">
+						<table style="border-collapse:separate; border-spacing:10px;">
+							<tr style = "height: 1.0rem">
+							
+							</tr>
 							<tr>
-								<td class="td1" >
-								真实姓名:
+								<td  >
+								真实姓名 : 
 								</td >
-								<td class="td1"> 
-									<input type = "text" style = "height: 3.1rem" id = "real_name"> </input>
+								<td > 
+									<input type = "text" style = "height: 2.1rem" id = "real_name"> </input>
 								</td>
-								<td class="td1">
-								真实手机号:
+							</tr>
+							<tr>
+								<td >
+								真实手机号 : 
 								</td>
-								<td class="td1">
-									<input type = "text" style = "height: 3.1rem" id = "real_mobile"> </input>
-								</td class="td1">
-								<td class="td1">
-								身份证号:
+								<td>
+									<input type = "text" style = "height: 2.1rem" id = "real_mobile"> </input>
+								</td >
+							</tr>
+							<tr>
+								<td >
+								身份证号 : 
 								</td>
-								<td class="td1">
+								<td >
 									<input style="width:650px" type = "text" id = "id_no" class="idInput" onkeyup='this.value=this.value.replace(/\D/gi,"")'  > </input>
 								</td>								
 							</tr>
