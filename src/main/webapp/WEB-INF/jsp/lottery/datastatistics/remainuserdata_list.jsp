@@ -70,7 +70,7 @@
 							<thead>
 								<tr>
 									<th class="center">日期</th>
-									<th class="center">注册数</th>
+									<th class="center">购彩数</th>
 									<th class="center">第2${pd.type }</th>
 									<th class="center">第3${pd.type }</th>
 									<th class="center">第4${pd.type }</th>

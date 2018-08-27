@@ -46,6 +46,8 @@
 													<option value="1" <c:if test="${pd.action_type == '1'}">selected</c:if>>添加</option>
 													<option value="2" <c:if test="${pd.action_type == '2'}">selected</c:if>>删除</option>
 												</select> 
+												 <span class="input-icon" style="width: 70px;"> 操作菜单：</span> 
+								 				<input name="keywords" id="keywords"  value="${pd.keywords }" type="text" style="width:150px;border-radius: 5px !important;" placeholder="关键字"  /> 
 												<span class="input-icon" style="width: 10px; text-align: right;"> </span>
 												时间: <span>
 													<input name="lastStart" id="lastStart" value="${pd.lastStart }" type="text"

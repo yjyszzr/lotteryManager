@@ -79,6 +79,12 @@
 		<if test="pd.action_type != null and pd.action_type != ''"> 
 			and action_type = #{pd.action_type }
 		</if>
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				action_object LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
 		ORDER BY
 		action_time DESC
 	</select>
