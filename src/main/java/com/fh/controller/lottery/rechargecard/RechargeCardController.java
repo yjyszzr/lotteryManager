@@ -60,6 +60,7 @@ public class RechargeCardController extends BaseController {
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong());
 		pd.put("img_url", "");
 		pd.put("status", "0");		
+		
 		rechargecardService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");

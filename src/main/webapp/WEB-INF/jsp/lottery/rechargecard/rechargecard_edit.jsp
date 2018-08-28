@@ -48,6 +48,10 @@
 								<td><input type="number" name="real_value" id="real_value" value="${pd.real_value}" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" min=1 step=1  max=100   style="width:204px;border-radius:5px !important" /></td>
 							</tr>
 							<tr>
+								<td style="width:95px;text-align: right;padding-top: 13px;">最高送价值:</td>
+								<td><input type="number" name="max_donation" id="max_donation" value="${pd.max_donation}" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" min=1 step=1  style="width:204px;border-radius:5px !important" /></td>
+							</tr>
+							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
 									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
@@ -112,6 +116,17 @@
 				$("#real_value").focus();
 			return false;
 			}
+			if($("#max_donation").val()==""){
+				$("#max_donation").tips({
+					side:3,
+		            msg:'请输入最高赠送价值',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#max_donation").focus();
+			return false;
+			}
+			
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

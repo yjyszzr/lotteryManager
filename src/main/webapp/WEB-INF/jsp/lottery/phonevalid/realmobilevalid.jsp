@@ -72,7 +72,7 @@
 								身份证号 : 
 								</td>
 								<td >
-									<input style="width:650px" type = "text" id = "id_no" class="idInput" onkeyup='this.value=this.value.replace(/\D/gi,"")'  > </input>
+									<input style="width:650px" type = "text" id = "id_no" style = "height: 2.1rem" onkeyup='this.value=this.value.replace(/\D/gi,"")'  > </input>
 								</td>								
 							</tr>
 						</table>
