@@ -114,7 +114,9 @@
 									<td style="text-align: left;" colspan="10">
 										<div class="col-sm-4">
 					                        <select  name="recharge_card_id" id="recharge_card_id" value="${pd.recharge_card_id}"  style="width:204px;border-radius:5px !important">
-										        <option></option>
+       											<c:forEach items="${pd.rechargeCardList}" var="rechargeCard">
+										        		<option  value="${rechargeCard.recharge_card_id }"  <c:if test="${rechargeCard.recharge_card_id == pd.recharge_card_id }">selected</c:if>>${rechargeCard.recharge_card_name}</option>
+										    	</c:forEach>
 										    </select>
 										</div>
                               	     </td>                        	
@@ -280,6 +282,7 @@
 		$(function() {
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+
 		});
 
 		function changeType(value){

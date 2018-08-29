@@ -226,7 +226,7 @@ public class ActivityBonusController extends BaseController {
 	}
 
 	/**
-	 * 查询充值卡
+	 * 查询充值卡Map
 	 * @return
 	 * @throws Exception 
 	 */
@@ -239,6 +239,25 @@ public class ActivityBonusController extends BaseController {
 		}
 		return rechargeMap;
 	}
+	
+	/**
+	 * 查询充值卡List
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<PageData> createRechareCardList() throws Exception {
+		PageData pd = new PageData();
+		List<PageData> varList = rechargecardService.listAll(pd);
+		List<PageData> pdList = new ArrayList<PageData>();
+		for(PageData d :varList){
+			PageData pdf = new PageData();
+			pdf.put("recharge_card_id", d.getString("recharge_card_id"));
+			pdf.put("recharge_card_name", d.getString("name"));
+			pdList.add(pdf);
+		}
+		return pdList;
+	}
+	
 	/**
 	 * 去新增页面
 	 * 
@@ -293,6 +312,8 @@ public class ActivityBonusController extends BaseController {
 		Integer rechargeChanceInt = num.intValue();
 		pd.put("recharge_chance", String.valueOf(rechargeChanceInt));
 		
+		List<PageData> rechargeCardList = this.createRechareCardList();
+		pd.put("rechargeCardList", rechargeCardList);
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;

@@ -41,7 +41,7 @@
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">充值卡描述:</td>
-								<td><input type="text" name="description" id="description" value="${pd.description}" maxlength="200" placeholder="这里输入充值卡描述" title="充值卡描述" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
+								<td><input type="text" name="description" id="description" value="${pd.description}" maxlength="200" placeholder="充值卡描述,前端展示,例如最高送多少元" title="充值卡描述" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">实际价值:</td>
@@ -145,6 +145,21 @@
 	           }
 	    }
 		
+		//初始第一级
+		$(function() {
+			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>switchappconfig/getLevels.do?tm='+new Date().getTime(),
+		    	data: {},
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					 $.each(data.list, function(i, dvar){
+							$("#app_code_name").append("<option value="+dvar.DICTIONARIES_ID+"  >"+dvar.NAME+"</option>");
+					 });
+				}
+			});
+		}); 
 		
 		$(function() {
 			//日期框
