@@ -103,13 +103,15 @@ public class AppDocController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		String keywords = pd.getString("keywords");			//关键词检索条件
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
 		List<PageData>	varList = appdocService.list(page);	//列出AppDoc列表
-		
+		for(PageData pdata:varList){
+			pdata.put("create_time", DateUtilNew.getTimeString(Integer.valueOf(pdata.getString("create_time")), DateUtilNew.ymd_sdf));
+		}
 		//查询文案分类
 		mv.setViewName("lottery/appdoc/appdoc_list");
 		mv.addObject("varList", varList);
@@ -118,31 +120,6 @@ public class AppDocController extends BaseController {
 		return mv;
 	}
 	
-	/**列表
-	 * @param page
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/toPreShow")
-	public ModelAndView toPreShow(Page page) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"列表AppDoc");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
-		if(null != keywords && !"".equals(keywords)){
-			pd.put("keywords", keywords.trim());
-		}
-		page.setPd(pd);
-		List<PageData>	varList = appdocService.list(page);	//列出AppDoc列表
-		
-		//查询文案分类
-		mv.setViewName("lottery/appdoc/appdoc_list");
-		mv.addObject("varList", varList);
-		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
-		return mv;
-	}
 	
 	
 	/**去新增页面

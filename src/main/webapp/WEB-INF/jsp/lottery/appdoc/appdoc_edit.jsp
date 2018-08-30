@@ -1,7 +1,8 @@
+<%@page import="com.fh.util.DateUtil"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -55,19 +56,17 @@
 								<td> </td>
 							</tr>
 							<tr>
-								<td> </td>
-								<td> <div  id="editor"></div> </td>
+								 <td> </td>
+								 <td> <div id="editor"></div> </td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
-									<a class="btn btn-mini btn-warming" onclick="toPreShow()">预览</a>
+									<!-- <a class="btn btn-mini btn-warming" onclick="toPreShow()">预览</a> -->
 									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 								</td>
 							</tr>
 						</table>
-						</div>
-						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
 					</form>
 					</div>
 					<!-- /.col -->
@@ -100,27 +99,30 @@
 	<!-- 上传控件 -->
 	<script src="static/ace/js/ace/elements.fileinput.js"></script>
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
-		<script type="text/javascript">
-		   var E = window.wangEditor;
-	       var editor = new E('#editor');
-	       editor.customConfig.showLinkImg = false;//关闭网络上传tab
-	       editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
-	       editor.customConfig.uploadImgMaxLength = 1;
-	       editor.customConfig.debug=true;
-	       editor.customConfig.uploadFileName = 'myFileName';
-	       editor.customConfig.uploadImgServer = '<%=basePath%>pictures/fileUploadForWangEditor.do';  // 上传图片到服务器
-	       editor.customConfig.uploadImgHooks = {
-	               customInsert: function (insertImg, result, editor) {
-	                   insertImg(result.data);
-	               }
-	           };
-	      editor.create();
-	      editor.txt.append('${pd.content}');
+	<script type="text/javascript">
+
+	  debugger;
+	  var E = window.wangEditor;
+      var editor = new E('#editor');
+      editor.customConfig.showLinkImg = false;//关闭网络上传tab
+      editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+      editor.customConfig.uploadImgMaxLength = 1;
+      editor.customConfig.debug=true;
+      editor.customConfig.uploadFileName = 'myFileName';
+      editor.customConfig.uploadImgServer = '<%=basePath%>pictures/fileUploadForWangEditor.do';  // 上传图片到服务器
+      editor.customConfig.uploadImgHooks = {
+               customInsert: function (insertImg, result, editor) {
+                   insertImg(result.data);
+               }
+           };
+      editor.create();
+/*       var content = $("#content").val(); */
+      editor.txt.append('${pd.content}'); 
 		
-		$(top.hangge());
+ 	  $(top.hangge()); 
 		
 		function save(status){
-			if($("#classify").val()==""){
+/* 			if($("#classify").val()==""){
 				$("#classify").tips({
 					side:3,
 		            msg:'请选择分类',
@@ -139,12 +141,11 @@
 		            time:2
 		        });
 			return false;
-			}
-			
+			} */
+			var content = editor.txt.html();
 			$("#content").val(content);
 			$("#Form").submit();
 			$("#zhongxin").hide();
-			$("#zhongxin2").show();
 		}
 		
 		//预览
@@ -158,10 +159,6 @@
 			});
 		}
 		
-		$(function() {
-			//日期框
-			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
-		});
 		</script>
 </body>
 </html>

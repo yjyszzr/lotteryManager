@@ -67,7 +67,6 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">备注1</th>
 									<th class="center">文案分类</th>
 									<th class="center">创建时间</th>
 									<th class="center">操作</th>
@@ -84,18 +83,18 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.id}</td>
+											<td class='center' style="display:none">${var.id}</td>
 											<td class='center' onclick="toPreShow('${var.id}');">
-												体现说明文案
+												<a>提现说明文案</a>
 											</td>
 											<td class='center'>${var.create_time}</td>
 											<td class="center">
-												<c:if test="${QX.edit != 1 && QX.del != 1 }">
-												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
-												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');">
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
+													</a>
+													<a class="btn btn-xs btn-danger" onclick="del('${var.id}');">
+														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
 												</div>
 												<div class="hidden-md hidden-lg">
@@ -175,7 +174,6 @@
 		$(top.hangge());//关闭加载状态
 		//检索
 		function tosearch(){
-			top.jzts();
 			$("#Form").submit();
 		}
 		$(function() {
@@ -232,8 +230,8 @@
 			 diag.Drag=true;
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>appdoc/goAdd.do';
-			 diag.Width = 850;
-			 diag.Height = 655;
+			 diag.Width = 800;
+			 diag.Height = 800;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -255,7 +253,7 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>appdoc/delete.do?app_id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>appdoc/delete.do?id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						tosearch();
 					});
@@ -265,13 +263,12 @@
 		
 		//修改
 		function edit(Id){
-			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>appdoc/goEdit.do?app_id='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.URL = '<%=basePath%>appdoc/goEdit.do?id='+Id;
+			 diag.Width = 800;
+			 diag.Height = 800;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
