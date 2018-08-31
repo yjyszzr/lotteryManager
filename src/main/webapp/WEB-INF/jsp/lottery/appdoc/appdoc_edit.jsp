@@ -41,7 +41,7 @@
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td ></td>
-								<td><input type="hidden"  id="content"  name="content"   value=""/></td>
+								<td><input type="hidden"  id="content"  name="content"   value="${pd.content}"/></td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">文案分类:</td>
@@ -116,13 +116,13 @@
                }
            };
       editor.create();
-/*       var content = $("#content").val(); */
-      editor.txt.append('${pd.content}'); 
+      var content = $("#content").val();
+      editor.txt.append(content); 
 		
  	  $(top.hangge()); 
 		
 		function save(status){
-/* 			if($("#classify").val()==""){
+ 		    if($("#classify").val()==""){
 				$("#classify").tips({
 					side:3,
 		            msg:'请选择分类',
@@ -141,7 +141,7 @@
 		            time:2
 		        });
 			return false;
-			} */
+			}
 			var content = editor.txt.html();
 			$("#content").val(content);
 			$("#Form").submit();
