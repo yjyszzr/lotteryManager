@@ -230,7 +230,7 @@ public class UserManagerControllerController extends BaseController {
 			return ThirdApiEnum.getName(Integer.valueOf(rescode));
 		}else {
 			logger.error(data);
-			return data;
+			return jo.getString("reason");
 		}
 	}
 	/**

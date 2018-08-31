@@ -37,7 +37,7 @@
                                 	</td>
                                 	<td style="text-align: left;" colspan="10">
 	                                	<div class="col-sm-4">
-	                                  	 	<input type="text" id="bonus_amount"  name="bonus_amount" placeholder="0元"    value="${pd.bonus_amount}"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:204px;border-radius:5px !important"/>元
+	                                  	 	<input type="text" id="bonus_amount"  name="bonus_amount" placeholder="0元"    value="${pd.bonus_amount}"   style="width:204px;border-radius:5px !important"/>元
 	                               		</div>
 	                                <div class="col-sm-5">
 	                                </div>
