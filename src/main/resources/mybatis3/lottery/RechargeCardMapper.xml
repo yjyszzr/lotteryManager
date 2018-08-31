@@ -71,10 +71,6 @@
 		set 
 			recharge_card_id = #{recharge_card_id},
 			name = #{name},
-			img_url = #{img_url},
-			status = #{status},
-			add_user = #{add_user},
-			add_time = #{add_time},
 			description = #{description},
 			max_donation = #{max_donation},
 			real_value = #{real_value}

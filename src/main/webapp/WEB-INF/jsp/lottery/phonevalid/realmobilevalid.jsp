@@ -177,10 +177,6 @@
 				return false;
 			}
 			
-			if(!IdentityCodeValid(id_no)){
-				return;
-			}
-			
 			$.ajax({
 				type: "POST",
 				url: '<%=basePath%>usermanagercontroller/realMobileValid.do?tm='+new Date().getTime(),

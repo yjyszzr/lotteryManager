@@ -55,7 +55,7 @@ public class RechargeCardController extends BaseController {
 		pd = this.getPageData();
 //		pd.put("recharge_card_id_id", this.get32UUID());	//主键
 		pd.put("is_delete", "0");	
-		pd.put("type", "0");	//充值卡类型
+		pd.put("type", "1");	//充值卡类型
 		pd.put("add_user", user.getNAME());
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong());
 		pd.put("img_url", "");
@@ -112,6 +112,7 @@ public class RechargeCardController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改RechargeCard");
+		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
