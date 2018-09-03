@@ -394,9 +394,9 @@
 	</select>
 	<!-- 数据统计中-首购订单 -->
 	<select id="getFirstOrderList" parameterType="page" resultType="pd">
-		SELECT count(a.user_id) as count,
-			 	sum(a.amount) as amount,
-			 	sum(a.amountTicket) as amountTicket
+		SELECT COALESCE(count(a.user_id),0) as count,
+			 	COALESCE(sum(a.amount),0) as amount,
+			 	COALESCE(sum(a.amountTicket),0) as amountTicket
 		from  (SELECT  user_id,money_paid  AS amount,ticket_amount  AS amountTicket  from dl_order 
 			where order_status in ('3','4','5','6','7') GROUP BY user_id 
 			HAVING min(add_time) &gt;= #{pd.lastStart1} and  min(add_time) &lt;= #{pd.lastEnd1} ) a;

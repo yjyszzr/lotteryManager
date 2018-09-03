@@ -142,7 +142,7 @@ public class ReportFormDataController extends BaseController {
 		titles.add("当"+day+"购彩用户数"); //  21
 		titles.add("当"+day+"三方支付"); //  201
 		titles.add("当"+day+"余额支付"); //  202
-		titles.add("当"+day+"当日订单量"); //  203
+		titles.add("当"+day+"订单量"); //  203
 		titles.add("当"+day+"提现金额"); //  22 
 		titles.add("当"+day+"充值金额"); //  23
 		titles.add("当"+day+"出票失败金额"); //  40
@@ -192,40 +192,40 @@ public class ReportFormDataController extends BaseController {
 //			vpd.put("var19", getPercent(pdt.getString("ply7"),pdt.getString("data3"))); // 19
 //			vpd.put("var20", getPercent(pdt.getString("ply8"),pdt.getString("data3"))); // 20
 			
-			vpd.put("var21", pdt.getString("data20")); // 21
-			vpd.put("var201", pdt.getString("data201")); // 21
-			vpd.put("var202", pdt.getString("data202")); // 21
-			vpd.put("var203", pdt.getString("data203")); // 21
-			vpd.put("var22", pdt.getString("data21")); // 22
-			vpd.put("var23", pdt.getString("data22")); // 23
-			vpd.put("var40", pdt.getString("data39")); // 40
-			vpd.put("var41", pdt.getString("data40")); // 41
-			vpd.put("var24", pdt.getString("data23")); // 24
-			vpd.put("var25", pdt.getString("data24")); // 25
-			vpd.put("var26", pdt.getString("data25")); // 26
-			vpd.put("var27", pdt.getString("data26")); // 27
-			vpd.put("var28", pdt.getString("data27")); // 28
-			vpd.put("var29", pdt.getString("data28")); // 29
-			vpd.put("var30", pdt.getString("data29")); // 30
-			vpd.put("var31", pdt.getString("data30")); // 31
-			vpd.put("var32", pdt.getString("data31")); // 32
-			vpd.put("var33", pdt.getString("data32")); // 33
+			vpd.put("var5", pdt.getString("data20")); // 21
+			vpd.put("var6", pdt.getString("data201")); // 21
+			vpd.put("var7", pdt.getString("data202")); // 21
+			vpd.put("var8", pdt.getString("data203")); // 21
+			vpd.put("var9", pdt.getString("data21")); // 22
+			vpd.put("var10", pdt.getString("data22")); // 23
+			vpd.put("var11", pdt.getString("data39")); // 40
+			vpd.put("var12", pdt.getString("data40")); // 41
+			vpd.put("var13", pdt.getString("data23")); // 24
+			vpd.put("var14", pdt.getString("data24")); // 25
+			vpd.put("var15", pdt.getString("data25")); // 26
+			vpd.put("var16", pdt.getString("data26")); // 27
+			vpd.put("var17", pdt.getString("data27")); // 28
+			vpd.put("var18", pdt.getString("data28")); // 29
+			vpd.put("var19", pdt.getString("data29")); // 30
+			vpd.put("var20", pdt.getString("data30")); // 31
+			vpd.put("var21", pdt.getString("data31")); // 32
+			vpd.put("var22", pdt.getString("data32")); // 33
 			BigDecimal a = new BigDecimal(pdt.getString("data32"));
 			BigDecimal b = new BigDecimal(pdt.getString("data31"));
-			vpd.put("var34", ""); // 34
+			vpd.put("var23", ""); // 34
 			if(!pdt.getString("data31").equals("0")) {
-				vpd.put("var34", a.divide(b,2,BigDecimal.ROUND_HALF_UP)); // 34
+				vpd.put("var23", a.divide(b,2,BigDecimal.ROUND_HALF_UP)); // 34
 			}
-			vpd.put("var35", pdt.getString("data34")); // 35
-			vpd.put("var36", pdt.getString("data35")); // 36
+			vpd.put("var24", pdt.getString("data34")); // 35
+			vpd.put("var25", pdt.getString("data35")); // 36
 			BigDecimal c = new BigDecimal(pdt.getString("data35"));
 			BigDecimal d = new BigDecimal(pdt.getString("data34"));
-			vpd.put("var37", ""); // 34
+			vpd.put("var26", ""); // 34
 			if(!pdt.getString("data34").equals("0")) {
-				vpd.put("var37", c.divide(d,2,BigDecimal.ROUND_HALF_UP)); // 34
+				vpd.put("var26", c.divide(d,2,BigDecimal.ROUND_HALF_UP)); // 34
 			}
-			vpd.put("var38", pdt.getString("data37")); // 38
-			vpd.put("var39", pdt.getString("data38")); // 39
+			vpd.put("var27", pdt.getString("data37")); // 38
+			vpd.put("var28", pdt.getString("data38")); // 39
 
 			for(Object o :vpd.keySet()) {
 				if(vpd.get(o)==null || vpd.get(o).equals("")) {
