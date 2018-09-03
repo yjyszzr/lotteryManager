@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -16,17 +18,17 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
+import com.fh.service.lottery.rechargecard.RechargeCardManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtilNew;
+import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
-import com.fh.service.lottery.rechargecard.RechargeCardManager;
 
 /** 
  * 说明：RechargeCard
@@ -53,13 +55,21 @@ public class RechargeCardController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-//		pd.put("recharge_card_id_id", this.get32UUID());	//主键
 		pd.put("is_delete", "0");	
 		pd.put("type", "1");	//充值卡类型
 		pd.put("add_user", user.getNAME());
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong());
 		pd.put("img_url", "");
 		pd.put("status", "0");		
+		
+		PageData queryPd = new PageData();
+		queryPd.put("real_value", pd.getString("real_value"));
+		PageData samePd = rechargecardService.findByRealValue(queryPd);	//根据ID读取
+		if(null != samePd) {
+			mv.addObject("msg","已经有相同价值的充值卡，请输入其他金额");
+			mv.setViewName("save_result");
+			return mv;
+		}
 		
 		rechargecardService.save(pd);
 		mv.addObject("msg","success");
@@ -117,6 +127,16 @@ public class RechargeCardController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		
+		PageData queryPd = new PageData();
+		queryPd.put("real_value", pd.getString("real_value"));
+		PageData samePd = rechargecardService.findByRealValue(queryPd);	//根据ID读取
+		if(null != samePd) {
+			mv.addObject("msg","已经有相同价值的充值卡，请输入其他金额");
+			mv.setViewName("save_result");
+			return mv;
+		}
+		
 		rechargecardService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -142,7 +162,7 @@ public class RechargeCardController extends BaseController {
 		List<PageData>	varList = rechargecardService.list(page);	//列出RechargeCard列表
 		for(PageData pageData:varList) {
 			pageData.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("add_time"))), DateUtilNew.datetimeFormat));
-			if("0".equals(String.valueOf(pageData.get("type")))) {
+			if("1".equals(String.valueOf(pageData.get("type")))) {
 				pageData.put("type", "充值赠红包类型 ");
 			}
 		}
