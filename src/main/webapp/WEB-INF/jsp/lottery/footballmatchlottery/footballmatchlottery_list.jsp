@@ -162,6 +162,10 @@
 															</c:when>
 															<c:when test="${var.qaStatus == 1 }"></c:when>
 														</c:choose>
+														<c:choose>
+															<c:when test="${var.is_del == 0 }"><a  onclick="updateDel('${var.match_id}','1');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-success" title="下架"   >下架</a></c:when>
+															<c:when test="${var.is_del == 1 }"><a  onclick="updateDel('${var.match_id}','0');" style="border-radius: 5px;cursor:pointer;" class="btn btn-xs btn-primary" title="上架"   >上架</a></c:when>
+														</c:choose>
 															 
 													</c:if>
 												</div>
@@ -274,6 +278,24 @@
 				if(result) {
 					top.jzts();
 					var url = "<%=basePath%>footballmatchlottery/updateStatus.do?match_id="+Id+"&is_hot="+status;
+					$.get(url,function(data){
+						tosearch();
+					});
+				}
+			});
+		}
+		
+		function updateDel(Id,status){
+			var str = "";
+			if(status == 1){
+				str = "确定下架吗?";
+			}else{
+				str = "确定上架吗?";
+			}
+			bootbox.confirm(str, function(result) {
+				if(result) {
+					top.jzts();
+					var url = "<%=basePath%>footballmatchlottery/updateDel.do?match_id="+Id+"&is_del="+status;
 					$.get(url,function(data){
 						tosearch();
 					});

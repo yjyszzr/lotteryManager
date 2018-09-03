@@ -112,6 +112,30 @@ public class FootballMatchLotteryController extends BaseController {
 		out.write("success");
 		out.close();
 	}
+	
+	/**
+	 * 是否下架
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updateDel")
+	public void updateDel(PrintWriter out) throws Exception {
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		footballmatchlotteryService.updateDel(pd);
+		PageData pdOld = footballmatchlotteryService.findById(pd);
+		if(pd.getString("is_del").equals("1")) {
+			ACLOG.save("1", "0", "赛事管理："+pdOld.getString("changci")+pdOld.getString("league_name"), "下架");
+		}else {
+			ACLOG.save("1", "0", "赛事管理："+pdOld.getString("changci")+pdOld.getString("league_name"), "上架");
+		}
+		out.write("success");
+		out.close();
+	}
 
 	/**
 	 * 修改

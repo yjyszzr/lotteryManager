@@ -69,5 +69,11 @@ public interface FootballMatchLotteryManager {
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
 
 	public void updateStatus(PageData pd) throws Exception;
+	/**
+	 * 赛事上架/下架
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void updateDel(PageData pd) throws Exception;
 
 }

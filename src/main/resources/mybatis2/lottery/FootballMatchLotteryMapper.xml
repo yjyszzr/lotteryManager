@@ -140,6 +140,15 @@
 		where 
 		match_id = #{match_id}
 	</update>
+	<!-- 修改is_del -->
+	<update id="updateDel" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set   
+			is_del = #{is_del}
+		where 
+		match_id = #{match_id}
+	</update>
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
@@ -158,7 +167,7 @@
 		is_show,is_del,match_sn,status,is_hot
 	from
 	dl_match 
-	where DATEDIFF(show_time,NOW()) &gt;= 0 and is_del = 0 and is_show=1 and TIMESTAMPDIFF(MINUTE, match_time, NOW()) &lt; 10
+	where DATEDIFF(show_time,NOW()) &gt;= 0   and is_show=1 and TIMESTAMPDIFF(MINUTE, match_time, NOW()) &lt; 10
 			<if test="pd.league_name!= null and pd.league_name != ''"> 
 			and  league_name LIKE CONCAT(CONCAT('%', #{pd.league_name}),'%') 
 		</if>

@@ -126,5 +126,12 @@ public class FootballMatchLotteryService implements FootballMatchLotteryManager 
 	public void updateStatus(PageData pd) throws Exception {
 		dao.update("FootballMatchLotteryMapper.updateStatus", pd);
 	}
+	/**
+	 * 赛事上架、下架
+	 */
+	@Override
+	public void updateDel(PageData pd) throws Exception {
+		dao.update("FootballMatchLotteryMapper.updateDel", pd);
+	}
 
 }
