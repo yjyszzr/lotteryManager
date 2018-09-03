@@ -80,6 +80,11 @@ public class RechargeCardService implements RechargeCardManager{
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("RechargeCardMapper.deleteAll", ArrayDATA_IDS);
 	}
+
+	@Override
+	public PageData findByRealValue(PageData pd) throws Exception {
+		return (PageData)dao.findForObject("RechargeCardMapper.findByRealValue", pd);
+	}
 	
 }
 
