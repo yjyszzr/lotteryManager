@@ -137,21 +137,21 @@ public class OrderService implements OrderManager {
 	}
 
 	/**
-	 * 首购订单（仅收购订单的钱）
+	 * 首购订单 
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getFirstOrderList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getFirstOrderList", page);
 	}
-
+	
 	/**
-	 * 新增购彩用户
+	 * 首购订单 
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<PageData> getFirstOrderAllList(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("OrderMapper.getFirstOrderAllList", page);
+	public List<PageData> getFirstOrderForUserList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.getFirstOrderForUserList", page);
 	}
 
 	/**

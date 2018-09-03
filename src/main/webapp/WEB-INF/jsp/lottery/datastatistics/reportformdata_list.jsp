@@ -1,4 +1,4 @@
-﻿<%@page import="com.fh.util.DateUtil"%>
+﻿﻿<%@page import="com.fh.util.DateUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -112,7 +112,7 @@
 											<th class='center'>当${pd.day }购彩用户数</th><!-- 20 -->
 											<th class='center'>当${pd.day }三方支付</th><!-- 201 -->
 											<th class='center'>当${pd.day }余额支付</th><!-- 202 -->
-											<th class='center'>当${pd.day }当日订单量</th><!-- 203 -->
+											<th class='center'>当${pd.day }订单量</th><!-- 203 -->
 											<th class='center'>当${pd.day }提现金额</th><!-- 21 -->
 											<th class='center'>当${pd.day }充值金额</th><!-- 22 -->
 											<th class='center'>当${pd.day }出票失败金额</th><!-- 39 -->
