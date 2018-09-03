@@ -179,29 +179,6 @@
 	</select>
 		<!-- 用户留存 -->
 	<select id="remainUserCount" parameterType="page" resultType="pd">
-		<!--  SELECT COUNT(DISTINCT u.user_id) as count
- 		from dl_user u left join dl_user_login_log l on u.user_id = l.user_id 
-		where 1=1
-			<if test="pd.regTime != null and pd.regTime != ''"> 
-			<if test="pd.dayStart != null and pd.dayStart != ''"> 
-				AND DATE_FORMAT(ADDDATE(FROM_UNIXTIME(u.reg_time),#{pd.dayStart}),"%Y-%m-%d") &lt;= DATE_FORMAT(FROM_UNIXTIME(l.login_time),"%Y-%m-%d")
-			</if>
-			<if test="pd.dayEnd != null and pd.dayEnd != ''"> 
-				AND DATE_FORMAT(ADDDATE(FROM_UNIXTIME(u.reg_time),#{pd.dayEnd}),"%Y-%m-%d") &gt;= DATE_FORMAT(FROM_UNIXTIME(l.login_time),"%Y-%m-%d")
-			</if> 
-				AND DATE_FORMAT(FROM_UNIXTIME(u.reg_time),"%Y-%m-%d")=#{pd.regTime}
-			</if> 
- 			<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-					AND u.reg_time &gt; #{pd.lastStart1} 
-					AND DATE_FORMAT(ADDDATE(FROM_UNIXTIME(#{pd.lastStart1}),#{pd.dayStart}),"%Y-%m-%d") &lt;= DATE_FORMAT(FROM_UNIXTIME(l.login_time),"%Y-%m-%d")
-					AND DATE_FORMAT(ADDDATE(FROM_UNIXTIME(#{pd.lastStart1}),#{pd.dayEnd}),"%Y-%m-%d") &gt;= DATE_FORMAT(FROM_UNIXTIME(l.login_time),"%Y-%m-%d")
-			</if>
-			<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-					AND u.reg_time &lt; #{pd.lastEnd1} 
-			</if>
-			<if test="pd.device_channel != null and pd.device_channel != ''"> 
-					AND u.device_channel = #{pd.device_channel} 
-			</if> -->
 			<if test="pd.device_channel != null and pd.device_channel != ''"> 
 				SELECT  count(DISTINCT u.user_id) as count 
 				from dl_user u left join dl_phone_channel p on u.device_channel = p.channel

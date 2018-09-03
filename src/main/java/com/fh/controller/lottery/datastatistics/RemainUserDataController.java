@@ -116,7 +116,7 @@ public class RemainUserDataController extends BaseController {
 		pd.put("lastEnd", dateE);
 		int days = (int) (dateE.toEpochDay()-dateB.toEpochDay());
 		List<PageData> varList = new ArrayList<PageData>();
-		for (int i = 0; i < days; i++) {
+		for (int i = 0; i < days+1; i++) {
 			PageData pageData = new PageData(); 
 			LocalDate time = dateE.plusDays(-i);//当天的前i天
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));

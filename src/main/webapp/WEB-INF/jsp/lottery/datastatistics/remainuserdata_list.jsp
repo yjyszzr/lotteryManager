@@ -78,8 +78,8 @@
 									<th class="center">第6${pd.type }</th>
 									<th class="center">第7${pd.type }</th>
 									<c:if test="${!empty pd.typeForDay}">
-									<th class="center">第15${pd.type }</th>
-									<th class="center">第30${pd.type }</th>
+									<th class="center">15${pd.type }</th>
+									<th class="center">30${pd.type }</th>
 									</c:if>
 									<c:if test="${empty pd.typeForDay}">
 									<th class="center">第8${pd.type }</th>

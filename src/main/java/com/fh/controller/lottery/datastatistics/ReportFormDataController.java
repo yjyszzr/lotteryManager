@@ -397,7 +397,7 @@ public class ReportFormDataController extends BaseController {
 		pageData.put("data30",rA.divide(rB, 2,BigDecimal.ROUND_HALF_DOWN)+"%");
 		}
 		//新增购彩用户
-		List<PageData> firstList = ordermanagerService.getFirstOrderAllList(page);
+		List<PageData> firstList = ordermanagerService.getFirstOrderList(page);
 		pageData.put("data31", firstList.get(0).getString("count"));
 		pageData.put("data32", firstList.get(0).getString("amount"));
 		//老用户购彩
