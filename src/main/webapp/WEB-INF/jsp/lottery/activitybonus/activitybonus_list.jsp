@@ -81,7 +81,7 @@
 									<th class="center">彩种限制</th>
 									<th class="center">生效时间</th>
 									<th class="center">有效期</th>
-									<th class="center">冲值卡名称</th>
+									<th class="center">充值卡名称</th>
 									<th class="center">充值赠概率</th>									
 									<th class="center">发放数量</th>
 									<th class="center">已领取</th>
