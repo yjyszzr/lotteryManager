@@ -40,6 +40,7 @@ public class Const {
 	public static final String LOGINEDIT = "admin/config/LOGIN.txt"; // 登录页面配置
 	public static final String FILEPATHIMG = UPLOADFILESDIR + "uploadImgs/"; // 图片上传路径
 	public static final String FILEPATHFILE = UPLOADFILESDIR + "file/"; // 文件上传路径
+	public static final String WITHDRAWALFILE = UPLOADFILESDIR + "withdrawalFile/"; // 文件上传路径
 	public static final String FILEPATHFILEOA = UPLOADFILESDIR; // 文件上传路径(oa管理)
 	public static final String FILEPATHTWODIMENSIONCODE = UPLOADFILESDIR + "twoDimensionCode/"; // 二维码存放路径
 	public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(logout)|(code)|(app)|(weixin)|(static)|(main)|(websocket)|(uploadImgs)).*"; // 不对匹配该值的访问路径拦截（正则）

@@ -132,6 +132,14 @@ public class DateUtilNew {
 	public static String getCurrentDateTime() {
 		return getCurrentDateTime(LocalDateTime.now(), datetimeFormat);
 	}
+	/**
+	 * 默认时间格式的当前时间 yyyyMMddHHmmss
+	 *
+	 * @return
+	 */
+	public static String getCurrentDateTime2() {
+		return getCurrentDateTime(LocalDateTime.now(), yyyymmddhhmmss);
+	}
 
 	/**
 	 * 获取年月日 yyyy-MM-dd

@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.axis.utils.SessionUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -380,6 +383,7 @@ public class UserWithdrawController extends BaseController {
 		page.setShowCount(100);
 		List<PageData> varOList = userwithdrawService.list(page);
 		mv = this.creatExcel(varOList);
+		ACLOG.save("1", "0", "提现明细：人工审核导出", "");
 		return mv;
 	}
 	private ModelAndView creatExcel(List<PageData> varOList) {
@@ -461,8 +465,12 @@ public class UserWithdrawController extends BaseController {
 			return null;
 		}
 		if (null != file && !file.isEmpty()) {
-			String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE; // 文件上传路径
-			String fileName = FileUpload.fileUp(file, filePath, "userexcel"); // 执行上传
+			String fname = file.getOriginalFilename();
+			if(fname.contains(".")) {
+				fname = fname.split("\\.")[0];
+			}
+			String filePath = PathUtil.getClasspath() + Const.WITHDRAWALFILE; // 文件上传路径
+			String fileName = FileUpload.fileUp(file, filePath,DateUtilNew.getCurrentDateTime2()); // 执行上传
 			List<PageData> listPd = (List) ObjectExcelRead.readExcel(filePath, fileName, 1, 0, 0); // 执行读EXCEL操作,读出的数据导入List
 			List<String> sucessPersonWithdrawSns = new ArrayList<>();																					// 2:从第3行开始；0:从第A列开始；0:第0个sheet
 			List<String> failPersonWithdrawSns = new ArrayList<>();																					// 2:从第3行开始；0:从第A列开始；0:第0个sheet
@@ -481,8 +489,10 @@ public class UserWithdrawController extends BaseController {
 			String result = ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getUserWithDrawPersonOpen(), true);
 			JsonObject json = JsonUtils.NewStringToJsonObject(result);
 			if(json.get("code").getAsString().equals("0")) {
+				ACLOG.save("1", "0", "提现明细：人工审核导入"+fileName, "源文件名："+fname);
 				mv.addObject("msg","success");
 			}else {
+				ACLOG.save("0", "0", "提现明细：人工审核导入"+fileName, "源文件名："+fname);
 				mv.addObject("msg",json.get("msg").getAsString());
 			}
 		}
