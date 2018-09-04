@@ -198,6 +198,7 @@
         <property name="uploadAppPackageUrl" value="${uploadAppPackageUrl}"></property>
         <property name="juheVerifyPhoneUrl" value="${juheVerifyPhoneUrl}"></property>
         <property name="juhePhoneVerifyKey" value="${juhePhoneVerifyKey}"></property>
+        <property name="userWithDrawPersonOpen" value="${userWithDrawPersonOpen}"></property>
     </bean>
  	<!-- QQ313596790 -->
 </beans>

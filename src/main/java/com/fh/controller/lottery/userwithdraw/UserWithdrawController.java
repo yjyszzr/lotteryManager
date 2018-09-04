@@ -20,7 +20,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
@@ -28,19 +30,28 @@ import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.controller.lottery.actionlog.ActionLogController;
 import com.fh.entity.Page;
+import com.fh.entity.system.Role;
 import com.fh.entity.system.User;
+import com.fh.service.lottery.banner.BannerManager;
+import com.fh.service.lottery.thresholdvalue.ThresholdValueManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.userwithdraw.UserWithdrawManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
+import com.fh.util.FileUpload;
+import com.fh.util.GetPinyin;
 import com.fh.util.JsonUtils;
 import com.fh.util.Jurisdiction;
+import com.fh.util.MD5Utils;
 import com.fh.util.ManualAuditUtil;
+import com.fh.util.ObjectExcelRead;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.PathUtil;
 import com.fh.util.StringUtil;
+import com.fh.util.Tools;
 import com.google.gson.JsonObject;
 
 /**
@@ -58,7 +69,8 @@ public class UserWithdrawController extends BaseController {
 	private URLConfig urlConfig;
 	@Resource(name = "userActionLogService")
 	private UserActionLogService ACLOG;
-
+	@Resource(name = "thresholdvalueService")
+	private ThresholdValueManager thresholdvalueService;
 	/**
 	 * 保存
 	 * 
@@ -190,6 +202,10 @@ public class UserWithdrawController extends BaseController {
 				}
 			}
 		}
+		PageData bannerPd = new PageData();
+		bannerPd.put("id", "14");
+		PageData threshold = thresholdvalueService.findById(bannerPd);
+		pd.put("personal", new BigDecimal(threshold.getString("value")).intValue());
 		mv.setViewName("lottery/userwithdraw/userwithdraw_list");
 		mv.addObject("varList", varList);
 		mv.addObject("successAmount", successAmount);
@@ -199,7 +215,8 @@ public class UserWithdrawController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-
+	
+	
 	/**
 	 * 去新增页面
 	 * 
@@ -338,6 +355,35 @@ public class UserWithdrawController extends BaseController {
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		List<PageData> varOList = userwithdrawService.listAll(pd);
+		mv = this.creatExcel(varOList);
+		return mv;
+	}
+	/**
+	 * 导出到excel
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/perExcel")
+	public ModelAndView exportPersonlExcel() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "人工审核导出UserWithdraw到excel");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+			return null;
+		}
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		Page page = new Page();
+		pd = this.getPageData();
+		pd.put("status", "0");
+		page.setPd(pd);
+		page.setShowCount(100);
+		List<PageData> varOList = userwithdrawService.list(page);
+		mv = this.creatExcel(varOList);
+		return mv;
+	}
+	private ModelAndView creatExcel(List<PageData> varOList) {
+		ModelAndView mv = new ModelAndView();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
 		titles.add("提现编号"); //
@@ -350,7 +396,6 @@ public class UserWithdrawController extends BaseController {
 		titles.add("状态"); //
 		titles.add("备注"); //
 		dataMap.put("titles", titles);
-		List<PageData> varOList = userwithdrawService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
@@ -381,10 +426,67 @@ public class UserWithdrawController extends BaseController {
 		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
-
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
+	}
+	
+
+	/**
+	 * 打开上传EXCEL页面
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goUploadExcel")
+	public ModelAndView goUploadExcel() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		mv.setViewName("lottery/userwithdraw/uploadexcel");
+		return mv;
+	}
+	
+	/**
+	 * 从EXCEL导入到数据库
+	 * 
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/readExcel")
+	public ModelAndView readExcel(@RequestParam(value = "excel", required = false) MultipartFile file) throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		}
+		if (null != file && !file.isEmpty()) {
+			String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE; // 文件上传路径
+			String fileName = FileUpload.fileUp(file, filePath, "userexcel"); // 执行上传
+			List<PageData> listPd = (List) ObjectExcelRead.readExcel(filePath, fileName, 1, 0, 0); // 执行读EXCEL操作,读出的数据导入List
+			List<String> sucessPersonWithdrawSns = new ArrayList<>();																					// 2:从第3行开始；0:从第A列开始；0:第0个sheet
+			List<String> failPersonWithdrawSns = new ArrayList<>();																					// 2:从第3行开始；0:从第A列开始；0:第0个sheet
+			listPd.forEach(item->{
+				if(item.getString("var7").equals("1")) {
+					sucessPersonWithdrawSns.add(item.getString("var0"));
+				}
+				if(item.getString("var7").equals("2")) {
+					failPersonWithdrawSns.add(item.getString("var0"));
+				}
+			});
+			Map<String,List<String>> map = new HashMap<>();
+			map.put("sucessPersonWithdrawSns", sucessPersonWithdrawSns);
+			map.put("failPersonWithdrawSns", failPersonWithdrawSns);
+			String reqStr = JSON.toJSONString(map);
+			String result = ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getUserWithDrawPersonOpen(), true);
+			JsonObject json = JsonUtils.NewStringToJsonObject(result);
+			if(json.get("code").getAsString().equals("0")) {
+				mv.addObject("msg","success");
+			}else {
+				mv.addObject("msg",json.get("msg").getAsString());
+			}
+		}
+		mv.setViewName("save_result");
+		return mv;
 	}
 }

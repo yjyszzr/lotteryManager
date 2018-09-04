@@ -11,6 +11,7 @@ public class URLConfig {
 	private String uploadAppPackageUrl;
 	private String juheVerifyPhoneUrl;
 	private String juhePhoneVerifyKey;
+	private String userWithDrawPersonOpen;
 	
 	public String getJuheVerifyPhoneUrl() {
 		return juheVerifyPhoneUrl;
@@ -84,4 +85,13 @@ public class URLConfig {
 		this.manualRewardToUserMoneyLimitUrl = manualRewardToUserMoneyLimitUrl;
 	}
 
+	public String getUserWithDrawPersonOpen() {
+		return userWithDrawPersonOpen;
+	}
+
+	public void setUserWithDrawPersonOpen(String userWithDrawPersonOpen) {
+		this.userWithDrawPersonOpen = userWithDrawPersonOpen;
+	}
+
+	 
 }

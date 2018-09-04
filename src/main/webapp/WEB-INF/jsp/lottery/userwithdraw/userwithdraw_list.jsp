@@ -98,13 +98,24 @@
 											</span>
 										</td>
 									</c:if>
-										<c:if test="${QX.toExcel == 1 }">
+									<c:if test="${QX.toExcel == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
 										<span class="input-icon" style="width:80px;"> </span>
 											<span>
 												<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:150px">导出到EXCEL </a>
 											</span>
-											</td>
+										</td>
+									</c:if>
+									<c:if test="${pd.personal == 1 }">
+										<td style="vertical-align:top;padding-left:2px">
+										<span class="input-icon" style="width:80px;"> </span>
+											<span>
+												<a class="btn btn-light btn-xs" onclick="perExcel();" title="审核导出"  style="border-radius:5px;color:blue !important; width:150px">审核导出 </a>
+											</span>
+											<span>
+												<a class="btn btn-light btn-xs" onclick="fromExcel();" title="审核导入"  style="border-radius:5px;color:blue !important; width:150px">审核导入 </a>
+											</span>
+										</td>
 									</c:if>
 								</tr>
 							</table> <!-- 检索结束 -->
@@ -184,7 +195,7 @@
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.edit == 1 }">
 														<c:choose>
-															<c:when test="${var.status == 0 }"> <a class="btn btn-xs btn-success" title="审核" style="border-radius:5px;" onclick="edit('${var.id}');">审核</a></c:when>
+																<c:when test="${var.status == 0 && pd.personal == 0 }"> <a class="btn btn-xs btn-success" title="审核" style="border-radius:5px;" onclick="edit('${var.id}');">审核</a></c:when>
 															<c:when test="${var.status == 1 }"><a  title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a></c:when>
 															<c:when test="${var.status == 2 }"><a title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a></c:when>
 															<c:when test="${var.status == 3 }"><a title="详情" style="cursor:pointer" onclick="edit('${var.id}');">详情</a></c:when>
@@ -290,6 +301,33 @@
 		function toExcel(){
 			window.location.href='<%=basePath%>userwithdraw/excel.do';
 		}
+		//导出excel
+		function perExcel(){
+			window.location.href='<%=basePath%>userwithdraw/perExcel.do';
+		}
+		
+		//打开上传excel页面
+		function fromExcel(){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="EXCEL 导入到数据库";
+			 diag.URL = '<%=basePath%>userwithdraw/goUploadExcel.do';
+			 diag.Width = 300;
+			 diag.Height = 150;
+			 diag.CancelEvent = function(){ //关闭事件
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 if('${page.currentPage}' == '0'){
+						 top.jzts();
+						 setTimeout("self.location.reload()",100);
+					 }else{
+						 nextPage(${page.currentPage});
+					 }
+				}
+				diag.close();
+			 };
+			 diag.show();
+		}	
 	</script>
 </body>
 </html>
