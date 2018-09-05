@@ -47,6 +47,11 @@ public interface ThresholdValueManager{
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd)throws Exception;
+	/**通过id获取数据
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findByBusinessID(PageData pd)throws Exception;
 	
 	/**批量删除
 	 * @param ArrayDATA_IDS

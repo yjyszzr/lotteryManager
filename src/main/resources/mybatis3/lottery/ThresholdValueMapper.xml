@@ -66,6 +66,15 @@
 		where 
 			id = #{id}
 	</select>
+	<!-- 通过ID获取数据 -->
+	<select id="findByBusinessID" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			business_id = #{business_id}
+	</select>
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">

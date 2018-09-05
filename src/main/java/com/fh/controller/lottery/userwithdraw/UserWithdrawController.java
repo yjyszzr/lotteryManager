@@ -206,8 +206,8 @@ public class UserWithdrawController extends BaseController {
 			}
 		}
 		PageData bannerPd = new PageData();
-		bannerPd.put("id", "14");
-		PageData threshold = thresholdvalueService.findById(bannerPd);
+		bannerPd.put("business_id", "12");
+		PageData threshold = thresholdvalueService.findByBusinessID(bannerPd);
 		pd.put("personal", new BigDecimal(threshold.getString("value")).intValue());
 		mv.setViewName("lottery/userwithdraw/userwithdraw_list");
 		mv.addObject("varList", varList);

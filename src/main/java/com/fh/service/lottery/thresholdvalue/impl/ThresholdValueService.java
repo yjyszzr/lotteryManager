@@ -86,6 +86,16 @@ public class ThresholdValueService implements ThresholdValueManager {
 		return (PageData) dao
 				.findForObject("ThresholdValueMapper.findById", pd);
 	}
+	
+	/**
+	 * 通过businessID获取数据
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData findByBusinessID(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("ThresholdValueMapper.findByBusinessID", pd);
+	}
 
 	/**
 	 * 批量删除
