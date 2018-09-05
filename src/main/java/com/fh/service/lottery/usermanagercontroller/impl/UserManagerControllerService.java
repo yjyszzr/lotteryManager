@@ -133,6 +133,18 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public List<PageData> getRemainUserCount(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.remainUserCount", page);
 	}
+	
+	/**
+	 * 根据用户手机号查询用户
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public PageData queryUserByMobile(PageData pd) throws Exception {
+		return (PageData)dao.findForObject("UserManagerControllerMapper.findUserByMobile", pd);
+	}
+	
+	
 	/**注册并认证统计（购彩）
 	 * 
 	 */

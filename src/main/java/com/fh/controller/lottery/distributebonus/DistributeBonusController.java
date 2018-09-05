@@ -1,4 +1,4 @@
-package com.fh.controller.lottery.rechargecard;
+package com.fh.controller.lottery.distributebonus;
 
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -8,9 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Resource;
-
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -18,30 +16,34 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
-import com.fh.service.lottery.rechargecard.RechargeCardManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtilNew;
-import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.Jurisdiction;
+import com.fh.util.Tools;
+import com.fh.service.lottery.distributebonus.DistributeBonusManager;
+import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 
 /** 
- * 说明：RechargeCard
+ * 说明：派发红包管理
  * 创建人：FH Q313596790
- * 创建时间：2018-08-21
+ * 创建时间：2018-09-03
  */
 @Controller
-@RequestMapping(value="/rechargecard")
-public class RechargeCardController extends BaseController {
+@RequestMapping(value="/distributebonus")
+public class DistributeBonusController extends BaseController {
 	
-	String menuUrl = "rechargecard/list.do"; //菜单地址(权限用)
-	@Resource(name="rechargecardService")
-	private RechargeCardManager rechargecardService;
+	String menuUrl = "distributebonus/list.do"; //菜单地址(权限用)
+	@Resource(name="distributebonusService")
+	private DistributeBonusManager distributebonusService;
+	
+	@Resource(name = "usermanagercontrollerService")
+	private UserManagerControllerManager usermanagercontrollerService;
 	
 	/**保存
 	 * @param
@@ -49,56 +51,38 @@ public class RechargeCardController extends BaseController {
 	 */
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"新增RechargeCard");
+		logBefore(logger, Jurisdiction.getUsername()+"新增DistributeBonus");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("is_delete", "0");	
-		pd.put("type", "1");	//充值卡类型
-		pd.put("add_user", user.getNAME());
-		pd.put("add_time", DateUtilNew.getCurrentTimeLong());
-		pd.put("img_url", "");
-		pd.put("status", "0");		
-		
-		PageData queryPd = new PageData();
-		queryPd.put("real_value", pd.getString("real_value"));
-		PageData samePd = rechargecardService.findByRealValue(queryPd);	//根据ID读取
-		if(null != samePd) {
-			mv.addObject("msg","已经有相同价值的充值卡，请输入其他金额");
-			mv.setViewName("save_result");
-			return mv;
-		}
-		
-		rechargecardService.save(pd);
+		String type = pd.getString("chooseOne");
+        pd.put("bonus_id", pd.getString("selectBonus"));
+        pd.put("status", "0");
+        pd.put("add_time", DateUtilNew.getCurrentTimeLong());
+        pd.put("add_user", user.getNAME());
+        pd.put("type", type);
+        if("1".equals(type)) {
+        	PageData queryPd = new PageData();
+        	queryPd.put("mobile", Long.valueOf(pd.getString("receiver")));
+	       	PageData userPd = usermanagercontrollerService.queryUserByMobile(queryPd);
+	       	if(null == userPd) {
+	    		mv.addObject("msg","没有该用户,请核查");
+	    		mv.setViewName("save_result");
+	    		return mv;
+	       	}
+	       	String userId = userPd.getString("user_id");
+	       	pd.put("user_id", Integer.valueOf(userId));
+	       	pd.put("receiver",pd.getString("receiver"));
+        }else if("2".equals(type)) {
+        	pd.put("file_url", pd.getString("file_url"));
+        }
+		distributebonusService.save(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
-	/**获取连级数据
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping(value="/getRechargeCardList")
-	@ResponseBody
-	public Object getRechargeCardList() throws Exception{
-		Map<String,Object> map = new HashMap<String,Object>();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		List<PageData> varList = rechargecardService.listAll(pd);
-		List<PageData> pdList = new ArrayList<PageData>();
-		for(PageData d :varList){
-			PageData pdf = new PageData();
-			pdf.put("recharge_card_id", d.getString("recharge_card_id"));
-			pdf.put("recharge_card_name", d.getString("name"));
-			pdList.add(pdf);
-		}
-		map.put("list", pdList);	
-		return AppUtil.returnObject(new PageData(), map);
-	}
-	
 	
 	/**删除
 	 * @param out
@@ -106,11 +90,11 @@ public class RechargeCardController extends BaseController {
 	 */
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"删除RechargeCard");
+		logBefore(logger, Jurisdiction.getUsername()+"删除DistributeBonus");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		rechargecardService.delete(pd);
+		distributebonusService.delete(pd);
 		out.write("success");
 		out.close();
 	}
@@ -121,14 +105,12 @@ public class RechargeCardController extends BaseController {
 	 */
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"修改RechargeCard");
-		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
+		logBefore(logger, Jurisdiction.getUsername()+"修改DistributeBonus");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		
-		rechargecardService.edit(pd);
+		distributebonusService.edit(pd);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -140,7 +122,7 @@ public class RechargeCardController extends BaseController {
 	 */
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"列表RechargeCard");
+		logBefore(logger, Jurisdiction.getUsername()+"列表DistributeBonus");
 		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -150,15 +132,12 @@ public class RechargeCardController extends BaseController {
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
-		List<PageData>	varList = rechargecardService.list(page);	//列出RechargeCard列表
-		for(PageData pageData:varList) {
-			pageData.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("add_time"))), DateUtilNew.datetimeFormat));
-			if("1".equals(String.valueOf(pageData.get("type")))) {
-				pageData.put("type", "充值赠红包类型 ");
-			}
+		List<PageData>	varList = distributebonusService.list(page);	//列出DistributeBonus列表
+		mv.setViewName("lottery/distributebonus/distributebonus_list");
+		for(PageData one:varList) {
+			String fileUrl = one.getString("file_url");
+			one.put("file_url", fileUrl.substring(fileUrl.lastIndexOf("/")));
 		}
-		
-		mv.setViewName("lottery/rechargecard/rechargecard_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
@@ -174,7 +153,7 @@ public class RechargeCardController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		mv.setViewName("lottery/rechargecard/rechargecard_edit");
+		mv.setViewName("lottery/distributebonus/distributebonus_edit");
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
@@ -189,8 +168,8 @@ public class RechargeCardController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = rechargecardService.findById(pd);	//根据ID读取
-		mv.setViewName("lottery/rechargecard/rechargecard_edit");
+		pd = distributebonusService.findById(pd);	//根据ID读取
+		mv.setViewName("lottery/distributebonus/distributebonus_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
@@ -203,7 +182,7 @@ public class RechargeCardController extends BaseController {
 	@RequestMapping(value="/deleteAll")
 	@ResponseBody
 	public Object deleteAll() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"批量删除RechargeCard");
+		logBefore(logger, Jurisdiction.getUsername()+"批量删除DistributeBonus");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -212,7 +191,7 @@ public class RechargeCardController extends BaseController {
 		String DATA_IDS = pd.getString("DATA_IDS");
 		if(null != DATA_IDS && !"".equals(DATA_IDS)){
 			String ArrayDATA_IDS[] = DATA_IDS.split(",");
-			rechargecardService.deleteAll(ArrayDATA_IDS);
+			distributebonusService.deleteAll(ArrayDATA_IDS);
 			pd.put("msg", "ok");
 		}else{
 			pd.put("msg", "no");
@@ -228,7 +207,7 @@ public class RechargeCardController extends BaseController {
 	 */
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"导出RechargeCard到excel");
+		logBefore(logger, Jurisdiction.getUsername()+"导出DistributeBonus到excel");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
@@ -236,30 +215,30 @@ public class RechargeCardController extends BaseController {
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
 		titles.add("备注1");	//1
-		titles.add("充值卡名称");	//2
-		titles.add("备注3");	//3
-		titles.add("充值卡状态");	//4
-		titles.add("添加人");	//5
-		titles.add("添加时间");	//6
-		titles.add("充值卡描述");	//7
-		titles.add("备注8");	//8
-		titles.add("实际价值");	//9
-		titles.add("充值卡类型");	//10
+		titles.add("活动红包id");	//2
+		titles.add("接收人手机号");	//3
+		titles.add("备注4");	//4
+		titles.add("备注5");	//5
+		titles.add("派发状态");	//6
+		titles.add("添加时间");	//7
+		titles.add("提交人");	//8
+		titles.add("审核时间");	//9
+		titles.add("审核人");	//10
 		dataMap.put("titles", titles);
-		List<PageData> varOList = rechargecardService.listAll(pd);
+		List<PageData> varOList = distributebonusService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("recharge_card_id").toString());	//1
-			vpd.put("var2", varOList.get(i).getString("name"));	    //2
-			vpd.put("var3", varOList.get(i).getString("img_url"));	    //3
-			vpd.put("var4", varOList.get(i).get("status").toString());	//4
-			vpd.put("var5", varOList.get(i).getString("add_user"));	    //5
-			vpd.put("var6", varOList.get(i).getString("add_time"));	    //6
-			vpd.put("var7", varOList.get(i).getString("description"));	    //7
-			vpd.put("var8", varOList.get(i).get("is_delete").toString());	//8
-			vpd.put("var9", varOList.get(i).getString("real_value"));	    //9
-			vpd.put("var10", varOList.get(i).getString("type"));	    //10
+			vpd.put("var1", varOList.get(i).get("id").toString());	//1
+			vpd.put("var2", varOList.get(i).get("bonus_id").toString());	//2
+			vpd.put("var3", varOList.get(i).get("receiver").toString());	//3
+			vpd.put("var4", varOList.get(i).get("user_id").toString());	//4
+			vpd.put("var5", varOList.get(i).getString("file_url"));	    //5
+			vpd.put("var6", varOList.get(i).get("status").toString());	//6
+			vpd.put("var7", varOList.get(i).get("add_time").toString());	//7
+			vpd.put("var8", varOList.get(i).getString("add_user"));	    //8
+			vpd.put("var9", varOList.get(i).get("pass_time").toString());	//9
+			vpd.put("var10", varOList.get(i).getString("pass_user"));	    //10
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

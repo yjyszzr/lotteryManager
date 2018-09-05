@@ -45,7 +45,7 @@
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">实际价值:</td>
-								<td><input type="number" name="real_value" id="real_value" value="${pd.real_value}" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" min=1 step=1  max=100   style="width:204px;border-radius:5px !important" /></td>
+								<td><input type="number" name="real_value" id="real_value" value="${pd.real_value}" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" min=1 step=1    style="width:204px;border-radius:5px !important" /></td>
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">最高送价值:</td>

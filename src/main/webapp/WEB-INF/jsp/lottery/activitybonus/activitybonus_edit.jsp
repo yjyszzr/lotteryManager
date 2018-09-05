@@ -282,7 +282,6 @@
 		$(function() {
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
-
 		});
 
 		function changeType(value){

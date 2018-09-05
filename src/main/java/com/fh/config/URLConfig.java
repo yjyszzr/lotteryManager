@@ -9,10 +9,19 @@ public class URLConfig {
 	private String manualRewardToUserMoneyLimitUrl;
 	private String uploadURL;
 	private String uploadAppPackageUrl;
+	private String uploadFileUrl;
 	private String juheVerifyPhoneUrl;
 	private String juhePhoneVerifyKey;
 	private String userWithDrawPersonOpen;
 	
+	public String getUploadFileUrl() {
+		return uploadFileUrl;
+	}
+
+	public void setUploadFileUrl(String uploadFileUrl) {
+		this.uploadFileUrl = uploadFileUrl;
+	}
+
 	public String getJuheVerifyPhoneUrl() {
 		return juheVerifyPhoneUrl;
 	}

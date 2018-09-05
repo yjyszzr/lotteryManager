@@ -1,16 +1,16 @@
-package com.fh.service.lottery.activitybonus;
+package com.fh.service.lottery.distributebonus;
 
 import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /** 
- * 说明： 优惠券接口
+ * 说明： 派发红包管理接口
  * 创建人：FH Q313596790
- * 创建时间：2018-05-05
+ * 创建时间：2018-09-03
  * @version
  */
-public interface ActivityBonusManager{
+public interface DistributeBonusManager{
 
 	/**新增
 	 * @param pd
@@ -35,12 +35,6 @@ public interface ActivityBonusManager{
 	 * @throws Exception
 	 */
 	public List<PageData> list(Page page)throws Exception;
-	
-	/**query列表 by type
-	 * @param page
-	 * @throws Exception
-	 */
-	public List<PageData> queryListByType(PageData pd)throws Exception;
 	
 	/**列表(全部)
 	 * @param pd

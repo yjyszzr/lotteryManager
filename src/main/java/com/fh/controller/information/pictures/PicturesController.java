@@ -162,6 +162,26 @@ public class PicturesController extends BaseController {
 		return map;
 	}
 	
+	@RequestMapping(value = "/excelFileUpload")
+	@ResponseBody
+	public Map<String, String> excelFileUpload(@RequestParam(required = false) MultipartFile file) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "新增excel");
+		Map<String, String> map = new HashMap<String, String>();
+		String ffile = DateUtil.getDays();
+		String fileName = file.getOriginalFilename();
+		if (null != file && !file.isEmpty()) {
+			String filePath = urlConfig.getUploadFileUrl() + ffile; // 文件上传路径
+			fileName = FileUpload.fileUpApk(file, filePath, fileName); // 执行上传
+		} else {
+			map.put("result", "false");
+			return map;
+		}
+		map.put("result", "true");
+		String excelPath = urlConfig.getImgShowUrl() + "uploadFiles/file/" + ffile + "/" + fileName; // 路径
+		map.put("excel_path", excelPath);
+		return map;
+	}
+	
 	
 	@RequestMapping(value = "/fileUpload")
 	@ResponseBody

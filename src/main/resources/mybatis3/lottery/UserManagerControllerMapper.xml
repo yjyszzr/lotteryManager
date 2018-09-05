@@ -177,7 +177,7 @@
 		where 
 			user_id = #{user_id}
 	</select>
-		<!-- 用户留存 -->
+	<!-- 用户留存 -->
 	<select id="remainUserCount" parameterType="page" resultType="pd">
 			<if test="pd.device_channel != null and pd.device_channel != ''"> 
 				SELECT  count(DISTINCT u.user_id) as count 
@@ -197,7 +197,6 @@
 				where a.user_id in ( SELECT user_id from dl_order  where order_status in ('3','4','5','6','7') 
 						and add_time &gt;= #{pd.lastStart2} and add_time &lt;= #{pd.lastEnd2})
 			</if>
-			 
 	</select>
 	<!-- 设备渠道注册人数汇总列表 -->
 	<select id="marketlist" parameterType="page" resultType="pd">
@@ -410,6 +409,11 @@
 				and  od.order_status in ('3','4','5','6','7')
 				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
 				and  ur.is_delete = 0
+	</select>
+	
+	<!-- 根据手机号查询用户 -->
+	<select id="findUserByMobile" parameterType="pd" resultType="pd">
+		select * from dl_user where mobile = #{pd.mobile}
 	</select>
 	
 	<!-- 注册并充值  -->

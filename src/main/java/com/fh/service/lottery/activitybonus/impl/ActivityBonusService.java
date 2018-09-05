@@ -65,6 +65,17 @@ public class ActivityBonusService implements ActivityBonusManager {
 	}
 
 	/**
+	 * query列表 by type
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> queryListByType(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("ActivityBonusMapper.queryListByType", pd);
+	}	
+	
+	/**
 	 * 列表(全部)
 	 * 
 	 * @param pd

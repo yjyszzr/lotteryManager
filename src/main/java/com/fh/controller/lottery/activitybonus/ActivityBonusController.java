@@ -130,6 +130,14 @@ public class ActivityBonusController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		PageData pdOld = activitybonusService.findById(pd);
+		
+		Number num = Float.parseFloat(pd.getString("recharge_chance"));
+		Integer rechargeChanceInt = num.intValue();
+		NumberFormat numberFormat = NumberFormat.getInstance();  
+		numberFormat.setMaximumFractionDigits(2);    
+		String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
+		pd.put("recharge_chance", rechargeChance);
+		
 		activitybonusService.edit(pd);
 		ACLOG.saveByObject("1", "优惠券管理：修改优惠券", pdOld, pd);
 		mv.addObject("msg", "success");
@@ -238,6 +246,42 @@ public class ActivityBonusController extends BaseController {
 			rechargeMap.put(pageData.getString("recharge_card_id"),pageData.getString("name"));
 		}
 		return rechargeMap;
+	}
+	
+	/**
+	 * query Bonus List by actBonusType
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<PageData> queryActivityBonusListByActType(Integer bonusType) throws Exception{
+		PageData pd = new PageData();
+		pd.put("bonus_type", bonusType);
+		List<PageData> bonusList = activitybonusService.queryListByType(pd);
+		return bonusList;
+	}
+	
+	/**
+	 * query Bonus Name List by bonusType
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value="/getDistributeBonusList")
+	@ResponseBody
+	public Object queryActivityBonusListForDistribute() throws Exception{
+		Map<String,Object> map = new HashMap<String,Object>();
+		List<PageData> bonusList = this.queryActivityBonusListByActType(3);
+		
+		List<PageData> newbonusList = new ArrayList<>();
+		bonusList.stream().forEach(s->{
+			PageData newPd = new PageData();
+			newPd.put("bonus_id", s.getString("bonus_id"));
+			newPd.put("min_goods_amount", s.getString("min_goods_amount"));
+			newPd.put("bonus_price", s.getString("bonus_amount"));
+			newbonusList.add(newPd);
+		});
+		
+		map.put("list", newbonusList);
+		return AppUtil.returnObject(new PageData(), map);
 	}
 	
 	/**

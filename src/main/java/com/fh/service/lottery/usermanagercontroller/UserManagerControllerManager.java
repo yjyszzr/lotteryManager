@@ -107,6 +107,12 @@ public interface UserManagerControllerManager {
 	 */
 	public List<PageData> getRegisterAndRecharge(Page page)throws Exception;
 	
+	/**根据手机号查询用户
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData queryUserByMobile(PageData pd)throws Exception;	
+	
 	/**注册并购彩
 	 * @param pd
 	 * @throws Exception

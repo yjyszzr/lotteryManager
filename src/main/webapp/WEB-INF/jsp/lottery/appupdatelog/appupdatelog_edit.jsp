@@ -86,7 +86,7 @@
 								<td style="width:120px;text-align: right;padding-top: 13px;">apk路径*</td>
 								<td colspan="3">
 									<input  type="file" id="fileUpload" name="file"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
-									<input type="text" style="width:100%" name="apk_path" id="apk_path" readonly="readonly" onmouseover="this.title=this.value"   value="${pd.apk_path}" />
+									<input type="text" style="width:100%" name="apk_path" id="apk_path" readonly="readonly" onmouseover="this.title=this.value"  value="${pd.apk_path}" />
 								</td>
 								<td><span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');">apk上传</span></td>
 							</tr>
