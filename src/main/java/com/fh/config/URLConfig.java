@@ -14,6 +14,43 @@ public class URLConfig {
 	private String juhePhoneVerifyKey;
 	private String userWithDrawPersonOpen;
 	
+	private String url3;
+	private String driverClassName3;
+	private String username3;
+	private String password3;
+	
+	public String getUrl3() {
+		return url3;
+	}
+
+	public void setUrl3(String url3) {
+		this.url3 = url3;
+	}
+
+	public String getDriverClassName3() {
+		return driverClassName3;
+	}
+
+	public void setDriverClassName3(String driverClassName3) {
+		this.driverClassName3 = driverClassName3;
+	}
+
+	public String getUsername3() {
+		return username3;
+	}
+
+	public void setUsername3(String username3) {
+		this.username3 = username3;
+	}
+
+	public String getPassword3() {
+		return password3;
+	}
+
+	public void setPassword3(String password3) {
+		this.password3 = password3;
+	}
+
 	public String getUploadFileUrl() {
 		return uploadFileUrl;
 	}

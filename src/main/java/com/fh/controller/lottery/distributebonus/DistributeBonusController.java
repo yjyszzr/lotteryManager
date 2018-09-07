@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
+import com.fh.enums.ApproveStatusEnums;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtilNew;
@@ -26,6 +27,7 @@ import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.Jurisdiction;
 import com.fh.util.Tools;
+import com.fh.service.lottery.activitybonus.ActivityBonusManager;
 import com.fh.service.lottery.distributebonus.DistributeBonusManager;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 
@@ -39,11 +41,16 @@ import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager
 public class DistributeBonusController extends BaseController {
 	
 	String menuUrl = "distributebonus/list.do"; //菜单地址(权限用)
+	
+	String menuUrl2 = "distributebonus/approvelist.do"; //菜单地址(权限用)
 	@Resource(name="distributebonusService")
 	private DistributeBonusManager distributebonusService;
 	
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
+	
+	@Resource(name = "activitybonusService")
+	private ActivityBonusManager activitybonusService;
 	
 	/**保存
 	 * @param
@@ -135,14 +142,69 @@ public class DistributeBonusController extends BaseController {
 		List<PageData>	varList = distributebonusService.list(page);	//列出DistributeBonus列表
 		mv.setViewName("lottery/distributebonus/distributebonus_list");
 		for(PageData one:varList) {
-			String fileUrl = one.getString("file_url");
-			one.put("file_url", fileUrl.substring(fileUrl.lastIndexOf("/")));
+			if("1".equals(one.getString("type"))) {
+				one.put("file_url", "");
+			}else if("2".equals(one.getString("type"))) {
+				String fileUrl = one.getString("file_url");
+				one.put("file_url", fileUrl.substring(fileUrl.lastIndexOf("/")));
+			}
+			one.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(one.getString("add_time")), DateUtilNew.datetimeFormat));
+			one.put("status", ApproveStatusEnums.getCodeByName(one.getString("status")));
+			PageData queryP = new PageData();
+			queryP.put("bonus_id", one.getString("bonus_id"));
+			PageData actBonus = activitybonusService.findById(queryP);
+			if(null !=actBonus) {
+				one.put("bonus_id", one.getString("bonus_id")+"(满"+actBonus.getString("min_goods_amount")+"元减"+actBonus.getString("bonus_amount")+"元)");
+			}
 		}
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
+	
+	
+	/**列表
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/approvelist")
+	public ModelAndView approvelist(Page page) throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"列表DistributeBonus");
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String keywords = pd.getString("keywords");				//关键词检索条件
+		if(null != keywords && !"".equals(keywords)){
+			pd.put("keywords", keywords.trim());
+		}
+		page.setPd(pd);
+		List<PageData>	varList = distributebonusService.list(page);	//列出DistributeBonus列表
+		mv.setViewName("lottery/distributebonus/distributebonusapprove_list");
+		for(PageData one:varList) {
+			if("1".equals(one.getString("type"))) {
+				one.put("file_url", "");
+			}else if("2".equals(one.getString("type"))) {
+				String fileUrl = one.getString("file_url");
+				one.put("file_url", fileUrl.substring(fileUrl.lastIndexOf("/")));
+			}
+			one.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(one.getString("add_time")), DateUtilNew.datetimeFormat));
+			one.put("status", ApproveStatusEnums.getNameByCode(Integer.valueOf(one.getString("status"))));
+			PageData queryP = new PageData();
+			queryP.put("bonus_id", one.getString("bonus_id"));
+			PageData actBonus = activitybonusService.findById(queryP);
+			if(null !=actBonus) {
+				one.put("bonus_id", one.getString("bonus_id")+"(满"+actBonus.getString("min_goods_amount")+"元减"+actBonus.getString("bonus_amount")+"元)");
+			}
+		}
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
+	
+	
 	
 	/**去新增页面
 	 * @param

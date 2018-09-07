@@ -141,7 +141,8 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	 * @throws Exception
 	 */
 	public PageData queryUserByMobile(PageData pd) throws Exception {
-		return (PageData)dao.findForObject("UserManagerControllerMapper.findUserByMobile", pd);
+		String mobile = pd.getString("mobile");
+		return (PageData)dao.findForObject("UserManagerControllerMapper.getUserByMobile", mobile);
 	}
 	
 	

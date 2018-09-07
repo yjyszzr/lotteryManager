@@ -200,6 +200,10 @@
         <property name="juheVerifyPhoneUrl" value="${juheVerifyPhoneUrl}"></property>
         <property name="juhePhoneVerifyKey" value="${juhePhoneVerifyKey}"></property>
         <property name="userWithDrawPersonOpen" value="${userWithDrawPersonOpen}"></property>
+        <property name="url3" value="url3"></property>
+        <property name="driverClassName3" value="${driverClassName3}"></property>
+        <property name="username3" value="${username3}"></property>
+        <property name="password3n" value="${password3}"></property>
     </bean>
  	<!-- QQ313596790 -->
 </beans>

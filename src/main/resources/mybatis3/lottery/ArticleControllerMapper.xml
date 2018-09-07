@@ -157,7 +157,6 @@
 			list_style = #{list_style},
 			is_original = #{is_original},
 			is_delete = #{is_delete},
-			is_stick = #{is_stick},
 			price = #{price},
 			level = #{level},
 			article_pv = #{article_pv},

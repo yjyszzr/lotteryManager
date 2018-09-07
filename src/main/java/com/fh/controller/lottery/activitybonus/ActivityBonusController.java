@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.druid.util.StringUtils;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
@@ -392,7 +390,8 @@ public class ActivityBonusController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-
+	
+	
 	/**
 	 * 导出到excel
 	 * 

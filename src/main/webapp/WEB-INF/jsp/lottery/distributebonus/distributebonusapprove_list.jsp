@@ -83,11 +83,10 @@
 							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id_id}" class="ace" /><span class="lbl"></span></label>
+												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 <%-- 										<td class='center'>${var.id}</td>  --%>
@@ -99,10 +98,18 @@
 											<td class='center'>${var.pass_time}</td>
 											<td class='center'>${var.pass_user}</td>
 											<td class='center'>${var.status}</td>
+											<td class="center">
+												<div class="hidden-md hidden-lg">
+													<div class="inline pos-rel">
+														<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.recharge_card_id}');">
+															<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
+														</a>
+													</div>
+												</div>
+											</td>
 										</tr>
 									
 									</c:forEach>
-									</c:if>
 									<c:if test="${QX.cha == 0 }">
 										<tr>
 											<td colspan="100" class="center">您无权查看</td>
@@ -263,7 +270,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>distributebonus/goEdit.do?id_id='+Id;
+			 diag.URL = '<%=basePath%>distributebonus/goEdit.do?id='+Id;
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口

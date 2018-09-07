@@ -412,7 +412,7 @@
 	</select>
 	
 	<!-- 根据手机号查询用户 -->
-	<select id="findUserByMobile" parameterType="pd" resultType="pd">
+	<select id="getUserByMobile" parameterType="java.lang.String" resultType="pd">
 		select * from dl_user where mobile = #{pd.mobile}
 	</select>
 	
