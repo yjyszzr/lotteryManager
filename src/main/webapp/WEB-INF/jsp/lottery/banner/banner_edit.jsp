@@ -45,6 +45,7 @@
 									        <option value="1" selected <c:if test="${pd.banner_param==1}">selected</c:if>>文章Id</option>
 									        <option value="2" <c:if test="${pd.banner_param==2}">selected</c:if>>赛事Id</option>
 									        <option value="3"  <c:if test="${pd.banner_param==3}">selected</c:if>>活动URL</option>
+									        <option value="4"  <c:if test="${pd.banner_param==4}">selected</c:if>>小白课堂</option>
 									    </select>
 									</div>
 								 

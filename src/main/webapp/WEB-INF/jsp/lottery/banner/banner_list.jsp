@@ -151,6 +151,7 @@
 												<c:choose>
 													<c:when test="${var.banner_param==1}"><td>(文章ID)${var.banner_link}</td></c:when>
 													<c:when test="${var.banner_param==2}"><td>(赛事ID)${var.banner_link}</td></c:when>
+													<c:when test="${var.banner_param==4}"><td>(小白课堂)${var.banner_link}</td></c:when>
 													<c:otherwise>
 															<c:choose>
 															<c:when test="${fn:length(var.banner_link)  <= 15 }">
