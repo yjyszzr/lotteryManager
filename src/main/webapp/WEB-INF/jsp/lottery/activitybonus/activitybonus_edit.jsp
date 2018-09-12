@@ -101,6 +101,7 @@
 											        <option value="1" <c:if test="${pd.bonus_type==1}">selected</c:if> >注册送红包</option>
 													<option value="2" <c:if test="${pd.bonus_type==2}">selected</c:if> >西安活动红包</option>
 											        <option value="3" <c:if test="${pd.bonus_type==3}">selected</c:if> >充值送红包</option>
+											        <option value="4" <c:if test="${pd.bonus_type==4}">selected</c:if> >指定赠送红包(用于派发)</option>
 											    </select>
 											</div>
 	                                	<div class="col-sm-5"> </div>
@@ -202,17 +203,20 @@
 			return false;
 			}
 
-
-			if($("#recharge_chance").val()=="" || $("#recharge_chance").val() < 0 || $("#recharge_chance").val() >100){
-				$("#recharge_chance").tips({
+			var bonusType = $("#bonus_type").val();
+			if(3 == bonusType){
+				if($("#recharge_chance").val()=="" || $("#recharge_chance").val() < 0 || $("#recharge_chance").val() >100){
+					$("#recharge_chance").tips({
 					side:3,
 		            msg:'请输入正确的冲值概率',
 		            bg:'#AE81FF',
 		            time:2
-		        });
-				$("#recharge_chance").focus();
-			return false;
+		        	});
+					$("#recharge_chance").focus();
+				return false;
+				}
 			}
+
 
 			if($("#start_time").val()==""){
 				$("#start_time").tips({

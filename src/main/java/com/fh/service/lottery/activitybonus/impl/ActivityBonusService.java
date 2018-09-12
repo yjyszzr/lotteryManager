@@ -13,7 +13,6 @@ import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.entity.param.BonusParam;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
-import com.fh.util.DateUtilNew;
 import com.fh.util.PageData;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
@@ -121,7 +120,7 @@ public class ActivityBonusService implements ActivityBonusManager {
 	 * sdd
 	 * @param list
 	 */
-	public int batchInsertBonus(List<Integer> userIdlist,BonusParam bonusParam) {
+	public int batchInsertUserBonus(List<Integer> userIdlist,BonusParam bonusParam) {
 		Connection conn = null;
 		try {
 			Class.forName(urlConfig.getDriverClassName3());
@@ -131,7 +130,6 @@ public class ActivityBonusService implements ActivityBonusManager {
 					"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement prest = (PreparedStatement) conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			for (int i = 0, size = userIdlist.size(); i < size; i++) {
-				//445303,1,'2018090411112326280055',100,1536042398,0,1536042398,1536249599,1536042398,'0','0',0,0,1000,0
 				prest.setInt(1, userIdlist.get(i));
 				prest.setInt(2, bonusParam.getBonusId());
 				prest.setString(3, bonusParam.getBonusSn());

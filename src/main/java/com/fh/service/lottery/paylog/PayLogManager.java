@@ -1,17 +1,16 @@
-package com.fh.service.lottery.activitybonus;
+package com.fh.service.lottery.paylog;
 
 import java.util.List;
 import com.fh.entity.Page;
-import com.fh.entity.param.BonusParam;
 import com.fh.util.PageData;
 
 /** 
- * 说明： 优惠券接口
+ * 说明： payLog接口
  * 创建人：FH Q313596790
- * 创建时间：2018-05-05
+ * 创建时间：2018-09-10
  * @version
  */
-public interface ActivityBonusManager{
+public interface PayLogManager{
 
 	/**新增
 	 * @param pd
@@ -37,12 +36,6 @@ public interface ActivityBonusManager{
 	 */
 	public List<PageData> list(Page page)throws Exception;
 	
-	/**query列表 by type
-	 * @param page
-	 * @throws Exception
-	 */
-	public List<PageData> queryListByType(PageData pd)throws Exception;
-	
 	/**列表(全部)
 	 * @param pd
 	 * @throws Exception
@@ -61,11 +54,14 @@ public interface ActivityBonusManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 	
-	/**批量给用户派送红包
-	 * @param List<Integer> userIdlist,BonusParam bonusParam
+	/****
+	 * 根据交易号查询交易记录
+	 * 
+	 * @param userId
+	 * @return
 	 * @throws Exception
 	 */
-	public int batchInsertUserBonus(List<Integer> userIdlist,BonusParam bonusParam)throws Exception;
+	public List<PageData> findPLByOrderSns(PageData pd) throws Exception;
 	
 }
 

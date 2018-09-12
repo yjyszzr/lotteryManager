@@ -108,6 +108,7 @@
 												<c:if test="${var.bonus_type==1 }">注册送红包</c:if>
 												<c:if test="${var.bonus_type==2 }">西安活动红包</c:if>
 												<c:if test="${var.bonus_type==3 }">充值活动红包</c:if>
+												<c:if test="${var.bonus_type==4 }">指定赠送红包(用于派发)</c:if>
 											</td>
 											<td class='center'>${var.bonus_amount}</td>
 											<td class='center'>${var.min_goods_amount}</td>

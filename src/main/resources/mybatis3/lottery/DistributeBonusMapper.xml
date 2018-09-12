@@ -74,7 +74,10 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			bonus_num = #{bonus_num}
+			status = #{status},
+			bonus_num = #{bonus_num},
+			pass_user = #{pass_user},
+			pass_time = #{pass_time}
 		where 
 		id = #{id}
 	</update>
@@ -95,15 +98,17 @@
 		from 
 		<include refid="tableName"></include>
 		where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-				(
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+		<if test="pd.keywords!= null and pd.keywords != ''">
+			and file_url LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or add_user LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or bonus_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or receiver LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+		</if>
+		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+			and add_time &gt; #{pd.lastStart}
+		</if>
+		<if test="pd.lastEnd != null and pd.lastEnd != ''"> 
+			and add_time &lt; #{pd.lastEnd}
 		</if>
 	</select>
 	

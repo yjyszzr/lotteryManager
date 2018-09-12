@@ -140,8 +140,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	 * @return
 	 * @throws Exception
 	 */
-	public PageData queryUserByMobile(PageData pd) throws Exception {
-		String mobile = pd.getString("mobile");
+	public PageData queryUserByMobile(String mobile) throws Exception {
 		return (PageData)dao.findForObject("UserManagerControllerMapper.getUserByMobile", mobile);
 	}
 	
@@ -184,6 +183,11 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	@SuppressWarnings("unchecked")
 	public List<PageData> getRealAndOrder(Page page) throws Exception {
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRealAndOrder", page);
+	}
+
+	@Override
+	public List<Integer> getUserIdListByMobileList(List mobileList) throws Exception {
+		return (List<Integer>)dao.findForList("UserManagerControllerMapper.getUserIdListByMobileList", mobileList);
 	}
 	
 }

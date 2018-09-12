@@ -37,20 +37,10 @@
 								<td>
 									<div class="nav-search">
 										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+											<input type="text" placeholder="红包id,接收人,文件名,提交人" style="width:240px;"  class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="红包id,接收人,文件名,提交人"/>
 											<i class="ace-icon fa fa-search nav-search-icon"></i>
 										</span>
 									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="">全部</option>
-									<option value="">1</option>
-									<option value="">2</option>
-								  	</select>
 								</td>
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
@@ -70,12 +60,12 @@
 									<th class="center">活动红包</th>
 									<th class="center">接收人手机号</th>
 									<th class="center">excel文件名</th>
+									<th class="center">已发放红包个数</th>
 									<th class="center">添加时间</th>
 									<th class="center">提交人</th>
 									<th class="center">审核时间</th>
 									<th class="center">审核人</th>
 									<th class="center">派发状态</th>
-									<th class="center">操作</th>
 								</tr>
 							</thead>
 													
@@ -90,15 +80,21 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id_id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-<%-- 										<td class='center'>${var.id}</td>  --%>
 											<td class='center'>${var.bonus_id}</td>
 											<td class='center'>${var.receiver}</td>
-											<td class='center'>${var.file_url}</td>
+											<td class='center'><a href="${var.file_url}">${var.file_name}</a></td>
+											<td class='center'>${var.bonus_num}</td>
 											<td class='center'>${var.add_time}</td>
 											<td class='center'>${var.add_user}</td>
 											<td class='center'>${var.pass_time}</td>
 											<td class='center'>${var.pass_user}</td>
-											<td class='center'>${var.status}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.status==0}"><font color="green">待审核</font></c:when>
+													<c:when test="${var.status==1}"><font color="blue">通过</font></c:when>
+													<c:when test="${var.status==2}"><font color="red">拒绝</font></c:when>
+												</c:choose>
+											</td>
 										</tr>
 									
 									</c:forEach>
@@ -123,9 +119,6 @@
 								<td style="vertical-align:top;">
 									<c:if test="${QX.add == 1 }">
 									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -205,8 +198,7 @@
 					 else $('#form-field-select-4').removeClass('tag-input-style');
 				});
 			}
-			
-			
+				
 			//复选框全选控制
 			var active_class = 'active';
 			$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).on('click', function(){

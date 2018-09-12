@@ -195,12 +195,11 @@
         <property name="manualRewardUrl" value="${manualRewardUrl}"></property>
         <property name="uploadURL" value="${uploadURL}"></property>
         <property name="manualRewardToUserMoneyLimitUrl" value="${manualRewardToUserMoneyLimitUrl}"></property>
-        <property name="uploadAppPackageUrl" value="${uploadAppPackageUrl}"></property>
-        <property name="uploadFileUrl" value="${uploadFileUrl}"></property>
+        <property name="uploadCommonUrl" value="${uploadCommonUrl}"></property>
         <property name="juheVerifyPhoneUrl" value="${juheVerifyPhoneUrl}"></property>
         <property name="juhePhoneVerifyKey" value="${juhePhoneVerifyKey}"></property>
         <property name="userWithDrawPersonOpen" value="${userWithDrawPersonOpen}"></property>
-        <property name="url3" value="url3"></property>
+        <property name="url3" value="${url3}"></property>
         <property name="driverClassName3" value="${driverClassName3}"></property>
         <property name="username3" value="${username3}"></property>
         <property name="password3" value="${password3}"></property>

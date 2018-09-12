@@ -44,7 +44,7 @@
 								<td style="width:120px;text-align: right;padding-top: 13px;"><input type= "radio" name = "chooseOne" value = "2" />excel</input> </td>
 								<td colspan="3" id="file_td">
 									<input  type="file" id="fileUpload" name="file"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
-									<input type="text" style="width:100%" name="excel_path" id="excel_path" readonly="readonly" onmouseover="this.title=this.value"  value="${pd.excel_path}" />
+									<input type="text" style="width:100%" name="file_url" id="file_url" readonly="readonly" onmouseover="this.title=this.value"  value="${pd.file_url}" />
 								</td >
 								<td id="file_upload_td"><span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');">excel上传</span></td>						
 							</tr>
@@ -96,7 +96,7 @@
 			return false;
 			}
 			
-			if($("#receiver").val()==""){
+/* 			if($("#receiver").val()==""){
 				$("#receiver").tips({
 					side:3,
 		            msg:'请输入接收人手机号',
@@ -105,7 +105,7 @@
 		        });
 				$("#receiver").focus();
 			return false;
-			}
+			} */
 			
 			$("#Form").submit();
 			$("#zhongxin").hide();
@@ -152,7 +152,7 @@
 		        dataType:'json',                           //服务器返回的格式,可以是json或xml等
 		        success:function(data, status){            //服务器响应成功时的处理函数
 		            if(data.result){
-		            	$("#excel_path").val(data.excel_path);
+		            	$("#file_url").val(data.file_url);
 		            } 
 		        },
 		        error:function(data,status){

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.appupdatelog.AppUpdateLogManager;
@@ -52,6 +53,9 @@ public class AppUpdateLogController extends BaseController {
 	@Resource(name = "userActionLogService")
 	private UserActionLogService ACLOG;
 	
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
+	
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -65,7 +69,7 @@ public class AppUpdateLogController extends BaseController {
 		pd = this.getPageData();
 		String version = pd.getString("points1")+"."+pd.getString("points2")+"."+pd.getString("points3");
 		String updateLog = this.createUpdateLog(pd);
-		pd.put("app_code_name", pd.getString("app_name"));
+		pd.put("app_code_name", pd.getString("app_code_name"));
 		pd.put("version", version);
 		pd.put("download_url", pd.getString("apk_path"));
 		pd.put("update_log", updateLog);
@@ -179,6 +183,7 @@ public class AppUpdateLogController extends BaseController {
 			pdata.put("version", pdata.getString("version"));
 			pdata.put("app_name", appName);
 			pdata.put("channel_name", channelName);
+			pdata.put("download_url", urlConfig.getImgShowUrl() + pdata.getString("download_url"));
 			pdata.put("update_install",updateInstall.equals("1")?"是":"否");
 			pdata.put("update_time", DateUtilNew.getTimeString(Integer.valueOf(updateTime),DateUtilNew.datetimeFormat));
 			newVarList.add(pdata);
@@ -239,7 +244,7 @@ public class AppUpdateLogController extends BaseController {
         }
         
         String downLoadUrl = pd.getString("download_url");
-        pd.put("apk_path", downLoadUrl);
+        pd.put("apk_path", urlConfig.getUploadCommonUrl() + downLoadUrl);
 		mv.setViewName("lottery/appupdatelog/appupdatelog_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

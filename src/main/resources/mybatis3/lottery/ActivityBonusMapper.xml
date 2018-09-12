@@ -169,7 +169,7 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
-		 where bonus_type = #{bonus_type}
+		 where bonus_type = #{bonus_type} and is_enable = 1 and is_delete = 0
 	</select>
 	
 	<!-- 批量删除 -->

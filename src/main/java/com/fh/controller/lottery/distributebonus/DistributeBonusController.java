@@ -1,14 +1,24 @@
 package com.fh.controller.lottery.distributebonus;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -16,20 +26,24 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.druid.util.StringUtils;
+import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.param.BonusParam;
 import com.fh.entity.system.User;
-import com.fh.enums.ApproveStatusEnums;
-import com.fh.util.AppUtil;
-import com.fh.util.Const;
-import com.fh.util.DateUtilNew;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
+import com.fh.enums.SNBusinessCodeEnum;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
 import com.fh.service.lottery.distributebonus.DistributeBonusManager;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.util.AppUtil;
+import com.fh.util.Const;
+import com.fh.util.DateUtilNew;
+import com.fh.util.Jurisdiction;
+import com.fh.util.ObjectExcelView;
+import com.fh.util.PageData;
+import com.fh.util.SNGenerator;
 
 /** 
  * 说明：派发红包管理
@@ -52,6 +66,9 @@ public class DistributeBonusController extends BaseController {
 	@Resource(name = "activitybonusService")
 	private ActivityBonusManager activitybonusService;
 	
+	@Resource(name = "urlConfig")
+	private URLConfig urlConfig;
+	
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -71,9 +88,7 @@ public class DistributeBonusController extends BaseController {
         pd.put("add_user", user.getNAME());
         pd.put("type", type);
         if("1".equals(type)) {
-        	PageData queryPd = new PageData();
-        	queryPd.put("mobile", Long.valueOf(pd.getString("receiver")));
-	       	PageData userPd = usermanagercontrollerService.queryUserByMobile(queryPd);
+	       	PageData userPd = usermanagercontrollerService.queryUserByMobile(pd.getString("receiver"));
 	       	if(null == userPd) {
 	    		mv.addObject("msg","没有该用户,请核查");
 	    		mv.setViewName("save_result");
@@ -130,36 +145,28 @@ public class DistributeBonusController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表DistributeBonus");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
-		page.setPd(pd);
-		List<PageData>	varList = distributebonusService.list(page);	//列出DistributeBonus列表
-		mv.setViewName("lottery/distributebonus/distributebonus_list");
-		for(PageData one:varList) {
-			if("1".equals(one.getString("type"))) {
-				one.put("file_url", "");
-			}else if("2".equals(one.getString("type"))) {
-				String fileUrl = one.getString("file_url");
-				one.put("file_url", fileUrl.substring(fileUrl.lastIndexOf("/")));
-			}
-			one.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(one.getString("add_time")), DateUtilNew.datetimeFormat));
-			one.put("status", ApproveStatusEnums.getCodeByName(one.getString("status")));
-			PageData queryP = new PageData();
-			queryP.put("bonus_id", one.getString("bonus_id"));
-			PageData actBonus = activitybonusService.findById(queryP);
-			if(null !=actBonus) {
-				one.put("bonus_id", one.getString("bonus_id")+"(满"+actBonus.getString("min_goods_amount")+"元减"+actBonus.getString("bonus_amount")+"元)");
-			}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart", DateUtilNew.getMilliSecondsByStr(lastStart));
 		}
-		mv.addObject("varList", varList);
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
+		page.setPd(pd);
+		List<PageData>	varList = distributebonusService.list(page);
+		mv.setViewName("lottery/distributebonus/distributebonus_list");
+		List<PageData> list = this.dealList(varList);
+		mv.addObject("varList", list);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());
 		return mv;
 	}
 	
@@ -171,26 +178,48 @@ public class DistributeBonusController extends BaseController {
 	@RequestMapping(value="/approvelist")
 	public ModelAndView approvelist(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表DistributeBonus");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String keywords = pd.getString("keywords");				//关键词检索条件
+		String keywords = pd.getString("keywords");
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
 		}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
 		page.setPd(pd);
-		List<PageData>	varList = distributebonusService.list(page);	//列出DistributeBonus列表
+		List<PageData>	varList = distributebonusService.list(page);
 		mv.setViewName("lottery/distributebonus/distributebonusapprove_list");
+		List<PageData> list = this.dealList(varList);
+		mv.addObject("varList", list);
+		mv.addObject("pd", pd);
+		mv.addObject("QX",Jurisdiction.getHC());
+		return mv;
+	}
+	
+	public List<PageData> dealList(List<PageData> varList) throws Exception{
 		for(PageData one:varList) {
 			if("1".equals(one.getString("type"))) {
 				one.put("file_url", "");
+				one.put("file_name", "");
 			}else if("2".equals(one.getString("type"))) {
 				String fileUrl = one.getString("file_url");
-				one.put("file_url", fileUrl.substring(fileUrl.lastIndexOf("/")));
+				one.put("file_url",urlConfig.getImgShowUrl()+fileUrl);
+				one.put("file_name", "点击下载查看 : "+fileUrl.substring(fileUrl.lastIndexOf("/")+1));
 			}
 			one.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(one.getString("add_time")), DateUtilNew.datetimeFormat));
-			one.put("status", ApproveStatusEnums.getNameByCode(Integer.valueOf(one.getString("status"))));
+			if(!StringUtils.isEmpty(one.getString("pass_time"))) {
+				one.put("pass_time", DateUtilNew.getCurrentTimeString(Long.valueOf(one.getString("pass_time")), DateUtilNew.datetimeFormat));
+			}else {
+				one.put("pass_time", "");
+			}
+			one.put("status", one.getString("status"));//ApproveStatusEnums.getNameByCode(Integer.valueOf(
 			PageData queryP = new PageData();
 			queryP.put("bonus_id", one.getString("bonus_id"));
 			PageData actBonus = activitybonusService.findById(queryP);
@@ -198,13 +227,120 @@ public class DistributeBonusController extends BaseController {
 				one.put("bonus_id", one.getString("bonus_id")+"(满"+actBonus.getString("min_goods_amount")+"元减"+actBonus.getString("bonus_amount")+"元)");
 			}
 		}
-		mv.addObject("varList", varList);
-		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
-		return mv;
+		return varList;
 	}
 	
+	@RequestMapping(value="/approveGiveBonus")
+	@ResponseBody
+	public Object approveGiveBonus() throws Exception{
+		PageData pd = new PageData();		
+		Map<String,Object> map = new HashMap<String,Object>();
+		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
+		pd = this.getPageData();
+		if("2".equals(pd.getString("type"))) {//拒绝
+			pd.put("status", "2");
+			pd.put("bonus_num", 0);
+			pd.put("pass_user", user.getUSERNAME());
+			pd.put("pass_time", DateUtilNew.getCurrentTimeLong());
+			distributebonusService.edit(pd);
+			map.put("code", "2");
+			map.put("msg", "审核拒绝");
+			return AppUtil.returnObject(pd, map);
+		}
+		
+		PageData distributePd = distributebonusService.findById(pd);
+		Integer bonusId = Integer.valueOf(distributePd.getString("bonus_id"));
+		BonusParam bp = this.createBonusParam(bonusId);
+		String receiver = distributePd.getString("receiver");
+		List<Integer> userIdList = new ArrayList<>();
+		if(StringUtils.isEmpty(receiver)) {
+			userIdList = this.resolveUserBonusExcel(distributePd.getString("file_url"));
+		}else {
+			PageData userPd = usermanagercontrollerService.queryUserByMobile(receiver);
+			String userId = userPd.getString("user_id");
+			userIdList.add(Integer.valueOf(userId));
+		}
+		int rst = this.giveUserBonus(userIdList, bp);
+		if(1 == rst) {
+			distributePd.put("bonus_num", userIdList.size());
+			distributePd.put("status", "1");
+			distributePd.put("pass_user", user.getUSERNAME());
+			distributePd.put("pass_time", DateUtilNew.getCurrentTimeLong());
+			distributebonusService.edit(distributePd);
+			map.put("code", "1");
+			map.put("msg", "审核通过");
+		}else{
+			map.put("code", "0");
+			map.put("msg", "审核失败，请联系管理员");
+		}
+		return AppUtil.returnObject(pd, map);
+	}
 	
+	/**
+	 * 根据红包id 创建赠送的红包param
+	 * @param bonusId
+	 * @return
+	 * @throws Exception
+	 */
+	public BonusParam createBonusParam(Integer bonusId) throws Exception {
+		BonusParam bp =new BonusParam();
+		PageData pd = new PageData();
+		pd.put("bonus_id", bonusId);
+		PageData actBonus = activitybonusService.findById(pd);
+	
+		bp.setBonusId(bonusId);
+		bp.setBonusSn(SNGenerator.nextSN(SNBusinessCodeEnum.BONUS_SN.getCode()));
+		BigDecimal b = new BigDecimal(actBonus.getString("bonus_amount")); 
+		bp.setBonusPrice(b.setScale(2, BigDecimal.ROUND_HALF_UP));
+		BigDecimal bMin = new BigDecimal(actBonus.getString("min_goods_amount")); 
+		bp.setMinGoodsAmount(bMin.setScale(2, BigDecimal.ROUND_HALF_UP));
+		bp.setReceiveTime(DateUtilNew.getCurrentTimeLong());
+		bp.setAddTime(DateUtilNew.getCurrentTimeLong());
+		bp.setStartTime(Integer.valueOf(actBonus.getString("start_time")));
+		bp.setEndTime(Integer.valueOf(actBonus.getString("end_time")));
+		bp.setBonusStatus(0);
+		bp.setIsDelete(0);
+		bp.setIsRead(0);
+		return bp;
+	}
+	
+	/**
+	 * 解析红包的excel
+	 * @return
+	 * @throws Exception 
+	 */
+	public List<Integer> resolveUserBonusExcel(String bonusExcelUrl) throws Exception {
+		List<String> mobileList = new ArrayList<>();
+        File file=new File(urlConfig.getUploadCommonUrl()+bonusExcelUrl);
+        XSSFWorkbook workbook=new XSSFWorkbook(new FileInputStream(file));
+        Sheet sheet=workbook.getSheetAt(0);//读取第一个 sheet
+        Row row=null;
+        int count=sheet.getPhysicalNumberOfRows();
+        //逐行处理 excel 数据
+        NumberFormat nf = NumberFormat.getInstance();
+        for (int i = 0; i < count; i++) {
+            row=sheet.getRow(i);
+            Cell cell0 = row.getCell(0);
+            String data = nf.format(cell0.getNumericCellValue());
+            if (data.indexOf(",") >= 0) {
+            	data = data.replace(",", "");
+            }
+            mobileList.add(data);
+        }
+        workbook.close();
+        List<Integer> userIdList = usermanagercontrollerService.getUserIdListByMobileList(mobileList);
+		return userIdList;
+	}
+
+
+	/**
+	 * 给用户派发红包
+	 * @throws Exception 
+	 */
+	public int giveUserBonus(List<Integer> userIdlist,BonusParam bonusParam) throws Exception {
+		int rst = activitybonusService.batchInsertUserBonus(userIdlist, bonusParam);
+		return rst;
+	}
 	
 	/**去新增页面
 	 * @param
@@ -275,32 +411,10 @@ public class DistributeBonusController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
-		List<String> titles = new ArrayList<String>();
-		titles.add("备注1");	//1
-		titles.add("活动红包id");	//2
-		titles.add("接收人手机号");	//3
-		titles.add("备注4");	//4
-		titles.add("备注5");	//5
-		titles.add("派发状态");	//6
-		titles.add("添加时间");	//7
-		titles.add("提交人");	//8
-		titles.add("审核时间");	//9
-		titles.add("审核人");	//10
-		dataMap.put("titles", titles);
-		List<PageData> varOList = distributebonusService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
+		for(int i=0;i<2;i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("id").toString());	//1
-			vpd.put("var2", varOList.get(i).get("bonus_id").toString());	//2
-			vpd.put("var3", varOList.get(i).get("receiver").toString());	//3
-			vpd.put("var4", varOList.get(i).get("user_id").toString());	//4
-			vpd.put("var5", varOList.get(i).getString("file_url"));	    //5
-			vpd.put("var6", varOList.get(i).get("status").toString());	//6
-			vpd.put("var7", varOList.get(i).get("add_time").toString());	//7
-			vpd.put("var8", varOList.get(i).getString("add_user"));	    //8
-			vpd.put("var9", varOList.get(i).get("pass_time").toString());	//9
-			vpd.put("var10", varOList.get(i).getString("pass_user"));	    //10
+			vpd.put("var1", "11位数字类型手机号格式"+i);
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

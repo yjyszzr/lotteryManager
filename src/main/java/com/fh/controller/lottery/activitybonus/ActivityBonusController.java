@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fh.common.ProjectConstant;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
@@ -57,7 +58,7 @@ public class ActivityBonusController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername() + "新增ActivityBonus");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
 			return null;
-		} // 校验权限
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -71,19 +72,24 @@ public class ActivityBonusController extends BaseController {
 		} else {
 			pd.put("min_goods_amount", pd.getString("min_goods_amount"));
 		}
-
-		Number num = Float.parseFloat(pd.getString("recharge_chance"));
-		Integer rechargeChanceInt = num.intValue();
-		NumberFormat numberFormat = NumberFormat.getInstance();  
-		numberFormat.setMaximumFractionDigits(2);    
-		String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
-		pd.put("recharge_chance", rechargeChance);
 		
-		pd.put("bonus_id", "0"); // id
-		pd.put("receive_count", "0"); // id
-		pd.put("is_enable", "0"); // id
-		pd.put("is_delete", "0"); // id
-		pd.put("add_time", DateUtilNew.getCurrentTimeLong()); // id
+		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
+			Number num = Float.parseFloat(pd.getString("recharge_chance"));
+			Integer rechargeChanceInt = num.intValue();
+			NumberFormat numberFormat = NumberFormat.getInstance();  
+			numberFormat.setMaximumFractionDigits(2);    
+			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
+			pd.put("recharge_chance", rechargeChance);
+		}else {
+			pd.put("recharge_chance", null);
+			pd.put("recharge_card_id", null);
+		}
+
+		pd.put("bonus_id", "0");
+		pd.put("receive_count", "0");
+		pd.put("is_enable", "0");
+		pd.put("is_delete", "0");
+		pd.put("add_time", DateUtilNew.getCurrentTimeLong());
 		activitybonusService.save(pd);
 		ACLOG.save("1", "1", "优惠券管理：新增优惠券", "金额："+pd.getString("bonus_amount"));
 		mv.addObject("msg", "success");
@@ -123,19 +129,21 @@ public class ActivityBonusController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername() + "修改ActivityBonus");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
 			return null;
-		} // 校验权限
+		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		PageData pdOld = activitybonusService.findById(pd);
 		
-		Number num = Float.parseFloat(pd.getString("recharge_chance"));
-		Integer rechargeChanceInt = num.intValue();
-		NumberFormat numberFormat = NumberFormat.getInstance();  
-		numberFormat.setMaximumFractionDigits(2);    
-		String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
-		pd.put("recharge_chance", rechargeChance);
-		
+		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
+			Number num = Float.parseFloat(pd.getString("recharge_chance"));
+			Integer rechargeChanceInt = num.intValue();
+			NumberFormat numberFormat = NumberFormat.getInstance();  
+			numberFormat.setMaximumFractionDigits(2);    
+			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
+			pd.put("recharge_chance", rechargeChance);
+		}
+
 		activitybonusService.edit(pd);
 		ACLOG.saveByObject("1", "优惠券管理：修改优惠券", pdOld, pd);
 		mv.addObject("msg", "success");
@@ -192,7 +200,7 @@ public class ActivityBonusController extends BaseController {
 			pageData = varList.get(i);
 			String min_goods_amount = pageData.getString("min_goods_amount");
 			String bonusType =  pageData.getString("bonus_type");
-			if("3".equals(bonusType)) {
+			if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(bonusType)) {
 				String rechargeChance = pageData.getString("recharge_chance");
 				Number num = Float.parseFloat(rechargeChance) * 100;
 				Integer rechargeChanceInt = num.intValue();
@@ -267,7 +275,7 @@ public class ActivityBonusController extends BaseController {
 	@ResponseBody
 	public Object queryActivityBonusListForDistribute() throws Exception{
 		Map<String,Object> map = new HashMap<String,Object>();
-		List<PageData> bonusList = this.queryActivityBonusListByActType(3);
+		List<PageData> bonusList = this.queryActivityBonusListByActType(ProjectConstant.Bonus_TYPE_GIVE_USER);
 		
 		List<PageData> newbonusList = new ArrayList<>();
 		bonusList.stream().forEach(s->{
@@ -348,11 +356,13 @@ public class ActivityBonusController extends BaseController {
 				pd.put("min_amount", 0);
 			}
 		}
-
-		String rechargeChance = pd.getString("recharge_chance");
-		Number num = Float.parseFloat(rechargeChance) * 100;
-		Integer rechargeChanceInt = num.intValue();
-		pd.put("recharge_chance", String.valueOf(rechargeChanceInt));
+		
+		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
+			String rechargeChance = pd.getString("recharge_chance");
+			Number num = Float.parseFloat(rechargeChance) * 100;
+			Integer rechargeChanceInt = num.intValue();
+			pd.put("recharge_chance", String.valueOf(rechargeChanceInt));
+		}
 		
 		List<PageData> rechargeCardList = this.createRechareCardList();
 		pd.put("rechargeCardList", rechargeCardList);

@@ -8,8 +8,8 @@ public class URLConfig {
 	private String manualRewardUrl;
 	private String manualRewardToUserMoneyLimitUrl;
 	private String uploadURL;
-	private String uploadAppPackageUrl;
 	private String uploadFileUrl;
+	private String uploadCommonUrl;
 	private String juheVerifyPhoneUrl;
 	private String juhePhoneVerifyKey;
 	private String userWithDrawPersonOpen;
@@ -19,6 +19,14 @@ public class URLConfig {
 	private String username3;
 	private String password3;
 	
+	public String getUploadCommonUrl() {
+		return uploadCommonUrl;
+	}
+
+	public void setUploadCommonUrl(String uploadCommonUrl) {
+		this.uploadCommonUrl = uploadCommonUrl;
+	}
+
 	public String getUrl3() {
 		return url3;
 	}
@@ -73,14 +81,6 @@ public class URLConfig {
 
 	public void setJuhePhoneVerifyKey(String juhePhoneVerifyKey) {
 		this.juhePhoneVerifyKey = juhePhoneVerifyKey;
-	}
-
-	public String getUploadAppPackageUrl() {
-		return uploadAppPackageUrl;
-	}
-
-	public void setUploadAppPackageUrl(String uploadAppPackageUrl) {
-		this.uploadAppPackageUrl = uploadAppPackageUrl;
 	}
 
 	public String getUploadURL() {

@@ -18,6 +18,43 @@
 <%@ include file="../../system/index/top.jsp"%>
 <!-- 日期框 -->
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
+
+<style type="text/css">
+.background { 
+    display: block; 
+    width: 100%; 
+    height: 100%; 
+    opacity: 0.4; 
+    filter: alpha(opacity=40); 
+    background:while; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    z-index: 2000; 
+} 
+.progressBar { 
+    border: solid 2px #86A5AD; 
+    background: white url(${pageContext.request.contextPath}/static/image/progressBar_m.gif) no-repeat 10px 10px; 
+} 
+.progressBar { 
+    display: block; 
+    width: 160px; 
+    height: 28px; 
+    position: fixed; 
+    top: 50%; 
+    left: 50%; 
+    margin-left: -74px; 
+    margin-top: -14px; 
+    padding: 10px 10px 10px 50px; 
+    text-align: left; 
+    line-height: 27px; 
+    font-weight: bold; 
+    position: absolute; 
+    z-index: 2001; 
+} 
+</style>
+
+
 </head>
 <body class="no-skin">
 
@@ -31,26 +68,16 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="distributebonus/list.do" method="post" name="Form" id="Form">
+						<form action="distributebonus/approvelist.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
 									<div class="nav-search">
 										<span class="input-icon">
-											<input type="text" placeholder="这里输入关键词" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="这里输入关键词"/>
+											<input type="text" placeholder="红包id,接收人,文件名,提交人"  style="width:240px;" class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }"/>
 											<i class="ace-icon fa fa-search nav-search-icon"></i>
 										</span>
 									</div>
-								</td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastStart" id="lastStart"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="开始日期" title="开始日期"/></td>
-								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" name="lastEnd"  value="" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:88px;" placeholder="结束日期" title="结束日期"/></td>
-								<td style="vertical-align:top;padding-left:2px;">
-								 	<select class="chosen-select form-control" name="name" id="id" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
-									<option value=""></option>
-									<option value="">全部</option>
-									<option value="">1</option>
-									<option value="">2</option>
-								  	</select>
 								</td>
 								<c:if test="${QX.cha == 1 }">
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
@@ -70,6 +97,7 @@
 									<th class="center">活动红包</th>
 									<th class="center">接收人手机号</th>
 									<th class="center">excel文件名</th>
+									<th class="center">已发放红包个数</th>
 									<th class="center">添加时间</th>
 									<th class="center">提交人</th>
 									<th class="center">审核时间</th>
@@ -92,19 +120,31 @@
 <%-- 										<td class='center'>${var.id}</td>  --%>
 											<td class='center'>${var.bonus_id}</td>
 											<td class='center'>${var.receiver}</td>
-											<td class='center'>${var.file_url}</td>
+											<td class='center'><a href="${var.file_url}">${var.file_name}</a></td>
+											<td class='center'>${var.bonus_num}</td>
 											<td class='center'>${var.add_time}</td>
 											<td class='center'>${var.add_user}</td>
 											<td class='center'>${var.pass_time}</td>
 											<td class='center'>${var.pass_user}</td>
-											<td class='center'>${var.status}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.status==0}"><font color="green">待审核</font></c:when>
+													<c:when test="${var.status==1}"><font color="blue">通过</font></c:when>
+													<c:when test="${var.status==2}"><font color="red">拒绝</font></c:when>
+												</c:choose>
+											</td>
 											<td class="center">
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.recharge_card_id}');">
-															<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
-														</a>
-													</div>
+												<div class="inline pos-rel">
+													<c:choose>
+														<c:when test="${var.status == 0}"> 
+															<a class="btn btn-mini btn-success" title="通过" onclick="approveOrNot('${var.id}','1');">
+																<i  title="通过">通过</i>
+															</a>
+															<a class="btn btn-mini btn-success" title="拒绝" onclick="approveOrNot('${var.id}','2');">
+																<i  title="拒绝">拒绝</i>
+															</a>
+														</c:when>
+													</c:choose>
 												</div>
 											</td>
 										</tr>
@@ -131,14 +171,12 @@
 									<c:if test="${QX.add == 1 }">
 									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
 									</c:if>
-									<c:if test="${QX.del == 1 }">
-									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" ><i class='ace-icon fa fa-trash-o bigger-120'></i></a>
-									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
 						</table>
 						</div>
+						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">派发红包中可能需要一段时间,请等待...</h4></div>
 						</form>
 					
 						</div>
@@ -262,6 +300,44 @@
 					});
 				}
 			});
+		}
+		
+	  function approveOrNot(id,type){
+		    if("1" == type){
+				if(!confirm("确定要审核通过吗?")){
+					return false;
+				}
+		    }else if("2" == type){
+				if(!confirm("确定要审核拒绝吗?")){
+					return false;
+				}
+		    }
+		    
+			$("#zhongxin2").show();
+ 			$.ajax({
+				type: "POST",
+				url: '<%=basePath%>distributebonus/approveGiveBonus.do?tm='+new Date().getTime(),
+				data: {id:id,type:type},
+				dataType:'json',
+				cache: false,
+				success: function(data){
+					var code = data.code;
+					if(1 == code){
+						alert("审核通过");
+						
+					}else if(2 == code){
+						alert("审核拒绝")
+					}else{
+						alert("审核异常，请联系管理员:"+data)
+					}
+					$("#zhongxin2").hide();
+					tosearch();
+				},
+				error: function(data){
+					alert("异常，请联系管理员:"+data);
+					$("#zhongxin2").hide();
+				}
+			}); 
 		}
 		
 		//修改

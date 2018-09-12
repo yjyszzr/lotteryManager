@@ -111,7 +111,7 @@ public interface UserManagerControllerManager {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData queryUserByMobile(PageData pd)throws Exception;	
+	public PageData queryUserByMobile(String mobile)throws Exception;	
 	
 	/**注册并购彩
 	 * @param pd
@@ -124,4 +124,11 @@ public interface UserManagerControllerManager {
 	 * @throws Exception
 	 */
 	public List<PageData> getRegisterAndAgainOrder(Page page)throws Exception;
+	
+	/**根据手机号集合查询userId集合
+	 * @param List mobileList
+	 * @throws Exception
+	 */
+	public List<Integer> getUserIdListByMobileList(List<String> mobileList)throws Exception;
+	
 }

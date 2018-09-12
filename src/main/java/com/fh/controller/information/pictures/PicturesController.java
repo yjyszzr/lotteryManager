@@ -142,6 +142,12 @@ public class PicturesController extends BaseController {
 		return AppUtil.returnObject(pd, map);
 	}
 
+	/**
+	 * 上传apk
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/apkFileUpload")
 	@ResponseBody
 	public Map<String, String> apkFileUpload(@RequestParam(required = false) MultipartFile file) throws Exception {
@@ -150,18 +156,24 @@ public class PicturesController extends BaseController {
 		String ffile = DateUtil.getDays();
 		String fileName = file.getOriginalFilename();
 		if (null != file && !file.isEmpty()) {
-			String filePath = urlConfig.getUploadAppPackageUrl() + ffile; // 文件上传路径
+			String filePath = urlConfig.getUploadCommonUrl() + "uploadFiles/appPackage/" + ffile; // 文件上传路径
 			fileName = FileUpload.fileUpApk(file, filePath, fileName); // 执行上传
 		} else {
 			map.put("result", "false");
 			return map;
 		}
 		map.put("result", "true");
-		String apkPath = urlConfig.getImgShowUrl() + "uploadFiles/appPackage/" + ffile + "/" + fileName; // 路径
+		String apkPath = "uploadFiles/appPackage/" + ffile + "/" + fileName; // 路径
 		map.put("apk_path", apkPath);
 		return map;
 	}
 	
+	/**
+	 * 上传红包的excel
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/excelFileUpload")
 	@ResponseBody
 	public Map<String, String> excelFileUpload(@RequestParam(required = false) MultipartFile file) throws Exception {
@@ -170,15 +182,15 @@ public class PicturesController extends BaseController {
 		String ffile = DateUtil.getDays();
 		String fileName = file.getOriginalFilename();
 		if (null != file && !file.isEmpty()) {
-			String filePath = urlConfig.getUploadFileUrl() + ffile; // 文件上传路径
-			fileName = FileUpload.fileUpApk(file, filePath, fileName); // 执行上传
+			String filePath = urlConfig.getUploadCommonUrl() + "uploadFiles/file/" + ffile;
+			fileName = FileUpload.fileUpApk(file, filePath, fileName);
 		} else {
 			map.put("result", "false");
 			return map;
 		}
 		map.put("result", "true");
-		String excelPath = urlConfig.getImgShowUrl() + "uploadFiles/file/" + ffile + "/" + fileName; // 路径
-		map.put("excel_path", excelPath);
+		String excelPath =  "uploadFiles/file/" + ffile + "/" + fileName;
+		map.put("file_url", excelPath);
 		return map;
 	}
 	
