@@ -286,7 +286,7 @@
 		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
 			and o.winning_money &lt; #{pd.amountEnd }
 		</if>
-		<if test="pd.order_status != null and pd.order_status != ''"> 
+		<if test="pd.order_status != null and pd.order_status != '' and pd.order_status != '-1'"> 
 			and o.order_status = #{pd.order_status }
 		</if>
 		<if test="pd.order_status == null || pd.order_status == ''"> 

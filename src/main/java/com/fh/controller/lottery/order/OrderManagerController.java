@@ -59,33 +59,63 @@ public class OrderManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String order_status = pd.getString("order_status");
+
 		String order_sn = pd.getString("order_sn");
 		if (null != order_sn && !"".equals(order_sn)) {
 			pd.put("order_sn", order_sn.trim());
+			if (null == order_status || "".equals(order_status)) {
+				pd.put("order_status", "-1");
+			}
 		}
 		String mobile = pd.getString("mobile");
 		if (null != mobile && !"".equals(mobile)) {
 			pd.put("mobile", mobile.trim());
+			if (null == order_status || "".equals(order_status)) {
+				pd.put("order_status", "-1");
+			}
 		}
 		String user_name = pd.getString("user_name");
 		if (null != user_name && !"".equals(user_name)) {
 			pd.put("user_name", user_name.trim());
+			if (null == order_status || "".equals(order_status)) {
+				pd.put("order_status", "-1");
+			}
 		}
 		String amountStart = pd.getString("amountStart");
 		if (null != amountStart && !"".equals(amountStart)) {
 			pd.put("amountStart", amountStart.trim());
+			if (null == order_status || "".equals(order_status)) {
+				pd.put("order_status", "-1");
+			}
 		}
 		String amountEnd = pd.getString("amountEnd");
 		if (null != amountEnd && !"".equals(amountEnd)) {
 			pd.put("amountEnd", amountEnd.trim());
+			if (null == order_status || "".equals(order_status)) {
+				pd.put("order_status", "-1");
+			}
 		}
 		String lastStart = pd.getString("lastStart");
 		if (null != lastStart && !"".equals(lastStart)) {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+			if (null == order_status || "".equals(order_status)) {
+				pd.put("order_status", "-1");
+			}
 		}
 		String lastEnd = pd.getString("lastEnd");
 		if (null != lastEnd && !"".equals(lastEnd)) {
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+			if (null == order_status || "".equals(order_status)) {
+				pd.put("order_status", "-1");
+			}
+		}
+		String lottery_classify_id = pd.getString("lottery_classify_id");
+		if (null != lottery_classify_id && !"".equals(lottery_classify_id)) {
+			pd.put("lottery_classify_id", lottery_classify_id);
+			if (null == order_status || "".equals(order_status)) {
+				pd.put("order_status", "-1");
+			}
 		}
 		page.setPd(pd);
 		List<PageData> varList = ordermanagerService.getOrderList(page); // 列出OrderManager列表
@@ -127,45 +157,81 @@ public class OrderManagerController extends BaseController {
 		if (indx != -1) {
 			passTypeStr = passTypeStr.substring(0, indx) + passTypeStr.substring(indx + 1, passTypeStr.length());
 		}
-
 		pd.put("pass_type", passTypeStr);
 		List<PageData> orderDetailsList = ordermanagerService.toDetail(pd); // 列出OrderManager列表
-
-		for (int i = 0; i < orderDetailsList.size(); i++) {
-			String nameStr = "";
-			if (orderDetailsList.get(i).getString("changci").equals("T56") || orderDetailsList.get(i).getString("changci").equals("T57")) {
-				String ticketData = orderDetailsList.get(i).getString("ticket_data");
-				String[] splitsjb = ticketData.split("@");
-				nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("match_team") + "&nbsp" + "【" + splitsjb[1] + "】  </div>";
-			} else {
-				List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
-				for (int j = 0; j < list.size(); j++) {
-					for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
-						String fixOdds = orderDetailsList.get(i).getString("fix_odds");
-						if (list.get(j).getPlayType().equals("01")) {// 判断是不是<让球胜平负>,是的话添加上让球个数
-							nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
-						} else {
-							nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
+		if (pd.getString("lottery_classify_id").equals("1")) {
+			for (int i = 0; i < orderDetailsList.size(); i++) {
+				String nameStr = "";
+				if (orderDetailsList.get(i).getString("changci").equals("T56") || orderDetailsList.get(i).getString("changci").equals("T57")) {
+					String ticketData = orderDetailsList.get(i).getString("ticket_data");
+					String[] splitsjb = ticketData.split("@");
+					nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("match_team") + "&nbsp" + "【" + splitsjb[1] + "】  </div>";
+				} else {
+					List<MatchBetCellDTO> list = getString(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
+					for (int j = 0; j < list.size(); j++) {
+						for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
+							String fixOdds = orderDetailsList.get(i).getString("fix_odds");
+							if (list.get(j).getPlayType().equals("01")) {// 判断是不是<让球胜平负>,是的话添加上让球个数
+								nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
+							} else {
+								nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
+							}
 						}
 					}
 				}
-			}
-			orderDetailsList.get(i).put("list", nameStr);
-			String matchResult = orderDetailsList.get(i).getString("match_result");
-			String matchResultStr = "";
-			List<String> matchResults = null;
-			if (StringUtils.isNotEmpty(matchResult) && !ProjectConstant.ORDER_MATCH_RESULT_CANCEL.equals(matchResult)) {
-				matchResults = Arrays.asList(matchResult.split(";"));
-				for (String matchStr : matchResults) {
-					String rstPlayType = matchStr.substring(0, matchStr.indexOf("|"));
-					String rstPlayCells = matchStr.substring(matchStr.lastIndexOf("|") + 1);
-					matchResultStr = getCathecticData(rstPlayType, rstPlayCells);
+				orderDetailsList.get(i).put("list", nameStr);
+				String matchResult = orderDetailsList.get(i).getString("match_result");
+				String matchResultStr = "";
+				List<String> matchResults = null;
+				if (StringUtils.isNotEmpty(matchResult) && !ProjectConstant.ORDER_MATCH_RESULT_CANCEL.equals(matchResult)) {
+					matchResults = Arrays.asList(matchResult.split(";"));
+					for (String matchStr : matchResults) {
+						String rstPlayType = matchStr.substring(0, matchStr.indexOf("|"));
+						String rstPlayCells = matchStr.substring(matchStr.lastIndexOf("|") + 1);
+						matchResultStr = getCathecticData(rstPlayType, rstPlayCells);
+					}
 				}
+				orderDetailsList.get(i).put("matchResultStr", matchResultStr);
 			}
-			orderDetailsList.get(i).put("matchResultStr", matchResultStr);
+			mv.setViewName("lottery/ordermanager/ordermanager_details");
+		} else if (pd.getString("lottery_classify_id").equals("2")) {
+			for (int i = 0; i < orderDetailsList.size(); i++) {
+				String tikcket = orderDetailsList.get(i).getString("ticket_data");
+				String[] ball = tikcket.split("\\|");
+				List<String> redBileList = new ArrayList<String>();
+				List<String> redTowingList = new ArrayList<String>();
+				List<String> blueBileList = new ArrayList<String>();
+				List<String> blueTowingList = new ArrayList<String>();
+				// 标准投注 ||复式投注
+				if (orderDetailsList.get(i).getString("bet_type").equals("00") || orderDetailsList.get(i).getString("bet_type").equals("01")) {
+					if (ball.length > 1) {
+						redBileList = Arrays.asList(ball[0].split(","));
+						blueBileList = Arrays.asList(ball[1].split(","));
+					}
 
+					// 胆拖投注
+				} else if (orderDetailsList.get(i).getString("bet_type").equals("02")) {
+					if (ball.length > 1) {
+						String[] redbull = ball[0].split("\\$");
+						if (redbull.length > 1) {
+							redBileList = Arrays.asList(redbull[0].split(","));
+							redTowingList = Arrays.asList(redbull[1].split(","));
+						}
+						String[] bluebull = ball[1].split("\\$");
+						if (bluebull.length > 1) {
+							blueBileList = Arrays.asList(bluebull[0].split(","));
+							blueTowingList = Arrays.asList(bluebull[1].split(","));
+						}
+					}
+
+				}
+				orderDetailsList.get(i).put("redBileList", redBileList);
+				orderDetailsList.get(i).put("redTowingList", redTowingList);
+				orderDetailsList.get(i).put("blueBileList", blueBileList);
+				orderDetailsList.get(i).put("blueTowingList", blueTowingList);
+			}
+			mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
 		}
-		mv.setViewName("lottery/ordermanager/ordermanager_details");
 		mv.addObject("varList", orderDetailsList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
