@@ -144,10 +144,10 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByProcessType", page);
 	}
 	
-	@SuppressWarnings("unchecked")
+/*	@SuppressWarnings("unchecked")
 	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.queryPayLogByPayOrderSn", pd);
-	}
+	}*/
 	
 	
 }

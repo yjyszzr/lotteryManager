@@ -135,7 +135,7 @@ public interface UserAccountManagerManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception;
+/*	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception;*/
 	
 
 }

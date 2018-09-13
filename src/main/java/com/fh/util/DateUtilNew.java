@@ -150,6 +150,26 @@ public class DateUtilNew {
 		return getCurrentDateTime(LocalDateTime.now(), date_sdf);
 	}
 
+    /**
+     * 获取当前时间之后过多少天后零点前的时间
+     * @param currentTime
+     * @param dayNum
+     * @return
+     */
+    public static Integer getTimeAfterDays(Date currentTime,Integer dayNum,int h,int m,int s) {
+    	if(0 == dayNum) {
+    		dayNum = 1;
+    	}
+
+    	Calendar calendar = Calendar.getInstance();  
+    	calendar.setTime(currentTime);
+    	calendar.add(Calendar.DAY_OF_MONTH, dayNum - 1); 
+    	calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH), h, m, s);
+        Long millions = calendar.getTimeInMillis()/1000;
+
+		return millions.intValue();
+    }
+	
 	/**
 	 * 获取年月日 yyyyMMdd
 	 *

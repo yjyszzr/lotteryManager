@@ -284,6 +284,7 @@ public class DistributeBonusController extends BaseController {
 	 */
 	public BonusParam createBonusParam(Integer bonusId) throws Exception {
 		BonusParam bp =new BonusParam();
+		Date todayDate  = new Date();
 		PageData pd = new PageData();
 		pd.put("bonus_id", bonusId);
 		PageData actBonus = activitybonusService.findById(pd);
@@ -296,8 +297,8 @@ public class DistributeBonusController extends BaseController {
 		bp.setMinGoodsAmount(bMin.setScale(2, BigDecimal.ROUND_HALF_UP));
 		bp.setReceiveTime(DateUtilNew.getCurrentTimeLong());
 		bp.setAddTime(DateUtilNew.getCurrentTimeLong());
-		bp.setStartTime(Integer.valueOf(actBonus.getString("start_time")));
-		bp.setEndTime(Integer.valueOf(actBonus.getString("end_time")));
+		bp.setStartTime(DateUtilNew.getTimeAfterDays(todayDate, Integer.valueOf(actBonus.getString("start_time")), 0, 0, 0));
+		bp.setEndTime(DateUtilNew.getTimeAfterDays(todayDate, Integer.valueOf(actBonus.getString("end_time")), 0, 0, 0));
 		bp.setBonusStatus(0);
 		bp.setIsDelete(0);
 		bp.setIsRead(0);
