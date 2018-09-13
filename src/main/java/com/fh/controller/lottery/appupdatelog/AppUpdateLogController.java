@@ -159,7 +159,7 @@ public class AppUpdateLogController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername()+"列表AppUpdateLog");
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
-		pd = this.getPageData();//{app_name=, channel=c10020}
+		pd = this.getPageData();
 		String keywords = pd.getString("keywords");				//关键词检索条件
 		if(null != keywords && !"".equals(keywords)){
 			pd.put("keywords", keywords.trim());
@@ -183,7 +183,7 @@ public class AppUpdateLogController extends BaseController {
 			pdata.put("version", pdata.getString("version"));
 			pdata.put("app_name", appName);
 			pdata.put("channel_name", channelName);
-			pdata.put("download_url", urlConfig.getImgShowUrl() + pdata.getString("download_url"));
+			pdata.put("download_url", urlConfig.getImgShowUrl() +pdata.getString("download_url"));
 			pdata.put("update_install",updateInstall.equals("1")?"是":"否");
 			pdata.put("update_time", DateUtilNew.getTimeString(Integer.valueOf(updateTime),DateUtilNew.datetimeFormat));
 			newVarList.add(pdata);
@@ -244,7 +244,7 @@ public class AppUpdateLogController extends BaseController {
         }
         
         String downLoadUrl = pd.getString("download_url");
-        pd.put("apk_path", urlConfig.getUploadCommonFileUrl() + downLoadUrl);
+        pd.put("apk_path", urlConfig.getImgShowUrl() + downLoadUrl);
 		mv.setViewName("lottery/appupdatelog/appupdatelog_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

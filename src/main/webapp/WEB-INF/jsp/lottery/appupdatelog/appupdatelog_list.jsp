@@ -46,14 +46,14 @@
 								<td style="width:70px;">app名称:</td>
 								<td>
 									<select name="app_code_name" id="app_code_name"  title = "app名称必选" onchange="change1(this.value)">
-		                                <option>app名称必选</option>    					 
+		                                <option></option>    					 
 		                          	</select>									
 								</td>
 								<td style="width:12px;"></td>
 								<td style="width:100px;">app渠道名称:</td>
 								<td>
 		                          	<select id="channel" title = "app下载渠道必选"  name="channel">
-								 		<option>app下载渠道必选</option>                       
+								 		<option></option>                       
                       				</select>									
 								</td>
 								<td style="width:12px;"></td>
@@ -90,7 +90,7 @@
 											<td class='center'>${var.app_name}</td>
 											<td class='center'>${var.channel_name}</td>
 											<td class='center'>${var.version}</td>
-											<td class='center'><a> ${var.download_url}</a></td>
+											<td class='center'><a href ="${var.download_url}">${var.download_url}</a></td>
 											<td class='center' style="WORD-WRAP: break-word">${var.update_log}</td>
 											<td class='center'>${var.update_time}</td>
 											<td class='center'>${var.update_install}</td>
