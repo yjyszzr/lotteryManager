@@ -127,5 +127,15 @@ public interface UserAccountManagerManager {
 	 * @throws Exception
 	 */
 	public List<PageData> findByProcessType(Page page) throws Exception;
+	
+	/****
+	 * 根据交易号查询交易记录
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception;
+	
 
 }

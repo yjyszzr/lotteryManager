@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @version
  */
 public class FileUpload {
+	protected static Logger logger = Logger.getLogger(FileUpload.class);
 
 	/**上传文件
 	 * @param file 			//文件对象
@@ -34,7 +35,7 @@ public class FileUpload {
 			}
 			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
 		} catch (IOException e) {
-			System.out.println(e);
+			logger.error(e.getStackTrace());
 		}
 		return fileName+extName;
 	}
@@ -49,7 +50,7 @@ public class FileUpload {
 		try {
 			copyFile(file.getInputStream(), filePath, fileName);
 		} catch (IOException e) {
-			System.out.println(e);
+			logger.error(e.getStackTrace());
 		}
 		return fileName;
 	}
@@ -100,7 +101,6 @@ public class FileUpload {
 			String fileName = null == myFileName?httpUrl.substring(httpUrl.lastIndexOf("/")).replace("/", ""):myFileName; //图片文件名(null时用网络图片原名)
 			url = new URL(httpUrl);		//初始化url对象
 			in = new BufferedInputStream(url.openStream());									//初始化in对象，也就是获得url字节流
-			//file = new FileOutputStream(new File(filePath +"\\"+ fileName));
 			file = new FileOutputStream(mkdirsmy(filePath,fileName));
 			int t;
 			while ((t = in.read()) != -1) {
@@ -110,11 +110,11 @@ public class FileUpload {
 			in.close();
 			return fileName;
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getStackTrace());
 		}
 		return null;
 		

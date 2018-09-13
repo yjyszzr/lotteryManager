@@ -244,7 +244,7 @@ public class AppUpdateLogController extends BaseController {
         }
         
         String downLoadUrl = pd.getString("download_url");
-        pd.put("apk_path", urlConfig.getUploadCommonUrl() + downLoadUrl);
+        pd.put("apk_path", urlConfig.getUploadCommonFileUrl() + downLoadUrl);
 		mv.setViewName("lottery/appupdatelog/appupdatelog_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport3;
@@ -142,4 +143,11 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	public List<PageData> findByProcessType(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByProcessType", page);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserAccountManagerMapper.queryPayLogByPayOrderSn", pd);
+	}
+	
+	
 }

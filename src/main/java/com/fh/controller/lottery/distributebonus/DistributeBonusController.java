@@ -311,7 +311,7 @@ public class DistributeBonusController extends BaseController {
 	 */
 	public List<Integer> resolveUserBonusExcel(String bonusExcelUrl) throws Exception {
 		List<String> mobileList = new ArrayList<>();
-        File file=new File(urlConfig.getUploadCommonUrl()+bonusExcelUrl);
+        File file=new File(urlConfig.getUploadCommonFileUrl()+bonusExcelUrl);
         XSSFWorkbook workbook=new XSSFWorkbook(new FileInputStream(file));
         Sheet sheet=workbook.getSheetAt(0);//读取第一个 sheet
         Row row=null;

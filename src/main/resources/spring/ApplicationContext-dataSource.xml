@@ -195,7 +195,7 @@
         <property name="manualRewardUrl" value="${manualRewardUrl}"></property>
         <property name="uploadURL" value="${uploadURL}"></property>
         <property name="manualRewardToUserMoneyLimitUrl" value="${manualRewardToUserMoneyLimitUrl}"></property>
-        <property name="uploadCommonUrl" value="${uploadCommonUrl}"></property>
+        <property name="uploadCommonFileUrl" value="${uploadCommonFileUrl}"></property>
         <property name="juheVerifyPhoneUrl" value="${juheVerifyPhoneUrl}"></property>
         <property name="juhePhoneVerifyKey" value="${juhePhoneVerifyKey}"></property>
         <property name="userWithDrawPersonOpen" value="${userWithDrawPersonOpen}"></property>

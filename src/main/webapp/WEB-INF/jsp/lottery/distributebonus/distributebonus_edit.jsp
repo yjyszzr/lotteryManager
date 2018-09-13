@@ -33,7 +33,9 @@
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">活动赠送红包</td>
 								<td colspan="4">
-									<select  name="selectBonus" id ="selectBonus"  onclick="showList()"></select>
+									<select style="width:260px" name="selectBonus" id ="selectBonus"  >
+										<option>请选择红包</option>
+									</select>
 								</td>
 							</tr>
 							<tr>
@@ -129,7 +131,7 @@
             });
 		})
 		
-		function showList(){
+		$(function() {
  			$.ajax({
 				type: "POST",
 				url: '<%=basePath%>activitybonus/getDistributeBonusList.do?tm='+new Date().getTime(),
@@ -142,7 +144,7 @@
 						 });
 				}
 			}); 
-		}
+		});
 		
 		function ajaxFileUpload(fileObj,fileId){
 		    $.ajaxFileUpload({

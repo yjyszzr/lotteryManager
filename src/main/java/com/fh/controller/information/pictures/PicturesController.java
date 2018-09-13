@@ -156,14 +156,14 @@ public class PicturesController extends BaseController {
 		String ffile = DateUtil.getDays();
 		String fileName = file.getOriginalFilename();
 		if (null != file && !file.isEmpty()) {
-			String filePath = urlConfig.getUploadCommonUrl() + "uploadFiles/appPackage/" + ffile; // 文件上传路径
+			String filePath = urlConfig.getUploadCommonFileUrl() + "appPackage/" + ffile; // 文件上传路径
 			fileName = FileUpload.fileUpApk(file, filePath, fileName); // 执行上传
 		} else {
 			map.put("result", "false");
 			return map;
 		}
 		map.put("result", "true");
-		String apkPath = "uploadFiles/appPackage/" + ffile + "/" + fileName; // 路径
+		String apkPath = "appPackage/" + ffile + "/" + fileName; // 路径
 		map.put("apk_path", apkPath);
 		return map;
 	}
@@ -182,14 +182,14 @@ public class PicturesController extends BaseController {
 		String ffile = DateUtil.getDays();
 		String fileName = file.getOriginalFilename();
 		if (null != file && !file.isEmpty()) {
-			String filePath = urlConfig.getUploadCommonUrl() + "uploadFiles/file/" + ffile;
+			String filePath = urlConfig.getUploadCommonFileUrl() + "bonusFile/" + ffile;
 			fileName = FileUpload.fileUpApk(file, filePath, fileName);
 		} else {
 			map.put("result", "false");
 			return map;
 		}
 		map.put("result", "true");
-		String excelPath =  "uploadFiles/file/" + ffile + "/" + fileName;
+		String excelPath =  "bonusFile/" + ffile + "/" + fileName;
 		map.put("file_url", excelPath);
 		return map;
 	}
