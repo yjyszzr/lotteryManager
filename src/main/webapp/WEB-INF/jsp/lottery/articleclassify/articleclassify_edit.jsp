@@ -36,6 +36,15 @@
 								<td><input type="text" name="classify_name" id="classify_name" value="${pd.classify_name}" maxlength="55" placeholder="这里输入分类名称"  autocomplete="off"   style="width:98%;"/></td>
 							</tr>
 							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">app交易版类型:</td>
+								<td>
+									<select class="chosen-select form-control" name="app_deal_version" id="app_deal_version" value="${pd.app_deal_version}"  data-placeholder="请选择app交易版类型" style="vertical-align:top;width: 120px;">
+										<option value="2" selected>交易版 </option>
+										<option value="1">资讯版 </option>
+								  	</select
+								</td>
+							</tr>
+							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
 									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
@@ -82,6 +91,8 @@
 				$("#classify_name").focus();
 			return false;
 			}
+			
+			
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

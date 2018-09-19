@@ -67,6 +67,7 @@
 									<th class="center" style="width:50px;">序号</th>
 <!-- 									<th class="center">id</th> -->
 									<th class="center">分类名称</th>
+									<th class="center">app交易版本</th>
 									<th class="center">创建时间</th>
 									<th class="center">是否删除</th>
 									<th class="center">操作</th>
@@ -84,8 +85,12 @@
 <%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id}" class="ace" /><span class="lbl"></span></label> --%>
 <!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-<%-- 											<td class='center'>${var.id}</td> --%>
+											<td class='center' style="display:none">${var.id}</td> 
 											<td class='center'>${var.classify_name}</td>
+											<td class='center'>
+												<c:if test="${var.app_deal_version == 1}">资讯版</c:if>
+												<c:if test="${var.app_deal_version == 2}">交易版</c:if>
+											</td>
 											<td class='center'>${DateUtil.toSDFTime(var.create_time*1000)}</td>
 											<td class='center'>
 												<c:choose>
@@ -108,13 +113,11 @@
 														<c:when test="${var.deleted==1}">
 															<c:if test="${QX.edit == 1 }">
 																<a class="btn btn-xs btn-success" title="编辑" onclick="edit('${var.id}');"   style="border-radius: 5px;" >编辑</a>
-																<a class="btn btn-xs btn-yellow" title="上架" onclick="del('${var.id}','0');"   style="border-radius: 5px;" >上架</a>
+																<a class="btn btn-xs btn-yellow" title="恢复" onclick="del('${var.id}','0');"   style="border-radius: 5px;" >恢复</a>
 															</c:if>
 														</c:when>
 														<c:otherwise>--</c:otherwise>
 													</c:choose>
-												
-													
 												</div>
 											</td>
 										</tr>
@@ -245,7 +248,7 @@
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>articleclassify/goAdd.do';
 			 diag.Width = 450;
-			 diag.Height = 135;
+			 diag.Height = 245;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -285,7 +288,7 @@
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>articleclassify/goEdit.do?id='+Id;
 			 diag.Width = 450;
-			 diag.Height = 135;
+			 diag.Height = 245;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

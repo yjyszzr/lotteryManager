@@ -11,6 +11,7 @@
 	<sql id="Field">
 		id,	
 		classify_name,	
+		app_deal_version,
 		deleted,	
 		create_time
 	</sql>
@@ -18,7 +19,8 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue">
         #{id},	
-        #{classify_name},	
+        #{classify_name},
+        #{app_deal_version},	
         #{deleted},	
         #{create_time}	
 	</sql>
@@ -30,6 +32,7 @@
 		(
 		        id,	
 		        classify_name,	
+		        app_deal_version,
 		        deleted,	
 		        create_time	
 		) values (
@@ -52,7 +55,8 @@
 		update
 		<include refid="tableName"></include>
 		set 
-			classify_name = #{classify_name}
+			classify_name = #{classify_name},
+			app_deal_version = #{app_deal_version}
 		where 
 		id = #{id}
 	</update>

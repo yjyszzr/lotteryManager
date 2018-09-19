@@ -57,9 +57,9 @@ public class ArticleClassifyController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		// pd.put("_id", this.get32UUID()); //主键
-		pd.put("id", "0"); // id
 		pd.put("create_time", DateUtilNew.getCurrentTimeLong()); // 创建时间
+		pd.put("deleted", "0");
+		pd.put("app_deal_version", pd.getString("app_deal_version"));
 		articleclassifyService.save(pd);
 		userActionLogService.save("1", "1", "资讯分类管理", "添加资讯分类:" + pd.getString("classify_name"));
 		mv.addObject("msg", "success");
@@ -82,6 +82,9 @@ public class ArticleClassifyController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = articleclassifyService.findById(pd);
+		Integer deleted = Integer.valueOf(pd.getString("deleted"));
+		Integer result = deleted^1;
+		pd.put("deleted", String.valueOf(result));
 		articleclassifyService.delete(pd);
 		userActionLogService.save("1", "1", "资讯分类管理", "删除资讯分类,资讯分类为:" + pd.toString());
 		out.write("success");

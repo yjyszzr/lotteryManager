@@ -306,12 +306,12 @@ public class DistributeBonusController extends BaseController {
 	}
 	
 	/**
-	 * 解析红包的excel
+	 * 解析红包的excel,直接去取excel中的userId
 	 * @return
 	 * @throws Exception 
 	 */
 	public List<Integer> resolveUserBonusExcel(String bonusExcelUrl) throws Exception {
-		List<String> mobileList = new ArrayList<>();
+		List<Integer> userIdList = new ArrayList<>();
         File file=new File(urlConfig.getUploadCommonFileUrl()+bonusExcelUrl);
         XSSFWorkbook workbook=new XSSFWorkbook(new FileInputStream(file));
         Sheet sheet=workbook.getSheetAt(0);//读取第一个 sheet
@@ -326,12 +326,13 @@ public class DistributeBonusController extends BaseController {
             if (data.indexOf(",") >= 0) {
             	data = data.replace(",", "");
             }
-            mobileList.add(data);
+            userIdList.add(Integer.valueOf(data));
         }
         workbook.close();
-        List<Integer> userIdList = usermanagercontrollerService.getUserIdListByMobileList(mobileList);
 		return userIdList;
 	}
+	
+	
 
 
 	/**
