@@ -5,8 +5,12 @@ import java.util.regex.Pattern;
 
 public class MobileCheckUtils {
 	public static boolean isMobileNO(String mobiles) {
-		Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+		Pattern p = Pattern.compile("^(1)\\d{10}$");
 		Matcher m = p.matcher(mobiles);
 		return m.matches();
 	};
+
+	public static void main(String[] args) {
+		System.out.println(isMobileNO("1w222222222"));
+	}
 }
