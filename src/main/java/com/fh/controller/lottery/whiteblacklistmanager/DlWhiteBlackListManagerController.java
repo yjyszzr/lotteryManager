@@ -36,6 +36,7 @@ import com.fh.util.Const;
 import com.fh.util.DateUtilNew;
 import com.fh.util.FileUpload;
 import com.fh.util.Jurisdiction;
+import com.fh.util.MobileCheckUtils;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.PathUtil;
@@ -355,11 +356,13 @@ public class DlWhiteBlackListManagerController extends BaseController {
 				PageData pData = pageDataMap.get(listPd.get(i).getString("var0"));
 				if (null == pData) {
 					if (null != listPd.get(i).get("var0")) {
-						pData = new PageData();
-						pData.put("mobile", listPd.get(i).get("var0"));
-						pData.put("is_white", listPd.get(i).get("var1") == null ? 0 : listPd.get(i).getString("var1"));
-						dlwhiteblacklistmanagerService.save(pData);
-						ACLOG.save("1", "1", "手机号：" + pData.getString("mobile"), "状态：" + pData.getString("is_white"));
+						if (MobileCheckUtils.isMobileNO(listPd.get(i).getString("var0"))) {
+							pData = new PageData();
+							pData.put("mobile", listPd.get(i).get("var0"));
+							pData.put("is_white", listPd.get(i).get("var1") == null ? 0 : listPd.get(i).getString("var1"));
+							dlwhiteblacklistmanagerService.save(pData);
+							ACLOG.save("1", "1", "手机号：" + pData.getString("mobile"), "状态：" + pData.getString("is_white"));
+						}
 					}
 				}
 			}
