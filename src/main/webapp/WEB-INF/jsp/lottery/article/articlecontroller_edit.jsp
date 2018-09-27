@@ -96,6 +96,12 @@
 																			   <span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');"  id="showOnePhoto"> 单张上传</span>  
 																			</div>
 											                            </div>
+											                            <div class="row slt1"  style="padding:5px">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"></label>
+																			<div class="col-sm-9">
+																			   <span>上传图片大小仅限100K以内!</span>  
+																			</div>
+											                            </div>
 																			<div  class="slt1">
 																				<div class="col-sm-3"></div>
 																				<div class="col-sm-9">
@@ -107,6 +113,20 @@
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">缩略图：</label>
 																			<div class="col-sm-9">
 																			   <span class="btn btn-mini btn-primary" onclick="uploadThreePhoto()" id="showThirdPhoto"> 三张上传</span>  
+																			</div>
+											                            </div >
+											                            	<div  class="slt2" >
+																				<div class="col-sm-3"></div>
+																				<div class="col-sm-9">
+																					<img id="photoShow1"    <c:if test="${not empty pd.article_thumb1_show}">src="${pd.article_thumb1_show}" width="100px",hight="50px"  </c:if>  alt="">
+																					<img id="photoShow2"    <c:if test="${not empty pd.article_thumb2_show}">src="${pd.article_thumb2_show}" width="100px",hight="50px"  </c:if>   alt="">
+																					<img id="photoShow3"    <c:if test="${not empty pd.article_thumb3_show}">src="${pd.article_thumb3_show}" width="100px",hight="50px"  </c:if>   alt="">
+																				</div>
+												                            </div>
+									                                      <div  class="row slt2"  style="padding:5px;display:none;">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> </label>
+																			<div class="col-sm-9">
+																			   <span > 上传图片大小仅限100K以内!</span>  
 																			</div>
 											                            </div >
 											                            	<div  class="slt2" >
@@ -452,6 +472,7 @@
 		        secureuri:false,                           //是否启用安全提交,默认为false
 		        fileElementId:fileId,               		//文件选择框的id属性
 		        dataType:'json',                           //服务器返回的格式,可以是json或xml等
+		        maxFileSize : 100,
 		        success:function(data, status){            //服务器响应成功时的处理函数
 		            if(data.result){
 		            	if($('input[type=radio][name=list_style]:checked').val() == '1'  || $('input[type=radio][name=list_style]:checked').val() == '4'  ){
