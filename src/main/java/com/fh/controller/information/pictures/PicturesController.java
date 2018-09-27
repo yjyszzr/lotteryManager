@@ -144,6 +144,7 @@ public class PicturesController extends BaseController {
 
 	/**
 	 * 上传apk
+	 * 
 	 * @param file
 	 * @return
 	 * @throws Exception
@@ -167,9 +168,10 @@ public class PicturesController extends BaseController {
 		map.put("apk_path", apkPath);
 		return map;
 	}
-	
+
 	/**
 	 * 上传红包的excel
+	 * 
 	 * @param file
 	 * @return
 	 * @throws Exception
@@ -189,12 +191,62 @@ public class PicturesController extends BaseController {
 			return map;
 		}
 		map.put("result", "true");
-		String excelPath =  "bonusFile/" + ffile + "/" + fileName;
+		String excelPath = "bonusFile/" + ffile + "/" + fileName;
 		map.put("file_url", excelPath);
 		return map;
 	}
-	
-	
+
+	@RequestMapping(value = "/fileUploadForArticle")
+	@ResponseBody
+	public Map<String, String> fileUploadForArticle(@RequestParam(required = false) MultipartFile file) throws Exception {
+		// if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+		// return null;
+		// } // 校验权限
+
+		Map<String, String> map = new HashMap<String, String>();
+		if (file.getSize() > 100 * 1024) {
+			map.put("result", "false");
+			map.put("info", "图片超过100K,请重新上传!");
+			return map;
+		}
+		logBefore(logger, Jurisdiction.getUsername() + "新增图片");
+		String ffile = DateUtil.getDays(), fileName = "";
+		PageData pd = new PageData();
+		// if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+		if (null != file && !file.isEmpty()) {
+			// String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG
+			// + ffile; // 文件上传路径
+			String filePath = urlConfig.getUploadURL() + ffile; // 文件上传路径
+			fileName = FileUpload.fileUp(file, filePath, this.get32UUID()); // 执行上传
+		} else {
+			System.out.println("上传失败");
+		}
+		pd.put("PICTURES_ID", this.get32UUID()); // 主键
+		pd.put("TITLE", "图片"); // 标题
+		pd.put("NAME", fileName); // 文件名
+		pd.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
+		pd.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
+		pd.put("MASTER_ID", "1"); // 附属与
+		pd.put("BZ", "图片管理处上传"); // 备注
+		// Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG
+		// + ffile + "/" + fileName);// 加水印
+		// picturesService.save(pd);
+		// }
+		map.put("result", "true");
+		map.put("PICTURES_ID", this.get32UUID()); // 主键
+		map.put("TITLE", "图片"); // 标题
+		map.put("NAME", fileName); // 文件名
+		map.put("PATH", "uploadImgs/" + ffile + "/" + fileName); // 路径
+		map.put("IMG_SHOW_PATH", urlConfig.getImgShowUrl() + "uploadImgs/" + ffile + "/" + fileName); // 路径
+		map.put("CREATETIME", Tools.date2Str(new Date())); // 创建时间
+		map.put("MASTER_ID", "1"); // 附属与
+		map.put("BZ", "图片管理处上传"); // 备注
+		map.put("errno", "0");
+		String imgPath = urlConfig.getImgShowUrl() + "uploadImgs/" + ffile + "/" + fileName; // 路径
+		map.put("data", imgPath); // 备注
+		return map;
+	}
+
 	@RequestMapping(value = "/fileUpload")
 	@ResponseBody
 	public Map<String, String> fileUpload(@RequestParam(required = false) MultipartFile file) throws Exception {

@@ -468,11 +468,10 @@
 		//上传图片
 		function ajaxFileUpload(fileObj,fileId){
 		    $.ajaxFileUpload({
-		        url:'<%=basePath%>pictures/fileUpload.do',
+		        url:'<%=basePath%>pictures/fileUploadForArticle.do',
 		        secureuri:false,                           //是否启用安全提交,默认为false
 		        fileElementId:fileId,               		//文件选择框的id属性
 		        dataType:'json',                           //服务器返回的格式,可以是json或xml等
-		        maxFileSize : 100,
 		        success:function(data, status){            //服务器响应成功时的处理函数
 		            if(data.result){
 		            	if($('input[type=radio][name=list_style]:checked').val() == '1'  || $('input[type=radio][name=list_style]:checked').val() == '4'  ){
@@ -482,6 +481,8 @@
 			            	$("#photoShow"+clickNum).attr("src", data.IMG_SHOW_PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb"+clickNum).val(data.PATH);
 		            	}
+		            }else{
+		            	alert(data.info);
 		            } 
 		        }
 		    });
