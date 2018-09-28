@@ -30,13 +30,15 @@
 		insert into 
 	<include refid="tableName"></include>
 		(
-		        id,	
 		        classify_name,	
 		        app_deal_version,
 		        deleted,	
 		        create_time	
 		) values (
-	<include refid="FieldValue"></include>
+	 		#{classify_name},
+	        #{app_deal_version},	
+	        #{deleted},	
+	        #{create_time}	
 		)
 	</insert>
 	

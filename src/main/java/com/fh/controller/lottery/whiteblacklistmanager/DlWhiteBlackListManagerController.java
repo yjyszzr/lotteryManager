@@ -362,8 +362,12 @@ public class DlWhiteBlackListManagerController extends BaseController {
 							pData.put("is_white", listPd.get(i).get("var1") == null ? 0 : listPd.get(i).getString("var1"));
 							dlwhiteblacklistmanagerService.save(pData);
 							ACLOG.save("1", "1", "手机号：" + pData.getString("mobile"), "状态：" + pData.getString("is_white"));
+						} else {
+							System.out.println("手机号不合法==========" + listPd.get(i).getString("var0"));
 						}
 					}
+				} else {
+					System.out.println(listPd.get(i).getString("var0") + "==========该手机号已存在!");
 				}
 			}
 		}

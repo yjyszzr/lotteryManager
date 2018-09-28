@@ -473,7 +473,9 @@
 		        fileElementId:fileId,               		//文件选择框的id属性
 		        dataType:'json',                           //服务器返回的格式,可以是json或xml等
 		        success:function(data, status){            //服务器响应成功时的处理函数
-		            if(data.result){
+		        	 console.log(data.result);
+		            if(data.result == "true"){
+		        	 	console.log("图片正常!");
 		            	if($('input[type=radio][name=list_style]:checked').val() == '1'  || $('input[type=radio][name=list_style]:checked').val() == '4'  ){
 			            	$("#photoShow").attr("src", data.IMG_SHOW_PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb1").val(data.PATH);
@@ -481,7 +483,8 @@
 			            	$("#photoShow"+clickNum).attr("src", data.IMG_SHOW_PATH).attr("width","100px").attr("hight","50px");
 			            	$("#article_thumb"+clickNum).val(data.PATH);
 		            	}
-		            }else{
+		            }else if(data.result == "false"){
+		        	 	console.log("图片过大!");
 		            	alert(data.info);
 		            } 
 		        }
