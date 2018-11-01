@@ -137,16 +137,16 @@ public class OrderService implements OrderManager {
 	}
 
 	/**
-	 * 首购订单 
+	 * 首购订单
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getFirstOrderList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.getFirstOrderList", page);
 	}
-	
+
 	/**
-	 * 首购订单 
+	 * 首购订单
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -243,5 +243,20 @@ public class OrderService implements OrderManager {
 		PageData pd = new PageData();
 		pd.put("userId", userId);
 		return (List<PageData>) dao.findForList("OrderMapper.findByUserId", pd);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> getOrderListForMO(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.datalistPage2", page);
+	}
+
+	@Override
+	public void updatePayStatus(PageData pd) throws Exception {
+		if (pd.getString("pay_status").equals("9")) {
+			dao.update("OrderMapper.updateOrderStatus", pd);
+		}else {
+			dao.update("OrderMapper.updatePayStatus", pd);
+		}
 	}
 }

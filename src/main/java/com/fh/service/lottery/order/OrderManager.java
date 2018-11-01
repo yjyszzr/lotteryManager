@@ -79,7 +79,7 @@ public interface OrderManager {
 	public List<PageData> toDetail(PageData pd) throws Exception;
 
 	public List<PageData> getFirstOrderList(Page page) throws Exception;
-	
+
 	public List<PageData> getFirstOrderForUserList(Page page) throws Exception;
 
 	public List<PageData> getOldUserOrderList(Page page) throws Exception;
@@ -103,4 +103,8 @@ public interface OrderManager {
 	public List<PageData> findByUserId(int userId) throws Exception;
 
 	public List<PageData> exportExcel(PageData pd) throws Exception;
+
+	public List<PageData> getOrderListForMO(Page page) throws Exception;
+
+	public void updatePayStatus(PageData pd)throws Exception;
 }

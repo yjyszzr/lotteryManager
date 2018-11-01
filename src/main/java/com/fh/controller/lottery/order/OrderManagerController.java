@@ -1,5 +1,6 @@
 package com.fh.controller.lottery.order;
 
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,12 +22,16 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.dto.DlJcZqMatchCellDTO;
 import com.fh.entity.dto.MatchBetCellDTO;
+import com.fh.entity.system.User;
 import com.fh.enums.MatchBetTypeEnum;
 import com.fh.enums.MatchPlayTypeEnum;
 import com.fh.enums.MatchResultCrsEnum;
 import com.fh.enums.MatchResultHadEnum;
 import com.fh.enums.MatchResultHafuEnum;
+import com.fh.service.lottery.logoperation.LogOperationManager;
 import com.fh.service.lottery.order.OrderManager;
+import com.fh.service.system.user.UserManager;
+import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -44,6 +49,12 @@ public class OrderManagerController extends BaseController {
 	String menuUrl = "ordermanager/list.do"; // 菜单地址(权限用)
 	@Resource(name = "orderService")
 	private OrderManager ordermanagerService;
+	
+	@Resource(name = "userService")
+	private UserManager userService;
+	
+	@Resource(name="logoperationService")
+	private LogOperationManager logoperationService;
 
 	/**
 	 * 列表
@@ -132,6 +143,73 @@ public class OrderManagerController extends BaseController {
 			}
 		}
 		mv.setViewName("lottery/ordermanager/ordermanager_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		mv.addObject("allAmount", allAmountD);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
+	/**
+	 * 手动操作订单manual operation order
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/moOrder")
+	public ModelAndView moOrder(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "manual operation order");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+
+		String order_sn = pd.getString("order_sn");
+		if (null != order_sn && !"".equals(order_sn)) {
+			pd.put("order_sn", order_sn.trim());
+		}
+		String mobile = pd.getString("mobile");
+		if (null != mobile && !"".equals(mobile)) {
+			pd.put("mobile", mobile.trim());
+		}
+		String user_name = pd.getString("user_name");
+		if (null != user_name && !"".equals(user_name)) {
+			pd.put("user_name", user_name.trim());
+		}
+		String amountStart = pd.getString("amountStart");
+		if (null != amountStart && !"".equals(amountStart)) {
+			pd.put("amountStart", amountStart.trim());
+		}
+		String amountEnd = pd.getString("amountEnd");
+		if (null != amountEnd && !"".equals(amountEnd)) {
+			pd.put("amountEnd", amountEnd.trim());
+		}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
+		String lottery_classify_id = pd.getString("lottery_classify_id");
+		if (null != lottery_classify_id && !"".equals(lottery_classify_id)) {
+			pd.put("lottery_classify_id", lottery_classify_id);
+		}
+		page.setPd(pd);
+		List<PageData> varList = ordermanagerService.getOrderListForMO(page); // 列出手工出票OrderManager列表
+		Double allAmountD = 0D;
+		if (varList.size() > 0) {
+			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);
+			Map<String, PageData> payLogMap = new HashMap<String, PageData>(payLogList.size());
+			payLogList.forEach(item -> payLogMap.put(item.getString("order_sn"), item));
+			for (int i = 0; i < varList.size(); i++) {
+				PageData pageData = payLogMap.get(varList.get(i).getString("order_sn"));
+				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
+				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
+				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
+			}
+		}
+		mv.setViewName("lottery/ordermanager/manual_operation_order");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("allAmount", allAmountD);
@@ -376,4 +454,44 @@ public class OrderManagerController extends BaseController {
 		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
+
+	/**
+	 * 删除
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/updatePayStatus")
+	public void updatePayStatus(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "updatePayStatus");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String payStatus = pd.getString("pay_status");
+		String opType ="";
+		if (payStatus.equals("1")) {
+			opType= "1";
+		}else if (payStatus.equals("2")) {
+			opType= "3";
+		}else  if (payStatus.equals("9"))  {
+			opType= "2";
+		}
+		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
+		ordermanagerService.updatePayStatus(pd);
+		PageData pdForlogoperation = new PageData();
+		pdForlogoperation.put("order_sn", pd.getString("id"));
+		pdForlogoperation.put("type", "1");
+		pdForlogoperation.put("add_time",  DateUtilNew.getCurrentTimeLong());
+		pdForlogoperation.put("op_type", opType);
+		PageData pduser = new PageData();
+		pduser.put("USER_ID",  user.getUSER_ID());
+		pduser =	userService.findById(pduser);
+		pdForlogoperation.put("phone", pduser.getString("PHONE"));
+		logoperationService.save(pdForlogoperation);
+		out.write("success");
+		out.close();
+	}
+	
 }

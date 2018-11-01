@@ -256,7 +256,8 @@
 			o.surplus,
 			o.third_party_paid,
 			o.add_time,
-			o.pay_time 
+			o.pay_time,
+			o.pay_status 
 		FROM
 			dl_order o
 			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
@@ -292,6 +293,64 @@
 		<if test="pd.order_status == null || pd.order_status == ''"> 
 			and o.order_status != 8   and o.order_status != 0 
 		</if>
+		<if test="pd.lottery_classify_id != null and pd.lottery_classify_id != ''"> 
+			and l.lottery_classify_id = #{pd.lottery_classify_id }
+		</if>
+		order  by 	o.add_time desc
+	</select>
+	<!-- 手动支付订单列表 -->
+	<select id="datalistPage2" parameterType="page" resultType="pd">
+		SELECT
+			o.order_id,
+			o.order_sn,
+			u.user_id,
+			u.user_name,
+			u.mobile,
+			l.lottery_name,
+			l.lottery_classify_id,
+			o.order_status,
+			o.pay_name,
+			o.ticket_amount,
+			o.winning_money,
+			o.bonus,
+			o.surplus,
+			o.third_party_paid,
+			o.add_time,
+			o.pay_time,
+			o.pay_status 
+		FROM
+			dl_order o
+			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
+			LEFT JOIN dl_user u ON o.user_id = u.user_id 
+		WHERE 1 = 1 and 	o.add_time > 1540981190
+			<if test="pd.order_sn != null and pd.order_sn != ''"> 
+			and o.order_sn  
+				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
+		</if>
+		<if test="pd.mobile != null and pd.mobile != ''">
+			and u.mobile  
+			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
+		<if test="pd.user_name != null and pd.user_name != ''"> 
+			and u.user_name  
+				LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		</if>
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and o.add_time &gt; #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and o.add_time &lt; #{pd.lastEnd1 }
+		</if>
+		<if test="pd.amountStart != null and pd.amountStart != ''"> 
+			and o.winning_money &gt; #{pd.amountStart }
+		</if>
+		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
+			and o.winning_money &lt; #{pd.amountEnd }
+		</if>
+		<if test="pd.order_status != null and pd.order_status != ''"> 
+			and o.order_status = #{pd.order_status }
+		</if>
+	 
 		<if test="pd.lottery_classify_id != null and pd.lottery_classify_id != ''"> 
 			and l.lottery_classify_id = #{pd.lottery_classify_id }
 		</if>
@@ -607,4 +666,10 @@
 	<select id="findByUserId"   resultType="pd">
 		select * from dl_order where user_id = #{userId}
 	</select>
+	<update id="updatePayStatus">
+		update dl_order set pay_status = #{pay_status} where order_sn = #{id}
+	</update>
+	<update id="updateOrderStatus">
+		update dl_order set order_status = #{pay_status} where order_sn = #{id}
+	</update>
 </mapper>
