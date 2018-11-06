@@ -290,8 +290,10 @@
 		                    var str ='<span style="font-weight:bold;color:red">00:00:00</span>';  
 		                    var str1 ='<span style="font-weight:bold;color:red">00:'+fz+':'+mz+'</span>';  
 		                    if (overtime<= 0) {  
-		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(7).html( str);  
-								if(!$('.get_set_time tbody  tr').eq(i).find('td').eq(9).html()=='派奖中'){
+		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(7).html( str); 
+								var bjstr =$('.get_set_time tbody  tr').eq(i).find('td').eq(8).text() ;
+								bjstr=Trim(bjstr,'g');
+								if(bjstr!='派奖中'){
 			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(9).html( "--");  
 								}
 		                    }else {  
@@ -309,6 +311,17 @@
 			        });  
 			
 		 
+		     function Trim(str,is_global)
+	        {
+	            var result;
+	            result = str.replace(/(^\s+)|(\s+$)/g,"");
+	            if(is_global.toLowerCase()=="g")
+	            {
+	                result = result.replace(/\s/g,"");
+	             }
+	            return result;
+	}
+			
 			//导出excel
 			function toExcel(){
 // 				var lastStart = $("#lastStart").val();
