@@ -257,12 +257,16 @@ public class OrderService implements OrderManager {
 			dao.update("OrderMapper.updateOrderStatus", pd);
 		} else {
 			dao.update("OrderMapper.updatePayStatus", pd);
+			PageData pageData = new PageData();
+			pageData.put("id", pd.getString("id"));
 			if (pd.getString("pay_status").equals("2")) {
-				PageData pageData = new PageData();
-				pageData.put("id", pd.getString("id"));
 				pageData.put("pay_status", "8");
 				dao.update("OrderMapper.updateOrderStatus", pageData);
+			} else if (pd.getString("pay_status").equals("1")) {
+				pageData.put("pay_status", "3");
+				dao.update("OrderMapper.updateOrderStatus", pageData);
 			}
+
 		}
 	}
 
