@@ -106,5 +106,7 @@ public interface OrderManager {
 
 	public List<PageData> getOrderListForMO(Page page) throws Exception;
 
-	public void updatePayStatus(PageData pd)throws Exception;
+	public void updatePayStatus(PageData pd) throws Exception;
+
+	public List<PageData> exportExcelForMO(PageData pd) throws Exception;
 }

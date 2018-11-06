@@ -430,6 +430,35 @@
 		  	LEFT JOIN	dl_ticket_channel channel ON printTemp.print_lottery_com=channel.id
 		where o.order_sn LIKE CONCAT(CONCAT(#{selectionTime}),'%')
 	</select>
+	<select id="exportExcelForMO" parameterType="pd" resultType="pd">
+	 select 
+			o.order_id,
+			o.order_sn,
+			u.user_id,
+			u.user_name,
+			u.mobile,
+			l.lottery_name,
+			l.lottery_classify_id,
+			o.order_status,
+			o.pay_name,
+			o.ticket_amount,
+			o.winning_money,
+			o.bonus,
+			o.surplus,
+			o.third_party_paid,
+			o.add_time,
+			o.pay_time,
+			p.pay_order_sn,
+			channel.channel_name
+		FROM
+			dl_order o
+			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
+			LEFT JOIN dl_user u ON o.user_id = u.user_id  
+			LEFT JOIN dl_pay_log p ON o.order_sn = p.order_sn  
+			LEFT JOIN (select print.order_sn,print_lottery_com from dl_print_lottery print group by print.order_sn) printTemp ON printTemp.order_sn=o.order_sn 
+		  	LEFT JOIN	dl_ticket_channel channel ON printTemp.print_lottery_com=channel.id
+		where o.order_sn LIKE CONCAT(CONCAT(#{selectionTime}),'%')  and  o.add_time > 1540981190
+	</select>
 	
 	<select id="selectByTime" parameterType="String" resultType="pd">
 		SELECT

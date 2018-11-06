@@ -139,7 +139,7 @@
 														</c:choose>
 													</c:when>
 													<c:when test="${var.order_status == 5}">
-														<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.ticket_amount}');"> 派奖</a>
+														<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.winning_money}');"> 派奖</a>
 													</c:when>
 													<c:when test="${var.order_status == 6}">
 														<span>大额订单先审核</span>
@@ -278,7 +278,7 @@
 							timeStart = timeStart.split(':');
 							var startTimeInt = new Date(timeStart[0],(timeStart[1]-1),timeStart[2],timeStart[3],timeStart[4],timeStart[5]).getTime();
 							var currentTime = Date.parse(new Date());
-		                   	var overtime = 60*60*1000 - (currentTime - startTimeInt)  ;  
+		                   	var overtime = 20*60*1000 - (currentTime - startTimeInt)  ;  
 		                    var fz = parseInt(overtime / 60000);  
 								if(fz<10){
 									fz = "0"+fz;
@@ -291,17 +291,24 @@
 		                    var str1 ='<span style="font-weight:bold;color:red">00:'+fz+':'+mz+'</span>';  
 		                    if (overtime<= 0) {  
 		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(7).html( str);  
-		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(9).html( "--");  
+								if(!$('.get_set_time tbody  tr').eq(i).find('td').eq(9).html()=='派奖中'){
+			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(9).html( "--");  
+								}
 		                    }else {  
 		                        $('.get_set_time tbody tr').eq(i).find('td').eq(7).html( str1);  
-			                    }  
+		                    }  
+							var str1 =$.trim($('.get_set_time tbody  tr').eq(i).find('td').eq(9).text()) ;
+							if (str1 == '--') {
+		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(7).html( str);  
+							}
+// 							console.log(i+"============================="+str);  
 			                }  
 			            }  
 			            setInterval(show, 1000); // 注意函数名没有引号和括弧！  
 			            // 使用setInterval("show()",3000);会报“缺少对象”  
 			        });  
 			
-			
+		 
 			//导出excel
 			function toExcel(){
 // 				var lastStart = $("#lastStart").val();
@@ -313,7 +320,7 @@
 							var selectionTime = $("#selectionTime").val();
 						    var items = selectionTime.split("-");
 						    var newStr = items.join("");
-							window.location.href='<%=basePath%>ordermanager/excel.do?selectionTime='+newStr;
+							window.location.href='<%=basePath%>ordermanager/excelForMO.do?selectionTime='+newStr;
 						}
 					});
 // 				}else{

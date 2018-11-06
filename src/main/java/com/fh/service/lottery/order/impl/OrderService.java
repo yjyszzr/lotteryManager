@@ -255,8 +255,19 @@ public class OrderService implements OrderManager {
 	public void updatePayStatus(PageData pd) throws Exception {
 		if (pd.getString("pay_status").equals("9")) {
 			dao.update("OrderMapper.updateOrderStatus", pd);
-		}else {
+		} else {
 			dao.update("OrderMapper.updatePayStatus", pd);
+			if (pd.getString("pay_status").equals("2")) {
+				PageData pageData = new PageData();
+				pageData.put("id", pd.getString("id"));
+				pageData.put("pay_status", "8");
+				dao.update("OrderMapper.updateOrderStatus", pageData);
+			}
 		}
+	}
+
+	@Override
+	public List<PageData> exportExcelForMO(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.exportExcelForMO", pd);
 	}
 }

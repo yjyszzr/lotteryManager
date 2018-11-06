@@ -49,11 +49,11 @@ public class OrderManagerController extends BaseController {
 	String menuUrl = "ordermanager/list.do"; // 菜单地址(权限用)
 	@Resource(name = "orderService")
 	private OrderManager ordermanagerService;
-	
+
 	@Resource(name = "userService")
 	private UserManager userService;
-	
-	@Resource(name="logoperationService")
+
+	@Resource(name = "logoperationService")
 	private LogOperationManager logoperationService;
 
 	/**
@@ -456,6 +456,82 @@ public class OrderManagerController extends BaseController {
 	}
 
 	/**
+	 * 导出到excel
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/excelForMO")
+	public ModelAndView exportExcelForMO() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "导出订单到excel");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+			return null;
+		}
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		List<String> titles = new ArrayList<String>();
+		titles.add("订单编号"); // 1
+		titles.add("用户昵称"); // 2
+		titles.add("电话"); // 3
+		titles.add("彩种"); // 4
+		titles.add("投注金额"); // 5
+		titles.add("中奖金额"); // 6
+		titles.add("购彩时间"); // 7
+		titles.add("订单状态"); // 8
+		dataMap.put("titles", titles);
+		String selectionTime = pd.getString("selectionTime");
+		if (null == selectionTime || "".equals(selectionTime)) {
+			pd.put("selectionTime", DateUtilNew.getCurrentyyyyMMdd());
+		}
+
+		List<PageData> varOList = ordermanagerService.exportExcelForMO(pd);
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < varOList.size(); i++) {
+			PageData vpd = new PageData();
+			vpd.put("var1", varOList.get(i).getString("order_sn")); // 1
+			vpd.put("var2", varOList.get(i).getString("user_name")); // 2
+			vpd.put("var3", varOList.get(i).getString("mobile")); // 3
+			vpd.put("var4", varOList.get(i).getString("lottery_name")); // 4
+			vpd.put("var5", varOList.get(i).getString("ticket_amount") + "元"); // 5
+			vpd.put("var6", varOList.get(i).getString("winning_money") + "元"); // 6
+			BigDecimal big1000 = new BigDecimal(1000);
+			BigDecimal big8 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
+			vpd.put("var7", DateUtil.toSDFTime(Long.parseLong(big8.multiply(big1000).toString()))); // 8
+			String orderStatus = varOList.get(i).getString("order_status");
+			String orderStatusStr = "";
+			if (orderStatus.equals("0")) {
+				orderStatusStr = "待付款";
+			} else if (orderStatus.equals("1")) {
+				orderStatusStr = "待出票";
+			} else if (orderStatus.equals("2")) {
+				orderStatusStr = "出票失败";
+			} else if (orderStatus.equals("3")) {
+				orderStatusStr = "待开奖";
+			} else if (orderStatus.equals("4")) {
+				orderStatusStr = "未中奖";
+			} else if (orderStatus.equals("5")) {
+				orderStatusStr = "已中奖";
+			} else if (orderStatus.equals("6")) {
+				orderStatusStr = "派奖中";
+			} else if (orderStatus.equals("7")) {
+				orderStatusStr = "审核中";
+			} else if (orderStatus.equals("8")) {
+				orderStatusStr = "支付失败";
+			} else if (orderStatus.equals("9")) {
+				orderStatusStr = "已派奖";
+			}
+			vpd.put("var8", orderStatusStr); // 11
+			varList.add(vpd);
+		}
+		dataMap.put("varList", varList);
+		ObjectExcelView erv = new ObjectExcelView();
+		mv = new ModelAndView(erv, dataMap);
+		return mv;
+	}
+
+	/**
 	 * 删除
 	 * 
 	 * @param out
@@ -470,28 +546,28 @@ public class OrderManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String payStatus = pd.getString("pay_status");
-		String opType ="";
+		String opType = "";
 		if (payStatus.equals("1")) {
-			opType= "1";
-		}else if (payStatus.equals("2")) {
-			opType= "3";
-		}else  if (payStatus.equals("9"))  {
-			opType= "2";
+			opType = "1";
+		} else if (payStatus.equals("2")) {
+			opType = "3";
+		} else if (payStatus.equals("9")) {
+			opType = "2";
 		}
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
 		ordermanagerService.updatePayStatus(pd);
 		PageData pdForlogoperation = new PageData();
 		pdForlogoperation.put("order_sn", pd.getString("id"));
 		pdForlogoperation.put("type", "1");
-		pdForlogoperation.put("add_time",  DateUtilNew.getCurrentTimeLong());
+		pdForlogoperation.put("add_time", DateUtilNew.getCurrentTimeLong());
 		pdForlogoperation.put("op_type", opType);
 		PageData pduser = new PageData();
-		pduser.put("USER_ID",  user.getUSER_ID());
-		pduser =	userService.findById(pduser);
+		pduser.put("USER_ID", user.getUSER_ID());
+		pduser = userService.findById(pduser);
 		pdForlogoperation.put("phone", pduser.getString("PHONE"));
 		logoperationService.save(pdForlogoperation);
 		out.write("success");
 		out.close();
 	}
-	
+
 }
