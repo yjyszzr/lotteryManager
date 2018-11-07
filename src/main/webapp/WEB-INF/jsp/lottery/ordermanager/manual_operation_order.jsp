@@ -251,10 +251,26 @@
 			function operationOrder(Id,status,money){
 				var str = "<h4  style='color:green'>温馨提示</h4><hr>&nbsp;&nbsp;&nbsp;";
 				if(status==1 ){
+					
+// 					$.ajax({
+// 						type: "POST",
+<%-- 						url: '<%=basePath%>ordermanager/checkOrderStatus.do?order_sn='+Id, --%>
+// 						dataType:'json',
+// 						cache: false,
+// 						success: function(data){
+					 
+// 						}
+// 					});
+					
+// 					return;
 						str+="请确认:&nbsp;订单号:"+Id+"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;付款金额:<span style='font-weight:bold;color:red'>"+money+"</span>元"
 					}else if(status==2 ){
+// 					alert("该订单已取消!");
+					return;
 						str+="确定要取消编号为:"+Id+"的订单吗?"
 					}else if(status==9 ){
+// 					alert("该订单已派奖!");
+// 					return;
 						str+="请确认:&nbsp;订单号:"+Id+"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;中奖金额:<span style='font-weight:bold;color:red'>"+money+"</span>元"
 					}else{
 						return;
@@ -293,7 +309,7 @@
 		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(7).html( str); 
 								var bjstr =$('.get_set_time tbody  tr').eq(i).find('td').eq(8).text() ;
 								bjstr=Trim(bjstr,'g');
-								if(bjstr!='派奖中'){
+								if(bjstr!='已中奖'){
 			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(9).html( "--");  
 								}
 		                    }else {  
