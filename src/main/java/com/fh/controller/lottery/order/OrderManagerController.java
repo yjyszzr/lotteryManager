@@ -570,4 +570,21 @@ public class OrderManagerController extends BaseController {
 		out.close();
 	}
 
+	/**
+	 * 后端预览
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/checkOrderStatus")
+	@ResponseBody
+	public Object toPreShow() throws Exception {
+		PageData pd = new PageData();
+		Map<String, Object> map = new HashMap<String, Object>();
+		pd = this.getPageData();
+		Integer result = ordermanagerService.checkOrderStatus(pd);
+		map.put("updateCount", result);
+		return map;
+	}
+
 }

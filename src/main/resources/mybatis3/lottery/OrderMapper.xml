@@ -301,28 +301,28 @@
 	<!-- 手动支付订单列表 -->
 	<select id="datalistPage2" parameterType="page" resultType="pd">
 		SELECT
-			o.order_id,
-			o.order_sn,
-			u.user_id,
-			u.user_name,
-			u.mobile,
-			l.lottery_name,
-			l.lottery_classify_id,
-			o.order_status,
-			o.pay_name,
-			o.ticket_amount,
-			o.winning_money,
-			o.bonus,
-			o.surplus,
-			o.third_party_paid,
-			o.add_time,
-			o.pay_time,
-			o.pay_status 
+			o.order_id order_id,
+			o.order_sn order_sn,
+			u.user_id user_id,
+			u.user_name user_name,
+			u.mobile mobile,
+			o.order_status order_status,
+			o.pay_name pay_name,
+			o.ticket_amount ticket_amount,
+			o.winning_money winning_money,
+			o.bonus bonus,
+			o.surplus surplus,
+			o.third_party_paid third_party_paid,
+			o.add_time add_time,
+			o.pay_time pay_time,
+			o.pay_status pay_status,
+			a.order_status mo_status,
+			a.add_time mo_add_time
 		FROM
 			dl_order o
-			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
-		WHERE 1 = 1 and 	o.add_time > 1540981190
+			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
+		WHERE o.add_time > 1540981190
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  
 				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
@@ -347,12 +347,21 @@
 		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
 			and o.winning_money &lt; #{pd.amountEnd }
 		</if>
-		<if test="pd.order_status != null and pd.order_status != ''"> 
-			and o.order_status = #{pd.order_status }
+		<if test="pd.mo_status != null and pd.mo_status != ''"> 
+		<if test="pd.mo_status == 4"> 
+				and a.order_status  is null
+			</if>
+			<if test="pd.mo_status != 4"> 
+				and a.order_status = #{pd.mo_status }
+			</if>
 		</if>
-	 
-		<if test="pd.lottery_classify_id != null and pd.lottery_classify_id != ''"> 
-			and l.lottery_classify_id = #{pd.lottery_classify_id }
+		<if test="pd.order_status != null and pd.order_status != ''"> 
+			<if test="pd.order_status == 3"> 
+				and o.order_status  IN ( 3, 4, 5, 6, 7 )
+			</if>
+			<if test="pd.order_status != 3"> 
+				and o.order_status = #{pd.order_status }
+			</if>
 		</if>
 		order  by 	o.add_time desc
 	</select>
@@ -701,4 +710,7 @@
 	<update id="updateOrderStatus">
 		update dl_order set order_status = #{pay_status} where order_sn = #{id}
 	</update>
+	<select id="checkOrderStatus">
+		select update_count from dl_order where order_sn = #{order_sn} 
+	</select>
 </mapper>

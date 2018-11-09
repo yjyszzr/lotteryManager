@@ -39,22 +39,38 @@
 											</span>
 										</div>
 									</th>
+										
 										<th>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
 													订单状态:
 												</span>
 										 	<select  name="order_status" id="order_status" data-placeholder="请选择" value="${pd.order_status }" style="width:154px;border-radius:5px !important"  >
-											<option value="" selected="selected">全部</option>
-													<option value="0" <c:if test="${pd.order_status!=NULL && pd.order_status!='' && pd.order_status == 0}">selected</c:if>>待付款</option>
-													<option value="1" <c:if test="${pd.order_status == 1}">selected</c:if>>待出票</option>
-													<option value="2" <c:if test="${pd.order_status == 2}">selected</c:if>>出票失败</option>
+												<option value="" selected="selected">全部</option>
+<%-- 													<option value="0" <c:if test="${pd.order_status!=NULL && pd.order_status!='' && pd.order_status == 0}">selected</c:if>>待付款</option> --%>
+<%-- 													<option value="1" <c:if test="${pd.order_status == 1}">selected</c:if>>待出票</option> --%>
+<%-- 													<option value="2" <c:if test="${pd.order_status == 2}">selected</c:if>>出票失败</option> --%>
 													<option value="3" <c:if test="${pd.order_status == 3}">selected</c:if>>待开奖</option>
-													<option value="4" <c:if test="${pd.order_status == 4}">selected</c:if>>未中奖</option>
-													<option value="5" <c:if test="${pd.order_status == 5}">selected</c:if>>已中奖</option>
-													<option value="6" <c:if test="${pd.order_status == 6}">selected</c:if>>派奖中</option>
-													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>审核中</option>
-													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option>
+<%-- 													<option value="4" <c:if test="${pd.order_status == 4}">selected</c:if>>未中奖</option> --%>
+<%-- 													<option value="5" <c:if test="${pd.order_status == 5}">selected</c:if>>已中奖</option> --%>
+<%-- 													<option value="6" <c:if test="${pd.order_status == 6}">selected</c:if>>派奖中</option> --%>
+<%-- 													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>审核中</option> --%>
+<%-- 													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option> --%>
+													<option value="9" <c:if test="${pd.order_status == 9}">selected</c:if>>已派奖</option>
+										  	</select>
+										  	</div>
+									</th>
+									<th>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													出票状态:
+												</span>
+										 	<select  name="mo_status" id="mo_status" data-placeholder="请选择" value="${pd.mo_status }" style="width:154px;border-radius:5px !important"  >
+													<option value="" selected="selected">全部</option>
+													<option value="0" <c:if test="${pd.mo_status!=NULL && pd.mo_status!='' && pd.mo_status == 0}">selected</c:if>>待出票</option>
+													<option value="1" <c:if test="${pd.mo_status == 1}">selected</c:if>>出票成功</option>
+													<option value="2" <c:if test="${pd.mo_status == 2}">selected</c:if>>出票失败</option>
+													<option value="4" <c:if test="${pd.mo_status == 4}">selected</c:if>>--- ---</option>
 										  	</select>
 										  	</div>
 									</th>
@@ -85,6 +101,9 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover get_set_time" style="margin-top:5px;">	
 							<thead>
 								<tr>
+									<th class="center" style="width:35px;">
+										<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
+									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">订单编号</th>
 									<th class="center">用户名称</th>
@@ -94,6 +113,8 @@
 									<th class="center">购彩时间</th>
 									<th class="center">支付倒计时</th>
 									<th class="center">订单状态</th>
+									<th class="center">手动出票状态</th>
+									<th class="center">手动出票时间</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -105,6 +126,9 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
+										<td class='center'>
+												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.order_id}" class="ace" /><span class="lbl"></span></label>
+											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'><a onclick="toDetail('${var.order_id}');" style=" cursor:pointer;">${var.order_sn}</a></td>
 											<td class='center'>${var.user_name}</td>
@@ -127,6 +151,20 @@
 													<c:when test="${var.order_status == 9}">已派奖</c:when>
 												</c:choose>
 											</td>
+											<td class='center'>  
+												<c:choose>
+													<c:when test="${var.mo_status == 0}">待出票</c:when>
+													<c:when test="${var.mo_status == 1}">出票成功</c:when>
+													<c:when test="${var.mo_status == 2}">出票失败</c:when>
+													<c:otherwise>--- ---</c:otherwise>
+												</c:choose>
+											</td>
+													<td class='center'>
+														<c:choose>
+															<c:when test="${empty var.mo_add_time}">--</c:when>
+															<c:otherwise>${DateUtil.toSDFTime(var.mo_add_time*1000)}</c:otherwise>
+														</c:choose>
+													</td>
 											<td class='center'>  
 												<c:choose>
 													<c:when test="${var.order_status == 0}">
@@ -209,15 +247,9 @@
 		//检索
 			function tosearch(status){
 			if(status==0){
-				$("#user_name").val("");
-				$("#mobile").val("");
 				$("#order_sn").val("");
-				$("#lastStart").val("");
-				$("#lastEnd").val("");
-				$("#amountStart").val("");
-				$("#amountEnd").val("");
 				$("#order_status").empty();
-				$("#lottery_classify_id").empty();
+				$("#mo_status").empty();
 			}
 			top.jzts();
 			$("#Form").submit();
@@ -306,18 +338,18 @@
 		                    var str ='<span style="font-weight:bold;color:red">00:00:00</span>';  
 		                    var str1 ='<span style="font-weight:bold;color:red">00:'+fz+':'+mz+'</span>';  
 		                    if (overtime<= 0) {  
-		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(7).html( str); 
-								var bjstr =$('.get_set_time tbody  tr').eq(i).find('td').eq(8).text() ;
+		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(8).html( str); 
+								var bjstr =$('.get_set_time tbody  tr').eq(i).find('td').eq(9).text() ;
 								bjstr=Trim(bjstr,'g');
 								if(bjstr!='已中奖'){
-			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(9).html( "--");  
+			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(12).html( "--");  
 								}
 		                    }else {  
-		                        $('.get_set_time tbody tr').eq(i).find('td').eq(7).html( str1);  
+		                        $('.get_set_time tbody tr').eq(i).find('td').eq(8).html( str1);  
 		                    }  
-							var str1 =$.trim($('.get_set_time tbody  tr').eq(i).find('td').eq(9).text()) ;
+							var str1 =$.trim($('.get_set_time tbody  tr').eq(i).find('td').eq(12).text()) ;
 							if (str1 == '--') {
-		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(7).html( str);  
+		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(8).html( str);  
 							}
 // 							console.log(i+"============================="+str);  
 			                }  
@@ -340,10 +372,18 @@
 			
 			//导出excel
 			function toExcel(){
-// 				var lastStart = $("#lastStart").val();
-// 				var lastEnd = $("#lastEnd").val();
-// 				var orderStatus = $("#order_status").val();
-// 				if(lastStart =="" && lastEnd == ""  && orderStatus == "" ){
+				var orderSn = $("#order_sn").val();
+				var moStatus = $("#mo_status").val();
+				var orderStatus = $("#order_status").val();
+				var str = '';
+					for(var i=0;i < document.getElementsByName('ids').length;i++){
+					  if(document.getElementsByName('ids')[i].checked){
+					  	if(str=='') str += document.getElementsByName('ids')[i].value;
+					  	else str += ',' + document.getElementsByName('ids')[i].value;
+					  }
+					}
+
+				if(orderSn =="" && moStatus == ""  && orderStatus == "" || str == "" ){
 					bootbox.confirm("<h4><strong>温馨提示</strong> </h4><hr><h5>&nbsp&nbsp默认导出今天的数据。</h5><br><h5>&nbsp&nbsp您可以按照<span style='color:red'>时间</span>筛选导出！</h5><br> &nbsp&nbsp<input id=\"selectionTime\"   type=\"text\" onfocus=\"WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})\" readonly=\"readonly\" style=\"width:186px;border-radius:5px !important\" placeholder=\"时间筛选\"/><br><br>", function(result) {
 						if(result) {
 							var selectionTime = $("#selectionTime").val();
@@ -352,11 +392,24 @@
 							window.location.href='<%=basePath%>ordermanager/excelForMO.do?selectionTime='+newStr;
 						}
 					});
-// 				}else{
-<%-- 				window.location.href='<%=basePath%>ordermanager/excel.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&order_status='+orderStatus; --%>
-// 				}
+				}else{
+				window.location.href='<%=basePath%>ordermanager/excel.do?orderSn='+orderSn+'&moStatus='+moStatus+'&order_status='+orderStatus+'&idsStr='+str;
+				}
 			}
 			
+			
+			$(function() {
+				//复选框全选控制
+				var active_class = 'active';
+				$('#simple-table > thead > tr > th input[type=checkbox]').eq(0).click( function(){
+					var th_checked = this.checked;//checkbox inside "TH" table header
+					$(this).closest('table').find('tbody > tr').each(function(){
+						var row = this;
+						if(th_checked) $(row).addClass(active_class).find('input[type=checkbox]').eq(0).attr('checked', true);
+						else $(row).removeClass(active_class).find('input[type=checkbox]').eq(0).attr('checked', false);
+					});
+				});
+			});	
 	</script>
 </body>
  

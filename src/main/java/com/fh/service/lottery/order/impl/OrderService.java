@@ -271,7 +271,13 @@ public class OrderService implements OrderManager {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<PageData> exportExcelForMO(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.exportExcelForMO", pd);
+	}
+
+	@Override
+	public Integer checkOrderStatus(PageData pd) throws Exception {
+		return  (Integer)dao.findForObject("OrderMapper.checkOrderStatus", pd);
 	}
 }

@@ -109,4 +109,6 @@ public interface OrderManager {
 	public void updatePayStatus(PageData pd) throws Exception;
 
 	public List<PageData> exportExcelForMO(PageData pd) throws Exception;
+
+	public Integer checkOrderStatus(PageData pd)throws Exception;
 }
