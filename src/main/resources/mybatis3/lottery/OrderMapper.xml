@@ -439,6 +439,34 @@
 		  	LEFT JOIN	dl_ticket_channel channel ON printTemp.print_lottery_com=channel.id
 		where o.order_sn LIKE CONCAT(CONCAT(#{selectionTime}),'%')
 	</select>
+	<select id="exportExcelForMOByIds" parameterType="pd" resultType="pd">
+	 select 
+			o.order_id,
+			o.order_sn,
+			u.user_id,
+			u.user_name,
+			u.mobile,
+			o.order_status,
+			o.pay_name,
+			o.ticket_amount,
+			o.winning_money,
+			o.bonus,
+			o.surplus,
+			o.third_party_paid,
+			o.add_time,
+			o.pay_time,
+			a.order_status mo_status,
+			a.add_time mo_add_time
+		FROM
+			dl_order o
+			LEFT JOIN dl_user u ON o.user_id = u.user_id  
+			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
+		WHERE o.add_time > 1540981190
+			 	and o.order_id IN  
+	 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
 	<select id="exportExcelForMO" parameterType="pd" resultType="pd">
 	 select 
 			o.order_id,
@@ -482,9 +510,6 @@
 				and o.order_status = #{orderStatus }
 			</if>
 		</if>
-			<if test="idsStr != null and idsStr != ''"> 
-			 	and o.order_sn IN ( #{idsStr })
-			</if>
 	</select>
 	
 	<select id="selectByTime" parameterType="String" resultType="pd">

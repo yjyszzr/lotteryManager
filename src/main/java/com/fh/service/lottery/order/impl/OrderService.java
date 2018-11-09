@@ -280,4 +280,10 @@ public class OrderService implements OrderManager {
 	public Integer checkOrderStatus(PageData pd) throws Exception {
 		return  (Integer)dao.findForObject("OrderMapper.checkOrderStatus", pd);
 	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> exportExcelForMOByIds(String[] arrayDATA_IDS) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.exportExcelForMOByIds", arrayDATA_IDS);
+	}
 }

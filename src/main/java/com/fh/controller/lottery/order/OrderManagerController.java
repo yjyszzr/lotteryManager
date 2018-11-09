@@ -499,9 +499,14 @@ public class OrderManagerController extends BaseController {
 		titles.add("手动出票状态"); // 8
 		titles.add("手动出票时间"); // 9
 		dataMap.put("titles", titles);
-	 
-
-		List<PageData> varOList = ordermanagerService.exportExcelForMO(pd);
+		String idsStr = pd.getString("idsStr");
+		List<PageData> varOList =new 		ArrayList<PageData> ();
+		if (null != idsStr && !"".equals(idsStr)) {
+			String ArrayDATA_IDS[] = idsStr.split(",");
+			  varOList = ordermanagerService.exportExcelForMOByIds(ArrayDATA_IDS);
+		}else {
+			varOList = ordermanagerService.exportExcelForMO(pd);
+		}
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();

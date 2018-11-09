@@ -298,15 +298,15 @@
 // 					});
 					
 // 					return;
-						str+="请确认:&nbsp;订单号:"+Id+"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;付款金额:<span style='font-weight:bold;color:red'>"+money+"</span>元"
+						str+="请确认:&nbsp;订单号:"+Id+"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;付款金额:<span style='font-weight:bold;color:red'>"+money+"</span>元";
 					}else if(status==2 ){
 // 					alert("该订单已取消!");
 // 					return;
-						str+="确定要取消编号为:"+Id+"的订单吗?"
+						str+="确定要取消编号为:"+Id+"的订单吗?";
 					}else if(status==9 ){
 // 					alert("该订单已派奖!");
 // 					return;
-						str+="请确认:&nbsp;订单号:"+Id+"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;中奖金额:<span style='font-weight:bold;color:red'>"+money+"</span>元"
+						str+="请确认:&nbsp;订单号:"+Id+"<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;中奖金额:<span style='font-weight:bold;color:red'>"+money+"</span>元";
 					}else{
 						return;
 					}
