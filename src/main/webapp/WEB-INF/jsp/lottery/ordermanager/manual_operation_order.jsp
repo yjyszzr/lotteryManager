@@ -205,6 +205,9 @@
 						<div class="page-header position-relative">
 						<table style="width:100%; ">
 							<tr>
+							<td style="vertical-align:top;">
+								总计：昨日已付款票数：${pd.payNum }张，昨日已出票数：${pd.printNum }张。
+								</td>
 								<th style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></th>
 							</tr>
 						</table>
@@ -373,8 +376,11 @@
 			//导出excel
 			function toExcel(){
 				var orderSn = $("#order_sn").val();
+				console.log("orderSn:"+orderSn);
 				var moStatus = $("#mo_status").val();
+				console.log("moStatus:"+moStatus);
 				var orderStatus = $("#order_status").val();
+				console.log("orderStatus:"+orderStatus);
 				var str = '';
 					for(var i=0;i < document.getElementsByName('ids').length;i++){
 					  if(document.getElementsByName('ids')[i].checked){
@@ -383,17 +389,24 @@
 					  }
 					}
 
-				if(orderSn =="" && moStatus == ""  && orderStatus == "" || str == "" ){
-					bootbox.confirm("<h4><strong>温馨提示</strong> </h4><hr><h5>&nbsp&nbsp默认导出今天的数据。</h5><br><h5>&nbsp&nbsp您可以按照<span style='color:red'>时间</span>筛选导出！</h5><br> &nbsp&nbsp<input id=\"selectionTime\"   type=\"text\" onfocus=\"WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})\" readonly=\"readonly\" style=\"width:186px;border-radius:5px !important\" placeholder=\"时间筛选\"/><br><br>", function(result) {
-						if(result) {
-							var selectionTime = $("#selectionTime").val();
-						    var items = selectionTime.split("-");
-						    var newStr = items.join("");
-							window.location.href='<%=basePath%>ordermanager/excelForMO.do?selectionTime='+newStr;
-						}
-					});
+				console.log(orderSn =='');
+				console.log(moStatus =='');
+				console.log(orderStatus == '' );
+				console.log(str =='');
+				console.log(orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' );
+				
+				if(orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' ){
+					alert("请选择要导出的数据。");
+// 					bootbox.confirm("<h4><strong>温馨提示</strong> </h4><hr><h5>&nbsp&nbsp默认导出今天的数据。</h5><br><h5>&nbsp&nbsp您可以按照<span style='color:red'>时间</span>筛选导出！</h5><br> &nbsp&nbsp<input id=\"selectionTime\"   type=\"text\" onfocus=\"WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})\" readonly=\"readonly\" style=\"width:186px;border-radius:5px !important\" placeholder=\"时间筛选\"/><br><br>", function(result) {
+// 						if(result) {
+// 							var selectionTime = $("#selectionTime").val();
+// 						    var items = selectionTime.split("-");
+// 						    var newStr = items.join("");
+<%-- 							window.location.href='<%=basePath%>ordermanager/excelForMO.do?selectionTime='+newStr; --%>
+// 						}
+// 					});
 				}else{
-				window.location.href='<%=basePath%>ordermanager/excel.do?orderSn='+orderSn+'&moStatus='+moStatus+'&order_status='+orderStatus+'&idsStr='+str;
+				window.location.href='<%=basePath%>ordermanager/excelForMO.do?orderSn='+orderSn+'&moStatus='+moStatus+'&orderStatus='+orderStatus+'&idsStr='+str;
 				}
 			}
 			

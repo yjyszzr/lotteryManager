@@ -28,6 +28,7 @@ import com.fh.enums.MatchPlayTypeEnum;
 import com.fh.enums.MatchResultCrsEnum;
 import com.fh.enums.MatchResultHadEnum;
 import com.fh.enums.MatchResultHafuEnum;
+import com.fh.service.lottery.artifiprintlottery.ArtifiPrintLotteryManager;
 import com.fh.service.lottery.logoperation.LogOperationManager;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.system.user.UserManager;
@@ -56,6 +57,8 @@ public class OrderManagerController extends BaseController {
 	@Resource(name = "logoperationService")
 	private LogOperationManager logoperationService;
 
+	@Resource(name="artifiprintlotteryService")
+	private ArtifiPrintLotteryManager artifiprintlotteryService;
 	/**
 	 * 列表
 	 * 
@@ -209,6 +212,20 @@ public class OrderManagerController extends BaseController {
 				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
 			}
 		}
+		int printNum = 0;
+		int payNum = 0;
+		Long   mm=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
+		List<PageData> payLogList = artifiprintlotteryService.findByTime(DateUtilNew.getCurrentTimeString( mm-60*60*24,DateUtilNew.date_sdf));
+		for (int i = 0; i < payLogList.size(); i++) {
+			PageData pageData =new PageData();
+			pageData = payLogList.get(i);
+			payNum += 1;
+			if (pageData.getString("order_status").equals("1")) {
+				printNum += 1;
+			}
+		}
+		pd.put("printNum", printNum);
+		pd.put("payNum", payNum);
 		mv.setViewName("lottery/ordermanager/manual_operation_order");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -475,16 +492,14 @@ public class OrderManagerController extends BaseController {
 		titles.add("订单编号"); // 1
 		titles.add("用户昵称"); // 2
 		titles.add("电话"); // 3
-		titles.add("彩种"); // 4
-		titles.add("投注金额"); // 5
-		titles.add("中奖金额"); // 6
-		titles.add("购彩时间"); // 7
-		titles.add("订单状态"); // 8
+		titles.add("投注金额"); // 4
+		titles.add("中奖金额"); // 5
+		titles.add("购彩时间"); // 6
+		titles.add("订单状态"); // 7
+		titles.add("手动出票状态"); // 8
+		titles.add("手动出票时间"); // 9
 		dataMap.put("titles", titles);
-		String selectionTime = pd.getString("selectionTime");
-		if (null == selectionTime || "".equals(selectionTime)) {
-			pd.put("selectionTime", DateUtilNew.getCurrentyyyyMMdd());
-		}
+	 
 
 		List<PageData> varOList = ordermanagerService.exportExcelForMO(pd);
 		List<PageData> varList = new ArrayList<PageData>();
@@ -493,12 +508,11 @@ public class OrderManagerController extends BaseController {
 			vpd.put("var1", varOList.get(i).getString("order_sn")); // 1
 			vpd.put("var2", varOList.get(i).getString("user_name")); // 2
 			vpd.put("var3", varOList.get(i).getString("mobile")); // 3
-			vpd.put("var4", varOList.get(i).getString("lottery_name")); // 4
-			vpd.put("var5", varOList.get(i).getString("ticket_amount") + "元"); // 5
-			vpd.put("var6", varOList.get(i).getString("winning_money") + "元"); // 6
+			vpd.put("var4", varOList.get(i).getString("ticket_amount") + "元"); // 5
+			vpd.put("var5", varOList.get(i).getString("winning_money") + "元"); // 6
 			BigDecimal big1000 = new BigDecimal(1000);
-			BigDecimal big8 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
-			vpd.put("var7", DateUtil.toSDFTime(Long.parseLong(big8.multiply(big1000).toString()))); // 8
+			BigDecimal big6 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
+			vpd.put("var6", DateUtil.toSDFTime(Long.parseLong(big6.multiply(big1000).toString()))); // 8
 			String orderStatus = varOList.get(i).getString("order_status");
 			String orderStatusStr = "";
 			if (orderStatus.equals("0")) {
@@ -522,7 +536,23 @@ public class OrderManagerController extends BaseController {
 			} else if (orderStatus.equals("9")) {
 				orderStatusStr = "已派奖";
 			}
-			vpd.put("var8", orderStatusStr); // 11
+			vpd.put("var7", orderStatusStr); // 7
+			
+			String moStatus = varOList.get(i).getString("mo_status");
+			String moStatusStr = "";
+			if (moStatus.equals("0")) {
+				moStatusStr ="待出票";
+			} else if(moStatus.equals("1")) {
+				moStatusStr ="出票成功";
+			} else if(moStatus.equals("2")) {
+				moStatusStr ="出票失败";
+			}else {
+				moStatusStr ="--- ---";
+			}
+			vpd.put("var8", moStatusStr); // 8
+			BigDecimal bigmo1000 = new BigDecimal(1000);
+			BigDecimal big9 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("mo_add_time")) ? "0" : varOList.get(i).getString("mo_add_time"));
+			vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

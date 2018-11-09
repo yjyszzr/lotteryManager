@@ -333,5 +333,11 @@ public class DateUtilNew {
 		}
 		return 0l;
 	}
-
+public static void main(String[] args) {
+//	1541752289
+	
+	Long   mm=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
+	System.out.println(mm);
+	System.out.println(DateUtilNew.getCurrentTimeString( mm-60*60*24,DateUtilNew.date_sdf));
+}
 }
