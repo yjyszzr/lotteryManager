@@ -47,15 +47,15 @@
 												</span>
 										 	<select  name="order_status" id="order_status" data-placeholder="请选择" value="${pd.order_status }" style="width:154px;border-radius:5px !important"  >
 												<option value="" selected="selected">全部</option>
-<%-- 													<option value="0" <c:if test="${pd.order_status!=NULL && pd.order_status!='' && pd.order_status == 0}">selected</c:if>>待付款</option> --%>
-<%-- 													<option value="1" <c:if test="${pd.order_status == 1}">selected</c:if>>待出票</option> --%>
-<%-- 													<option value="2" <c:if test="${pd.order_status == 2}">selected</c:if>>出票失败</option> --%>
-													<option value="3" <c:if test="${pd.order_status == 3}">selected</c:if>>待开奖</option>
-<%-- 													<option value="4" <c:if test="${pd.order_status == 4}">selected</c:if>>未中奖</option> --%>
-<%-- 													<option value="5" <c:if test="${pd.order_status == 5}">selected</c:if>>已中奖</option> --%>
-<%-- 													<option value="6" <c:if test="${pd.order_status == 6}">selected</c:if>>派奖中</option> --%>
-<%-- 													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>审核中</option> --%>
-<%-- 													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option> --%>
+													<option value="0" <c:if test="${pd.order_status!=NULL && pd.order_status!='' && pd.order_status == 0}">selected</c:if>>待付款</option>
+													<option value="1" <c:if test="${pd.order_status == 1}">selected</c:if>>待出票</option>
+													<option value="2" <c:if test="${pd.order_status == 2}">selected</c:if>>出票失败</option>
+													<option value="3" <c:if test="${pd.order_status == 3}">selected</c:if>>已付款</option>
+													<option value="4" <c:if test="${pd.order_status == 4}">selected</c:if>>未中奖</option>
+													<option value="5" <c:if test="${pd.order_status == 5}">selected</c:if>>已中奖</option>
+													<option value="6" <c:if test="${pd.order_status == 6}">selected</c:if>>派奖中</option>
+													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>审核中</option>
+													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option>
 													<option value="9" <c:if test="${pd.order_status == 9}">selected</c:if>>已派奖</option>
 										  	</select>
 										  	</div>
@@ -142,7 +142,7 @@
 													<c:when test="${var.order_status == 0}">待付款</c:when>
 													<c:when test="${var.order_status == 1}">待出票</c:when>
 													<c:when test="${var.order_status == 2}">出票失败</c:when>
-													<c:when test="${var.order_status == 3}">待开奖</c:when>
+													<c:when test="${var.order_status == 3}">已付款</c:when>
 													<c:when test="${var.order_status == 4}">未中奖</c:when>
 													<c:when test="${var.order_status == 5}">已中奖</c:when>
 													<c:when test="${var.order_status == 6}">派奖中</c:when>
@@ -153,17 +153,30 @@
 											</td>
 											<td class='center'>  
 												<c:choose>
-													<c:when test="${var.mo_status == 0}">待出票</c:when>
-													<c:when test="${var.mo_status == 1}">出票成功</c:when>
-													<c:when test="${var.mo_status == 2}">出票失败</c:when>
-													<c:otherwise>--- ---</c:otherwise>
+															<c:when test="${var.order_status == 8}">--- ---</c:when>
+													<c:otherwise>
+														<c:choose>
+															<c:when test="${var.mo_status == 0}">待出票</c:when>
+															<c:when test="${var.mo_status == 1}">出票成功</c:when>
+															<c:when test="${var.mo_status == 2}">出票失败</c:when>
+															<c:otherwise>--- ---</c:otherwise>
+														</c:choose>
+													</c:otherwise>
 												</c:choose>
+											
+											
 											</td>
 													<td class='center'>
+																	<c:choose>
+															<c:when test="${var.order_status == 8}">--- ---</c:when>
+													<c:otherwise>
 														<c:choose>
-															<c:when test="${empty var.mo_add_time}">--</c:when>
+															<c:when test="${empty var.mo_add_time}">--- ---</c:when>
 															<c:otherwise>${DateUtil.toSDFTime(var.mo_add_time*1000)}</c:otherwise>
 														</c:choose>
+													</c:otherwise>
+												</c:choose>
+														
 													</td>
 											<td class='center'>  
 												<c:choose>
