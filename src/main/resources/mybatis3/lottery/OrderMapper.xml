@@ -363,6 +363,9 @@
 				and o.order_status = #{pd.order_status }
 			</if>
 		</if>
+		<if test="pd.order_status == null || pd.order_status == ''"> 
+				and o.order_status  <![CDATA[ <> ]]>  8
+		</if>
 		order  by 	o.add_time desc
 	</select>
 	
