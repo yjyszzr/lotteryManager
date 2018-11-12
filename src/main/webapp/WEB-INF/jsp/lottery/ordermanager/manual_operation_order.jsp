@@ -80,7 +80,7 @@
 											<span>
 													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
 											</span>
-											<span class="input-icon" style="width:43px;"> </span>
+											<span class="input-icon" style="width:33px;"> </span>
 											<span>
 													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
 											</span>
@@ -265,10 +265,10 @@
 				 diag.Title ="订单详情";
 				 diag.URL = '<%=basePath%>ordermanager/toDetail.do?order_id='+orderId;
 				 diag.Width = 1300;
-				 diag.Height = 320;
+				 diag.Height = 700;
 				 diag.Modal = true;				//有无遮罩窗口
-				 diag. ShowMaxButton = false;	//最大化按钮
-			     diag.ShowMinButton = false;		//最小化按钮
+				 diag. ShowMaxButton = true;	//最大化按钮
+			     diag.ShowMinButton = true;		//最小化按钮
 				 diag.CancelEvent = function(){ //关闭事件
 					 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
 						 if('${page.currentPage}' == '0'){
