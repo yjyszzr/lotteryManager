@@ -89,14 +89,14 @@
 										</tr>
 											<tr>
 									</c:if>
-									<c:if test="${QX.toExcel == 1 }">
+<%-- 									<c:if test="${QX.toExcel == 1 }"> --%>
 										<th style="vertical-align:top;padding-left:2px">
 										<span class="input-icon" style="width:80px;"> </span>
 											<span>
 												<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:150px">导出到EXCEL </a>
 											</span>
 										</th>
-									</c:if>
+<%-- 									</c:if> --%>
 									</tr>
 							</table>
 						<!-- 检索  -->
@@ -405,11 +405,11 @@
 					  }
 					}
 
-				console.log(orderSn =='');
-				console.log(moStatus =='');
-				console.log(orderStatus == '' );
-				console.log(str =='');
-				console.log(orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' );
+// 				console.log(orderSn =='');
+// 				console.log(moStatus =='');
+// 				console.log(orderStatus == '' );
+// 				console.log(str =='');
+// 				console.log(orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' );
 				
 				if(orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' ){
 					alert("请选择要导出的数据。");

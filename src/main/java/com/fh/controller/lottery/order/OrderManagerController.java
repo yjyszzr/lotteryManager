@@ -481,9 +481,9 @@ public class OrderManagerController extends BaseController {
 	@RequestMapping(value = "/excelForMO")
 	public ModelAndView exportExcelForMO() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "导出订单到excel");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
-			return null;
-		}
+//		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+//			return null;
+//		}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
