@@ -317,7 +317,7 @@
 			o.pay_time pay_time,
 			o.pay_status pay_status,
 			a.order_status mo_status,
-			a.add_time mo_add_time
+			a.operation_time mo_add_time
 		FROM
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 

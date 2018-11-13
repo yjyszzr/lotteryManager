@@ -74,17 +74,20 @@
 										  	</select>
 										  	</div>
 									</th>
+											
 										<c:if test="${QX.cha == 1 }">
 										<th style="vertical-align:top;padding-left:2px">
 											<span class="input-icon" style="width:80px;"> </span>
 											<span>
 													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
 											</span>
-											<span class="input-icon" style="width:33px;"> </span>
+											<span class="input-icon" style="width:44px;"> </span>
 											<span>
 													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
 											</span>
 										</th>
+										</tr>
+											<tr>
 									</c:if>
 									<c:if test="${QX.toExcel == 1 }">
 										<th style="vertical-align:top;padding-left:2px">
@@ -151,7 +154,7 @@
 													<c:when test="${var.order_status == 9}">已派奖</c:when>
 												</c:choose>
 											</td>
-											<td class='center'>  
+											<td class='center'>   
 												<c:choose>
 															<c:when test="${var.order_status == 8}">--- ---</c:when>
 													<c:otherwise>
@@ -171,7 +174,7 @@
 															<c:when test="${var.order_status == 8}">--- ---</c:when>
 													<c:otherwise>
 														<c:choose>
-															<c:when test="${empty var.mo_add_time}">--- ---</c:when>
+															<c:when test="${var.mo_add_time  == null or var.mo_add_time == ''}">--- ---</c:when>
 															<c:otherwise>${DateUtil.toSDFTime(var.mo_add_time*1000)}</c:otherwise>
 														</c:choose>
 													</c:otherwise>
