@@ -513,8 +513,8 @@ public class OrderManagerController extends BaseController {
 			vpd.put("var1", varOList.get(i).getString("order_sn")); // 1
 			vpd.put("var2", varOList.get(i).getString("user_name")); // 2
 			vpd.put("var3", varOList.get(i).getString("mobile")); // 3
-			vpd.put("var4", varOList.get(i).getString("ticket_amount") + "元"); // 5
-			vpd.put("var5", varOList.get(i).getString("winning_money") + "元"); // 6
+			vpd.put("var4", varOList.get(i).getString("ticket_amount")); // 5
+			vpd.put("var5", varOList.get(i).getString("winning_money")); // 6
 			BigDecimal big1000 = new BigDecimal(1000);
 			BigDecimal big6 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
 			vpd.put("var6", DateUtil.toSDFTime(Long.parseLong(big6.multiply(big1000).toString()))); // 8

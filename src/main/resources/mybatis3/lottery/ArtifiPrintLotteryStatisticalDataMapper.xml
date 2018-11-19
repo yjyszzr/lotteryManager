@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ArtifiPrintLotteryStatisticalDataMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		dl_artifi_print_lottery_statistical_data
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		data_str,	
+		paid_order_num,	
+		total_paid_amount,	
+		print_num,	
+		total_award_amount
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{id},	
+        #{data_str},	
+        #{paid_order_num},	
+        #{total_paid_amount},	
+        #{print_num},	
+        #{total_award_amount}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        id,	
+		        data_str,	
+		        paid_order_num,	
+		        total_paid_amount,	
+		        print_num,	
+		        total_award_amount	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			id = #{id},
+			data_str = #{data_str},
+			paid_order_num = #{paid_order_num},
+			total_paid_amount = #{total_paid_amount},
+			print_num = #{print_num},
+			total_award_amount = #{total_award_amount}
+		where 
+		id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="pd.lastStart != null and pd.lastStart != ''"> 
+				and data_str &gt;= #{pd.lastStart }
+		</if>
+		<if test="pd.lastEnd != null and pd.lastEnd != ''"> 
+				and data_str &lt;= #{pd.lastEnd }
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+			where 1=1
+		<if test="lastStart != null and lastStart != ''"> 
+				and data_str &gt;= #{lastStart }
+		</if>
+		<if test="lastEnd != null and lastEnd != ''"> 
+				and data_str &lt;= #{lastEnd }
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="toExcelListAllForIds" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+			 	where  id IN  
+	 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
