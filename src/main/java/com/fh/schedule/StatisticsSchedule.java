@@ -38,13 +38,16 @@ public class StatisticsSchedule {
 						pdPaidHasStatisticalA.put("id",0);
 						pdPaidHasStatisticalA.put("paid_order_num",pdPaid.getString("paid_count"));
 						pdPaidHasStatisticalA.put("data_str", pdPaid.getString("add_time"));
-						pdPaidHasStatisticalA.put("total_paid_amount",pdPaid.getString("money_paid"));
+						BigDecimal moneyPaid =new BigDecimal(pdPaid.getString("money_paid"));
+						BigDecimal bd100 =new BigDecimal("100");
+						pdPaidHasStatisticalA.put("total_paid_amount",moneyPaid.divide(bd100));
 						artifiprintlotterystatisticaldataService.savePaidStatistical(pdPaidHasStatisticalA);
 					}else {
 						pdPaidHasStatisticalA.put("paid_order_num",Integer.parseInt(pdPaidHasStatisticalA.getString("paid_order_num").equals("") ? "0" : pdPaidHasStatisticalA.getString("paid_order_num") )+Integer.parseInt(pdPaid.getString("paid_count") ));
-						BigDecimal a =new BigDecimal(pdPaid.getString("money_paid"));
+						BigDecimal moneyPaid =new BigDecimal(pdPaid.getString("money_paid"));
+						BigDecimal pd100 =new BigDecimal(100);
 						BigDecimal b =new BigDecimal(pdPaidHasStatisticalA.getString("total_paid_amount").equals("") ? "0" : pdPaidHasStatisticalA.getString("total_paid_amount"));
-						pdPaidHasStatisticalA.put("total_paid_amount",a.add(b).toString());
+						pdPaidHasStatisticalA.put("total_paid_amount",moneyPaid.divide(pd100).add(b).toString());
 						artifiprintlotterystatisticaldataService.editPaidStatistical(pdPaidHasStatisticalA);
 					}
 					String orderSn = pdPaid.getString("order_sn");

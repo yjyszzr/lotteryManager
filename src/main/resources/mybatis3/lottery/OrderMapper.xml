@@ -322,7 +322,7 @@
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
-		WHERE o.add_time > 1540981190
+		WHERE o.add_time > 1542038400
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  
 				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
@@ -464,7 +464,7 @@
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id  
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
-		WHERE o.add_time > 1540981190
+		WHERE o.add_time > 1542038400
 			 	and o.order_id IN  
 	 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                  #{item}
@@ -492,7 +492,7 @@
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id  
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
-		WHERE o.add_time > 1540981190 and o.order_status  != 8
+		WHERE o.add_time > 1542038400 and o.order_status  != 8
 			<if test="orderSn != null and orderSn != ''"> 
 			 	and o.order_sn = #{orderSn }
 			</if>
@@ -513,7 +513,7 @@
 			</if>
 			<if test="orderStatus != null and orderStatus != ''"> 
 			<if test="orderStatus == 3"> 
-				and o.order_status  IN ( 3, 4, 5, 6, 7 )
+				and o.order_status  IN ( 3, 4, 5, 6, 7,9 )
 			</if>
 			<if test="orderStatus != 3"> 
 				and o.order_status = #{orderStatus }

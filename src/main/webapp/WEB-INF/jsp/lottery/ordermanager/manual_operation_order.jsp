@@ -56,7 +56,7 @@
 <%-- 													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>审核中</option> --%>
 <%-- 													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option> --%>
 													<option value="9" <c:if test="${pd.order_status == 9}">selected</c:if>>已派奖</option>
-													<option value="10" <c:if test="${pd.order_status == 10}">selected</c:if>>退款</option>
+													<option value="10" <c:if test="${pd.order_status == 10}">selected</c:if>>已退款</option>
 										  	</select>
 										  	</div>
 									</th>

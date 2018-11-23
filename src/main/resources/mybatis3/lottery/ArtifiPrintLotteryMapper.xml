@@ -118,7 +118,7 @@
 		set 
 			statistics_reward = 0 
 		where 
-		order_sn  =  #{order_sn}
+		order_sn  =  #{id}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
