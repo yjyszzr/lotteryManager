@@ -336,16 +336,16 @@
 				LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
 		</if>
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-			and o.add_time &gt; #{pd.lastStart1 }
+			and o.add_time &gt;= #{pd.lastStart1 }
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-			and o.add_time &lt; #{pd.lastEnd1 }
+			and o.add_time &lt;= #{pd.lastEnd1 }
 		</if>
 		<if test="pd.amountStart != null and pd.amountStart != ''"> 
-			and o.winning_money &gt; #{pd.amountStart }
+			and o.winning_money &gt;= #{pd.amountStart }
 		</if>
 		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
-			and o.winning_money &lt; #{pd.amountEnd }
+			and o.winning_money &lt;= #{pd.amountEnd }
 		</if>
 		<if test="pd.mo_status != null and pd.mo_status != ''"> 
 		<if test="pd.mo_status == 4"> 
@@ -492,7 +492,7 @@
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id  
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
-		WHERE o.add_time > 1540981190
+		WHERE o.add_time > 1540981190 and o.order_status  != 8
 			<if test="orderSn != null and orderSn != ''"> 
 			 	and o.order_sn = #{orderSn }
 			</if>
@@ -503,8 +503,14 @@
 				<if test="moStatus != 4"> 
 					and a.order_status = #{moStatus }
 				</if>
+				
 			</if>
-			
+			<if test="lastStart1 != null and lastStart1 != ''"> 
+				and o.add_time &gt;= #{lastStart1 }
+			</if>
+			<if test="lastEnd1 != null and lastEnd1 != ''"> 
+				and o.add_time &lt;= #{lastEnd1 }
+			</if>
 			<if test="orderStatus != null and orderStatus != ''"> 
 			<if test="orderStatus == 3"> 
 				and o.order_status  IN ( 3, 4, 5, 6, 7 )
@@ -755,6 +761,9 @@
 	</update>
 	<update id="updateOrderStatus">
 		update dl_order set order_status = #{pay_status} where order_sn = #{id}
+	</update>
+	<update id="updateOrderStatusByOrderSn">
+		update dl_order set order_status = 10 where order_sn = #{order_sn}
 	</update>
 	<select id="checkOrderStatus">
 		select update_count from dl_order where order_sn = #{order_sn} 

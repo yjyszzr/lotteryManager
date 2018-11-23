@@ -100,4 +100,39 @@ public class ArtifiPrintLotteryStatisticalDataService implements ArtifiPrintLott
 		return (List<PageData>) dao.findForList("ArtifiPrintLotteryStatisticalDataMapper.toExcelListAllForIds", arrayDATA_IDS);
 	}
 
+	@Override
+	public PageData findByTime(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("ArtifiPrintLotteryStatisticalDataMapper.findByTime", pd);
+	}
+
+	@Override
+	public void savePrintStatistical(PageData pdPrintHasStatisticalA) throws Exception {
+		dao.save("ArtifiPrintLotteryStatisticalDataMapper.savePrintStatistical", pdPrintHasStatisticalA);		
+	}
+
+	@Override
+	public void editPrintStatistical(PageData pdPrintHasStatisticalA) throws Exception {
+		dao.update("ArtifiPrintLotteryStatisticalDataMapper.editPrintStatistical", pdPrintHasStatisticalA);		
+	}
+
+	@Override
+	public void savePaidStatistical(PageData pdPaidHasStatisticalA) throws Exception {
+		dao.save("ArtifiPrintLotteryStatisticalDataMapper.savePaidStatistical", pdPaidHasStatisticalA);		
+	}
+
+	@Override
+	public void editPaidStatistical(PageData pdPaidHasStatisticalA) throws Exception {
+		dao.update("ArtifiPrintLotteryStatisticalDataMapper.editPaidStatistical", pdPaidHasStatisticalA);		
+	}
+
+	@Override
+	public void saveRewardStatistical(PageData pdRewardHasStatisticalA) throws Exception {
+		dao.save("ArtifiPrintLotteryStatisticalDataMapper.saveRewardStatistical", pdRewardHasStatisticalA);		
+	}
+
+	@Override
+	public void editRewardStatistical(PageData pdRewardHasStatisticalA) throws Exception {
+		dao.update("ArtifiPrintLotteryStatisticalDataMapper.editRewardStatistical", pdRewardHasStatisticalA);		
+	}
+
 }

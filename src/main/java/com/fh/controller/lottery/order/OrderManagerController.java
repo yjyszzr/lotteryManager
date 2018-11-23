@@ -241,8 +241,13 @@ public class OrderManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String statusType = pd.getString("moStatus_type");
 		pd = ordermanagerService.findById(pd);
 		String passType = pd.getString("pass_type");
+		String orderSN = pd.getString("order_sn");
+		PageData pdOrderSN = new PageData();
+		pdOrderSN.put("order_sn", orderSN);
+	List<PageData> orderSnPageDataList =	logoperationService.findByOrderSn(pdOrderSN);
 		String[] passTypeArr = passType.split(",");
 		String passTypeStr = "";
 		for (int i = 0; i < passTypeArr.length; i++) {
@@ -288,7 +293,13 @@ public class OrderManagerController extends BaseController {
 				}
 				orderDetailsList.get(i).put("matchResultStr", matchResultStr);
 			}
-			mv.setViewName("lottery/ordermanager/ordermanager_details");
+
+			if (statusType.equals("1")) {
+				mv.setViewName("lottery/ordermanager/ordermanager_details_for_mo");
+				mv.addObject("orderSnList",orderSnPageDataList);
+			}else	if (statusType.equals("0"))  {
+				mv.setViewName("lottery/ordermanager/ordermanager_details");
+			}
 		} else if (pd.getString("lottery_classify_id").equals("2")) {
 			for (int i = 0; i < orderDetailsList.size(); i++) {
 				String tikcket = orderDetailsList.get(i).getString("ticket_data");
@@ -500,6 +511,14 @@ public class OrderManagerController extends BaseController {
 		titles.add("手动出票时间"); // 9
 		dataMap.put("titles", titles);
 		String idsStr = pd.getString("idsStr");
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
 		List<PageData> varOList =new 		ArrayList<PageData> ();
 		if (null != idsStr && !"".equals(idsStr)) {
 			String ArrayDATA_IDS[] = idsStr.split(",");
@@ -540,6 +559,8 @@ public class OrderManagerController extends BaseController {
 				orderStatusStr = "支付失败";
 			} else if (orderStatus.equals("9")) {
 				orderStatusStr = "已派奖";
+			} else if (orderStatus.equals("10")) {
+				orderStatusStr = "已退款";
 			}
 			vpd.put("var7", orderStatusStr); // 7
 			
@@ -557,7 +578,12 @@ public class OrderManagerController extends BaseController {
 			vpd.put("var8", moStatusStr); // 8
 			BigDecimal bigmo1000 = new BigDecimal(1000);
 			BigDecimal big9 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("mo_add_time")) ? "0" : varOList.get(i).getString("mo_add_time"));
-			vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
+			BigDecimal bigmo0 = new BigDecimal(0);
+			if (big9.equals(bigmo0)) {
+				vpd.put("var9", "--- ---"); // 9
+			}else {
+				vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
+			}
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -587,6 +613,7 @@ public class OrderManagerController extends BaseController {
 		} else if (payStatus.equals("2")) {
 			opType = "3";
 		} else if (payStatus.equals("9")) {
+			artifiprintlotteryService.updateRewardStatusByOrderSn(pd);
 			opType = "2";
 		}
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
@@ -621,5 +648,21 @@ public class OrderManagerController extends BaseController {
 		map.put("updateCount", result);
 		return map;
 	}
-
+	/**添加退款备注
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/addRefundRemark")
+	public void addRefundRemark(PrintWriter out) throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"删除LogOperation");
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		logoperationService.addRefundRemark(pd);
+		//修改订单状态 置为已退款
+		ordermanagerService.updateOrderStatusByOrderSn(pd);
+		out.write("success");
+		out.close();
+	}
+	
 }

@@ -53,6 +53,10 @@ public interface LogOperationManager{
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
-	
+
+	public List<PageData> findByOrderSn(PageData pdOrderSN)throws Exception;
+
+	public void addRefundRemark(PageData pd)throws Exception;
+
 }
 

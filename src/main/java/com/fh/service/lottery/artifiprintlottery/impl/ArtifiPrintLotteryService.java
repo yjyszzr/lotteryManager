@@ -80,10 +80,48 @@ public class ArtifiPrintLotteryService implements ArtifiPrintLotteryManager{
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<PageData> findByTime(String currentTimeString) throws Exception {
 		PageData pd =new PageData();
 		pd.put("currentTime", currentTimeString);
 		return (List<PageData>)dao.findForList("ArtifiPrintLotteryMapper.findByTime", pd);
+	}
+ 
+	@Override
+	public PageData statisticalPrintData(PageData pd) throws Exception {
+		return (PageData)dao.findForObject("ArtifiPrintLotteryMapper.statisticalPrintData", pd);
+	}
+
+	@Override
+	public PageData statisticalPaidData(PageData pdPaid) throws Exception {
+		return (PageData)dao.findForObject("ArtifiPrintLotteryMapper.statisticalPaidData", pdPaid);
+	}
+
+	@Override
+	public PageData statisticalRewardData(PageData pdReward) throws Exception {
+		return (PageData)dao.findForObject("ArtifiPrintLotteryMapper.statisticalRewardData", pdReward);
+	}
+
+	@Override
+	public void updatePrintStatisticalByOrderSn(String[] arrayDATA_IDS) throws Exception {
+		dao.update("ArtifiPrintLotteryMapper.updatePrintStatisticalByOrderSn", arrayDATA_IDS);
+		
+	}
+
+	@Override
+	public void updatePaidStatisticalByOrderSn(String[] arrayDATA_IDS) throws Exception {
+		dao.update("ArtifiPrintLotteryMapper.updatePaidStatisticalByOrderSn", arrayDATA_IDS);
+	}
+
+	@Override
+	public void updateRewardStatisticalByOrderSn(String[] arrayDATA_IDS) throws Exception {
+		dao.update("ArtifiPrintLotteryMapper.updateRewardStatisticalByOrderSn", arrayDATA_IDS);
+		
+	}
+
+	@Override
+	public void updateRewardStatusByOrderSn(PageData pd) throws Exception {
+		dao.update("ArtifiPrintLotteryMapper.updateRewardStatusByOrderSn", pd);
 	}
 	
 }

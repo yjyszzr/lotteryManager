@@ -43,6 +43,52 @@
 		)
 	</insert>
 	
+	
+	
+	<!-- 根据付款新增记录 -->
+	<insert id="savePaidStatistical" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(      id,	
+		        data_str,	
+		        paid_order_num,	
+		        total_paid_amount
+		) values (
+				#{id},	
+			    #{data_str},	
+		        #{paid_order_num},	
+		        #{total_paid_amount}
+		        )
+	</insert>
+	<!-- 根据出票新增记录-->
+	<insert id="savePrintStatistical" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(      id,	
+		        data_str,	
+		        print_num
+		) values (
+				#{id},	
+			    #{data_str},
+			    #{print_num}
+		        )
+	</insert>
+	<!--根据派奖新增记录-->
+	<insert id="saveRewardStatistical" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(       id,	
+		        data_str,	
+		        total_award_amount
+		) values (
+				#{id},	
+			    #{data_str},
+			    #{total_award_amount}
+		        )
+	</insert>
+	
+	
+	
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
 		delete from
@@ -66,6 +112,40 @@
 		id = #{id}
 	</update>
 	
+	
+	<!-- 修改出票量 -->
+	<update id="editPrintStatistical" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			print_num = #{print_num}
+		where 
+			data_str = #{data_str}
+	</update>
+	<!-- 修改总派奖金额 -->
+	<update id="editRewardStatistical" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			total_award_amount = #{total_award_amount}
+		where 
+			data_str = #{data_str}
+	</update>
+	<!-- 修改总金额和订单量 -->
+	<update id="editPaidStatistical" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			paid_order_num = #{paid_order_num},
+			total_paid_amount = #{total_paid_amount}
+		where 
+			data_str = #{data_str}
+	</update>
+	
+	
+	
+	
+	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 
@@ -74,6 +154,14 @@
 		<include refid="tableName"></include>
 		where 
 			id = #{id}
+	</select>
+	<select id="findByTime" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			data_str = #{add_time}
 	</select>
 	
 	<!-- 列表 -->

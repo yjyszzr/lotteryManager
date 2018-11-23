@@ -113,4 +113,7 @@ public interface OrderManager {
 	public Integer checkOrderStatus(PageData pd)throws Exception;
 
 	public List<PageData> exportExcelForMOByIds(String[] arrayDATA_IDS)throws Exception;
+
+	public void updateOrderStatusByOrderSn(PageData pd)throws Exception;
+
 }

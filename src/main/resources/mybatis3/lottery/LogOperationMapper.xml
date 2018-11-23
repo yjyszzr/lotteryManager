@@ -67,11 +67,22 @@
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 
-		<include refid="Field"></include>
+			*
 		from 
 		<include refid="tableName"></include>
 		where 
 			log_id = #{log_id}
+	</select>
+
+	
+	<!-- 通order_sn获取数据 -->
+	<select id="findByOrderSn" parameterType="pd" resultType="pd">
+		select 
+			*
+		from 
+		<include refid="tableName"></include>
+		where 
+			order_sn = #{order_sn}
 	</select>
 	
 	<!-- 列表 -->
@@ -111,6 +122,7 @@
                  #{item}
 		</foreach>
 	</delete>
-	
-	<!-- fh313596790qq(青苔) -->
+	<update id="addRefundRemark" parameterType="pd">
+	update dl_log_operation set  fail_msg = #{fail_msg}  where  order_sn = #{order_sn}  and  type = 1
+	</update>
 </mapper>

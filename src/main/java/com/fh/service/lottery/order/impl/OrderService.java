@@ -286,4 +286,9 @@ public class OrderService implements OrderManager {
 	public List<PageData> exportExcelForMOByIds(String[] arrayDATA_IDS) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.exportExcelForMOByIds", arrayDATA_IDS);
 	}
+
+	@Override
+	public void updateOrderStatusByOrderSn(PageData pd) throws Exception {
+		dao.update("OrderMapper.updateOrderStatusByOrderSn", pd);
+	}
 }

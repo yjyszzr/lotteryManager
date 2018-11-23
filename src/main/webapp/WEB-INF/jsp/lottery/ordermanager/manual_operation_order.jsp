@@ -35,11 +35,10 @@
 												订单编号:
 											</span>
 											<span class="input-icon">
-												<input type="text" placeholder="订单编号" class="nav-search-input" id="order_sn" autocomplete="off" name="order_sn" value="${pd.order_sn }"   onkeyup="value=value.replace(/[^\d]/g,'')"  />
+												<input type="text" placeholder="订单编号" style="width:265px;" class="nav-search-input" id="order_sn" autocomplete="off" name="order_sn" value="${pd.order_sn }"   onkeyup="value=value.replace(/[^\d]/g,'')"  />
 											</span>
 										</div>
 									</th>
-										
 										<th>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
@@ -57,6 +56,7 @@
 <%-- 													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>审核中</option> --%>
 <%-- 													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option> --%>
 													<option value="9" <c:if test="${pd.order_status == 9}">selected</c:if>>已派奖</option>
+													<option value="10" <c:if test="${pd.order_status == 10}">selected</c:if>>退款</option>
 										  	</select>
 										  	</div>
 									</th>
@@ -74,21 +74,30 @@
 										  	</select>
 										  	</div>
 									</th>
-											
-										<c:if test="${QX.cha == 1 }">
-										<th style="vertical-align:top;padding-left:2px">
-											<span class="input-icon" style="width:80px;"> </span>
-											<span>
-													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
-											</span>
-											<span class="input-icon" style="width:44px;"> </span>
-											<span>
-													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
-											</span>
-										</th>
 										</tr>
-											<tr>
-									</c:if>
+										<tr>
+									<th  >
+											<span class="input-icon" style="width:80px;text-align:right;">
+													购彩时间:
+												</span>
+												<span  >
+													<input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:130px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+													<input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:130px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+												</span>
+										<c:if test="${QX.cha == 1 }">
+											<td >
+												<span class="input-icon" style="width:80px;"> </span>
+												<span>
+														<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+												</span>
+												<span class="input-icon" style="width:44px;"> </span>
+												<span>
+														<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+												</span>
+												</td>
+										</c:if>
+											</th>
+									
 <%-- 									<c:if test="${QX.toExcel == 1 }"> --%>
 										<th style="vertical-align:top;padding-left:2px">
 										<span class="input-icon" style="width:80px;"> </span>
@@ -152,6 +161,7 @@
 													<c:when test="${var.order_status == 7}">审核中</c:when>
 													<c:when test="${var.order_status == 8}"><lable style ="color:red">支付失败</lable></c:when>
 													<c:when test="${var.order_status == 9}">已派奖</c:when>
+													<c:when test="${var.order_status == 10}">已退款</c:when>
 												</c:choose>
 											</td>
 											<td class='center'>   
@@ -187,16 +197,28 @@
 														<c:choose>
 															<c:when test="${var.pay_status == 0}">
 																<a class="btn btn-xs btn-success" title="确认付款" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',1,'${var.ticket_amount}');"> 确认付款</a>
-																<a class="btn btn-xs btn-default" title="取消" style="border-radius: 5px;  color:#yellow" onclick="operationOrder('${var.order_sn}',2,'${var.ticket_amount}');"> 取消</a>
+<%-- 																<a class="btn btn-xs btn-default" title="取消" style="border-radius: 5px;  color:#yellow" onclick="operationOrder('${var.order_sn}',2,'${var.ticket_amount}');"> 取消</a> --%>
 															</c:when>
 															<c:otherwise>--</c:otherwise>
 														</c:choose>
 													</c:when>
 													<c:when test="${var.order_status == 5}">
 														<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.winning_money}');"> 派奖</a>
+<%-- 														<a class="btn btn-xs btn-primary" title="退款" style="border-radius: 5px;" onclick="refundOperation('${var.order_sn}');"> 退款</a> --%>
 													</c:when>
 													<c:when test="${var.order_status == 6}">
 														<span>大额订单先审核</span>
+													</c:when>
+													<c:when test="${var.order_status == 4}">
+															<c:choose>
+															<c:when test="${var.mo_status == 0}">
+																	<a class="btn btn-xs btn-primary" title="退款" style="border-radius: 5px;" onclick="refundOperation('${var.order_sn}');"> 退款</a>
+															</c:when>
+															<c:when test="${var.mo_status == 2}">
+																	<a class="btn btn-xs btn-primary" title="退款" style="border-radius: 5px;" onclick="refundOperation('${var.order_sn}');"> 退款</a>
+															</c:when>
+															<c:otherwise>--</c:otherwise>
+														</c:choose>
 													</c:when>
 													<c:otherwise>--</c:otherwise>
 												</c:choose>
@@ -267,6 +289,8 @@
 			function tosearch(status){
 			if(status==0){
 				$("#order_sn").val("");
+				$("#lastEnd").val("");
+				$("#lastStart").val("");
 				$("#order_status").empty();
 				$("#mo_status").empty();
 			}
@@ -279,7 +303,7 @@
 				 var diag = new top.Dialog();
 				 diag.Drag=true;
 				 diag.Title ="订单详情";
-				 diag.URL = '<%=basePath%>ordermanager/toDetail.do?order_id='+orderId;
+				 diag.URL = '<%=basePath%>ordermanager/toDetail.do?order_id='+orderId+'&moStatus_type=1';
 				 diag.Width = 1300;
 				 diag.Height = 700;
 				 diag.Modal = true;				//有无遮罩窗口
@@ -337,7 +361,24 @@
 				});
 			}
 			
-			$(document).ready(function (){ 
+			//退款
+			function refundOperation(orderSn){
+				var str = "<h4  style='color:green'>退款备注</h4><hr>&nbsp;&nbsp;&nbsp;";
+			 
+						str+="<br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea rows='4'   id=\"refundRemark\"   type=\"text\"  style=\"width:450px;border-radius:5px !important\" placeholder=\"退款备注\"></textarea>";
+				 
+				bootbox.confirm(str, function(result) {
+					if(result) {
+						top.jzts();
+						var refundRemark = $("#refundRemark").val();
+						var url = "<%=basePath%>ordermanager/addRefundRemark.do?&order_sn="+orderSn+"&fail_msg="+refundRemark;
+						$.get(url,function(data){
+							tosearch();
+						});
+					}
+				});
+			}
+			$(document).ready(function (){ show();});
 			            function show() {  
 							var getTime = $(".get_time");
 			                for (var i = 0; i < getTime.length; i++) {  
@@ -360,7 +401,7 @@
 		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(8).html( str); 
 								var bjstr =$('.get_set_time tbody  tr').eq(i).find('td').eq(9).text() ;
 								bjstr=Trim(bjstr,'g');
-								if(bjstr!='已中奖'){
+								if(!(bjstr!='已中奖' ) || ( bjstr!='未中奖' )){
 			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(12).html( "--");  
 								}
 		                    }else {  
@@ -373,6 +414,7 @@
 // 							console.log(i+"============================="+str);  
 			                }  
 			            }  
+			$(document).ready(function (){ 
 			            setInterval(show, 1000); // 注意函数名没有引号和括弧！  
 			            // 使用setInterval("show()",3000);会报“缺少对象”  
 			        });  
@@ -392,11 +434,10 @@
 			//导出excel
 			function toExcel(){
 				var orderSn = $("#order_sn").val();
-				console.log("orderSn:"+orderSn);
 				var moStatus = $("#mo_status").val();
-				console.log("moStatus:"+moStatus);
 				var orderStatus = $("#order_status").val();
-				console.log("orderStatus:"+orderStatus);
+				var lastStart = $("#lastStart").val();
+				var lastEnd = $("#lastEnd").val();
 				var str = '';
 					for(var i=0;i < document.getElementsByName('ids').length;i++){
 					  if(document.getElementsByName('ids')[i].checked){
@@ -404,25 +445,10 @@
 					  	else str += ',' + document.getElementsByName('ids')[i].value;
 					  }
 					}
-
-// 				console.log(orderSn =='');
-// 				console.log(moStatus =='');
-// 				console.log(orderStatus == '' );
-// 				console.log(str =='');
-// 				console.log(orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' );
-				
-				if(orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' ){
+				if(lastStart =='' && lastEnd =='' && orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' ){
 					alert("请选择要导出的数据。");
-// 					bootbox.confirm("<h4><strong>温馨提示</strong> </h4><hr><h5>&nbsp&nbsp默认导出今天的数据。</h5><br><h5>&nbsp&nbsp您可以按照<span style='color:red'>时间</span>筛选导出！</h5><br> &nbsp&nbsp<input id=\"selectionTime\"   type=\"text\" onfocus=\"WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})\" readonly=\"readonly\" style=\"width:186px;border-radius:5px !important\" placeholder=\"时间筛选\"/><br><br>", function(result) {
-// 						if(result) {
-// 							var selectionTime = $("#selectionTime").val();
-// 						    var items = selectionTime.split("-");
-// 						    var newStr = items.join("");
-<%-- 							window.location.href='<%=basePath%>ordermanager/excelForMO.do?selectionTime='+newStr; --%>
-// 						}
-// 					});
 				}else{
-				window.location.href='<%=basePath%>ordermanager/excelForMO.do?orderSn='+orderSn+'&moStatus='+moStatus+'&orderStatus='+orderStatus+'&idsStr='+str;
+				window.location.href='<%=basePath%>ordermanager/excelForMO.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&orderSn='+orderSn+'&moStatus='+moStatus+'&orderStatus='+orderStatus+'&idsStr='+str;
 				}
 			}
 			

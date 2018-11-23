@@ -288,7 +288,7 @@
 				 var diag = new top.Dialog();
 				 diag.Drag=true;
 				 diag.Title ="订单详情";
-				 diag.URL = '<%=basePath%>ordermanager/toDetail.do?order_id='+orderId;
+				 diag.URL = '<%=basePath%>ordermanager/toDetail.do?order_id='+orderId+'&moStatus_type=0';
 				 diag.Width = 1300;
 				 diag.Height = 320;
 				 diag.Modal = true;				//有无遮罩窗口

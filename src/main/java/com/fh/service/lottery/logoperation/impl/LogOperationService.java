@@ -78,6 +78,16 @@ public class LogOperationService implements LogOperationManager{
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("LogOperationMapper.deleteAll", ArrayDATA_IDS);
 	}
-	
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> findByOrderSn(PageData pdOrderSN) throws Exception{
+		return (List<PageData>)dao.findForList("LogOperationMapper.findByOrderSn", pdOrderSN);
+	}
+
+	@Override
+	public void addRefundRemark(PageData pd) throws Exception {
+		dao.update("LogOperationMapper.addRefundRemark", pd);
+	}
 }
 

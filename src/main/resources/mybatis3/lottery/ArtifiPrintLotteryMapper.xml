@@ -73,6 +73,53 @@
 		where 
 		id = #{id}
 	</update>
+ 
+<!-- 	出票统计字段 -->
+	<update id="updatePrintStatisticalByOrderSn" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			statistics_print = 1 
+		where 
+		order_sn  in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</update>
+<!-- 	付款统计字段 -->
+	<update id="updatePaidStatisticalByOrderSn" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			statistics_paid = 1 
+		where 
+		order_sn  in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</update>
+<!-- 	派奖统计字段 -->
+	<update id="updateRewardStatisticalByOrderSn" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			statistics_reward = 1 
+		where 
+		order_sn  in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</update>
+	
+<!--  派奖统计字段设置 -->
+	<update id="updateRewardStatusByOrderSn" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			statistics_reward = 0 
+		where 
+		order_sn  =  #{order_sn}
+	</update>
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
@@ -125,5 +172,51 @@
 	select * from dl_artifi_print_lottery where DATE_FORMAT( FROM_UNIXTIME( add_time ), "%Y-%m-%d" )  = #{currentTime}
 	
 	</select>
-	<!-- fh313596790qq(青苔) -->
+ 
+<!-- 	出票数量 -->
+	<select id="statisticalPrintData" parameterType="pd" resultType="pd">
+		SELECT
+			group_concat( order_sn ) AS order_sn,
+			count( * ) AS print_count,
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) AS add_time 
+		FROM
+			dl_artifi_print_lottery 
+		WHERE
+			statistics_print = 0
+		GROUP BY
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
+			LIMIT 1;
+	</select>
+<!-- 	付款数量和钱数 -->
+	<select id="statisticalPaidData" parameterType="pd" resultType="pd">
+		SELECT
+			group_concat( order_sn ) AS order_sn,
+			count( * ) AS paid_count,
+			SUM( money_paid ) AS money_paid,
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) AS add_time 
+		FROM
+			dl_artifi_print_lottery 
+		WHERE
+			statistics_paid = 0
+		GROUP BY
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
+			LIMIT 1;
+	</select>
+<!-- 	派奖金额 -->
+	<select id="statisticalRewardData" parameterType="pd" resultType="pd">
+	SELECT
+		group_concat( o.order_sn ) AS order_sn,
+		SUM( o.winning_money ) AS total_winning_money,
+		date_format( FROM_UNIXTIME( o.add_time ), '%Y-%m-%d ' ) AS add_time 
+	FROM
+		dl_order o,
+		dl_artifi_print_lottery a 
+	WHERE
+		o.order_sn = a.order_sn 
+		AND statistics_reward = 0 
+	GROUP BY
+		date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
+		LIMIT 1;
+	</select>
+	
 </mapper>
