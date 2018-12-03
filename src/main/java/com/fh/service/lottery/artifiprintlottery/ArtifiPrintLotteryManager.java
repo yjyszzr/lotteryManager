@@ -69,5 +69,12 @@ public interface ArtifiPrintLotteryManager{
 	public void updateRewardStatisticalByOrderSn(String[] arrayDATA_IDS)throws Exception;
 
 	public void updateRewardStatusByOrderSn(PageData pd)throws Exception;
+
+	public PageData findPaidLimitDay(PageData pdPaid)throws Exception;
+
+	public PageData findPrintLimitDay(PageData pdPrint)throws Exception;
+
+	public PageData findRewardLimitDay(PageData pdReward)throws Exception;
+
 }
 

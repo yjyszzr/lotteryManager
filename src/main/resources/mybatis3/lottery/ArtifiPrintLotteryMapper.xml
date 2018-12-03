@@ -173,7 +173,7 @@
 	
 	</select>
  
-<!-- 	出票数量 -->
+<!-- 	出票数量统计(开始) -->
 	<select id="statisticalPrintData" parameterType="pd" resultType="pd">
 		SELECT
 			group_concat( order_sn ) AS order_sn,
@@ -187,12 +187,44 @@
 			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
 			LIMIT 1;
 	</select>
-<!-- 	付款数量和钱数 -->
+	<select id="findPrintLimitDay" parameterType="pd" resultType="pd">
+		SELECT
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) AS add_time 
+		FROM
+			dl_artifi_print_lottery 
+		WHERE
+			statistics_print = 0
+		GROUP BY
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
+			LIMIT 1;
+	</select>
+	<!-- 	出票数量统计(结束) -->
+	
+	
+	
+	<!-- 	付款数量和钱数统计(开始) -->
 	<select id="statisticalPaidData" parameterType="pd" resultType="pd">
 		SELECT
 			group_concat( order_sn ) AS order_sn,
 			count( * ) AS paid_count,
 			SUM( money_paid ) AS money_paid,
+			add_time 
+		FROM
+			(
+		SELECT
+			order_sn,
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) AS add_time,
+			money_paid 
+		FROM
+			dl_artifi_print_lottery 
+		WHERE
+			statistics_paid = 0 
+			AND date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) = #{add_time}
+			LIMIT 30 
+			) a;
+	</select>
+	<select id="findPaidLimitDay" parameterType="pd" resultType="pd">
+		SELECT
 			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) AS add_time 
 		FROM
 			dl_artifi_print_lottery 
@@ -202,21 +234,45 @@
 			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
 			LIMIT 1;
 	</select>
-<!-- 	派奖金额 -->
-	<select id="statisticalRewardData" parameterType="pd" resultType="pd">
-	SELECT
-		group_concat( o.order_sn ) AS order_sn,
-		SUM( o.winning_money ) AS total_winning_money,
-		date_format( FROM_UNIXTIME( o.add_time ), '%Y-%m-%d ' ) AS add_time 
-	FROM
-		dl_order o,
-		dl_artifi_print_lottery a 
-	WHERE
-		o.order_sn = a.order_sn 
-		AND statistics_reward = 0 
-	GROUP BY
-		date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
-		LIMIT 1;
-	</select>
+	<!-- 	付款数量和钱数统计(结束) -->
 	
+	
+	
+	<!-- 	派奖金额统计(开始) -->
+	<select id="statisticalRewardData" parameterType="pd" resultType="pd">
+		SELECT
+			count( * )  AS count,
+			group_concat( order_sn ) AS order_sn,
+			SUM( winning_money ) AS total_winning_money,
+			add_time 
+		FROM
+			(
+		SELECT
+			o.order_sn AS order_sn,
+			o.winning_money AS winning_money,
+			date_format( FROM_UNIXTIME( o.add_time ), '%Y-%m-%d ' ) AS add_time 
+		FROM
+			dl_order o,
+			dl_artifi_print_lottery a 
+		WHERE
+			o.order_sn = a.order_sn 
+			AND statistics_reward = 0 
+			AND date_format( FROM_UNIXTIME( o.add_time ), '%Y-%m-%d ' ) = #{add_time}
+			LIMIT 30 
+			) a;
+	</select>
+		<select id="findRewardLimitDay" parameterType="pd" resultType="pd">
+		SELECT
+			date_format( FROM_UNIXTIME( o.add_time ), '%Y-%m-%d ' ) AS add_time 
+		FROM
+			dl_order o,
+			dl_artifi_print_lottery a 
+		WHERE
+			o.order_sn = a.order_sn 
+			AND a.statistics_reward = 0 
+			GROUP BY
+				date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
+				LIMIT 1;
+	</select>
+		<!-- 	派奖金额统计(结束) -->
 </mapper>

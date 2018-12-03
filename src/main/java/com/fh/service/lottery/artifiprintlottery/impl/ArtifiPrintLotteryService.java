@@ -123,6 +123,21 @@ public class ArtifiPrintLotteryService implements ArtifiPrintLotteryManager{
 	public void updateRewardStatusByOrderSn(PageData pd) throws Exception {
 		dao.update("ArtifiPrintLotteryMapper.updateRewardStatusByOrderSn", pd);
 	}
+
+	@Override
+	public PageData findPaidLimitDay(PageData pdPaid) throws Exception {
+		return (PageData)dao.findForObject("ArtifiPrintLotteryMapper.findPaidLimitDay", pdPaid);
+	}
+
+	@Override
+	public PageData findPrintLimitDay(PageData pdPrint) throws Exception {
+		return (PageData)dao.findForObject("ArtifiPrintLotteryMapper.findPrintLimitDay", pdPrint);
+	}
+
+	@Override
+	public PageData findRewardLimitDay(PageData pdReward) throws Exception {
+		return (PageData)dao.findForObject("ArtifiPrintLotteryMapper.findRewardLimitDay", pdReward);
+	}
 	
 }
 

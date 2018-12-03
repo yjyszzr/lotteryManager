@@ -30,14 +30,18 @@ public class StatisticsSchedule {
 		try {
 			//付款金额和总数量
 			PageData pdPaid = new PageData();
+			pdPaid =	artifiprintlotteryService.findPaidLimitDay(pdPaid);
 			pdPaid =artifiprintlotteryService.statisticalPaidData(pdPaid);
+			System.out.println("pdPaid==================================================="+pdPaid);
 			if (pdPaid != null) {
 				PageData pdPaidHasStatisticalA =artifiprintlotterystatisticaldataService.findByTime(pdPaid);
+					System.out.println("未统计的付款数pdPaidHasStatistical====================================="+pdPaidHasStatisticalA);
 					if (pdPaidHasStatisticalA == null) {
 						pdPaidHasStatisticalA	= new PageData();
 						pdPaidHasStatisticalA.put("id",0);
 						pdPaidHasStatisticalA.put("paid_order_num",pdPaid.getString("paid_count"));
 						pdPaidHasStatisticalA.put("data_str", pdPaid.getString("add_time"));
+						pdPaidHasStatisticalA.put("total_award_amount", "0");
 						BigDecimal moneyPaid =new BigDecimal(pdPaid.getString("money_paid"));
 						BigDecimal bd100 =new BigDecimal("100");
 						pdPaidHasStatisticalA.put("total_paid_amount",moneyPaid.divide(bd100));
@@ -57,9 +61,12 @@ public class StatisticsSchedule {
 			
 			//出票量
 			PageData pdPrint = new PageData();
+			pdPrint =	artifiprintlotteryService.findPrintLimitDay(pdPrint);
 			pdPrint =artifiprintlotteryService.statisticalPrintData(pdPrint);
+			System.out.println("pdPrint======================================="+pdPrint);
 			if (pdPrint != null) {
 				PageData pdPrintHasStatisticalA =artifiprintlotterystatisticaldataService.findByTime(pdPrint);
+				System.out.println("未统计的出票数pdPrintHasStatistical==========="+pdPrintHasStatisticalA);
 				if (pdPrintHasStatisticalA == null) {
 //					pdPrintHasStatisticalA	= new PageData();
 //					pdPrintHasStatisticalA.put("id",0);
@@ -77,9 +84,12 @@ public class StatisticsSchedule {
 			
 			//	派奖量
 			PageData pdReward = new PageData();
+			pdReward=artifiprintlotteryService.findRewardLimitDay(pdReward);
 			pdReward =artifiprintlotteryService.statisticalRewardData(pdReward);
+			System.out.println("pdReward=========================================="+pdReward);
 			if (pdReward != null) {
 				PageData pdRewardHasStatisticalA =artifiprintlotterystatisticaldataService.findByTime(pdReward);
+				System.out.println("未统计的派奖数pdRewardHasStatistical============================================================"+pdRewardHasStatisticalA);
 					if (pdRewardHasStatisticalA == null) {
 //						pdRewardHasStatisticalA	= new PageData();
 //						pdRewardHasStatisticalA.put("id",0);
