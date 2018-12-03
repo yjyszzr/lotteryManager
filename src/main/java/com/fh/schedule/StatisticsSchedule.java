@@ -25,7 +25,7 @@ public class StatisticsSchedule {
 	private ArtifiPrintLotteryStatisticalDataManager artifiprintlotterystatisticaldataService;
 	
  
-	@Scheduled(cron = "0 0/1 * * * ? ")
+	@Scheduled(cron = "52 * * * * ? ")
 	public void moOrderStatistics()   {
 		try {
 			//付款金额和总数量
@@ -61,18 +61,18 @@ public class StatisticsSchedule {
 			if (pdPrint != null) {
 				PageData pdPrintHasStatisticalA =artifiprintlotterystatisticaldataService.findByTime(pdPrint);
 				if (pdPrintHasStatisticalA == null) {
-					pdPrintHasStatisticalA	= new PageData();
-					pdPrintHasStatisticalA.put("id",0);
-					pdPrintHasStatisticalA.put("print_num",pdPrint.getString("print_count"));
-					pdPrintHasStatisticalA.put("data_str", pdPrint.getString("add_time"));
-					artifiprintlotterystatisticaldataService.savePrintStatistical(pdPrintHasStatisticalA);
+//					pdPrintHasStatisticalA	= new PageData();
+//					pdPrintHasStatisticalA.put("id",0);
+//					pdPrintHasStatisticalA.put("print_num",pdPrint.getString("print_count"));
+//					pdPrintHasStatisticalA.put("data_str", pdPrint.getString("add_time"));
+//					artifiprintlotterystatisticaldataService.savePrintStatistical(pdPrintHasStatisticalA);
 				}else {
 					pdPrintHasStatisticalA.put("print_num",Integer.parseInt(pdPrintHasStatisticalA.getString("print_num").equals("") ? "0" : pdPrintHasStatisticalA.getString("print_num"))+Integer.parseInt(pdPrint.getString("print_count") ));
 					artifiprintlotterystatisticaldataService.editPrintStatistical(pdPrintHasStatisticalA);
+					String orderSn = pdPrint.getString("order_sn");
+					String ArrayDATA_IDS[] = orderSn.split(",");
+					artifiprintlotteryService.updatePrintStatisticalByOrderSn(ArrayDATA_IDS);
 				}
-				String orderSn = pdPrint.getString("order_sn");
-				String ArrayDATA_IDS[] = orderSn.split(",");
-				artifiprintlotteryService.updatePrintStatisticalByOrderSn(ArrayDATA_IDS);
 			}
 			
 			//	派奖量
@@ -81,20 +81,20 @@ public class StatisticsSchedule {
 			if (pdReward != null) {
 				PageData pdRewardHasStatisticalA =artifiprintlotterystatisticaldataService.findByTime(pdReward);
 					if (pdRewardHasStatisticalA == null) {
-						pdRewardHasStatisticalA	= new PageData();
-						pdRewardHasStatisticalA.put("id",0);
-						pdRewardHasStatisticalA.put("data_str", pdReward.getString("add_time"));
-						pdRewardHasStatisticalA.put("total_award_amount",pdReward.getString("total_winning_money"));
-						artifiprintlotterystatisticaldataService.saveRewardStatistical(pdRewardHasStatisticalA);
+//						pdRewardHasStatisticalA	= new PageData();
+//						pdRewardHasStatisticalA.put("id",0);
+//						pdRewardHasStatisticalA.put("data_str", pdReward.getString("add_time"));
+//						pdRewardHasStatisticalA.put("total_award_amount",pdReward.getString("total_winning_money"));
+//						artifiprintlotterystatisticaldataService.saveRewardStatistical(pdRewardHasStatisticalA);
 					}else {
 						BigDecimal a =new BigDecimal(pdReward.getString("total_winning_money"));
 						BigDecimal b =new BigDecimal(pdRewardHasStatisticalA.getString("total_award_amount").equals("") ? "0" : pdRewardHasStatisticalA.getString("total_award_amount"));
 						pdRewardHasStatisticalA.put("total_award_amount",a.add(b).toString());
 						artifiprintlotterystatisticaldataService.editRewardStatistical(pdRewardHasStatisticalA);
-					}
-					String orderSn = pdReward.getString("order_sn");
+						String orderSn = pdReward.getString("order_sn");
 						String ArrayDATA_IDS[] = orderSn.split(",");
-					artifiprintlotteryService.updateRewardStatisticalByOrderSn(ArrayDATA_IDS);
+						artifiprintlotteryService.updateRewardStatisticalByOrderSn(ArrayDATA_IDS);
+					}
 			}
 		} catch (Exception e) {
 			System.out.println(e);

@@ -178,7 +178,7 @@
 				and data_str &lt;= #{pd.lastEnd }
 		</if>
 		ORDER BY
-			data_str ASC
+			data_str DESC
 	</select>
 	
 	<!-- 列表(全部) -->

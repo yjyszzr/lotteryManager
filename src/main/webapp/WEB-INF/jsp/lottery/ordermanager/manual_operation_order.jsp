@@ -401,7 +401,9 @@
 		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(8).html( str); 
 								var bjstr =$('.get_set_time tbody  tr').eq(i).find('td').eq(9).text() ;
 								bjstr=Trim(bjstr,'g');
-								if(!(bjstr!='已中奖' ) || ( bjstr!='未中奖' )){
+									console.log("bjstr============================"+bjstr);  
+									console.log("状态============================"+!((bjstr=='已中奖' ) || ( bjstr=='未中奖' )));  
+								if(!((bjstr=='已中奖' ) || ( bjstr=='未中奖' ))){
 			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(12).html( "--");  
 								}
 		                    }else {  
