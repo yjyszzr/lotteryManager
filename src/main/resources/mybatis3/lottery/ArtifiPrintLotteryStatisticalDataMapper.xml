@@ -53,12 +53,14 @@
 		        data_str,	
 		        paid_order_num,	
 		        total_paid_amount,
+		        print_num,
 		        total_award_amount
 		) values (
 				#{id},	
 			    #{data_str},	
 		        #{paid_order_num},	
 		        #{total_paid_amount},
+		        #{print_num},
 		        #{total_award_amount}
 		        )
 	</insert>

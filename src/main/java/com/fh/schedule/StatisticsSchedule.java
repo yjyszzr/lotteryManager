@@ -42,6 +42,7 @@ public class StatisticsSchedule {
 						pdPaidHasStatisticalA.put("paid_order_num",pdPaid.getString("paid_count"));
 						pdPaidHasStatisticalA.put("data_str", pdPaid.getString("add_time"));
 						pdPaidHasStatisticalA.put("total_award_amount", "0");
+						pdPaidHasStatisticalA.put("print_num", "0");
 						BigDecimal moneyPaid =new BigDecimal(pdPaid.getString("money_paid"));
 						BigDecimal bd100 =new BigDecimal("100");
 						pdPaidHasStatisticalA.put("total_paid_amount",moneyPaid.divide(bd100));
