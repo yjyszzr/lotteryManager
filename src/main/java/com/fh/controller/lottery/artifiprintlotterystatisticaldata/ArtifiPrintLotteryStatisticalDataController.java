@@ -201,9 +201,9 @@ public class ArtifiPrintLotteryStatisticalDataController extends BaseController 
 	@RequestMapping(value = "/excel")
 	public ModelAndView exportExcel() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "导出ArtifiPrintLotteryStatisticalData到excel");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
-			return null;
-		}
+//		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+//			return null;
+//		}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();

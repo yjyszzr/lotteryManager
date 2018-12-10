@@ -41,12 +41,12 @@
 									<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
 								</td> 
 								</c:if>
-								<c:if test="${QX.toExcel == 1 }">
+<%-- 								<c:if test="${QX.toExcel == 1 }"> --%>
 							<td style="vertical-align:top;padding-left:20px;">
 									<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL" style="border-radius:5px;color:blue !important; ">  导出EXCEL</a>
 <!-- 		<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a> -->
 									</td>
-									</c:if>
+<%-- 									</c:if> --%>
 							</tr>
 						</table>
 						<!-- 检索  -->

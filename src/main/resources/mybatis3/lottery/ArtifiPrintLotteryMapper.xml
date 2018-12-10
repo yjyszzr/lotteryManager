@@ -175,17 +175,34 @@
  
 <!-- 	出票数量统计(开始) -->
 	<select id="statisticalPrintData" parameterType="pd" resultType="pd">
+<!-- 		SELECT -->
+<!-- 			group_concat( order_sn ) AS order_sn, -->
+<!-- 			count( * ) AS print_count, -->
+<!-- 			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) AS add_time  -->
+<!-- 		FROM -->
+<!-- 			dl_artifi_print_lottery  -->
+<!-- 		WHERE -->
+<!-- 			statistics_print = 0 -->
+<!-- 		GROUP BY -->
+<!-- 			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' )  -->
+<!-- 			LIMIT 1; -->
 		SELECT
 			group_concat( order_sn ) AS order_sn,
 			count( * ) AS print_count,
-			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) AS add_time 
+			add_time 
+		FROM
+			(
+		SELECT
+			order_sn,
+			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) AS add_time
 		FROM
 			dl_artifi_print_lottery 
 		WHERE
-			statistics_print = 0
-		GROUP BY
-			date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) 
-			LIMIT 1;
+			statistics_print = 0 
+			AND date_format( FROM_UNIXTIME( add_time ), '%Y-%m-%d ' ) = #{add_time}
+			LIMIT 30 
+			) a;
+			
 	</select>
 	<select id="findPrintLimitDay" parameterType="pd" resultType="pd">
 		SELECT
