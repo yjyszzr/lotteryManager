@@ -166,6 +166,7 @@
          <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout3}" />
          <property name="logAbandoned" value="${logAbandoned3}" />
 	</bean>  
+	  
 	<aop:config>
 		<aop:pointcut id="pc3" expression="execution(* com.fh.service..*(..))" />
 		<aop:advisor pointcut-ref="pc3" advice-ref="txAdvice3" />
@@ -187,6 +188,61 @@
 	<bean name="transactionManager3" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">   
     	<property name="dataSource" ref="dataSource3"></property>
  	</bean> 
+ 	
+ 			<!-- ====================数据源4==================== -->
+	<bean id="sqlSessionTemplate4" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory4" />
+	</bean>
+	<bean id="sqlSessionFactory4" class="org.mybatis.spring.SqlSessionFactoryBean">
+    	<property name="dataSource" ref="dataSource4" />
+        <property name="configLocation" value="classpath:mybatis4/mybatis-config.xml"></property>
+        <property name="mapperLocations" value="classpath:mybatis4/*/*.xml"></property>
+    </bean>
+	<bean id="dataSource4" class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">  
+         <property name="url" value="${url4}" />  
+         <property name="username" value="${username4}" />  
+         <property name="password" value="${password4}" />  
+         <property name="driverClassName" value="${driverClassName4}" />  
+         <property name="filters" value="${filters4}" />  
+         <property name="maxActive" value="${maxActive4}" />
+         <property name="initialSize" value="${initialSize4}" />
+         <property name="maxWait" value="${maxWait4}" />
+         <property name="minIdle" value="${minIdle4}" />  
+         <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis4}" />
+         <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis4}" />  
+         <property name="validationQuery" value="${validationQuery4}" />  
+         <property name="testWhileIdle" value="${testWhileIdle4}" />  
+         <property name="testOnBorrow" value="${testOnBorrow4}" />  
+         <property name="testOnReturn" value="${testOnReturn4}" />  
+         <property name="maxOpenPreparedStatements" value="${maxOpenPreparedStatements4}" />
+         <property name="removeAbandoned" value="${removeAbandoned4}" />
+         <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout4}" />
+         <property name="logAbandoned" value="${logAbandoned4}" />
+	</bean>
+ 	<aop:config>
+		<aop:pointcut id="pc4" expression="execution(* com.fh.service..*(..))" />
+		<aop:advisor pointcut-ref="pc4" advice-ref="txAdvice4" />
+	</aop:config>
+	<tx:advice id="txAdvice4" transaction-manager="transactionManager4">
+		<tx:attributes>
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false" 
+			           rollback-for="java.lang.Exception"/>
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false" 
+			           rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false" 
+			           rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="false" 
+			           rollback-for="java.lang.Exception" />
+			<tx:method name="edit*" propagation="REQUIRED" read-only="false" 
+			           rollback-for="java.lang.Exception" />
+		</tx:attributes>
+	</tx:advice>
+	<bean name="transactionManager4" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">   
+    	<property name="dataSource" ref="dataSource4"></property>
+ 	</bean> 
+ 	
+ 	
+ 	
  	
  	<bean name="urlConfig" class="com.fh.config.URLConfig">
     	<property name="serviceSmsUrl" value="${serviceSmsUrl}"></property>

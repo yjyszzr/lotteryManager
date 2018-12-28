@@ -33,7 +33,7 @@
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-        #{id},	
+     	#{id},	
         #{account_sn},	
         #{user_id},	
         #{admin_user},	
@@ -52,6 +52,7 @@
         #{user_surplus},	
         #{user_surplus_limit},	
         #{bonus_price},	
+        #{store_id},	
         #{status}	
 	</sql>
 	
@@ -60,28 +61,47 @@
 		insert into 
 	<include refid="tableName"></include>
 		(
-		        id,	
-		        account_sn,	
-		        user_id,	
-		        admin_user,	
-		        amount,	
-		        cur_balance,	
-		        add_time,	
-		        last_time,	
-		        note,	
-		        process_type,	
-		        order_sn,	
-		        parent_sn,	
-		        pay_id,	
-		        payment_name,	
-		        third_part_name,	
-		        third_part_paid,	
-		        user_surplus,	
-		        user_surplus_limit,	
-		        bonus_price,	
-		        status	
+	        account_sn,	
+	        user_id,	
+	        admin_user,	
+	        amount,	
+	        cur_balance,	
+	        add_time,	
+	        last_time,	
+	        note,	
+	        process_type,	
+	        order_sn,	
+	        parent_sn,	
+	        pay_id,	
+	        payment_name,	
+	        third_part_name,	
+	        third_part_paid,	
+	        user_surplus,	
+	        user_surplus_limit,	
+	        bonus_price,	
+	        store_id,
+	        status	
 		) values (
-	<include refid="FieldValue"></include>
+		 	#{account_sn},	
+	        #{user_id},	
+	        #{admin_user},	
+	        #{amount},	
+	        #{cur_balance},	
+	        #{add_time},	
+	        #{last_time},	
+	        #{note},	
+	        #{process_type},	
+	        #{order_sn},	
+	        #{parent_sn},	
+	        #{pay_id},	
+	        #{payment_name},	
+	        #{third_part_name},	
+	        #{third_part_paid},	
+	        #{user_surplus},	
+	        #{user_surplus_limit},	
+	        #{bonus_price},	
+	        #{store_id},	
+	        #{status}	
 		)
 	</insert>
 	
@@ -121,9 +141,10 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
-		where 1 = 1 
-		and	user_id = #{user_id}
+		where 1 = 1
+		and user_id = #{user_id}
 		and store_id = #{store_id}
+		ORDER BY add_time DESC	
 	</select>
 	
 	<!-- 列表 -->

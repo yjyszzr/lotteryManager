@@ -69,6 +69,8 @@ public interface UserAccountManagerManager {
 	 */
 	public PageData findById(PageData pd) throws Exception;
 
+	public List<PageData> findByUserIdStoreId(PageData pd) throws Exception;
+	
 	/**
 	 * 批量删除
 	 * 
@@ -127,6 +129,8 @@ public interface UserAccountManagerManager {
 	 * @throws Exception
 	 */
 	public List<PageData> findByProcessType(Page page) throws Exception;
+
+	
 	
 	/****
 	 * 根据交易号查询交易记录

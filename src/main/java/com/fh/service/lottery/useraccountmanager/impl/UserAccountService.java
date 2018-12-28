@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import com.fh.dao.DaoSupport3;
+import com.fh.dao.DaoSupport4;
 import com.fh.entity.Page;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.util.PageData;
@@ -17,11 +18,11 @@ import com.fh.util.PageData;
  * 
  * @version
  */
-@Service("useraccountmanagerService")
-public class UserAccountManagerService implements UserAccountManagerManager {
+@Service("useraccountService")
+public class UserAccountService implements UserAccountManagerManager {
 
-	@Resource(name = "daoSupport3")
-	private DaoSupport3 dao;
+	@Resource(name = "daoSupport4")
+	private DaoSupport4 dao;
 
 	/**
 	 * 新增
@@ -95,7 +96,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	public List<PageData> findByUserIdStoreId(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByUserIdStoreId", pd);
 	}
-
+ 
 
 	/**
 	 * 批量删除
