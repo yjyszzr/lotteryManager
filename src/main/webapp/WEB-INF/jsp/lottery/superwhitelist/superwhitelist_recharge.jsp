@@ -12,6 +12,16 @@
 	<base href="<%=basePath%>">
 	<!-- 下拉框 -->
 	<link rel="stylesheet" href="static/ace/css/chosen.css" />
+	<!-- 删除时确认窗口 -->
+	<script src="static/ace/js/bootbox.js"></script>
+	<!-- ace scripts -->
+	<script src="static/ace/js/ace/ace.js"></script>
+	<!-- 下拉框 -->
+	<script src="static/ace/js/chosen.jquery.js"></script>
+	<!-- 日期框 -->
+	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+	<!--提示框-->
+	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../../system/index/top.jsp"%>
 	<!-- 日期框 -->
@@ -28,7 +38,8 @@
 					<div class="col-xs-12">
 					
 					<form action="superwhitelist/${msg}.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="id" id="id" value="${pd.id}"/>
+						<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
+						<input type="hidden" name="store_id" id="store_id" value="${pd.store_id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -39,19 +50,19 @@
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
-								<td>									
+								<td id="user_name">									
 								 	${pd.user_name}
 								 </td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">店铺:</td>
-								<td>
+								<td id="store_name">
 									${pd.name}
 								</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">账户余额:</td>
-								<td>
+								<td id="money">
 									${pd.money}
 								</td>
 							</tr>
@@ -104,16 +115,16 @@
 		$(top.hangge());
 		//保存
 		function save(){
-			if($("#user_name").val()==""){
-				$("#user_name").tips({
-					side:3,
-		            msg:'请输入备注2',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#user_name").focus();
-			return false;
-			}
+// 			if($("#user_name").val()==""){
+// 				$("#user_name").tips({
+// 					side:3,
+// 		            msg:'请输入备注2',
+// 		            bg:'#AE81FF',
+// 		            time:2
+// 		        });
+// 				$("#user_name").focus();
+// 			return false;
+// 			}
 			if($("#email").val()==""){
 				$("#email").tips({
 					side:3,
@@ -124,6 +135,19 @@
 				$("#email").focus();
 			return false;
 			}
+			
+			var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "")
+			if($("#number").val() < 0){
+				$("#number").tips({
+					side:3,
+		            msg:'充值金额应大于0',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#frozen_money").focus();
+				return false;
+			}
+			
 			if($("#password").val()==""){
 				$("#password").tips({
 					side:3,
@@ -204,10 +228,10 @@
 				$("#user_money_limit").focus();
 			return false;
 			}
-			if($("#frozen_money").val()==""){
-				$("#frozen_money").tips({
+			if($("#number").val()==""){
+				$("#number").tips({
 					side:3,
-		            msg:'请输入备注14',
+		            msg:'请输入充值金额',
 		            bg:'#AE81FF',
 		            time:2
 		        });
@@ -484,7 +508,35 @@
 				$("#is_super_white").focus();
 			return false;
 			}
-			$("#Form").submit();
+			
+// 			var str = "请确认"
+			
+// 			alert("-1");
+// 			bootbox.confirm(str, function(result) {
+// 				alert("0");
+// 				if(result) {
+// 					top.jzts();
+// 					alert("1");				
+// 					$("#Form").submit();
+// 				}
+// 			});
+			
+// 			alert("2");
+
+			var str = "请确认，\n"
+					+ "\n用户名：" + $("#user_name").text().replace(/(^\s*)|(\s*$)/g, "")
+					+ "\n店铺：" + $("#store_name").text().replace(/(^\s*)|(\s*$)/g, "")
+					+ "\n充值金额：" + $("#number").val() 
+					;
+// 			alert("str=" + str)
+			if (window.confirm(str)) {
+				$("#Form").submit();
+                return true;
+             }else{
+                //alert("取消");
+                return false;
+            }
+			
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
 		}

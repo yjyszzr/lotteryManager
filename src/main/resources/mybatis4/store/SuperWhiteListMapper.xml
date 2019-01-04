@@ -156,11 +156,24 @@
 	</delete>
 	
 	<update id="recharge" parameterType="pd">
-		update dl_user_store_money 
-		set money = money<if test="type == 1">+</if><if test="type == 0">-</if>#{number}, 
-		last_time = #{last_time}  
-		WHERE id = #{id}
+		INSERT INTO dl_user_store_money(user_id, store_id, money, last_time) VALUES(#{user_id}, #{store_id}, #{number}, #{last_time})
+		ON DUPLICATE KEY
+		UPDATE money = money + #{number}, 
+		user_id = #{user_id},
+		store_id = #{store_id},
+		last_time = #{last_time}
 	</update>
+	
+	
+	<update id="deduction" parameterType="pd">
+		INSERT INTO dl_user_store_money(user_id, store_id, money, last_time) VALUES(#{user_id}, #{store_id}, -#{number}, #{last_time})
+		ON DUPLICATE KEY
+		UPDATE money = money - #{number}, 
+		user_id = #{user_id},
+		store_id = #{store_id},
+		last_time = #{last_time}
+	</update>
+	
 	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
@@ -211,18 +224,30 @@
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		SELECT user_store_money.store_id, user_store_money.user_id, user.user_name, user.nickname, user.mobile, user_store_money.money, store.name, user_store_money.id 
-		FROM dl_user_store_money user_store_money, dl_user user, dl_store store
-        WHERE user_store_money.user_id = user.user_id and user_store_money.store_id = store.id 
-        and user_store_money.id = #{id}
-	</select>
+		SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
+		,user_store_money.id 
+		FROM (dl_store store , dl_user user)
+		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
+		WHERE user.is_super_white = 1
+		and	user.user_id = #{user_id}
+		and store.id = #{store_id}
+	</select>	
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
+		<!-- 
 		SELECT user_store_money.store_id,user_store_money.user_id, user.user_name, user.nickname, user.mobile, user_store_money.money, store.name, user_store_money.id 
 		FROM dl_user_store_money user_store_money, dl_user user, dl_store store
         WHERE user_store_money.user_id = user.user_id AND user_store_money.store_id = store.id
-       
+        and user.is_super_white = 1
+		-->        
+        
+        SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
+		,user_store_money.id 
+		FROM (dl_store store , dl_user user)
+		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
+		WHERE user.is_super_white = 1
+
         <if test="pd.mobile != null and pd.mobile != ''">
 			and user.mobile  
 			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
@@ -233,23 +258,113 @@
  		<if test="pd.user_name != null and pd.user_name != ''"> 
 			and user.user_name LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
 		</if>
+		<if test="pd.store_name!= null and pd.store_name != ''"> 
+			and store.name LIKE CONCAT(CONCAT('%', #{pd.store_name}),'%')
+		</if>
  		<if test="pd.nickname!= null and pd.nickname != ''"> 
 			and user.nickname LIKE CONCAT(CONCAT('%', #{pd.nickname}),'%')
  		</if>
 		<if test="pd.mobile!= null and pd.mobile != ''"> 
 			and user.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
  		</if>
- 		
 	</select>
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
+		SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
+		,user_store_money.id 
+		FROM (dl_store store , dl_user user)
+		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
+		WHERE user.is_super_white = 1
+        <if test="mobile != null and mobile != ''">
+			and user.mobile  
+			LIKE CONCAT(CONCAT('%', #{mobile}),'%')
+		</if>
+		<if test="user_id!= null and user_id != ''"> 
+			and user.user_id LIKE CONCAT(CONCAT('%', #{user_id}),'%')
+ 		</if>
+ 		<if test="user_name != null and user_name != ''"> 
+			and user.user_name LIKE CONCAT(CONCAT('%', #{user_name}),'%')
+		</if>
+		<if test="store_name!= null and store_name != ''"> 
+			and store.name LIKE CONCAT(CONCAT('%', #{store_name}),'%')
+		</if>
+ 		<if test="nickname!= null and nickname != ''"> 
+			and user.nickname LIKE CONCAT(CONCAT('%', #{nickname}),'%')
+ 		</if>
+		<if test="mobile!= null and mobile != ''"> 
+			and user.mobile LIKE CONCAT(CONCAT('%', #{mobile}),'%')
+ 		</if>
 	</select>
 	
+	<select id="datalistAccountPage" parameterType="page" resultType="pd">
+		SELECT user.`mobile`, store.`name`, user_account.* 
+		FROM `dl_user_account` user_account, `dl_user` user, `dl_store` store
+		WHERE user_account.`user_id` = user.user_id AND user_account.`store_id` = store.`id`
+		<if test="pd.user_id!= null and pd.user_id != ''"> 
+		and user_account.user_id LIKE CONCAT(CONCAT('%', #{pd.user_id}),'%')
+		</if>
+		<if test="pd.user_id!= null and pd.user_id != ''"> 
+		and user_account.user_id LIKE CONCAT(CONCAT('%', #{pd.user_id}),'%')
+		</if>
+		<if test="pd.store_id!= null and pd.store_id != ''"> 
+		and user_account.store_id LIKE CONCAT(CONCAT('%', #{pd.store_id}),'%')
+ 		</if> 
+ 		
+ 		<if test="pd.store_name!= null and pd.store_name != ''"> 
+		and store.name LIKE CONCAT(CONCAT('%', #{pd.store_name}),'%')
+		</if>
+		
+		<if test="pd.end_add_time!= null and pd.end_add_time != ''"> 
+		AND user_account.`add_time` &lt;= #{pd.end_add_time}
+ 		</if>
+		<if test="pd.start_add_time!= null and pd.start_add_time != ''"> 
+		AND user_account.`add_time` &gt;= #{pd.start_add_time}
+ 		</if>
+ 		<if test="pd.process_type!= null and pd.process_type != ''"> 
+		AND user_account.`process_type` = #{pd.process_type}
+ 		</if>
+ 		<if test="pd.process_type == null or pd.process_type == ''"> 
+		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
+ 		</if>
+ 		order by user_account.add_time desc
+	</select>
+	
+	<select id="datalistStore" parameterType="pd" resultType="pd">
+		SELECT * FROM `dl_store`
+	</select>
+	
+	<select id="datalistAccount" parameterType="pd" resultType="pd">
+		SELECT user.`mobile`, store.`name`, user_account.* 
+		FROM `dl_user_account` user_account, `dl_user` user, `dl_store` store
+		WHERE user_account.`user_id` = user.user_id AND user_account.`store_id` = store.`id`
+		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
+		<if test="user_id!= null and user_id != ''"> 
+		and user_account.user_id LIKE CONCAT(CONCAT('%', #{user_id}),'%')
+		</if>
+		<if test="store_id!= null and store_id != ''"> 
+		and user_account.store_id LIKE CONCAT(CONCAT('%', #{store_id}),'%')
+ 		</if> 
+ 		<if test="store_name!= null and store_name != ''"> 
+		and store.name LIKE CONCAT(CONCAT('%', #{store_name}),'%')
+		</if>
+		<if test="end_add_time!= null and end_add_time != ''"> 
+		AND user_account.`add_time` &lt;= #{end_add_time}
+ 		</if>
+		<if test="start_add_time!= null and start_add_time != ''"> 
+		AND user_account.`add_time` &gt;= #{start_add_time}
+ 		</if>
+ 		<if test="process_type!= null and process_type != ''"> 
+		AND user_account.`process_type` = #{process_type}
+ 		</if>
+ 	 	<if test="process_type == null or process_type == ''"> 
+		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
+ 		</if>
+ 		order by user_account.add_time desc
+	</select>
+	
+	
+	 
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from

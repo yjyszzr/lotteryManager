@@ -32,157 +32,17 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">手机号:</td>
+								<td><input type="text" name="mobile" id="mobile" value="${pd.mobile}" maxlength="255" placeholder="这里输入手机号" title="这里输入手机号" style="width:98%;"/></td>
+							</tr>
+							
+							<!-- 
+							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">备注2:</td>
 								<td><input type="text" name="user_name" id="user_name" value="${pd.user_name}" maxlength="60" placeholder="这里输入备注2" title="备注2" style="width:98%;"/></td>
 							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注4:</td>
-								<td><input type="text" name="email" id="email" value="${pd.email}" maxlength="100" placeholder="这里输入备注4" title="备注4" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注5:</td>
-								<td><input type="text" name="password" id="password" value="${pd.password}" maxlength="255" placeholder="这里输入备注5" title="备注5" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注6:</td>
-								<td><input type="text" name="salt" id="salt" value="${pd.salt}" maxlength="100" placeholder="这里输入备注6" title="备注6" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注7:</td>
-								<td><input type="text" name="nickname" id="nickname" value="${pd.nickname}" maxlength="200" placeholder="这里输入备注7" title="备注7" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注8:</td>
-								<td><input type="number" name="sex" id="sex" value="${pd.sex}" maxlength="32" placeholder="这里输入备注8" title="备注8" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注9:</td>
-								<td><input type="number" name="birthday" id="birthday" value="${pd.birthday}" maxlength="32" placeholder="这里输入备注9" title="备注9" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注10:</td>
-								<td><input type="text" name="detail_address" id="detail_address" value="${pd.detail_address}" maxlength="255" placeholder="这里输入备注10" title="备注10" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注11:</td>
-								<td><input type="text" name="headimg" id="headimg" value="${pd.headimg}" maxlength="255" placeholder="这里输入备注11" title="备注11" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注13:</td>
-								<td><input type="text" name="user_money_limit" id="user_money_limit" value="${pd.user_money_limit}" maxlength="22" placeholder="这里输入备注13" title="备注13" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注14:</td>
-								<td><input type="text" name="frozen_money" id="frozen_money" value="${pd.frozen_money}" maxlength="22" placeholder="这里输入备注14" title="备注14" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注15:</td>
-								<td><input type="number" name="pay_point" id="pay_point" value="${pd.pay_point}" maxlength="32" placeholder="这里输入备注15" title="备注15" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注16:</td>
-								<td><input type="number" name="rank_point" id="rank_point" value="${pd.rank_point}" maxlength="32" placeholder="这里输入备注16" title="备注16" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注17:</td>
-								<td><input type="number" name="reg_time" id="reg_time" value="${pd.reg_time}" maxlength="32" placeholder="这里输入备注17" title="备注17" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注18:</td>
-								<td><input type="text" name="reg_ip" id="reg_ip" value="${pd.reg_ip}" maxlength="40" placeholder="这里输入备注18" title="备注18" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注19:</td>
-								<td><input type="number" name="last_time" id="last_time" value="${pd.last_time}" maxlength="32" placeholder="这里输入备注19" title="备注19" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注20:</td>
-								<td><input type="text" name="last_ip" id="last_ip" value="${pd.last_ip}" maxlength="40" placeholder="这里输入备注20" title="备注20" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注21:</td>
-								<td><input type="text" name="mobile_supplier" id="mobile_supplier" value="${pd.mobile_supplier}" maxlength="255" placeholder="这里输入备注21" title="备注21" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注22:</td>
-								<td><input type="text" name="mobile_province" id="mobile_province" value="${pd.mobile_province}" maxlength="255" placeholder="这里输入备注22" title="备注22" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注23:</td>
-								<td><input type="text" name="mobile_city" id="mobile_city" value="${pd.mobile_city}" maxlength="255" placeholder="这里输入备注23" title="备注23" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注24:</td>
-								<td><input type="text" name="reg_from" id="reg_from" value="${pd.reg_from}" maxlength="10" placeholder="这里输入备注24" title="备注24" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注25:</td>
-								<td><input type="text" name="surplus_password" id="surplus_password" value="${pd.surplus_password}" maxlength="255" placeholder="这里输入备注25" title="备注25" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注26:</td>
-								<td><input type="text" name="pay_pwd_salt" id="pay_pwd_salt" value="${pd.pay_pwd_salt}" maxlength="100" placeholder="这里输入备注26" title="备注26" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注27:</td>
-								<td><input type="number" name="user_status" id="user_status" value="${pd.user_status}" maxlength="32" placeholder="这里输入备注27" title="备注27" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注28:</td>
-								<td><input type="number" name="pass_wrong_count" id="pass_wrong_count" value="${pd.pass_wrong_count}" maxlength="32" placeholder="这里输入备注28" title="备注28" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注29:</td>
-								<td><input type="number" name="user_type" id="user_type" value="${pd.user_type}" maxlength="32" placeholder="这里输入备注29" title="备注29" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注30:</td>
-								<td><input type="text" name="is_real" id="is_real" value="${pd.is_real}" maxlength="10" placeholder="这里输入备注30" title="备注30" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注31:</td>
-								<td><input type="text" name="user_remark" id="user_remark" value="${pd.user_remark}" maxlength="21845" placeholder="这里输入备注31" title="备注31" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注32:</td>
-								<td><input type="number" name="add_time" id="add_time" value="${pd.add_time}" maxlength="32" placeholder="这里输入备注32" title="备注32" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注33:</td>
-								<td><input type="text" name="push_key" id="push_key" value="${pd.push_key}" maxlength="80" placeholder="这里输入备注33" title="备注33" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注34:</td>
-								<td><input type="text" name="device_channel" id="device_channel" value="${pd.device_channel}" maxlength="16" placeholder="这里输入备注34" title="备注34" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注35:</td>
-								<td><input type="number" name="is_business" id="is_business" value="${pd.is_business}" maxlength="32" placeholder="这里输入备注35" title="备注35" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注36:</td>
-								<td><input type="number" name="lon" id="lon" value="${pd.lon}" maxlength="32" placeholder="这里输入备注36" title="备注36" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注37:</td>
-								<td><input type="number" name="lat" id="lat" value="${pd.lat}" maxlength="32" placeholder="这里输入备注37" title="备注37" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注38:</td>
-								<td><input type="text" name="city" id="city" value="${pd.city}" maxlength="20" placeholder="这里输入备注38" title="备注38" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注39:</td>
-								<td><input type="text" name="province" id="province" value="${pd.province}" maxlength="20" placeholder="这里输入备注39" title="备注39" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注40:</td>
-								<td><input type="number" name="has_third_user_id" id="has_third_user_id" value="${pd.has_third_user_id}" maxlength="32" placeholder="这里输入备注40" title="备注40" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注41:</td>
-								<td><input type="number" name="is_super_white" id="is_super_white" value="${pd.is_super_white}" maxlength="32" placeholder="这里输入备注41" title="备注41" style="width:98%;"/></td>
-							</tr>
+							 -->
+							
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
