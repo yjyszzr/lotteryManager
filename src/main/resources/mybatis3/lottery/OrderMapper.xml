@@ -301,6 +301,8 @@
 	<!-- 手动支付订单列表 -->
 	<select id="datalistPage2" parameterType="page" resultType="pd">
 		SELECT
+			l.`lottery_name`, 
+			s.`name`,
 			o.order_id order_id,
 			o.order_sn order_sn,
 			u.user_id user_id,
@@ -322,6 +324,8 @@
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
+			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
+			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
 		WHERE o.add_time > 1541520000
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  

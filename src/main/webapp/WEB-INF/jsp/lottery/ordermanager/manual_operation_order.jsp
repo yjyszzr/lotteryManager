@@ -84,7 +84,18 @@
 													<input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:130px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
 													<input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:130px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 												</span>
-										<c:if test="${QX.cha == 1 }">
+										
+											</th>
+											<th>
+										<div class="nav-search">
+												<span class="input-icon" style="width:80px;text-align:right;">
+													手机号:
+												</span>
+												<span class="input-icon">
+													<input type="text" placeholder="手机号" style="width:154px;" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"   onkeyup="value=value.replace(/[^\d]/g,'')"  />
+												</span>
+											</div>
+											<c:if test="${QX.cha == 1 }">
 											<td >
 												<span class="input-icon" style="width:80px;"> </span>
 												<span>
@@ -96,7 +107,8 @@
 												</span>
 												</td>
 										</c:if>
-											</th>
+										</th>
+											
 									
 <%-- 									<c:if test="${QX.toExcel == 1 }"> --%>
 										<th style="vertical-align:top;padding-left:2px">
@@ -118,8 +130,13 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">订单编号</th>
+									<!-- 
 									<th class="center">用户名称</th>
+									 -->
 									<th class="center">手机号</th>
+									<th class="center">购买彩种</th>
+									<th class="center">店铺</th>
+									<th class="center">支付方式</th>
 									<th class="center">投注金额</th>
 									<th class="center">中奖金额</th>
 									<th class="center">购彩时间</th>
@@ -143,8 +160,20 @@
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'><a onclick="toDetail('${var.order_id}');" style=" cursor:pointer;">${var.order_sn}</a></td>
+											<!-- 
 											<td class='center'>${var.user_name}</td>
+											 -->
 											<td class='center'>${var.mobile}</td>
+											<td class='center'>${var.lottery_name}</td>
+											<td class='center'>${var.name}</td>
+											<th class="center">
+												  <c:choose>  
+													   <c:when test="${var.surplus > 0}">余额支付 
+													   </c:when>  
+													   <c:otherwise>线下支付 
+													   </c:otherwise>  
+												</c:choose>  
+											</th>
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.winning_money}</td>
 											<td class='center get_time'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
@@ -184,8 +213,8 @@
 															<c:when test="${var.order_status == 8}">--- ---</c:when>
 													<c:otherwise>
 														<c:choose>
-															<c:when test="${var.mo_add_time  == null or var.mo_add_time == ''}">--- ---</c:when>
-															<c:otherwise>${DateUtil.toSDFTime(var.mo_add_time*1000)}</c:otherwise>
+															<c:when test="${var.add_time  == null or var.add_time == ''}">--- ---</c:when>
+															<c:otherwise>${DateUtil.toSDFTime(var.add_time*1000)}</c:otherwise>
 														</c:choose>
 													</c:otherwise>
 												</c:choose>
@@ -293,6 +322,7 @@
 				$("#lastStart").val("");
 				$("#order_status").empty();
 				$("#mo_status").empty();
+				$("#mobile").val("");
 			}
 			top.jzts();
 			$("#Form").submit();
@@ -398,20 +428,20 @@
 		                    var str ='<span style="font-weight:bold;color:red">00:00:00</span>';  
 		                    var str1 ='<span style="font-weight:bold;color:red">00:'+fz+':'+mz+'</span>';  
 		                    if (overtime<= 0) {  
-		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(8).html( str); 
-								var bjstr =$('.get_set_time tbody  tr').eq(i).find('td').eq(9).text() ;
+		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(9).html( str); 
+								var bjstr =$('.get_set_time tbody  tr').eq(i).find('td').eq(11).text() ;
 								bjstr=Trim(bjstr,'g');
 									console.log("bjstr============================"+bjstr);  
 									console.log("状态============================"+!((bjstr=='已中奖' ) || ( bjstr=='未中奖' )));  
 								if(!((bjstr=='已中奖' ) || ( bjstr=='未中奖' ))){
-			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(12).html( "--");  
+			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(14).html( "--");  
 								}
 		                    }else {  
-		                        $('.get_set_time tbody tr').eq(i).find('td').eq(8).html( str1);  
+		                        $('.get_set_time tbody tr').eq(i).find('td').eq(9).html( str1);  
 		                    }  
-							var str1 =$.trim($('.get_set_time tbody  tr').eq(i).find('td').eq(12).text()) ;
+							var str1 =$.trim($('.get_set_time tbody  tr').eq(i).find('td').eq(14).text()) ;
 							if (str1 == '--') {
-		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(8).html( str);  
+		                        $('.get_set_time tbody  tr').eq(i).find('td').eq(9).html( str);  
 							}
 // 							console.log(i+"============================="+str);  
 			                }  
