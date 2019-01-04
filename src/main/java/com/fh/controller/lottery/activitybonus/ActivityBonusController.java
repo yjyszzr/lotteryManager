@@ -74,12 +74,15 @@ public class ActivityBonusController extends BaseController {
 		}
 		
 		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
-			Number num = Float.parseFloat(pd.getString("recharge_chance"));
-			Integer rechargeChanceInt = num.intValue();
-			NumberFormat numberFormat = NumberFormat.getInstance();  
-			numberFormat.setMaximumFractionDigits(2);    
-			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
-			pd.put("recharge_chance", rechargeChance);
+//			Number num = Float.parseFloat(pd.getString("recharge_chance"));
+//			Integer rechargeChanceInt = num.intValue();
+//			NumberFormat numberFormat = NumberFormat.getInstance();  
+//			numberFormat.setMaximumFractionDigits(2);    
+//			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
+//			pd.put("recharge_chance", rechargeChance);
+			String startTime = pd.getString("start_time");			
+			pd.put("start_time", 0);
+			pd.put("end_time", Integer.valueOf(startTime));			
 		}else {
 			pd.put("recharge_chance", null);
 			pd.put("recharge_card_id", null);
@@ -136,12 +139,12 @@ public class ActivityBonusController extends BaseController {
 		PageData pdOld = activitybonusService.findById(pd);
 		
 		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
-			Number num = Float.parseFloat(pd.getString("recharge_chance"));
-			Integer rechargeChanceInt = num.intValue();
-			NumberFormat numberFormat = NumberFormat.getInstance();  
-			numberFormat.setMaximumFractionDigits(2);    
-			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
-			pd.put("recharge_chance", rechargeChance);
+//			Number num = Float.parseFloat(pd.getString("recharge_chance"));
+//			Integer rechargeChanceInt = num.intValue();
+//			NumberFormat numberFormat = NumberFormat.getInstance();  
+//			numberFormat.setMaximumFractionDigits(2);    
+//			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
+//			pd.put("recharge_chance", rechargeChance);
 		}
 
 		activitybonusService.edit(pd);
@@ -156,7 +159,7 @@ public class ActivityBonusController extends BaseController {
 		logBefore(logger, Jurisdiction.getUsername() + "置顶或者上线操作");
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
 			return;
-		} // 校验权限
+		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		activitybonusService.edit(pd);
@@ -201,13 +204,13 @@ public class ActivityBonusController extends BaseController {
 			String min_goods_amount = pageData.getString("min_goods_amount");
 			String bonusType =  pageData.getString("bonus_type");
 			if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(bonusType)) {
-				String rechargeChance = pageData.getString("recharge_chance");
-				Number num = Float.parseFloat(rechargeChance) * 100;
-				Integer rechargeChanceInt = num.intValue();
-				pageData.put("recharge_chance", rechargeChanceInt+"%");
+//				String rechargeChance = pageData.getString("recharge_chance");
+//				Number num = Float.parseFloat(rechargeChance) * 100;
+//				Integer rechargeChanceInt = num.intValue();
+//				pageData.put("recharge_chance", rechargeChanceInt+"%");
 				pageData.put("recharge_card_name", rechargeCardMap.get(String.valueOf(pageData.get("recharge_card_id"))));
 			}else {
-				pageData.put("recharge_chance", "~");
+//				pageData.put("recharge_chance", "~");
 				pageData.put("recharge_card_name", "~");
 			}
 			
@@ -358,10 +361,9 @@ public class ActivityBonusController extends BaseController {
 		}
 		
 		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
-			String rechargeChance = pd.getString("recharge_chance");
-			Number num = Float.parseFloat(rechargeChance) * 100;
-			Integer rechargeChanceInt = num.intValue();
-			pd.put("recharge_chance", String.valueOf(rechargeChanceInt));
+			String endTime = pd.getString("end_time");
+			pd.put("start_time", Integer.valueOf(endTime));
+			
 		}
 		
 		List<PageData> rechargeCardList = this.createRechareCardList();

@@ -25,6 +25,7 @@
 		is_delete,	
 		add_time,	
 		recharge_card_id,
+		recharge_chance,
 		exchange_points,	
 		exchange_goods_number
 	</sql>
@@ -47,6 +48,7 @@
         #{is_delete},	
         #{add_time},	
         #{recharge_card_id},
+		#{recharge_chance},
         #{exchange_points},	
         #{exchange_goods_number}	
 	</sql>
@@ -72,6 +74,7 @@
 		        is_delete,	
 		        add_time,	
 		        recharge_card_id,
+				recharge_chance,
 		        exchange_points,	
 		        exchange_goods_number	
 		) values (
@@ -102,6 +105,9 @@
 			, bonus_number = #{bonus_number}
 		</if>
 		
+		<if test="recharge_chance != null and recharge_chance != ''">
+			, recharge_chance = #{recharge_chance}
+		</if>
 		<if test="recharge_card_id != null and recharge_card_id != ''">
 			, recharge_card_id = #{recharge_card_id}
 		</if>

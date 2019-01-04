@@ -123,7 +123,7 @@
 										</div>
                               	     </td>                        	
 							</tr>
-							<tr id="chance_tr" style="display: none;">
+							<!--  <tr id="chance_tr" style="display: none;">
 									<td style="text-align: right;" colspan="10">
 	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">充值获赠概率：</label>
                                 	</td>
@@ -132,7 +132,7 @@
 	                                		<input type="number" name="recharge_chance" id="recharge_chance" value="${pd.recharge_chance}" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" min=1 step=1  max=100 style="width:204px;border-radius:5px !important" /> %
                                 		</div>
                                 	</td>                                	                                	
-							</tr>							
+							</tr>	-->						
 							
 							<tr>
 									<td style="text-align: right;" colspan="10">
@@ -140,13 +140,13 @@
                                 	</td>
                                 	<td style="text-align: left;" colspan="10">
 	                                	<div class="col-sm-2">
-	                                  	 	领取之日起<input type="text" id="start_time"  name="start_time" placeholder="0天"    value="${pd.start_time}"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:40px;border-radius:5px !important"/>天开始生效
+	                                  	 	从派发之日记（天数）:<input type="text" id="start_time"  name="start_time" placeholder="0天"    value="${pd.start_time}"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:40px;border-radius:5px !important"/>
 	                               		</div>
 	                                <div class="col-sm-5"> 
 	                                </div>
 	                                </td>
 							</tr>
-							<tr>
+<%-- 							<tr>
 									<td style="text-align: right;" colspan="10">
 	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">优惠券有效日期：</label>
                                 	</td>
@@ -157,7 +157,7 @@
 	                                <div class="col-sm-5"> 
 	                                </div>
 	                                </td>
-							</tr>
+							</tr> --%>
 							<tr>
 								<td style="text-align: center;" colspan="20">
 										<a class="btn btn-mini btn-primary" onclick="save();">保存</a>
@@ -205,7 +205,7 @@
 			}
 
 			var bonusType = $("#bonus_type").val();
-			if(3 == bonusType){
+/* 			if(3 == bonusType){
 				if($("#recharge_chance").val()=="" || $("#recharge_chance").val() < 0 || $("#recharge_chance").val() >100){
 					$("#recharge_chance").tips({
 					side:3,
@@ -216,10 +216,10 @@
 					$("#recharge_chance").focus();
 				return false;
 				}
-			}
+			} */
 
 
-			if($("#start_time").val()==""){
+/* 			if($("#start_time").val()==""){
 				$("#start_time").tips({
 					side:3,
 		            msg:'请输起始天数',
@@ -238,7 +238,7 @@
 		        });
 				$("#end_time").focus();
 			return false;
-			}
+			} */
 
 			$("#Form").submit();
 			$("#zhongxin").hide();
@@ -292,9 +292,9 @@
 		function changeType(value){
 			if("3" == value){
 				var range_style = document.getElementById('range_tr').style;
-				var chance_style = document.getElementById('chance_tr').style;
+				//var chance_style = document.getElementById('chance_tr').style;
 				range_style.display = 'table-row';
-				chance_style.display = 'table-row';
+				//chance_style.display = 'table-row';
 
 				$.ajax({
 					type: "POST",
@@ -311,9 +311,9 @@
 
 			}else{
 				var range_style = document.getElementById('range_tr').style;
-				var chance_style = document.getElementById('chance_tr').style;
+				//var chance_style = document.getElementById('chance_tr').style;
 				range_style.display = 'none';
-				chance_style.display = 'none';			
+				//chance_style.display = 'none';			
 			}
 		}
 		</script>
