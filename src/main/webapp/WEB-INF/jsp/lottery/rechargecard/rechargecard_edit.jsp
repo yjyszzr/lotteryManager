@@ -32,25 +32,25 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr style="display: none;">
-								<td style="width:75px;text-align: right;padding-top: 13px;">充值卡id:</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">优惠券大礼包id:</td>
 								<td><input type="number" name="recharge_card_id" id="recharge_card_id" value="${pd.recharge_card_id}" maxlength="32" placeholder="这里输入备注1" title="备注1" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:95px;text-align: right;padding-top: 13px;">充值卡名称:</td>
-								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="50" placeholder="充值卡名称不能重复,给前端显示,例如:1000元" title="充值卡名称" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
+								<td style="width:95px;text-align: right;padding-top: 13px;">优惠券大礼包名称:</td>
+								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="50" placeholder="优惠券大礼包名称不能重复,给前端显示,例如:1000元优惠券大礼包" title="优惠券大礼包名称" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
 							</tr>
 							<tr>
-								<td style="width:95px;text-align: right;padding-top: 13px;">充值卡描述:</td>
-								<td><input type="text" name="description" id="description" value="${pd.description}" maxlength="200" placeholder="充值卡描述,前端展示,例如最高送多少元" title="充值卡描述" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
+								<td style="width:95px;text-align: right;padding-top: 13px;">优惠券大礼包描述:</td>
+								<td><input type="text" name="description" id="description" value="${pd.description}" maxlength="200" placeholder="优惠券大礼包描述" title="优惠券大礼包描述" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">实际价值:</td>
 								<td><input type="number" name="real_value" id="real_value" value="${pd.real_value}" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" min=1 step=1    style="width:204px;border-radius:5px !important" /></td>
 							</tr>
-							<tr>
+							<!-- <tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">最高送价值:</td>
 								<td><input type="number" name="max_donation" id="max_donation" value="${pd.max_donation}" onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" min=1 step=1  style="width:204px;border-radius:5px !important" /></td>
-							</tr>
+							</tr> -->
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">保存</a>

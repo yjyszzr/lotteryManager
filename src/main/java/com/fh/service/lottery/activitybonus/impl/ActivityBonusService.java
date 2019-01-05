@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fh.config.URLConfig;
 import com.fh.dao.DaoSupport3;
+import com.fh.dao.DaoSupport4;
 import com.fh.entity.Page;
 import com.fh.entity.param.BonusParam;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
@@ -27,8 +28,8 @@ public class ActivityBonusService implements ActivityBonusManager {
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
 	
-	@Resource(name = "daoSupport3")
-	private DaoSupport3 dao;
+	@Resource(name = "daoSupport4")
+	private DaoSupport4 dao;
 
 	/**
 	 * 新增

@@ -153,9 +153,6 @@ public class RechargeCardController extends BaseController {
 		List<PageData>	varList = rechargecardService.list(page);	//列出RechargeCard列表
 		for(PageData pageData:varList) {
 			pageData.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("add_time"))), DateUtilNew.datetimeFormat));
-			if("1".equals(String.valueOf(pageData.get("type")))) {
-				pageData.put("type", "充值赠红包类型 ");
-			}
 		}
 		
 		mv.setViewName("lottery/rechargecard/rechargecard_list");

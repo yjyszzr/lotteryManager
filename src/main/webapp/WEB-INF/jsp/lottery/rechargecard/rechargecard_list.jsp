@@ -41,13 +41,12 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center" style="display: none;">充值卡id</th>
-									<th class="center">充值卡名称</th>
+									<th class="center" style="display: none;">优惠券大礼包id</th>
+									<th class="center">优惠券大礼包名称</th>
 									<th class="center">添加人</th>
 									<th class="center">添加时间</th>
-									<th class="center">充值卡描述</th>
+									<th class="center">优惠券大礼包描述</th>
 									<th class="center">实际价值</th>
-									<th class="center">充值卡类型</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -69,7 +68,6 @@
 											<td class='center'>${var.add_time}</td>
 											<td class='center'>${var.description}</td>
 											<td class='center'>${var.real_value}</td>
-											<td class='center'>${var.type}</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
