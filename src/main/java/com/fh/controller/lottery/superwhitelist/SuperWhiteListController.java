@@ -461,6 +461,18 @@ public class SuperWhiteListController extends BaseController {
 		boolean flag = true;
 		superwhitelistService.recharge(pd);
 		
+//		recharge_card_id
+//		recharge_card_real_value
+		String _recharge_card_id = pd.getString("recharge_card_id");
+		String recharge_card_id = "";
+		String recharge_card_real_value = "";
+		if (null != _recharge_card_id && !"".equals(_recharge_card_id)) {
+			recharge_card_id = _recharge_card_id.split("\\,")[0].toString();
+			recharge_card_real_value = _recharge_card_id.split("\\,")[1].toString(); 
+			pd.put("recharge_card_id", recharge_card_id);
+			pd.put("recharge_card_real_value", recharge_card_real_value);
+		}
+		
 		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
 		pd.put("admin_user", user.getNAME());
@@ -479,6 +491,7 @@ public class SuperWhiteListController extends BaseController {
 		}
 		pd.put("status", "1");
 		pd.put("id", "");
+		
 		userAccountManagerService.save(pd);
 				
 		if (null != pd.getString("recharge_card_id") && !"".equals(pd.getString("recharge_card_id"))) {

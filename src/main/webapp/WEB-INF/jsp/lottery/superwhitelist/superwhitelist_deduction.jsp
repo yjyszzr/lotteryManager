@@ -116,7 +116,7 @@
 				return false;
 			}
 			var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "")
-			if($("#number").val() > money){
+			if(parseFloat($("#number").val()) > parseFloat(money)){
 				$("#number").tips({
 					side:3,
 		            msg:'扣款金额应小于或等于帐户余额',

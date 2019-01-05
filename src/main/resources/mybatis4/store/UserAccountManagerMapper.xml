@@ -81,6 +81,11 @@
 	        bonus_price,	
 	        store_id,
 	        status	
+	        
+	        <if test="recharge_card_id != null and recharge_card_id != ''">
+	        , recharge_card_id
+	        , recharge_card_real_value
+	        </if>
 		) values (
 		 	#{account_sn},	
 	        #{user_id},	
@@ -102,6 +107,10 @@
 	        #{bonus_price},	
 	        #{store_id},	
 	        #{status}	
+	         <if test="recharge_card_id != null and recharge_card_id != ''">
+	        , #{recharge_card_id}
+	        , #{recharge_card_real_value}
+	        </if>
 		)
 	</insert>
 	
@@ -145,6 +154,15 @@
 		and user_id = #{user_id}
 		and store_id = #{store_id}
 		ORDER BY add_time DESC	
+	</select>
+	
+	<select id="getUserByUserId" parameterType="pd" resultType="pd">
+		select 
+		*
+		from 
+		dl_user
+		where 
+			user_id = #{user_id}
 	</select>
 	
 	<!-- 列表 -->

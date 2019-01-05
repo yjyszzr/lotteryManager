@@ -31,6 +31,7 @@ import com.fh.enums.MatchResultHafuEnum;
 import com.fh.service.lottery.artifiprintlottery.ArtifiPrintLotteryManager;
 import com.fh.service.lottery.logoperation.LogOperationManager;
 import com.fh.service.lottery.order.OrderManager;
+import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.system.user.UserManager;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
@@ -59,6 +60,11 @@ public class OrderManagerController extends BaseController {
 
 	@Resource(name="artifiprintlotteryService")
 	private ArtifiPrintLotteryManager artifiprintlotteryService;
+	
+	@Resource(name="useraccountService")
+	private UserAccountManagerManager UserAccountService;
+	
+	
 	/**
 	 * 列表
 	 * 
@@ -143,6 +149,8 @@ public class OrderManagerController extends BaseController {
 				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
+				
+				
 			}
 		}
 		mv.setViewName("lottery/ordermanager/ordermanager_list");
@@ -210,6 +218,23 @@ public class OrderManagerController extends BaseController {
 				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
+				
+				try {
+					String store_id = varList.get(i).getString("store_id");
+					String user_id = varList.get(i).getString("user_id");
+					if (null != store_id && !"".equals(store_id)
+						&& new Long(store_id) > 0	
+					) {
+						PageData _pd = new PageData();
+						_pd.put("user_id", user_id);
+						PageData user = this.UserAccountService.getUserByUserId(_pd);
+						varList.get(i).put("mobile", user.getString("mobile"));
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				
 			}
 		}
 		int printNum = 0;

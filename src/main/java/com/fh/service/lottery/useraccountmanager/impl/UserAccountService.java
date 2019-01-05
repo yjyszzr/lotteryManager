@@ -92,6 +92,15 @@ public class UserAccountService implements UserAccountManagerManager {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.findById", pd);
 	}
 	
+	
+	
+	
+	public PageData getUserByUserId(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("UserAccountManagerMapper.getUserByUserId", pd);
+	}
+	
+	
+	
 	@Override
 	public List<PageData> findByUserIdStoreId(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByUserIdStoreId", pd);

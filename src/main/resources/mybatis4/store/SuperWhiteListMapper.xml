@@ -192,7 +192,7 @@
 			#{receive_time} AS receive_time,
 			0 AS used_time,
 			#{add_time} AS start_time,
-			#{add_time} + activity_bonus.end_time*3600 AS end_time,
+			#{add_time} + activity_bonus.end_time*86400 AS end_time,
 			#{add_time} AS add_time,
 			"" AS order_sn,
 			0 AS bonus_status,

@@ -88,7 +88,7 @@
 									  <select  name="recharge_card_id" id="recharge_card_id" value=""  style="width:204px;border-radius:5px !important">
 									  			<option  value="">不使用大礼包</option>
       											<c:forEach items="${pd.rechargeCardList}" var="rechargeCard">
-									        		<option  value="${rechargeCard.recharge_card_id }"  >${rechargeCard.name}</option>
+									        		<option  value="${rechargeCard.recharge_card_id},${rechargeCard.real_value}"  >${rechargeCard.name}</option>
 									    	</c:forEach>
 									    </select>
 								</td>

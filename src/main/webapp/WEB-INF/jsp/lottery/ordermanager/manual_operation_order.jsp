@@ -144,6 +144,7 @@
 									<th class="center">订单状态</th>
 									<th class="center">手动出票状态</th>
 									<th class="center">手动出票时间</th>
+									<th class="center">代金卷金额</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -213,13 +214,17 @@
 															<c:when test="${var.order_status == 8}">--- ---</c:when>
 													<c:otherwise>
 														<c:choose>
-															<c:when test="${var.add_time  == null or var.add_time == ''}">--- ---</c:when>
-															<c:otherwise>${DateUtil.toSDFTime(var.add_time*1000)}</c:otherwise>
+															<c:when test="${var.mo_add_time  == null or var.mo_add_time == ''}">--- ---</c:when>
+															<c:otherwise>${DateUtil.toSDFTime(var.mo_add_time*1000)}</c:otherwise>
 														</c:choose>
 													</c:otherwise>
 												</c:choose>
 														
 													</td>
+													
+											<td class='center'> 
+												${var.bonus}
+											</td>		
 											<td class='center'>  
 												<c:choose>
 													<c:when test="${var.order_status == 0}">

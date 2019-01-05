@@ -305,7 +305,7 @@
 			s.`name`,
 			o.order_id order_id,
 			o.order_sn order_sn,
-			u.user_id user_id,
+			o.user_id user_id,
 			u.user_name user_name,
 			u.mobile mobile,
 			o.order_status order_status,
@@ -319,7 +319,9 @@
 			o.pay_time pay_time,
 			o.pay_status pay_status,
 			a.order_status mo_status,
-			a.operation_time mo_add_time
+			a.operation_time mo_add_time,
+			o.store_id 
+			 
 		FROM
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
@@ -327,7 +329,7 @@
 			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
 			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
 		WHERE o.add_time > 1541520000
-		AND u.`user_id` IS NOT NULL
+		 
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  
 				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')

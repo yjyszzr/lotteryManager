@@ -68,6 +68,8 @@ public interface UserAccountManagerManager {
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception;
+	
+	public PageData getUserByUserId(PageData pd) throws Exception;
 
 	public List<PageData> findByUserIdStoreId(PageData pd) throws Exception;
 	
