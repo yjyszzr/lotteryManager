@@ -70,7 +70,12 @@
 									</div>
 								</td>
 								<td>
-									 &nbsp;
+									<div class="nav-search">
+											店铺:
+										<span class="input-icon">
+											<input type="text" placeholder="店铺" class="nav-search-input" id="store_name" autocomplete="off" name="store_name" value="${pd.store_name}"  />
+										</span>
+									</div>
 								</td>
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align:top;padding-left:2px">
@@ -82,7 +87,12 @@
 										<span>
 												<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
 										</span>
+										<span class="input-icon" style="width:23px;"> </span>
+										<span>
+												<a class="btn btn-light btn-xs blue" onclick="toExcel();"  title="导出到Excel"  style="border-radius:5px;color:blue !important; width:50px">EXCEL</a>
+										</span>
 									</td>
+									
 								</c:if>
 								<!--
 								<c:if test="${QX.toExcel == 1 }">
@@ -106,6 +116,26 @@
 									</td>
 								</c:if>
 							</tr>
+							
+							
+							<!-- 
+							<tr style="margin:2px">
+								<td >
+									<div class="nav-search">
+										<a class="btn btn-xs btn-success" title="新增" onclick="add();">
+											<i class="ace-icon fa fa-pencil-square-o bigger-120" title="新增">新增</i>
+										</a>
+									</div>
+								</td>
+								<td>
+									<div class="nav-search">
+										 
+									</div>
+								</td>
+								
+							</tr>
+							 -->
+							 
 						</table>
 					 
 						
@@ -114,9 +144,11 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
+									<!-- 
 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
+									 -->
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">用户id</th>
 									<!-- 
@@ -179,20 +211,22 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
+											<!-- 
 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.user_id_id}" class="ace" /><span class="lbl"></span></label>
 											</td>
+											 -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.user_id}</td>
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.nickname}</td>
 											<td class='center'>
-												<!-- 
-												<a class="btn btn-xs btn-success" title="查看流水" onclick="userAccounts('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}');">
+												<a title="查看流水" onclick="goListAccount('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}');">
 													${var.mobile}
 												</a>
-												 -->
+												<!-- 
 												 ${var.mobile}	
+												 -->
 											</td>
 											<td class='center'>${var.money}</td>
 											<td class='center'>${var.name}</td>
@@ -249,8 +283,11 @@
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑"></i>
 													</a>
 													 -->
-													<a class="btn btn-xs btn-success" title="充值" onclick="recharge('${var.id}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="充值"></i>
+													<a class="btn btn-xs btn-success" title="充值" 
+													   onclick="recharge('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}');"	   
+													   
+													>
+														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="充值">充值</i>
 													</a>
 													</c:if>
 													<c:if test="${QX.del == 1 }">
@@ -259,8 +296,10 @@
 														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
 													</a>
 													-->
-													<a class="btn btn-xs btn-success" title="扣款" onclick="deduction('${var.id}');">
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="扣款"></i>
+													<a class="btn btn-xs btn-success" title="扣款" 
+														onclick="deduction('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}');"
+													>
+														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="扣款">扣款</i>
 													</a>
 													</c:if>
 												</div>
@@ -370,7 +409,7 @@
 				$("#user_name").val("");
 				$("#nickname").val("");
 				$("#mobile").val("");
-			 
+				$("#store_name").val("");
 			}
 			top.jzts();
 			$("#Form").submit();
@@ -481,12 +520,12 @@
 			 diag.show();
 		}
 		
-		function recharge(Id){
+		function recharge(str){
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="充值";
-			 diag.URL = '<%=basePath%>superwhitelist/goRecharge.do?id='+Id;
+			 diag.URL = '<%=basePath%>superwhitelist/goRecharge.do?'+str;
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
@@ -501,18 +540,18 @@
 			 diag.show();
 		}
 		
-		function userAccounts(str){
-			 alert();
+		function goListAccount(str){
+			 
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="查看流水";
-			 diag.URL = '<%=basePath%>superwhitelist/goUserAccounts.do?' + str;
+			 diag.URL = '<%=basePath%>superwhitelist/listAccount.do?' + str;
 			 /**
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 **/
-			 diag.Width = 900;
+			 diag.Width = 950;
 			 diag.Height = 700;
 			 
 			 diag.Modal = true;				//有无遮罩窗口
@@ -527,12 +566,12 @@
 			 diag.show();
 		}				
 		
-		function deduction(Id){
+		function deduction(str){
 			 top.jzts();
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="扣款";
-			 diag.URL = '<%=basePath%>superwhitelist/goDeduction.do?id='+Id;
+			 diag.URL = '<%=basePath%>superwhitelist/goDeduction.do?' + str;
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 diag.Modal = true;				//有无遮罩窗口
@@ -595,7 +634,25 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>superwhitelist/excel.do';
+			
+			var user_id =  $("#user_id").val();
+			var user_name =  $("#user_name").val();
+			var nickname = $("#nickname").val();
+			var mobile = $("#mobile").val();
+			var store_name = $("#store_name").val();
+			
+			var url = '<%=basePath%>superwhitelist/excel.do?tm=' + new Date().getTime() 
+				+ "&user_id=" + user_id 
+				+ "&user_name=" + user_name		
+				+ "&nickname=" + nickname
+				+ "&mobile=" + mobile
+				+ "&store_name=" + store_name
+				;
+			
+	//			alert("url=" + url);
+			
+			window.location.href= url;
+		
 		}
 	</script>
 

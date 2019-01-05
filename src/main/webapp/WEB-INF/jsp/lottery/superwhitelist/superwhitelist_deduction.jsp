@@ -28,7 +28,8 @@
 					<div class="col-xs-12">
 					
 					<form action="superwhitelist/${msg}.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="id" id="id" value="${pd.id}"/>
+						<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
+						<input type="hidden" name="store_id" id="store_id" value="${pd.store_id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -39,19 +40,19 @@
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
-								<td>									
+								<td id="user_name">									
 								 	${pd.user_name}
 								 </td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">店铺:</td>
-								<td>
+								<td id="store_name">
 									${pd.name}
 								</td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">账户余额:</td>
-								<td>
+								<td id="money">
 									${pd.money}
 								</td>
 							</tr>
@@ -104,16 +105,38 @@
 		$(top.hangge());
 		//保存
 		function save(){
-			if($("#user_name").val()==""){
-				$("#user_name").tips({
+			if($("#number").val()==""){
+				$("#number").tips({
 					side:3,
-		            msg:'请输入备注2',
+		            msg:'请输入扣款金额',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#user_name").focus();
-			return false;
+				$("#frozen_money").focus();
+				return false;
 			}
+			var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "")
+			if($("#number").val() > money){
+				$("#number").tips({
+					side:3,
+		            msg:'扣款金额应小于或等于帐户余额',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#frozen_money").focus();
+				return false;
+			}
+			
+// 			if($("#user_name").val()==""){
+// 				$("#user_name").tips({
+// 					side:3,
+// 		            msg:'请输入备注2',
+// 		            bg:'#AE81FF',
+// 		            time:2
+// 		        });
+// 				$("#user_name").focus();
+// 			return false;
+// 			}
 			if($("#email").val()==""){
 				$("#email").tips({
 					side:3,
@@ -484,6 +507,21 @@
 				$("#is_super_white").focus();
 			return false;
 			}
+			
+			var str = "请确认，\n"
+				+ "\n用户名：" + $("#user_name").text().replace(/(^\s*)|(\s*$)/g, "")
+				+ "\n店铺：" + $("#store_name").text().replace(/(^\s*)|(\s*$)/g, "")
+				+ "\n扣款金额：" + $("#number").val() 
+				;
+// 			alert("str=" + str)
+			if (window.confirm(str)) {
+				$("#Form").submit();
+                return true;
+             }else{
+                //alert("取消");
+                return false;
+            }
+            
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();

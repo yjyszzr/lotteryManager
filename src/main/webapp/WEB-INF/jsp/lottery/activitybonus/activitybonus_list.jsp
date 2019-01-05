@@ -29,7 +29,7 @@
 						<!-- 检索  -->
 						<form action="activitybonus/list.do" method="post" name="Form" id="Form">
 						<div id="zhongxin" style="padding-top: 13px;">
-						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
+						<!--  <table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
 								
 								<td>
@@ -66,7 +66,7 @@
 										</td>
 									</c:if>
 									</tr>
-							</table> <!-- 检索结束 -->
+							</table>  -->
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
@@ -81,7 +81,7 @@
 									<th class="center">彩种限制</th>
 									<th class="center">生效时间</th>
 									<th class="center">有效期</th>
-									<th class="center">充值卡名称</th>
+									<th class="center">优惠券大礼包名称</th>
 															
 									<th class="center">发放数量</th>
 									<th class="center">已领取</th>

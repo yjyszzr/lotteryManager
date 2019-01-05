@@ -61,7 +61,7 @@
 	                                </div>
 	                                </td>
 							</tr>
-							<tr>
+	<!--  						<tr>
 									<td style="text-align: right;" colspan="10">
 	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">优惠券数量：</label>
                                 	</td>
@@ -78,7 +78,7 @@
 	                                <div class="col-sm-5">
 	                                </div>
 	                                </td>
-							</tr>
+							</tr>  -->
 							<tr>
 									<td style="text-align: right;" colspan="10">
 	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">优惠券使用范围：</label>
@@ -97,11 +97,11 @@
                                 	</td>
                                 		<td style="text-align: left;" colspan="10">
 	                                		 <div class="col-sm-4">
-											    <select  name="bonus_type" id="bonus_type" value="${pd.bonus_type}" onchange="changeType(this.value)" style="width:204px;border-radius:5px !important">
-											        <option value="1" <c:if test="${pd.bonus_type==1}">selected</c:if> >注册送红包</option>
-													<option value="2" <c:if test="${pd.bonus_type==2}">selected</c:if> >西安活动红包</option>
+											    <select  name="bonus_type" id="bonus_type" value="${pd.bonus_type}"  style="width:204px;border-radius:5px !important">
+											        <!-- <option value="1" <c:if test="${pd.bonus_type==1}">selected</c:if> >注册送红包</option> -->
+													<!-- <option value="2" <c:if test="${pd.bonus_type==2}">selected</c:if> >西安活动红包</option> -->
 											        <option value="3" <c:if test="${pd.bonus_type==3}">selected</c:if> >充值送红包</option>
-											        <option value="4" <c:if test="${pd.bonus_type==4}">selected</c:if> >指定赠送红包(用于派发)</option>
+											        <!--  <option value="4" <c:if test="${pd.bonus_type==4}">selected</c:if> >指定赠送红包(用于派发)</option> -->
 											    </select>
 											</div>
 	                                	<div class="col-sm-5"> </div>
@@ -109,9 +109,9 @@
 	                                </td>
 							</tr>
 							
-							<tr id="range_tr" style="display: none;">
+							<tr id="range_tr">
 									<td style="text-align: right;" colspan="10">
-	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">充值卡名称：</label>
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">优惠券大礼包名称：</label>
                                 	</td>
 									<td style="text-align: left;" colspan="10">
 										<div class="col-sm-4">
@@ -136,11 +136,11 @@
 							
 							<tr>
 									<td style="text-align: right;" colspan="10">
-	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">优惠券生效日期：</label>
+	                                	<label class="col-sm-3 control-label no-padding-right" for="form-field-1">优惠券有效日期：</label>
                                 	</td>
                                 	<td style="text-align: left;" colspan="10">
 	                                	<div class="col-sm-2">
-	                                  	 	从派发之日记（天数）:<input type="text" id="start_time"  name="start_time" placeholder="0天"    value="${pd.start_time}"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:40px;border-radius:5px !important"/>
+	                                  	 	从派发之日记(天数）:<input type="text" id="start_time"  name="start_time" placeholder="0天"    value="${pd.start_time}"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:40px;border-radius:5px !important"/>
 	                               		</div>
 	                                <div class="col-sm-5"> 
 	                                </div>
@@ -289,7 +289,7 @@
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
 		});
 
-		function changeType(value){
+<%-- 		function changeType(value){
 			if("3" == value){
 				var range_style = document.getElementById('range_tr').style;
 				//var chance_style = document.getElementById('chance_tr').style;
@@ -315,7 +315,7 @@
 				range_style.display = 'none';
 				//chance_style.display = 'none';			
 			}
-		}
+		} --%>
 		</script>
 </body>
 </html>

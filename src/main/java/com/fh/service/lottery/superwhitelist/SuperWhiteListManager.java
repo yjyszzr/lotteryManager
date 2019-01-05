@@ -42,6 +42,18 @@ public interface SuperWhiteListManager{
 	 */
 	public List<PageData> listAll(PageData pd)throws Exception;
 	
+	/**
+	 * 流水（全部）
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> listAccount(Page page)throws Exception;
+	
+	public List<PageData> listAccountAll(PageData pd)throws Exception;
+	
+	public List<PageData> listStoreAll(PageData pd)throws Exception;
+	
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
@@ -55,5 +67,8 @@ public interface SuperWhiteListManager{
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 	
 	public void recharge(PageData pd)throws Exception;
+	
+	public void deduction(PageData pd)throws Exception;
+	
 }
 

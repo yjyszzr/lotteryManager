@@ -63,9 +63,37 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 		return (List<PageData>)dao.findForList("SuperWhiteListMapper.listAll", pd);
 	}
 	
+	/**查流水 
+	 * @param pd
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAccount(Page page)throws Exception{
+		return (List<PageData>)dao.findForList("SuperWhiteListMapper.datalistAccountPage", page);
+	}
+	
+	/**查流水（全部）
+	 * @param pd
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAccountAll(PageData pd)throws Exception{
+		return (List<PageData>)dao.findForList("SuperWhiteListMapper.datalistAccount", pd);
+	}
+	
+	public List<PageData> listStoreAll(PageData pd)throws Exception {
+		return (List<PageData>)dao.findForList("SuperWhiteListMapper.datalistStore", pd);
+	}
+	
 	public void recharge(PageData pd)throws Exception{
 		dao.update("SuperWhiteListMapper.recharge", pd);
 	}
+	
+	public void deduction(PageData pd)throws Exception{
+		dao.update("SuperWhiteListMapper.deduction", pd);
+	}
+	
+	
 	
 	/**通过id获取数据
 	 * @param pd
