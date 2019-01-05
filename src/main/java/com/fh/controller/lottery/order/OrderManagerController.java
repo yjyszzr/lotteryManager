@@ -417,7 +417,8 @@ public class OrderManagerController extends BaseController {
 		titles.add("订单编号"); // 1
 		titles.add("用户昵称"); // 2
 		titles.add("电话"); // 3
-		titles.add("彩种"); // 4
+		titles.add("购买彩种"); // 4
+		titles.add("店铺"); // 4
 		titles.add("投注金额"); // 5
 		titles.add("余额支付"); // 6
 		titles.add("红包支付"); // 7
@@ -501,14 +502,17 @@ public class OrderManagerController extends BaseController {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
 		titles.add("订单编号"); // 1
-		titles.add("用户昵称"); // 2
-		titles.add("电话"); // 3
-		titles.add("投注金额"); // 4
-		titles.add("中奖金额"); // 5
-		titles.add("购彩时间"); // 6
-		titles.add("订单状态"); // 7
-		titles.add("手动出票状态"); // 8
-		titles.add("手动出票时间"); // 9
+		titles.add("手机号"); // 2
+		titles.add("购买彩种");  // 3
+		titles.add("店铺"); // 4
+		titles.add("支付方式"); // 5
+		titles.add("投注金额"); // 6
+		titles.add("中奖金额"); // 7
+		titles.add("购彩时间"); // 8
+		titles.add("支付倒计时"); // 9
+		titles.add("订单状态"); // 10
+		titles.add("手动出票状态"); // 11
+		titles.add("手动出票时间"); // 12
 		dataMap.put("titles", titles);
 		String idsStr = pd.getString("idsStr");
 		String lastStart = pd.getString("lastStart");
@@ -529,14 +533,27 @@ public class OrderManagerController extends BaseController {
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("order_sn")); // 1
-			vpd.put("var2", varOList.get(i).getString("user_name")); // 2
-			vpd.put("var3", varOList.get(i).getString("mobile")); // 3
-			vpd.put("var4", varOList.get(i).getString("ticket_amount")); // 5
-			vpd.put("var5", varOList.get(i).getString("winning_money")); // 6
+			vpd.put("var1", varOList.get(i).getString("order_id")); // 1
+			vpd.put("var2", varOList.get(i).getString("mobile")); // 2
+			vpd.put("var3", varOList.get(i).getString("lottery_name")); // 3
+			vpd.put("var4", varOList.get(i).getString("name")); // 5
+			String surplusStr = "";
+			Double surplus = new Double(varOList.get(i).getString("surplus"));
+			if (surplus > 0) {
+				surplusStr = "余额支付";
+			} else {
+				surplusStr = "线下支付";
+			}
+			vpd.put("var5", surplusStr); // 5
+			vpd.put("var6", varOList.get(i).getString("ticket_amount")); // 6
+			vpd.put("var7", varOList.get(i).getString("winning_money")); // 7
+			
+			vpd.put("var8", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time"))*1000)); // 8
+			
 			BigDecimal big1000 = new BigDecimal(1000);
 			BigDecimal big6 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
-			vpd.put("var6", DateUtil.toSDFTime(Long.parseLong(big6.multiply(big1000).toString()))); // 8
+			vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(big6.multiply(big1000).toString()))); // 9
+			
 			String orderStatus = varOList.get(i).getString("order_status");
 			String orderStatusStr = "";
 			if (orderStatus.equals("0")) {
@@ -562,7 +579,7 @@ public class OrderManagerController extends BaseController {
 			} else if (orderStatus.equals("10")) {
 				orderStatusStr = "已退款";
 			}
-			vpd.put("var7", orderStatusStr); // 7
+			vpd.put("var10", orderStatusStr); // 10
 			
 			String moStatus = varOList.get(i).getString("mo_status");
 			String moStatusStr = "";
@@ -575,14 +592,15 @@ public class OrderManagerController extends BaseController {
 			}else {
 				moStatusStr ="--- ---";
 			}
-			vpd.put("var8", moStatusStr); // 8
+			vpd.put("var11", moStatusStr); // 11
+			
 			BigDecimal bigmo1000 = new BigDecimal(1000);
 			BigDecimal big9 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("mo_add_time")) ? "0" : varOList.get(i).getString("mo_add_time"));
 			BigDecimal bigmo0 = new BigDecimal(0);
 			if (big9.equals(bigmo0)) {
-				vpd.put("var9", "--- ---"); // 9
+				vpd.put("var12", "--- ---"); // 12
 			}else {
-				vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
+				vpd.put("var12", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
 			}
 			varList.add(vpd);
 		}

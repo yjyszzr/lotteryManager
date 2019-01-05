@@ -39,9 +39,9 @@
 								</td>	 
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
-								<td id="user_name">									
-								 	${pd.user_name}
+								<td style="width:75px;text-align: right;padding-top: 13px;">手机号:</td>
+								<td id="mobile">									
+								 	${pd.mobile}
 								 </td>
 							</tr>
 							<tr>
@@ -509,7 +509,7 @@
 			}
 			
 			var str = "请确认，\n"
-				+ "\n用户名：" + $("#user_name").text().replace(/(^\s*)|(\s*$)/g, "")
+				+ "\n手机号：" + $("#mobile").text().replace(/(^\s*)|(\s*$)/g, "")
 				+ "\n店铺：" + $("#store_name").text().replace(/(^\s*)|(\s*$)/g, "")
 				+ "\n扣款金额：" + $("#number").val() 
 				;

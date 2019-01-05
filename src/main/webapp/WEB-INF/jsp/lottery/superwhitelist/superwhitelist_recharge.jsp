@@ -49,9 +49,9 @@
 								</td>	 
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">用户名:</td>
-								<td id="user_name">									
-								 	${pd.user_name}
+								<td style="width:75px;text-align: right;padding-top: 13px;">手机号:</td>
+								<td id="mobile">									
+								 	${pd.mobile}
 								 </td>
 							</tr>
 							<tr>
@@ -79,7 +79,20 @@
 								<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>
 								<td><input type="number" name="number" id="number" value="" maxlength="32" placeholder="这里输入充值金额" title="充值金额" style="width:42%;"/></td>
 							</tr>
-							
+							<tr>
+								<td style="width:110px;text-align: right;padding-top: 13px;">大礼包:</td>
+								<td>
+									<!-- 
+									<input type="number" name="number2" id="number2" value="" maxlength="32" placeholder="这里输入充值送金额" title="这里输入充值送金额" style="width:42%;"/>
+									 -->
+									  <select  name="recharge_card_id" id="recharge_card_id" value=""  style="width:204px;border-radius:5px !important">
+									  			<option  value="">不使用大礼包</option>
+      											<c:forEach items="${pd.rechargeCardList}" var="rechargeCard">
+									        		<option  value="${rechargeCard.recharge_card_id }"  >${rechargeCard.name}</option>
+									    	</c:forEach>
+									    </select>
+								</td>
+							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
 									<a class="btn btn-mini btn-primary" onclick="save();">确认</a>
@@ -524,10 +537,16 @@
 // 			alert("2");
 
 			var str = "请确认，\n"
-					+ "\n用户名：" + $("#user_name").text().replace(/(^\s*)|(\s*$)/g, "")
+					+ "\手机号：" + $("#mobile").text().replace(/(^\s*)|(\s*$)/g, "")
 					+ "\n店铺：" + $("#store_name").text().replace(/(^\s*)|(\s*$)/g, "")
 					+ "\n充值金额：" + $("#number").val() 
 					;
+			
+			if ("" == $("#recharge_card_id").val()) {
+			} else {
+				str += "\n大礼包：" + $("#recharge_card_id option:selected").text();
+			}
+					
 // 			alert("str=" + str)
 			if (window.confirm(str)) {
 				$("#Form").submit();

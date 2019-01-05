@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Resource;
+
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -16,23 +18,22 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
 import com.fh.enums.SNBusinessCodeEnum;
+import com.fh.service.lottery.rechargecard.impl.RechargeCardService;
+import com.fh.service.lottery.superwhitelist.SuperWhiteListManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
+import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.SNGenerator;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
-import com.fh.service.lottery.superwhitelist.SuperWhiteListManager;
-import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
-import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
-import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 
 /** 
  * 说明：超级白名单
@@ -49,6 +50,9 @@ public class SuperWhiteListController extends BaseController {
 	
 	@Resource(name="useraccountService")
 	private UserAccountService userAccountManagerService;
+	
+	@Resource(name="rechargecardService")
+	private RechargeCardService rechargecardService;
 	
 	/**保存
 	 * @param
@@ -270,6 +274,10 @@ public class SuperWhiteListController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = superwhitelistService.findById(pd);	//根据ID读取
+		
+		List<PageData> rechargeCardList = rechargecardService.listAll(pd);
+		pd.put("rechargeCardList", rechargeCardList);
+		
 		mv.setViewName("lottery/superwhitelist/superwhitelist_recharge");
 		mv.addObject("msg", "recharge");
 		mv.addObject("pd", pd);
@@ -473,6 +481,13 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("id", "");
 		userAccountManagerService.save(pd);
 				
+		if (null != pd.getString("recharge_card_id") && !"".equals(pd.getString("recharge_card_id"))) {
+			pd.put("bonus_sn", SNGenerator.nextSN(6));
+			pd.put("receive_time", time);
+			pd.put("add_time", time);
+			superwhitelistService.saveUserBonus(pd);
+		}
+		
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;

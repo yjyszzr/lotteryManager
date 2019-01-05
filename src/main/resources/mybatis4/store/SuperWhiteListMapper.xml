@@ -164,6 +164,47 @@
 		last_time = #{last_time}
 	</update>
 	
+	<update id="saveUserBonus" parameterType="pd">
+		INSERT INTO dl_user_bonus(
+			user_id,				 
+			bonus_id,				 
+			bonus_sn,				 
+			bonus_price,			 
+			receive_time,			 
+			used_time,				 
+			start_time,				 
+			end_time,				 
+			add_time,				 
+			order_sn,				 
+			bonus_status,				 
+			is_delete,				 							 
+			use_range,                
+			min_goods_amount,        
+			is_read,                  
+			pay_log_id,               
+			store_id              
+		)
+		SELECT 
+			#{user_id} AS user_id, 
+			activity_bonus.bonus_id,
+			#{bonus_sn} AS bonus_sn,
+			activity_bonus.bonus_amount,
+			#{receive_time} AS receive_time,
+			0 AS used_time,
+			#{add_time} AS start_time,
+			#{add_time} + activity_bonus.end_time*3600 AS end_time,
+			#{add_time} AS add_time,
+			"" AS order_sn,
+			0 AS bonus_status,
+			0 AS is_delete,
+			0 AS use_range,
+			activity_bonus.min_goods_amount,
+			0 AS is_read,
+			NULL AS pay_log_id,
+			#{store_id}  AS store_id
+		FROM dl_activity_bonus activity_bonus
+		WHERE activity_bonus.recharge_card_id = #{recharge_card_id} 
+	</update>
 	
 	<update id="deduction" parameterType="pd">
 		INSERT INTO dl_user_store_money(user_id, store_id, money, last_time) VALUES(#{user_id}, #{store_id}, -#{number}, #{last_time})

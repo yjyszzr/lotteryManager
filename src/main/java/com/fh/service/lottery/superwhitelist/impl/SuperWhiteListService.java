@@ -29,6 +29,10 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 		dao.save("SuperWhiteListMapper.save", pd);
 	}
 	
+	public void saveUserBonus(PageData pd)throws Exception{
+		dao.save("SuperWhiteListMapper.saveUserBonus", pd);
+	}
+	
 	/**删除
 	 * @param pd
 	 * @throws Exception

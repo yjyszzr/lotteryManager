@@ -18,6 +18,8 @@ public interface SuperWhiteListManager{
 	 */
 	public void save(PageData pd)throws Exception;
 	
+	public void saveUserBonus(PageData pd)throws Exception;
+	
 	/**删除
 	 * @param pd
 	 * @throws Exception

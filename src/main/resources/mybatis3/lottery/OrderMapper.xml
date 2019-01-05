@@ -327,6 +327,7 @@
 			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
 			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
 		WHERE o.add_time > 1541520000
+		AND u.`user_id` IS NOT NULL
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  
 				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
@@ -446,6 +447,8 @@
 		  	LEFT JOIN	dl_ticket_channel channel ON printTemp.print_lottery_com=channel.id
 		where o.order_sn LIKE CONCAT(CONCAT(#{selectionTime}),'%')
 	</select>
+	
+	<!-- 
 	<select id="exportExcelForMOByIds" parameterType="pd" resultType="pd">
 	 select 
 			o.order_id,
@@ -474,6 +477,43 @@
                  #{item}
 		</foreach>
 	</select>
+	 -->
+	 <select id="exportExcelForMOByIds" parameterType="pd" resultType="pd">
+		SELECT
+			l.`lottery_name`, 
+			s.`name`,
+			o.order_id order_id,
+			o.order_sn order_sn,
+			u.user_id user_id,
+			u.user_name user_name,
+			u.mobile mobile,
+			o.order_status order_status,
+			o.pay_name pay_name,
+			o.ticket_amount ticket_amount,
+			o.winning_money winning_money,
+			o.bonus bonus,
+			o.surplus surplus,
+			o.third_party_paid third_party_paid,
+			o.add_time add_time,
+			o.pay_time pay_time,
+			o.pay_status pay_status,
+			a.order_status mo_status,
+			a.operation_time mo_add_time
+		FROM
+			dl_order o
+			LEFT JOIN dl_user u ON o.user_id = u.user_id 
+			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
+			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
+			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
+		WHERE o.add_time > 1541520000
+		AND u.`user_id` IS NOT NULL
+			 	and o.order_id IN  
+	 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
+	
+	<!-- 
 	<select id="exportExcelForMO" parameterType="pd" resultType="pd">
 	 select 
 			o.order_id,
@@ -497,6 +537,65 @@
 			LEFT JOIN dl_user u ON o.user_id = u.user_id  
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
 		WHERE o.add_time > 1541520000 and o.order_status  != 8
+			<if test="orderSn != null and orderSn != ''"> 
+			 	and o.order_sn = #{orderSn }
+			</if>
+			<if test="moStatus != null and moStatus != ''"> 
+				<if test="moStatus == 4"> 
+					and a.order_status  is null
+				</if>
+				<if test="moStatus != 4"> 
+					and a.order_status = #{moStatus }
+				</if>
+				
+			</if>
+			<if test="lastStart1 != null and lastStart1 != ''"> 
+				and o.add_time &gt;= #{lastStart1 }
+			</if>
+			<if test="lastEnd1 != null and lastEnd1 != ''"> 
+				and o.add_time &lt;= #{lastEnd1 }
+			</if>
+			<if test="orderStatus != null and orderStatus != ''"> 
+			<if test="orderStatus == 3"> 
+				and o.order_status  IN ( 3, 4, 5, 6, 7,9 )
+			</if>
+			<if test="orderStatus != 3"> 
+				and o.order_status = #{orderStatus }
+			</if>
+		</if>
+	</select>
+	 -->
+	 <select id="exportExcelForMO" parameterType="pd" resultType="pd">
+		SELECT
+			l.`lottery_name`, 
+			s.`name`,
+			o.order_id order_id,
+			o.order_sn order_sn,
+			u.user_id user_id,
+			u.user_name user_name,
+			u.mobile mobile,
+			o.order_status order_status,
+			o.pay_name pay_name,
+			o.ticket_amount ticket_amount,
+			o.winning_money winning_money,
+			o.bonus bonus,
+			o.surplus surplus,
+			o.third_party_paid third_party_paid,
+			o.add_time add_time,
+			o.pay_time pay_time,
+			o.pay_status pay_status,
+			a.order_status mo_status,
+			a.operation_time mo_add_time
+		FROM
+			dl_order o
+			LEFT JOIN dl_user u ON o.user_id = u.user_id 
+			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
+			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
+			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
+		WHERE o.add_time > 1541520000
+		AND u.`user_id` IS NOT NULL
+		
+		and o.order_status  != 8
 			<if test="orderSn != null and orderSn != ''"> 
 			 	and o.order_sn = #{orderSn }
 			</if>
