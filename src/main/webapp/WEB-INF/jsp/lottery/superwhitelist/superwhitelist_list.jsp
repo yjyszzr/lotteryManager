@@ -34,6 +34,7 @@
 						<form action="superwhitelist/list.do" method="post" name="Form" id="Form">
 					 
 						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
+							<!-- 
 							<tr style="margin:2px ">
 								<td>
 									<div class="nav-search">
@@ -59,7 +60,10 @@
 										</span>
 									</div>
 								</td>
-								</tr>
+							</tr>
+							 -->
+								
+								
 								<tr style="margin:2px">
 								<td >
 									<div class="nav-search">
@@ -69,6 +73,8 @@
 										</span>
 									</div>
 								</td>
+								
+								<!-- 
 								<td>
 									<div class="nav-search">
 											店铺:
@@ -77,6 +83,8 @@
 										</span>
 									</div>
 								</td>
+								 -->
+								 
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align:top;padding-left:2px">
 										<span class="input-icon" style="width:40px;"> </span>
