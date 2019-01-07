@@ -536,7 +536,7 @@ public class OrderManagerController extends BaseController {
 		titles.add("投注金额"); // 6
 		titles.add("中奖金额"); // 7
 		titles.add("购彩时间"); // 8
-		titles.add("支付倒计时"); // 9
+//		titles.add("支付倒计时"); // 9
 		titles.add("订单状态"); // 10
 		titles.add("手动出票状态"); // 11
 		titles.add("手动出票时间"); // 12
@@ -561,7 +561,8 @@ public class OrderManagerController extends BaseController {
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("order_id")); // 1
+//			vpd.put("var1", varOList.get(i).getString("order_id")); // 1
+			vpd.put("var1", varOList.get(i).getString("order_sn")); // 1
 			
 			vpd.put("var2", varOList.get(i).getString("mobile")); // 2
 			try {
@@ -596,9 +597,9 @@ public class OrderManagerController extends BaseController {
 			
 			vpd.put("var8", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time"))*1000)); // 8
 			
-			BigDecimal big1000 = new BigDecimal(1000);
-			BigDecimal big6 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
-			vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(big6.multiply(big1000).toString()))); // 9
+//			BigDecimal big1000 = new BigDecimal(1000);
+//			BigDecimal big6 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
+//			vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(big6.multiply(big1000).toString()))); // 9
 			
 			String orderStatus = varOList.get(i).getString("order_status");
 			String orderStatusStr = "";

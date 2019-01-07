@@ -237,7 +237,16 @@
 														</c:choose>
 													</c:when>
 													<c:when test="${var.order_status == 5}">
-														<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.winning_money}');"> 派奖</a>
+														
+														<c:choose>  
+															   <c:when test="${var.surplus <= 0 && var.order_status != 5}">
+															   		<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.winning_money}');"> 派奖</a> 
+															   </c:when>  
+																<c:otherwise>
+															    </c:otherwise>  	
+													    </c:choose>
+													
+													
 <%-- 														<a class="btn btn-xs btn-primary" title="退款" style="border-radius: 5px;" onclick="refundOperation('${var.order_sn}');"> 退款</a> --%>
 													</c:when>
 													<c:when test="${var.order_status == 6}">
