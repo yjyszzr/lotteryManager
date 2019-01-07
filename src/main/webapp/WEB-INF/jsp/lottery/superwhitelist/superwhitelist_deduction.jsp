@@ -127,18 +127,24 @@
 				return false;
 			}
 			
-			var length = $("#number").val().toString().split(".")[1].length
-// 			alert("length=" + length)
-			if (length > 2) {
-				$("#number").tips({
-					side:3,
-		            msg:'小数点位最多支持两位',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#frozen_money").focus();
-				return false;
+		//	alert("----")
+			try {
+				var length = $("#number").val().toString().split(".")[1].length
+// 				alert("length=" + length)
+				if (length > 2) {
+					$("#number").tips({
+						side:3,
+			            msg:'小数点位最多支持两位',
+			            bg:'#AE81FF',
+			            time:2
+			        });
+					$("#frozen_money").focus();
+					return false;
+				}
+			} catch (e) {
+				// TODO: handle exception
 			}
+
 			
 // 			if($("#user_name").val()==""){
 // 				$("#user_name").tips({
