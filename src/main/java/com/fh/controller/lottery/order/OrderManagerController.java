@@ -237,6 +237,7 @@ public class OrderManagerController extends BaseController {
 				
 			}
 		}
+		
 		int printNum = 0;
 		int payNum = 0;
 		Long   mm=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
@@ -251,6 +252,7 @@ public class OrderManagerController extends BaseController {
 		}
 		pd.put("printNum", printNum);
 		pd.put("payNum", payNum);
+		
 		mv.setViewName("lottery/ordermanager/manual_operation_order");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -538,6 +540,7 @@ public class OrderManagerController extends BaseController {
 		titles.add("订单状态"); // 10
 		titles.add("手动出票状态"); // 11
 		titles.add("手动出票时间"); // 12
+		titles.add("代金卷金额");
 		dataMap.put("titles", titles);
 		String idsStr = pd.getString("idsStr");
 		String lastStart = pd.getString("lastStart");
@@ -559,7 +562,25 @@ public class OrderManagerController extends BaseController {
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
 			vpd.put("var1", varOList.get(i).getString("order_id")); // 1
+			
 			vpd.put("var2", varOList.get(i).getString("mobile")); // 2
+			try {
+				String mobile = "";
+				String store_id = varOList.get(i).getString("store_id");
+				String user_id = varOList.get(i).getString("user_id");
+				if (null != store_id && !"".equals(store_id)
+					&& new Long(store_id) > 0	
+				) {
+					PageData _pd = new PageData();
+					_pd.put("user_id", user_id);
+					PageData user = this.UserAccountService.getUserByUserId(_pd);
+					vpd.put("var2", user.getString("mobile")); // 2
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
 			vpd.put("var3", varOList.get(i).getString("lottery_name")); // 3
 			vpd.put("var4", varOList.get(i).getString("name")); // 5
 			String surplusStr = "";
@@ -627,6 +648,9 @@ public class OrderManagerController extends BaseController {
 			}else {
 				vpd.put("var12", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
 			}
+			
+			vpd.put("var13", varOList.get(i).getString("bonus")); 
+			
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

@@ -486,7 +486,7 @@
 			s.`name`,
 			o.order_id order_id,
 			o.order_sn order_sn,
-			u.user_id user_id,
+			o.user_id user_id,
 			u.user_name user_name,
 			u.mobile mobile,
 			o.order_status order_status,
@@ -500,7 +500,9 @@
 			o.pay_time pay_time,
 			o.pay_status pay_status,
 			a.order_status mo_status,
-			a.operation_time mo_add_time
+			a.operation_time mo_add_time,
+			o.store_id 
+			 
 		FROM
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
@@ -508,11 +510,11 @@
 			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
 			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
 		WHERE o.add_time > 1541520000
-		AND u.`user_id` IS NOT NULL
 			 	and o.order_id IN  
 	 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                  #{item}
 		</foreach>
+		order  by 	o.add_time desc
 	</select>
 	
 	<!-- 
@@ -573,7 +575,7 @@
 			s.`name`,
 			o.order_id order_id,
 			o.order_sn order_sn,
-			u.user_id user_id,
+			o.user_id user_id,
 			u.user_name user_name,
 			u.mobile mobile,
 			o.order_status order_status,
@@ -587,7 +589,9 @@
 			o.pay_time pay_time,
 			o.pay_status pay_status,
 			a.order_status mo_status,
-			a.operation_time mo_add_time
+			a.operation_time mo_add_time,
+			o.store_id 
+			 
 		FROM
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
@@ -595,9 +599,6 @@
 			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
 			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
 		WHERE o.add_time > 1541520000
-		AND u.`user_id` IS NOT NULL
-		
-		and o.order_status  != 8
 			<if test="orderSn != null and orderSn != ''"> 
 			 	and o.order_sn = #{orderSn }
 			</if>
@@ -617,13 +618,14 @@
 				and o.add_time &lt;= #{lastEnd1 }
 			</if>
 			<if test="orderStatus != null and orderStatus != ''"> 
-			<if test="orderStatus == 3"> 
-				and o.order_status  IN ( 3, 4, 5, 6, 7,9 )
+				<if test="orderStatus == 3"> 
+					and o.order_status  IN ( 3, 4, 5, 6, 7,9 )
+				</if>
+				<if test="orderStatus != 3"> 
+					and o.order_status = #{orderStatus }
+				</if>
 			</if>
-			<if test="orderStatus != 3"> 
-				and o.order_status = #{orderStatus }
-			</if>
-		</if>
+			order  by 	o.add_time desc
 	</select>
 	
 	<select id="selectByTime" parameterType="String" resultType="pd">
