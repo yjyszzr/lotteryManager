@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RechargeCardMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		dl_donation_recharge_card
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		recharge_card_id,	
+		name,	
+		img_url,	
+		status,	
+		add_user,	
+		add_time,	
+		description,	
+		is_delete,	
+		real_value,
+		max_donation,	
+		type
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{name},	
+        #{img_url},	
+        #{status},	
+        #{add_user},	
+        #{add_time},	
+        #{description},	
+        #{is_delete},	
+        #{real_value},	
+        #{max_donation},
+        #{type}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        name,	
+		        img_url,	
+		        status,	
+		        add_user,	
+		        add_time,	
+		        description,	
+		        is_delete,	
+		        real_value,	
+		        max_donation,
+		        type	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			recharge_card_id = #{recharge_card_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			recharge_card_id = #{recharge_card_id},
+			name = #{name},
+			description = #{description},
+			max_donation = #{max_donation},
+			real_value = #{real_value}
+		where 
+		recharge_card_id= #{recharge_card_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			recharge_card_id = #{recharge_card_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		SELECT
+		a.*,
+		( SELECT count( * ) FROM dl_user_account b WHERE a.recharge_card_id = b.recharge_card_id ) AS receive_quantity
+		FROM
+		dl_donation_recharge_card a
+		where 1=1
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				<!--	根据需求自己加检索条件
+					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				-->
+				)
+		</if>
+		order by add_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>  
+	
+	<select id = "findByRealValue" parameterType="pd" resultType="pd">
+	    select * from dl_donation_recharge_card where real_value = #{real_value}
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			recharge_card_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
