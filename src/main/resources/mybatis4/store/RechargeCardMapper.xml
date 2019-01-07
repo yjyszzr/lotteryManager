@@ -115,7 +115,7 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
-	</select>  
+	</select>
 	
 	<select id = "findByRealValue" parameterType="pd" resultType="pd">
 	    select * from dl_donation_recharge_card where real_value = #{real_value}
