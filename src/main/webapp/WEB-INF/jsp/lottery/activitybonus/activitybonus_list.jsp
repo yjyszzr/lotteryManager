@@ -79,7 +79,6 @@
 									<th class="center">金额</th>
 									<th class="center">使用条件</th>
 									<th class="center">彩种限制</th>
-									<th class="center">生效时间</th>
 									<th class="center">有效期</th>
 									<th class="center">优惠券大礼包名称</th>
 															
@@ -115,7 +114,6 @@
 											<td class='center'> 
 												<c:if test="${var.use_range==0}">通用</c:if>
 											</td>
-											<td class='center'>领取后第${var.start_time}天</td>
 											<td class='center'>${var.end_time}天</td>
 											<td class='center'>${var.recharge_card_name}</td>
 						

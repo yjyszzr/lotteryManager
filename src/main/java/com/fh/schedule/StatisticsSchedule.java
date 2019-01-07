@@ -20,11 +20,11 @@ import com.fh.util.PageData;
 public class StatisticsSchedule {
 	@Resource(name="artifiprintlotteryService")
 	private ArtifiPrintLotteryManager artifiprintlotteryService;
-	
+
 	@Resource(name = "artifiprintlotterystatisticaldataService")
 	private ArtifiPrintLotteryStatisticalDataManager artifiprintlotterystatisticaldataService;
-	
- 
+
+
 	@Scheduled(cron = "52 * * * * ? ")
 	public void moOrderStatistics()   {
 		try {
@@ -57,7 +57,7 @@ public class StatisticsSchedule {
 					String ArrayDATA_IDS[] = orderSn.split(",");
 					artifiprintlotteryService.updatePaidStatisticalByOrderSn(ArrayDATA_IDS);
 			}
-			
+
 			//出票量
 			PageData pdPrint = new PageData();
 			pdPrint =	artifiprintlotteryService.findPrintLimitDay(pdPrint);
@@ -78,7 +78,7 @@ public class StatisticsSchedule {
 					artifiprintlotteryService.updatePrintStatisticalByOrderSn(ArrayDATA_IDS);
 				}
 			}
-			
+
 			//	派奖量
 			PageData pdReward = new PageData();
 			pdReward=artifiprintlotteryService.findRewardLimitDay(pdReward);
@@ -104,6 +104,6 @@ public class StatisticsSchedule {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-	
+
 	}
 }

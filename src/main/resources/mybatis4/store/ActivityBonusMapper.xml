@@ -153,7 +153,7 @@
 		<if test="pd.is_enable!= null and pd.is_enable != ''"> 
 			and a.is_enable = #{pd.is_enable }
 		</if>
-		order by recharge_card_id,add_time DESC
+		order by recharge_card_id asc,add_time desc
 	</select>
 	
 	<!-- 列表(全部) -->
