@@ -81,8 +81,6 @@
 									<th class="center">彩种限制</th>
 									<th class="center">有效期</th>
 									<th class="center">优惠券大礼包名称</th>
-															
-									<th class="center">发放数量</th>
 									<th class="center">已领取</th>
 									<th class="center">已使用</th>
 									<th class="center">状态</th>
@@ -116,8 +114,6 @@
 											</td>
 											<td class='center'>${var.end_time}天</td>
 											<td class='center'>${var.recharge_card_name}</td>
-						
-											<td class='center'>${var.bonus_number}</td>
 											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.use_count}</td>
 											<td class='center'> 
