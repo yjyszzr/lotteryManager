@@ -626,7 +626,7 @@ public class OrderManagerController extends BaseController {
 			} else if (orderStatus.equals("10")) {
 				orderStatusStr = "已退款";
 			}
-			vpd.put("var10", orderStatusStr); // 10
+			vpd.put("var9", orderStatusStr); // 10
 			
 			String moStatus = varOList.get(i).getString("mo_status");
 			String moStatusStr = "";
@@ -639,18 +639,24 @@ public class OrderManagerController extends BaseController {
 			}else {
 				moStatusStr ="--- ---";
 			}
-			vpd.put("var11", moStatusStr); // 11
+			vpd.put("var10", moStatusStr); // 11
 			
-			BigDecimal bigmo1000 = new BigDecimal(1000);
-			BigDecimal big9 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("mo_add_time")) ? "0" : varOList.get(i).getString("mo_add_time"));
-			BigDecimal bigmo0 = new BigDecimal(0);
-			if (big9.equals(bigmo0)) {
-				vpd.put("var12", "--- ---"); // 12
-			}else {
-				vpd.put("var12", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
+//			BigDecimal bigmo1000 = new BigDecimal(1000);
+//			BigDecimal big9 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("mo_add_time")) ? "0" : varOList.get(i).getString("mo_add_time"));
+//			BigDecimal bigmo0 = new BigDecimal(0);
+//			if (big9.equals(bigmo0)) {
+//				vpd.put("var11", "--- ---"); // 12
+//			}else {
+//				vpd.put("var11", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
+//			}
+			try {
+				vpd.put("var11", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time"))*1000));
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
+//			DateUtil.toSDFTime(var.add_time*1000)
 			
-			vpd.put("var13", varOList.get(i).getString("bonus")); 
+			vpd.put("var12", varOList.get(i).getString("bonus")); 
 			
 			varList.add(vpd);
 		}
