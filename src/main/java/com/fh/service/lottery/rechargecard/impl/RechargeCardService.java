@@ -1,15 +1,13 @@
 package com.fh.service.lottery.rechargecard.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
-import com.fh.dao.DaoSupport3;
+import com.fh.dao.DaoSupport4;
 import com.fh.entity.Page;
 import com.fh.service.lottery.rechargecard.RechargeCardManager;
 import com.fh.util.PageData;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /** 
  * 说明： RechargeCard
@@ -20,8 +18,8 @@ import com.fh.util.PageData;
 @Service("rechargecardService")
 public class RechargeCardService implements RechargeCardManager{
 
-	@Resource(name = "daoSupport3")
-	private DaoSupport3 dao;
+	@Resource(name = "daoSupport4")
+	private DaoSupport4 dao;
 	
 	/**新增
 	 * @param pd
