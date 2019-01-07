@@ -43,6 +43,7 @@
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center" style="display: none;">优惠券大礼包id</th>
 									<th class="center">优惠券大礼包名称</th>
+									<th class="center">已领取</th>
 									<th class="center">添加人</th>
 									<th class="center">添加时间</th>
 									<th class="center">优惠券大礼包描述</th>
@@ -64,6 +65,7 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center' style="display: none;">${var.recharge_card_id}</td>
 											<td class='center'>${var.name}</td>
+											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.add_user}</td>
 											<td class='center'>${var.add_time}</td>
 											<td class='center'>${var.description}</td>
