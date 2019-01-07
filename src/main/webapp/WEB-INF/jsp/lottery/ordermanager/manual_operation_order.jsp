@@ -214,8 +214,8 @@
 															<c:when test="${var.order_status == 8}">--- ---</c:when>
 													<c:otherwise>
 														<c:choose>
-															<c:when test="${var.mo_add_time  == null or var.mo_add_time == ''}">--- ---</c:when>
-															<c:otherwise>${DateUtil.toSDFTime(var.mo_add_time*1000)}</c:otherwise>
+															<c:when test="${var.add_time  == null or var.add_time == ''}">--- ---</c:when>
+															<c:otherwise>${DateUtil.toSDFTime(var.add_time*1000)}</c:otherwise>
 														</c:choose>
 													</c:otherwise>
 												</c:choose>
@@ -226,45 +226,36 @@
 												${var.bonus}
 											</td>		
 											<td class='center'>  
+											
 												<c:choose>
-													<c:when test="${var.order_status == 0}">
-														<c:choose>
-															<c:when test="${var.pay_status == 0}">
-																<a class="btn btn-xs btn-success" title="确认付款" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',1,'${var.ticket_amount}');"> 确认付款</a>
-<%-- 																<a class="btn btn-xs btn-default" title="取消" style="border-radius: 5px;  color:#yellow" onclick="operationOrder('${var.order_sn}',2,'${var.ticket_amount}');"> 取消</a> --%>
-															</c:when>
-															<c:otherwise>--</c:otherwise>
-														</c:choose>
+													<c:when test="${var.order_status == 0 && var.pay_status == 0}"> 
+														<a class="btn btn-xs btn-success" title="确认付款" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',1,'${var.ticket_amount}');"> 确认付款</a>
 													</c:when>
-													<c:when test="${var.order_status == 5}">
-														
-														<c:choose>  
-															   <c:when test="${var.surplus <= 0 && var.order_status != 5}">
-															   		<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.winning_money}');"> 派奖</a> 
-															   </c:when>  
-																<c:otherwise>
-															    </c:otherwise>  	
-													    </c:choose>
-													
-													
-<%-- 														<a class="btn btn-xs btn-primary" title="退款" style="border-radius: 5px;" onclick="refundOperation('${var.order_sn}');"> 退款</a> --%>
-													</c:when>
-													<c:when test="${var.order_status == 6}">
-														<span>大额订单先审核</span>
-													</c:when>
-													<c:when test="${var.order_status == 4}">
-															<c:choose>
-															<c:when test="${var.mo_status == 0}">
-																	<a class="btn btn-xs btn-primary" title="退款" style="border-radius: 5px;" onclick="refundOperation('${var.order_sn}');"> 退款</a>
-															</c:when>
-															<c:when test="${var.mo_status == 2}">
-																	<a class="btn btn-xs btn-primary" title="退款" style="border-radius: 5px;" onclick="refundOperation('${var.order_sn}');"> 退款</a>
-															</c:when>
-															<c:otherwise>--</c:otherwise>
-														</c:choose>
-													</c:when>
-													<c:otherwise>--</c:otherwise>
+													 
 												</c:choose>
+												
+		 
+		 										<!-- 
+		 										var.surplus <= 0  \\ 线下支付
+		 										var.order_status != 5}	\\  不是已中奖
+		 										var.mo_status == 1  \\ 出票成动	
+		 										
+		 										 ((var.surplus <= 0 && var.order_status != 5) || var.mo_status == 1) 
+		 										 -->
+												<c:choose>  
+													   <c:when test="${ var.surplus <= 0 && var.order_status == 5 }">
+													   		<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.winning_money}');"> 派奖</a> 
+													   </c:when>  
+													   
+											    </c:choose>
+											    
+												 <c:choose>
+												 	<c:when test="${var.order_status == 4 && (var.mo_status == 0 || var.mo_status == 2)}">
+															<a class="btn btn-xs btn-primary" title="退款" style="border-radius: 5px;" onclick="refundOperation('${var.order_sn}');"> 退款</a>
+													</c:when>
+													 
+												 </c:choose>
+												
 											 </td>
 										</tr>
 									</c:forEach>
@@ -448,7 +439,11 @@
 									console.log("bjstr============================"+bjstr);  
 									console.log("状态============================"+!((bjstr=='已中奖' ) || ( bjstr=='未中奖' )));  
 								if(!((bjstr=='已中奖' ) || ( bjstr=='未中奖' ))){
-			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(14).html( "--");  
+
+			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(14)
+// 											.html( "--")
+											;  
+
 								}
 		                    }else {  
 		                        $('.get_set_time tbody tr').eq(i).find('td').eq(9).html( str1);  
