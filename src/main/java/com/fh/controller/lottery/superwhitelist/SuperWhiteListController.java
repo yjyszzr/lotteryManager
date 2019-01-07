@@ -149,7 +149,7 @@ public class SuperWhiteListController extends BaseController {
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"导出SuperWhiteList到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+//		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -164,6 +164,12 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("店铺");	//6
 		 
 		dataMap.put("titles", titles);
+		
+		
+//		String mobile = pd.getString("mobile");
+//		if (null != mobile && !"".equals(mobile)) {
+//			pd.put("mobile", mobile.trim());
+//		}
 		List<PageData> varOList = superwhitelistService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
@@ -342,6 +348,7 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("充值时间");	//7
 		titles.add("店铺");	//8
 		titles.add("充值状态");	//9
+		titles.add("操作人");	//9
 		dataMap.put("titles", titles);
 		List<PageData> varOList = superwhitelistService.listAccountAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
@@ -365,16 +372,15 @@ public class SuperWhiteListController extends BaseController {
 				processTypeStr = "账户回滚";
 			} else if (null != processTypeStr && processTypeStr.equals("7")) {
 				processTypeStr = "购券";
-			} else {
-				processTypeStr = "";
-			}
+			} else if (null != processTypeStr && processTypeStr.equals("8")) {
+				processTypeStr = "退款";	
+			} 
+		
 			vpd.put("var5", processTypeStr);	    //5
 			
 			String processTypeStr2 = varOList.get(i).getString("process_type");
 			if (null != processTypeStr2 && processTypeStr2.equals("4")) {
 				processTypeStr2 = "提现";
-			} else if (null != processTypeStr2 && processTypeStr2.equals("8")) {
-				processTypeStr2 = "退款";	
 			} else if (null != processTypeStr2 && processTypeStr2.equals("9")) {
 				processTypeStr2 = "输入错误";
 			} else {
@@ -396,6 +402,12 @@ public class SuperWhiteListController extends BaseController {
 				statusStr = "";
 			}
 			vpd.put("var9", statusStr);	//9
+			
+			try {
+				vpd.put("var10", varOList.get(i).get("admin_user").toString());	//9
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 			
 			varList.add(vpd);
 		}

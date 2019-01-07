@@ -165,6 +165,6 @@
 				window.location.href='<%=basePath%>ordermanager/toDetail.do?order_id='+orderId;
 			}
 			
-	</script>   
+	</script>
 </body>
 </html>

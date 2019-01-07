@@ -82,7 +82,7 @@
 									<th class="center">有效期</th>
 									<th class="center">优惠券大礼包名称</th>
 															
-									<th class="center">发放数量</th>
+
 									<th class="center">已领取</th>
 									<th class="center">已使用</th>
 									<th class="center">状态</th>
@@ -94,7 +94,7 @@
 							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
+									<c:if test="${1 == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 <!-- 											<td class='center'> -->
@@ -117,7 +117,7 @@
 											<td class='center'>${var.end_time}天</td>
 											<td class='center'>${var.recharge_card_name}</td>
 						
-											<td class='center'>${var.bonus_number}</td>
+
 											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.use_count}</td>
 											<td class='center'> 
@@ -127,11 +127,11 @@
 												</c:choose>
 											</td>
 											<td class="center">
-												<c:if test="${QX.edit != 1 && QX.del != 1 }">
+												<c:if test="${1 != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${QX.edit == 1 }">
+													<c:if test="${1 == 1 }">
 													<c:choose>
 															<c:when test="${var.is_enable==1}"> 
 																<a class="btn btn-xs btn-success" title="下架" style="border-radius: 5px;" onclick="onOrOffLine('0','${var.bonus_id}');"> 下架</a>
@@ -139,7 +139,7 @@
 															<c:when test="${var.is_enable==0}">
 																<a class="btn btn-xs btn-success" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('1','${var.bonus_id}');"> 上架</a>
 																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.bonus_id}');"> 编辑</a>
-																<c:if test="${QX.del == 1 }">
+																<c:if test="${1 == 1 }">
 																		<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.bonus_id}');">删除</a>
 																</c:if>
 															</c:when>
@@ -153,7 +153,7 @@
 														</button>
 			
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
+															<c:if test="${1 == 1 }">
 															<li>
 																<a style="cursor:pointer;" onclick="edit('${var.bonus_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
 																	<span class="green">
@@ -162,7 +162,7 @@
 																</a>
 															</li>
 															</c:if>
-															<c:if test="${QX.del == 1 }">
+															<c:if test="${1 == 1 }">
 															<li>
 																<a style="cursor:pointer;" onclick="del('${var.bonus_id}');" class="tooltip-error" data-rel="tooltip" title="删除">
 																	<span class="red">
@@ -179,11 +179,6 @@
 									
 									</c:forEach>
 									</c:if>
-									<c:if test="${QX.cha == 0 }">
-										<tr>
-											<td colspan="100" class="center">您无权查看</td>
-										</tr>
-									</c:if>
 								</c:when>
 								<c:otherwise>
 									<tr class="main_info">
@@ -197,7 +192,7 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
+									<c:if test="${1 == 1 }">
 									<a class="btn btn-mini btn-success" onclick="add();" style="border-radius:5px ; width:50px">新增</a>
 									</c:if>
 									<c:if test="${QX.del == 1 }">

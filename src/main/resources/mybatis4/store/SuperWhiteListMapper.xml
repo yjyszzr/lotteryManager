@@ -317,25 +317,12 @@
 		FROM (dl_store store , dl_user user)
 		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
 		WHERE user.is_super_white = 1
+
         <if test="mobile != null and mobile != ''">
 			and user.mobile  
 			LIKE CONCAT(CONCAT('%', #{mobile}),'%')
 		</if>
-		<if test="user_id!= null and user_id != ''"> 
-			and user.user_id LIKE CONCAT(CONCAT('%', #{user_id}),'%')
- 		</if>
- 		<if test="user_name != null and user_name != ''"> 
-			and user.user_name LIKE CONCAT(CONCAT('%', #{user_name}),'%')
-		</if>
-		<if test="store_name!= null and store_name != ''"> 
-			and store.name LIKE CONCAT(CONCAT('%', #{store_name}),'%')
-		</if>
- 		<if test="nickname!= null and nickname != ''"> 
-			and user.nickname LIKE CONCAT(CONCAT('%', #{nickname}),'%')
- 		</if>
-		<if test="mobile!= null and mobile != ''"> 
-			and user.mobile LIKE CONCAT(CONCAT('%', #{mobile}),'%')
- 		</if>
+		 
 	</select>
 	
 	<select id="datalistAccountPage" parameterType="page" resultType="pd">
