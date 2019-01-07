@@ -149,6 +149,11 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	public List<PageData> findByProcessType(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByProcessType", page);
 	}
+
+	@Override
+	public PageData getUserByUserId(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("UserAccountManagerMapper.getUserByUserId", pd);
+	}
 	
 /*	@SuppressWarnings("unchecked")
 	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception {
