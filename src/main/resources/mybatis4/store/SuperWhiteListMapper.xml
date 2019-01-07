@@ -164,6 +164,7 @@
 		last_time = #{last_time}
 	</update>
 	
+
 	<update id="saveUserBonus" parameterType="pd">
 		INSERT INTO dl_user_bonus(
 			user_id,				 
@@ -205,6 +206,7 @@
 		FROM dl_activity_bonus activity_bonus
 		WHERE activity_bonus.recharge_card_id = #{recharge_card_id} 
 	</update>
+
 	
 	<update id="deduction" parameterType="pd">
 		INSERT INTO dl_user_store_money(user_id, store_id, money, last_time) VALUES(#{user_id}, #{store_id}, -#{number}, #{last_time})
@@ -369,6 +371,7 @@
 		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
  		</if>
  		order by user_account.add_time desc
+
 	</select>
 	
 	<select id="datalistStore" parameterType="pd" resultType="pd">
@@ -404,7 +407,41 @@
  		order by user_account.add_time desc
 	</select>
 	
+
 	
+	<select id="datalistStore" parameterType="pd" resultType="pd">
+		SELECT * FROM `dl_store`
+	</select>
+	
+	<select id="datalistAccount" parameterType="pd" resultType="pd">
+		SELECT user.`mobile`, store.`name`, user_account.* 
+		FROM `dl_user_account` user_account, `dl_user` user, `dl_store` store
+		WHERE user_account.`user_id` = user.user_id AND user_account.`store_id` = store.`id`
+		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
+		<if test="user_id!= null and user_id != ''"> 
+		and user_account.user_id LIKE CONCAT(CONCAT('%', #{user_id}),'%')
+		</if>
+		<if test="store_id!= null and store_id != ''"> 
+		and user_account.store_id LIKE CONCAT(CONCAT('%', #{store_id}),'%')
+ 		</if> 
+ 		<if test="store_name!= null and store_name != ''"> 
+		and store.name LIKE CONCAT(CONCAT('%', #{store_name}),'%')
+		</if>
+		<if test="end_add_time!= null and end_add_time != ''"> 
+		AND user_account.`add_time` &lt;= #{end_add_time}
+ 		</if>
+		<if test="start_add_time!= null and start_add_time != ''"> 
+		AND user_account.`add_time` &gt;= #{start_add_time}
+ 		</if>
+ 		<if test="process_type!= null and process_type != ''"> 
+		AND user_account.`process_type` = #{process_type}
+ 		</if>
+ 	 	<if test="process_type == null or process_type == ''"> 
+		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
+ 		</if>
+ 		order by user_account.add_time desc
+	</select>
+
 	 
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">

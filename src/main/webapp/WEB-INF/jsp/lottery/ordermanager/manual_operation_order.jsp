@@ -439,9 +439,11 @@
 									console.log("bjstr============================"+bjstr);  
 									console.log("状态============================"+!((bjstr=='已中奖' ) || ( bjstr=='未中奖' )));  
 								if(!((bjstr=='已中奖' ) || ( bjstr=='未中奖' ))){
+
 			                        $('.get_set_time tbody  tr').eq(i).find('td').eq(14)
 // 											.html( "--")
 											;  
+
 								}
 		                    }else {  
 		                        $('.get_set_time tbody tr').eq(i).find('td').eq(9).html( str1);  
