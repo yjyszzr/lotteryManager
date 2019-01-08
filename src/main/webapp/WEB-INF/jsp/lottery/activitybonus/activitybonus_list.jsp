@@ -195,7 +195,7 @@
 									<c:if test="${1 == 1 }">
 									<a class="btn btn-mini btn-success" onclick="add();" style="border-radius:5px ; width:50px">新增</a>
 									</c:if>
-									<c:if test="${QX.del == 1 }">
+									<c:if test="${1 == 1 }">
 <!-- 									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" style="border-radius:5px ; width:70px" >批量删除</a> -->
 									</c:if>
 								</td>
