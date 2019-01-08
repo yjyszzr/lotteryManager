@@ -85,7 +85,9 @@
 
 									<th class="center">已领取</th>
 									<th class="center">已使用</th>
+									<!-- 
 									<th class="center">状态</th>
+									 -->
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -120,60 +122,17 @@
 
 											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.use_count}</td>
+											<!-- 
 											<td class='center'> 
 												<c:choose>
 													<c:when test="${var.is_enable eq 1}">上线</c:when>
 													<c:otherwise>下线</c:otherwise>
 												</c:choose>
 											</td>
+											 -->
 											<td class="center">
-												<c:if test="${1 != 1 }">
-												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
-												</c:if>
-												<div class="hidden-sm hidden-xs btn-group">
-													<c:if test="${1 == 1 }">
-													<c:choose>
-															<c:when test="${var.is_enable==1}"> 
-																<a class="btn btn-xs btn-success" title="下架" style="border-radius: 5px;" onclick="onOrOffLine('0','${var.bonus_id}');"> 下架</a>
-															</c:when>
-															<c:when test="${var.is_enable==0}">
-																<a class="btn btn-xs btn-success" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('1','${var.bonus_id}');"> 上架</a>
-																<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.bonus_id}');"> 编辑</a>
-																<c:if test="${1 == 1 }">
-																		<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.bonus_id}');">删除</a>
-																</c:if>
-															</c:when>
-														</c:choose>
-													</c:if>
-												</div>
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-			
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${1 == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.bonus_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-															<c:if test="${1 == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="del('${var.bonus_id}');" class="tooltip-error" data-rel="tooltip" title="删除">
-																	<span class="red">
-																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-														</ul>
-													</div>
-												</div>
+												<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.bonus_id}');"> 编辑</a>
+												<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.bonus_id}');">删除</a>
 											</td>
 										</tr>
 									
