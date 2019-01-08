@@ -211,7 +211,7 @@
 											</td>
 													<td class='center'>
 																	<c:choose>
-															<c:when test="${var.order_status == 8}">--- ---</c:when>
+					 										<c:when test="${var.order_status == 8}">--- ---</c:when>
 													<c:otherwise>
 														<c:choose>
 															<c:when test="${var.mo_add_time  == null or var.mo_add_time == ''}">--- ---</c:when>
