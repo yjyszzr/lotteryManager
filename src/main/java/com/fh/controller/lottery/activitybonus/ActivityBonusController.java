@@ -69,9 +69,9 @@ public class ActivityBonusController extends BaseController {
 //			numberFormat.setMaximumFractionDigits(2);    
 //			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
 //			pd.put("recharge_chance", rechargeChance);
-			String startTime = pd.getString("start_time");			
+			String endTime = pd.getString("end_time");
 			pd.put("start_time", 0);
-			pd.put("end_time", Integer.valueOf(startTime));			
+			pd.put("end_time", Integer.valueOf(endTime));
 		}else {
 			pd.put("recharge_chance", null);
 			pd.put("recharge_card_id", null);
@@ -227,7 +227,6 @@ public class ActivityBonusController extends BaseController {
 		}
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
 
