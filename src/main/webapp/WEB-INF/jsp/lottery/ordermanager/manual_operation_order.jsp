@@ -214,8 +214,8 @@
 															<c:when test="${var.order_status == 8}">--- ---</c:when>
 													<c:otherwise>
 														<c:choose>
-															<c:when test="${var.add_time  == null or var.add_time == ''}">--- ---</c:when>
-															<c:otherwise>${DateUtil.toSDFTime(var.add_time*1000)}</c:otherwise>
+															<c:when test="${var.mo_add_time  == null or var.mo_add_time == ''}">--- ---</c:when>
+															<c:otherwise>${DateUtil.toSDFTime(var.mo_add_time*1000)}</c:otherwise>
 														</c:choose>
 													</c:otherwise>
 												</c:choose>

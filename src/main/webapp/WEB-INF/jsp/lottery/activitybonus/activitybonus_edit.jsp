@@ -140,7 +140,7 @@
                                 	</td>
                                 	<td style="text-align: left;" colspan="10">
 	                                	<div class="col-sm-2">
-	                                  	 	从派发之日记(天数）:<input type="text" id="start_time"  name="start_time" placeholder="0天"    value="${pd.start_time}"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:40px;border-radius:5px !important"/>
+	                                  	 	从派发之日记(天数）:<input type="text" id="end_time"  name="end_time" placeholder="0天"    value="${pd.end_time}"  onkeyup="value=value.replace(/[^\d]/g,'')" style="width:40px;border-radius:5px !important"/>
 	                               		</div>
 	                                <div class="col-sm-5"> 
 	                                </div>
