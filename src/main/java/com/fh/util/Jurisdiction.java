@@ -1,5 +1,6 @@
 package com.fh.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,25 +41,35 @@ public class Jurisdiction {
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean readMenu(List<Menu> menuList,String menuUrl,Session session,String USERNAME){
+//		if (true) 
+//			return true;
+		
+		/**
 		for(int i=0;i<menuList.size();i++){
-//			if(menuList.get(i).getMENU_URL().split(".do")[0].equals(menuUrl.split(".do")[0])){ //访问地址与菜单地址循环匹配，如何匹配到就进一步验证，如果没匹配到就不处理(可能是接口链接或其它链接)
 			if(menuList.get(i).getMENU_URL().equals(menuUrl)){ //访问地址与菜单地址循环匹配，如何匹配到就进一步验证，如果没匹配到就不处理(可能是接口链接或其它链接)
 				if(!menuList.get(i).isHasMenu()){				//判断有无此菜单权限
 					return false;
-				}else{											//按钮判断
-					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);//按钮权限(增删改查)
-					map.remove("add");
-					map.remove("del");
-					map.remove("edit");
-					map.remove("cha");
-					String MENU_ID =  menuList.get(i).getMENU_ID();
-					Boolean isAdmin = "admin".equals(USERNAME);
-					map.put("add", (RightsHelper.testRights(map.get("adds"), MENU_ID)) || isAdmin?"1":"0");
-					map.put("del", RightsHelper.testRights(map.get("dels"), MENU_ID) || isAdmin?"1":"0");
-					map.put("edit", RightsHelper.testRights(map.get("edits"), MENU_ID) || isAdmin?"1":"0");
-					map.put("cha", RightsHelper.testRights(map.get("chas"), MENU_ID) || isAdmin?"1":"0");
-					session.removeAttribute(USERNAME + Const.SESSION_QX);
-					session.setAttribute(USERNAME + Const.SESSION_QX, map);	//重新分配按钮权限
+				}else{
+					//按钮判断
+					try {
+						Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);//按钮权限(增删改查)
+						map.remove("add");
+						map.remove("del");
+						map.remove("edit");
+						map.remove("cha");
+						String MENU_ID =  menuList.get(i).getMENU_ID();
+						Boolean isAdmin = "admin".equals(USERNAME);
+						map.put("add", (RightsHelper.testRights(map.get("adds"), MENU_ID)) || isAdmin?"1":"0");
+						map.put("del", RightsHelper.testRights(map.get("dels"), MENU_ID) || isAdmin?"1":"0");
+						map.put("edit", RightsHelper.testRights(map.get("edits"), MENU_ID) || isAdmin?"1":"0");
+						map.put("cha", RightsHelper.testRights(map.get("chas"), MENU_ID) || isAdmin?"1":"0");
+						session.removeAttribute(USERNAME + Const.SESSION_QX);
+						session.setAttribute(USERNAME + Const.SESSION_QX, map);	//重新分配按钮权限
+					} catch (Exception e) {
+						// TODO: handle exception
+						e.printStackTrace();
+					}
+			
 					return true;
 				}
 			}else{
@@ -68,6 +79,88 @@ public class Jurisdiction {
 			}
 		}
 		return true;
+		**/
+		
+		List<Menu> _menuList = new ArrayList<Menu>();
+
+		if (null != menuList && menuList.size() > 0)
+		for (Menu menu : menuList) {
+			if (null != menu)
+			_menuList.add(menu);
+			if (null != menu.getSubMenu() && menu.getSubMenu().size() > 0)
+			_menuList.addAll(menu.getSubMenu());
+		}
+		
+		if (null != _menuList && _menuList.size() > 0)
+		for (Menu menu : _menuList) {
+			String MENU_URL = menu.getMENU_URL().toString();
+			Boolean isHasMenu = menu.isHasMenu();
+			
+			if (MENU_URL.equals(menuUrl)
+				&& 	isHasMenu
+			) {
+				try {
+					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);//按钮权限(增删改查)
+					map.remove("add");
+					map.remove("del");
+					map.remove("edit");
+					map.remove("cha");
+					String MENU_ID =  menu.getMENU_ID();
+					Boolean isAdmin = "admin".equals(USERNAME);
+					map.put("add", (RightsHelper.testRights(map.get("adds"), MENU_ID)) || isAdmin?"1":"0");
+					map.put("del", RightsHelper.testRights(map.get("dels"), MENU_ID) || isAdmin?"1":"0");
+					map.put("edit", RightsHelper.testRights(map.get("edits"), MENU_ID) || isAdmin?"1":"0");
+					map.put("cha", RightsHelper.testRights(map.get("chas"), MENU_ID) || isAdmin?"1":"0");
+					session.removeAttribute(USERNAME + Const.SESSION_QX);
+					session.setAttribute(USERNAME + Const.SESSION_QX, map);	//重新分配按钮权限
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+			
+				return true;
+			}
+		}
+		
+		return true;
+		
+//		boolean isGoto = false;
+//		for(int i=0; i<menuList.size(); i++) {
+//			String MENU_URL = menuList.get(i).getMENU_URL().toString();
+//			Boolean isHasMenu = menuList.get(i).isHasMenu();
+//			
+//			
+//			if (MENU_URL.equals(menuUrl)
+//				&& 	isHasMenu
+//			) {
+//				try {
+//					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);//按钮权限(增删改查)
+//					map.remove("add");
+//					map.remove("del");
+//					map.remove("edit");
+//					map.remove("cha");
+//					String MENU_ID =  menuList.get(i).getMENU_ID();
+//					Boolean isAdmin = "admin".equals(USERNAME);
+//					map.put("add", (RightsHelper.testRights(map.get("adds"), MENU_ID)) || isAdmin?"1":"0");
+//					map.put("del", RightsHelper.testRights(map.get("dels"), MENU_ID) || isAdmin?"1":"0");
+//					map.put("edit", RightsHelper.testRights(map.get("edits"), MENU_ID) || isAdmin?"1":"0");
+//					map.put("cha", RightsHelper.testRights(map.get("chas"), MENU_ID) || isAdmin?"1":"0");
+//					session.removeAttribute(USERNAME + Const.SESSION_QX);
+//					session.setAttribute(USERNAME + Const.SESSION_QX, map);	//重新分配按钮权限
+//				} catch (Exception e) {
+//					// TODO: handle exception
+//					e.printStackTrace();
+//				}
+//			
+//				return true;
+//			}
+//			
+//			
+//			return !readMenu(menuList.get(i).getSubMenu(), menuUrl, session, USERNAME);
+//		}
+//		
+//		return true;
+		
 	}
 	
 	/**

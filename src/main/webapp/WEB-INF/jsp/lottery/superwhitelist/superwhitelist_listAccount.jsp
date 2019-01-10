@@ -99,6 +99,7 @@
 									<th class="center">手机号</th>
 									<th class="center">帐户余额</th>
 									<th class="center">充值余额</th>
+									<th class="center">大礼包金额</th>
 									<th class="center">充值原因</th>
 									<th class="center">扣款原因</th>
 									<th class="center">充值时间</th>
@@ -120,6 +121,7 @@
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.cur_balance}</td>
 											<td class='center'>${var.amount}</td>
+											<td class='center'>${var.recharge_card_real_value}</td>
 											<td class='center'>
 											<c:choose>
 												<c:when test="${var.process_type == 1}">奖金</c:when>

@@ -169,65 +169,81 @@ public class ActivityBonusController extends BaseController {
 	 */
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
-		logBefore(logger, Jurisdiction.getUsername() + "列表ActivityBonus");
-		// if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
-		// //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		String amountStart = pd.getString("amountStart");
-		if (null != amountStart && !"".equals(amountStart)) {
-			pd.put("amountStart", amountStart.trim());
-		}
-		String amountEnd = pd.getString("amountEnd");
-		if (null != amountEnd && !"".equals(amountEnd)) {
-			pd.put("amountEnd", amountEnd.trim());
-		}
-		page.setPd(pd);
-		List<PageData> varList = activitybonusService.list(page); // 列出ActivityBonus列表
-		Map<String,String> rechargeCardMap = this.createRechareCardMap();
-		mv.setViewName("lottery/activitybonus/activitybonus_list");
-		for (int i = 0; i < varList.size(); i++) {
-			PageData pageData = new PageData();
-			pageData = varList.get(i);
-			String min_goods_amount = pageData.getString("min_goods_amount");
-			String bonusType =  pageData.getString("bonus_type");
-			if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(bonusType)) {
-//				String rechargeChance = pageData.getString("recharge_chance");
-//				Number num = Float.parseFloat(rechargeChance) * 100;
-//				Integer rechargeChanceInt = num.intValue();
-//				pageData.put("recharge_chance", rechargeChanceInt+"%");
-				pageData.put("recharge_card_name", rechargeCardMap.get(String.valueOf(pageData.get("recharge_card_id"))));
-			}else {
-//				pageData.put("recharge_chance", "~");
-				pageData.put("recharge_card_name", "~");
+		System.out.println("====== list start ======");
+		try {
+			logBefore(logger, Jurisdiction.getUsername() + "列表ActivityBonus");
+			// if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+			// //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+			ModelAndView mv = this.getModelAndView();
+			PageData pd = new PageData();
+			pd = this.getPageData();
+			String amountStart = pd.getString("amountStart");
+			if (null != amountStart && !"".equals(amountStart)) {
+				pd.put("amountStart", amountStart.trim());
 			}
+			String amountEnd = pd.getString("amountEnd");
+			if (null != amountEnd && !"".equals(amountEnd)) {
+				pd.put("amountEnd", amountEnd.trim());
+			}
+			page.setPd(pd);
+			List<PageData> varList = activitybonusService.list(page); // 列出ActivityBonus列表
+			Map<String,String> rechargeCardMap = this.createRechareCardMap();
+			mv.setViewName("lottery/activitybonus/activitybonus_list");
+			if (null != varList)
+			for (int i = 0; i < varList.size(); i++) {
+				try {
+					PageData pageData = new PageData();
+					pageData = varList.get(i);
+					String min_goods_amount = pageData.getString("min_goods_amount");
+					String bonusType =  pageData.getString("bonus_type");
+					if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(bonusType)) {
+//						String rechargeChance = pageData.getString("recharge_chance");
+//						Number num = Float.parseFloat(rechargeChance) * 100;
+//						Integer rechargeChanceInt = num.intValue();
+//						pageData.put("recharge_chance", rechargeChanceInt+"%");
+						pageData.put("recharge_card_name", rechargeCardMap.get(String.valueOf(pageData.get("recharge_card_id"))));
+					}else {
+//						pageData.put("recharge_chance", "~");
+						pageData.put("recharge_card_name", "~");
+					}
+					
+					if (null != min_goods_amount && !"".equals(min_goods_amount)) {
+						if (Double.parseDouble(min_goods_amount) == 0.00) {
+							pageData.put("min_goods_amount", "无门槛");
+						} else {
+							pageData.put("min_goods_amount", "	需消费满" + min_goods_amount + "元");
+						}
+					}
+					String bonus_number = pageData.getString("bonus_number");
+					if (null != bonus_number && !"".equals(bonus_number)) {
+						if (bonus_number.equals("0")) {
+							pageData.put("bonus_number", "无上限");
+						}
+					}
+					String start_time = pageData.getString("start_time");
+					if (null != start_time && !"".equals(start_time)) {
+						String end_time = pageData.getString("end_time");
+						if (null != end_time && !"".equals(end_time)) {
+							int value = Integer.parseInt(end_time) - Integer.parseInt(start_time);
+							pageData.put("end_time", value);
+						}
+					}
+				
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			mv.addObject("varList", varList);
+			mv.addObject("pd", pd);
 			
-			if (null != min_goods_amount && !"".equals(min_goods_amount)) {
-				if (Double.parseDouble(min_goods_amount) == 0.00) {
-					pageData.put("min_goods_amount", "无门槛");
-				} else {
-					pageData.put("min_goods_amount", "	需消费满" + min_goods_amount + "元");
-				}
-			}
-			String bonus_number = pageData.getString("bonus_number");
-			if (null != bonus_number && !"".equals(bonus_number)) {
-				if (bonus_number.equals("0")) {
-					pageData.put("bonus_number", "无上限");
-				}
-			}
-			String start_time = pageData.getString("start_time");
-			if (null != start_time && !"".equals(start_time)) {
-				String end_time = pageData.getString("end_time");
-				if (null != end_time && !"".equals(end_time)) {
-					int value = Integer.parseInt(end_time) - Integer.parseInt(start_time);
-					pageData.put("end_time", value);
-				}
-			}
+			System.out.println("====== list end ======");
+			return mv;
+		
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
-		mv.addObject("varList", varList);
-		mv.addObject("pd", pd);
-		return mv;
+		return null;
 	}
 
 	/**

@@ -29,44 +29,6 @@
 						<!-- 检索  -->
 						<form action="activitybonus/list.do" method="post" name="Form" id="Form">
 						<div id="zhongxin" style="padding-top: 13px;">
-						<!--  <table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
-								<tr style="margin:2px ">
-								
-								<td>
-											<span class="input-icon" style="width:80px;text-align:right;">
-													金额范围:
-												</span>
-										 	<span  >
-												<input name="amountStart" id="amountStart"  value="${pd.amountStart }" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
-												<input name="amountEnd" id="amountEnd"  value="${pd.amountEnd}" type="text"  style="width:74px;border-radius:5px !important" placeholder="0元"  onkeyup="value=value.replace(/[^\d]/g,'')" />
-											</span>
-									</td>
-									<td>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-													状态:
-												</span>
-										 	<select  name="is_enable" id="is_enable" data-placeholder="请选择" value="${pd.is_enable }" style="width:154px;border-radius:5px !important"  >
-											<option value="" selected>全部</option>
-											<option value="0" <c:if test="${pd.is_enable!=NULL && pd.is_enable!='' && pd.is_enable == 0}">selected</c:if>>下线</option>
-											<option value="1" <c:if test="${pd.is_enable==1}">selected</c:if>>上线</option>
-										  	</select>
-										  	</div>
-									</td>
-									<c:if test="${QX.cha == 1 }">
-										<td style="vertical-align:top;padding-left:2px">
-											<span class="input-icon" style="width:80px;"> </span>
-											<span>
-													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
-											</span>
-											<span class="input-icon" style="width:43px;"> </span>
-											<span>
-													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
-											</span>
-										</td>
-									</c:if>
-									</tr>
-							</table>  -->
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
