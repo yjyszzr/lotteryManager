@@ -60,7 +60,7 @@
 								<td style="width:75px;text-align: right;padding-top: 13px;">扣款原因:</td>
 								<td>
 									<select id="process_type" name="process_type"  value="" style ="width:42%">
-								        <option value="4" >提取</option>
+								        <option value="4" >提现</option>
 								        <option value="9" >输入错误</option>
 									</select>
 								</td>
