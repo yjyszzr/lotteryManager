@@ -499,6 +499,8 @@ public class OrderManagerController extends BaseController {
 				orderStatusStr = "审核中";
 			} else if (orderStatus.equals("8")) {
 				orderStatusStr = "支付失败";
+				
+				continue;
 			}
 			vpd.put("var11", orderStatusStr); // 11
 			vpd.put("var12", varOList.get(i).getString("pay_order_sn")); // 12
@@ -621,6 +623,9 @@ public class OrderManagerController extends BaseController {
 				orderStatusStr = "审核中";
 			} else if (orderStatus.equals("8")) {
 				orderStatusStr = "支付失败";
+				
+				continue;
+				
 			} else if (orderStatus.equals("9")) {
 				orderStatusStr = "已派奖";
 			} else if (orderStatus.equals("10")) {

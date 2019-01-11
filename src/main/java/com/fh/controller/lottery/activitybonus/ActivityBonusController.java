@@ -169,7 +169,7 @@ public class ActivityBonusController extends BaseController {
 	 */
 	@RequestMapping(value = "/list")
 	public ModelAndView list(Page page) throws Exception {
-		System.out.println("====== list start ======");
+//		System.out.println("====== list start ======");
 		try {
 			logBefore(logger, Jurisdiction.getUsername() + "列表ActivityBonus");
 			// if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
@@ -236,7 +236,7 @@ public class ActivityBonusController extends BaseController {
 			mv.addObject("varList", varList);
 			mv.addObject("pd", pd);
 			
-			System.out.println("====== list end ======");
+//			System.out.println("====== list end ======");
 			return mv;
 		
 		} catch (Exception e) {
