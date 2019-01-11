@@ -166,6 +166,9 @@
 									<th class="center">昵称</th>
 									<th class="center">手机号</th>
 									<th class="center">账户余额</th>
+									
+									<th class="center">大礼包总金额</th>
+									
 									<th class="center">店铺</th>
 									<!-- 
 									<th class="center">备注4</th>
@@ -237,6 +240,8 @@
 												 -->
 											</td>
 											<td class='center'>${var.money}</td>
+											<td class='center'>${var.recharge_card_real_value}</td>
+											
 											<td class='center'>${var.name}</td>
 											<!-- 
 											<td class='center'>${var.email}</td>

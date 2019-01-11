@@ -62,6 +62,8 @@ public interface SuperWhiteListManager{
 	 */
 	public PageData findById(PageData pd)throws Exception;
 	
+	public PageData getSumRechargeCardRealValue(PageData pd)throws Exception;
+	
 	/**批量删除
 	 * @param ArrayDATA_IDS
 	 * @throws Exception

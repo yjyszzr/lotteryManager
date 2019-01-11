@@ -274,6 +274,21 @@
 		and store.id = #{store_id}
 	</select>	
 	
+	<select id="getSumRechargeCardRealValue" parameterType="pd" resultType="pd">
+		SELECT SUM(user_account.recharge_card_real_value) as recharge_card_real_value
+		FROM `dl_user_account` user_account
+		
+		WHERE 1 = 1
+		<if test="user_id != null and user_id != ''">
+		and user_account.user_id = #{user_id}
+		</if>
+		<if test="store_id != null and store_id != ''">
+		AND user_account.store_id = #{store_id}
+		</if>
+	</select>	
+
+
+	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		<!-- 
@@ -312,7 +327,7 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
+		SELECT store.id store_id, store.name, user.user_id user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
 		,user_store_money.id 
 		FROM (dl_store store , dl_user user)
 		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
@@ -363,7 +378,7 @@
 	</select>
 	
 	<select id="datalistAccount" parameterType="pd" resultType="pd">
-		SELECT user.`mobile`, store.`name`, user_account.* 
+		SELECT user.`mobile`, store.`name`, user_account.*
 		FROM `dl_user_account` user_account, `dl_user` user, `dl_store` store
 		WHERE user_account.`user_id` = user.user_id AND user_account.`store_id` = store.`id`
 		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)

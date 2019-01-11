@@ -97,14 +97,16 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 		dao.update("SuperWhiteListMapper.deduction", pd);
 	}
 	
-	
-	
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("SuperWhiteListMapper.findById", pd);
+	}
+	
+	public PageData getSumRechargeCardRealValue(PageData pd)throws Exception {
+		return (PageData)dao.findForObject("SuperWhiteListMapper.getSumRechargeCardRealValue", pd);
 	}
 	
 	/**批量删除

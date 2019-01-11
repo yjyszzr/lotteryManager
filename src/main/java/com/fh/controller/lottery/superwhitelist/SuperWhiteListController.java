@@ -139,7 +139,30 @@ public class SuperWhiteListController extends BaseController {
 		page.setPd(pd);
 		List<PageData>	varList = superwhitelistService.list(page);	//列出SuperWhiteList列表
 		mv.setViewName("lottery/superwhitelist/superwhitelist_list");
+ 
+		if (null != varList && varList.size() > 0) {
+			for (PageData pageData : varList) {
+				try {
+//					String user_id = pageData.getString("user_id");
+//					String store_id = pageData.getString("store_id");
+							
+					String recharge_card_real_value = "";
+					PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(pageData);
+					if (null != _pageData) {
+						recharge_card_real_value = _pageData.getString("recharge_card_real_value");
+						pageData.put("recharge_card_real_value", recharge_card_real_value);
+						
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+			}
+		 
+		}
+		
 		mv.addObject("varList", varList);
+		
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
@@ -161,7 +184,8 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("昵称");	//3
 		titles.add("手机号");	//4
 		titles.add("账户余额");	//5
-		titles.add("店铺");	//6
+		titles.add("大礼包总金额");	//6
+		titles.add("店铺");	//7
 		 
 		dataMap.put("titles", titles);
 		
@@ -179,7 +203,23 @@ public class SuperWhiteListController extends BaseController {
 			vpd.put("var3", varOList.get(i).getString("nickname"));	    //3
 			vpd.put("var4", varOList.get(i).getString("mobile"));	    //4
 			vpd.put("var5", varOList.get(i).getString("money"));	
-			vpd.put("var6", varOList.get(i).getString("name"));
+
+			try {
+//				String user_id = pageData.getString("user_id");
+//				String store_id = pageData.getString("store_id");
+						
+				String recharge_card_real_value = "";
+				PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(varOList.get(i));
+				if (null != _pageData) {
+					recharge_card_real_value = _pageData.getString("recharge_card_real_value");
+					vpd.put("var6", recharge_card_real_value);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
+			vpd.put("var7", varOList.get(i).getString("name"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -343,6 +383,7 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("手机号");	//2
 		titles.add("帐户余额");	//3
 		titles.add("充值余额");	//4
+		titles.add("大礼包余额");
 		titles.add("充值原因");	//5
 		titles.add("扣款原因");	//6
 		titles.add("充值时间");	//7
@@ -358,6 +399,21 @@ public class SuperWhiteListController extends BaseController {
 			vpd.put("var2", varOList.get(i).getString("mobile"));	    //2
 			vpd.put("var3", varOList.get(i).getString("cur_balance"));	    //3
 			vpd.put("var4", varOList.get(i).getString("amount"));	    //4
+			
+//			String recharge_card_real_value = "";
+//			try {
+////				String user_id = pageData.getString("user_id");
+////				String store_id = pageData.getString("store_id");
+//				
+//				PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(varOList.get(i));
+//				if (null != _pageData) {
+//					recharge_card_real_value = _pageData.getString("recharge_card_real_value");
+//				}
+//			} catch (Exception e) {
+//				// TODO: handle exception
+//				e.printStackTrace();
+//			}
+			vpd.put("var5", varOList.get(i).getString("recharge_card_real_value"));
 			
 			String processTypeStr = varOList.get(i).getString("process_type");
 			if (null != processTypeStr && processTypeStr.equals("1")) {
@@ -376,7 +432,7 @@ public class SuperWhiteListController extends BaseController {
 				processTypeStr = "退款";	
 			} 
 		
-			vpd.put("var5", processTypeStr);	    //5
+			vpd.put("var6", processTypeStr);	    //5
 			
 			String processTypeStr2 = varOList.get(i).getString("process_type");
 			if (null != processTypeStr2 && processTypeStr2.equals("4")) {
@@ -386,10 +442,10 @@ public class SuperWhiteListController extends BaseController {
 			} else {
 				processTypeStr2 = "";
 			}
-			vpd.put("var6", processTypeStr2);	    //6
+			vpd.put("var7", processTypeStr2);	    //6
 			
-			vpd.put("var7", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time"))*1000));	    //7
-			vpd.put("var8", varOList.get(i).get("name").toString());	//8
+			vpd.put("var8", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time"))*1000));	    //7
+			vpd.put("var9", varOList.get(i).get("name").toString());	//8
 			
 			String statusStr = varOList.get(i).get("status").toString();
 			if (null != statusStr && statusStr.equals("0")) {
@@ -401,10 +457,10 @@ public class SuperWhiteListController extends BaseController {
 			} else {
 				statusStr = "";
 			}
-			vpd.put("var9", statusStr);	//9
+			vpd.put("var10", statusStr);	//9
 			
 			try {
-				vpd.put("var10", varOList.get(i).get("admin_user").toString());	//9
+				vpd.put("var11", varOList.get(i).get("admin_user").toString());	//9
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
