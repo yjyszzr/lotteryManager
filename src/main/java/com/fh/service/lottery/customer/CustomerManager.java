@@ -1,24 +1,22 @@
-package com.fh.service.lottery.superwhitelist;
+package com.fh.service.lottery.customer;
 
 import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
 /** 
- * 说明： 超级白名单接口
+ * 说明： 销售接口
  * 创建人：FH Q313596790
- * 创建时间：2018-12-26
+ * 创建时间：2019-01-14
  * @version
  */
-public interface SuperWhiteListManager{
+public interface CustomerManager{
 
 	/**新增
 	 * @param pd
 	 * @throws Exception
 	 */
 	public void save(PageData pd)throws Exception;
-	
-	public void saveUserBonus(PageData pd)throws Exception;
 	
 	/**删除
 	 * @param pd
@@ -44,35 +42,17 @@ public interface SuperWhiteListManager{
 	 */
 	public List<PageData> listAll(PageData pd)throws Exception;
 	
-	/**
-	 * 流水（全部）
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	public List<PageData> listAccount(Page page)throws Exception;
-	
-	public List<PageData> listAccountAll(PageData pd)throws Exception;
-	
-	public List<PageData> listStoreAll(PageData pd)throws Exception;
-	
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd)throws Exception;
 	
-	public PageData getSumRechargeCardRealValue(PageData pd)throws Exception;
-	
 	/**批量删除
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
-	
-	public void recharge(PageData pd)throws Exception;
-	
-	public void deduction(PageData pd)throws Exception;
 	
 }
 
