@@ -60,6 +60,11 @@ public class CustomerService implements CustomerManager{
 		return (List<PageData>)dao.findForList("CustomerMapper.datalistPage", page);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<PageData> getOrdes(PageData pd)throws Exception{
+		return (List<PageData>)dao.findForList("CustomerMapper.getOrdes", pd);
+	}
+	
 	/**列表(全部)
 	 * @param pd
 	 * @throws Exception
@@ -76,6 +81,15 @@ public class CustomerService implements CustomerManager{
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("CustomerMapper.findById", pd);
 	}
+	
+	public PageData setFirstPayTime(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("CustomerMapper.setFirstPayTime", pd);
+	}
+	
+	public PageData getCountOrderByMobile(PageData pd)throws Exception{
+		return (PageData)dao.findForObject("CustomerMapper.getCountOrderByMobile", pd);
+	}
+	
 	
 	/**批量删除
 	 * @param ArrayDATA_IDS

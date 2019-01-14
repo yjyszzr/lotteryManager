@@ -23,6 +23,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
 import com.fh.enums.SNBusinessCodeEnum;
+import com.fh.service.lottery.customer.CustomerManager;
 import com.fh.service.lottery.rechargecard.impl.RechargeCardService;
 import com.fh.service.lottery.superwhitelist.SuperWhiteListManager;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
@@ -53,6 +54,9 @@ public class SuperWhiteListController extends BaseController {
 	
 	@Resource(name="rechargecardService")
 	private RechargeCardService rechargecardService;
+	
+	@Resource(name="customerService")
+	private CustomerManager customerService;
 	
 	/**保存
 	 * @param
@@ -561,6 +565,24 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("id", "");
 		
 		userAccountManagerService.save(pd);
+		
+//		try {
+//			if (pd.getString("type").equals("1")) {
+//				String user_id = _pd.getString("user_id");
+//				PageData _customer = new PageData();
+//				_customer.put("user_id", user_id);
+//				_customer.put("first_pay_time", time);
+//				String mobile = "";
+//				PageData _user = this.superwhitelistService.findUserByUserid(_pd);
+//				mobile = _user.getString("mobile");
+//				_customer.put("mobile", mobile);
+//				
+//				this.customerService.setFirstPayTime(_customer);
+//			}
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			e.printStackTrace();
+//		}
 				
 		if (null != pd.getString("recharge_card_id") && !"".equals(pd.getString("recharge_card_id"))) {
 			pd.put("bonus_sn", SNGenerator.nextSN(6));

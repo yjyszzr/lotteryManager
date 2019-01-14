@@ -23,6 +23,12 @@ public class UserAccountService implements UserAccountManagerManager {
 
 	@Resource(name = "daoSupport4")
 	private DaoSupport4 dao;
+	
+	@SuppressWarnings("unchecked")
+	public List<PageData> getOrdes(PageData pd)throws Exception{
+		return (List<PageData>)dao.findForList("UserAccountManagerMapper.getOrdes", pd);
+	}
+	
 
 	/**
 	 * 新增
@@ -99,6 +105,9 @@ public class UserAccountService implements UserAccountManagerManager {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.getUserByUserId", pd);
 	}
 	
+	public PageData getCountOrderByMobile(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("UserAccountManagerMapper.getCountOrderByMobile", pd);
+	}
 	
 	
 	@Override

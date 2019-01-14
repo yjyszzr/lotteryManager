@@ -4,7 +4,7 @@
 	
 	<!--表名 -->
 	<sql id="tableName">
-		
+		dl_customer
 	</sql>
 	
 	<!-- 字段 -->
@@ -23,13 +23,13 @@
 		last_add_time,	
 		last_add_seller_name,	
 		last_add_seller_id,	
-		distribute_state,	
-		_id
+		distribute_state 
+		 
 	</sql>
 	
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-        #{id},	
+ 
         #{user_id},	
         #{mobile},	
         #{user_name},	
@@ -49,25 +49,49 @@
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
 		insert into 
-	<include refid="tableName"></include>
+		dl_customer
 		(
-		        id,	
-		        user_id,	
-		        mobile,	
-		        user_name,	
-		        user_state,	
-		        user_source,	
-		        pay_state,	
-		        first_pay_time,	
-		        first_add_time,	
-		        first_add_seller_name,	
-		        first_add_seller_id,	
-		        last_add_time,	
-		        last_add_seller_name,	
-		        last_add_seller_id,	
-		        distribute_state	
+			<if test="user_id != null and user_id != ''">
+			user_id,	
+			</if>
+			mobile,	
+			user_name,	
+			user_state,	
+			user_source,	
+			<if test="pay_state != null and pay_state != ''">
+			pay_state,	
+			</if>
+			<if test="first_pay_time != null and first_pay_time != ''">
+			first_pay_time,	
+			</if>
+			first_add_time,	
+			first_add_seller_name,	
+			first_add_seller_id,	
+			last_add_time,	
+			last_add_seller_name,	
+			last_add_seller_id,	
+			distribute_state 
 		) values (
-	<include refid="FieldValue"></include>
+			<if test="user_id != null and user_id != ''">
+	        #{user_id},	
+	        </if>
+	        #{mobile},	
+	        #{user_name},	
+	        #{user_state},	
+	        #{user_source},	
+	        <if test="pay_state != null and pay_state != ''">
+	        #{pay_state},	
+	        </if>
+	        <if test="first_pay_time != null and first_pay_time != ''">
+	        #{first_pay_time},	
+	        </if>
+	        #{first_add_time},	
+	        #{first_add_seller_name},	
+	        #{first_add_seller_id},	
+	        #{last_add_time},	
+	        #{last_add_seller_name},	
+	        #{last_add_seller_id},	
+	        #{distribute_state}	
 		)
 	</insert>
 	
@@ -79,40 +103,98 @@
 			_id = #{_id}
 	</delete>
 	
+	<update id="setFirstPayTime" parameterType="pd">
+		
+	UPDATE `dl_customer` customer 
+	SET customer.pay_state = 1 
+	, customer.user_id = #{user_id}
+	, customer.first_pay_time = #{first_pay_time}
+	WHERE customer.`mobile` = #{mobile} AND (customer.first_pay_time is NULL OR customer.first_pay_time = '') 
+
+	</update>
+	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
 		<include refid="tableName"></include>
 		set 
-			id = #{id},
+		    <if test="user_id != null and user_id != ''"> 
 			user_id = #{user_id},
+			</if>
+			<if test="mobile != null and mobile != ''">
 			mobile = #{mobile},
+			</if>
+			<if test="user_name != null and user_name != ''">
 			user_name = #{user_name},
+			</if>
+			<if test="user_state != null and user_state != ''">
 			user_state = #{user_state},
+			</if>
+			<if test="user_source != null and user_source != ''">
 			user_source = #{user_source},
+			</if>
+			<if test="pay_state != null and pay_state != ''">
 			pay_state = #{pay_state},
+			</if>
+			<if test="first_pay_time != null and first_pay_time != ''">
 			first_pay_time = #{first_pay_time},
+			</if>
+			<if test="first_add_time != null and first_add_time != ''">
 			first_add_time = #{first_add_time},
+			</if>
+			<if test="first_add_seller_name != null and first_add_seller_name != ''">
 			first_add_seller_name = #{first_add_seller_name},
+			</if>
+			<if test="first_add_seller_id != null and first_add_seller_id != ''">
 			first_add_seller_id = #{first_add_seller_id},
+			</if>
+			<if test="last_add_time != null and last_add_time != ''">
 			last_add_time = #{last_add_time},
+			</if>
+			<if test="last_add_seller_name != null and last_add_seller_name != ''">
 			last_add_seller_name = #{last_add_seller_name},
+			</if>
+			<if test="last_add_seller_id != null and last_add_seller_id != ''">
 			last_add_seller_id = #{last_add_seller_id},
+			</if>
+			<if test="distribute_state != null and distribute_state != ''">
 			distribute_state = #{distribute_state},
-		_id = _id
+			</if>
+		    id = #{id}
 		where 
-		_id = #{_id}
+		id = #{id}
 	</update>
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 
-			_id = #{_id}
+		select customer.* 
+		from dl_customer customer
+		where 1 = 1
+		<if test="id != null and id != ''">
+		and customer.id = #{id}
+		</if>
+		<if test="mobile != null and mobile != ''">
+		and customer.mobile = #{mobile}
+		</if>
 	</select>
+	
+	<select id="getCountOrderByMobile" parameterType="pd" resultType="pd">
+		<!-- 
+		SELECT COUNT(_order.`order_id`)
+		FROM dl_order _order, dl_user _user
+		WHERE _order.`user_id` = _user.`user_id`
+		AND _order.`pay_status` = 1
+		AND _order.`add_time` >= 1546790400000
+		AND _user.`mobile` = '13241675826'
+		 -->
+		SELECT COUNT(_order.`order_id`) as _count
+		FROM dl_order _order, dl_user _user
+		WHERE _order.`user_id` = _user.`user_id`
+		AND _order.`pay_status` = 1
+		AND _order.`add_time` >= 1546790400000
+		AND _user.`mobile` = #{mobile}
+	</select>
+	
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
@@ -135,8 +217,12 @@
 		and customer.pay_state = #{pd.pay_state} 
 		</if>
 		<if test="pd.last_add_seller_id != null and pd.last_add_seller_id != ''">
-		and customer.last_add_seller_id = '#{pd.last_add_seller_id}' 
+		and customer.last_add_seller_id = #{pd.last_add_seller_id} 
 		</if>
+		<if test="pd.last_add_seller_name != null and pd.last_add_seller_name != ''">
+		and customer.last_add_seller_name = #{pd.last_add_seller_name} 
+		</if>
+		ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC
 	</select>
 	
 	
@@ -159,6 +245,32 @@
                  #{item}
 		</foreach>
 	</delete>
+	
+	<select id="getOrdes" parameterType="pd" resultType="pd">
+		SELECT 
+<!-- 		_order.order_sn,   -->
+<!-- 		_order.ticket_amount, -->
+<!-- 		_order.bonus, -->
+<!-- 		_order.add_time -->
+		_order.*
+		FROM `dl_order` _order
+		WHERE 1 = 1
+		<if test="user_id != null and user_id != ''">
+		AND _order.`user_id` = #{user_id}
+		</if>
+		<if test="pay_status != null and pay_status != ''">
+		AND _order.`pay_status` = #{pay_status}
+		</if>
+		<if test="end_add_time!= null and end_add_time != ''"> 
+		AND _order.`add_time` &lt;= #{end_add_time}
+ 		</if>
+		<if test="start_add_time!= null and start_add_time != ''"> 
+		AND _order.`add_time` &gt;= #{start_add_time}
+ 		</if>
+ 		
+ 		
+		ORDER BY _order.`add_time` DESC
+	</select>
 	
 	<!-- fh313596790qq(青苔) -->
 </mapper>

@@ -55,7 +55,7 @@ public class BaseController extends ApplicationObjectSupport{
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		return request;
 	}
-
+	
 	/**得到32位的uuid
 	 * @return
 	 */
@@ -138,5 +138,4 @@ public class BaseController extends ApplicationObjectSupport{
 			}
 	}
 		
-	
 }

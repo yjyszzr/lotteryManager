@@ -274,6 +274,10 @@
 		and store.id = #{store_id}
 	</select>	
 	
+	<select id="findUserByUserid" parameterType="pd" resultType="pd">
+		select * from dl_user user where user.user_id = #{user_id}
+	</select>
+	
 	<select id="getSumRechargeCardRealValue" parameterType="pd" resultType="pd">
 		SELECT SUM(user_account.recharge_card_real_value) as recharge_card_real_value
 		FROM `dl_user_account` user_account

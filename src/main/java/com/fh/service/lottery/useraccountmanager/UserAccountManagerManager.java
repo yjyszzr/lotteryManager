@@ -69,6 +69,8 @@ public interface UserAccountManagerManager {
 	 */
 	public PageData findById(PageData pd) throws Exception;
 	
+	public PageData getCountOrderByMobile(PageData pd) throws Exception; 
+	
 	public PageData getUserByUserId(PageData pd) throws Exception;
 
 	public List<PageData> findByUserIdStoreId(PageData pd) throws Exception;

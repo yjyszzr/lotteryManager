@@ -43,16 +43,24 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="customer/list.do" method="post" name="Form" id="Form">
+						<form action="customer/total.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
 								<td>
 									<div class="nav-search">
+										<!-- 
 										<span class="input-icon" style="width:80px;text-align:right;">
 											手机号:
 										</span>
 										<span class="input-icon">
 											<input type="text" placeholder="手机号" style="width:154px;" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"   onkeyup="value=value.replace(/[^\d]/g,'')"  />
+										</span>
+										 -->
+										<span class="input-icon" style="width:80px;text-align:right;">
+											销售员:
+										</span>
+										<span class="input-icon">
+											<input type="text" placeholder="销售员" style="width:154px;" class="nav-search-input" id="last_add_seller_name" autocomplete="off" name="last_add_seller_name" value="${pd.last_add_seller_name}"  />
 										</span>
 									</div>
 								</td>
@@ -117,6 +125,7 @@
 									<th class="center">用户类型</th>
 									<th class="center">用户来源</th>
 									<th class="center">是否已购彩</th>
+									<th class="center">销售员</th>
 									<th class="center">录入时间</th>
 									<th class="center">购彩时间</th>
 									<th class="center">操作</th>
@@ -171,6 +180,11 @@
 												</c:if>
 												 
 											</td>
+											<td class='center'>
+												
+												
+												${var.last_add_seller_name}
+											</td>
 											<td class='center'>${DateUtil.toSDFTime(var.last_add_time*1000)}</td>
 											<td class='center'>
 													<c:choose>
@@ -189,21 +203,7 @@
 													>
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看">查看</i>
 													</a>
-													<a class="btn btn-xs btn-success" title="编辑" 
-													   onclick="edit('id=' + '${var.id}' + '');"	   
-													   
-													>
-														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="编辑">编辑</i>
-													</a>
-													
-													<c:if test="${var.pay_state == 0}">
-														<a class="btn btn-xs btn-success" title="置回" 
-														   onclick="reset('id=' + '${var.id}' + '');"	   
-														   
-														>
-															<i class="ace-icon fa fa-pencil-square-o bigger-120" title="置回">置回</i>
-														</a>
-													</c:if>
+													 
 												
 														
 												</div>
@@ -258,9 +258,9 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
+<%-- 									<c:if test="${QX.add == 1 }"> --%>
+<!-- 									<a class="btn btn-mini btn-success" onclick="add();">新增</a> -->
+<%-- 									</c:if> --%>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
@@ -304,7 +304,7 @@
 		//检索
 		function tosearch(status){
 			if(status==0){
-				$("#mobile").val("");
+				$("#last_add_seller_name").val("");
 				$("#user_state").val("");
 				$("#start_last_add_time").val("");
 				$("#end_last_add_time").val("");
@@ -368,7 +368,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="";
-			 diag.URL = '<%=basePath%>customer/see.do?' + str;
+			 diag.URL = '<%=basePath%>customer/seeTotal.do?' + str;
 			 /**
 			 diag.Width = 450;
 			 diag.Height = 355;

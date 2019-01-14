@@ -104,6 +104,7 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 	public PageData findById(PageData pd)throws Exception{
 		return (PageData)dao.findForObject("SuperWhiteListMapper.findById", pd);
 	}
+
 	
 	public PageData getSumRechargeCardRealValue(PageData pd)throws Exception {
 		return (PageData)dao.findForObject("SuperWhiteListMapper.getSumRechargeCardRealValue", pd);
@@ -115,6 +116,11 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("SuperWhiteListMapper.deleteAll", ArrayDATA_IDS);
+	}
+
+	@Override
+	public PageData findUserByUserid(PageData pd) throws Exception {
+		return (PageData)dao.findForObject("SuperWhiteListMapper.findUserByUserid", pd);
 	}
 	
 }

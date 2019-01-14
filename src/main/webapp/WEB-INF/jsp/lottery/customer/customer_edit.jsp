@@ -28,68 +28,50 @@
 					<div class="col-xs-12">
 					
 					<form action="customer/${msg }.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="_id" id="_id" value="${pd._id}"/>
+						<input type="hidden" name="id" id="id" value="${pd.id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注1:</td>
-								<td><input type="number" name="id" id="id" value="${pd.id}" maxlength="32" placeholder="这里输入备注1" title="备注1" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">手机号:</td>
+								<td>${pd.mobile}</td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注2:</td>
-								<td><input type="number" name="user_id" id="user_id" value="${pd.user_id}" maxlength="32" placeholder="这里输入备注2" title="备注2" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">姓名:</td>
+								<td><input type="text" name="user_name" id="user_name" value="${pd.user_name}" maxlength="20" placeholder="这里输入姓名"  title="这里输入姓名" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注3:</td>
-								<td><input type="text" name="mobile" id="mobile" value="${pd.mobile}" maxlength="20" placeholder="这里输入备注3" title="备注3" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">用户类型:</td>
+								<td>
+									<c:if test="${pd.user_state == 1}">
+										新用户
+									</c:if>
+									<c:if test="${pd.user_state == 2}">
+										老用户
+									</c:if>
+								</td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注4:</td>
-								<td><input type="text" name="user_name" id="user_name" value="${pd.user_name}" maxlength="20" placeholder="这里输入备注4" title="备注4" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注5:</td>
-								<td><input type="number" name="user_state" id="user_state" value="${pd.user_state}" maxlength="32" placeholder="这里输入备注5" title="备注5" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注6:</td>
-								<td><input type="number" name="user_source" id="user_source" value="${pd.user_source}" maxlength="32" placeholder="这里输入备注6" title="备注6" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注7:</td>
-								<td><input type="number" name="pay_state" id="pay_state" value="${pd.pay_state}" maxlength="32" placeholder="这里输入备注7" title="备注7" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注8:</td>
-								<td><input type="number" name="first_pay_time" id="first_pay_time" value="${pd.first_pay_time}" maxlength="32" placeholder="这里输入备注8" title="备注8" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注9:</td>
-								<td><input type="number" name="first_add_time" id="first_add_time" value="${pd.first_add_time}" maxlength="32" placeholder="这里输入备注9" title="备注9" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注10:</td>
-								<td><input type="text" name="first_add_seller_name" id="first_add_seller_name" value="${pd.first_add_seller_name}" maxlength="20" placeholder="这里输入备注10" title="备注10" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注11:</td>
-								<td><input type="text" name="first_add_seller_id" id="first_add_seller_id" value="${pd.first_add_seller_id}" maxlength="100" placeholder="这里输入备注11" title="备注11" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注12:</td>
-								<td><input type="number" name="last_add_time" id="last_add_time" value="${pd.last_add_time}" maxlength="32" placeholder="这里输入备注12" title="备注12" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注13:</td>
-								<td><input type="text" name="last_add_seller_name" id="last_add_seller_name" value="${pd.last_add_seller_name}" maxlength="20" placeholder="这里输入备注13" title="备注13" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注14:</td>
-								<td><input type="text" name="last_add_seller_id" id="last_add_seller_id" value="${pd.last_add_seller_id}" maxlength="100" placeholder="这里输入备注14" title="备注14" style="width:98%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">备注15:</td>
-								<td><input type="number" name="distribute_state" id="distribute_state" value="${pd.distribute_state}" maxlength="32" placeholder="这里输入备注15" title="备注15" style="width:98%;"/></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">用户来源:</td>
+								<td>
+									<c:if test="${pd.user_source == 1}">
+										 公司资源
+									</c:if>
+									<c:if test="${pd.user_source == 2}">
+										 微信群
+									</c:if>
+									<c:if test="${pd.user_source == 3}">
+										 QQ群
+									</c:if>
+									<c:if test="${pd.user_source == 4}">
+										 好友推荐
+									</c:if>
+									<c:if test="${pd.user_source == 5}">
+										 电话访问
+									</c:if>
+									<c:if test="${pd.user_source == 6}">
+										 其它
+									</c:if>
+								</td>
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
@@ -159,7 +141,7 @@
 			if($("#user_name").val()==""){
 				$("#user_name").tips({
 					side:3,
-		            msg:'请输入备注4',
+		            msg:'请输入用户名',
 		            bg:'#AE81FF',
 		            time:2
 		        });

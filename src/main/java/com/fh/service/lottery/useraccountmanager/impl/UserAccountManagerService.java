@@ -154,6 +154,13 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	public PageData getUserByUserId(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.getUserByUserId", pd);
 	}
+
+	@Override
+	public PageData getCountOrderByMobile(PageData pd) throws Exception {
+		// TODO Auto-generated method stub
+		return (PageData) dao.findForObject("UserAccountManagerMapper.getCountOrderByMobile", pd);
+	}
+	
 	
 /*	@SuppressWarnings("unchecked")
 	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception {

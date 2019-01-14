@@ -7,6 +7,29 @@
 		dl_user_account
 	</sql>
 	
+	<select id="getOrdes" parameterType="pd" resultType="pd">
+ 
+		SELECT 
+		_order.*
+		FROM `dl_order` _order
+		WHERE 1 = 1
+		<if test="user_id != null and user_id != ''">
+		AND _order.`user_id` = #{user_id}
+		</if>
+		<if test="pay_status != null and pay_status != ''">
+		AND _order.`pay_status` = #{pay_status}
+		</if>
+		<if test="end_add_time!= null and end_add_time != ''"> 
+		AND _order.`add_time` &lt;= #{end_add_time}
+ 		</if>
+		<if test="start_add_time!= null and start_add_time != ''"> 
+		AND _order.`add_time` &gt;= #{start_add_time}
+ 		</if>
+		ORDER BY _order.`add_time` DESC
+	 
+		
+	</select>
+	
 	<!-- 字段 -->
 	<sql id="Field">
 		id,	
@@ -141,9 +164,28 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
-		where 
-			id = #{id}
+		where 1 = 1
+		and	id = #{id}
+		
+		<!-- 
+		<if test="id != null and id != ''">
+		and	id = #{id}
+		</if>
+		<if test="process_type != null and process_type != ''">
+		and	process_type = #{process_type}
+		</if>
+		 -->
 	</select>
+	
+	<select id="getCountOrderByMobile" parameterType="pd" resultType="pd">
+		SELECT COUNT(_order.`order_id`) as _count
+		FROM dl_order _order, dl_user _user
+		WHERE _order.`user_id` = _user.`user_id`
+		AND _order.`pay_status` = 1
+		AND _order.`add_time` >= 1546790400000
+		AND _user.`mobile` = #{mobile}
+	</select>
+	
 	
 	<select id="findByUserIdStoreId" parameterType="pd" resultType="pd">
 		select 
