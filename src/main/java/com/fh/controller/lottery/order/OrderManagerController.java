@@ -286,6 +286,7 @@ public class OrderManagerController extends BaseController {
 		}
 		pd.put("pass_type", passTypeStr);
 		List<PageData> orderDetailsList = ordermanagerService.toDetail(pd); // 列出OrderManager列表
+		logBefore(logger,    " orderDetailsList详情列表==============" + orderDetailsList);
 		if (pd.getString("lottery_classify_id").equals("1")) {
 			for (int i = 0; i < orderDetailsList.size(); i++) {
 				String nameStr = "";
@@ -359,9 +360,13 @@ public class OrderManagerController extends BaseController {
 
 				}
 				orderDetailsList.get(i).put("redBileList", redBileList);
+				logBefore(logger,    " redBileList列表==============" + redBileList);
 				orderDetailsList.get(i).put("redTowingList", redTowingList);
+				logBefore(logger,    "redTowingList列表==============" + redTowingList);
 				orderDetailsList.get(i).put("blueBileList", blueBileList);
+				logBefore(logger,    " blueBileList列表==============" + blueBileList);
 				orderDetailsList.get(i).put("blueTowingList", blueTowingList);
+				logBefore(logger,    " blueTowingList列表==============" + blueTowingList);
 			}
 			mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
 		}

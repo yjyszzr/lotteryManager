@@ -74,6 +74,18 @@
 										  	</select>
 										  	</div>
 									</th>
+										<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													彩种:
+												</span>
+										 	<select  name="lottery_classify_id" id="lottery_classify_id" data-placeholder="请选择" value="${pd.lottery_classify_id }" style="width:154px;border-radius:5px !important"  >
+											<option value="" selected="selected">全部</option>
+													<option value="1" <c:if test="${pd.lottery_classify_id == 1}">selected</c:if>>竞彩足球</option>
+													<option value="2" <c:if test="${pd.lottery_classify_id == 2}">selected</c:if>>大乐透</option>
+										  	</select>
+										  	</div>
+									</td>
 										</tr>
 										<tr>
 									<th  >

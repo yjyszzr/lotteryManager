@@ -370,6 +370,9 @@
 				and o.order_status = #{pd.order_status }
 			</if>
 		</if>
+		<if test="pd.lottery_classify_id != null and pd.lottery_classify_id != ''"> 
+			and l.lottery_classify_id = #{pd.lottery_classify_id }
+		</if>
 		<if test="pd.order_status == null || pd.order_status == ''"> 
 				and o.order_status  <![CDATA[ <> ]]>  8
 		</if>
