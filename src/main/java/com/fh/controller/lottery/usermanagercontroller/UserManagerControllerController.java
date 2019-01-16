@@ -3,9 +3,11 @@ package com.fh.controller.lottery.usermanagercontroller;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -17,12 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
+import com.fh.entity.dto.SysUserDTO;
 import com.fh.entity.sms.RspSmsCodeEntity;
+import com.fh.entity.system.User;
 import com.fh.enums.ThirdApiEnum;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
@@ -30,7 +35,9 @@ import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
+import com.fh.service.system.user.impl.UserService;
 import com.fh.util.AppUtil;
+import com.fh.util.Const;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.NetWorkUtil;
@@ -76,6 +83,9 @@ public class UserManagerControllerController extends BaseController {
 
 	@Resource(name = "orderService")
 	private OrderManager ordermanagerService;
+	
+	@Resource(name = "userService")
+	private UserService userService;
 	
 	private final static Logger logFac = LoggerFactory.getLogger(UserManagerControllerController.class);
 
@@ -161,6 +171,124 @@ public class UserManagerControllerController extends BaseController {
 		mv = getDetailView(mv);
 		return mv;
 	}
+
+
+	/*
+	 *  销售人员业绩总列表
+	 */
+	@RequestMapping(value = "/listSA")
+	public ModelAndView sellerAchievementList(Page page) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		Calendar cal = Calendar.getInstance();
+		Integer curMonth = cal.get(Calendar.MONTH) + 1; 
+		pd.put("curMonth", curMonth);
+		page.setPd(pd);
+		List<PageData> varList = usermanagercontrollerService.sellerAchieveList(page);
+		
+		//销售人员总红包数量
+		List<PageData> bonusList =  usermanagercontrollerService.sellerUserBonushTotal();
+		Map<String,String> bonusMap = bonusList.stream().collect(Collectors.toMap(s->s.getString("firstAddSellerId"), s->s.getString("totalBonus")));
+		
+		//销售人员表
+		List<PageData> sellers = userService.querySellers();
+		Map<String,SysUserDTO> userMap = this.createUserMap(sellers);
+		
+		for(PageData pdata:varList) {
+			String firstSellerId = pdata.getString("first_add_seller_id");
+			String totalBonus = bonusMap.get(firstSellerId);
+			if(!StringUtils.isEmpty(totalBonus)) {
+				pdata.put("totalBonus", totalBonus);
+			}else {
+				pdata.put("totalBonus", "0");
+			}
+			
+			if(userMap.get(firstSellerId) != null) {
+				SysUserDTO sysUser = userMap.get(firstSellerId);
+				pdata.put("userId", String.valueOf(sysUser.getUserId()));
+				pdata.put("mobile", sysUser.getMobile());
+				pdata.put("username", sysUser.getUsername());				
+			}else {
+				pdata.put("userId", "");
+				pdata.put("mobile", "");
+				pdata.put("username", "");
+			}
+		}
+		
+		//销售人员月增加购彩量
+		
+		//销售人员总增加购彩量
+		
+		mv.setViewName("lottery/customer/sellerAchieve_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		return mv;
+	}
+	
+	@RequestMapping(value = "/toDetail")
+	public ModelAndView toDetail() throws Exception {
+		ModelAndView mv = getDetailView(null);
+		return mv;
+	}
+	
+	@RequestMapping(value = "/toSellerDetail")
+	@ResponseBody
+	public ModelAndView toSellerDetail() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "用户销售业绩详情");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("first_add_seller_id", pd.getString("user_id"));
+		
+		PageData queryPd = new PageData();
+		queryPd.put("USER_ID", pd.getString("user_id"));
+		PageData seller = userService.findById(queryPd);
+		List<PageData> varList = usermanagercontrollerService.sellerAchieveByMonthList(pd);
+		for(PageData newpd:varList) {
+			newpd.put("curPersons", "0");
+			newpd.put("curBonus", "0");
+		}
+		
+		mv.setViewName("lottery/customer/sellerAchieveByMonth_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", seller);
+		return mv;
+	}
+
+	
+	/**
+	 * 构造销售人员map
+	 * @param sellers
+	 * @return
+	 */
+	public Map<String,SysUserDTO> createUserMap(List<PageData> sellers){
+		Map<String,SysUserDTO> map = new HashMap<String,SysUserDTO>();
+		for(PageData pageData:sellers) {
+			SysUserDTO sysUser = new SysUserDTO();
+			sysUser.setUserId(pageData.getString("USER_ID"));
+			sysUser.setMobile(pageData.getString("PHONE"));
+			sysUser.setUsername(pageData.getString("USERNAME"));
+			map.put(pageData.getString("USER_ID"), sysUser);
+		}
+		return map;
+	}
+	
+	/*
+	 *  销售人员业绩按月列表
+	 */
+	@RequestMapping(value = "/sellerAchievementByMonthList")
+	public ModelAndView sellerAchievementByMonthList() throws Exception {
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		List<PageData> varList = usermanagercontrollerService.sellerAchieveByMonthList(pd);
+		mv.setViewName("lottery/usermanagercontroller/sellerAchieveByMonth_list");
+		mv.addObject("varList", varList);
+		mv.addObject("pd", pd);
+		return mv;
+	}
+
 
 	/**
 	 * 强制
@@ -358,11 +486,6 @@ public class UserManagerControllerController extends BaseController {
 		return mv;
 	}
 
-	@RequestMapping(value = "/toDetail")
-	public ModelAndView toDetail() throws Exception {
-		ModelAndView mv = getDetailView(null);
-		return mv;
-	}
 
 	/**
 	 * 消费详情
