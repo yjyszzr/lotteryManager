@@ -58,7 +58,7 @@ public interface UserManagerControllerManager {
 	public List<PageData> listDetailTwo(Page page) throws Exception;
 
 	/**
-	 * 列表(全部)
+	 * 列表(全部)˙
 	 * 
 	 * @param pd
 	 * @throws Exception
@@ -124,7 +124,46 @@ public interface UserManagerControllerManager {
 	 * @throws Exception
 	 */
 	public List<PageData> getRegisterAndAgainOrder(Page page)throws Exception;
-	
+
+
+	/** 获取销售人员业绩总体查询
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerAchieveList(Page page)throws Exception;
+
+	/** 获取销售人员每个月的业绩查询
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerAchieveByMonthList(PageData page)throws Exception;
+
+
+	/** 获取销售人员每个月录入的用户数量
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerWriteUserhList(PageData page)throws Exception;
+
+	/** 获取销售人员下的人员每个月的购彩量
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerBuyMoneyhList(PageData pd)throws Exception;
+
+
+	/** 获取销售人员下的人员每个月红包使用量
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerUserBonushList(PageData page)throws Exception;
+
+	/** 获取销售人员下的人员红包使用总量
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerUserBonushTotal()throws Exception;
+
 	/**根据手机号集合查询userId集合
 	 * @param List mobileList
 	 * @throws Exception

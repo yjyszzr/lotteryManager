@@ -189,5 +189,66 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public List<Integer> getUserIdListByMobileList(List mobileList) throws Exception {
 		return (List<Integer>)dao.findForList("UserManagerControllerMapper.getUserIdListByMobileList", mobileList);
 	}
+
+
+	/** 获取销售人员业绩总体查询
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerAchieveList(Page page)throws Exception{
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.sellerAchieveList", page);
+	}
 	
+
+	/** 获取销售人员每个月的业绩查询
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerAchieveByMonthList(PageData page)throws Exception{
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerAchieveByMonthList", page);
+	}
+
+	/** 获取销售人员每个月录入的用户数量
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerWriteUserhList(PageData page)throws Exception{
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerWriteUserhList", page);
+	}
+
+	/** 获取销售人员下的人员每个月的购彩量
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerBuyMoneyhList(List<PageData> varList)throws Exception{
+		String[] userIdList = new String[varList.size()];
+		for (int i = 0; i < varList.size(); i++) {
+			userIdList[i] = varList.get(i).getString("user_id");
+		}
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerBuyMoneyhList", userIdList);
+	}
+
+
+	/** 获取销售人员下的人员每个月的红包量
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerUserBonushList(PageData page)throws Exception{
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerUserBonushList", page);
+	}
+	
+	
+	/** 获取销售人员下的人员红包总量
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> sellerUserBonushTotal()throws Exception{
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerUserBonushTotal", "");
+	}
+
+	@Override
+	public List<PageData> sellerBuyMoneyhList(PageData pd) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

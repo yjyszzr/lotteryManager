@@ -458,4 +458,8 @@
 		where u.ROLE_ID = r.ROLE_ID 
 		order by u.LAST_LOGIN desc
 	</select>
+	
+	<select id="querySellers" resultType="pd">
+			select USER_ID,PHONE,USERNAME from fhadmin_test.SYS_USER  u left join fhadmin_test.SYS_ROLE r on u.ROLE_ID = r.ROLE_ID where r.ROLE_NAME = '销售组'
+	</select>
 </mapper>

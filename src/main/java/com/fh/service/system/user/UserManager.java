@@ -181,4 +181,6 @@ public interface UserManager {
 	public List<PageData> listAllRefresh(PageData pd) throws Exception;
 
 	public PageData findByMobile(PageData pd) throws Exception;
+	
+	public List<PageData>  querySellers() throws Exception;
 }

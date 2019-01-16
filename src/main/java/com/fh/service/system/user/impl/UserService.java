@@ -253,5 +253,11 @@ public class UserService implements UserManager {
 	public PageData findByMobile(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserMapper.findByMobile", pd);
 	}
+	
+	public List<PageData>  querySellers() throws Exception{
+		return (List<PageData>) dao.findForList("UserMapper.querySellers", "");
+
+	}
+	
 
 }
