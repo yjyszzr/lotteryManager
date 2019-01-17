@@ -29,6 +29,7 @@ import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
+import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
@@ -86,8 +87,6 @@ public class CustomerController extends BaseController {
 		return mv;
 	}
 	
-	
-	
 	@RequestMapping(value="/reset")
 	public ModelAndView reset() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改Customer");
@@ -97,8 +96,8 @@ public class CustomerController extends BaseController {
 		pd = this.getPageData();
 		
 		pd.put("last_add_time",  DateUtilNew.getCurrentTimeLong());
-		pd.put("last_add_seller_name", "NULL");
-		pd.put("last_add_seller_id", "NULL");
+		pd.put("last_add_seller_name", " ");
+		pd.put("last_add_seller_id", "(NULL)");
 		pd.put("distribute_state", "0");
 		
 		customerService.edit(pd);
@@ -344,6 +343,8 @@ public class CustomerController extends BaseController {
 		return mv;
 	}
 	
+	
+	
 	/** 
 	 * @param page
 	 * @throws Exception
@@ -385,6 +386,113 @@ public class CustomerController extends BaseController {
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		return mv;
+	}
+	
+	 /**导出到excel
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/excel")
+	public ModelAndView exportExcel() throws Exception{
+//		logBefore(logger, Jurisdiction.getUsername()+"导出Customer到excel");
+//		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		
+//		String keywords = pd.getString("keywords");				//关键词检索条件
+//		if(null != keywords && !"".equals(keywords)){
+//			pd.put("keywords", keywords.trim());
+//		}
+		
+		String _start_last_add_time = pd.getString("start_last_add_time");
+		if (null != _start_last_add_time && !"".equals(_start_last_add_time)) {
+			pd.put("start_last_add_time", DateUtilNew.getMilliSecondsByStr(_start_last_add_time.trim()));
+		}
+		String _end_last_add_time = pd.getString("end_last_add_time");
+		if (null != _end_last_add_time && !"".equals(_end_last_add_time)) {
+			pd.put("end_last_add_time", DateUtilNew.getMilliSecondsByStr(_end_last_add_time.trim()));
+		}
+		
+//		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+//		String last_add_seller_id = user.getUSER_ID();
+//		System.out.println("last_add_seller_id=" + last_add_seller_id);
+//		pd.put("last_add_seller_id", last_add_seller_id);
+ 
+		List<PageData> varOList = customerService.listAll(pd);	//列出Customer列表
+		
+		pd.put("start_last_add_time", _start_last_add_time.trim());
+		pd.put("end_last_add_time", _end_last_add_time.trim());
+		
+		Map<String,Object> dataMap = new HashMap<String,Object>();
+		List<String> titles = new ArrayList<String>();
+		titles.add("手机号");	//1
+		titles.add("用户名");	//2
+		titles.add("用户类型");	//3
+		titles.add("用户来源");	//4
+		titles.add("是否已购彩");	//5
+		titles.add("销售员");	//6
+		titles.add("录入时间");	//7
+		titles.add("购彩时间");	//8
+		dataMap.put("titles", titles);
+		List<PageData> varList = new ArrayList<PageData>();
+		for(int i=0;i<varOList.size();i++){
+			PageData vpd = new PageData();
+			vpd.put("var1", varOList.get(i).get("mobile").toString());	//1
+			vpd.put("var2", varOList.get(i).get("user_name").toString());	//2
+			
+			String user_state = "";
+			if (varOList.get(i).getString("user_state").equals("1"))
+				user_state = "新用户";
+			if (varOList.get(i).getString("user_state").equals("2"))
+				user_state = "老用户";
+			vpd.put("var3", user_state);	    //3
+			
+			String user_source = "";
+			if (varOList.get(i).getString("user_source").equals("1"))
+				user_source = "公司资源";
+			if (varOList.get(i).getString("user_source").equals("2"))
+				user_source = "微信群";
+			if (varOList.get(i).getString("user_source").equals("3"))
+				user_source = "QQ群";
+			if (varOList.get(i).getString("user_source").equals("4"))
+				user_source = "好友推荐";
+			if (varOList.get(i).getString("user_source").equals("5"))
+				user_source = "电话访问";
+			if (varOList.get(i).getString("user_source").equals("6"))
+				user_source = "其它";
+			vpd.put("var4", user_source);	    //4
+			
+			String pay_state = "";
+			if (varOList.get(i).getString("pay_state").equals("1"))
+				pay_state = "已购彩";
+			if (varOList.get(i).getString("pay_state").equals("2"))
+				pay_state = "未购彩";
+			vpd.put("var5", pay_state);	//5
+			
+			vpd.put("var6", varOList.get(i).get("last_add_seller_name").toString());	//6
+			
+			String last_add_time = "";
+			last_add_time = varOList.get(i).get("last_add_time").toString();
+			if (null != last_add_time && !last_add_time.equals("")) {
+				last_add_time = DateUtil.toSDFTime(new Long(last_add_time)*1000);
+			}
+			vpd.put("var7", last_add_time);	//7
+			
+			String first_pay_time = "";
+			first_pay_time = varOList.get(i).getString("first_pay_time");
+			if (null != first_pay_time && !first_pay_time.equals("")) {
+				first_pay_time = DateUtil.toSDFTime(new Long(first_pay_time)*1000);
+			}
+			vpd.put("var8", first_pay_time);	//8
+			
+			varList.add(vpd);
+		}
+		dataMap.put("varList", varList);
+		ObjectExcelView erv = new ObjectExcelView();
+		mv = new ModelAndView(erv,dataMap);
 		return mv;
 	}
 	
@@ -558,62 +666,6 @@ public class CustomerController extends BaseController {
 		pdList.add(pd);
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
-	}
-	
-	 /**导出到excel
-	 * @param
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/excel")
-	public ModelAndView exportExcel() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"导出Customer到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
-		ModelAndView mv = new ModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		Map<String,Object> dataMap = new HashMap<String,Object>();
-		List<String> titles = new ArrayList<String>();
-		titles.add("备注1");	//1
-		titles.add("备注2");	//2
-		titles.add("备注3");	//3
-		titles.add("备注4");	//4
-		titles.add("备注5");	//5
-		titles.add("备注6");	//6
-		titles.add("备注7");	//7
-		titles.add("备注8");	//8
-		titles.add("备注9");	//9
-		titles.add("备注10");	//10
-		titles.add("备注11");	//11
-		titles.add("备注12");	//12
-		titles.add("备注13");	//13
-		titles.add("备注14");	//14
-		titles.add("备注15");	//15
-		dataMap.put("titles", titles);
-		List<PageData> varOList = customerService.listAll(pd);
-		List<PageData> varList = new ArrayList<PageData>();
-		for(int i=0;i<varOList.size();i++){
-			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("id").toString());	//1
-			vpd.put("var2", varOList.get(i).get("user_id").toString());	//2
-			vpd.put("var3", varOList.get(i).getString("mobile"));	    //3
-			vpd.put("var4", varOList.get(i).getString("user_name"));	    //4
-			vpd.put("var5", varOList.get(i).get("user_state").toString());	//5
-			vpd.put("var6", varOList.get(i).get("user_source").toString());	//6
-			vpd.put("var7", varOList.get(i).get("pay_state").toString());	//7
-			vpd.put("var8", varOList.get(i).get("first_pay_time").toString());	//8
-			vpd.put("var9", varOList.get(i).get("first_add_time").toString());	//9
-			vpd.put("var10", varOList.get(i).getString("first_add_seller_name"));	    //10
-			vpd.put("var11", varOList.get(i).getString("first_add_seller_id"));	    //11
-			vpd.put("var12", varOList.get(i).get("last_add_time").toString());	//12
-			vpd.put("var13", varOList.get(i).getString("last_add_seller_name"));	    //13
-			vpd.put("var14", varOList.get(i).getString("last_add_seller_id"));	    //14
-			vpd.put("var15", varOList.get(i).get("distribute_state").toString());	//15
-			varList.add(vpd);
-		}
-		dataMap.put("varList", varList);
-		ObjectExcelView erv = new ObjectExcelView();
-		mv = new ModelAndView(erv,dataMap);
-		return mv;
 	}
 	
 	@InitBinder

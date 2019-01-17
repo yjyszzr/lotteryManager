@@ -1,4 +1,5 @@
 <%@page import="com.fh.util.DateUtil"%>
+<%@page import="com.fh.util.StringUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -118,7 +119,10 @@
 											</td>
 											 -->
 											<td class='center'>${var.index+1}</td>
-											<td class='center'>${var.order_sn}</td>
+											<td class='center'>
+<%-- 												${var.order_sn} --%>
+												${StringUtil.strReplace(var.order_sn, 8, 14, "XXXXXX")}
+											</td>
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.bonus}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.first_pay_time*1000)}</td>

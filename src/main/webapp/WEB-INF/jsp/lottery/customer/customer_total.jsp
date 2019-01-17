@@ -109,6 +109,9 @@
 									<span>
 											<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
 									</span>
+									<span class="input-icon" style="width:44px;"> </span>
+											<a class="btn btn-light btn-xs blue" onclick="toExcel();"  title="导出到Excel"  style="border-radius:5px;color:blue !important; width:50px">EXCEL</a>
+									</span>
 								</td>
 														  	
 							</tr>
@@ -515,7 +518,25 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>customer/excel.do';
+			
+			var last_add_seller_name = $("#last_add_seller_name").val();
+			var user_state = $("#user_state").val();
+			var start_last_add_time = $("#start_last_add_time").val();
+			var end_last_add_time = $("#end_last_add_time").val();
+			var pay_state = $("#pay_state").val();
+			
+			var url = '<%=basePath%>customer/excel.do?t=' + new Date().getTime() 
+			+ "&last_add_seller_name=" + last_add_seller_name 
+			+ "&user_state=" + user_state		
+			+ "&start_last_add_time=" + start_last_add_time
+			+ "&end_last_add_time=" + end_last_add_time
+			+ "&pay_state=" + pay_state
+			;
+		
+// 			alert("url=" + url);
+		
+			window.location.href= url;
+		
 		}
 	</script>
 

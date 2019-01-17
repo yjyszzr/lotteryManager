@@ -98,7 +98,7 @@
 									<th class="center">用户ID</th>
 									<th class="center">手机号</th>
 									<th class="center">帐户余额</th>
-									<th class="center">充值余额</th>
+									<th class="center">充值金额</th>
 									<th class="center">大礼包金额</th>
 									<th class="center">充值原因</th>
 									<th class="center">扣款原因</th>

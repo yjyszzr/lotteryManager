@@ -40,6 +40,38 @@ public class StringUtil {
     	// content = HTMLDecoder.decode(content); 
     	return content; 
     }
+    
+    public static void main(String[] args) {
+		System.out.println(strReplace("20181218111111298879", 8, 14, "XXXXXX"));
+	}
+    
+    public static String strReplace(String srcStr, int startIndex, int endIndex, String repStr) {
+    	try {
+			if (StringUtil.isEmptyStr(srcStr)) return null;
+			
+			String str1 = "";
+			try {
+				str1 = srcStr.substring(0, startIndex);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+					
+			String str2 = "";
+			try {
+				str2 = srcStr.substring(endIndex);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			if (null == repStr) repStr = "";
+			
+			return str1 + repStr + str2;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return null;
+    }
 	
 	
 	/**获取字符串编码

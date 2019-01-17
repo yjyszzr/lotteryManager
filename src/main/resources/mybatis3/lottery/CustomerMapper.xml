@@ -229,10 +229,37 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
+		<!-- 
 		select
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+		 -->
+		select * 
+		from dl_customer customer  		
+		where 1=1
+		<if test="mobile != null and mobile != ''">
+		and customer.mobile LIKE CONCAT(CONCAT('%', #{mobile}),'%')
+		</if>
+		<if test="user_state != null and user_state != ''">
+		and customer.user_state = #{user_state} 
+		</if>
+		<if test="end_last_add_time!= null and end_last_add_time != ''"> 
+		AND customer.`last_add_time` &lt;= #{end_last_add_time}
+ 		</if>
+		<if test="start_last_add_time!= null and start_last_add_time != ''"> 
+		AND customer.`last_add_time` &gt;= #{start_last_add_time}
+ 		</if>
+		<if test="pay_state != null and pay_state != ''">
+		and customer.pay_state = #{pay_state} 
+		</if>
+		<if test="last_add_seller_id != null and last_add_seller_id != ''">
+		and customer.last_add_seller_id = #{last_add_seller_id} 
+		</if>
+		<if test="last_add_seller_name != null and last_add_seller_name != ''">
+		and customer.last_add_seller_name = #{last_add_seller_name} 
+		</if>
+		ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC 
 	</select>
 	
 	<!-- 批量删除 -->
