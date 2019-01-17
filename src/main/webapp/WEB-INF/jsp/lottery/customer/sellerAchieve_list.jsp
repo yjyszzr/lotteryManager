@@ -36,7 +36,7 @@
 						<table style="margin-top:5px;">
 							<tr>
 								<td style="padding-left:2px;"><label>销售员账号:</label></td>
-								<td style="padding-left:2px;"><input id="phone" value="${pd.phone}"></input></td>
+								<td style="padding-left:2px;"><input id="phone" name = "phone" value="${pd.phone}"></input></td>
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								<td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
 							</tr>
@@ -317,7 +317,7 @@
 		
 		//导出excel
 		function toExcel(){
-			window.location.href='<%=basePath%>customer/excel.do';
+			window.location.href='<%=basePath%>usermanagercontroller/excelSellersTotal.do';
 		}
 	</script>
 

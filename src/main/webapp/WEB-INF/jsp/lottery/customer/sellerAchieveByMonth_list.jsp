@@ -31,6 +31,12 @@
 			<div>
 				<lable >${pd.USERNAME}</lable>
 			</div>
+			
+
+		</div>
+		<div>
+			<td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel('${pd.USER_ID}');" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
+		
 		</div>
 		
 	</div>
@@ -103,6 +109,11 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">	
 	$(top.hangge());//关闭加载状态
+	
+	//导出excel
+	function toExcel(userId){
+		window.location.href='<%=basePath%>usermanagercontroller/excelSellersDetail.do?user_id='+userId;
+	}
 	</script>
 </body>
 </html>

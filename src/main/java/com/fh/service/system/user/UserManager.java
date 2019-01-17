@@ -182,5 +182,5 @@ public interface UserManager {
 
 	public PageData findByMobile(PageData pd) throws Exception;
 	
-	public List<PageData>  querySellers() throws Exception;
+	public List<PageData>  querySellers(PageData pd) throws Exception;
 }

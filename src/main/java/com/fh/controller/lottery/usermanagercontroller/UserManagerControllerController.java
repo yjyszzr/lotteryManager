@@ -42,12 +42,15 @@ import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
 import com.fh.service.system.user.impl.UserService;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
+import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.NetWorkUtil;
+import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.RandomUtil;
 import com.fh.util.SmsUtil;
+import com.fh.util.StringUtil;
 
 import net.sf.json.JSONObject;
 
@@ -192,6 +195,8 @@ public class UserManagerControllerController extends BaseController {
 		Integer curMonth = cal.get(Calendar.MONTH) + 1; 
 		pd.put("curMonth", curMonth);
 		page.setPd(pd);
+		
+		
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveList(page);
 		
 		//销售人员总红包数量
@@ -199,7 +204,9 @@ public class UserManagerControllerController extends BaseController {
 		Map<String,String> bonusMap = bonusList.stream().collect(Collectors.toMap(s->s.getString("firstAddSellerId"), s->s.getString("totalBonus")));
 		
 		//销售人员表
-		List<PageData> sellers = userService.querySellers();
+		PageData cuPd = new PageData();
+		cuPd.put("phone", pd.getString("phone"));
+		List<PageData> sellers = userService.querySellers(cuPd);
 		Map<String,SysUserDTO> userMap = this.createUserMap(sellers);
 
 		List<PageData> queryToalList = new ArrayList<>();
@@ -218,7 +225,11 @@ public class UserManagerControllerController extends BaseController {
         List<PageData> buyTotalList = usermanagercontrollerService.queryBuyTotal(queryToalList);
         Map<String,String> totalMap = this.createUserTotalBuyMap(buyTotalList);
         
+        List<PageData> newVarList = new ArrayList<>();
 		for(PageData pdata:varList) {
+			if(userMap.get(pdata.getString("first_add_seller_id")) == null) {
+				continue;
+			}
 			String firstSellerId = pdata.getString("first_add_seller_id");
 			String totalBonus = bonusMap.get(firstSellerId);
 			if(!StringUtils.isEmpty(totalBonus)) {
@@ -251,10 +262,11 @@ public class UserManagerControllerController extends BaseController {
 			}else {
 				pdata.put("curMoney", "");
 			}
+			newVarList.add(pdata);
 		}
 		
 		mv.setViewName("lottery/customer/sellerAchieve_list");
-		mv.addObject("varList", varList);
+		mv.addObject("varList", newVarList);
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -747,6 +759,100 @@ public class UserManagerControllerController extends BaseController {
 		pd.put("msg", rspEntity.msg);
 		mv.setViewName("lottery/usermanagercontroller/usermanagercontroller_result");
 		mv.addObject("rentity", pd);
+		return mv;
+	}
+	
+	/**
+	 * 导出到excel
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/excelSellersTotal")
+	public ModelAndView exportExcel() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "导出销售人员销售概况到excel");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+			return null;
+		}
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		List<String> titles = new ArrayList<String>();
+		
+		// 手机号	姓名	当月用户录入数	总录入用户量	当月购彩销售额	购彩销售总额	惠券使用总金额
+		titles.add("手机号"); // 1
+		titles.add("姓名"); // 2
+		titles.add("当月用户录入数"); // 3
+		titles.add("总录入用户量"); // 4
+		titles.add("当月购彩销售额"); // 4
+		titles.add("购彩销售总额"); // 5
+		titles.add("优惠券使用总金额"); // 6
+		dataMap.put("titles", titles);
+
+		Page page  = new Page();
+		ModelAndView modelView = this.sellerAchievementList(page);
+		Map<String, Object> m = modelView.getModel();
+		List<PageData> varOList = (List<PageData>) m.get("varList");
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < varOList.size(); i++) {
+			PageData vpd = new PageData();
+			vpd.put("var1", varOList.get(i).getString("mobile")); // 1
+			vpd.put("var2", varOList.get(i).getString("username")); // 2
+			vpd.put("var3", varOList.get(i).getString("curPersons")); // 3
+			vpd.put("var4", varOList.get(i).getString("totalPersons")); // 4
+			vpd.put("var5", varOList.get(i).getString("curMoney")); // 5
+			vpd.put("var6", varOList.get(i).getString("totalMoney")); // 6
+			vpd.put("var7", varOList.get(i).getString("totalBonus")); // 6
+			varList.add(vpd);
+		}
+		dataMap.put("varList", varList);
+		ObjectExcelView erv = new ObjectExcelView();
+		mv = new ModelAndView(erv, dataMap);
+		return mv;
+	}
+	
+	/**
+	 * 导出到excel
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/excelSellersDetail")
+	public ModelAndView excelSellersDetail() throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "导出销售人员销售详情到excel");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
+			return null;
+		}
+		ModelAndView mv = new ModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		List<String> titles = new ArrayList<String>();
+		
+		// 月份	增加用户量	销售金额	红包使用量
+		titles.add("月份"); // 1
+		titles.add("增加用户量"); // 2
+		titles.add("销售金额"); // 3
+		titles.add("红包使用量"); // 4
+		dataMap.put("titles", titles);
+
+		Page page  = new Page();
+		ModelAndView modelView = this.toSellerDetail();
+		Map<String, Object> m = modelView.getModel();
+		List<PageData> varOList = (List<PageData>) m.get("varList");
+		List<PageData> varList = new ArrayList<PageData>();
+		for (int i = 0; i < varOList.size(); i++) {
+			PageData vpd = new PageData();
+			vpd.put("var1", varOList.get(i).getString("eveMon")); // 1
+			vpd.put("var2", varOList.get(i).getString("curPersons")); // 2
+			vpd.put("var3", varOList.get(i).getString("curMoneyPaid")); // 3
+			vpd.put("var4", varOList.get(i).getString("curBonus")); // 4
+			varList.add(vpd);
+		}
+		dataMap.put("varList", varList);
+		ObjectExcelView erv = new ObjectExcelView();
+		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
 }
