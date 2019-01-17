@@ -169,5 +169,28 @@ public interface UserManagerControllerManager {
 	 * @throws Exception
 	 */
 	public List<Integer> getUserIdListByMobileList(List<String> mobileList)throws Exception;
+
+
+	/**
+	 * 查询多人月售彩额度
+	 * @param PageData page
+	 * @throws Exception
+	 */
+	public List<PageData> queryBuyByMonth(List<PageData> varList)throws Exception;
+
+
+	/**
+	 * 查询多人总售彩额度
+	 * @param PageData page
+	 * @throws Exception
+	 */
+	public List<PageData> queryBuyTotal(List<PageData> varList)throws Exception;
+	
+	
+	/**
+	 * 查询单个销售人员的顾客id
+	 */
+	public List<Integer> queryUserIdsBySellersId(String sellerId)throws Exception;
+
 	
 }

@@ -126,7 +126,7 @@
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.bonus}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.first_pay_time*1000)}</td>
-										</tr>
+				 						</tr>
 									</c:forEach>	
 									</c:if>
 									

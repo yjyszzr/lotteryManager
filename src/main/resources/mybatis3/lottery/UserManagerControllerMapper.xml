@@ -228,7 +228,6 @@
 		from dl_customer c ;
 	</select>
 
-
 	<!-- 查询销售人员业绩表 -->
 	<select id="sellerAchieveByMonthList" parameterType="pd" resultType="pd">		
  		select sysUserId,sum(moneyPaid) curMoneyPaid,eveMon from
@@ -243,21 +242,41 @@
 	  	and cc.user_id in (select c.user_id from dl_customer c where first_add_seller_id = #{first_add_seller_id})) temp
 		group by sysUserId,eveMon;
 	</select>
-
-	<!-- 查询销售人员业绩表 -->
-	<select id="sellerWriteUserhList" parameterType="pd" resultType="pd">
-		SELECT
-			count( 1 ) totalPersons,
-			FROM_UNIXTIME( first_add_time, '%Y-%m' ) eveMon
-		FROM
-			dl_customer
-		WHERE
-				user_id IN ( SELECT user_id FROM dl_customer WHERE first_add_seller_id = '2fee55b7fcbb4731b875164a466e6335' )
-		GROUP BY
-			FROM_UNIXTIME( first_add_time, '%Y-%m' )
-		AND distribute_state = 1;
+	
+	<select id ="queryAddUserByMonth" resultType="pd">
+		select 
+		distinct(c.first_add_seller_id) first_add_seller_id,
+		FROM_UNIXTIME( c1.first_add_time, '%Y-%m' ) eveMon,
+		(select count(1) from dl_customer c1 where c1.first_add_seller_id = c.first_add_seller_id and  month(FROM_UNIXTIME(c1.first_add_time,'%Y-%m-%d')) = #{curMonth}) curPersons,
+		from dl_customer c
 	</select>
 
+	<!-- 查询销售人员业绩表 -->
+	<select id="sellerWriteUserhList" resultType="pd">
+		select count(1) curPersons,FROM_UNIXTIME( first_add_time, '%Y-%m' ) eveMon,first_add_seller_id from dl_customer where first_add_seller_id = #{first_add_seller_id} group by FROM_UNIXTIME( first_add_time, '%Y-%m' )
+	</select>
+	
+	<select id= "querySellersUserIds" resultType="Integer">
+		select user_id from dl_customer where first_add_seller_id = #{first_add_seller_id} 
+	</select>
+
+    <select id = "queryBuyByMonth" resultType="pd">
+        select sum(o.money_paid) moneyPaid,cc.first_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.user_id = cc.user_id where o.user_id in(
+            select c.user_id from dl_customer c where c.first_add_seller_id in
+                <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+        ) and month(FROM_UNIXTIME(o.add_time,'%Y-%m-%d')) = month(now()) group by cc.first_add_seller_id
+    </select>
+
+    <select id="queryBuyTotal" resultType="pd">
+        select sum(o.money_paid) moneyPaid,cc.first_add_seller_id from dl_order o  left join dl_customer cc on o.user_id = cc.user_id where o.user_id in(
+            select c.user_id from dl_customer c where c.first_add_seller_id in
+                <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+        )	 group by cc.first_add_seller_id
+    </select>
 
 	<!-- 查询销售人员业绩查询 -->
 	<select id="sellerBuyMoneyhList"  resultType="pd">	
@@ -288,6 +307,8 @@
 		GROUP BY
 			FROM_UNIXTIME( add_time, '%Y-%m' );
 	</select>
+	
+
 	
 	<select id="sellerUserBonushTotal"  resultType="pd">
 		select distinct(c.first_add_seller_id) firstAddSellerId,

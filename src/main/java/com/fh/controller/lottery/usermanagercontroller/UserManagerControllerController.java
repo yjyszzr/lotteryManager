@@ -3,6 +3,7 @@ package com.fh.controller.lottery.usermanagercontroller;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +26,13 @@ import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
+import com.fh.entity.dto.BonusMonthDTO;
+import com.fh.entity.dto.CountPersonDTO;
 import com.fh.entity.dto.SysUserDTO;
 import com.fh.entity.sms.RspSmsCodeEntity;
 import com.fh.entity.system.User;
 import com.fh.enums.ThirdApiEnum;
+import com.fh.service.lottery.activitybonus.impl.ActivityBonusService;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
@@ -86,6 +90,9 @@ public class UserManagerControllerController extends BaseController {
 	
 	@Resource(name = "userService")
 	private UserService userService;
+	
+	@Resource(name = "activitybonusService")
+	private ActivityBonusService activityBonusService;
 	
 	private final static Logger logFac = LoggerFactory.getLogger(UserManagerControllerController.class);
 
@@ -194,7 +201,23 @@ public class UserManagerControllerController extends BaseController {
 		//销售人员表
 		List<PageData> sellers = userService.querySellers();
 		Map<String,SysUserDTO> userMap = this.createUserMap(sellers);
+
+		List<PageData> queryToalList = new ArrayList<>();
+		sellers.stream().forEach(s->{
+			PageData  totalPd = new PageData();
+			String first_add_seller_id = s.getString("USER_ID");
+			totalPd.put("user_id", first_add_seller_id);
+			queryToalList.add(totalPd);
+		});
 		
+		//销售人员月增加购彩量
+		List<PageData> buyMonthList = usermanagercontrollerService.queryBuyByMonth(queryToalList);
+		Map<String,String> monthMap = this.createUserMonthBuyMap(buyMonthList);
+		
+		//销售人员总购彩量
+        List<PageData> buyTotalList = usermanagercontrollerService.queryBuyTotal(queryToalList);
+        Map<String,String> totalMap = this.createUserTotalBuyMap(buyTotalList);
+        
 		for(PageData pdata:varList) {
 			String firstSellerId = pdata.getString("first_add_seller_id");
 			String totalBonus = bonusMap.get(firstSellerId);
@@ -214,11 +237,21 @@ public class UserManagerControllerController extends BaseController {
 				pdata.put("mobile", "");
 				pdata.put("username", "");
 			}
+			
+			if(totalMap.get(firstSellerId) != null) {
+				String totalMoney = totalMap.get(firstSellerId);
+				pdata.put("totalMoney", totalMoney);
+			}else {
+				pdata.put("totalMoney", "");
+			}
+			
+			if(monthMap.get(firstSellerId) != null) {
+				String monthMoney = monthMap.get(firstSellerId);
+				pdata.put("curMoney", monthMoney);
+			}else {
+				pdata.put("curMoney", "");
+			}
 		}
-		
-		//销售人员月增加购彩量
-		
-		//销售人员总增加购彩量
 		
 		mv.setViewName("lottery/customer/sellerAchieve_list");
 		mv.addObject("varList", varList);
@@ -244,10 +277,37 @@ public class UserManagerControllerController extends BaseController {
 		PageData queryPd = new PageData();
 		queryPd.put("USER_ID", pd.getString("user_id"));
 		PageData seller = userService.findById(queryPd);
+		
+		//月购彩量
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveByMonthList(pd);
+		
+		//月增加用户数
+		List<PageData> personsList = usermanagercontrollerService.sellerWriteUserhList(pd);
+		Map<String,CountPersonDTO> curPersonsMap = this.createMonthAddUserMap(personsList);
+		
+		//月增加红包数
+		List<Integer> userIdList = usermanagercontrollerService.queryUserIdsBySellersId(pd.getString("user_id"));
+		List<PageData> bonusMonthList = activityBonusService.queryTotalBonusByMonth(userIdList);
+		Map<String,String> bonusMonthMap = this.createMonthAddBonusMap(bonusMonthList);
+		
 		for(PageData newpd:varList) {
-			newpd.put("curPersons", "0");
-			newpd.put("curBonus", "0");
+			String eveMon = newpd.getString("eveMon");
+			String sysUserId = newpd.getString("sysUserId");
+			if(curPersonsMap.get(sysUserId) != null) {
+				CountPersonDTO ctDto = curPersonsMap.get(sysUserId);
+				if(eveMon.equals(ctDto.getEveMon())) {
+					newpd.put("curPersons",ctDto.getCurPersons());
+				}else {
+					newpd.put("curPersons", "0");
+				}
+			}
+			
+			String totalBonus = bonusMonthMap.get(eveMon);
+			if(bonusMonthMap.get(eveMon) != null) {
+				newpd.put("curBonus", bonusMonthMap.get(eveMon));
+			}else {
+				newpd.put("curBonus", "0");
+			}
 		}
 		
 		mv.setViewName("lottery/customer/sellerAchieveByMonth_list");
@@ -270,6 +330,42 @@ public class UserManagerControllerController extends BaseController {
 			sysUser.setMobile(pageData.getString("PHONE"));
 			sysUser.setUsername(pageData.getString("USERNAME"));
 			map.put(pageData.getString("USER_ID"), sysUser);
+		}
+		return map;
+	}
+	
+	public Map<String,String> createUserTotalBuyMap(List<PageData> valist){
+		Map<String,String> map = new HashMap<String,String>();
+		for(PageData pageData:valist) {
+			map.put(pageData.getString("first_add_seller_id"), pageData.getString("moneyPaid"));
+		}
+		return map;
+	}
+	
+	public Map<String,String> createUserMonthBuyMap(List<PageData> valist){
+		Map<String,String> map = new HashMap<String,String>();
+		for(PageData pageData:valist) {
+			map.put(pageData.getString("first_add_seller_id"), pageData.getString("moneyPaid"));
+		}
+		return map;
+	}
+	
+	public Map<String,CountPersonDTO> createMonthAddUserMap(List<PageData> valist){
+		Map<String,CountPersonDTO> map = new HashMap<String,CountPersonDTO>();
+		for(PageData pageData:valist) {
+			CountPersonDTO dto = new CountPersonDTO();
+			dto.setFirstAddSellerId(pageData.getString("first_add_seller_id"));
+			dto.setEveMon(pageData.getString("eveMon"));
+			dto.setCurPersons(pageData.getString("curPersons"));
+			map.put(pageData.getString("first_add_seller_id"), dto);
+		}
+		return map;
+	}
+	
+	public Map<String,String> createMonthAddBonusMap(List<PageData> valist){
+		Map<String,String> map = new HashMap<String,String>();
+		for(PageData pageData:valist) {
+			map.put(pageData.getString("eveMon"), pageData.getString("bonusTotalPrice"));
 		}
 		return map;
 	}

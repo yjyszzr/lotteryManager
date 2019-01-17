@@ -37,7 +37,7 @@
 												真实姓名:
 											</span>
 											<span class="input-icon">
-												<input type="text" placeholder="真实姓名" class="nav-search-input" id="real_name" autocomplete="off" name="real_name" value="${pd.real_name }"  />
+												<input type="text" placeholder="真实姓名" class="nav-search-input" id="real_name" autocomplete="off" name="real_name" value="${pd.real_name}"  />
 											</span>
 										</div>
 									</td>
@@ -265,7 +265,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="消费详情";
-			 diag.URL = '<%=basePath%>usermanagercontroller/toConsumeDetail.do?user_id='+userId;
+			 diag.URL = '<%=basePath%>usermanagercontroller/toSellerDetail.do?user_id='+userId;
 			 diag.Width = 1200;
 			 diag.Height = 600;
 			 diag.Modal = true;				//有无遮罩窗口
