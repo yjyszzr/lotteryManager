@@ -116,6 +116,14 @@ public class ActivityBonusService implements ActivityBonusManager {
 		dao.delete("ActivityBonusMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
+	public List<PageData> queryTotalBonusByMonth(List<Integer> varList)throws Exception{
+		String[] userIdList = new String[varList.size()];
+		for (int i = 0; i < varList.size(); i++) {
+			userIdList[i] = String.valueOf(varList.get(i));
+		}
+		return (List<PageData>) dao.findForList("ActivityBonusMapper.queryTotalBonusByMonth", userIdList);
+	}
+	
 	/**
 	 * 高速批量派发红包
 	 * sdd
