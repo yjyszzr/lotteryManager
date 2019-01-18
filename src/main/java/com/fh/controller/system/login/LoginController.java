@@ -124,7 +124,6 @@ public class LoginController extends BaseController {
 				String USERNAME = KEYDATA[0]; // 登录过来的用户名
 				String PASSWORD = KEYDATA[1]; // 登录过来的密码
 				pd.put("USERNAME", USERNAME);
-				if (Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(code)) { // 判断登录验证码
 					// String passwd = new SimpleHash("SHA-1", USERNAME,
 					// PASSWORD).toString(); // 密码加密
 					String passwd = MD5Utils.encrypt(PASSWORD);
@@ -161,9 +160,6 @@ public class LoginController extends BaseController {
 						FHLOG.save(USERNAME, "登录系统密码或用户名错误");
 					}
 
-				} else {
-					errInfo = "codeerror"; // 验证码输入有误
-				}
 
 				if (Tools.isEmpty(errInfo)) {
 					errInfo = "success"; // 验证成功

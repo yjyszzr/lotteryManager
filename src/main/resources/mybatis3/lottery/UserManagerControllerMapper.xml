@@ -222,10 +222,10 @@
 	<!-- 查询销售人员业绩表 -->
 	<select id="sellerAchieveList" parameterType="page" resultType="pd">
 		select 
-		distinct(c.first_add_seller_id) first_add_seller_id,
-		(select count(1) from dl_customer c1 where c1.first_add_seller_id = c.first_add_seller_id and  month(FROM_UNIXTIME(c1.first_add_time,'%Y-%m-%d')) = #{pd.curMonth}) curPersons,
-		(select count(1) from dl_customer c2  where c2.first_add_seller_id = c.first_add_seller_id) totalPersons
-		from dl_customer c 
+		distinct(c.last_add_seller_id) last_add_seller_id,
+		(select count(1) from dl_customer_20190117_0617 c1 where c1.last_add_seller_id = c.last_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{pd.curMonth} and c1.distribute_state = 1) curPersons,
+		(select count(1) from dl_customer_20190117_0617 c2  where c2.last_add_seller_id = c.last_add_seller_id and and c2.distribute_state = 1) totalPersons
+		from dl_customer_20190117_0617 c and c.distribute_state = 1
 
 	</select>
 
@@ -233,64 +233,66 @@
 	<select id="sellerAchieveByMonthList" parameterType="pd" resultType="pd">		
  		select sysUserId,sum(moneyPaid) curMoneyPaid,eveMon from
 		(SELECT	
-			cc.first_add_seller_id sysUserId,		
+			cc.last_add_seller_id sysUserId,		
 			o.money_paid moneyPaid,
 			FROM_UNIXTIME( o.add_time, '%Y-%m' ) eveMon
 		FROM
-			 dl_customer cc  left join dl_order o 
+			 dl_customer_20190117_0617 cc  left join dl_order o 
 		on cc.user_id = o.user_id 	
 		WHERE  o.pay_status = 1
-	  	and cc.user_id in (select c.user_id from dl_customer c where first_add_seller_id = #{first_add_seller_id})) temp
+		and cc.distribute_state = 1
+	  	and cc.user_id in (select c.user_id from dl_customer_20190117_0617 c where last_add_seller_id = #{last_add_seller_id})) temp
 		group by sysUserId,eveMon;
 	</select>
 	
 	<select id ="queryAddUserByMonth" resultType="pd">
 		select 
-		distinct(c.first_add_seller_id) first_add_seller_id,
-		FROM_UNIXTIME( c1.first_add_time, '%Y-%m' ) eveMon,
-		(select count(1) from dl_customer c1 where c1.first_add_seller_id = c.first_add_seller_id and  month(FROM_UNIXTIME(c1.first_add_time,'%Y-%m-%d')) = #{curMonth}) curPersons,
-		from dl_customer c
+		distinct(c.last_add_seller_id) last_add_seller_id,
+		FROM_UNIXTIME( c1.last_add_time, '%Y-%m' ) eveMon,
+		(select count(1) from dl_customer_20190117_0617 c1 where c1.last_add_seller_id = c.last_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{curMonth} and c1.distribute_state = 1) curPersons,
+		from dl_customer_20190117_0617 c and c.distribute_state = 1
 	</select>
 
 	<!-- 查询销售人员业绩表 -->
 	<select id="sellerWriteUserhList" resultType="pd">
-		select count(1) curPersons,FROM_UNIXTIME( first_add_time, '%Y-%m' ) eveMon,first_add_seller_id from dl_customer where first_add_seller_id = #{first_add_seller_id} group by FROM_UNIXTIME( first_add_time, '%Y-%m' )
+		select count(1) curPersons,FROM_UNIXTIME( last_add_time, '%Y-%m' ) eveMon,last_add_seller_id from dl_customer_20190117_0617 where last_add_seller_id = #{last_add_seller_id} and distribute_state = 1 group by FROM_UNIXTIME( last_add_time, '%Y-%m' )
 	</select>
 	
 	<select id= "querySellersUserIds" resultType="Integer">
-		select user_id from dl_customer where first_add_seller_id = #{first_add_seller_id} 
+		select user_id from dl_customer_20190117_0617 where last_add_seller_id = #{last_add_seller_id} and distribute_state = 1
 	</select>
 
     <select id = "queryBuyByMonth" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.first_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.user_id = cc.user_id where o.user_id in(
-            select c.user_id from dl_customer c where c.first_add_seller_id in
+        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_order o  left join dl_customer_20190117_0617 cc on o.user_id = cc.user_id where o.user_id in(
+            select c.user_id from dl_customer_20190117_0617 c where c.distribute_state = 1 and c.last_add_seller_id in
                 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                     #{item}
                 </foreach>
-        ) and month(FROM_UNIXTIME(o.add_time,'%Y-%m-%d')) = month(now()) group by cc.first_add_seller_id
+        ) and month(FROM_UNIXTIME(o.add_time,'%Y-%m-%d')) = month(now()) and cc.distribute_state = 1 group by cc.last_add_seller_id
     </select>
 
     <select id="queryBuyTotal" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.first_add_seller_id from dl_order o  left join dl_customer cc on o.user_id = cc.user_id where o.user_id in(
-            select c.user_id from dl_customer c where c.first_add_seller_id in
+        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_order o  left join dl_customer_20190117_0617 cc on o.user_id = cc.user_id where cc.distribute_state = 1   and o.user_id in(
+            select c.user_id from dl_customer_20190117_0617 c where c.last_add_seller_id in
                 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                     #{item}
                 </foreach>
-        )	 group by cc.first_add_seller_id
+        )	 group by cc.last_add_seller_id
     </select>
 
 	<!-- 查询销售人员业绩查询 -->
 	<select id="sellerBuyMoneyhList"  resultType="pd">	
 		SELECT	
-			cc.first_add_seller_id,		
+			cc.last_add_seller_id,		
 			o.money_paid moneyPaid,
 			FROM_UNIXTIME( o.add_time, '%Y-%m' ) eveMon
 		FROM
-			 dl_customer cc left join dl_order o 
+			 dl_customer_20190117_0617 cc left join dl_order o 
 		on   cc.user_id = o.user_id 	
 		WHERE  o.pay_status = 1
+		and cc.distribute_state = 1
 	    and cc.user_id in (
-	        select c.user_id from dl_customer c where first_add_seller_id in 
+	        select c.user_id from dl_customer_20190117_0617 c where c.distribute_state = 1 and last_add_seller_id in 
 	  				<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
 			                 #{item}
 					</foreach>
@@ -304,7 +306,7 @@
 		FROM
 			dl_user_bonus
 		WHERE
-				user_id IN ( SELECT user_id FROM dl_customer WHERE first_add_seller_id = '2fee55b7fcbb4731b875164a466e6335' ) bonus_status = 1
+				user_id IN ( SELECT user_id FROM dl_customer_20190117_0617 WHERE distribute_state = 1 and last_add_seller_id = '2fee55b7fcbb4731b875164a466e6335' ) bonus_status = 1
 		GROUP BY
 			FROM_UNIXTIME( add_time, '%Y-%m' );
 	</select>
@@ -312,14 +314,14 @@
 
 	
 	<select id="sellerUserBonushTotal"  resultType="pd">
-		select distinct(c.first_add_seller_id) firstAddSellerId,
+		select distinct(c.last_add_seller_id) firstAddSellerId,
 			(SELECT
 					sum( bonus_price ) totalBonus
 				FROM
 					dl_user_bonus bonus
 				WHERE
-						bonus.user_id IN ( SELECT c1.user_id FROM dl_customer c1 WHERE c1.first_add_seller_id = c.first_add_seller_id ) and bonus.bonus_status = 1) totalBonus
-		from dl_customer c;
+						bonus.user_id IN ( SELECT c1.user_id FROM dl_customer_20190117_0617 c1 WHERE c1.distribute_state = 1 and c1.last_add_seller_id = c.last_add_seller_id ) and bonus.bonus_status = 1) totalBonus
+		from dl_customer_20190117_0617 c;
 	</select>
 	
 	<select id="sellerUserBuyTotal"  resultType="pd">
