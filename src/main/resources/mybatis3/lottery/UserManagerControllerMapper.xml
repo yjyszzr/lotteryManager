@@ -224,8 +224,8 @@
 		select 
 		distinct(c.last_add_seller_id) last_add_seller_id,
 		(select count(1) from dl_customer c1 where c1.last_add_seller_id = c.last_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{pd.curMonth} and c1.distribute_state = 1) curPersons,
-		(select count(1) from dl_customer c2  where c2.last_add_seller_id = c.last_add_seller_id and and c2.distribute_state = 1) totalPersons
-		from dl_customer c and c.distribute_state = 1
+		(select count(1) from dl_customer c2  where c2.last_add_seller_id = c.last_add_seller_id and c2.distribute_state = 1) totalPersons
+		from dl_customer c where c.distribute_state = 1
 
 	</select>
 
