@@ -196,6 +196,7 @@ public class UserManagerControllerController extends BaseController {
 		pd.put("curMonth", curMonth);
 		page.setPd(pd);
 		
+		//月增加用户数 总增加用户数
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveList(page);
 		
 		//销售人员总红包数量
@@ -226,11 +227,11 @@ public class UserManagerControllerController extends BaseController {
         
         List<PageData> newVarList = new ArrayList<>();
 		for(PageData pdata:varList) {
-			if(userMap.get(pdata.getString("first_add_seller_id")) == null) {
+			if(userMap.get(pdata.getString("last_add_seller_id")) == null) {
 				continue;
 			}
 			
-			String firstSellerId = pdata.getString("first_add_seller_id");
+			String firstSellerId = pdata.getString("last_add_seller_id");
 			String totalBonus = bonusMap.get(firstSellerId);
 			if(!StringUtils.isEmpty(totalBonus)) {
 				pdata.put("totalBonus", totalBonus);
@@ -260,7 +261,7 @@ public class UserManagerControllerController extends BaseController {
 				String monthMoney = monthMap.get(firstSellerId);
 				pdata.put("curMoney", monthMoney);
 			}else {
-				pdata.put("curMoney", "");
+				pdata.put("curMoney", "0");
 			}
 			newVarList.add(pdata);
 		}
@@ -284,7 +285,7 @@ public class UserManagerControllerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("first_add_seller_id", pd.getString("user_id"));
+		pd.put("last_add_seller_id", pd.getString("user_id"));
 		
 		PageData queryPd = new PageData();
 		queryPd.put("USER_ID", pd.getString("user_id"));

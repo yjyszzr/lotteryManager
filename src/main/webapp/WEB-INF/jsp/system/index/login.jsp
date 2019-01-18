@@ -136,17 +136,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="control-group">
-					<div class="controls">
-						<div class="main_input_box">
-							<span class="add-on bg_lr">
-								<i><img height="37" src="static/login/suo.png" /></i>
-							</span>
-								<input  type="text" name="code" id="code" placeholder="请输入手机验证码"  value="123456"  autocomplete="off"  style="height:30px; border:0px; display:inline-block; width:53%; line-height:28px;  margin-bottom:3px  !important;" autocomplete="off" style = "height:37px;float:left"/>
-								 <input type="button" onclick="sendMsgCode();" id="sendMsgBtn" value="获取验证码" style="background:#FFD700;padding: 0px; width: 22%;height: 38px !important;}" />  
-						</div>
-					</div>
-				</div>
+
 				<div class="control-group">
 					<div class="controls">
 						<div class="main_input_box">
@@ -317,11 +307,11 @@
 
 	<script type="text/javascript">
 	var countdown=60; 
-	function sendMsgCode(){
+<%-- 	function sendMsgCode(){
 	    var obj = $("#sendMsgBtn");
 	    var loginName = $("#loginname").val();
 // 	    var url= "";
-<%-- 	    var url="<%=path%>login_toSend/smsCode.do"; --%>
+	    var url="<%=path%>login_toSend/smsCode.do";
 	    $.ajax({  
 	        type:"POST",
 	        url: "login_smsCode",  
@@ -341,7 +331,7 @@
 				$("#loginname").focus();
 	        },  
 	    });  
-    }
+    } --%>
 	
 	
 	function settime(obj) { //发送验证码倒计时

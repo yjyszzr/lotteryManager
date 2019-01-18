@@ -35,10 +35,10 @@
 						<form action="usermanagercontroller/listSA.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
 							<tr>
-								<td style="padding-left:2px;"><label>销售员账号:</label></td>
+								<td style="padding-left:2px;"><label>销售员手机号:</label></td>
 								<td style="padding-left:2px;"><input id="phone" name = "phone" value="${pd.phone}"></input></td>
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
-								<td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
+								<td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL">导出到EXCEL</a></td>
 							</tr>
 						</table>
 						<!-- 检索  -->
@@ -46,9 +46,9 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
+<!-- 									<th class="center" style="width:35px;">
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
+									</th> -->
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">手机号</th>
 									<th class="center">姓名</th>
@@ -68,9 +68,9 @@
 								
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
+<%-- 											<td class='center'>
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.userId}" class="ace" /><span class="lbl"></span></label>
-											</td>
+											</td> --%>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.username}</td>

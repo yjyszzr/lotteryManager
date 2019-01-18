@@ -87,7 +87,7 @@
 										<select  name="pay_state" id="pay_state" data-placeholder="请选择" value="${pd.pay_state}" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected="selected">全部</option>
 											<option value="1" <c:if test="${pd.pay_state == 1}">selected</c:if>>已购彩</option>
-											<option value="2" <c:if test="${pd.pay_state == 2}">selected</c:if>>未购彩</option>
+											<option value="0" <c:if test="${pd.pay_state == 0}">selected</c:if>>未购彩</option>
 										</select>
 								  	</div>
 								</td>		  	
@@ -308,7 +308,7 @@
 				$("#user_state").val("");
 				$("#start_last_add_time").val("");
 				$("#end_last_add_time").val("");
-				$("#pay_state").val("");
+				$("#pay_state").empty();
 			}
 			top.jzts();
 			$("#Form").submit();

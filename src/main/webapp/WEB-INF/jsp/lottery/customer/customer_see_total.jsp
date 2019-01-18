@@ -90,6 +90,22 @@
 										<td>
 											当前所属销售员：${customer.last_add_seller_name}
 										</td>
+										<td>
+										&nbsp;
+										</td>	
+										<td>
+											<c:if test="${customer.distribute_state == 0}">
+												待分派
+											</c:if>
+										</td>
+										<td>
+										&nbsp;
+										</td>	
+										<td>
+											<c:if test="${customer.last_add_seller_id != null}">
+												首次录入销售员:${customer.first_add_seller_name}
+											</c:if>
+										</td>
 									</tr>
 									</tbody>
 								</table>

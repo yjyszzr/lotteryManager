@@ -41,7 +41,7 @@
 									<select class="chosen-select form-control" name="app_deal_version" id="app_deal_version" value="${pd.app_deal_version}"  data-placeholder="请选择app交易版类型" style="vertical-align:top;width: 120px;">
 										<option value="2" selected>交易版 </option>
 										<option value="1">资讯版 </option>
-								  	</select
+								  	</select>
 								</td>
 							</tr>
 							<tr>

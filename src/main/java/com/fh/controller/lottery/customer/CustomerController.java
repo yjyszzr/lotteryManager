@@ -13,7 +13,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -27,6 +26,7 @@ import com.fh.entity.system.User;
 import com.fh.service.lottery.customer.CustomerManager;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.service.system.user.impl.UserService;
 import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
@@ -54,6 +54,9 @@ public class CustomerController extends BaseController {
 	
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
+	
+	@Resource(name = "userService")
+	private UserService userService;
 	
 	/**删除
 	 * @param out
@@ -134,6 +137,18 @@ public class CustomerController extends BaseController {
 			PageData pd = new PageData();
 			pd = this.getPageData();
 			
+			User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+			PageData queryPd = new PageData();
+			queryPd.put("USER_ID", user.getUSER_ID());
+			PageData seller = userService.findById(queryPd);
+			if (!StringUtil.isEmpty(seller.getString("PHONE"))
+				&& pd.getString("mobile").trim().equals(seller.getString("PHONE").trim())	
+			) {
+				map.put("flag", false);
+				map.put("msg", "不能添加自身手机号");
+				return AppUtil.returnObject(new PageData(), map);
+			}
+			
 			PageData _pd = this.customerService.getCountOrderByMobile(pd);
 			long _count = new Long(_pd.getString("_count"));
 			if (_count > 0) {
@@ -187,13 +202,30 @@ public class CustomerController extends BaseController {
 		
 		// ~~~~~~~~~~~~~~~
 		boolean flag = true;
-		PageData _pd = this.customerService.getCountOrderByMobile(pd);  // 1
-		long _count = new Long(_pd.getString("_count"));
-		if (_count > 0) {
+		
+		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+		PageData queryPd = new PageData();
+		queryPd.put("USER_ID", user.getUSER_ID());
+		PageData seller = userService.findById(queryPd);
+		if (!StringUtil.isEmpty(seller.getString("PHONE"))
+			&& pd.getString("mobile").trim().equals(seller.getString("PHONE").trim())	
+		) {
 //			map.put("flag", false);
-//			map.put("msg", "2019年11月7号之后有购过彩");
+//			map.put("msg", "不能添加自身手机号");
+//			return AppUtil.returnObject(new PageData(), map);
 			flag = false;
 		}
+		
+		if (flag) {
+			PageData _pd = this.customerService.getCountOrderByMobile(pd);  // 1
+			long _count = new Long(_pd.getString("_count"));
+			if (_count > 0) {
+//				map.put("flag", false);
+//				map.put("msg", "2019年11月7号之后有购过彩");
+				flag = false;
+			}
+		}
+
 		
 //		if (flag) {
 //			_pd = null;
@@ -233,7 +265,7 @@ public class CustomerController extends BaseController {
 				String first_add_seller_name = null;
 				String last_add_seller_id = null;
 				String last_add_seller_name = null;
-				User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+//				User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
 				first_add_seller_id = user.getUSER_ID();
 				first_add_seller_name = user.getNAME();
 				last_add_seller_id = user.getUSER_ID();
@@ -269,7 +301,7 @@ public class CustomerController extends BaseController {
 				
 				String last_add_seller_id = null;
 				String last_add_seller_name = null;
-				User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+//				User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
 				last_add_seller_id = user.getUSER_ID();
 				last_add_seller_name = user.getNAME();
 				customer.put("last_add_seller_id", last_add_seller_id);

@@ -28,12 +28,12 @@
 										<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:60px;text-align: right;padding-top: 13px;">手机号:</td>
-								<td style="padding: 13px;"> <lable >${pd.PHONE}</lable></td>
-								<td style="width:60px;text-align: right;padding-top: 13px;">姓名:</td>
-								<td style="padding: 13px;"> <lable> ${pd.USERNAME} </lable></td>
-								<td style="padding: 13px;"> 
-									<a class="btn btn-light btn-xs" onclick="toExcel('${pd.USER_ID}');" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
+								<td style="width:60px;text-align: right;">手机号:</td>
+								<td > <lable >${pd.PHONE}</lable></td>
+								<td style="width:60px;text-align: right;">姓名:</td>
+								<td > <lable> ${pd.USERNAME} </lable></td>
+								<td style="padding: 5px;"> 
+									<a class="btn btn-light btn-xs" onclick="toExcel('${pd.USER_ID}');" title="导出到EXCEL">导出到EXCEL</a>
 								</td>  
 							</tr>
 						</table>

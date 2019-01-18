@@ -50,7 +50,7 @@
 									<select class="chosen-select form-control" name="platform" id="platform" value="${pd.platform}"  data-placeholder="请选择平台" style="vertical-align:top;width: 120px;">
 										<option value="0">ios</option>
 										<option value="1">android</option>
-								  	</select
+								  	</select>
 								
 								</td>
 							</tr>
@@ -60,7 +60,7 @@
 								<!--  <input type="text" name="business_type" id="business_type" value="${pd.business_type}" maxlength="255" placeholder="这里输入业务版本:1-交易版 2-资讯版" title="业务版本" style="width:98%;"/>-->
 									<select class="chosen-select form-control" name="business_type" id="business_type" value="${pd.business_type}"  data-placeholder="请选择业务版本" style="vertical-align:top;width: 120px;">
 										<option value="1">交易版 </option>
-								  	</select
+								  	</select>
 								</td>
 							</tr>
 							<tr>
