@@ -50,7 +50,6 @@
 							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${1 == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<td class='center'>${var.bonus_id}</td>
@@ -78,7 +77,6 @@
 										</tr>
 									
 									</c:forEach>
-									</c:if>
 								</c:when>
 								<c:otherwise>
 									<tr class="main_info">
