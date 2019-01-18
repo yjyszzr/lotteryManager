@@ -196,7 +196,6 @@ public class UserManagerControllerController extends BaseController {
 		pd.put("curMonth", curMonth);
 		page.setPd(pd);
 		
-		
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveList(page);
 		
 		//销售人员总红包数量
@@ -230,6 +229,7 @@ public class UserManagerControllerController extends BaseController {
 			if(userMap.get(pdata.getString("first_add_seller_id")) == null) {
 				continue;
 			}
+			
 			String firstSellerId = pdata.getString("first_add_seller_id");
 			String totalBonus = bonusMap.get(firstSellerId);
 			if(!StringUtils.isEmpty(totalBonus)) {
@@ -253,7 +253,7 @@ public class UserManagerControllerController extends BaseController {
 				String totalMoney = totalMap.get(firstSellerId);
 				pdata.put("totalMoney", totalMoney);
 			}else {
-				pdata.put("totalMoney", "");
+				pdata.put("totalMoney", "0");
 			}
 			
 			if(monthMap.get(firstSellerId) != null) {

@@ -17,30 +17,6 @@
 </head>
 <body class="no-skin">
 
-	<div style="padding-top: 12px;padding-bottom: 12px">
-
-		<div style="padding-top: 12px;">
-			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">手机号：</label>
-			<div>
-				<lable >${pd.PHONE}</lable>
-			</div>
-		</div>
-		
-		<div style="padding-top: 12px;">
-			<label class="col-sm-3 control-label no-padding-right" for="form-field-1">姓名：</label>
-			<div>
-				<lable >${pd.USERNAME}</lable>
-			</div>
-			
-
-		</div>
-		<div>
-			<td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel('${pd.USER_ID}');" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a></td>
-		
-		</div>
-		
-	</div>
-	
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->
@@ -49,7 +25,19 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-						<div id="zhongxin" style="padding-top: 13px;">
+										<div id="zhongxin" style="padding-top: 13px;">
+						<table id="table_report" class="table table-striped table-bordered table-hover">
+							<tr>
+								<td style="width:60px;text-align: right;padding-top: 13px;">手机号:</td>
+								<td style="padding: 13px;"> <lable >${pd.PHONE}</lable></td>
+								<td style="width:60px;text-align: right;padding-top: 13px;">姓名:</td>
+								<td style="padding: 13px;"> <lable> ${pd.USERNAME} </lable></td>
+								<td style="padding: 13px;"> 
+									<a class="btn btn-light btn-xs" onclick="toExcel('${pd.USER_ID}');" title="导出到EXCEL"><i id="nav-search-icon" class="ace-icon fa fa-download bigger-110 nav-search-icon blue"></i></a>
+								</td>  
+							</tr>
+						</table>
+						
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
