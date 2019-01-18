@@ -286,7 +286,7 @@
     <script src="plugins/fhform/js/jquery-ui-1.10.4.min.js"></script>
     <script src="plugins/fhform/js/beautifyhtml/beautifyhtml.js"></script>
 	<!-- 富文本编辑框-->
-	<script src="static/ace/js/wangEditor.min.js"</script>
+	<script src="static/ace/js/wangEditor.min.js"></script>
  
 	
 	<!-- 富文本编辑框-->

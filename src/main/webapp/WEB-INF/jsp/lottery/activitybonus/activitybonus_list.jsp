@@ -1,6 +1,7 @@
 ﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -32,10 +33,6 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-<!-- 									<th class="center" style="width:35px;"> -->
-<!-- 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label> -->
-<!-- 									</th> -->
-<!-- 									<th class="center" style="width:50px;">序号</th> -->
 									<th class="center">ID</th>
 									<th class="center">券类型</th>
 									<th class="center">金额</th>
@@ -43,13 +40,8 @@
 									<th class="center">彩种限制</th>
 									<th class="center">有效期</th>
 									<th class="center">优惠券大礼包名称</th>
-															
-
 									<th class="center">已领取</th>
 									<th class="center">已使用</th>
-									<!-- 
-									<th class="center">状态</th>
-									 -->
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -61,11 +53,6 @@
 									<c:if test="${1 == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-<!-- 											<td class='center'> -->
-<%-- 												<c:if test="${var.is_enable == 0 }">  --%>
-<%-- 														<label class="pos-rel"><input type='checkbox' name='ids' value="${var.bonus_id}" class="ace" /><span class="lbl"></span></label> --%>
-<%-- 												</c:if> --%>
-<!-- 											</td> -->
 											<td class='center'>${var.bonus_id}</td>
 											<td class='center'> 
 												<c:if test="${var.bonus_type==1 }">注册送红包</c:if>
@@ -84,14 +71,6 @@
 
 											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.use_count}</td>
-											<!-- 
-											<td class='center'> 
-												<c:choose>
-													<c:when test="${var.is_enable eq 1}">上线</c:when>
-													<c:otherwise>下线</c:otherwise>
-												</c:choose>
-											</td>
-											 -->
 											<td class="center">
 												<a class="btn btn-xs btn-success" title="编辑" style="border-radius: 5px;" onclick="edit('${var.bonus_id}');"> 编辑</a>
 												<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.bonus_id}');">删除</a>
@@ -113,12 +92,7 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${1 == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();" style="border-radius:5px ; width:50px">新增</a>
-									</c:if>
-									<c:if test="${1 == 1 }">
-<!-- 									<a class="btn btn-mini btn-danger" onclick="makeAll('确定要删除选中的数据吗?');" title="批量删除" style="border-radius:5px ; width:70px" >批量删除</a> -->
-									</c:if>
+									<a class="btn btn-mini btn-success" onclick="add();" style="border-radius:5px；width:50px">新增</a>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>
@@ -127,11 +101,8 @@
 						</form>
 					
 						</div>
-						<!-- /.col -->
 					</div>
-					<!-- /.row -->
 				</div>
-				<!-- /.page-content -->
 			</div>
 		</div>
 		<!-- /.main-content -->
