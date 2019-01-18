@@ -95,7 +95,7 @@
 										</td>	
 										<td>
 											<c:if test="${customer.distribute_state == 0}">
-												待分派
+												待分配
 											</c:if>
 										</td>
 										<td>

@@ -62,7 +62,7 @@
 											用戶类型:
 										</span>
 										<select  name="user_state" id="user_state" data-placeholder="请选择" value="${pd.user_state}" style="width:154px;border-radius:5px !important"  >
-											<option value="" selected="selected">全部</option>
+											<option value="" >全部</option>
 											<option value="1" <c:if test="${pd.user_state == 1}">selected</c:if>>新用户</option>
 											<option value="2" <c:if test="${pd.user_state == 2}">selected</c:if>>老用户</option>
 										</select>
@@ -305,7 +305,7 @@
 		function tosearch(status){
 			if(status==0){
 				$("#mobile").val("");
-				$("#user_state").val("");
+				$("#user_state").empty();
 				$("#start_last_add_time").val("");
 				$("#end_last_add_time").val("");
 				$("#pay_state").empty();
