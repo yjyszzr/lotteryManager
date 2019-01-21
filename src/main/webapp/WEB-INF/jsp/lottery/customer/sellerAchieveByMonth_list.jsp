@@ -25,17 +25,27 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-										<div id="zhongxin" style="padding-top: 13px;">
-						<table id="table_report" class="table table-striped table-bordered table-hover">
+						<div id="zhongxin" style="padding-top: 13px;">
+						<form action="usermanagercontroller/toSellerDetail.do" method="post" name="Form" id="Form">
+						<table id="table_report"  border="0"  rules="none"   cellspacing="0"    >
 							<tr>
-								<td style="width:60px;text-align: right;">手机号:</td>
-								<td > ${pd.PHONE}</td>
-								<td style="width:60px;text-align: right;">姓名:</td>
-								<td > ${pd.USERNAME} </td>
-						      	<td style="text-align: left;" colspan="10">
+								<td style="width:60px;text-align: left;">手机号:</td>
+								<td style="width:60px;text-align: left;">${pd.PHONE}</td>
+								<td style="width:60px;text-align: left;">姓名:</td>
+								<td style="width:60px;text-align: left;">${pd.USERNAME} </td>
+								<td style="display:none">
+									<input name="user_id" id="user_id" value="${pd.user_id}"></input>
+								</td>
+							</tr>
+							<tr>
+								<td style="width:80px;text-align: left;">各月销售记录</td>
+							</tr>
+							<tr>
+								<td style="text-align: left;" colspan="10">
 								    <select  name="pyear" id="pyear" value="${pd.pyear}"  style="width:204px;border-radius:5px !important"   onchange="changeYear(this.value,'${pd.USER_ID}')" >
 								        <option value="2018" <c:if test="${pd.pyear==2018}">selected</c:if> >2018年</option>
 								        <option value="2019" <c:if test="${pd.pyear==2019}">selected</c:if> >2019年</option>
+								        <option value="2020" <c:if test="${pd.pyear==2020}">selected</c:if> >2020年</option>
 								    </select>
                                	</td>
 								<td style="padding: 5px;"> 
@@ -47,7 +57,7 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:50px;">序号</th>
+									<!--  <th class="center" style="width:50px;">序号</th>-->
 									<th class="center">月份</th>
 									<th class="center">增加用户量</th>
 									<th class="center">销售金额</th>
@@ -62,7 +72,7 @@
 								<c:when test="${not empty varList}">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center' style="width: 30px;">${vs.index+1}</td>
+											<!--  <td class='center' style="width: 30px;">${vs.index+1}</td> -->
 											<td class='center'>${var.eveMon}</td>
 											<td class='center'>${var.curPersons}</td>
 											<td class='center'>${var.curMoneyPaid}</td>
@@ -74,6 +84,7 @@
 							</c:choose>	
 							</tbody>
 						</table>
+						</form>
 						</div>
 						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
 						</div>
@@ -104,6 +115,10 @@
 	<script type="text/javascript">	
 	$(top.hangge());//关闭加载状态
 	
+	function sub2Str(str){
+		return str.substring(5,2);
+	}
+	
 	//导出excel
 	function toExcel(userId){
 		window.location.href='<%=basePath%>usermanagercontroller/excelSellersDetail.do?user_id='+userId;
@@ -115,7 +130,9 @@
 	}
 	
 	function changeYear(value,userId){
-		$.ajax({
+		
+		tosearch();
+<%-- 		$.ajax({
 			type: "POST",
 			url: '<%=basePath%>usermanagercontroller/toSellerDetail.do?pyear='+value+'&user_id='+userId,
     		data: {},
@@ -124,7 +141,7 @@
 			success: function(data){
 				//tosearch();
 			}
-		});
+		}); --%>
 	}
 	</script>
 </body>

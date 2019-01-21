@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -21,16 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
-import com.fh.entity.dto.BonusMonthDTO;
 import com.fh.entity.dto.CountPersonDTO;
 import com.fh.entity.dto.SysUserDTO;
 import com.fh.entity.sms.RspSmsCodeEntity;
-import com.fh.entity.system.User;
 import com.fh.enums.ThirdApiEnum;
 import com.fh.service.lottery.activitybonus.impl.ActivityBonusService;
 import com.fh.service.lottery.order.OrderManager;
@@ -40,9 +36,6 @@ import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
 import com.fh.service.system.user.impl.UserService;
-import com.fh.util.AppUtil;
-import com.fh.util.Const;
-import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.NetWorkUtil;
@@ -50,7 +43,6 @@ import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.RandomUtil;
 import com.fh.util.SmsUtil;
-import com.fh.util.StringUtil;
 
 import net.sf.json.JSONObject;
 
@@ -300,6 +292,7 @@ public class UserManagerControllerController extends BaseController {
 		queryPd.put("USER_ID", pd.getString("user_id"));
 		PageData seller = userService.findById(queryPd);
 		seller.put("pyear",pyear);
+		seller.put("user_id",pd.getString("user_id"));
 		
 		//月购彩量
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveByMonthList(pd);
