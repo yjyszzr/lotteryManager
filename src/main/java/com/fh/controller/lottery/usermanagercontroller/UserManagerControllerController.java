@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -267,6 +268,8 @@ public class UserManagerControllerController extends BaseController {
 			}
 		}
 		
+		Comparator<PageData> comparator = (h1, h2) -> h1.getString("curMoney").compareTo(h2.getString("curMoney"));
+		newVarList.sort(comparator.reversed());
 		mv.setViewName("lottery/customer/sellerAchieve_list");
 		mv.addObject("varList", newVarList);
 		mv.addObject("pd", pd);
