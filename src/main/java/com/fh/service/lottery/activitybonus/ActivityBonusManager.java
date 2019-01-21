@@ -67,7 +67,11 @@ public interface ActivityBonusManager{
 	 */
 	public int batchInsertUserBonus(List<Integer> userIdlist,BonusParam bonusParam)throws Exception;
 	
-	public List<PageData> queryTotalBonusByMonth(List<Integer> varList)throws Exception;
+	public List<PageData> queryTotalBonusByMonth(List<String> varList)throws Exception;
+	
+	
+	public PageData sellerUserBonushTotal(List<String> varList)throws Exception;
+
 	
 }
 

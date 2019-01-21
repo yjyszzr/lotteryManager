@@ -115,5 +115,7 @@ public interface OrderManager {
 	public List<PageData> exportExcelForMOByIds(String[] arrayDATA_IDS)throws Exception;
 
 	public void updateOrderStatusByOrderSn(PageData pd)throws Exception;
+	
+	public void setFirstPayTime(String userId, String mobile, String firstPayTime) throws Exception;
 
 }

@@ -291,4 +291,13 @@ public class OrderService implements OrderManager {
 	public void updateOrderStatusByOrderSn(PageData pd) throws Exception {
 		dao.update("OrderMapper.updateOrderStatusByOrderSn", pd);
 	}
+	
+	@Override
+	public void setFirstPayTime(String userId, String mobile, String firstPayTime) throws Exception {
+		PageData pd = new PageData();
+		pd.put("user_id", userId);
+		pd.put("mobile", mobile);
+		pd.put("first_pay_time", firstPayTime);
+		dao.update("OrderMapper.setFirstPayTime", pd);
+	}
 }

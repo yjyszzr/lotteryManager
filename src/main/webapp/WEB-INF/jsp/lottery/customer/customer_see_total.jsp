@@ -132,8 +132,7 @@
 								</tr>
 							</thead>
 							<tbody>
-									<c:if test="${QX.cha == 1 }">
-									<c:forEach items="${ordes}" var="var" varStatus="vs">
+									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<!-- 
 											<td class='center'>
@@ -164,7 +163,6 @@
 											</td>
 										</tr>
 									</c:forEach>	
-									</c:if>
 									
 									<!-- 
 									<c:if test="${QX.cha == 0 }">

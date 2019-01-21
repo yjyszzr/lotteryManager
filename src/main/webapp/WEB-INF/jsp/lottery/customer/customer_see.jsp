@@ -110,7 +110,6 @@
 								</tr>
 							</thead>
 							<tbody>
-									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${ordes}" var="var" varStatus="vs">
 										<tr>
 											<!-- 
@@ -128,7 +127,6 @@
 											<td class='center'>${DateUtil.toSDFTime(var.first_pay_time*1000)}</td>
 				 						</tr>
 									</c:forEach>	
-									</c:if>
 									
 									<!-- 
 									<c:if test="${QX.cha == 0 }">

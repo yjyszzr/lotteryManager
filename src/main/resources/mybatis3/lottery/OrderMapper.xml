@@ -89,6 +89,21 @@
         #{ticket_num}	
 	</sql>
 	
+	<update id="setFirstPayTime" parameterType="java.util.Map">
+		<!-- 	
+		UPDATE `dl_customer` customer 
+		SET customer.pay_state = 1 
+		, customer.user_id = #{user_id}
+		, customer.first_pay_time = #{first_pay_time}
+		WHERE customer.`mobile` = #{mobile} AND (customer.first_pay_time is NULL OR customer.first_pay_time = '') 
+			-->
+		UPDATE `dl_customer` customer 
+		SET customer.pay_state = 1 
+		, customer.user_id = #{user_id, jdbcType=INTEGER}
+		, customer.first_pay_time = #{first_pay_time, jdbcType=INTEGER}
+		WHERE customer.`mobile` = #{mobile, jdbcType=VARCHAR} AND (customer.first_pay_time is NULL OR customer.first_pay_time = '') 
+	</update> 
+	
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
 		insert into 
@@ -867,7 +882,10 @@
 		select * from dl_order where user_id = #{userId}
 	</select>
 	<update id="updatePayStatus">
-		update dl_order set pay_status = #{pay_status} where order_sn = #{id}
+		update dl_order 
+		set pay_status = #{pay_status}, 
+		pay_time = unix_timestamp(now()) 
+		where order_sn = #{id}
 	</update>
 	<update id="updateOrderStatus">
 		update dl_order set order_status = #{pay_status} where order_sn = #{id}
