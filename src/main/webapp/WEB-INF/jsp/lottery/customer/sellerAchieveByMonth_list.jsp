@@ -1,7 +1,9 @@
 ﻿<%@page import="com.fh.util.DateUtil"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@page import="com.fh.util.StringUtil"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -30,12 +32,15 @@
 						<table id="table_report"  border="0"  rules="none"   cellspacing="0"    >
 							<tr>
 								<td style="width:60px;text-align: left;">手机号:</td>
-								<td style="width:60px;text-align: left;">${pd.PHONE}</td>
-								<td style="width:60px;text-align: left;">姓名:</td>
+								<td style="width:60px;text-align: right;">${pd.PHONE}</td>
+								<td style="width:60px;text-align: right;">姓名:</td>
 								<td style="width:60px;text-align: left;">${pd.USERNAME} </td>
 								<td style="display:none">
 									<input name="user_id" id="user_id" value="${pd.user_id}"></input>
 								</td>
+							</tr>
+							<tr>
+								<td></td>
 							</tr>
 							<tr>
 								<td style="width:80px;text-align: left;">各月销售记录</td>
@@ -49,7 +54,7 @@
 								    </select>
                                	</td>
 								<td style="padding: 5px;"> 
-									<a class="btn btn-light btn-xs" onclick="toExcel('${pd.USER_ID}');" title="导出到EXCEL">导出到EXCEL</a>
+									<a class="btn btn-light btn-xs" onclick="toExcel('${pd.USER_ID}','${pd.pyear}');" title="导出到EXCEL">导出到EXCEL</a>
 								</td>  
 							</tr>
 						</table>
@@ -61,7 +66,7 @@
 									<th class="center">月份</th>
 									<th class="center">增加用户量</th>
 									<th class="center">销售金额</th>
-									<th class="center">红包使用量</th>
+									<th class="center">红包使用金额</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -73,7 +78,7 @@
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<!--  <td class='center' style="width: 30px;">${vs.index+1}</td> -->
-											<td class='center'>${var.eveMon}</td>
+											<td class='center'>${StringUtil.strReplace(var.eveMon, 0, 5, "")}</td>
 											<td class='center'>${var.curPersons}</td>
 											<td class='center'>${var.curMoneyPaid}</td>
 											<td class='center'>${var.curBonus}</td>
@@ -115,13 +120,10 @@
 	<script type="text/javascript">	
 	$(top.hangge());//关闭加载状态
 	
-	function sub2Str(str){
-		return str.substring(5,2);
-	}
 	
 	//导出excel
-	function toExcel(userId){
-		window.location.href='<%=basePath%>usermanagercontroller/excelSellersDetail.do?user_id='+userId;
+	function toExcel(userId,pyear){
+		window.location.href='<%=basePath%>usermanagercontroller/excelSellersDetail.do?user_id='+userId+'&pyear='+pyear;
 	}
 	
 	function tosearch(){

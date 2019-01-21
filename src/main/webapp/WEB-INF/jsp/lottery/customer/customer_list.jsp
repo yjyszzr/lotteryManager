@@ -127,7 +127,6 @@
 							<!-- 开始循环 -->	
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											 
@@ -239,7 +238,6 @@
 										</tr>
 									
 									</c:forEach>
-									</c:if>
 									<c:if test="${QX.cha == 0 }">
 										<tr>
 											<td colspan="100" class="center">您无权查看</td>
@@ -258,9 +256,7 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
 									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

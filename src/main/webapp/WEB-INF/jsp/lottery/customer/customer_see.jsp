@@ -124,7 +124,13 @@
 											</td>
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.bonus}</td>
-											<td class='center'>${DateUtil.toSDFTime(var.first_pay_time*1000)}</td>
+											
+											<td class='center'>
+												<c:choose>
+													<c:when test="${empty var.add_time }"></c:when>
+													<c:otherwise>${DateUtil.toSDFTime(var.add_time*1000)}</c:otherwise>
+												</c:choose>
+											</td>
 				 						</tr>
 									</c:forEach>	
 									

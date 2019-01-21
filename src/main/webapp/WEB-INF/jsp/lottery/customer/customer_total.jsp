@@ -128,7 +128,7 @@
 									<th class="center">用户类型</th>
 									<th class="center">用户来源</th>
 									<th class="center">是否已购彩</th>
-									<th class="center">销售员</th>
+									<th class="center">所属销售员</th>
 									<th class="center">录入时间</th>
 									<th class="center">购彩时间</th>
 									<th class="center">操作</th>

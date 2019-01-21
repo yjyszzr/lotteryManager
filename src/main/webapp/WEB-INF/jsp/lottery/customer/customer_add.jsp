@@ -33,7 +33,7 @@
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">*手机号:</td>
-								<td><input type="text" name="mobile" id="mobile" value="${pd.mobile}" maxlength="255" placeholder="这里输入手机号" title="这里输入手机号" style="width:154px;" onkeyup="value=value.replace(/[^\d]/g,'')" /></td>
+								<td><input type="text" name="mobile" id="mobile" value="${pd.mobile}" maxlength="11" placeholder="这里输入手机号" title="这里输入手机号" style="width:154px;" onkeyup="value=value.replace(/[^\d]/g,'')" /></td>
 <%-- 								<input type="text" placeholder="手机号" style="width:154px;" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"   onkeyup="value=value.replace(/[^\d]/g,'')"  /> --%>
 							</tr>
 							<tr>

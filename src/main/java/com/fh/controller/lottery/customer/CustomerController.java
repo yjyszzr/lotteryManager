@@ -1,5 +1,5 @@
 package com.fh.controller.lottery.customer;
-
+  
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -98,7 +98,10 @@ public class CustomerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		
-		pd.put("last_add_time",  DateUtilNew.getCurrentTimeLong());
+		PageData _pd = customerService.findById(pd);
+		
+//		pd.put("last_add_time",  DateUtilNew.getCurrentTimeLong());
+		pd.put("last_add_time",  _pd.getString("last_add_time"));
 		pd.put("last_add_seller_name", " ");
 		pd.put("last_add_seller_id", "(NULL)");
 		pd.put("distribute_state", "0");
@@ -637,13 +640,14 @@ public class CustomerController extends BaseController {
 				cal_1.add(Calendar.MONTH, -1);
 				cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
 				String firstDay = format.format(cal_1.getTime());
-				start_add_time = String.valueOf(format.parse(firstDay).getTime());   
+				System.out.println("firstDay:" + firstDay);
+				start_add_time = String.valueOf(format.parse(firstDay).getTime()/1000);   
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			
 			_pd.put("start_add_time", start_add_time);
-			_pd.put("end_add_time", System.currentTimeMillis());
+//			_pd.put("end_add_time", DateUtilNew.getCurrentTimeLong());
 			ordes = this.customerService.getOrdes(_pd);
 //			List<PageData> ordes2 = this.userAccountManagerService.getOrdes(_pd);
 //			if (null != ordes) {

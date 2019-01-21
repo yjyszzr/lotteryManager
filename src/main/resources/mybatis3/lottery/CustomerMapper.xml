@@ -191,7 +191,7 @@
 		FROM dl_order _order, dl_user _user
 		WHERE _order.`user_id` = _user.`user_id`
 		AND _order.`pay_status` = 1
-		AND _order.`add_time` >= 1546790400000
+		AND _order.`pay_time` >= 1541520000
 		AND _user.`mobile` = #{mobile}
 	</select>
 	
@@ -222,7 +222,8 @@
 		<if test="pd.last_add_seller_name != null and pd.last_add_seller_name != ''">
 		and customer.last_add_seller_name = #{pd.last_add_seller_name} 
 		</if>
-		ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC
+<!-- 	ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC -->
+		ORDER BY customer.distribute_state, customer.`last_add_time` ASC, customer.`pay_state` ASC
 	</select>
 	
 	
@@ -259,7 +260,8 @@
 		<if test="last_add_seller_name != null and last_add_seller_name != ''">
 		and customer.last_add_seller_name = #{last_add_seller_name} 
 		</if>
-		ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC 
+<!-- 	ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC  -->
+		ORDER BY customer.distribute_state, customer.`last_add_time` ASC, customer.`pay_state` ASC
 	</select>
 	
 	<!-- 批量删除 -->
