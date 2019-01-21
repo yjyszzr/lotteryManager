@@ -347,6 +347,8 @@ public class CustomerController extends BaseController {
 //		if(null != keywords && !"".equals(keywords)){
 //			pd.put("keywords", keywords.trim());
 //		}
+//		String pay_state = pd.getString("pay_state");
+//		pd.put("pay_state", pay_state);
 		
 		String _start_last_add_time = pd.getString("start_last_add_time");
 		if (null != _start_last_add_time && !"".equals(_start_last_add_time)) {
@@ -371,7 +373,7 @@ public class CustomerController extends BaseController {
 		mv.setViewName("lottery/customer/customer_list");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+//		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
 	
@@ -574,18 +576,18 @@ public class CustomerController extends BaseController {
 //			_pd.put("end_add_time", System.currentTimeMillis());
 			
 			ordes = this.customerService.getOrdes(_pd);
-			List<PageData> ordes2 = this.userAccountManagerService.getOrdes(_pd);
-			if (null != ordes) {
-				if (null != ordes2) ordes.addAll(ordes2);
-			} else {
-				ordes = ordes2;
-			}
+//			List<PageData> ordes2 = this.userAccountManagerService.getOrdes(_pd);
+//			if (null != ordes) {
+//				if (null != ordes2) ordes.addAll(ordes2);
+//			} else {
+//				ordes = ordes2;
+//			}
 		}
 		
 		mv.setViewName("lottery/customer/customer_see_total");
 //		mv.addObject("msg", "save");
 		mv.addObject("customer", customer);
-		mv.addObject("ordes", ordes);
+		mv.addObject("varList", ordes);
 		return mv;
 	
 	}

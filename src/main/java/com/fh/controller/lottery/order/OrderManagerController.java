@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+
 import com.fh.common.ProjectConstant;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
@@ -32,6 +33,7 @@ import com.fh.service.lottery.artifiprintlottery.ArtifiPrintLotteryManager;
 import com.fh.service.lottery.logoperation.LogOperationManager;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
+import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.system.user.UserManager;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
@@ -54,6 +56,9 @@ public class OrderManagerController extends BaseController {
 
 	@Resource(name = "userService")
 	private UserManager userService;
+	
+	@Resource(name = "usermanagercontrollerService")
+	private UserManagerControllerManager usermanagercontrollerService;
 
 	@Resource(name = "logoperationService")
 	private LogOperationManager logoperationService;
@@ -692,8 +697,10 @@ public class OrderManagerController extends BaseController {
 		pd = this.getPageData();
 		String payStatus = pd.getString("pay_status");
 		String opType = "";
+		boolean flag = false;
 		if (payStatus.equals("1")) {
 			opType = "1";
+			flag = true;
 		} else if (payStatus.equals("2")) {
 			opType = "3";
 		} else if (payStatus.equals("9")) {
@@ -712,6 +719,47 @@ public class OrderManagerController extends BaseController {
 		pduser = userService.findById(pduser);
 		pdForlogoperation.put("phone", pduser.getString("PHONE"));
 		logoperationService.save(pdForlogoperation);
+		
+		
+		try {
+			System.out.println("[customer] start ================================= ");
+			if (flag) { 
+				String userId = "";
+				String mobile = "";
+				String firstPayTime = "";
+			 
+				PageData _order =  this.ordermanagerService.findByOrderSn(pd.getString("id"));
+				if(_order != null) {
+					firstPayTime = _order.getString("pay_time");
+					userId = _order.getString("user_id");
+				}
+				
+				PageData _user = new PageData();
+				_user.put("user_id", userId);
+				_user = this.usermanagercontrollerService.findById(_user);
+				mobile = _user.getString("mobile");
+				if (mobile!= null) mobile = mobile.trim();
+				
+				System.out.println("[customer] userId:" + userId); 
+				System.out.println("[customer] mobile:" + mobile);
+				System.out.println("[customer] firstPayTime:" + firstPayTime);
+				
+				if (null != userId
+					&& !StringUtil.isEmptyStr(mobile)
+					&& !StringUtil.isEmptyStr(firstPayTime)
+				) {
+					this.ordermanagerService.setFirstPayTime(userId + "", mobile, firstPayTime);
+					System.out.println("[customer] to db");
+				}
+			
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			System.out.println("[customer] end ================================= ");
+		}
+		
+		
 		out.write("success");
 		out.close();
 	}
