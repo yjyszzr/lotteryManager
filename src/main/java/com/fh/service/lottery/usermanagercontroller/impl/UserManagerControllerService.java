@@ -242,9 +242,14 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> sellerUserBonushTotal()throws Exception{
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerUserBonushTotal", "");
+	public PageData sellerUserBonushTotal(List<String> varList)throws Exception{
+		String[] userIdList = new String[varList.size()];
+		for (int i = 0; i < varList.size(); i++) {
+			userIdList[i] = varList.get(i);
+		}
+		return (PageData)dao.findForObject("UserManagerControllerMapper.sellerUserBonushTotal", userIdList);
 	}
+	
 
 	/**
 	 * 查询月售彩额度
@@ -275,13 +280,18 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	/**
 	 * 查询单个销售人员的多个顾客id
 	 */
-	public List<Integer> queryUserIdsBySellersId(String sellerId)throws Exception{
-		return (List<Integer>)dao.findForList("UserManagerControllerMapper.querySellersUserIds", sellerId);
+	public List<String> queryUserIdsBySellersId(String sellerId)throws Exception{
+		return (List<String>)dao.findForList("UserManagerControllerMapper.querySellersUserIds", sellerId);
 	}
-	
 	
 	@Override
 	public List<PageData> sellerBuyMoneyhList(PageData pd) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Integer> queryUserIdsByfirstAddUserId(List<Integer> sellerId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

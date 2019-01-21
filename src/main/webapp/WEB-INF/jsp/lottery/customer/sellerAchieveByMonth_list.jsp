@@ -29,9 +29,15 @@
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:60px;text-align: right;">手机号:</td>
-								<td > <lable >${pd.PHONE}</lable></td>
+								<td > ${pd.PHONE}</td>
 								<td style="width:60px;text-align: right;">姓名:</td>
-								<td > <lable> ${pd.USERNAME} </lable></td>
+								<td > ${pd.USERNAME} </td>
+						      	<td style="text-align: left;" colspan="10">
+								    <select  name="pyear" id="pyear" value="${pd.pyear}"  style="width:204px;border-radius:5px !important"   onchange="changeYear(this.value,'${pd.USER_ID}')" >
+								        <option value="2018" <c:if test="${pd.pyear==2018}">selected</c:if> >2018年</option>
+								        <option value="2019" <c:if test="${pd.pyear==2019}">selected</c:if> >2019年</option>
+								    </select>
+                               	</td>
 								<td style="padding: 5px;"> 
 									<a class="btn btn-light btn-xs" onclick="toExcel('${pd.USER_ID}');" title="导出到EXCEL">导出到EXCEL</a>
 								</td>  
@@ -101,6 +107,24 @@
 	//导出excel
 	function toExcel(userId){
 		window.location.href='<%=basePath%>usermanagercontroller/excelSellersDetail.do?user_id='+userId;
+	}
+	
+	function tosearch(){
+		top.jzts();
+		$("#Form").submit();
+	}
+	
+	function changeYear(value,userId){
+		$.ajax({
+			type: "POST",
+			url: '<%=basePath%>usermanagercontroller/toSellerDetail.do?pyear='+value+'&user_id='+userId,
+    		data: {},
+			dataType:'json',
+			cache: false,
+			success: function(data){
+				//tosearch();
+			}
+		});
 	}
 	</script>
 </body>

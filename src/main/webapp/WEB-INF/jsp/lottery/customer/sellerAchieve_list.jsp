@@ -56,7 +56,7 @@
 									<th class="center">总录入用户量</th>
 									<th class="center">当月购彩销售额</th>
 									<th class="center">购彩销售总额</th>
-									<th class="center">惠券使用总金额</th>
+									<th class="center">优惠券使用总金额</th>
 									<th class="center">查看</th>
 								</tr>
 							</thead>
@@ -192,7 +192,7 @@
 			 diag.Title ="销售业绩详情";
 			 diag.URL = '<%=basePath%>usermanagercontroller/toSellerDetail.do?user_id='+userId;
 			 diag.Width = 1300;
-			 diag.Height = 320;
+			 diag.Height = 520;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = false;	//最大化按钮
 		     diag.ShowMinButton = false;		//最小化按钮
@@ -256,7 +256,7 @@
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>customer/goEdit.do?_id='+Id;
 			 diag.Width = 450;
-			 diag.Height = 355;
+			 diag.Height = 555;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

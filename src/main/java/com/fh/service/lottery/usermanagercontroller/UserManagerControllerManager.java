@@ -162,7 +162,7 @@ public interface UserManagerControllerManager {
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> sellerUserBonushTotal()throws Exception;
+	public PageData sellerUserBonushTotal(List<String> varList)throws Exception;
 
 	/**根据手机号集合查询userId集合
 	 * @param List mobileList
@@ -190,7 +190,11 @@ public interface UserManagerControllerManager {
 	/**
 	 * 查询单个销售人员的顾客id
 	 */
-	public List<Integer> queryUserIdsBySellersId(String sellerId)throws Exception;
-
+	public List<String> queryUserIdsBySellersId(String sellerId)throws Exception;
+	
+	/**
+	 * 根据多个销售员id 查询多个顾客的userId
+	 */
+	public List<Integer> queryUserIdsByfirstAddUserId(List<Integer> sellerId);
 	
 }

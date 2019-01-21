@@ -200,5 +200,17 @@
 			FROM_UNIXTIME( receive_time, '%Y-%m' )
 	</select>
 	
+	<select id="sellerUserBonushTotal"  resultType="pd">
+		SELECT
+					sum( bonus_price ) totalBonus
+				FROM
+					dl_user_bonus bonus
+				WHERE
+					bonus_status = 1 and bonus.user_id IN 
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			    #{item}
+		</foreach>
+	</select>
+	
 	<!-- fh313596790qq(青苔) -->
 </mapper>

@@ -116,10 +116,10 @@ public class ActivityBonusService implements ActivityBonusManager {
 		dao.delete("ActivityBonusMapper.deleteAll", ArrayDATA_IDS);
 	}
 	
-	public List<PageData> queryTotalBonusByMonth(List<Integer> varList)throws Exception{
+	public List<PageData> queryTotalBonusByMonth(List<String> varList)throws Exception{
 		String[] userIdList = new String[varList.size()];
 		for (int i = 0; i < varList.size(); i++) {
-			userIdList[i] = String.valueOf(varList.get(i));
+			userIdList[i] = varList.get(i);
 		}
 		return (List<PageData>) dao.findForList("ActivityBonusMapper.queryTotalBonusByMonth", userIdList);
 	}
@@ -169,6 +169,17 @@ public class ActivityBonusService implements ActivityBonusManager {
 			}
 		}
 		return 1;
+	}
+
+	/* @param pd
+	 * @throws Exception
+	 */
+	public PageData sellerUserBonushTotal(List<String> varList)throws Exception{
+		String[] userIdList = new String[varList.size()];
+		for (int i = 0; i < varList.size(); i++) {
+			userIdList[i] = varList.get(i);
+		}
+		return (PageData)dao.findForObject("ActivityBonusMapper.sellerUserBonushTotal", userIdList);
 	}
 
 }
