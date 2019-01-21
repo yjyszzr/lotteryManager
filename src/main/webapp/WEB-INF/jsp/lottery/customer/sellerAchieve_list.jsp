@@ -37,6 +37,9 @@
 							<tr>
 								<td style="padding-left:2px;"><label>销售员手机号:</label></td>
 								<td style="padding-left:2px;"><input id="phone" name = "phone" value="${pd.phone}"></input></td>
+								<td>			
+									<a class="btn btn-light btn-xs blue" onclick="clearInput();"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+								</td>
 								<td style="vertical-align:top;padding-left:2px"><a class="btn btn-light btn-xs" onclick="tosearch();"  title="检索"><i id="nav-search-icon" class="ace-icon fa fa-search bigger-110 nav-search-icon blue"></i></a></td>
 								<td style="vertical-align:top;padding-left:2px;"><a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL">导出到EXCEL</a></td>
 							</tr>
@@ -56,7 +59,7 @@
 									<th class="center">总录入用户量</th>
 									<th class="center">当月购彩销售额</th>
 									<th class="center">购彩销售总额</th>
-									<th class="center">优惠券使用总金额</th>
+									<th class="center">优惠券使用总额</th>
 									<th class="center">查看</th>
 								</tr>
 							</thead>
@@ -90,13 +93,6 @@
 							</c:choose>
 							</tbody>
 						</table>
-						<div class="page-header position-relative">
-						<table style="width:100%;">
-							<tr>
-								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
-							</tr>
-						</table>
-						</div>
 						</form>
 					
 						</div>
@@ -137,6 +133,12 @@
 			top.jzts();
 			$("#Form").submit();
 		}
+		
+		function clearInput(){
+			$("#phone").val("");
+			tosearch();
+		}
+		
 		$(function() {
 		
 			//日期框
@@ -256,7 +258,7 @@
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>customer/goEdit.do?_id='+Id;
 			 diag.Width = 450;
-			 diag.Height = 555;
+			 diag.Height = 595;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 
