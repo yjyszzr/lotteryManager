@@ -206,63 +206,65 @@ public class UserManagerControllerController extends BaseController {
 		PageData cuPd = new PageData();
 		cuPd.put("phone", pd.getString("phone"));
 		List<PageData> sellers = userService.querySellers(cuPd);
-		Map<String,SysUserDTO> userMap = this.createUserMap(sellers);
+		List<PageData> newVarList = new ArrayList<>();
+		if(sellers.size() > 0 ) {
+			Map<String,SysUserDTO> userMap = this.createUserMap(sellers);
 
-		List<PageData> queryToalList = new ArrayList<>();
-		sellers.stream().forEach(s->{
-			PageData  totalPd = new PageData();
-			String first_add_seller_id = s.getString("USER_ID");
-			totalPd.put("user_id", first_add_seller_id);
-			queryToalList.add(totalPd);
-		});
-		
-		//销售人员月增加购彩量
-		List<PageData> buyMonthList = usermanagercontrollerService.queryBuyByMonth(queryToalList);
-		Map<String,String> monthMap = this.createUserMonthBuyMap(buyMonthList);
-		
-		//销售人员总购彩量
-        List<PageData> buyTotalList = usermanagercontrollerService.queryBuyTotal(queryToalList);
-        Map<String,String> totalMap = this.createUserTotalBuyMap(buyTotalList);
-        
-        List<PageData> newVarList = new ArrayList<>();
-		for(PageData pdata:varList) {
-			if(userMap.get(pdata.getString("last_add_seller_id")) == null) {
-				continue;
-			}
+			List<PageData> queryToalList = new ArrayList<>();
+			sellers.stream().forEach(s->{
+				PageData  totalPd = new PageData();
+				String first_add_seller_id = s.getString("USER_ID");
+				totalPd.put("user_id", first_add_seller_id);
+				queryToalList.add(totalPd);
+			});
 			
-			String firstSellerId = pdata.getString("last_add_seller_id");
-			String totalBonus = bonusMap.get(firstSellerId);
-			if(!StringUtils.isEmpty(totalBonus)) {
-				pdata.put("totalBonus", totalBonus);
-			}else {
-				pdata.put("totalBonus", "0");
-			}
+			//销售人员月增加购彩量
+			List<PageData> buyMonthList = usermanagercontrollerService.queryBuyByMonth(queryToalList);
+			Map<String,String> monthMap = this.createUserMonthBuyMap(buyMonthList);
 			
-			if(userMap.get(firstSellerId) != null) {
-				SysUserDTO sysUser = userMap.get(firstSellerId);
-				pdata.put("userId", String.valueOf(sysUser.getUserId()));
-				pdata.put("mobile", sysUser.getMobile());
-				pdata.put("username", sysUser.getUsername());				
-			}else {
-				pdata.put("userId", "");
-				pdata.put("mobile", "");
-				pdata.put("username", "");
+			//销售人员总购彩量
+	        List<PageData> buyTotalList = usermanagercontrollerService.queryBuyTotal(queryToalList);
+	        Map<String,String> totalMap = this.createUserTotalBuyMap(buyTotalList);
+	        
+			for(PageData pdata:varList) {
+				if(userMap.get(pdata.getString("last_add_seller_id")) == null) {
+					continue;
+				}
+				
+				String firstSellerId = pdata.getString("last_add_seller_id");
+				String totalBonus = bonusMap.get(firstSellerId);
+				if(!StringUtils.isEmpty(totalBonus)) {
+					pdata.put("totalBonus", totalBonus);
+				}else {
+					pdata.put("totalBonus", "0");
+				}
+				
+				if(userMap.get(firstSellerId) != null) {
+					SysUserDTO sysUser = userMap.get(firstSellerId);
+					pdata.put("userId", String.valueOf(sysUser.getUserId()));
+					pdata.put("mobile", sysUser.getMobile());
+					pdata.put("username", sysUser.getUsername());				
+				}else {
+					pdata.put("userId", "");
+					pdata.put("mobile", "");
+					pdata.put("username", "");
+				}
+				
+				if(totalMap.get(firstSellerId) != null) {
+					String totalMoney = totalMap.get(firstSellerId);
+					pdata.put("totalMoney", totalMoney);
+				}else {
+					pdata.put("totalMoney", "0");
+				}
+				
+				if(monthMap.get(firstSellerId) != null) {
+					String monthMoney = monthMap.get(firstSellerId);
+					pdata.put("curMoney", monthMoney);
+				}else {
+					pdata.put("curMoney", "0");
+				}
+				newVarList.add(pdata);
 			}
-			
-			if(totalMap.get(firstSellerId) != null) {
-				String totalMoney = totalMap.get(firstSellerId);
-				pdata.put("totalMoney", totalMoney);
-			}else {
-				pdata.put("totalMoney", "0");
-			}
-			
-			if(monthMap.get(firstSellerId) != null) {
-				String monthMoney = monthMap.get(firstSellerId);
-				pdata.put("curMoney", monthMoney);
-			}else {
-				pdata.put("curMoney", "0");
-			}
-			newVarList.add(pdata);
 		}
 		
 		mv.setViewName("lottery/customer/sellerAchieve_list");

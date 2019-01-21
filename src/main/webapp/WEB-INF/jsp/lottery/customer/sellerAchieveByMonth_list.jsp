@@ -66,7 +66,7 @@
 									<th class="center">月份</th>
 									<th class="center">增加用户量</th>
 									<th class="center">销售金额</th>
-									<th class="center">红包使用量</th>
+									<th class="center">红包使用金额</th>
 								</tr>
 							</thead>
 							<tbody>
