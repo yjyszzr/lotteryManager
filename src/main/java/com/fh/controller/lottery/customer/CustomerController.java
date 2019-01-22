@@ -152,7 +152,17 @@ public class CustomerController extends BaseController {
 				return AppUtil.returnObject(new PageData(), map);
 			}
 			
-			PageData _pd = this.customerService.getCountOrderByMobile(pd);
+			String user_id_2 = "";
+			PageData _pd = new PageData();
+			_pd.put("mobile", pd.getString("mobile"));
+			PageData _user = this.userAccountManagerService.getUserByMobile(_pd);
+			if (null != _user) {
+				user_id_2 = _user.getString("user_id");
+			}
+			pd.put("user_id_2", user_id_2);
+			
+			_pd = null;
+			_pd = this.customerService.getCountOrderByMobile(pd);
 			long _count = new Long(_pd.getString("_count"));
 			if (_count > 0) {
 				map.put("flag", false);
@@ -220,7 +230,18 @@ public class CustomerController extends BaseController {
 		}
 		
 		if (flag) {
-			PageData _pd = this.customerService.getCountOrderByMobile(pd);  // 1
+			
+			String user_id_2 = "";
+			PageData _pd = new PageData();
+			_pd.put("mobile", pd.getString("mobile"));
+			PageData _user = this.userAccountManagerService.getUserByMobile(_pd);
+			if (null != _user) {
+				user_id_2 = _user.getString("user_id");
+			}
+			pd.put("user_id_2", user_id_2);
+			
+			_pd = null;
+			_pd = this.customerService.getCountOrderByMobile(pd);  // 1
 			long _count = new Long(_pd.getString("_count"));
 			if (_count > 0) {
 //				map.put("flag", false);
@@ -541,51 +562,30 @@ public class CustomerController extends BaseController {
 		
 //		id
 		PageData customer = this.customerService.findById(pd);
+		String user_id_1 = customer.getString("user_id");
+		String last_add_time = customer.getString("last_add_time");
+		String mobile = customer.getString("mobile");
+		String user_id_2 = "";
+		PageData _pd = new PageData();
+		_pd.put("mobile", mobile);
+		PageData user = this.userAccountManagerService.getUserByMobile(_pd);
+		if (null != user) {
+			user_id_2 = user.getString("user_id");
+		}
 		
-		List<PageData> ordes = null;
-		String user_id = "";
-		String last_add_time = "";
-		try {
-			user_id = customer.getString("user_id");
-		} catch (Exception e) {
-			// TODO: handle exception
+		_pd = new PageData();
+		_pd.put("start_add_time", last_add_time);
+		
+		String user_id_s = "";
+		if (!StringUtil.isEmpty(user_id_1)) {
+			user_id_s = user_id_1;
 		}
-		try {
-			last_add_time = customer.getString("last_add_time");
-		} catch (Exception e) {
-			// TODO: handle exception
+		if (!StringUtil.isEmpty(user_id_2)) {
+			user_id_s += "," + user_id_2;
 		}
-		if (!StringUtil.isEmpty(user_id)
-			&& !StringUtil.isEmpty(last_add_time)	
-		) {
-			PageData _pd = new PageData();
-			_pd.put("user_id", user_id);
-//			_pd.put("pay_status", 1);
-			_pd.put("start_add_time", last_add_time);
-			
-//			String start_add_time = "";
-//			try {
-//				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd 00:00:00"); 
-//				Calendar   cal_1=Calendar.getInstance();//获取当前日期 
-//				cal_1.add(Calendar.MONTH, -1);
-//				cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
-//				String firstDay = format.format(cal_1.getTime());
-//				start_add_time = String.valueOf(format.parse(firstDay).getTime());   
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//			
-//			_pd.put("start_add_time", start_add_time);
-//			_pd.put("end_add_time", System.currentTimeMillis());
-			
-			ordes = this.customerService.getOrdes(_pd);
-//			List<PageData> ordes2 = this.userAccountManagerService.getOrdes(_pd);
-//			if (null != ordes) {
-//				if (null != ordes2) ordes.addAll(ordes2);
-//			} else {
-//				ordes = ordes2;
-//			}
-		}
+		_pd.put("user_id_s", user_id_s);
+		
+		List<PageData> ordes = this.customerService.getOrdes(_pd);
 		
 		mv.setViewName("lottery/customer/customer_see_total");
 //		mv.addObject("msg", "save");
@@ -622,40 +622,44 @@ public class CustomerController extends BaseController {
 		PageData customer = this.customerService.findById(pd);
 		
 		List<PageData> ordes = null;
-		String user_id = "";
+		String user_id_1 = customer.getString("user_id");
+		String mobile = customer.getString("mobile");
+		String user_id_2 = "";
+		PageData _pd = new PageData();
+		_pd.put("mobile", mobile);
+		PageData user = this.userAccountManagerService.getUserByMobile(_pd);
+		if (null != user) {
+			user_id_2 = user.getString("user_id");
+		}
+		
+		_pd = new PageData();
+		_pd.put("pay_status", 1);
+		
+		String start_add_time = "";
 		try {
-			user_id = customer.getString("user_id");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd 00:00:00"); 
+			Calendar   cal_1=Calendar.getInstance();//获取当前日期 
+			cal_1.add(Calendar.MONTH, -1);
+			cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
+			String firstDay = format.format(cal_1.getTime());
+			System.out.println("firstDay:" + firstDay);
+			start_add_time = String.valueOf(format.parse(firstDay).getTime()/1000);   
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
-		if (!StringUtil.isEmpty(user_id)) {
-			PageData _pd = new PageData();
-			_pd.put("user_id", user_id);
-			_pd.put("pay_status", 1);
-			
-			String start_add_time = "";
-			try {
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd 00:00:00"); 
-				Calendar   cal_1=Calendar.getInstance();//获取当前日期 
-				cal_1.add(Calendar.MONTH, -1);
-				cal_1.set(Calendar.DAY_OF_MONTH,1);//设置为1号,当前日期既为本月第一天
-				String firstDay = format.format(cal_1.getTime());
-				System.out.println("firstDay:" + firstDay);
-				start_add_time = String.valueOf(format.parse(firstDay).getTime()/1000);   
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			_pd.put("start_add_time", start_add_time);
-//			_pd.put("end_add_time", DateUtilNew.getCurrentTimeLong());
-			ordes = this.customerService.getOrdes(_pd);
-//			List<PageData> ordes2 = this.userAccountManagerService.getOrdes(_pd);
-//			if (null != ordes) {
-//				if (null != ordes2) ordes.addAll(ordes2);
-//			} else {
-//				ordes = ordes2;
-//			}
+		_pd.put("start_add_time", start_add_time);
+		
+		String user_id_s = "";
+		if (!StringUtil.isEmpty(user_id_1)) {
+			user_id_s = user_id_1;
 		}
+		if (!StringUtil.isEmpty(user_id_2)) {
+			user_id_s += "," + user_id_2;
+		}
+		
+		_pd.put("user_id_s", user_id_s);
+		
+		ordes = this.customerService.getOrdes(_pd);
 		
 		mv.setViewName("lottery/customer/customer_see");
 //		mv.addObject("msg", "save");

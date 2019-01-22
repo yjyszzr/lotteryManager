@@ -7,6 +7,15 @@
 		dl_user_account
 	</sql>
 	
+	<select id="getUserByMobile" parameterType="pd" resultType="pd">
+		select 
+		*
+		from 
+		dl_user
+		where 
+			mobile = #{mobile}
+	</select>
+	
 	<select id="getOrdes" parameterType="pd" resultType="pd">
  
 		SELECT 
