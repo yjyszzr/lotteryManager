@@ -268,7 +268,7 @@ public class UserManagerControllerController extends BaseController {
 			}
 		}
 		
-		Comparator<PageData> comparator = (h1, h2) -> h1.getString("curMoney").compareTo(h2.getString("curMoney"));
+		Comparator<PageData> comparator = (h1, h2) -> Double.valueOf(h1.getString("curMoney")).compareTo(Double.valueOf(h2.getString("curMoney")));
 		newVarList.sort(comparator.reversed());
 		mv.setViewName("lottery/customer/sellerAchieve_list");
 		mv.addObject("varList", newVarList);
@@ -308,9 +308,14 @@ public class UserManagerControllerController extends BaseController {
 		Map<String,CountPersonDTO> curPersonsMap = this.createMonthAddUserMap(personsList);
 		
 		//月增加红包数
+		List<PageData> bonusMonthList = new ArrayList<>();
+		Map<String,String> bonusMonthMap = new HashMap<>();
 		List<String> userIdList = usermanagercontrollerService.queryUserIdsBySellersId(pd.getString("user_id"));
-		List<PageData> bonusMonthList = activityBonusService.queryTotalBonusByMonth(userIdList);
-		Map<String,String> bonusMonthMap = this.createMonthAddBonusMap(bonusMonthList);
+		if(userIdList.size() > 0) {
+			bonusMonthList = activityBonusService.queryTotalBonusByMonth(userIdList);
+			bonusMonthMap = this.createMonthAddBonusMap(bonusMonthList);
+		}
+
 		
 		//获取当前年份的12个月份的数组
 		List<String> monthArr = new ArrayList<>();
