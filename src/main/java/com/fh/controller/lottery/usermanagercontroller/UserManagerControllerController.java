@@ -222,7 +222,7 @@ public class UserManagerControllerController extends BaseController {
 			List<PageData> buyMonthList = usermanagercontrollerService.queryBuyByMonth(queryToalList);
 			Map<String,String> monthMap = this.createUserMonthBuyMap(buyMonthList);
 			
-			//销售人员总购彩量
+			//销售人员总购彩量(两个user_id)
 	        List<PageData> buyTotalList = usermanagercontrollerService.queryBuyTotal(queryToalList);
 	        Map<String,String> totalMap = this.createUserTotalBuyMap(buyTotalList);
 	        
@@ -299,7 +299,7 @@ public class UserManagerControllerController extends BaseController {
 		seller.put("pyear",pyear);
 		seller.put("user_id",pd.getString("user_id"));
 		
-		//月购彩量
+		//月购彩量(两个user_id)
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveByMonthList(pd);
 		Map<String,String> curBuyMap = this.createMonthAddBuyMap(varList);
 		
@@ -356,7 +356,6 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("pd", seller);
 		return mv;
 	}
-
 	
 	/**
 	 * 构造销售人员map
