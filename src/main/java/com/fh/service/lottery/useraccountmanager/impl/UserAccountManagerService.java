@@ -160,6 +160,12 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 		// TODO Auto-generated method stub
 		return (PageData) dao.findForObject("UserAccountManagerMapper.getCountOrderByMobile", pd);
 	}
+
+	@Override
+	public PageData getUserByMobile(PageData pd) throws Exception {
+		// TODO Auto-generated method stub
+		return (PageData) dao.findForObject("UserAccountManagerMapper.getUserByMobile", pd);
+	}
 	
 	
 /*	@SuppressWarnings("unchecked")

@@ -26,6 +26,9 @@ public class CustomerService implements CustomerManager{
 	@Resource(name = "daoSupport3")
 	private DaoSupport3 dao;
 	
+	public PageData getUserByMobile(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("CustomerMapper.getUserByMobile", pd);
+	}
 	
 	/**新增
 	 * @param pd

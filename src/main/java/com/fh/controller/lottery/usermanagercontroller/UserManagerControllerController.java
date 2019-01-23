@@ -210,7 +210,6 @@ public class UserManagerControllerController extends BaseController {
 		List<PageData> newVarList = new ArrayList<>();
 		if(sellers.size() > 0 ) {
 			Map<String,SysUserDTO> userMap = this.createUserMap(sellers);
-
 			List<PageData> queryToalList = new ArrayList<>();
 			sellers.stream().forEach(s->{
 				PageData  totalPd = new PageData();
@@ -223,7 +222,7 @@ public class UserManagerControllerController extends BaseController {
 			List<PageData> buyMonthList = usermanagercontrollerService.queryBuyByMonth(queryToalList);
 			Map<String,String> monthMap = this.createUserMonthBuyMap(buyMonthList);
 			
-			//销售人员总购彩量
+			//销售人员总购彩量(两个user_id)
 	        List<PageData> buyTotalList = usermanagercontrollerService.queryBuyTotal(queryToalList);
 	        Map<String,String> totalMap = this.createUserTotalBuyMap(buyTotalList);
 	        
@@ -234,6 +233,7 @@ public class UserManagerControllerController extends BaseController {
 				
 				String firstSellerId = pdata.getString("last_add_seller_id");
 				String totalBonus = bonusMap.get(firstSellerId);
+				
 				if(!StringUtils.isEmpty(totalBonus)) {
 					pdata.put("totalBonus", totalBonus);
 				}else {
@@ -289,17 +289,17 @@ public class UserManagerControllerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		String pyear = StringUtils.isEmpty(pd.getString("pyear"))?"2019":pd.getString("pyear");
-		
-		pd.put("last_add_seller_id", pd.getString("user_id"));
 		
 		PageData queryPd = new PageData();
+		pd.put("last_add_seller_id", pd.getString("user_id"));
+		String pyear = StringUtils.isEmpty(pd.getString("pyear"))?"2019":pd.getString("pyear");
 		queryPd.put("USER_ID", pd.getString("user_id"));
 		PageData seller = userService.findById(queryPd);
+		
 		seller.put("pyear",pyear);
 		seller.put("user_id",pd.getString("user_id"));
 		
-		//月购彩量
+		//月购彩量(两个user_id)
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveByMonthList(pd);
 		Map<String,String> curBuyMap = this.createMonthAddBuyMap(varList);
 		
@@ -315,11 +315,9 @@ public class UserManagerControllerController extends BaseController {
 			bonusMonthList = activityBonusService.queryTotalBonusByMonth(userIdList);
 			bonusMonthMap = this.createMonthAddBonusMap(bonusMonthList);
 		}
-
 		
 		//获取当前年份的12个月份的数组
 		List<String> monthArr = new ArrayList<>();
-			
 		monthArr.add(pyear+"-01");
 		monthArr.add(pyear+"-02");
 		monthArr.add(pyear+"-03");
@@ -340,20 +338,16 @@ public class UserManagerControllerController extends BaseController {
 			newpd.put("curPersons", "0");
 			newpd.put("curBonus", "0");
 			newpd.put("curMoneyPaid", "0");
-			
 			if(curPersonsMap.get(str) != null) {
 				CountPersonDTO ctDto = curPersonsMap.get(str);
 				newpd.put("curPersons",ctDto.getCurPersons());
 			}
-			
 			if(bonusMonthMap.get(str) != null) {
 				newpd.put("curBonus", bonusMonthMap.get(str));
 			}
-			
 			if(curBuyMap.get(str) != null) {
 				newpd.put("curMoneyPaid", curBuyMap.get(str));
 			}
-			
 			varNewList.add(newpd);
 		}
 		
@@ -362,7 +356,6 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("pd", seller);
 		return mv;
 	}
-
 	
 	/**
 	 * 构造销售人员map

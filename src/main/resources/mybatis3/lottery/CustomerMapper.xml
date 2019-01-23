@@ -7,6 +7,15 @@
 		dl_customer
 	</sql>
 	
+	<select id="getUserByMobile" parameterType="pd" resultType="pd">
+		select 
+		*
+		from 
+		dl_user
+		where 
+			mobile = #{mobile}
+	</select>
+	
 	<!-- 字段 -->
 	<sql id="Field">
 		id,	
@@ -294,7 +303,7 @@
 		</if>
 		
 		<if test="user_id_s != null and user_id_s != ''">
-		AND _order.`user_id` in (#{user_id_s})
+		AND _order.`user_id` in (#{user_id_1},#{user_id_2})
 		</if>
 		
 		<if test="pay_status != null and pay_status != ''">

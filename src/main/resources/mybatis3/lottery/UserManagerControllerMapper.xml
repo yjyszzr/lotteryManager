@@ -238,10 +238,10 @@
 			FROM_UNIXTIME( o.add_time, '%Y-%m' ) eveMon
 		FROM
 			 dl_customer cc  left join dl_order o 
-		on cc.user_id = o.user_id 	
+		on cc.mobile = o.mobile 	
 		WHERE  o.pay_status = 1
 		and cc.distribute_state = 1
-	  	and cc.user_id in (select c.user_id from dl_customer c where last_add_seller_id = #{last_add_seller_id})) temp
+	  	and cc.mobile in (select c.mobile from dl_customer c where last_add_seller_id = #{last_add_seller_id})) temp
 		group by sysUserId,eveMon;
 	</select>
 	
@@ -263,8 +263,8 @@
 	</select>
 
     <select id = "queryBuyByMonth" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.user_id = cc.user_id where o.pay_status = 1 and o.user_id in(
-            select c.user_id from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
+        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.mobile = cc.mobile where o.pay_status = 1 and o.mobile in(
+            select c.mobile from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
                 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                     #{item}
                 </foreach>
@@ -272,8 +272,8 @@
     </select>
 
     <select id="queryBuyTotal" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_order o  left join dl_customer cc on o.user_id = cc.user_id where o.pay_status = 1 and cc.distribute_state = 1   and o.user_id in(
-            select c.user_id from dl_customer c where c.last_add_seller_id in
+        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_order o  left join dl_customer cc on o.mobile = cc.mobile and o.pay_time > cc.first_add_time where o.pay_status = 1 and cc.distribute_state = 1   and o.mobile in(
+            select c.mobile from dl_customer c where c.last_add_seller_id in
                 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                     #{item}
                 </foreach>
@@ -288,11 +288,11 @@
 			FROM_UNIXTIME( o.add_time, '%Y-%m' ) eveMon
 		FROM
 			 dl_customer cc left join dl_order o 
-		on   cc.user_id = o.user_id 	
+		on   cc.mobile = o.mobile 	
 		WHERE  o.pay_status = 1
 		and cc.distribute_state = 1
-	    and cc.user_id in (
-	        select c.user_id from dl_customer c where c.distribute_state = 1 and last_add_seller_id in 
+	    and cc.mobile in (
+	        select c.mobile from dl_customer c where c.distribute_state = 1 and last_add_seller_id in 
 	  				<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
 			                 #{item}
 					</foreach>

@@ -524,10 +524,14 @@ public class CustomerController extends BaseController {
 			vpd.put("var4", user_source);	    //4
 			
 			String pay_state = "";
-			if (varOList.get(i).getString("pay_state").equals("1"))
+			if (varOList.get(i).getString("pay_state").equals("1")) {
 				pay_state = "已购彩";
-			if (varOList.get(i).getString("pay_state").equals("2"))
+				
+			} else if (varOList.get(i).getString("pay_state").equals("0")) {
 				pay_state = "未购彩";
+				
+			}
+			
 			vpd.put("var5", pay_state);	//5
 			
 			vpd.put("var6", varOList.get(i).get("last_add_seller_name").toString());	//6
@@ -562,15 +566,22 @@ public class CustomerController extends BaseController {
 		
 //		id
 		PageData customer = this.customerService.findById(pd);
-		String user_id_1 = customer.getString("user_id");
+//		user_id_1 = customer.getString("user_id");
 		String last_add_time = customer.getString("last_add_time");
 		String mobile = customer.getString("mobile");
-		String user_id_2 = "";
 		PageData _pd = new PageData();
 		_pd.put("mobile", mobile);
-		PageData user = this.userAccountManagerService.getUserByMobile(_pd);
-		if (null != user) {
-			user_id_2 = user.getString("user_id");
+		
+		String user_id_1 = "";
+		PageData user_1 = this.customerService.getUserByMobile(_pd);
+		if (null != user_1) {
+			user_id_1 = user_1.getString("user_id");
+		}
+		
+		String user_id_2 = "";
+		PageData user_2 = this.userAccountManagerService.getUserByMobile(_pd);
+		if (null != user_2) {
+			user_id_2 = user_2.getString("user_id");
 		}
 		
 		_pd = new PageData();
@@ -584,8 +595,18 @@ public class CustomerController extends BaseController {
 			user_id_s += "," + user_id_2;
 		}
 		_pd.put("user_id_s", user_id_s);
+		_pd.put("user_id_1", user_id_1);
+		_pd.put("user_id_2", user_id_2);
 		
-		List<PageData> ordes = this.customerService.getOrdes(_pd);
+		_pd.put("pay_status", 1);
+		
+		List<PageData> ordes = null;
+		
+		if (StringUtil.isEmpty(user_id_s)) {
+			ordes = null;
+		} else {
+			ordes = this.customerService.getOrdes(_pd);
+		}
 		
 		mv.setViewName("lottery/customer/customer_see_total");
 //		mv.addObject("msg", "save");
@@ -622,14 +643,19 @@ public class CustomerController extends BaseController {
 		PageData customer = this.customerService.findById(pd);
 		
 		List<PageData> ordes = null;
-		String user_id_1 = customer.getString("user_id");
 		String mobile = customer.getString("mobile");
-		String user_id_2 = "";
 		PageData _pd = new PageData();
 		_pd.put("mobile", mobile);
-		PageData user = this.userAccountManagerService.getUserByMobile(_pd);
-		if (null != user) {
-			user_id_2 = user.getString("user_id");
+		String user_id_1 = "";
+		PageData user_1 = this.customerService.getUserByMobile(_pd);
+		if (null != user_1) {
+			user_id_1 = user_1.getString("user_id");
+		}
+		
+		String user_id_2 = "";
+		PageData user_2 = this.userAccountManagerService.getUserByMobile(_pd);
+		if (null != user_2) {
+			user_id_2 = user_2.getString("user_id");
 		}
 		
 		_pd = new PageData();
@@ -658,8 +684,15 @@ public class CustomerController extends BaseController {
 		}
 		
 		_pd.put("user_id_s", user_id_s);
+		_pd.put("user_id_1", user_id_1);
+		_pd.put("user_id_2", user_id_2);
 		
-		ordes = this.customerService.getOrdes(_pd);
+		if (StringUtil.isEmpty(user_id_s)) {
+			ordes = null;
+		} else {
+			ordes = this.customerService.getOrdes(_pd);
+		}
+		
 		
 		mv.setViewName("lottery/customer/customer_see");
 //		mv.addObject("msg", "save");
