@@ -460,7 +460,7 @@
 	</select>
 	
 	<select id="querySellers" parameterType="pd" resultType="pd">
-			select USER_ID,PHONE,USERNAME from fhadmin_test.SYS_USER  u left join fhadmin_test.SYS_ROLE r on u.ROLE_ID = r.ROLE_ID where r.ROLE_NAME = '销售组'
+			select USER_ID,PHONE,USERNAME from SYS_USER  u left join SYS_ROLE r on u.ROLE_ID = r.ROLE_ID where r.ROLE_NAME = '销售组'
 				<if test="phone != null and phone != ''">
 					and u.phone = #{phone} 
 				</if>

@@ -222,9 +222,9 @@
 	<!-- 查询销售人员业绩表 -->
 	<select id="sellerAchieveList" parameterType="page" resultType="pd">
 		select 
-		distinct(c.last_add_seller_id) last_add_seller_id,
-		(select count(1) from dl_customer c1 where c1.last_add_seller_id = c.last_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{pd.curMonth} and c1.distribute_state = 1) curPersons,
-		(select count(1) from dl_customer c2  where c2.last_add_seller_id = c.last_add_seller_id and c2.distribute_state = 1) totalPersons
+		distinct(c.first_add_seller_id) last_add_seller_id,
+		(select count(1) from dl_customer c1 where c1.first_add_seller_id = c.first_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{pd.curMonth} ) curPersons,
+		(select count(1) from dl_customer c2  where c2.first_add_seller_id = c.first_add_seller_id ) totalPersons
 		from dl_customer c where c.distribute_state = 1
 
 	</select>
@@ -240,6 +240,7 @@
 			 dl_customer cc  left join dl_order o 
 		on cc.mobile = o.mobile 	
 		WHERE  o.pay_status = 1
+		and o.order_status != 10
 		and cc.distribute_state = 1
 	  	and cc.mobile in (select c.mobile from dl_customer c where last_add_seller_id = #{last_add_seller_id})) temp
 		group by sysUserId,eveMon;
@@ -255,7 +256,7 @@
 
 	<!-- 查询销售人员业绩表 -->
 	<select id="sellerWriteUserhList" resultType="pd">
-		select count(1) curPersons,FROM_UNIXTIME( last_add_time, '%Y-%m' ) eveMon,last_add_seller_id from dl_customer where last_add_seller_id = #{last_add_seller_id} and distribute_state = 1 group by FROM_UNIXTIME( last_add_time, '%Y-%m' )
+		select count(1) curPersons,FROM_UNIXTIME( last_add_time, '%Y-%m' ) eveMon,last_add_seller_id from dl_customer where first_add_seller_id = #{last_add_seller_id}  group by FROM_UNIXTIME( last_add_time, '%Y-%m' )
 	</select>
 	
 	<select id= "querySellersUserIds" resultType="java.lang.String">
@@ -263,7 +264,7 @@
 	</select>
 
     <select id = "queryBuyByMonth" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.mobile = cc.mobile where o.pay_status = 1 and o.mobile in(
+        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.mobile = cc.mobile where o.pay_status = 1  and o.order_status != 10 and o.mobile in(
             select c.mobile from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
                 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                     #{item}
@@ -272,7 +273,7 @@
     </select>
 
     <select id="queryBuyTotal" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_order o  left join dl_customer cc on o.mobile = cc.mobile and o.pay_time > cc.first_add_time where o.pay_status = 1 and cc.distribute_state = 1   and o.mobile in(
+        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_order o  left join dl_customer cc on o.mobile = cc.mobile and o.pay_time > cc.first_add_time where o.pay_status = 1 and o.order_status != 10 and cc.distribute_state = 1   and o.mobile in(
             select c.mobile from dl_customer c where c.last_add_seller_id in
                 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                     #{item}
@@ -290,6 +291,7 @@
 			 dl_customer cc left join dl_order o 
 		on   cc.mobile = o.mobile 	
 		WHERE  o.pay_status = 1
+		and o.order_status != 10
 		and cc.distribute_state = 1
 	    and cc.mobile in (
 	        select c.mobile from dl_customer c where c.distribute_state = 1 and last_add_seller_id in 
