@@ -240,6 +240,7 @@
 			 dl_customer cc  left join dl_order o 
 		on cc.mobile = o.mobile 	
 		WHERE  o.pay_status = 1
+		and o.order_status != 10
 		and cc.distribute_state = 1
 	  	and cc.mobile in (select c.mobile from dl_customer c where last_add_seller_id = #{last_add_seller_id})) temp
 		group by sysUserId,eveMon;
@@ -263,7 +264,7 @@
 	</select>
 
     <select id = "queryBuyByMonth" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.mobile = cc.mobile where o.pay_status = 1 and o.mobile in(
+        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.mobile = cc.mobile where o.pay_status = 1  and o.order_status != 10 and o.mobile in(
             select c.mobile from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
                 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                     #{item}
@@ -272,7 +273,7 @@
     </select>
 
     <select id="queryBuyTotal" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_order o  left join dl_customer cc on o.mobile = cc.mobile and o.pay_time > cc.first_add_time where o.pay_status = 1 and cc.distribute_state = 1   and o.mobile in(
+        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_order o  left join dl_customer cc on o.mobile = cc.mobile and o.pay_time > cc.first_add_time where o.pay_status = 1 and o.order_status != 10 and cc.distribute_state = 1   and o.mobile in(
             select c.mobile from dl_customer c where c.last_add_seller_id in
                 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                     #{item}
@@ -290,6 +291,7 @@
 			 dl_customer cc left join dl_order o 
 		on   cc.mobile = o.mobile 	
 		WHERE  o.pay_status = 1
+		and o.order_status != 10
 		and cc.distribute_state = 1
 	    and cc.mobile in (
 	        select c.mobile from dl_customer c where c.distribute_state = 1 and last_add_seller_id in 
