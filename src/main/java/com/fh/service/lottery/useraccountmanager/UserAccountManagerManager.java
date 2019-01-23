@@ -20,6 +20,8 @@ public interface UserAccountManagerManager {
 	public static final int ACC_PRO_TYPE_BUY = 3; // 购彩
 	public static final int ACC_PRO_TYPE_CASH = 4; // 提现
 	public static final int ACC_PRO_TYPE_REDPKG = 5;// 红包
+	
+	public PageData getUserByMobile(PageData pd) throws Exception;
 
 	/**
 	 * 新增

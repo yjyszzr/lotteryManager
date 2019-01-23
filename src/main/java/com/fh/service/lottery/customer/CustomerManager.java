@@ -12,6 +12,8 @@ import com.fh.util.PageData;
  */
 public interface CustomerManager{
 
+	public PageData getUserByMobile(PageData pd) throws Exception;
+	
 	/**新增
 	 * @param pd
 	 * @throws Exception

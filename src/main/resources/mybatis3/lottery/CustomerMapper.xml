@@ -7,6 +7,15 @@
 		dl_customer
 	</sql>
 	
+	<select id="getUserByMobile" parameterType="pd" resultType="pd">
+		select 
+		*
+		from 
+		dl_user
+		where 
+			mobile = #{mobile}
+	</select>
+	
 	<!-- 字段 -->
 	<sql id="Field">
 		id,	
@@ -189,9 +198,14 @@
 		 -->
 		SELECT COUNT(_order.`order_id`) as _count
 		FROM dl_order _order, dl_user _user
-		WHERE _order.`user_id` = _user.`user_id`
+		WHERE 1=1
+		AND (_order.`user_id` = _user.`user_id`
+			<if test="user_id_2 != null and user_id_2 != ''">
+			OR _order.`user_id` = #{user_id_2}
+			</if>
+		)
 		AND _order.`pay_status` = 1
-		AND _order.`add_time` >= 1546790400000
+		AND _order.`pay_time` >= 1541520000
 		AND _user.`mobile` = #{mobile}
 	</select>
 	
@@ -222,7 +236,8 @@
 		<if test="pd.last_add_seller_name != null and pd.last_add_seller_name != ''">
 		and customer.last_add_seller_name = #{pd.last_add_seller_name} 
 		</if>
-		ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC
+<!-- 	ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC -->
+		ORDER BY customer.distribute_state, customer.`pay_state` ASC, customer.`last_add_time` ASC
 	</select>
 	
 	
@@ -259,7 +274,8 @@
 		<if test="last_add_seller_name != null and last_add_seller_name != ''">
 		and customer.last_add_seller_name = #{last_add_seller_name} 
 		</if>
-		ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC 
+<!-- 	ORDER BY customer.`last_add_time` ASC, customer.`pay_state` DESC  -->
+		ORDER BY customer.distribute_state, customer.`pay_state` ASC, customer.`last_add_time` ASC
 	</select>
 	
 	<!-- 批量删除 -->
@@ -285,6 +301,11 @@
 		<if test="user_id != null and user_id != ''">
 		AND _order.`user_id` = #{user_id}
 		</if>
+		
+		<if test="user_id_s != null and user_id_s != ''">
+		AND _order.`user_id` in (#{user_id_1},#{user_id_2})
+		</if>
+		
 		<if test="pay_status != null and pay_status != ''">
 		AND _order.`pay_status` = #{pay_status}
 		</if>
@@ -294,7 +315,6 @@
 		<if test="start_add_time!= null and start_add_time != ''"> 
 		AND _order.`add_time` &gt;= #{start_add_time}
  		</if>
- 		
  		
 		ORDER BY _order.`add_time` DESC
 	</select>

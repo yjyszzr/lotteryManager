@@ -29,6 +29,9 @@ public class UserAccountService implements UserAccountManagerManager {
 		return (List<PageData>)dao.findForList("UserAccountManagerMapper.getOrdes", pd);
 	}
 	
+	public PageData getUserByMobile(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("UserAccountManagerMapper.getUserByMobile", pd);
+	}
 
 	/**
 	 * 新增
