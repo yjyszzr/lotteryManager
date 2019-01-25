@@ -350,7 +350,7 @@
 				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
 		</if>
 		<if test="pd.mobile != null and pd.mobile != ''">
-			and u.mobile  
+			and o.mobile  
 			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
 		</if>
 		<if test="pd.user_name != null and pd.user_name != ''"> 
