@@ -122,7 +122,7 @@
 							<thead>
 								<tr> 
 									<c:forEach items="${orderSnList}" var="orderLog" varStatus="vs">
-										<c:if test="${orderLog.type == 2 }">
+										<c:if test="${orderLog.type == '2' }">
 											<td class="center" height="400px" width="650px"><img src="${orderLog.pic}" height="400px" width="650px"></td>
 											<td class="left"><span style="font-weight:bold">失败原因：</span>${orderLog.fail_msg}</td>
 										</c:if>
@@ -131,7 +131,7 @@
 								
 								<tr>
 										<c:forEach items="${orderSnList}" var="orderLog" varStatus="vs">
-										<c:if test="${orderLog.type == 1 }">
+										<c:if test="${orderLog.type == '1' }">
 											<td class="left" colspan = "2" height="60px" ><span style="font-weight:bold">退款原因：</span>${orderLog.fail_msg}</td>
 										</c:if>
 									</c:forEach>

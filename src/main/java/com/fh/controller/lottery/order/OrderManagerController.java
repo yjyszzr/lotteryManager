@@ -375,7 +375,15 @@ public class OrderManagerController extends BaseController {
 			}
 			mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
 		}
-		mv.addObject("varList", orderDetailsList);
+		mv.addObject("orderSnList",orderSnPageDataList);
+		
+		if (statusType.equals("1")) {
+			mv.setViewName("lottery/ordermanager/ordermanager_details_for_mo");
+			mv.addObject("orderSnList",orderSnPageDataList);
+		}else	if (statusType.equals("0"))  {
+			mv.setViewName("lottery/ordermanager/ordermanager_details");
+		}
+		
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
