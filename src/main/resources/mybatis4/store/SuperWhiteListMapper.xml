@@ -371,9 +371,11 @@
  		<if test="pd.process_type!= null and pd.process_type != ''"> 
 		AND user_account.`process_type` = #{pd.process_type}
  		</if>
+ 		<!-- 
  		<if test="pd.process_type == null or pd.process_type == ''"> 
 		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
  		</if>
+ 		 -->
  		order by user_account.add_time desc
 	</select>
 	

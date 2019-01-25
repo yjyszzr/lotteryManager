@@ -289,6 +289,7 @@ public class OrderManagerController extends BaseController {
 		if (indx != -1) {
 			passTypeStr = passTypeStr.substring(0, indx) + passTypeStr.substring(indx + 1, passTypeStr.length());
 		}
+		if (passTypeStr == null || passTypeStr.equals("null")) passTypeStr = "";
 		pd.put("pass_type", passTypeStr);
 		List<PageData> orderDetailsList = ordermanagerService.toDetail(pd); // 列出OrderManager列表
 		logBefore(logger,    " orderDetailsList详情列表==============" + orderDetailsList);

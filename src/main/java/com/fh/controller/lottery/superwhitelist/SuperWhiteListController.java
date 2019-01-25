@@ -386,9 +386,9 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("用户ID");	//1
 		titles.add("手机号");	//2
 		titles.add("帐户余额");	//3
-		titles.add("充值余额");	//4
+		titles.add("余额记录");	//4
 		titles.add("大礼包余额");
-		titles.add("充值原因");	//5
+		titles.add("状态");	//5
 		titles.add("扣款原因");	//6
 		titles.add("充值时间");	//7
 		titles.add("店铺");	//8
@@ -421,7 +421,7 @@ public class SuperWhiteListController extends BaseController {
 			
 			String processTypeStr = varOList.get(i).getString("process_type");
 			if (null != processTypeStr && processTypeStr.equals("1")) {
-				processTypeStr = "奖金";
+				processTypeStr = "中奖";
 			} else if (null != processTypeStr && processTypeStr.equals("2")) {
 				processTypeStr = "充值";
 			} else if (null != processTypeStr && processTypeStr.equals("3")) {

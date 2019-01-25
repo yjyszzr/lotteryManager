@@ -564,7 +564,7 @@
 			 diag.Width = 450;
 			 diag.Height = 355;
 			 **/
-			 diag.Width = 950;
+			 diag.Width = 1200;
 			 diag.Height = 700;
 			 
 			 diag.Modal = true;				//有无遮罩窗口

@@ -54,7 +54,9 @@
 												<span class="input-icon">
 													<select title="扣款原因" class="chosen-select form-control" name="process_type" id="process_type" data-placeholder="请选择" style="vertical-align:top;width: 120px;">
 													<option value="">全部</option>
+													<option value="1" <c:if test="${pd.process_type==1}">selected</c:if>>中奖</option>
 													<option value="2" <c:if test="${pd.process_type==2}">selected</c:if>>充值</option>
+													<option value="3" <c:if test="${pd.process_type==1}">selected</c:if>>购彩</option>
 													<option value="4" <c:if test="${pd.process_type==4}">selected</c:if>>提现</option>
 													<option value="8" <c:if test="${pd.process_type==8}">selected</c:if>>退款</option>
 													<option value="9" <c:if test="${pd.process_type==9}">selected</c:if>>输入错误</option>
@@ -98,9 +100,9 @@
 									<th class="center">用户ID</th>
 									<th class="center">手机号</th>
 									<th class="center">帐户余额</th>
-									<th class="center">充值金额</th>
+									<th class="center">金额记录</th>
 									<th class="center">大礼包金额</th>
-									<th class="center">充值原因</th>
+									<th class="center">状态</th>
 									<th class="center">扣款原因</th>
 									<th class="center">充值时间</th>
 									<th class="center">店铺</th>
@@ -124,7 +126,7 @@
 											<td class='center'>${var.recharge_card_real_value}</td>
 											<td class='center'>
 											<c:choose>
-												<c:when test="${var.process_type == 1}">奖金</c:when>
+												<c:when test="${var.process_type == 1}">中奖</c:when>
 												<c:when test="${var.process_type == 2}">充值</c:when>
 												<c:when test="${var.process_type == 3}">购彩</c:when>
 												<c:when test="${var.process_type == 5}">红包</c:when>
