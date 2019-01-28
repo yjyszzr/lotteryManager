@@ -56,7 +56,7 @@
 													<option value="">全部</option>
 													<option value="1" <c:if test="${pd.process_type==1}">selected</c:if>>中奖</option>
 													<option value="2" <c:if test="${pd.process_type==2}">selected</c:if>>充值</option>
-													<option value="3" <c:if test="${pd.process_type==1}">selected</c:if>>购彩</option>
+													<option value="3" <c:if test="${pd.process_type==3}">selected</c:if>>购彩</option>
 													<option value="4" <c:if test="${pd.process_type==4}">selected</c:if>>提现</option>
 													<option value="8" <c:if test="${pd.process_type==8}">selected</c:if>>退款</option>
 													<option value="9" <c:if test="${pd.process_type==9}">selected</c:if>>输入错误</option>
@@ -80,7 +80,7 @@
 												</c:if>
 										</td>		 
 												 												
-													 
+													  
 												
 												 
 											</div>

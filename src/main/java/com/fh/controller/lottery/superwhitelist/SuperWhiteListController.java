@@ -386,7 +386,7 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("用户ID");	//1
 		titles.add("手机号");	//2
 		titles.add("帐户余额");	//3
-		titles.add("余额记录");	//4
+		titles.add("金额记录");	//4
 		titles.add("大礼包余额");
 		titles.add("状态");	//5
 		titles.add("扣款原因");	//6
@@ -434,7 +434,9 @@ public class SuperWhiteListController extends BaseController {
 				processTypeStr = "购券";
 			} else if (null != processTypeStr && processTypeStr.equals("8")) {
 				processTypeStr = "退款";	
-			} 
+			} else {
+				processTypeStr = "";
+			}
 		
 			vpd.put("var6", processTypeStr);	    //5
 			
