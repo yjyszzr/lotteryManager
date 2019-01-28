@@ -116,30 +116,29 @@
 							</tbody>
 						</table>
 						</div>
-						
-				  	<div   class="row">
-					<table   class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
-							<thead>
-								<tr> 
-									<c:forEach items="${orderSnList}" var="orderLog" varStatus="vs">
-										<c:if test="${orderLog.type == '2' }">
-											<td class="center" height="400px" width="650px"><img src="${orderLog.pic}" height="400px" width="650px"></td>
-											<td class="left"><span style="font-weight:bold">失败原因：</span>${orderLog.fail_msg}</td>
-										</c:if>
-									</c:forEach>
-								</tr>
-								
-								<tr>
+					</div>
+					
+					<div   class="row">
+						<div class="col-xs-12">
+						<table   class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
+								<thead>
+									<tr> 
 										<c:forEach items="${orderSnList}" var="orderLog" varStatus="vs">
-										<c:if test="${orderLog.type == '1' }">
-											<td class="left" colspan = "2" height="60px" ><span style="font-weight:bold">退款原因：</span>${orderLog.fail_msg}</td>
-										</c:if>
-									</c:forEach>
-								</tr>
-							</thead>
-							</table>
+												<td class="center" height="400px" width="650px"><img src="${orderLog.pic}" height="400px" width="650px"></td>
+												<td class="left"><span style="font-weight:bold">失败原因：</span>${orderLog.fail_msg}</td>
+										</c:forEach>
+									</tr>
+									
+									<tr>
+										<c:forEach items="${orderSnList}" var="orderLog" varStatus="vs">
+												<td class="left" colspan = "2" height="60px" ><span style="font-weight:bold">退款原因：</span>${orderLog.fail_msg}</td>
+										</c:forEach>
+									</tr>
+								</thead>
+								</table>
+						</div>		
 					</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>
