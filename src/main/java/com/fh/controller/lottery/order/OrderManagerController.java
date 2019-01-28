@@ -279,7 +279,7 @@ public class OrderManagerController extends BaseController {
 		String orderSN = pd.getString("order_sn");
 		PageData pdOrderSN = new PageData();
 		pdOrderSN.put("order_sn", orderSN);
-	List<PageData> orderSnPageDataList =	logoperationService.findByOrderSn(pdOrderSN);
+		List<PageData> orderSnPageDataList =	logoperationService.findByOrderSn(pdOrderSN);
 		String[] passTypeArr = passType.split(",");
 		String passTypeStr = "";
 		for (int i = 0; i < passTypeArr.length; i++) {
@@ -375,12 +375,6 @@ public class OrderManagerController extends BaseController {
 				logBefore(logger,    " blueTowingList列表==============" + blueTowingList);
 			}
 			
-//			if (statusType.equals("1")) {
-//				mv.setViewName("lottery/ordermanager/ordermanager_details_for_mo_dlt");
-//				mv.addObject("orderSnList",orderSnPageDataList);
-//			}else	if (statusType.equals("0"))  {
-//				mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
-//			}
 			mv.addObject("orderSnList",orderSnPageDataList);
 			mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
 		}
@@ -729,7 +723,12 @@ public class OrderManagerController extends BaseController {
 		PageData pduser = new PageData();
 		pduser.put("USER_ID", user.getUSER_ID());
 		pduser = userService.findById(pduser);
+		PageData orderPd = new PageData();
+		orderPd.put("order_sn", pd.getString("id"));
+		PageData orderRes = ordermanagerService.findByOrderSn(pd.getString("id"));
+		String lotteryClassifyId = orderRes.getString("lottery_classify_id");
 		pdForlogoperation.put("phone", pduser.getString("PHONE"));
+		pdForlogoperation.put("lottery_classify_id", lotteryClassifyId);
 		logoperationService.save(pdForlogoperation);
 		
 		
