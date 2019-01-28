@@ -375,12 +375,14 @@ public class OrderManagerController extends BaseController {
 				logBefore(logger,    " blueTowingList列表==============" + blueTowingList);
 			}
 			
-			if (statusType.equals("1")) {
-				mv.setViewName("lottery/ordermanager/ordermanager_details_for_mo_dlt");
-				mv.addObject("orderSnList",orderSnPageDataList);
-			}else	if (statusType.equals("0"))  {
-				mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
-			}
+//			if (statusType.equals("1")) {
+//				mv.setViewName("lottery/ordermanager/ordermanager_details_for_mo_dlt");
+//				mv.addObject("orderSnList",orderSnPageDataList);
+//			}else	if (statusType.equals("0"))  {
+//				mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
+//			}
+			mv.addObject("orderSnList",orderSnPageDataList);
+			mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
 		}
 		
 		
