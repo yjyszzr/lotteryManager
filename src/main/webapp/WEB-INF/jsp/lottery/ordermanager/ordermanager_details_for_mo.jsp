@@ -132,8 +132,8 @@
 								
 								<tr>
 										<c:forEach items="${orderSnList}" var="orderLog" varStatus="vs">
-										<c:if test="${orderLog.type == 1 }">
-											<td class="left" colspan = "2" height="60px" ><span style="font-weight:bold">退款原因：</span>${orderLog.fail_msg}</td>
+										<c:if test="${orderLog.type == 2}">
+											<td class="left" colspan = "2" height="60px" ><span style="font-weight:bold">退款原因：</span>${orderLog.refound_msg}</td>
 										</c:if>
 									</c:forEach>
 								</tr>
