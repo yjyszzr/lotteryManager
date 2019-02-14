@@ -13,7 +13,8 @@
 		type,	
 		order_sn,	
 		phone,	
-		op_type,	
+		op_type,
+		lottery_classify_id,	
 		add_time
 	</sql>
 	
@@ -23,7 +24,8 @@
         #{type},	
         #{order_sn},	
         #{phone},	
-        #{op_type},	
+        #{op_type},
+        #{lottery_classify_id},	
         #{add_time}	
 	</sql>
 	
@@ -36,7 +38,8 @@
 		        type,	
 		        order_sn,	
 		        phone,	
-		        op_type,	
+		        op_type,
+		        lottery_classify_id,	
 		        add_time	
 		) values (
 	<include refid="FieldValue"></include>
@@ -123,6 +126,6 @@
 		</foreach>
 	</delete>
 	<update id="addRefundRemark" parameterType="pd">
-	update dl_log_operation set  fail_msg = #{fail_msg}  where  order_sn = #{order_sn}  and  type = 1
+		update dl_log_operation set  refound_msg = #{fail_msg}  where  order_sn = #{order_sn}  and  (type = 1 or  type = 2)
 	</update>
 </mapper>

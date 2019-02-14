@@ -281,7 +281,6 @@
 	<select id="getSumRechargeCardRealValue" parameterType="pd" resultType="pd">
 		SELECT SUM(user_account.recharge_card_real_value) as recharge_card_real_value
 		FROM `dl_user_account` user_account
-		
 		WHERE 1 = 1
 		<if test="user_id != null and user_id != ''">
 		and user_account.user_id = #{user_id}
@@ -290,24 +289,14 @@
 		AND user_account.store_id = #{store_id}
 		</if>
 	</select>	
-
-
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		<!-- 
-		SELECT user_store_money.store_id,user_store_money.user_id, user.user_name, user.nickname, user.mobile, user_store_money.money, store.name, user_store_money.id 
-		FROM dl_user_store_money user_store_money, dl_user user, dl_store store
-        WHERE user_store_money.user_id = user.user_id AND user_store_money.store_id = store.id
-        and user.is_super_white = 1
-		-->        
-        
         SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
 		,user_store_money.id 
 		FROM (dl_store store , dl_user user)
 		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
 		WHERE user.is_super_white = 1
-
         <if test="pd.mobile != null and pd.mobile != ''">
 			and user.mobile  
 			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
@@ -336,12 +325,10 @@
 		FROM (dl_store store , dl_user user)
 		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
 		WHERE user.is_super_white = 1
-
         <if test="mobile != null and mobile != ''">
 			and user.mobile  
 			LIKE CONCAT(CONCAT('%', #{mobile}),'%')
 		</if>
-		 
 	</select>
 	
 	<select id="datalistAccountPage" parameterType="page" resultType="pd">
@@ -357,11 +344,9 @@
 		<if test="pd.store_id!= null and pd.store_id != ''"> 
 		and user_account.store_id LIKE CONCAT(CONCAT('%', #{pd.store_id}),'%')
  		</if> 
- 		
  		<if test="pd.store_name!= null and pd.store_name != ''"> 
 		and store.name LIKE CONCAT(CONCAT('%', #{pd.store_name}),'%')
 		</if>
-		
 		<if test="pd.end_add_time!= null and pd.end_add_time != ''"> 
 		AND user_account.`add_time` &lt;= #{pd.end_add_time}
  		</if>
@@ -371,11 +356,6 @@
  		<if test="pd.process_type!= null and pd.process_type != ''"> 
 		AND user_account.`process_type` = #{pd.process_type}
  		</if>
- 		<!-- 
- 		<if test="pd.process_type == null or pd.process_type == ''"> 
-		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
- 		</if>
- 		 -->
  		order by user_account.add_time desc
 	</select>
 	
@@ -387,7 +367,6 @@
 		SELECT user.`mobile`, store.`name`, user_account.*
 		FROM `dl_user_account` user_account, `dl_user` user, `dl_store` store
 		WHERE user_account.`user_id` = user.user_id AND user_account.`store_id` = store.`id`
-		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
 		<if test="user_id!= null and user_id != ''"> 
 		and user_account.user_id LIKE CONCAT(CONCAT('%', #{user_id}),'%')
 		</if>
@@ -406,14 +385,9 @@
  		<if test="process_type!= null and process_type != ''"> 
 		AND user_account.`process_type` = #{process_type}
  		</if>
- 	 	<if test="process_type == null or process_type == ''"> 
-		and (user_account.`process_type` = 2 or user_account.`process_type` = 4 or user_account.`process_type` = 8 or user_account.`process_type` = 9)
- 		</if>
  		order by user_account.add_time desc
 	</select>
 	
-	
-	 
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
