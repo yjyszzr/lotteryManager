@@ -510,9 +510,9 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("amount", "-" + pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
-//		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
-//		BigDecimal bigNumber = new BigDecimal( pd.getString("number"));
-		pd.put("cur_balance", _pd.getString("money"));
+		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+		BigDecimal bigMoneyLimit = new BigDecimal(null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
+		pd.put("cur_balance", bigMoney.add(bigMoneyLimit).toString());
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
@@ -558,9 +558,10 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("amount", pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
-		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
-		BigDecimal bigNumber = new BigDecimal( pd.getString("number"));
-		pd.put("cur_balance", bigMoney);
+		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+		BigDecimal bigMoneyLimit = new BigDecimal(null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
+		pd.put("cur_balance", bigMoney.add(bigMoneyLimit).toString());
+		
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
