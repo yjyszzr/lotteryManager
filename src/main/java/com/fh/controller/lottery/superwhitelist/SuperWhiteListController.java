@@ -1,6 +1,7 @@
 package com.fh.controller.lottery.superwhitelist;
 
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -509,7 +510,9 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("amount", "-" + pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
-		pd.put("cur_balance", null != _pd.getString("money") ? _pd.getString("money") : 0);
+		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+		BigDecimal bigNumber = new BigDecimal( pd.getString("number"));
+		pd.put("cur_balance", bigMoney.multiply(bigNumber).toString());
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
@@ -555,7 +558,9 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("amount", pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
-		pd.put("cur_balance", null != _pd.getString("money") ? _pd.getString("money") : 0);
+		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+		BigDecimal bigNumber = new BigDecimal( pd.getString("number"));
+		pd.put("cur_balance", bigMoney.add(bigNumber).toString());
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
