@@ -78,6 +78,7 @@ public interface SuperWhiteListManager{
 	public void rechargeToMoneyLimit(PageData pd)throws Exception;
 	
 	public void deduction(PageData pd)throws Exception;
+	public void deductionToMoneyLimit(PageData pd)throws Exception;
 	
 }
 

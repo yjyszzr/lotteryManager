@@ -102,6 +102,11 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 		dao.update("SuperWhiteListMapper.deduction", pd);
 	}
 	
+	
+	public void deductionToMoneyLimit(PageData pd)throws Exception{
+		dao.update("SuperWhiteListMapper.deductionToMoneyLimit", pd);
+	}
+	
 	/**通过id获取数据
 	 * @param pd
 	 * @throws Exception

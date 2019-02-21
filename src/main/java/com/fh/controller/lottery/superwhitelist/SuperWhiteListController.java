@@ -500,7 +500,8 @@ public class SuperWhiteListController extends BaseController {
 	 
 		pd.put("last_time", time);
 		boolean flag = true;
-		superwhitelistService.deduction(pd);
+//		superwhitelistService.deduction(pd);
+		superwhitelistService.deductionToMoneyLimit(pd);
 		
 		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);

@@ -224,6 +224,15 @@
 		last_time = #{last_time}
 	</update>
 	
+	<update id="deductionToMoneyLimit" parameterType="pd">
+		INSERT INTO dl_user_store_money(user_id, store_id, money_limit, last_time) VALUES(#{user_id}, #{store_id}, -#{number}, #{last_time})
+		ON DUPLICATE KEY
+		UPDATE money_limit = money_limit - #{number}, 
+		user_id = #{user_id},
+		store_id = #{store_id},
+		last_time = #{last_time}
+	</update>
+	
 	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
