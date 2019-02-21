@@ -165,7 +165,7 @@
 									<th class="center">用户名</th>
 									<th class="center">昵称</th>
 									<th class="center">手机号</th>
-									<th class="center">不可提现余额</th>
+									<th class="center">充值金额</th>
 									<th class="center">可提现余额</th>
 									
 									<th class="center">大礼包总金额</th>
