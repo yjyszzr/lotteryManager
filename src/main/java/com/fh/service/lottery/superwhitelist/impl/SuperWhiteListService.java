@@ -1,13 +1,15 @@
 package com.fh.service.lottery.superwhitelist.impl;
 
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
-import com.fh.dao.DaoSupport;
+
 import com.fh.dao.DaoSupport4;
 import com.fh.entity.Page;
-import com.fh.util.PageData;
 import com.fh.service.lottery.superwhitelist.SuperWhiteListManager;
+import com.fh.util.PageData;
 
 /** 
  * 说明： 超级白名单
@@ -89,6 +91,9 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 		return (List<PageData>)dao.findForList("SuperWhiteListMapper.datalistStore", pd);
 	}
 	
+	public void rechargeToMoneyLimit(PageData pd)throws Exception{
+		dao.update("SuperWhiteListMapper.rechargeToMoneyLimit", pd);
+	}
 	public void recharge(PageData pd)throws Exception{
 		dao.update("SuperWhiteListMapper.recharge", pd);
 	}

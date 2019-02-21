@@ -1,6 +1,7 @@
 package com.fh.service.lottery.superwhitelist;
 
 import java.util.List;
+
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -73,6 +74,8 @@ public interface SuperWhiteListManager{
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 	
 	public void recharge(PageData pd)throws Exception;
+	
+	public void rechargeToMoneyLimit(PageData pd)throws Exception;
 	
 	public void deduction(PageData pd)throws Exception;
 	

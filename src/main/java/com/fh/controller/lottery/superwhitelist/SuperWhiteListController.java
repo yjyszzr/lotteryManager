@@ -531,7 +531,9 @@ public class SuperWhiteListController extends BaseController {
 		Integer time = DateUtilNew.getCurrentTimeLong();
 		pd.put("last_time", time);
 		boolean flag = true;
-		superwhitelistService.recharge(pd);
+//		superwhitelistService.recharge(pd);
+//		充值到不可提现余额
+		superwhitelistService.rechargeToMoneyLimit(pd);
 		
 //		recharge_card_id
 //		recharge_card_real_value
