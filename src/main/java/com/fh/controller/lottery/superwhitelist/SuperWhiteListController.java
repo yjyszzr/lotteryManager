@@ -501,8 +501,8 @@ public class SuperWhiteListController extends BaseController {
 	 
 		pd.put("last_time", time);
 		boolean flag = true;
-//		superwhitelistService.deduction(pd);
-		superwhitelistService.deductionToMoneyLimit(pd);
+		superwhitelistService.deduction(pd);
+//		superwhitelistService.deductionToMoneyLimit(pd);
 		
 		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
@@ -510,9 +510,9 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("amount", "-" + pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
-		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
-		BigDecimal bigNumber = new BigDecimal( pd.getString("number"));
-		pd.put("cur_balance", bigMoney.multiply(bigNumber).toString());
+//		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+//		BigDecimal bigNumber = new BigDecimal( pd.getString("number"));
+		pd.put("cur_balance", _pd.getString("money"));
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
@@ -558,9 +558,9 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("amount", pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
-		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
 		BigDecimal bigNumber = new BigDecimal( pd.getString("number"));
-		pd.put("cur_balance", bigMoney.add(bigNumber).toString());
+		pd.put("cur_balance", bigMoney);
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
