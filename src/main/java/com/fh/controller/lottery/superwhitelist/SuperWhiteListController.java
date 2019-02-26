@@ -1,6 +1,7 @@
 package com.fh.controller.lottery.superwhitelist;
 
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -187,9 +188,10 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("用户名");	//2
 		titles.add("昵称");	//3
 		titles.add("手机号");	//4
-		titles.add("账户余额");	//5
-		titles.add("大礼包总金额");	//6
-		titles.add("店铺");	//7
+		titles.add("充值金额");	//5
+		titles.add("可提现余额");	//6
+		titles.add("大礼包总金额");	//7
+		titles.add("店铺");	//8
 		 
 		dataMap.put("titles", titles);
 		
@@ -206,7 +208,8 @@ public class SuperWhiteListController extends BaseController {
 			vpd.put("var2", varOList.get(i).getString("user_name"));	    //2
 			vpd.put("var3", varOList.get(i).getString("nickname"));	    //3
 			vpd.put("var4", varOList.get(i).getString("mobile"));	    //4
-			vpd.put("var5", varOList.get(i).getString("money"));	
+			vpd.put("var5", varOList.get(i).getString("money_limit"));	
+			vpd.put("var6", varOList.get(i).getString("money"));	
 
 			try {
 //				String user_id = pageData.getString("user_id");
@@ -216,14 +219,14 @@ public class SuperWhiteListController extends BaseController {
 				PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(varOList.get(i));
 				if (null != _pageData) {
 					recharge_card_real_value = _pageData.getString("recharge_card_real_value");
-					vpd.put("var6", recharge_card_real_value);
+					vpd.put("var7", recharge_card_real_value);
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
 			
-			vpd.put("var7", varOList.get(i).getString("name"));
+			vpd.put("var8", varOList.get(i).getString("name"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -503,6 +506,7 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("last_time", time);
 		boolean flag = true;
 		superwhitelistService.deduction(pd);
+//		superwhitelistService.deductionToMoneyLimit(pd);
 		
 		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
@@ -510,7 +514,9 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("amount", "-" + pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
-		pd.put("cur_balance", null != _pd.getString("money") ? _pd.getString("money") : 0);
+		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+		BigDecimal bigMoneyLimit = new BigDecimal(null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
+		pd.put("cur_balance", bigMoney.add(bigMoneyLimit).toString());
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
@@ -533,7 +539,9 @@ public class SuperWhiteListController extends BaseController {
 		Integer time = DateUtilNew.getCurrentTimeLong();
 		pd.put("last_time", time);
 		boolean flag = true;
-		superwhitelistService.recharge(pd);
+//		superwhitelistService.recharge(pd);
+//		充值到不可提现余额
+		superwhitelistService.rechargeToMoneyLimit(pd);
 		
 //		recharge_card_id
 //		recharge_card_real_value
@@ -554,7 +562,10 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("amount", pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
-		pd.put("cur_balance", null != _pd.getString("money") ? _pd.getString("money") : 0);
+		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+		BigDecimal bigMoneyLimit = new BigDecimal(null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
+		pd.put("cur_balance", bigMoney.add(bigMoneyLimit).toString());
+		
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);

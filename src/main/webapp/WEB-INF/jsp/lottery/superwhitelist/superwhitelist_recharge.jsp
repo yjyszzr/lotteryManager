@@ -61,7 +61,13 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">账户余额:</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>
+								<td  >
+									${pd.money_limit}
+								</td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">可提现余额:</td>
 								<td id="money">
 									${pd.money}
 								</td>

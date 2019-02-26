@@ -164,6 +164,15 @@
 		last_time = #{last_time}
 	</update>
 	
+	<update id="rechargeToMoneyLimit" parameterType="pd">
+		INSERT INTO dl_user_store_money(user_id, store_id, money_limit, last_time) VALUES(#{user_id}, #{store_id}, #{number}, #{last_time})
+		ON DUPLICATE KEY
+		UPDATE money_limit = money_limit + #{number}, 
+		user_id = #{user_id},
+		store_id = #{store_id},
+		last_time = #{last_time}
+	</update>
+	
 	<update id="saveUserBonus" parameterType="pd">
 		INSERT INTO dl_user_bonus(
 			user_id,				 
@@ -210,6 +219,15 @@
 		INSERT INTO dl_user_store_money(user_id, store_id, money, last_time) VALUES(#{user_id}, #{store_id}, -#{number}, #{last_time})
 		ON DUPLICATE KEY
 		UPDATE money = money - #{number}, 
+		user_id = #{user_id},
+		store_id = #{store_id},
+		last_time = #{last_time}
+	</update>
+	
+	<update id="deductionToMoneyLimit" parameterType="pd">
+		INSERT INTO dl_user_store_money(user_id, store_id, money_limit, last_time) VALUES(#{user_id}, #{store_id}, -#{number}, #{last_time})
+		ON DUPLICATE KEY
+		UPDATE money_limit = money_limit - #{number}, 
 		user_id = #{user_id},
 		store_id = #{store_id},
 		last_time = #{last_time}
@@ -265,7 +283,7 @@
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
+		SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money,user_store_money.money_limit
 		,user_store_money.id 
 		FROM (dl_store store , dl_user user)
 		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
@@ -281,6 +299,7 @@
 	<select id="getSumRechargeCardRealValue" parameterType="pd" resultType="pd">
 		SELECT SUM(user_account.recharge_card_real_value) as recharge_card_real_value
 		FROM `dl_user_account` user_account
+		
 		WHERE 1 = 1
 		<if test="user_id != null and user_id != ''">
 		and user_account.user_id = #{user_id}
@@ -289,14 +308,16 @@
 		AND user_account.store_id = #{store_id}
 		</if>
 	</select>	
+
+
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-        SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
-		,user_store_money.id 
+        SELECT store.id store_id, store.name,user.user_id, user.user_name, user.nickname, user.mobile,user_store_money.money,user_store_money.id,user_store_money.money_limit money_limit 
 		FROM (dl_store store , dl_user user)
 		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
 		WHERE user.is_super_white = 1
+
         <if test="pd.mobile != null and pd.mobile != ''">
 			and user.mobile  
 			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
@@ -320,15 +341,17 @@
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		SELECT store.id store_id, store.name, user.user_id user_id, user.user_name, user.nickname, user.mobile,user_store_money.money
+		SELECT store.id store_id, store.name, user.user_id user_id, user.user_name, user.nickname, user.mobile,user_store_money.money,user_store_money.money_limit
 		,user_store_money.id 
 		FROM (dl_store store , dl_user user)
 		LEFT JOIN dl_user_store_money user_store_money ON user.`user_id`  = user_store_money.`user_id` AND store.`id`  = user_store_money.`store_id` 
 		WHERE user.is_super_white = 1
+
         <if test="mobile != null and mobile != ''">
 			and user.mobile  
 			LIKE CONCAT(CONCAT('%', #{mobile}),'%')
 		</if>
+		 
 	</select>
 	
 	<select id="datalistAccountPage" parameterType="page" resultType="pd">
@@ -344,9 +367,11 @@
 		<if test="pd.store_id!= null and pd.store_id != ''"> 
 		and user_account.store_id LIKE CONCAT(CONCAT('%', #{pd.store_id}),'%')
  		</if> 
+ 		
  		<if test="pd.store_name!= null and pd.store_name != ''"> 
 		and store.name LIKE CONCAT(CONCAT('%', #{pd.store_name}),'%')
 		</if>
+		
 		<if test="pd.end_add_time!= null and pd.end_add_time != ''"> 
 		AND user_account.`add_time` &lt;= #{pd.end_add_time}
  		</if>
@@ -388,6 +413,8 @@
  		order by user_account.add_time desc
 	</select>
 	
+	
+	 
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
