@@ -1,202 +1,202 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="UserManagerControllerMapper">
-	
+
 	<!--表名 -->
 	<sql id="tableName">
 		dl_user
 	</sql>
-	
+
 	<!-- 字段 -->
 	<sql id="Field">
-		user_id,	
-		user_name,	
-		mobile,	
-		email,	
-		password,	
-		salt,	
-		nickname,	
-		sex,	
-		birthday,	
-		detail_address,	
-		headimg,	
-		user_money,	
-		user_money_limit,	
-		frozen_money,	
-		pay_point,	
-		rank_point,	
-		reg_time,	
-		reg_ip,	
-		last_time,	
-		last_ip,	
-		mobile_supplier,	
-		mobile_province,	
-		mobile_city,	
-		reg_from,	
-		surplus_password,	
-		pay_pwd_salt,	
-		user_status,	
-		pass_wrong_count,	
-		user_type,	
-		is_real,	
+		user_id,
+		user_name,
+		mobile,
+		email,
+		password,
+		salt,
+		nickname,
+		sex,
+		birthday,
+		detail_address,
+		headimg,
+		user_money,
+		user_money_limit,
+		frozen_money,
+		pay_point,
+		rank_point,
+		reg_time,
+		reg_ip,
+		last_time,
+		last_ip,
+		mobile_supplier,
+		mobile_province,
+		mobile_city,
+		reg_from,
+		surplus_password,
+		pay_pwd_salt,
+		user_status,
+		pass_wrong_count,
+		user_type,
+		is_real,
 		user_remark,
 		is_business
 	</sql>
-	
+
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-        #{user_id},	
-        #{user_name},	
-        #{mobile},	
-        #{email},	
-        #{password},	
-        #{salt},	
-        #{nickname},	
-        #{sex},	
-        #{birthday},	
-        #{detail_address},	
-        #{headimg},	
-        #{user_money},	
-        #{user_money_limit},	
-        #{frozen_money},	
-        #{pay_point},	
-        #{rank_point},	
-        #{reg_time},	
-        #{reg_ip},	
-        #{last_time},	
-        #{last_ip},	
-        #{mobile_supplier},	
-        #{mobile_province},	
-        #{mobile_city},	
-        #{reg_from},	
-        #{surplus_password},	
-        #{pay_pwd_salt},	
-        #{user_status},	
-        #{pass_wrong_count},	
-        #{user_type},	
-        #{is_real},	
-        #{user_remark},
-        #{is_business}	
+		#{user_id},
+		#{user_name},
+		#{mobile},
+		#{email},
+		#{password},
+		#{salt},
+		#{nickname},
+		#{sex},
+		#{birthday},
+		#{detail_address},
+		#{headimg},
+		#{user_money},
+		#{user_money_limit},
+		#{frozen_money},
+		#{pay_point},
+		#{rank_point},
+		#{reg_time},
+		#{reg_ip},
+		#{last_time},
+		#{last_ip},
+		#{mobile_supplier},
+		#{mobile_province},
+		#{mobile_city},
+		#{reg_from},
+		#{surplus_password},
+		#{pay_pwd_salt},
+		#{user_status},
+		#{pass_wrong_count},
+		#{user_type},
+		#{is_real},
+		#{user_remark},
+		#{is_business}
 	</sql>
-	
+
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
-		insert into 
-	<include refid="tableName"></include>
+		insert into
+		<include refid="tableName"></include>
 		(
-		        user_id,	
-		        user_name,	
-		        mobile,	
-		        email,	
-		        password,	
-		        salt,	
-		        nickname,	
-		        sex,	
-		        birthday,	
-		        detail_address,	
-		        headimg,	
-		        user_money,	
-		        user_money_limit,	
-		        frozen_money,	
-		        pay_point,	
-		        rank_point,	
-		        reg_time,	
-		        reg_ip,	
-		        last_time,	
-		        last_ip,	
-		        mobile_supplier,	
-		        mobile_province,	
-		        mobile_city,	
-		        reg_from,	
-		        surplus_password,	
-		        pay_pwd_salt,	
-		        user_status,	
-		        pass_wrong_count,	
-		        user_type,	
-		        is_real,	
-		        user_remark	
+		user_id,
+		user_name,
+		mobile,
+		email,
+		password,
+		salt,
+		nickname,
+		sex,
+		birthday,
+		detail_address,
+		headimg,
+		user_money,
+		user_money_limit,
+		frozen_money,
+		pay_point,
+		rank_point,
+		reg_time,
+		reg_ip,
+		last_time,
+		last_ip,
+		mobile_supplier,
+		mobile_province,
+		mobile_city,
+		reg_from,
+		surplus_password,
+		pay_pwd_salt,
+		user_status,
+		pass_wrong_count,
+		user_type,
+		is_real,
+		user_remark
 		) values (
-	<include refid="FieldValue"></include>
+		<include refid="FieldValue"></include>
 		)
 	</insert>
-	
+
 	<update id="changeUserSwitch" parameterType="pd">
 		update
 		<include refid="tableName"></include>
 		set is_business = #{is_business}
 		where user_id = #{user_id}
 	</update>
-	
+
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
 		delete from
 		<include refid="tableName"></include>
-		where 
-			user_id = #{user_id}
+		where
+		user_id = #{user_id}
 	</delete>
-	
+
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
 		<include refid="tableName"></include>
-		set 
-			password = #{password},
-			salt = #{salt},
-			nickname = #{nickname},
-			sex = #{sex},
-			birthday = #{birthday},
-			detail_address = #{detail_address},
-			headimg = #{headimg},
-			user_money = #{user_money},
-			user_money_limit = #{user_money_limit},
-			frozen_money = #{frozen_money},
-			pay_point = #{pay_point},
-			rank_point = #{rank_point},
-			reg_ip = #{reg_ip},
-			last_ip = #{last_ip},
-			mobile_supplier = #{mobile_supplier},
-			mobile_province = #{mobile_province},
-			mobile_city = #{mobile_city},
-			surplus_password = #{surplus_password},
-			pay_pwd_salt = #{pay_pwd_salt},
-			pass_wrong_count = #{pass_wrong_count},
-			user_status = #{user_status},
-			user_type = #{user_type},
-			is_real = #{is_real},
-			user_remark = #{user_remark}
-		where 
+		set
+		password = #{password},
+		salt = #{salt},
+		nickname = #{nickname},
+		sex = #{sex},
+		birthday = #{birthday},
+		detail_address = #{detail_address},
+		headimg = #{headimg},
+		user_money = #{user_money},
+		user_money_limit = #{user_money_limit},
+		frozen_money = #{frozen_money},
+		pay_point = #{pay_point},
+		rank_point = #{rank_point},
+		reg_ip = #{reg_ip},
+		last_ip = #{last_ip},
+		mobile_supplier = #{mobile_supplier},
+		mobile_province = #{mobile_province},
+		mobile_city = #{mobile_city},
+		surplus_password = #{surplus_password},
+		pay_pwd_salt = #{pay_pwd_salt},
+		pass_wrong_count = #{pass_wrong_count},
+		user_status = #{user_status},
+		user_type = #{user_type},
+		is_real = #{is_real},
+		user_remark = #{user_remark}
+		where
 		user_id = #{user_id}
 	</update>
-	
+
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
+		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
-		where 
-			user_id = #{user_id}
+		where
+		user_id = #{user_id}
 	</select>
 	<!-- 用户留存 -->
 	<select id="remainUserCount" parameterType="page" resultType="pd">
-			<if test="pd.device_channel != null and pd.device_channel != ''"> 
-				SELECT  count(DISTINCT u.user_id) as count 
-				from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
-								left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 ) 
-								 AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1} 
-								) o on o.user_id=u.user_id 
-				where 1=1 AND u.reg_time &gt;= #{pd.lastStart1} AND u.reg_time &lt;= #{pd.lastEnd1} 
-					 	AND u.device_channel = #{pd.device_channel}  
-					 	AND u.user_id in (select user_id from dl_order where  order_status IN ( 3, 4, 5, 6, 7 ) 
-								 		AND add_time &gt;= #{pd.lastStart2}  AND add_time &lt;= #{pd.lastEnd2} )
-			</if>
-			<if test="pd.device_channel == null or pd.device_channel == ''"> 
-				select count(DISTINCT a.user_id) as count 
-				from ( SELECT user_id from dl_order where order_status in ('3','4','5','6','7') 
-						GROUP BY user_id HAVING  min(add_time) &gt;= #{pd.lastStart1} and min(add_time) &lt;= #{pd.lastEnd1} ) a 
-				where a.user_id in ( SELECT user_id from dl_order  where order_status in ('3','4','5','6','7') 
-						and add_time &gt;= #{pd.lastStart2} and add_time &lt;= #{pd.lastEnd2})
-			</if>
+		<if test="pd.device_channel != null and pd.device_channel != ''">
+			SELECT  count(DISTINCT u.user_id) as count
+			from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
+			left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 )
+			AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
+			) o on o.user_id=u.user_id
+			where 1=1 AND u.reg_time &gt;= #{pd.lastStart1} AND u.reg_time &lt;= #{pd.lastEnd1}
+			AND u.device_channel = #{pd.device_channel}
+			AND u.user_id in (select user_id from dl_order where  order_status IN ( 3, 4, 5, 6, 7 )
+			AND add_time &gt;= #{pd.lastStart2}  AND add_time &lt;= #{pd.lastEnd2} )
+		</if>
+		<if test="pd.device_channel == null or pd.device_channel == ''">
+			select count(DISTINCT a.user_id) as count
+			from ( SELECT user_id from dl_order where order_status in ('3','4','5','6','7')
+			GROUP BY user_id HAVING  min(add_time) &gt;= #{pd.lastStart1} and min(add_time) &lt;= #{pd.lastEnd1} ) a
+			where a.user_id in ( SELECT user_id from dl_order  where order_status in ('3','4','5','6','7')
+			and add_time &gt;= #{pd.lastStart2} and add_time &lt;= #{pd.lastEnd2})
+		</if>
 	</select>
 	<!-- 设备渠道注册人数汇总列表 -->
 	<select id="marketlist" parameterType="page" resultType="pd">
@@ -221,36 +221,43 @@
 
 	<!-- 查询销售人员业绩表 -->
 	<select id="sellerAchieveList" parameterType="page" resultType="pd">
-		select 
-		distinct(c.first_add_seller_id) last_add_seller_id,
-		(select count(1) from dl_customer c1 where c1.first_add_seller_id = c.first_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{pd.curMonth} ) curPersons,
+		select
+			distinct(c.first_add_seller_id) last_add_seller_id,
+					(select count(1) from dl_customer c1 where c1.first_add_seller_id = c.first_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{pd.curMonth} ) curPersons,
 		(select count(1) from dl_customer c2  where c2.first_add_seller_id = c.first_add_seller_id ) totalPersons
 		from dl_customer c where c.distribute_state = 1
 
 	</select>
 
 	<!-- 查询销售人员业绩表 -->
-	<select id="sellerAchieveByMonthList" parameterType="pd" resultType="pd">		
- 		select sysUserId,sum(moneyPaid) curMoneyPaid,eveMon from
-		(SELECT	
-			cc.last_add_seller_id sysUserId,		
-			o.money_paid moneyPaid,
-			FROM_UNIXTIME( o.add_time, '%Y-%m' ) eveMon
-		FROM
-			 dl_customer cc  left join dl_order o 
-		on cc.mobile = o.mobile 	
-		WHERE  o.pay_status = 1
-		and o.order_status != 10
-		and cc.distribute_state = 1
-	  	and cc.mobile in (select c.mobile from dl_customer c where last_add_seller_id = #{last_add_seller_id})) temp
-		group by sysUserId,eveMon;
+	<select id="sellerAchieveByMonthList" parameterType="pd" resultType="pd">
+		SELECT sysUserId,SUM(moneyPaid) curMoneyPaid,eveMon,pay_status,order_status,distribute_state FROM
+			(SELECT
+				 cc.last_add_seller_id sysUserId,
+				 o.money_paid moneyPaid,
+				 FROM_UNIXTIME( o.add_time, '%Y-%m' ) eveMon,
+				 o.pay_status pay_status,
+				 o.order_status order_status,
+				 cc.distribute_state  distribute_state
+
+			 FROM
+				 dl_customer cc  LEFT JOIN dl_order o
+										   ON cc.mobile = o.mobile
+			 WHERE
+				 o.add_time > 1546272000
+			   AND
+					 cc.mobile IN (SELECT c.mobile FROM dl_customer c WHERE last_add_seller_id = #{last_add_seller_id})) temp
+		WHERE pay_status = 1
+		  AND order_status != 10
+		  AND distribute_state = 1
+		GROUP BY sysUserId,eveMon;
 	</select>
-	
+
 	<select id ="queryAddUserByMonth" resultType="pd">
-		select 
-		distinct(c.last_add_seller_id) last_add_seller_id,
-		FROM_UNIXTIME( c1.last_add_time, '%Y-%m' ) eveMon,
-		(select count(1) from dl_customer c1 where c1.last_add_seller_id = c.last_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{curMonth} and c1.distribute_state = 1) curPersons,
+		select
+			distinct(c.last_add_seller_id) last_add_seller_id,
+					FROM_UNIXTIME( c1.last_add_time, '%Y-%m' ) eveMon,
+					(select count(1) from dl_customer c1 where c1.last_add_seller_id = c.last_add_seller_id and  month(FROM_UNIXTIME(c1.last_add_time,'%Y-%m-%d')) = #{curMonth} and c1.distribute_state = 1) curPersons,
 		from dl_customer c and c.distribute_state = 1
 	</select>
 
@@ -258,77 +265,82 @@
 	<select id="sellerWriteUserhList" resultType="pd">
 		select count(1) curPersons,FROM_UNIXTIME( last_add_time, '%Y-%m' ) eveMon,last_add_seller_id from dl_customer where first_add_seller_id = #{last_add_seller_id}  group by FROM_UNIXTIME( last_add_time, '%Y-%m' )
 	</select>
-	
+
 	<select id= "querySellersUserIds" resultType="java.lang.String">
 		select user_id from dl_customer where last_add_seller_id = #{last_add_seller_id} and distribute_state = 1 and user_id is not null
 	</select>
 
-    <select id = "queryBuyByMonth" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_order o  left join dl_customer cc on o.mobile = cc.mobile where o.pay_status = 1  and o.order_status != 10 and o.mobile in(
-            select c.mobile from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
-                <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-        ) and month(FROM_UNIXTIME(o.add_time,'%Y-%m-%d')) = month(now()) and cc.distribute_state = 1 group by cc.last_add_seller_id
-    </select>
+	<select id = "queryBuyByMonth" resultType="pd">
+		select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_customer cc left join dl_order o on o.mobile = cc.mobile where o.pay_status = 1 and o.order_status != 10 and  o.add_time > 1546272000 and  o.mobile in(
+		select c.mobile from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		) and month(FROM_UNIXTIME(o.add_time,'%Y-%m-%d')) = month(now()) and cc.distribute_state = 1 group by cc.last_add_seller_id
+	</select>
 
-    <select id="queryBuyTotal" resultType="pd">
-        select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_order o  left join dl_customer cc on o.mobile = cc.mobile and o.pay_time > cc.first_add_time where o.pay_status = 1 and o.order_status != 10 and cc.distribute_state = 1   and o.mobile in(
-            select c.mobile from dl_customer c where c.last_add_seller_id in
-                <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-        )	 group by cc.last_add_seller_id
-    </select>
+	<select id="queryBuyTotal" resultType="pd">
+		select sum(o.money_paid) moneyPaid,cc.last_add_seller_id from dl_customer cc  left join dl_order o on o.mobile = cc.mobile and o.pay_time > cc.first_add_time where o.pay_status = 1 and o.add_time > 1546272000 and  o.order_status != 10 and cc.distribute_state = 1   and o.mobile in(
+		select c.mobile from dl_customer c where c.last_add_seller_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		)	 group by cc.last_add_seller_id
+	</select>
 
 	<!-- 查询销售人员业绩查询 -->
-	<select id="sellerBuyMoneyhList"  resultType="pd">	
-		SELECT	
-			cc.last_add_seller_id,		
-			o.money_paid moneyPaid,
-			FROM_UNIXTIME( o.add_time, '%Y-%m' ) eveMon
+	<select id="sellerBuyMoneyhList"  resultType="pd">
+		SELECT
+		cc.last_add_seller_id,
+		o.money_paid moneyPaid,
+		FROM_UNIXTIME( o.add_time, '%Y-%m' ) eveMon
 		FROM
-			 dl_customer cc left join dl_order o 
-		on   cc.mobile = o.mobile 	
+		dl_customer cc left join dl_order o
+		on   cc.mobile = o.mobile
 		WHERE  o.pay_status = 1
 		and o.order_status != 10
+		AND o.add_time > 1546272000
 		and cc.distribute_state = 1
-	    and cc.mobile in (
-	        select c.mobile from dl_customer c where c.distribute_state = 1 and last_add_seller_id in 
-	  				<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-			                 #{item}
-					</foreach>
+		and cc.mobile in (
+		select c.mobile from dl_customer c where c.distribute_state = 1 and last_add_seller_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
 		)
 	</select>
 
 	<select id="sellerUserBonushList" parameterType="pd" resultType="pd">
 		SELECT
-			sum( bonus_price ),
+			SUM( bonus_price ),
 			FROM_UNIXTIME( add_time, '%Y-%m' )
 		FROM
 			dl_user_bonus
 		WHERE
-			bonus_status = 1 and user_id IN ( SELECT user_id FROM dl_customer WHERE distribute_state = 1 and last_add_seller_id = '2fee55b7fcbb4731b875164a466e6335' ) bonus_status = 1
+			bonus_status = 1
+		  AND receive_time > 1546272000
+		  AND user_id IN ( SELECT user_id FROM dl_customer WHERE distribute_state = 1 AND last_add_seller_id = '2fee55b7fcbb4731b875164a466e6335' ) bonus_status = 1
 		GROUP BY
 			FROM_UNIXTIME( add_time, '%Y-%m' );
 	</select>
-	
+
 	<select id="sellerUserBonushTotal"  resultType="pd">
 		SELECT
-					sum( bonus_price ) totalBonus
-				FROM
-					dl_user_bonus bonus
-				WHERE
-					bonus_status = 1 and bonus.user_id IN 
+		sum( bonus_price ) totalBonus
+		FROM
+		dl_user_bonus bonus
+		WHERE
+		bonus_status = 1
+		AND receive_time > 1546272000
+		and bonus.user_id IN
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-			    #{item}
+			#{item}
 		</foreach>
 	</select>
-	
+
 	<select id="queryUserIdsByfirstAddUserId" resultType="pd">
 		select user_id from dl_customer where last_add_seller_id = #{last_add_seller_id} and distribute_state = 1
 	</select>
-	
+
 	<select id="sellerUserBuyTotal"  resultType="pd">
 
 	</select>
@@ -336,59 +348,59 @@
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		SELECT
-			u.user_id,
-			u.user_money,
-			u.user_money_limit,
-			u.user_name,
-			u.mobile,
-			u.nickname,
-			u.reg_time,
-			u.reg_ip,
-			u.last_time,
-			u_r.real_name,
-			u_r.id_code,
-			u.user_status,
-			u.reg_from,
-			p.channel_name AS phone_channel,
-			u.device_channel,
-			log.brand,
-			u.is_business 
+		u.user_id,
+		u.user_money,
+		u.user_money_limit,
+		u.user_name,
+		u.mobile,
+		u.nickname,
+		u.reg_time,
+		u.reg_ip,
+		u.last_time,
+		u_r.real_name,
+		u_r.id_code,
+		u.user_status,
+		u.reg_from,
+		p.channel_name AS phone_channel,
+		u.device_channel,
+		log.brand,
+		u.is_business
 		FROM
-			dl_user u
-			LEFT JOIN (select * from dl_user_real where is_delete = 0) u_r ON u_r.user_id = u.user_id
-			LEFT JOIN dl_phone_channel p ON u.device_channel = p.channel
-			LEFT JOIN ( SELECT user_id, brand FROM dl_user_login_log WHERE brand != '' GROUP BY user_id HAVING min( login_time ) ) log ON log.user_id = u.user_id 
+		dl_user u
+		LEFT JOIN (select * from dl_user_real where is_delete = 0) u_r ON u_r.user_id = u.user_id
+		LEFT JOIN dl_phone_channel p ON u.device_channel = p.channel
+		LEFT JOIN ( SELECT user_id, brand FROM dl_user_login_log WHERE brand != '' GROUP BY user_id HAVING min( login_time ) ) log ON log.user_id = u.user_id
 		WHERE
-			1 = 1 
-		<if test="pd.real_name!= null and pd.real_name != ''"> 
+		1 = 1
+		<if test="pd.real_name!= null and pd.real_name != ''">
 			and u_r.real_name LIKE CONCAT(CONCAT('%', #{pd.real_name}),'%')
- 		</if>
-		<if test="pd.id_code!= null and pd.id_code != ''"> 
+		</if>
+		<if test="pd.id_code!= null and pd.id_code != ''">
 			and u_r.id_code LIKE CONCAT(CONCAT('%', #{pd.id_code}),'%')
- 		</if>
-<!--  		电话 -->
-		<if test="pd.mobile!= null and pd.mobile != ''"> 
-				and u.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
- 		</if>
-<!--  		昵称 -->
-		<if test="pd.nickname!= null and pd.nickname != ''"> 
-				and u.nickname LIKE CONCAT(CONCAT('%', #{pd.nickname}),'%')
- 		</if>
-<!-- 		时间 -->
-		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+		</if>
+		<!--  		电话 -->
+		<if test="pd.mobile!= null and pd.mobile != ''">
+			and u.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
+		<!--  		昵称 -->
+		<if test="pd.nickname!= null and pd.nickname != ''">
+			and u.nickname LIKE CONCAT(CONCAT('%', #{pd.nickname}),'%')
+		</if>
+		<!-- 		时间 -->
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
 			and  u.reg_time &gt; #{pd.lastStart1 }
 		</if>
-<!-- 		时间 -->
-		<if test="pd.lastEnd1 != null and pd.lastEnd1!= ''"> 
+		<!-- 		时间 -->
+		<if test="pd.lastEnd1 != null and pd.lastEnd1!= ''">
 			and  u.reg_time &lt; #{pd.lastEnd1 }
 		</if>
-<!-- 		状态 -->
+		<!-- 		状态 -->
 		<if test="pd.user_status != null and pd.user_status != ''">
-			and u.user_status = #{pd.user_status} 
+			and u.user_status = #{pd.user_status}
 		</if>
-<!-- 		实名认证 -->
+		<!-- 		实名认证 -->
 		<if test="pd.is_real != null and pd.is_real != ''">
-			and u.is_real = #{pd.is_real} 
+			and u.is_real = #{pd.is_real}
 		</if>
 		order by u.reg_time DESC
 	</select>
@@ -408,36 +420,36 @@
 		dl_user.user_status,
 		reg_from,
 		pc.channel_name as phone_channel,
-		dl_user.device_channel, 
+		dl_user.device_channel,
 		sex*1 as sex
-		from 
+		from
 		<include refid="tableName"></include>
-		left join dl_user_real on dl_user_real.user_id = dl_user.user_id 
+		left join dl_user_real on dl_user_real.user_id = dl_user.user_id
 		left join dl_phone_channel pc on pc.channel = dl_user.device_channel
 		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
-				(
-				dl_user.user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				or
-				mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				or 
-				nickname LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-		 
-				)
-			 
+			(
+			dl_user.user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or
+			nickname LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+
+			)
+
 		</if>
-		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-					AND reg_time &gt;= #{pd.lastStart1} 
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+			AND reg_time &gt;= #{pd.lastStart1}
 		</if>
-		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-					AND reg_time &lt;= #{pd.lastEnd1} 
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+			AND reg_time &lt;= #{pd.lastEnd1}
 		</if>
-		<if test="pd.moneyStart != null and pd.moneyStart != ''"> 
-					AND (dl_user.user_money+dl_user.user_money_limit) &gt;= #{pd.moneyStart} 
+		<if test="pd.moneyStart != null and pd.moneyStart != ''">
+			AND (dl_user.user_money+dl_user.user_money_limit) &gt;= #{pd.moneyStart}
 		</if>
-		<if test="pd.moneyEnd != null and pd.moneyEnd != ''"> 
-					AND (dl_user.user_money+dl_user.user_money_limit) &lt;= #{pd.moneyEnd} 
+		<if test="pd.moneyEnd != null and pd.moneyEnd != ''">
+			AND (dl_user.user_money+dl_user.user_money_limit) &lt;= #{pd.moneyEnd}
 		</if>
 		<if test="pd.mobile1 != null and pd.mobile1 != ''">
 			and	mobile like CONCAT(CONCAT('%', #{pd.mobile1}),'%')
@@ -448,133 +460,133 @@
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
-		where 1=1 
-		<if test="lastStart1 != null and lastStart1 != ''"> 
-					AND reg_time &gt; #{lastStart1} 
-			</if>
-			<if test="lastEnd1 != null and lastEnd1 != ''"> 
-					AND reg_time &lt; #{lastEnd1} 
-			</if>
+		where 1=1
+		<if test="lastStart1 != null and lastStart1 != ''">
+			AND reg_time &gt; #{lastStart1}
+		</if>
+		<if test="lastEnd1 != null and lastEnd1 != ''">
+			AND reg_time &lt; #{lastEnd1}
+		</if>
 	</select>
-	
+
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
-		where 
-			user_id in
+		where
+		user_id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                 #{item}
+			#{item}
 		</foreach>
 	</delete>
-	
+
 	<select id="findByUserId" parameterType="pd" resultType="pd">
 		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
 		where user_id = #{pd.user_id}
 	</select>
-	
+
 	<select id="findUserBonusByUserId"  parameterType="java.lang.Integer" resultType="java.lang.Double">
 		SELECT
 			SUM(bonus_price)
 		FROM
-			dl_user_bonus 
+			dl_user_bonus
 		WHERE
-			user_id =  #{pd.user_id} 
-			AND bonus_status = 0
+			user_id =  #{pd.user_id}
+		  AND bonus_status = 0
 	</select>
-	
+
 	<select id="findAll" resultType="pd" >
 		SELECT
 			a.user_id AS user_id,
 			a.user_name AS user_name,
 			a.mobile AS mobile,
 			b.id_code AS id_code,
-			b.real_name AS real_name 
+			b.real_name AS real_name
 		FROM
 			dl_user a
-			LEFT JOIN dl_user_real b ON a.user_id = b.user_id
+				LEFT JOIN dl_user_real b ON a.user_id = b.user_id
 		where b.is_delete = 0
 	</select>
-		
+
 	<!-- 认证并购彩 -->
 	<select id="getRealAndOrder" parameterType="pd" resultType="pd">
-		 SELECT COALESCE(count(distinct od.user_id),0) as count,
-				COALESCE(sum(od.money_paid),0) as amount,
-				COALESCE(sum(od.ticket_amount),0) as amountTicket
-		 FROM   dl_user_real ur left join  dl_order od on 
-				ur.user_id = od.user_id 
-				and DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
-		 where   od.order_status in ('3','4','5','6','7')
-				and  ur.add_time &gt; #{pd.lastStart1} and  ur.add_time &lt; #{pd.lastEnd1} 
-				and ur.is_delete = 0
+		SELECT COALESCE(count(distinct od.user_id),0) as count,
+			   COALESCE(sum(od.money_paid),0) as amount,
+		COALESCE(sum(od.ticket_amount),0) as amountTicket
+		FROM   dl_user_real ur left join  dl_order od on
+														  ur.user_id = od.user_id
+														  and DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
+		where   od.order_status in ('3','4','5','6','7')
+		and  ur.add_time &gt; #{pd.lastStart1} and  ur.add_time &lt; #{pd.lastEnd1}
+		and ur.is_delete = 0
 	</select>
-	
+
 	<!-- 注册并认证用户统计（购彩） -->
 	<select id="getRealAndRegister" parameterType="pd" resultType="pd">
-		
+
 		SELECT  COALESCE(count(distinct us.user_id),0) as count,
 				COALESCE(sum(od.money_paid),0) as amount,
-				COALESCE(sum(od.ticket_amount),0) as amountTicket
-		FROM dl_user us left join  dl_user_real ur on us.user_id = ur.user_id left join  dl_order od on 
-			us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
+		COALESCE(sum(od.ticket_amount),0) as amountTicket
+		FROM dl_user us left join  dl_user_real ur on us.user_id = ur.user_id left join  dl_order od on
+													  us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
 		where DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d')
-				and  od.order_status in ('3','4','5','6','7')
-				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
-				and  ur.is_delete = 0
+		and  od.order_status in ('3','4','5','6','7')
+		and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1}
+		and  ur.is_delete = 0
 	</select>
-	
+
 	<!-- 根据手机号查询用户 -->
 	<select id="getUserByMobile" parameterType="java.lang.String" resultType="pd">
 		select * from dl_user where mobile = #{mobile}
 	</select>
-	
+
 	<select id="getUserIdListByMobileList"  parameterType="java.lang.String" resultType="java.lang.Integer">
 		select user_id from dl_user where mobile in
-	  	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
 			#{item}
 		</foreach>
 	</select>
-	
+
 	<!-- 注册并充值  -->
 	<select id="getRegisterAndRecharge" parameterType="pd" resultType="pd">
-		
-		 SELECT COALESCE(count(distinct us.user_id),0) as count,
-				COALESCE(sum(ur.amount),0) as amount
- 		 from dl_user us left join dl_user_recharge ur on us.user_id=ur.user_id 
- 		 where  DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d')
- 		 and ur.status=1
-				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
+
+		SELECT COALESCE(count(distinct us.user_id),0) as count,
+			   COALESCE(sum(ur.amount),0) as amount
+		from dl_user us left join dl_user_recharge ur on us.user_id=ur.user_id
+		where  DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d')
+		and ur.status=1
+		and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1}
 	</select>
-	
+
 	<!-- 注册并购彩  -->
 	<select id="getRegisterAndOrder" parameterType="pd" resultType="pd">
-		
-		 SELECT COALESCE(count(distinct od.user_id),0) as count,
-				COALESCE(sum(od.money_paid),0) as amount,
-				COALESCE(sum(od.ticket_amount),0) as amountTicket
-		 FROM dl_user us  left join  dl_order od on 
-				us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
-		 where  od.order_status in ('3','4','5','6','7')
-				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
+
+		SELECT COALESCE(count(distinct od.user_id),0) as count,
+			   COALESCE(sum(od.money_paid),0) as amount,
+		COALESCE(sum(od.ticket_amount),0) as amountTicket
+		FROM dl_user us  left join  dl_order od on
+													us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
+		where  od.order_status in ('3','4','5','6','7')
+		and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1}
 	</select>
-	
+
 	<!-- 注册并购彩(复购) -->
 	<select id="getRegisterAndAgainOrder" parameterType="pd" resultType="pd">
 		SELECT count(user_id) AS count,COALESCE(sum(amount),0)  AS amount
 		from  (
 			SELECT count( DISTINCT od.order_sn ) AS count,
-	     			sum( od.money_paid ) AS amount ,
-	     			sum( od.ticket_amount ) AS amountTicket ,
-	     			od.user_id
-			FROM dl_user us LEFT JOIN dl_order od ON us.user_id = od.user_id 
-				AND DATE_FORMAT( FROM_UNIXTIME( us.reg_time ), '%Y-%m-%d' ) = DATE_FORMAT( FROM_UNIXTIME( od.add_time ), '%Y-%m-%d' ) 
+			sum( od.money_paid ) AS amount ,
+			sum( od.ticket_amount ) AS amountTicket ,
+			od.user_id
+			FROM dl_user us LEFT JOIN dl_order od ON us.user_id = od.user_id
+			AND DATE_FORMAT( FROM_UNIXTIME( us.reg_time ), '%Y-%m-%d' ) = DATE_FORMAT( FROM_UNIXTIME( od.add_time ), '%Y-%m-%d' )
 			WHERE  od.order_status in ('3','4','5','6','7')
-				and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1} 
+			and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1}
 			GROUP BY user_id HAVING count(od.order_sn)>1
 			)a
 	</select>
