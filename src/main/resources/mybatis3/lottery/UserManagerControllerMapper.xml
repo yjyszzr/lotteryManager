@@ -272,11 +272,11 @@
 
 	<select id = "queryBuyByMonth" resultType="pd">
 		select sum(o.money_paid) moneyPaid,cc.last_add_seller_id,o.add_time from dl_customer cc
-		left join dl_order o on o.mobile = cc.mobile where o.pay_status = 1 and cc.distribute_state = 1
+		left join dl_order o on o.user_id = cc.user_id where o.pay_status = 1 and cc.distribute_state = 1
 		and o.order_status != 10  and month(FROM_UNIXTIME(o.add_time,'%Y-%m-%d')) = month(now())
 		and o.add_time > 1546272000
-		and o.mobile in(
-		select c.mobile from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
+		and o.user_id in(
+		select c.user_id from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
 			#{item}
 		</foreach>
@@ -287,9 +287,9 @@
 	<select id="queryBuyTotal" resultType="pd">
 		select sum(moneyPaid) moneyPaid,last_add_seller_id from
 		(select o.money_paid moneyPaid,cc.last_add_seller_id  from dl_customer cc
-		 left join dl_order o on o.mobile = cc.mobile
+		 left join dl_order o on o.user_id = cc.user_id
 		 where  o.pay_status = 1 and o.add_time > 1546272000 and  o.order_status != 10 and cc.distribute_state = 1
-		 and o.mobile in(select c.mobile from dl_customer c where c.last_add_seller_id in
+		 and o.user_id in(select c.user_id from dl_customer c where c.last_add_seller_id in
 			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
 				#{item}
 			</foreach>
@@ -310,8 +310,8 @@
 		and o.order_status != 10
 		AND o.add_time > 1546272000
 		and cc.distribute_state = 1
-		and cc.mobile in (
-		select c.mobile from dl_customer c where c.distribute_state = 1 and last_add_seller_id in
+		and cc.user_id in (
+		select c.user_id from dl_customer c where c.distribute_state = 1 and last_add_seller_id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
 			#{item}
 		</foreach>
