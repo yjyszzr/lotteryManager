@@ -275,6 +275,12 @@
 		left join dl_order o on o.mobile = cc.mobile where o.pay_status = 1 and cc.distribute_state = 1
 		and o.order_status != 10  and month(FROM_UNIXTIME(o.add_time,'%Y-%m-%d')) = month(now())
 		and o.add_time > 1546272000
+		and o.mobile in(
+		select c.mobile from dl_customer c where c.distribute_state = 1 and c.last_add_seller_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		)
 		group by cc.last_add_seller_id;
 	</select>
 
@@ -282,8 +288,13 @@
 		select sum(moneyPaid) moneyPaid,last_add_seller_id from
 		(select o.money_paid moneyPaid,cc.last_add_seller_id  from dl_customer cc
 		 left join dl_order o on o.mobile = cc.mobile
-		 where o.pay_status = 1 and o.add_time > 1546272000 and  o.order_status != 10 and cc.distribute_state = 1
-		) tmp group by last_add_seller_id;
+		 where  o.pay_status = 1 and o.add_time > 1546272000 and  o.order_status != 10 and cc.distribute_state = 1
+		 and o.mobile in(select c.mobile from dl_customer c where c.last_add_seller_id in
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			)
+		  ) tmp group by last_add_seller_id;
 	</select>
 
 	<!-- 查询销售人员业绩查询 -->
