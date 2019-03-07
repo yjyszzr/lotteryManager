@@ -896,4 +896,32 @@
 	<select id="checkOrderStatus">
 		select update_count from dl_order where order_sn = #{order_sn} 
 	</select>
+
+
+	<select id="queryOrderMonthTotalBonusByMobile" resultType="pd">
+		SELECT
+		sum( bonus ) bonusTotalPrice,
+		FROM_UNIXTIME( add_time, '%Y-%m' ) eveMon
+		FROM
+		dl_order
+		WHERE
+		order_status != 10 and pay_status = 1 and add_time >1546272000 and  mobile IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		GROUP BY
+		FROM_UNIXTIME( add_time, '%Y-%m' )
+	</select>
+
+	<select id="queryOrderBonusTotalByMobile"  resultType="pd">
+		SELECT
+		sum( bonus ) totalBonus
+		FROM
+		dl_order
+		WHERE
+		order_status != 10 and pay_status = 1 and add_time >1546272000 and  mobile IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 </mapper>

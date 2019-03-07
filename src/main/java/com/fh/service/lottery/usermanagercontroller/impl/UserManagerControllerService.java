@@ -1,15 +1,13 @@
 package com.fh.service.lottery.usermanagercontroller.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.util.PageData;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 说明： 用户列表 创建人：FH Q313596790 创建时间：2018-04-23
@@ -30,6 +28,17 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	 */
 	public void save(PageData pd) throws Exception {
 		dao.save("UserManagerControllerMapper.save", pd);
+	}
+
+
+	/**
+	 * 新增市场统计数据
+	 *
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void saveMarketData(PageData pd) throws Exception {
+		dao.save("UserManagerControllerMapper.saveMarketData", pd);
 	}
 
 	/**
@@ -127,6 +136,10 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	@SuppressWarnings("unchecked")
 	public List<PageData> getMarketList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.marketlist", page);
+	}
+
+	public Integer getmarketCountToday(PageData page) throws Exception {
+		return (Integer) dao.findForObject("UserManagerControllerMapper.marketCountToday", page);
 	}
 	
 	@SuppressWarnings("unchecked")

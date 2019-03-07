@@ -79,6 +79,49 @@
 		#{is_business}
 	</sql>
 
+	<!-- 字段值 -->
+	<sql id="MarketFieldValue">
+		#{id},
+		#{channel},
+		#{date_time},
+		#{count_user},
+		#{count_order},
+		#{amount_sum},
+		#{count2},
+		#{count3},
+		#{count7},
+		#{count15},
+		#{count30},
+		#{count90},
+		#{count180},
+		#{count360}
+	</sql>
+
+	<!-- 新增-->
+	<insert id="saveMarketData" parameterType="pd">
+		insert into dl_market_data
+		(id,
+		channel,
+		date_time,
+		count_user,
+		count_order,
+		amount_sum,
+		count2,
+		count3,
+		count7,
+		count15,
+		count30,
+		count90,
+		count180,
+		count360)
+		values (
+		<include refid="MarketFieldValue"></include>
+		)
+	</insert>
+
+
+
+
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
 		insert into
@@ -168,6 +211,10 @@
 		user_id = #{user_id}
 	</update>
 
+	<select id="marketCountToday" resultType="java.lang.Integer">
+		select count(1) todayCount from dl_market_data where to_days(from_unixtime(add_time, '%Y-%m-%d')) = to_days(now())
+	</select>
+
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select
@@ -207,16 +254,10 @@
 		COALESCE(sum(o.ticket_amount),0) as amountSum
 		from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
 		left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 )
-		AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
+		AND add_time  &gt; 1551888000 AND add_time &lt;  1551974399
 		) o on o.user_id=u.user_id
-		where 1=1
-		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
-			AND u.reg_time &gt;= #{pd.lastStart1}
-		</if>
-		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
-			AND u.reg_time &lt;= #{pd.lastEnd1}
-		</if>
-		group by p.channel_name
+		where 1=1 and u.device_channel like 'c%' and u.device_channel != 'csdn' and u.device_channel != 'c048'
+		group by p.channel_name;
 	</select>
 
 	<!-- 查询销售人员业绩表 -->
@@ -267,7 +308,7 @@
 	</select>
 
 	<select id= "querySellersUserIds" resultType="java.lang.String">
-		select user_id from dl_customer where last_add_seller_id = #{last_add_seller_id} and distribute_state = 1 and user_id is not null
+		select mobile from dl_customer where last_add_seller_id = #{last_add_seller_id} and distribute_state = 1 and user_id is not null
 	</select>
 
 	<select id = "queryBuyByMonth" resultType="pd">

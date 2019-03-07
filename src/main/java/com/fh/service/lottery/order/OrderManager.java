@@ -1,9 +1,9 @@
 package com.fh.service.lottery.order;
 
-import java.util.List;
-
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+
+import java.util.List;
 
 /**
  * 说明： 订单模块接口 创建人：FH Q313596790 创建时间：2018-05-03
@@ -117,5 +117,10 @@ public interface OrderManager {
 	public void updateOrderStatusByOrderSn(PageData pd)throws Exception;
 	
 	public void setFirstPayTime(String userId, String mobile, String firstPayTime) throws Exception;
+
+	public List<PageData> queryMonthTotalBonusByMobile(List<String> mobileList) throws Exception;
+
+	public PageData queryOrderBonusTotalByMobile(List<String> mobileList) throws Exception;
+
 
 }

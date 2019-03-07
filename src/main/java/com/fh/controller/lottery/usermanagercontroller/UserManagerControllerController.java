@@ -1,25 +1,5 @@
 package com.fh.controller.lottery.usermanagercontroller;
 
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.alibaba.druid.util.StringUtils;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
@@ -37,15 +17,21 @@ import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
 import com.fh.service.system.user.impl.UserService;
-import com.fh.util.DateUtilNew;
-import com.fh.util.Jurisdiction;
-import com.fh.util.NetWorkUtil;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.RandomUtil;
-import com.fh.util.SmsUtil;
-
+import com.fh.util.*;
 import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.net.URLDecoder;
+import java.util.*;
 
 /**
  * 说明：用户列表 创建人：FH Q313596790 创建时间：2018-04-23
@@ -86,6 +72,8 @@ public class UserManagerControllerController extends BaseController {
 	
 	@Resource(name = "userService")
 	private UserService userService;
+
+
 	
 	@Resource(name = "activitybonusService")
 	private ActivityBonusService activityBonusService;
@@ -197,7 +185,8 @@ public class UserManagerControllerController extends BaseController {
 		for(PageData varPd:varList) {
 			List<String> userIds =  usermanagercontrollerService.queryUserIdsBySellersId(varPd.getString("last_add_seller_id"));
 			if(userIds.size() > 0) {
-				PageData bonusTotal =  activityBonusService.sellerUserBonushTotal(userIds);
+				PageData bonusTotal = ordermanagerService.queryOrderBonusTotalByMobile(userIds);
+						//activityBonusService.sellerUserBonushTotal(userIds);
 				if(bonusTotal != null) {
 					bonusMap.put(varPd.getString("last_add_seller_id"), bonusTotal.getString("totalBonus"));
 				}
@@ -312,7 +301,8 @@ public class UserManagerControllerController extends BaseController {
 		Map<String,String> bonusMonthMap = new HashMap<>();
 		List<String> userIdList = usermanagercontrollerService.queryUserIdsBySellersId(pd.getString("user_id"));
 		if(userIdList.size() > 0) {
-			bonusMonthList = activityBonusService.queryTotalBonusByMonth(userIdList);
+			bonusMonthList = ordermanagerService.queryMonthTotalBonusByMobile(userIdList);
+					//activityBonusService.queryTotalBonusByMonth(userIdList);
 			bonusMonthMap = this.createMonthAddBonusMap(bonusMonthList);
 		}
 		

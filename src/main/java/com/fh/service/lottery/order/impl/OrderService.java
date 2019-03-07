@@ -1,15 +1,13 @@
 package com.fh.service.lottery.order.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.util.PageData;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 说明： 订单模块 创建人：FH Q313596790 创建时间：2018-05-03
@@ -299,5 +297,23 @@ public class OrderService implements OrderManager {
 		pd.put("mobile", mobile);
 		pd.put("first_pay_time", firstPayTime);
 		dao.update("OrderMapper.setFirstPayTime", pd);
+	}
+
+	@Override
+	public List<PageData> queryMonthTotalBonusByMobile(List<String> varList)throws Exception{
+		String[] userIdList = new String[varList.size()];
+		for (int i = 0; i < varList.size(); i++) {
+			userIdList[i] = varList.get(i);
+		}
+		return (List<PageData>) dao.findForList("OrderMapper.queryOrderMonthTotalBonusByMobile", userIdList);
+	}
+
+	@Override
+	public PageData queryOrderBonusTotalByMobile(List<String> varList) throws Exception {
+		String[] userIdList = new String[varList.size()];
+		for (int i = 0; i < varList.size(); i++) {
+			userIdList[i] = varList.get(i);
+		}
+		return (PageData)dao.findForObject("OrderMapper.queryOrderBonusTotalByMobile", userIdList);
 	}
 }

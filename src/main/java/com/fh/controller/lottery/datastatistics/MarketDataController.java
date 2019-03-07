@@ -1,20 +1,5 @@
 package com.fh.controller.lottery.datastatistics;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
@@ -25,6 +10,19 @@ import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 说明：市场数据
@@ -42,7 +40,6 @@ public class MarketDataController extends BaseController {
 	private UserRealManagerService userrealmanagerService;
 	@Resource(name = "userbankmanagerService")
 	private UserBankManagerService userbankmanagerService;
- 
 
 	 
 
@@ -291,8 +288,8 @@ public class MarketDataController extends BaseController {
 		for (int i = 0; i < days+1; i++) {
 			PageData pageData = new PageData();
 			LocalDate date = dateE.plusDays(-i);//当天的前i天
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
+			pd.put("lastStart1", 1551888000);//DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
+			pd.put("lastEnd1", 1551974399);//DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
 			page.setPd(pd);
 			List<PageData> userList = usermanagercontrollerService.getMarketList(page);
 			for (int k = 0; k < userList.size(); k++) {

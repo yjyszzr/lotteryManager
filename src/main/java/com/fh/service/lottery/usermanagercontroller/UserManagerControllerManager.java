@@ -1,9 +1,9 @@
 package com.fh.service.lottery.usermanagercontroller;
 
-import java.util.List;
-
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+
+import java.util.List;
 
 /**
  * 说明： 用户列表接口 创建人：FH Q313596790 创建时间：2018-04-23
@@ -22,6 +22,24 @@ public interface UserManagerControllerManager {
 	 * @throws Exception
 	 */
 	public void save(PageData pd) throws Exception;
+
+
+	/**
+	 * 新增市场统计数据
+	 *
+	 * @param pd
+	 * @throws Exception
+	 */
+	public void saveMarketData(PageData pd) throws Exception;
+
+
+	/**
+	 * 今天的市场统计数据条数
+	 *
+	 * @param pd
+	 * @throws Exception
+	 */
+	public Integer getmarketCountToday(PageData pd) throws Exception;
 
 	/**
 	 * 删除
