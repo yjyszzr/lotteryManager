@@ -499,7 +499,14 @@ public class CustomerController extends BaseController {
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
 			vpd.put("var1", varOList.get(i).get("mobile").toString());	//1
-			vpd.put("var2", varOList.get(i).get("user_name").toString());	//2
+		
+			String user_name = "";
+			try {
+				user_name = varOList.get(i).get("user_name").toString();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			vpd.put("var2", user_name);	//2
 			
 			String user_state = "";
 			if (varOList.get(i).getString("user_state").equals("1"))
