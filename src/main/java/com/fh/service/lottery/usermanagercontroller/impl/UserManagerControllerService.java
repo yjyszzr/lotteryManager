@@ -42,6 +42,16 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	}
 
 	/**
+	 * 根据时间查询市场统计数据
+	 *
+	 * @param pd
+	 * @throws Exception
+	 */
+	 public List<PageData> queryMarketDataByTime(Page page) throws Exception {
+		 return (List<PageData>) dao.findForList("UserManagerControllerMapper.queryMarketDataByTime", page);
+	 }
+
+	/**
 	 * 删除
 	 * 
 	 * @param pd

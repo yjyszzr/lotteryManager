@@ -94,7 +94,8 @@
 		#{count30},
 		#{count90},
 		#{count180},
-		#{count360}
+		#{count360},
+        #{add_time}
 	</sql>
 
 	<!-- 新增-->
@@ -113,7 +114,8 @@
 		count30,
 		count90,
 		count180,
-		count360)
+		count360,
+        add_time)
 		values (
 		<include refid="MarketFieldValue"></include>
 		)
@@ -211,9 +213,13 @@
 		user_id = #{user_id}
 	</update>
 
-	<select id="marketCountToday" resultType="java.lang.Integer">
+	<select id="marketCountToday"  resultType="java.lang.Integer">
 		select count(1) todayCount from dl_market_data where to_days(from_unixtime(add_time, '%Y-%m-%d')) = to_days(now())
 	</select>
+
+    <select id="queryMarketDataByTime" parameterType="page"  resultType="pd">
+        select *  from dl_market_data where add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
+    </select>
 
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
@@ -229,35 +235,41 @@
 		<if test="pd.device_channel != null and pd.device_channel != ''">
 			SELECT  count(DISTINCT u.user_id) as count
 			from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
-			left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 )
+			left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7,9)
 			AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
 			) o on o.user_id=u.user_id
 			where 1=1 AND u.reg_time &gt;= #{pd.lastStart1} AND u.reg_time &lt;= #{pd.lastEnd1}
 			AND u.device_channel = #{pd.device_channel}
-			AND u.user_id in (select user_id from dl_order where  order_status IN ( 3, 4, 5, 6, 7 )
+			AND u.user_id in (select user_id from dl_order where  order_status IN ( 3, 4, 5, 6, 7,9 )
 			AND add_time &gt;= #{pd.lastStart2}  AND add_time &lt;= #{pd.lastEnd2} )
 		</if>
 		<if test="pd.device_channel == null or pd.device_channel == ''">
 			select count(DISTINCT a.user_id) as count
-			from ( SELECT user_id from dl_order where order_status in ('3','4','5','6','7')
+			from ( SELECT user_id from dl_order where order_status in ('3','4','5','6','7','9')
 			GROUP BY user_id HAVING  min(add_time) &gt;= #{pd.lastStart1} and min(add_time) &lt;= #{pd.lastEnd1} ) a
-			where a.user_id in ( SELECT user_id from dl_order  where order_status in ('3','4','5','6','7')
+			where a.user_id in ( SELECT user_id from dl_order  where order_status in ('3','4','5','6','7','9')
 			and add_time &gt;= #{pd.lastStart2} and add_time &lt;= #{pd.lastEnd2})
 		</if>
 	</select>
 	<!-- 设备渠道注册人数汇总列表 -->
 	<select id="marketlist" parameterType="page" resultType="pd">
 		SELECT  count(DISTINCT u.user_id) as count_user,
-		p.channel_name as phone_channel,
+		p.channel_name as channel,
 		u.device_channel,
-		count( DISTINCT o.user_id) as count_Order,
-		COALESCE(sum(o.ticket_amount),0) as amountSum
+		count( DISTINCT o.user_id) as count_order,
+		COALESCE(sum(o.ticket_amount),0) as amount_sum
 		from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
-		left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 )
-		AND add_time  &gt; 1551888000 AND add_time &lt;  1551974399
+		left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 ,9)
+		AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
 		) o on o.user_id=u.user_id
-		where 1=1 and u.device_channel like 'c%' and u.device_channel != 'csdn' and u.device_channel != 'c048'
-		group by p.channel_name;
+		where 1=1 and u.device_channel like 'c%' and u.device_channel != 'c048'
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+			AND u.reg_time &gt;= #{pd.lastStart1}
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+			AND u.reg_time &lt;= #{pd.lastEnd1}
+		</if>
+		group by p.channel_name
 	</select>
 
 	<!-- 查询销售人员业绩表 -->

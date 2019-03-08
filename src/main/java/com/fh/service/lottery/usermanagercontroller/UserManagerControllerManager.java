@@ -214,5 +214,11 @@ public interface UserManagerControllerManager {
 	 * 根据多个销售员id 查询多个顾客的userId
 	 */
 	public List<Integer> queryUserIdsByfirstAddUserId(List<Integer> sellerId);
+
+
+	/**
+	 * 根据时间查询市场数据
+	 */
+	public List<PageData> queryMarketDataByTime(Page page) throws Exception;
 	
 }

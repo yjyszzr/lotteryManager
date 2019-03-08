@@ -82,7 +82,6 @@
 								<tr>
 									<th class="center">渠道</th>
 									<th class="center">日期</th>
-									<th class="center">安装量</th>
 									<th class="center">注册数</th>
 									<th class="center">购彩数</th>
 									<th class="center">购彩金额</th>
@@ -122,19 +121,18 @@
 										<tr>
 											<td class='center'>
 											
-											${var.phone_channel }
-											<c:if test="${empty var.phone_channel}">
+											${var.channel }
+											<c:if test="${empty var.channel}">
 											${var.device_channel }
 											</c:if>
 											</td>
 											<td class='center'>${var.date }</td>
-											<td class='center'>*</td>
 											<td class='center'>${var.count_user }</td>
-											<td class='center'>${var.count_Order }</td>
-											<td class='center'>${var.amountSum }</td>
+											<td class='center'>${var.count_order }</td>
+											<td class='center'>${var.amount_sum }</td>
 											<td class='center'>
-												<c:if test="${var.count_Order == 0 }">0.00</c:if>
-												<c:if test="${var.count_Order != 0 }">${var.amountSum/var.count_Order }</c:if>
+												<c:if test="${var.count_order == 0 }">0.00</c:if>
+												<c:if test="${var.count_order != 0 }">${var.amount_sum/var.count_order }</c:if>
 											</td>
 											<c:if test="${!empty pd.typeForDay}">
 											<td class='center'>${var.count2 }<c:if test="${!empty var.count2}">%</c:if></td>

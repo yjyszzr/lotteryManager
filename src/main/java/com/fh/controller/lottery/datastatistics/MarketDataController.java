@@ -4,7 +4,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
-import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.service.lottery.usermanagercontroller.impl.UserManagerControllerService;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
@@ -33,7 +33,7 @@ public class MarketDataController extends BaseController {
 
 	String menuUrl = "marketdata/list.do"; // 菜单地址(权限用)
 	@Resource(name = "usermanagercontrollerService")
-	private UserManagerControllerManager usermanagercontrollerService;
+	private UserManagerControllerService usermanagercontrollerService;
 	@Resource(name = "useraccountmanagerService")
 	private UserAccountManagerManager useraccountmanagerService;
 	@Resource(name = "userrealmanagerService")
@@ -249,7 +249,8 @@ public class MarketDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(dateB+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(dateE+" 23:59:59"));
 			page.setPd(pd);
-			List<PageData> userList = usermanagercontrollerService.getMarketList(page);
+			List<PageData> userList = usermanagercontrollerService.queryMarketDataByTime(page);
+					//.getMarketList(page);
 			for (int k = 0; k < userList.size(); k++) {
 				pageData = userList.get(k);
 				if(dateE.compareTo(dateB)==0) {
@@ -288,14 +289,15 @@ public class MarketDataController extends BaseController {
 		for (int i = 0; i < days+1; i++) {
 			PageData pageData = new PageData();
 			LocalDate date = dateE.plusDays(-i);//当天的前i天
-			pd.put("lastStart1", 1551888000);//DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
-			pd.put("lastEnd1", 1551974399);//DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
 			page.setPd(pd);
-			List<PageData> userList = usermanagercontrollerService.getMarketList(page);
+			List<PageData> userList = usermanagercontrollerService.queryMarketDataByTime(page);
+					//.getMarketList(page);
 			for (int k = 0; k < userList.size(); k++) {
 				pageData = userList.get(k);
 				pageData.put("date", date);
-				int userCount = Integer.parseInt(pageData.getString("count_Order"));
+				int userCount = Integer.parseInt(pageData.getString("count_order"));
 				String device_channel = pageData.getString("device_channel");
 				pageData.put("count2", getCount(date, date, 1, 1, userCount, device_channel));
 				pageData.put("count3", getCount(date, date, 2, 2, userCount, device_channel));
@@ -340,7 +342,8 @@ public class MarketDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(time+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(time.plusDays(6)+" 23:59:59"));
 			page.setPd(pd);
-			List<PageData> userList = usermanagercontrollerService.getMarketList(page);
+			List<PageData> userList = usermanagercontrollerService.queryMarketDataByTime(page);
+					//.getMarketList(page);
 			for (int k = 0; k < userList.size(); k++) {
 				PageData pageData = userList.get(k);
 				int userCount = Integer.parseInt(pageData.getString("count_user"));
@@ -381,7 +384,8 @@ public class MarketDataController extends BaseController {
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(start+" 00:00:00"));
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(end+" 23:59:59"));
 			page.setPd(pd);
-			List<PageData> userList = usermanagercontrollerService.getMarketList(page);
+			List<PageData> userList = usermanagercontrollerService.queryMarketDataByTime(page);
+					//.getMarketList(page);
 			for (int k = 0; k < userList.size(); k++) {
 				PageData pageData = userList.get(k);
 				int userCount = Integer.parseInt(pageData.getString("count_user"));
