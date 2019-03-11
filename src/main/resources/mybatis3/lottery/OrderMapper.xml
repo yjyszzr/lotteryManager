@@ -46,6 +46,7 @@
 		issue,	
 		is_delete,	
 		ticket_num
+		,mobile 
 	</sql>
 	
 	<!-- 字段值 -->
@@ -87,6 +88,7 @@
         #{issue},	
         #{is_delete},	
         #{ticket_num}	
+        ,#{mobile}
 	</sql>
 	
 	<update id="setFirstPayTime" parameterType="java.util.Map">
