@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import com.fh.common.ProjectConstant;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.entity.dto.DlJcZqMatchCellDTO;
+import com.fh.entity.dto.DlJcZqMatchCellDTO;  
 import com.fh.entity.dto.MatchBetCellDTO;
 import com.fh.entity.system.User;
 import com.fh.enums.MatchBetTypeEnum;
@@ -743,17 +742,20 @@ public class OrderManagerController extends BaseController {
 				if(_order != null) {
 					firstPayTime = _order.getString("pay_time");
 					userId = _order.getString("user_id");
+					mobile = _order.getString("mobile").trim();
 				}
 				
-				PageData _user = new PageData();
-				_user.put("user_id", userId);
-				_user = this.usermanagercontrollerService.findById(_user);
-				mobile = _user.getString("mobile");
-				if (mobile!= null) mobile = mobile.trim();
+//				PageData _user = new PageData();
+//				_user.put("user_id", userId);
+//				_user = this.usermanagercontrollerService.findById(_user);
+//				mobile = _user.getString("mobile");
+//				if (mobile!= null) mobile = mobile.trim();
 				
-				System.out.println("[customer] userId:" + userId); 
-				System.out.println("[customer] mobile:" + mobile);
-				System.out.println("[customer] firstPayTime:" + firstPayTime);
+//				System.out.println("[customer] userId:" + userId); 
+//				System.out.println("[customer] mobile:" + mobile);
+//				System.out.println("[customer] firstPayTime:" + firstPayTime);
+				
+				System.out.println("customer|userId:" + userId + "|mobile:" + mobile + "|firstPayTime:" + firstPayTime);
 				
 				if (null != userId
 					&& !StringUtil.isEmptyStr(mobile)
