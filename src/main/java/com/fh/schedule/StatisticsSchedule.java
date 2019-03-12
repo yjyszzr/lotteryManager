@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Configuration
@@ -119,21 +120,18 @@ public class StatisticsSchedule {
 		}
 
 	}
-	public  Integer lastStart1 = 1552060800;
-	public  Integer lastEnd1 = 1552147199;
-	@Scheduled(cron = "0/10 * * * * ?")
+
+	@Scheduled(cron = "0 0 2 * * *")
 	public void marketDataStatistics() throws Exception  {
-		lastStart1  = lastStart1 + 86400;
-		lastEnd1  = lastEnd1 + 86400;
-		if(lastStart1 > DateUtilNew.getCurrentTimeLong()){
-			return;
-		}
 		logger.info("开始收集当天的市场数据))))");
 		MarketDataController marketDataController = new MarketDataController();
-//		Integer todayCount = userManagerControllerService.getmarketCountToday(new PageData());
-//		if(null != todayCount && 0 < todayCount){
-//			return;
-//		}
+		Integer todayCount = userManagerControllerService.getmarketCountToday(new PageData());
+		if(null != todayCount && 0 < todayCount){
+			return;
+		}
+
+		Integer lastStart1 = DateUtilNew.getTimeAfterDays(new Date(),0,0,0,0);
+		Integer lastEnd1 = DateUtilNew.getTimeAfterDays(new Date(),0,23,59,59);
 
 		Page page = new Page();
 		PageData pd = new PageData();
