@@ -9,6 +9,8 @@ import com.fh.service.lottery.usermanagercontroller.impl.UserManagerControllerSe
 import com.fh.util.DateUtilNew;
 import com.fh.util.PageData;
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,6 +26,8 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 public class StatisticsSchedule {
+	private final static Logger logger = LoggerFactory.getLogger(StatisticsSchedule.class);
+
 	@Resource(name="artifiprintlotteryService")
 	private ArtifiPrintLotteryManager artifiprintlotteryService;
 
@@ -115,15 +119,16 @@ public class StatisticsSchedule {
 		}
 
 	}
-	public  Integer lastStart1 = 1527782400;
-	public  Integer lastEnd1 = 1527868799;
-	@Scheduled(cron = "0/15 * * * * ?")
+	public  Integer lastStart1 = 1552060800;
+	public  Integer lastEnd1 = 1552147199;
+	@Scheduled(cron = "0/10 * * * * ?")
 	public void marketDataStatistics() throws Exception  {
 		lastStart1  = lastStart1 + 86400;
 		lastEnd1  = lastEnd1 + 86400;
 		if(lastStart1 > DateUtilNew.getCurrentTimeLong()){
 			return;
 		}
+		logger.info("开始收集当天的市场数据))))");
 		MarketDataController marketDataController = new MarketDataController();
 //		Integer todayCount = userManagerControllerService.getmarketCountToday(new PageData());
 //		if(null != todayCount && 0 < todayCount){
@@ -177,8 +182,12 @@ public class StatisticsSchedule {
 			return;
 		}
 
-		PageData insertPd = varList.get(0);
-		userManagerControllerService.saveMarketData(insertPd);
+		for (int i = 0;i < varList.size();i++){
+			PageData insertPd = varList.get(i);
+			userManagerControllerService.saveMarketData(insertPd);
+		}
+
+		logger.info("结束收集当天的市场数据))))");
 	}
 
 	/**
