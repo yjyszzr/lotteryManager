@@ -259,10 +259,10 @@
 		count( DISTINCT o.order_id) as count_order,
 		COALESCE(sum(o.money_paid),0) as amount_sum
 		from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
-		left join (select * from dl_order where  order_status IN ( 3, 4, 5, 6, 7 ,9)
+		left join (select mobile,money_paid,order_id  from dl_order where and pay_status = 1 and order_status IN ( 3, 4, 5, 6, 7 ,9)
 		AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
 		) o on o.mobile=u.mobile
-		where 1=1 and u.device_channel like 'c%' and u.device_channel != 'c048'
+		where 1=1
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
 			AND u.reg_time &gt;= #{pd.lastStart1}
 		</if>
