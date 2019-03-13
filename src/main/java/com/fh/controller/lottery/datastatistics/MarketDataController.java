@@ -256,9 +256,8 @@ public class MarketDataController extends BaseController {
 				if(dateE.compareTo(dateB)==0) {
 					pageData.put("date", dateE);
 				}else {
-					pageData.put("date", dateB+"："+dateE);
+					pageData.put("date", dateB+"~"+dateE);
 				}
-				int userCount = Integer.parseInt(pageData.getString("count_Order"));
 				varList.add(pageData);
 			}
 		return varList;
@@ -297,16 +296,16 @@ public class MarketDataController extends BaseController {
 			for (int k = 0; k < userList.size(); k++) {
 				pageData = userList.get(k);
 				pageData.put("date", date);
-				int userCount = Integer.parseInt(pageData.getString("count_order"));
-				String device_channel = pageData.getString("device_channel");
-				pageData.put("count2", getCount(date, date, 1, 1, userCount, device_channel));
-				pageData.put("count3", getCount(date, date, 2, 2, userCount, device_channel));
-				pageData.put("count7", getCount(date, date, 3, 6, userCount, device_channel));
-				pageData.put("count15", getCount(date, date, 7, 14, userCount, device_channel));
-				pageData.put("count30", getCount(date, date, 15, 29, userCount, device_channel));
-				pageData.put("count90", getCount(date, date, 30, 89, userCount, device_channel));
-				pageData.put("count180", getCount(date, date, 90, 179, userCount, device_channel));
-				pageData.put("count360", getCount(date, date, 180, 359, userCount, device_channel));
+//				int userCount = Integer.parseInt(pageData.getString("count_order"));
+//				String device_channel = pageData.getString("device_channel");
+//				pageData.put("count2", getCount(date, date, 1, 1, userCount, device_channel));
+//				pageData.put("count3", getCount(date, date, 2, 2, userCount, device_channel));
+//				pageData.put("count7", getCount(date, date, 3, 6, userCount, device_channel));
+//				pageData.put("count15", getCount(date, date, 7, 14, userCount, device_channel));
+//				pageData.put("count30", getCount(date, date, 15, 29, userCount, device_channel));
+//				pageData.put("count90", getCount(date, date, 30, 89, userCount, device_channel));
+//				pageData.put("count180", getCount(date, date, 90, 179, userCount, device_channel));
+//				pageData.put("count360", getCount(date, date, 180, 359, userCount, device_channel));
 				pageData.put("nowDate", LocalDate.now());
 				varList.add(pageData);
 			}
@@ -348,11 +347,11 @@ public class MarketDataController extends BaseController {
 				PageData pageData = userList.get(k);
 				int userCount = Integer.parseInt(pageData.getString("count_user"));
 				pageData.put("date", time+"~"+time.plusDays(6));
-				String device_channel = pageData.getString("device_channel");
-				int WEEK = 7;
-				for (int j = 2; j <15 ; j++) {
-					pageData.put("count"+j, getCount(time,time.plusDays(6),WEEK*(j-1),WEEK*j-1,userCount,device_channel));
-				}
+//				String device_channel = pageData.getString("device_channel");
+//				int WEEK = 7;
+//				for (int j = 2; j <15 ; j++) {
+//					pageData.put("count"+j, getCount(time,time.plusDays(6),WEEK*(j-1),WEEK*j-1,userCount,device_channel));
+//				}
 				varList.add(pageData);	
 			}
 		}
@@ -388,16 +387,17 @@ public class MarketDataController extends BaseController {
 					//.getMarketList(page);
 			for (int k = 0; k < userList.size(); k++) {
 				PageData pageData = userList.get(k);
-				int userCount = Integer.parseInt(pageData.getString("count_user"));
-				int startDay=0;
-				int endDay=time.lengthOfMonth();
-				String device_channel = pageData.getString("device_channel");
-				for (int j = 2; j <15 ; j++) {
-					startDay =endDay;
-					endDay =startDay + time.plusMonths(j-1).lengthOfMonth();
-					pageData.put("count"+j, getCount(start,end,startDay,endDay-1,userCount,device_channel));
-				}
-			varList.add(pageData);
+//				int userCount = Integer.parseInt(pageData.getString("count_user"));
+//				int startDay=0;
+//				int endDay=time.lengthOfMonth();
+//				String device_channel = pageData.getString("device_channel");
+//				for (int j = 2; j <15 ; j++) {
+//					startDay =endDay;
+//					endDay =startDay + time.plusMonths(j-1).lengthOfMonth();
+//					pageData.put("count"+j, getCount(start,end,startDay,endDay-1,userCount,device_channel));
+//				}
+				pageData.put("date",start+"~"+end);
+				varList.add(pageData);
 			}
 		}
 		return varList;

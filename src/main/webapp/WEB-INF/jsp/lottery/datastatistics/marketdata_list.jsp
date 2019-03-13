@@ -52,12 +52,12 @@
 								 <a class="btn btn-light btn-xs blue" onclick="tosearch(0);" title="清空"
 											style="border-radius: 5px; color: blue !important; width: 50px">清空</a>
 								</td>
-								<c:if test="${QX.toExcel == 1 }">
-								<td style="vertical-align: top; padding-left: 2px;">
-								<span class="input-icon" style="width: 30px;"> </span> 
-								<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL"
-									style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></td>
-								</c:if>
+								<%--<c:if test="${QX.toExcel == 1 }">--%>
+								<%--<td style="vertical-align: top; padding-left: 2px;">--%>
+								<%--<span class="input-icon" style="width: 30px;"> </span> --%>
+								<%--<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL"--%>
+									<%--style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></td>--%>
+								<%--</c:if>--%>
 								<td>
 									<span class="input-icon"  style="width: 30px;"></span>
 											<label class="radio-inline">
@@ -68,6 +68,9 @@
 											</label>
 											<label class="radio-inline">
 										  		<input type="radio" name="dateType" id="dateType" value="2" <c:if test="${pd.dateType == 2}">checked</c:if>> 月
+											</label>
+											<label class="radio-inline">
+												<input type="radio" name="dateType" id="dateType" value="3" <c:if test="${pd.dateType == 3}">checked</c:if>> 区间
 											</label>
 										</td>
 							</tr>
@@ -83,29 +86,29 @@
 									<th class="center">购彩数</th>
 									<th class="center">购彩金额</th>
 									<th class="center">人均购彩金额</th>
-									<c:if test="${!empty pd.typeForDay}">
-									<th class="center">次日留存</th>
-									<th class="center">3日留存</th>
-									<th class="center">7日留存</th>
-									<th class="center">15日留存</th>
-									<th class="center">30日留存</th>
-									<th class="center">90日留存</th>
-									<th class="center">180日留存</th>
-									<th class="center">360日留存</th>
-									</c:if>
-									<c:if test="${empty pd.typeForDay}">
-									<th class="center">第2${pd.type }留存</th>
-									<th class="center">第3${pd.type }留存</th>
-									<th class="center">第4${pd.type }留存</th>
-									<th class="center">第5${pd.type }留存</th>
-									<th class="center">第6${pd.type }留存</th>
-									<th class="center">第7${pd.type }留存</th>
-									<th class="center">第8${pd.type }留存</th>
-									<th class="center">第9${pd.type }留存</th>
-									<th class="center">第10${pd.type }留存</th>
-									<th class="center">第11${pd.type }留存</th>
-									<th class="center">第12${pd.type }留存</th>
-									</c:if>
+									<%--<c:if test="${!empty pd.typeForDay}">--%>
+									<%--<th class="center">次日留存</th>--%>
+									<%--<th class="center">3日留存</th>--%>
+									<%--<th class="center">7日留存</th>--%>
+									<%--<th class="center">15日留存</th>--%>
+									<%--<th class="center">30日留存</th>--%>
+									<%--<th class="center">90日留存</th>--%>
+									<%--<th class="center">180日留存</th>--%>
+									<%--<th class="center">360日留存</th>--%>
+									<%--</c:if>--%>
+									<%--<c:if test="${empty pd.typeForDay}">--%>
+									<%--<th class="center">第2${pd.type }留存</th>--%>
+									<%--<th class="center">第3${pd.type }留存</th>--%>
+									<%--<th class="center">第4${pd.type }留存</th>--%>
+									<%--<th class="center">第5${pd.type }留存</th>--%>
+									<%--<th class="center">第6${pd.type }留存</th>--%>
+									<%--<th class="center">第7${pd.type }留存</th>--%>
+									<%--<th class="center">第8${pd.type }留存</th>--%>
+									<%--<th class="center">第9${pd.type }留存</th>--%>
+									<%--<th class="center">第10${pd.type }留存</th>--%>
+									<%--<th class="center">第11${pd.type }留存</th>--%>
+									<%--<th class="center">第12${pd.type }留存</th>--%>
+									<%--</c:if>--%>
 								</tr>
 							</thead>
 													
@@ -131,29 +134,29 @@
 												<c:if test="${var.count_order == 0 }">0.00</c:if>
 												<c:if test="${var.count_order != 0 }">${var.amount_sum/var.count_order }</c:if>
 											</td>
-											<c:if test="${!empty pd.typeForDay}">
-											<td class='center'>${var.count2 }<c:if test="${!empty var.count2}">%</c:if></td>
-											<td class='center'>${var.count3 }<c:if test="${!empty var.count3}">%</c:if></td>
-											<td class='center'>${var.count7 }<c:if test="${!empty var.count7}">%</c:if></td>
-											<td class='center'>${var.count15 }<c:if test="${!empty var.count15}">%</c:if></td>
-											<td class='center'>${var.count30 }<c:if test="${!empty var.count30}">%</c:if></td>
-											<td class='center'>${var.count90 }<c:if test="${!empty var.count90}">%</c:if></td>
-											<td class='center'>${var.count180 }<c:if test="${!empty var.count180}">%</c:if></td>
-											<td class='center'>${var.count360 }<c:if test="${!empty var.count360}">%</c:if></td>
-											</c:if>
-											<c:if test="${empty pd.typeForDay}">
-											<td class='center'>${var.count2 }<c:if test="${!empty var.count2}">%</c:if></td>
-											<td class='center'>${var.count3 }<c:if test="${!empty var.count3}">%</c:if></td>
-											<td class='center'>${var.count4 }<c:if test="${!empty var.count4}">%</c:if></td>
-											<td class='center'>${var.count5 }<c:if test="${!empty var.count5}">%</c:if></td>
-											<td class='center'>${var.count6 }<c:if test="${!empty var.count6}">%</c:if></td>
-											<td class='center'>${var.count7 }<c:if test="${!empty var.count7}">%</c:if></td>
-											<td class='center'>${var.count8 }<c:if test="${!empty var.count8}">%</c:if></td>
-											<td class='center'>${var.count9 }<c:if test="${!empty var.count9}">%</c:if></td>
-											<td class='center'>${var.count10 }<c:if test="${!empty var.count10}">%</c:if></td>
-											<td class='center'>${var.count11 }<c:if test="${!empty var.count11}">%</c:if></td>
-											<td class='center'>${var.count12 }<c:if test="${!empty var.count12}">%</c:if></td>
-											</c:if>
+											<%--<c:if test="${!empty pd.typeForDay}">--%>
+											<%--<td class='center'>${var.count2 }<c:if test="${!empty var.count2}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count3 }<c:if test="${!empty var.count3}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count7 }<c:if test="${!empty var.count7}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count15 }<c:if test="${!empty var.count15}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count30 }<c:if test="${!empty var.count30}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count90 }<c:if test="${!empty var.count90}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count180 }<c:if test="${!empty var.count180}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count360 }<c:if test="${!empty var.count360}">%</c:if></td>--%>
+											<%--</c:if>--%>
+											<%--<c:if test="${empty pd.typeForDay}">--%>
+											<%--<td class='center'>${var.count2 }<c:if test="${!empty var.count2}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count3 }<c:if test="${!empty var.count3}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count4 }<c:if test="${!empty var.count4}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count5 }<c:if test="${!empty var.count5}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count6 }<c:if test="${!empty var.count6}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count7 }<c:if test="${!empty var.count7}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count8 }<c:if test="${!empty var.count8}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count9 }<c:if test="${!empty var.count9}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count10 }<c:if test="${!empty var.count10}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count11 }<c:if test="${!empty var.count11}">%</c:if></td>--%>
+											<%--<td class='center'>${var.count12 }<c:if test="${!empty var.count12}">%</c:if></td>--%>
+											<%--</c:if>--%>
 										</tr>
 									</c:forEach>
 									</c:if>

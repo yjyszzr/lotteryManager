@@ -121,7 +121,8 @@ public class StatisticsSchedule {
 
 	}
 
-	@Scheduled(cron = "0 0 2 * * *")
+
+	@Scheduled(cron = "0 0 2 * * ?")
 	public void marketDataStatistics() throws Exception  {
 		logger.info("开始收集当天的市场数据))))");
 		MarketDataController marketDataController = new MarketDataController();
