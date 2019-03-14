@@ -131,8 +131,8 @@ public class StatisticsSchedule {
 			return;
 		}
 
-		Integer lastStart1 = DateUtilNew.getTimeAfterDays(new Date(),0,0,0,0);
-		Integer lastEnd1 = DateUtilNew.getTimeAfterDays(new Date(),0,23,59,59);
+		Integer lastStart1 = DateUtilNew.getTimeAfterDays(new Date(),0,0,0,0) - 86400;
+		Integer lastEnd1 = DateUtilNew.getTimeAfterDays(new Date(),0,23,59,59) - 86400;
 
 		Page page = new Page();
 		PageData pd = new PageData();
