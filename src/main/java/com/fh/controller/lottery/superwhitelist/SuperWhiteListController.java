@@ -80,6 +80,16 @@ public class SuperWhiteListController extends BaseController {
 		return mv;
 	}
 	
+	@RequestMapping(value="/setIsSupperWhite")
+	public void setIsSupperWhite(PrintWriter out) throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		superwhitelistService.setIsSupperWhite(pd);
+		out.write("success");
+		out.close();
+	}
+	
 	/**删除
 	 * @param out
 	 * @throws Exception
