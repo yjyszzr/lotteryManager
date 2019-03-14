@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -99,6 +99,15 @@
 										<span>
 												<a class="btn btn-light btn-xs blue" onclick="toExcel();"  title="导出到Excel"  style="border-radius:5px;color:blue !important; width:50px">EXCEL</a>
 										</span>
+										
+										<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										</span>
+										<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										</span>
+										<span>
+												<a class="btn btn-light btn-xs blue" onclick="setIsSupperWhite();"  title="加超级白名单"  style="border-radius:5px;color:blue !important; width:100px">加超级白名单</a>
+										</span>
+										
 									</td>
 									
 								</c:if>
@@ -513,6 +522,31 @@
 				}
 			});
 		}
+		
+		
+		function setIsSupperWhite(){
+			var mobile = $("#mobile").val();
+			
+			if (mobile == null || mobile == "") {
+				alert("请先输入手机号");
+				return null;
+			}
+			
+			mobile = mobile.replace(/(^\s*)|(\s*$)/g,"");
+			
+			var str = "确定要将手机号：" + mobile + " 设为超级白名单用户";
+			
+			bootbox.confirm(str, function(result) {
+				if(result) {
+					top.jzts();
+					var url = "<%=basePath%>superwhitelist/setIsSupperWhite.do?mobile="+ mobile +"&tm="+new Date().getTime();
+					$.get(url,function(data){
+						tosearch(1);
+					});
+				}
+			});
+		}
+		
 		
 		//修改
 		function edit(Id){
