@@ -96,6 +96,10 @@
         #{is_super_white}	
 	</sql>
 	
+	<update id="setIsSupperWhite" parameterType="pd">
+		UPDATE dl_user SET is_super_white = 1 WHERE mobile = #{mobile}
+	</update>
+	
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
 		insert into 
