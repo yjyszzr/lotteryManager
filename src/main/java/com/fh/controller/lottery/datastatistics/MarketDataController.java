@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -78,8 +79,23 @@ public class MarketDataController extends BaseController {
 		if(pd.getString("dateType").equals("3")) {
 			varList = getDataListForTime(page,pd);
 		}
+
+
+		List<PageData> newVarList = new ArrayList<PageData>();
+		for(PageData p:varList){
+			DecimalFormat df=new DecimalFormat("0.00");
+			Double amountSum = Double.valueOf(p.getString("amount_sum"));
+			Double count_order = Double.valueOf(p.getString("count_order"));
+			if(count_order == 0.0){
+				p.put("avgMoney","0.00");
+			}else{
+				p.put("avgMoney",df.format((Double)amountSum/count_order));
+			}
+			newVarList.add(p);
+		}
+
 		mv.setViewName("lottery/datastatistics/marketdata_list");
-		mv.addObject("varList", varList);
+		mv.addObject("varList", newVarList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
@@ -288,14 +304,14 @@ public class MarketDataController extends BaseController {
 		for (int i = 0; i < days+1; i++) {
 			PageData pageData = new PageData();
 			LocalDate date = dateE.plusDays(-i);//当天的前i天
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(date+" 00:00:00") - 86400);
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59") - 86400);
 			page.setPd(pd);
 			List<PageData> userList = usermanagercontrollerService.queryMarketDataByTime(page);
 					//.getMarketList(page);
 			for (int k = 0; k < userList.size(); k++) {
 				pageData = userList.get(k);
-				pageData.put("date", date);
+				pageData.put("date", pageData.getString("date_time"));
 //				int userCount = Integer.parseInt(pageData.getString("count_order"));
 //				String device_channel = pageData.getString("device_channel");
 //				pageData.put("count2", getCount(date, date, 1, 1, userCount, device_channel));
@@ -306,7 +322,7 @@ public class MarketDataController extends BaseController {
 //				pageData.put("count90", getCount(date, date, 30, 89, userCount, device_channel));
 //				pageData.put("count180", getCount(date, date, 90, 179, userCount, device_channel));
 //				pageData.put("count360", getCount(date, date, 180, 359, userCount, device_channel));
-				pageData.put("nowDate", LocalDate.now());
+				pageData.put("nowDate", pageData.getString("date_time"));
 				varList.add(pageData);
 			}
 		}

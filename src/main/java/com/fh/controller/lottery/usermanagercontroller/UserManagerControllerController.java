@@ -12,6 +12,7 @@ import com.fh.enums.ThirdApiEnum;
 import com.fh.service.lottery.activitybonus.impl.ActivityBonusService;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
@@ -32,6 +33,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 说明：用户列表 创建人：FH Q313596790 创建时间：2018-04-23
@@ -49,6 +51,10 @@ public class UserManagerControllerController extends BaseController {
 
 	@Resource(name = "useraccountmanagerService")
 	private UserAccountManagerManager useraccountmanagerService;
+
+
+	@Resource(name = "useraccountService")
+	private UserAccountService useraccountService;
 
 	@Resource(name = "userrealmanagerService")
 	private UserRealManagerService userrealmanagerService;
@@ -80,6 +86,40 @@ public class UserManagerControllerController extends BaseController {
 	
 	private final static Logger logFac = LoggerFactory.getLogger(UserManagerControllerController.class);
 
+	@RequestMapping(value="/seeTotal")
+	public ModelAndView seeTotal(Page page) throws Exception{
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+
+		List<PageData> pdList = new ArrayList<>();
+		String mobile = pd.getString("mobile");
+		PageData pdMobile = new PageData();
+		pdMobile.put("mobile",mobile);
+		page.setPd(pdMobile);
+		List<PageData> orderSnInfoList = ordermanagerService.queryOrderInfoByMobile(page);
+		if(orderSnInfoList.size() > 0){
+			List<String> orderSnList = orderSnInfoList.stream().map(s->s.getString("order_sn")).collect(Collectors.toList());
+			List<PageData> everyOrderCurBalance = useraccountService.queryUserAccountBalanceByOrderSns(orderSnList);
+			Map<String,String> orderBalanceMap = everyOrderCurBalance.stream().collect(Collectors.toMap(s->s.getString("order_sn"),s->s.getString("cur_balance")));
+			orderSnInfoList.stream().forEach(s->{
+				PageData newPd = new PageData();
+//				BeanUtils.copyProperties(s,newPd);
+				String orderBalance  = orderBalanceMap.get("order_sn");
+				if(!StringUtils.isEmpty(orderBalance)){
+					newPd.put("cur_balance",orderBalance);
+				}
+				pdList.add(newPd);
+			});
+		}
+
+		mv.setViewName("lottery/datastatistics/customer_see");
+		mv.addObject("varList", pdList);
+		return mv;
+
+	}
+
+
 	/**
 	 * 保存
 	 * 
@@ -109,6 +149,7 @@ public class UserManagerControllerController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+
 
 	/**
 	 * 删除

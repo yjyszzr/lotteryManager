@@ -26,6 +26,7 @@ import java.util.List;
 
 @Configuration
 @EnableScheduling
+
 public class StatisticsSchedule {
 	private final static Logger logger = LoggerFactory.getLogger(StatisticsSchedule.class);
 
@@ -122,18 +123,21 @@ public class StatisticsSchedule {
 	}
 
 
-	@Scheduled(cron = "0 0 2 * * ?")
+//	public  Integer lastStart1 = 1552147200;
+//	public  Integer lastEnd1 = 1552233599;
+	@Scheduled(cron = "0 0 6 * * ?")
 	public void marketDataStatistics() throws Exception  {
-		logger.info("开始收集当天的市场数据))))");
 		MarketDataController marketDataController = new MarketDataController();
 		Integer todayCount = userManagerControllerService.getmarketCountToday(new PageData());
 		if(null != todayCount && 0 < todayCount){
 			return;
 		}
-
 		Integer lastStart1 = DateUtilNew.getTimeAfterDays(new Date(),0,0,0,0) - 86400;
 		Integer lastEnd1 = DateUtilNew.getTimeAfterDays(new Date(),0,23,59,59) - 86400;
-
+//		if(lastStart1 > 1552838400){
+//			return;
+//		}
+		logger.info("开始收集当天的市场数据))))");
 		Page page = new Page();
 		PageData pd = new PageData();
 		LocalDate dateE = LocalDate.now();
@@ -188,6 +192,13 @@ public class StatisticsSchedule {
 
 		logger.info("结束收集当天的市场数据))))");
 	}
+
+
+	public List<PageData> queryCommon(Page page){
+
+		return null;
+	}
+
 
 	/**
 	 * 获得留存数据

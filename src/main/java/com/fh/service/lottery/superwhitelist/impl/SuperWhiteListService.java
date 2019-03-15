@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.fh.dao.DaoSupport3;
 import com.fh.dao.DaoSupport4;
 import com.fh.entity.Page;
 import com.fh.service.lottery.superwhitelist.SuperWhiteListManager;
@@ -23,6 +24,9 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 	@Resource(name = "daoSupport4")
 	private DaoSupport4 dao;
 	
+	@Resource(name = "daoSupport3")
+	private DaoSupport3 dao3;
+	
 	/**新增
 	 * @param pd
 	 * @throws Exception
@@ -33,6 +37,7 @@ public class SuperWhiteListService implements SuperWhiteListManager{
 	
 	public void setIsSupperWhite(PageData pd)throws Exception {
 		dao.save("SuperWhiteListMapper.setIsSupperWhite", pd);
+		dao3.save("SuperWhiteListMapper.setIsSupperWhite", pd);
 	}
 	
 	public void saveUserBonus(PageData pd)throws Exception{

@@ -220,9 +220,10 @@
     <select id="queryMarketDataByTime" parameterType="page"  resultType="pd">
         select
 			channel as channel,
-			count(count_user) as count_user,
-			count(count_order) as count_order,
-			count(amount_sum) as amount_sum
+               date_time,
+			sum(count_user) as count_user,
+			sum(count_order) as count_order,
+			sum(amount_sum) as amount_sum
         from dl_market_data where add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
 		group by channel
     </select>
@@ -259,24 +260,56 @@
 	</select>
 	<!-- 设备渠道注册人数汇总列表 -->
 	<select id="marketlist" parameterType="page" resultType="pd">
-		SELECT  count(u.mobile) as count_user,
-		p.channel_name as channel,
-		u.device_channel,
-		count( DISTINCT o.order_id) as count_order,
-		COALESCE(sum(o.money_paid),0) as amount_sum
-		from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
-		left join (select mobile,money_paid,order_id,device_channel  from dl_order where and pay_status = 1 and order_status IN ( 3, 4, 5, 6, 7 ,9)
-		AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
-		) o on o.device_channel = p.channel
-		where 1=1
-		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
-			AND u.reg_time &gt;= #{pd.lastStart1}
-		</if>
-		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
-			AND u.reg_time &lt;= #{pd.lastEnd1}
-		</if>
-		group by p.channel_name
+		SELECT
+		sum( k.count_user ) count_user,
+		sum(count_order)  count_order,
+		sum( k.total_money ) amount_sum,
+		k.channel device_channel,
+		k.channel_name channel
+		FROM
+		(
+		SELECT
+		count( u.mobile ) count_user,
+		0 AS count_order,
+		0 AS total_money,
+		p.channel channel,
+		p.channel_name
+		FROM
+		dl_user u
+		LEFT JOIN dl_phone_channel p ON u.device_channel = p.channel
+		WHERE
+		u.reg_time &gt;= #{pd.lastStart1}
+		AND u.reg_time &lt;= #{pd.lastEnd1}
+		GROUP BY
+		p.channel UNION
+		SELECT
+		0 count_user,
+		count(o.order_id) AS count_order,
+		sum( o.money_paid ) total_money,
+		u.device_channel channel,
+		p.channel_name
+		FROM
+		dl_order o
+		LEFT JOIN dl_user u ON o.mobile = u.mobile
+		LEFT JOIN dl_phone_channel p ON p.channel = u.device_channel
+		WHERE
+		o.pay_status = 1
+		AND o.add_time &gt;= #{pd.lastStart1}
+		AND o.add_time &lt;= #{pd.lastEnd1}
+		AND u.reg_time &gt;= #{pd.lastStart1}
+		AND u.reg_time &lt;= #{pd.lastEnd1}
+		GROUP BY
+		o.device_channel
+		) k
+		GROUP BY
+		channel
 	</select>
+
+
+
+
+
+
 
 	<!-- 查询销售人员业绩表 -->
 	<select id="sellerAchieveList" parameterType="page" resultType="pd">
@@ -475,52 +508,26 @@
 	<!-- 列表 -->
 	<select id="datalistPageTwo" parameterType="page" resultType="pd">
 		select
-		dl_user.user_id,
-		dl_user.user_money,
-		dl_user.user_money_limit,
-		user_name,
 		mobile,
-		nickname,
 		reg_time,
-		last_time,
-		real_name,
-		id_code,
-		dl_user.user_status,
 		reg_from,
 		pc.channel_name as phone_channel,
-		dl_user.device_channel,
-		sex*1 as sex
+		dl_user.device_channel
 		from
 		<include refid="tableName"></include>
-		left join dl_user_real on dl_user_real.user_id = dl_user.user_id
 		left join dl_phone_channel pc on pc.channel = dl_user.device_channel
 		where 1=1
-		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
-			and
-			(
-			dl_user.user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-			or
-			mobile LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-			or
-			nickname LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-
-			)
-
-		</if>
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
 			AND reg_time &gt;= #{pd.lastStart1}
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
 			AND reg_time &lt;= #{pd.lastEnd1}
 		</if>
-		<if test="pd.moneyStart != null and pd.moneyStart != ''">
-			AND (dl_user.user_money+dl_user.user_money_limit) &gt;= #{pd.moneyStart}
-		</if>
-		<if test="pd.moneyEnd != null and pd.moneyEnd != ''">
-			AND (dl_user.user_money+dl_user.user_money_limit) &lt;= #{pd.moneyEnd}
-		</if>
 		<if test="pd.mobile1 != null and pd.mobile1 != ''">
 			and	mobile like CONCAT(CONCAT('%', #{pd.mobile1}),'%')
+		</if>
+		<if test="pd.channel != null and pd.channel != ''">
+			and	channel like CONCAT(CONCAT('%', #{pd.channel}),'%')
 		</if>
 		order by dl_user.reg_time DESC
 	</select>
@@ -538,6 +545,7 @@
 			AND reg_time &lt; #{lastEnd1}
 		</if>
 	</select>
+
 
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">

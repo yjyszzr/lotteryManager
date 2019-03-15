@@ -316,4 +316,9 @@ public class OrderService implements OrderManager {
 		}
 		return (PageData)dao.findForObject("OrderMapper.queryOrderBonusTotalByMobile", userIdList);
 	}
+
+	@Override
+	public List<PageData> queryOrderInfoByMobile(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("OrderMapper.datalistPageTwo", page);
+	}
 }

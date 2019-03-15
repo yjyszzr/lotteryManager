@@ -122,5 +122,7 @@ public interface OrderManager {
 
 	public PageData queryOrderBonusTotalByMobile(List<String> mobileList) throws Exception;
 
+	public List<PageData> queryOrderInfoByMobile(Page page) throws Exception;
+
 
 }

@@ -1,2 +1,2 @@
-public class UserManagerControllerMapper {
-}
+//public class UserManagerControllerMapper {
+//}
