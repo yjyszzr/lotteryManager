@@ -220,9 +220,10 @@
     <select id="queryMarketDataByTime" parameterType="page"  resultType="pd">
         select
 			channel as channel,
-			count(count_user) as count_user,
-			count(count_order) as count_order,
-			count(amount_sum) as amount_sum
+               date_time,
+			sum(count_user) as count_user,
+			sum(count_order) as count_order,
+			sum(amount_sum) as amount_sum
         from dl_market_data where add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
 		group by channel
     </select>
@@ -259,24 +260,60 @@
 	</select>
 	<!-- 设备渠道注册人数汇总列表 -->
 	<select id="marketlist" parameterType="page" resultType="pd">
-		SELECT  count(u.mobile) as count_user,
-		p.channel_name as channel,
-		u.device_channel,
-		count( DISTINCT o.order_id) as count_order,
-		COALESCE(sum(o.money_paid),0) as amount_sum
-		from dl_user u left join dl_phone_channel p on u.device_channel = p.channel
-		left join (select mobile,money_paid,order_id,device_channel  from dl_order where and pay_status = 1 and order_status IN ( 3, 4, 5, 6, 7 ,9)
-		AND add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
-		) o on o.device_channel = p.channel
-		where 1=1
-		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
-			AND u.reg_time &gt;= #{pd.lastStart1}
-		</if>
-		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
-			AND u.reg_time &lt;= #{pd.lastEnd1}
-		</if>
-		group by p.channel_name
+		SELECT
+		sum( k.count_user ) count_user,
+		sum( k.count_order ) count_order,
+		sum( k.amount_sum ) amount_sum,
+		k.channel_name channel
+		FROM
+		(
+		SELECT
+		count( u.mobile ) count_user,
+		0 AS count_order,
+		0 AS amount_sum,
+		p.channel,
+		p.channel_name
+		FROM
+		dl_user u
+		LEFT JOIN dl_phone_channel p ON u.device_channel = p.channel
+		WHERE
+		u.reg_time &gt;= #{pd.lastStart1}
+		AND u.reg_time &lt;= #{pd.lastEnd1}
+		GROUP BY
+		p.channel UNION
+		SELECT
+		0 count_user,
+		count( o.order_id ) AS count_order,
+		sum( o.money_paid ) amount_sum,
+		p.channel,
+		p.channel_name
+		FROM
+		dl_order o
+		LEFT JOIN dl_phone_channel p ON o.device_channel = p.channel
+		WHERE
+		o.pay_status = 1
+		AND order_status IN (
+		3,
+		4,
+		5,
+		6,
+		7,
+		9
+		)
+		AND o.add_time &gt;= #{pd.lastStart1}
+		AND o.add_time &lt;= #{pd.lastEnd1}
+		GROUP BY
+		o.device_channel
+		) k
+		GROUP BY
+		channel
 	</select>
+
+
+
+
+
+
 
 	<!-- 查询销售人员业绩表 -->
 	<select id="sellerAchieveList" parameterType="page" resultType="pd">

@@ -288,14 +288,14 @@ public class MarketDataController extends BaseController {
 		for (int i = 0; i < days+1; i++) {
 			PageData pageData = new PageData();
 			LocalDate date = dateE.plusDays(-i);//当天的前i天
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(date+" 00:00:00") - 86400);
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59") - 86400);
 			page.setPd(pd);
 			List<PageData> userList = usermanagercontrollerService.queryMarketDataByTime(page);
 					//.getMarketList(page);
 			for (int k = 0; k < userList.size(); k++) {
 				pageData = userList.get(k);
-				pageData.put("date", date);
+				pageData.put("date", pageData.getString("date_time"));
 //				int userCount = Integer.parseInt(pageData.getString("count_order"));
 //				String device_channel = pageData.getString("device_channel");
 //				pageData.put("count2", getCount(date, date, 1, 1, userCount, device_channel));
@@ -306,7 +306,7 @@ public class MarketDataController extends BaseController {
 //				pageData.put("count90", getCount(date, date, 30, 89, userCount, device_channel));
 //				pageData.put("count180", getCount(date, date, 90, 179, userCount, device_channel));
 //				pageData.put("count360", getCount(date, date, 180, 359, userCount, device_channel));
-				pageData.put("nowDate", LocalDate.now());
+				pageData.put("nowDate", pageData.getString("date_time"));
 				varList.add(pageData);
 			}
 		}

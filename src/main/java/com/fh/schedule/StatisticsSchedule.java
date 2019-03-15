@@ -122,7 +122,9 @@ public class StatisticsSchedule {
 	}
 
 
-	@Scheduled(cron = "0 0 2 * * ?")
+
+	//0 0 6 * * ?
+	@Scheduled(cron = "0 0 6 * * ?")
 	public void marketDataStatistics() throws Exception  {
 		logger.info("开始收集当天的市场数据))))");
 		MarketDataController marketDataController = new MarketDataController();
@@ -188,6 +190,13 @@ public class StatisticsSchedule {
 
 		logger.info("结束收集当天的市场数据))))");
 	}
+
+
+	public List<PageData> queryCommon(Page page){
+
+		return null;
+	}
+
 
 	/**
 	 * 获得留存数据
