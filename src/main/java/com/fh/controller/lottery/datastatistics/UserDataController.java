@@ -1,19 +1,5 @@
 package com.fh.controller.lottery.datastatistics;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.dao.redis.impl.RedisDaoImpl;
@@ -22,13 +8,19 @@ import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
-import com.fh.util.DateUtil;
-import com.fh.util.DateUtilNew;
-import com.fh.util.IPAddressUtils;
-import com.fh.util.Jurisdiction;
-import com.fh.util.MobileAddressUtils;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
+import com.fh.util.*;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 说明：用户列表 创建人
@@ -74,21 +66,23 @@ public class UserDataController extends BaseController {
 		}
 		String lastStart = pd.getString("lastStart");
 		String lastEnd = pd.getString("lastEnd");
-		if (pd.isEmpty()) {
-			lastStart = LocalDate.now().toString();
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart + " 00:00:00"));
-			pd.put("lastStart", lastStart);
-		}
+
 		if (null != lastStart && !"".equals(lastStart)) {
 			lastStart = lastStart + " 00:00:00";
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}else{
+			lastEnd = LocalDate.now() + " 00:00:00";
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
 		}
+
 		if (null != lastEnd && !"".equals(lastEnd)) {
 			lastEnd = lastEnd + " 23:59:59";
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		} else {
 			lastEnd = LocalDate.now() + " 23:59:59";
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		}
-		pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+
 
 		page.setPd(pd);
 		List<PageData> varList = usermanagercontrollerService.listDetailTwo(page); // 列出UserManagerController列表
@@ -96,9 +90,9 @@ public class UserDataController extends BaseController {
 			int size = varList.size();
 			for (int i = 0; i < size; i++) {
 				PageData pData = varList.get(i);
-				Integer userId = (int) pData.get("user_id");
+				//Integer userId = (int) pData.get("user_id");
 				// 获取个人充值总消费
-				Double val = useraccountmanagerService.getTotalConsumByUserId(userId);
+				Double val = null; //useraccountmanagerService.getTotalConsumByUserId(userId);
 				if (val == null) {
 					val = 0d;
 				}
@@ -110,7 +104,7 @@ public class UserDataController extends BaseController {
 					}
 				pData.put("total", Math.abs(val));
 				// 获取个人充值总金额
-				Double valR = useraccountmanagerService.getTotalRechargeByUserId(userId);
+				Double valR = null;//useraccountmanagerService.getTotalRechargeByUserId(userId);
 				if (valR == null) {
 					valR = 0d;
 				}
@@ -122,7 +116,7 @@ public class UserDataController extends BaseController {
 					}
 				pData.put("rtotal", valR);
 				// 获取个人获奖总金额
-				Double valA = useraccountmanagerService.getTotalAwardByUserId(userId);
+				Double valA = null;// useraccountmanagerService.getTotalAwardByUserId(userId);
 				if (valA == null) {
 					valA = 0d;
 				}
@@ -134,7 +128,7 @@ public class UserDataController extends BaseController {
 					}
 				pData.put("atotal", valA);
 				// 获取个人累计提现
-				Double valW = useraccountmanagerService.totalWithdraw(userId);
+				Double valW = null;//useraccountmanagerService.totalWithdraw(userId);
 				if (valW == null) {
 					valW = 0d;
 				}
@@ -170,7 +164,7 @@ public class UserDataController extends BaseController {
 		}
 		mv.setViewName("lottery/datastatistics/userdata_list");
 		mv.addObject("varList", varList);
-		mv.addObject("pd", pd);
+//		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}

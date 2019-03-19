@@ -1,16 +1,13 @@
 package com.fh.service.lottery.useraccountmanager.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Service;
-
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.util.PageData;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 说明： 流水相关 创建人：FH Q313596790 创建时间：2018-04-24
@@ -172,6 +169,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.queryPayLogByPayOrderSn", pd);
 	}*/
-	
+
+
 	
 }

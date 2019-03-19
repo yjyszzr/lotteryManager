@@ -370,6 +370,13 @@
 <!-- 	<select id ="queryPayLogByPayOrderSn" parameterType="pd" resultType="pd">
 		select * from dl_pay_log 
 	</select> -->
+
+	<select id = "queryUserAccountBalanceByOrderSns" resultType="pd">
+		select order_sn,cur_balance from dl_user_account where order_sn in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 	
 	
 </mapper>

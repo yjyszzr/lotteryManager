@@ -926,4 +926,9 @@
 			#{item}
 		</foreach>
 	</select>
+
+	<select id="datalistPageTwo" parameterType="page" resultType="pd">
+		select order_sn,lottery_classify_id,money_paid,bonus,winning_money,FROM_UNIXTIME(add_time, '%Y-%m-%d %H:%i:%S') add_time
+		from dl_order where mobile = #{pd.mobile}
+	</select>
 </mapper>
