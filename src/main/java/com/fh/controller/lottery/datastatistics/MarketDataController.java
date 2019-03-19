@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -78,8 +79,23 @@ public class MarketDataController extends BaseController {
 		if(pd.getString("dateType").equals("3")) {
 			varList = getDataListForTime(page,pd);
 		}
+
+
+		List<PageData> newVarList = new ArrayList<PageData>();
+		for(PageData p:varList){
+			DecimalFormat df=new DecimalFormat("0.00");
+			Double amountSum = Double.valueOf(p.getString("amount_sum"));
+			Double count_order = Double.valueOf(p.getString("count_order"));
+			if(count_order == 0.0){
+				p.put("avgMoney","0.00");
+			}else{
+				p.put("avgMoney",df.format((Double)amountSum/count_order));
+			}
+			newVarList.add(p);
+		}
+
 		mv.setViewName("lottery/datastatistics/marketdata_list");
-		mv.addObject("varList", varList);
+		mv.addObject("varList", newVarList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;

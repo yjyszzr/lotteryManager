@@ -132,7 +132,9 @@
 											<td class='center'>${var.amount_sum }</td>
 											<td class='center'>
 												<c:if test="${var.count_order == 0 }">0.00</c:if>
-												<c:if test="${var.count_order != 0 }">${var.amount_sum/var.count_order }</c:if>
+												<c:if test="${var.count_order != 0 }">
+													${var.avgMoney}
+												</c:if>
 											</td>
 											<%--<c:if test="${!empty pd.typeForDay}">--%>
 											<%--<td class='center'>${var.count2 }<c:if test="${!empty var.count2}">%</c:if></td>--%>

@@ -262,16 +262,17 @@
 	<select id="marketlist" parameterType="page" resultType="pd">
 		SELECT
 		sum( k.count_user ) count_user,
-		sum( k.count_order ) count_order,
-		sum( k.amount_sum ) amount_sum,
+		sum(count_order)  count_order,
+		sum( k.total_money ) amount_sum,
+		k.channel device_channel,
 		k.channel_name channel
 		FROM
 		(
 		SELECT
 		count( u.mobile ) count_user,
 		0 AS count_order,
-		0 AS amount_sum,
-		p.channel,
+		0 AS total_money,
+		p.channel channel,
 		p.channel_name
 		FROM
 		dl_user u
@@ -283,25 +284,20 @@
 		p.channel UNION
 		SELECT
 		0 count_user,
-		count( o.order_id ) AS count_order,
-		sum( o.money_paid ) amount_sum,
-		p.channel,
+		count(o.order_id) AS count_order,
+		sum( o.money_paid ) total_money,
+		u.device_channel channel,
 		p.channel_name
 		FROM
 		dl_order o
-		LEFT JOIN dl_phone_channel p ON o.device_channel = p.channel
+		LEFT JOIN dl_user u ON o.mobile = u.mobile
+		LEFT JOIN dl_phone_channel p ON p.channel = u.device_channel
 		WHERE
 		o.pay_status = 1
-		AND order_status IN (
-		3,
-		4,
-		5,
-		6,
-		7,
-		9
-		)
 		AND o.add_time &gt;= #{pd.lastStart1}
 		AND o.add_time &lt;= #{pd.lastEnd1}
+		AND u.reg_time &gt;= #{pd.lastStart1}
+		AND u.reg_time &lt;= #{pd.lastEnd1}
 		GROUP BY
 		o.device_channel
 		) k

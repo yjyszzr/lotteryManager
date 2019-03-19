@@ -148,6 +148,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.marketlist", page);
 	}
 
+
 	public Integer getmarketCountToday(PageData page) throws Exception {
 		return (Integer) dao.findForObject("UserManagerControllerMapper.marketCountToday", page);
 	}
