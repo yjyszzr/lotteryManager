@@ -262,7 +262,7 @@
 	</delete>
 	
 	<update id="setIsSupperWhite" parameterType="pd">
-		UPDATE dl_user SET is_super_white = 1 WHERE mobile = #{mobile}
+		UPDATE dl_user SET is_super_white = 1 WHERE mobile = #{mobile} 
 	</update>
 	
 	<!-- fh313596790qq(青苔) -->
