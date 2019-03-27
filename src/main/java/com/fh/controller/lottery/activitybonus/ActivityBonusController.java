@@ -45,9 +45,6 @@ public class ActivityBonusController extends BaseController {
 	@RequestMapping(value = "/save")
 	public ModelAndView save() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "新增ActivityBonus");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
-			return null;
-		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -98,9 +95,6 @@ public class ActivityBonusController extends BaseController {
 	@RequestMapping(value = "/delete")
 	public void delete(PrintWriter out) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "删除ActivityBonus");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-			return;
-		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		PageData pdOld = activitybonusService.findById(pd);
@@ -119,9 +113,6 @@ public class ActivityBonusController extends BaseController {
 	@RequestMapping(value = "/edit")
 	public ModelAndView edit() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "修改ActivityBonus");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
-			return null;
-		}
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -146,9 +137,6 @@ public class ActivityBonusController extends BaseController {
 	@RequestMapping(value = "/onAndOnLine")
 	public void isStickOrNot(PrintWriter out) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "置顶或者上线操作");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
-			return;
-		}
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		activitybonusService.edit(pd);
@@ -392,9 +380,6 @@ public class ActivityBonusController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "批量删除ActivityBonus");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-			return null;
-		} // 校验权限
 		PageData pd = new PageData();
 		Map<String, Object> map = new HashMap<String, Object>();
 		pd = this.getPageData();
@@ -422,9 +407,6 @@ public class ActivityBonusController extends BaseController {
 	@RequestMapping(value = "/excel")
 	public ModelAndView exportExcel() throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "导出ActivityBonus到excel");
-		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
-			return null;
-		}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
