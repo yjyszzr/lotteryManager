@@ -10,7 +10,7 @@
 	<select id="getUserByMobile" parameterType="pd" resultType="pd">
 		select 
 		*
-		from 
+		from user
 		dl_user
 		where 
 			mobile = #{mobile}
@@ -291,6 +291,8 @@
 	</select> -->
 
 
-	
+	<select id="getBalanceByMobile" parameterType="pd" resultType="java.lang.Double">
+		select (u.user_money+u.user_money_limit) balanceMoney from dl_user u  where u.mobile = #{mobile}
+	</select>
 	
 </mapper>

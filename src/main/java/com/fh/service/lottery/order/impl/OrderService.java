@@ -321,4 +321,15 @@ public class OrderService implements OrderManager {
 	public List<PageData> queryOrderInfoByMobile(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("OrderMapper.datalistPageTwo", page);
 	}
+
+	@Override
+	public Double getTotalById(PageData pd) throws Exception {
+		return (Double) dao.findForObject("OrderMapper.getTotalById", pd);
+	}
+
+	@Override
+	public Double getTotalAward(PageData pd) throws Exception {
+		return (Double) dao.findForObject("OrderMapper.getTotalAward", pd);
+	}
+
 }

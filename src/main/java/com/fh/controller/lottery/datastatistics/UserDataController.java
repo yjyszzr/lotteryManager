@@ -4,6 +4,7 @@ import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
+import com.fh.service.lottery.order.impl.OrderService;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +45,10 @@ public class UserDataController extends BaseController {
 
 	@Resource(name = "redisDaoImpl")
 	private RedisDaoImpl redisDaoImpl;
+
+	@Resource(name = "orderService")
+	private OrderService orderService;
+
 
 	/**
 	 * 列表
@@ -83,16 +87,43 @@ public class UserDataController extends BaseController {
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		}
 
-
 		page.setPd(pd);
 		List<PageData> varList = usermanagercontrollerService.listDetailTwo(page); // 列出UserManagerController列表
+
+		List<String> appstoreList = new ArrayList<>();
+		appstoreList.add("c26013");
+		appstoreList.add("c16010");
+		appstoreList.add("c26010");
+		appstoreList.add("c26011");
+		appstoreList.add("c26012");
+		appstoreList.add("c26014");
+		appstoreList.add("c36010");
+		appstoreList.add("c36011");
+		appstoreList.add("c36012");
+		appstoreList.add("c36013");
+		appstoreList.add("c36014");
+		appstoreList.add("c36015");
+		appstoreList.add("c36016");
+
 		if (varList != null) {
 			int size = varList.size();
 			for (int i = 0; i < size; i++) {
 				PageData pData = varList.get(i);
-				//Integer userId = (int) pData.get("user_id");
-				// 获取个人充值总消费
-				Double val = null; //useraccountmanagerService.getTotalConsumByUserId(userId);
+				String mobile = (String) pData.get("mobile");
+				PageData pdMobile = new PageData();
+				pdMobile.put("mobile",mobile);
+
+				String deviceChannel = (String) pData.get("device_channel");
+				if("h5".equals(deviceChannel)){
+					pData.put("device_channel", "H5");
+				}else if(appstoreList.contains(deviceChannel)){
+					pData.put("device_channel", "IOS");
+				}else{
+					pData.put("device_channel", "Android");
+				}
+
+				// 获取个人消费总消费
+				Double val = orderService.getTotalById(pdMobile);
 				if (val == null) {
 					val = 0d;
 				}
@@ -104,7 +135,7 @@ public class UserDataController extends BaseController {
 					}
 				pData.put("total", Math.abs(val));
 				// 获取个人充值总金额
-				Double valR = null;//useraccountmanagerService.getTotalRechargeByUserId(userId);
+				Double valR = useraccountmanagerService.getTotalConsumByUserId(pdMobile); //orderService.getTotalById(pdMobile);
 				if (valR == null) {
 					valR = 0d;
 				}
@@ -116,7 +147,7 @@ public class UserDataController extends BaseController {
 					}
 				pData.put("rtotal", valR);
 				// 获取个人获奖总金额
-				Double valA = null;// useraccountmanagerService.getTotalAwardByUserId(userId);
+				Double valA =  orderService.getTotalAward(pdMobile);
 				if (valA == null) {
 					valA = 0d;
 				}
@@ -128,37 +159,22 @@ public class UserDataController extends BaseController {
 					}
 				pData.put("atotal", valA);
 				// 获取个人累计提现
-				Double valW = null;//useraccountmanagerService.totalWithdraw(userId);
+				Double valW = useraccountmanagerService.totalWithdraw(pdMobile);
 				if (valW == null) {
 					valW = 0d;
 				}
 				pData.put("wtotal", valW);
-				// 性别判断
-				String idCode = pData.getString("id_code");
-				int sex = 0;
-				if (!idCode.equals("") && idCode != null) {
-					if (idCode.length() == 18) {
-						sex = Integer.parseInt(idCode.substring(16, 17));
-					} else {
-						sex = Integer.parseInt(idCode.substring(14, 15));
-					}
-					if (sex % 2 == 0) {
-						pData.put("sex", "2");
-					} else {
-						pData.put("sex", "1");
-					}
-					pData.put("age", IdNOToAge(idCode));
-				}
-				String mobile = pData.getString("mobile");
+
 				if (!mobile.equals("") && mobile != null) {
 					String area = MobileAddressUtils.getProvinceByIp(mobile);
 					pData.put("area", area);
 				}
-				// String regIP = pData.getString("reg_ip");
-				// if (!regIP.equals("") && regIP != null) {
-				// String area = IPAddressUtils.getProvinceByIp(regIP);
-				// pData.put("area", area);
-				// }
+				Double userBalance = useraccountmanagerService.getBalanceByMobile(pdMobile);
+				if(null == userBalance){
+					userBalance = 0d;
+				}
+				pData.put("balance", userBalance);
+
 			}
 			page.setTotalResult(size);
 		}
@@ -185,24 +201,15 @@ public class UserDataController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		List<String> titles = new ArrayList<String>();
-		titles.add("用户ID"); // 1
-		titles.add("用户昵称"); // 2
-		titles.add("级别"); // 3
-		titles.add("手机号"); // 4
-		titles.add("真实姓名"); // 5
-		titles.add("身份证号"); // 6
-		titles.add("性别"); // 7
-		titles.add("年龄"); // 8
-		titles.add("终端"); // 9
-		titles.add("地域"); // 10
-		titles.add("渠道"); // 11
-		titles.add("累计消费"); // 12
-		titles.add("累计充值"); // 13
-		titles.add("累计中奖"); // 14
-		titles.add("累计提现"); // 15
-		titles.add("账户余额"); // 16
-		titles.add("注册时间"); // 17
-		titles.add("最后登录时间"); // 18
+		titles.add("手机号");
+		titles.add("地域");
+		titles.add("渠道");
+		titles.add("累计消费");
+		titles.add("累计充值");
+		titles.add("累计中奖");
+		titles.add("账户余额");
+		titles.add("注册时间");
+
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("titles", titles);
 		String mobileC = pd.getString("mobile");
@@ -220,58 +227,55 @@ public class UserDataController extends BaseController {
 			page.setShowCount(65000);// 单页显示条数，为了全部导出应用
 		}
 		page.setPd(pd);
+
+		List<String> appstoreList = new ArrayList<>();
+		appstoreList.add("c26013");
+		appstoreList.add("c16010");
+		appstoreList.add("c26010");
+		appstoreList.add("c26011");
+		appstoreList.add("c26012");
+		appstoreList.add("c26014");
+		appstoreList.add("c36010");
+		appstoreList.add("c36011");
+		appstoreList.add("c36012");
+		appstoreList.add("c36013");
+		appstoreList.add("c36014");
+		appstoreList.add("c36015");
+		appstoreList.add("c36016");
+
 		List<PageData> list = usermanagercontrollerService.listDetailTwo(page);
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < list.size(); i++) {
 			PageData vpd = new PageData();
-			vpd.put("var1", list.get(i).getString("user_id")); // 1
-			vpd.put("var2", list.get(i).getString("nickname")); // 2
-			vpd.put("var3", "*"); // 3
-			vpd.put("var4", list.get(i).getString("mobile")); // 4
-			vpd.put("var5", list.get(i).getString("real_name")); // 5
-			vpd.put("var6", list.get(i).getString("id_code")); // 6
-			// 性别判断
-			String idCode = list.get(i).getString("id_code");
-			int sex = 0;
-			if (!idCode.equals("") && idCode != null) {
-				if (idCode.length() == 18) {
-					sex = Integer.parseInt(idCode.substring(16, 17));
-				} else {
-					sex = Integer.parseInt(idCode.substring(14, 15));
-				}
-				if (sex % 2 == 0) {
-					vpd.put("var7", "女"); // 7
-				} else {
-					vpd.put("var7", "男");
-				}
-				vpd.put("var8", IdNOToAge(idCode)); // 8
-			}
-			vpd.put("var9", list.get(i).getString("brand")); // 9
+			vpd.put("var1", list.get(i).getString("mobile"));
 			String mobile = list.get(i).getString("mobile");
-			if (!mobile.equals("") && mobile != null) {
-				String area = MobileAddressUtils.getProvinceByIp(mobile);
-				vpd.put("var10", area);// 10
-			}
-			// String regIP = list.get(i).getString("reg_ip");
-			// if (!regIP.equals("") && regIP != null) {
-			// String area = IPAddressUtils.getProvinceByIp(regIP);
-			// vpd.put("var10", area); // 10
-			// }
-			vpd.put("var11", list.get(i).getString("phone_channel")); // 11
-			if(list.get(i).get("phone_channel") == "" || list.get(i).get("phone_channel") == null) {
-				vpd.put("var11", list.get(i).getString("device_channel")); // 11
+			PageData pdmobile =new PageData();
+			pdmobile.put("mobile",mobile);
+			String deviceChannel = (String) list.get(i).getString("device_channel");
+			if("h5".equals(deviceChannel)){
+				vpd.put("var2", "H5");
+			}else if(appstoreList.contains(deviceChannel)){
+				vpd.put("var2", "IOS");
+			}else{
+				vpd.put("var2", "Android");
 			}
 
+			if (!mobile.equals("") && mobile != null) {
+				String area = MobileAddressUtils.getProvinceByIp(mobile);
+				vpd.put("var3", area);// 10
+			}
+			vpd.put("var4", list.get(i).getString("phone_channel"));
 			Integer userId = (int) list.get(i).get("user_id");
-			Double val = useraccountmanagerService.getTotalConsumByUserId(userId);
+			Double val = orderService.getTotalById(pdmobile);
 			if (val == null) {
 				val = 0d;
 			}
-				if(checkSumStart(pd,Math.abs(val),"totalStart") || checkSumStart(pd,Math.abs(val),"totalEnd")) {
-					continue;
-				}
+
+            if(checkSumStart(pd,Math.abs(val),"totalStart") || checkSumStart(pd,Math.abs(val),"totalEnd")) {
+                continue;
+            }
 			// 获取个人充值总金额
-			Double valR = useraccountmanagerService.getTotalRechargeByUserId(userId);
+			Double valR = useraccountmanagerService.getTotalConsumByUserId(pdmobile);
 			if (valR == null) {
 				valR = 0d;
 			}
@@ -279,7 +283,7 @@ public class UserDataController extends BaseController {
 					continue;
 				}
 			// 获取个人获奖总金额
-			Double valA = useraccountmanagerService.getTotalAwardByUserId(userId);
+			Double valA = orderService.getTotalAward(pdmobile);
 			if (valA == null) {
 				valA = 0d;
 			}
@@ -287,20 +291,20 @@ public class UserDataController extends BaseController {
 					continue;
 				}
 			// 获取个人累计提现
-			Double valW = useraccountmanagerService.totalWithdraw(userId);
+			Double valW = useraccountmanagerService.totalWithdraw(pdmobile);
 			if (valW == null) {
 				valW = 0d;
 			}
-			vpd.put("var12", Math.abs(val)); // 12
-			vpd.put("var13", valR); // 13
-			vpd.put("var14", valA); // 14
-			vpd.put("var15", valW); // 15
+			Double userBalance = useraccountmanagerService.getBalanceByMobile(pdmobile);
+			if(null == userBalance){
+				userBalance = 0d;
+			}
 
-			vpd.put("var16", new BigDecimal(list.get(i).getString("user_money_limit"))
-					.add(new BigDecimal(list.get(i).getString("user_money")))); // 16
-			vpd.put("var17", DateUtil.toSDFTime(Long.parseLong(list.get(i).getString("reg_time")) * 1000)); // 17
-			vpd.put("var18", DateUtil.toSDFTime(Long.parseLong(list.get(i).getString("last_time")) * 1000)); // 18
-
+			vpd.put("var5", Math.abs(val));
+			vpd.put("var6", valR);
+			vpd.put("var7", valA);
+			vpd.put("var8", valW);
+			vpd.put("var9", userBalance);
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -335,6 +339,7 @@ public class UserDataController extends BaseController {
 		}
 		return false;
 	}
+
 	public boolean checkSumEnd(PageData pd,Double val,String obj) {
 		if(null != pd.get(obj) && !"".equals(pd.get(obj))) {
 			Double total = Double.parseDouble(pd.getString(obj));

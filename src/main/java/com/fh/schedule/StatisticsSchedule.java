@@ -132,9 +132,10 @@ public class StatisticsSchedule {
 		if(null != todayCount && 0 < todayCount){
 			return;
 		}
+
 		Integer lastStart1 = DateUtilNew.getTimeAfterDays(new Date(),0,0,0,0) - 86400;
 		Integer lastEnd1 = DateUtilNew.getTimeAfterDays(new Date(),0,23,59,59) - 86400;
-//		if(lastStart1 > 1552838400){
+//		if(lastStart1 > 1553184000){
 //			return;
 //		}
 		logger.info("开始收集当天的市场数据))))");

@@ -1,17 +1,13 @@
 package com.fh.controller.app.switchappconfig;
 
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
+import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
+import com.fh.entity.dto.AppSelectDTO;
+import com.fh.entity.dto.ChannelDTO;
+import com.fh.entity.dto.SystemDTO;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
+import com.fh.service.switchappconfig.SwitchAppConfigManager;
+import com.fh.util.*;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -20,18 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
-import com.fh.entity.dto.AppSelectDTO;
-import com.fh.entity.dto.ChannelDTO;
-import com.fh.entity.dto.SystemDTO;
-import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
-import com.fh.service.switchappconfig.SwitchAppConfigManager;
-import com.fh.util.AppUtil;
-import com.fh.util.Jurisdiction;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.Tools;
+import javax.annotation.Resource;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /** 
  * 说明：app配置
@@ -202,6 +192,38 @@ public class SwitchAppConfigController extends BaseController {
 			}
 
 			map.put("list", pdList);	
+		} catch(Exception e){
+			errInfo = "error";
+			logger.error(e.toString(), e);
+		}
+		map.put("result", errInfo);				//返回结果
+		return AppUtil.returnObject(new PageData(), map);
+	}
+
+
+	/**获取连级数据
+	 * @return
+	 */
+	@RequestMapping(value="/getQiuDuoDuoLevels")
+	@ResponseBody
+	public Object getQiuDuoDuoLevels(){
+		Map<String,Object> map = new HashMap<String,Object>();
+		String errInfo = "success";
+		PageData pd = new PageData();
+		List<PageData>	varList = new ArrayList<>();
+		List<PageData> pdList = new ArrayList<PageData>();
+		try{
+			pd = this.getPageData();
+			String DICTIONARIES_ID = "10";
+			varList = switchappconfigService.listSubDictByParentId(DICTIONARIES_ID); //用传过来的ID获取此ID下的子列表数据
+			for(PageData d :varList){
+				PageData pdf = new PageData();
+				pdf.put("DICTIONARIES_ID", d.getString("channel"));
+				pdf.put("NAME", d.getString("channel_name"));
+				pdList.add(pdf);
+			}
+
+			map.put("list", pdList);
 		} catch(Exception e){
 			errInfo = "error";
 			logger.error(e.toString(), e);

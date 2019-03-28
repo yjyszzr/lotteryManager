@@ -31,20 +31,13 @@
 						<div id="zhongxin" style="padding-top: 13px;">
 						
 						<!-- 检索  -->
-						<form action="superwhitelist/listAccount.do" method="post" name="Form" id="Form">
-						<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
-						<%--<input type="hidden" name="store_id" id="store_id" value="${pd.store_id}"/>--%>
-						<%--<table style="margin-top: 5px;">--%>
-							<%--<thead>--%>
-								<%--<tr>&nbsp;</tr>--%>
-								<%--<tr>&nbsp;</tr>--%>
-								<%--<tr><strong>用户会员详情</strong></tr>--%>
-								 <%----%>
-							<%--</thead>--%>
+						<form action="usermanagercontroller/seeTotal.do" method="post" name="Form" id="Form">
+						<input type="hidden" name="mobile" id="store_id" value="${pd.mobile}"/>
+						<table style="margin-top: 5px;">
 							<%--<tbody>--%>
-									<%--<tr>--%>
+									<%---<tr>--%>
 										<%--<td>--%>
-											 <%--手机号：${customer.mobile}--%>
+											<%--<a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL" style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a>--%>
 										<%--</td>--%>
 										<%--<td>--%>
 										<%--&nbsp;--%>
@@ -87,14 +80,15 @@
 										<%--</td>--%>
 									<%--</tr>--%>
 									<%--</tbody>--%>
-								<%--</table>--%>
+								</table>
 						<!-- 检索  -->
 	 
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>&nbsp;</tr>
 								<tr>&nbsp;</tr>
-								<tr><strong>销售记录</strong></tr>
+								<tr><strong>订单记录</strong></tr>
+								<%--<tr><a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL" style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></tr>--%>
 								<tr>
 								    <!--  
 									<th class="center" style="width:35px;">
@@ -112,7 +106,7 @@
 								</tr>
 							</thead>
 							<tbody>
-									<c:forEach items="${ordes}" var="var" varStatus="vs">
+									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
 											<!-- 
 											<td class='center'>
@@ -121,13 +115,21 @@
 											 -->
 											<td class='center'>${var.index+1}</td>
 											<td class='center'>
-<%-- 												${var.order_sn} --%>
-												${StringUtil.strReplace(var.order_sn, 8, 14, "XXXXXX")}
+												${var.order_sn}
 											</td>
-											<td class='center'>${var.lottery_classify_id}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.lottery_classify_id == 1}">竞彩足球
+													</c:when>
+													<c:when test="${var.lottery_classify_id == 2}">竞彩篮球
+													</c:when>
+												</c:choose>
+											</td>
 											<td class='center'>${var.money_paid}</td>
 											<td class='center'>${var.bonus}</td>
 											<td class='center'>${var.winning_money}</td>
+											<td class='center'>${var.add_time}</td>
+											<td class='center'>${var.cur_balance}</td>
 				 						</tr>
 									</c:forEach>	
 									
@@ -254,24 +256,29 @@
 			};
 			
 			//导出excel
-			function toExcel(){
-				var user_id =  $("input:hidden[name='user_id']").val();;
-				var store_id =  $("input:hidden[name='store_id']").val();;
-				var start_add_time = $("#start_add_time").val();
-				var end_add_time = $("#end_add_time").val();
-				var process_type = $("#process_type").val();
-				var url = '<%=basePath%>superwhitelist/excelAccount.do?tm=' + new Date().getTime() 
-					+ "&user_id=" + user_id 
-					+ "&store_id=" + store_id		
-					+ "&start_add_time=" + start_add_time
-					+ "&end_add_time=" + end_add_time
-					+ "&process_type=" + process_type
-					;
-				
-// 				alert("url=" + url);
-				
-				window.location.href= url;
-			}	
+        <%--function toExcel(){--%>
+            <%--var user_id =  $("input:hidden[name='user_id']").val();;--%>
+            <%--var store_id =  $("input:hidden[name='store_id']").val();;--%>
+            <%--var start_add_time = $("#start_add_time").val();--%>
+            <%--var end_add_time = $("#end_add_time").val();--%>
+            <%--var process_type = $("#process_type").val();--%>
+            <%--var url = '<%=basePath%>superwhitelist/excelAccount.do?tm=' + new Date().getTime()--%>
+                <%--+ "&user_id=" + user_id--%>
+                <%--+ "&store_id=" + store_id--%>
+                <%--+ "&start_add_time=" + start_add_time--%>
+                <%--+ "&end_add_time=" + end_add_time--%>
+                <%--+ "&process_type=" + process_type--%>
+            <%--;--%>
+
+<%--// 				alert("url=" + url);--%>
+
+            <%--window.location.href= url;--%>
+        <%--}--%>
+
+        //导出excel
+        function toExcel(){
+            $("#Form").attr("action","usermanagercontroller/excelOrders.do").submit();
+        }
 	</script>
 </body>
 </html>

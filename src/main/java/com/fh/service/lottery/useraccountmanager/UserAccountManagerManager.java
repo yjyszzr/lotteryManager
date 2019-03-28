@@ -84,6 +84,16 @@ public interface UserAccountManagerManager {
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS) throws Exception;
 
+
+	/***
+	 * 获取个人消费资金总额
+	 *
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public Double getTotalConsumByUserId(Integer userId) throws Exception;
+
 	/***
 	 * 获取个人消费资金总额
 	 * 
@@ -91,7 +101,7 @@ public interface UserAccountManagerManager {
 	 * @return
 	 * @throws Exception
 	 */
-	public Double getTotalConsumByUserId(@Param("userId") Integer userId) throws Exception;
+	public Double getTotalConsumByUserId(PageData pd) throws Exception;
 
 	/****
 	 * 充值资金总额
@@ -119,12 +129,21 @@ public interface UserAccountManagerManager {
 
 	/****
 	 * 累计提现
+	 *
+	 * @param userId
+	 * @return
+	 * @throws Exception
+	 */
+	public Double totalWithdraw(Integer  userId) throws Exception;
+
+	/****
+	 * 累计提现
 	 * 
 	 * @param userId
 	 * @return
 	 * @throws Exception
 	 */
-	public Double totalWithdraw(Integer userId) throws Exception;
+	public Double totalWithdraw(PageData pd) throws Exception;
 
 	/****
 	 * 根据操作类型返回列表
@@ -146,6 +165,11 @@ public interface UserAccountManagerManager {
 	 */
 /*	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception;*/
 
-	
+
+	/**
+	 * 根据手机号查询店铺用户总余额
+	 */
+	public Double getBalanceByMobile(PageData pd) throws Exception;
+
 
 }

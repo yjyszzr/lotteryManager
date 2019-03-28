@@ -417,7 +417,9 @@
  		order by user_account.add_time desc
 	</select>
 	
-	
+	<select id="queryUserBalanceByMobile" parameterType="pd" resultType="Double">
+		select sm.money+sm.money_limit userBalance from dl_user_store_money sm left join dl_user u on sm.user_id = u.user_id  where mobile = #{mobile}
+	</select>
 	 
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">

@@ -931,4 +931,14 @@
 		select order_sn,lottery_classify_id,money_paid,bonus,winning_money,FROM_UNIXTIME(add_time, '%Y-%m-%d %H:%i:%S') add_time
 		from dl_order where mobile = #{pd.mobile}
 	</select>
+
+	<!-- 获取单个人购彩 -->
+	<select id="getTotalById"  resultType="java.lang.Double">
+		select sum(money_paid) money_paid from dl_order  where  mobile = #{mobile} and order_status in(5,9) and pay_status = 1;
+	</select>
+
+	<!-- 累计获奖汇总 -->
+	<select id="getTotalAward"  resultType="java.lang.Double">
+		select sum(winning_money) winning_money from dl_order o where mobile = #{mobile} and order_status in(5,9) and pay_status = 1;
+	</select>
 </mapper>

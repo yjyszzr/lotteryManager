@@ -131,9 +131,25 @@ public class UserAccountService implements UserAccountManagerManager {
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalById", userId);
 	}
 
+
+	@Override
+	public Double getBalanceByMobile(PageData pd) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.getBalanceByMobile", pd);
+	}
+
+	@Override
+	public Double getTotalConsumByUserId(PageData pd) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalById", pd);
+	}
+
 	@Override
 	public Double totalWithdraw(Integer userId) throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.totalWithdraw", userId);
+	}
+
+	@Override
+	public Double totalWithdraw(PageData pd) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.totalWithdraw", pd);
 	}
 
 	@Override

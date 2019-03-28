@@ -273,8 +273,8 @@
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 3;
 	</select>
 	<!-- 获取单个人充值汇总 -->
-	<select id="getTotalRecharge" parameterType="java.lang.Integer" resultType="java.lang.Double">
-		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 2;
+	<select id="getTotalRecharge" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT sum(amount) FROM dl_user_account a  left  join dl_user u on a.user_id = u.user_id where  mobile = #{mobile} and a.process_type = 2;
 	</select>
 	
 	<!-- 累计获奖汇总 -->
@@ -285,14 +285,11 @@
 	<select id="totalAwardForAll"   resultType="java.lang.Double">
 		SELECT SUM(amount) FROM dl_user_account WHERE   process_type = 1;
 	</select>
-	<select id="totalWithdraw"  parameterType="java.lang.Integer"   resultType="java.lang.Double">
+	<select id="totalWithdraw"   resultType="java.lang.Double">
 		SELECT
-			SUM( amount ) AS amount 
+			SUM( a.amount ) AS amount
 		FROM
-			dl_user_withdraw 
-		WHERE
-			user_id = #{userId} 
-			AND STATUS = 1
+			dl_user_account a  left  join dl_user u on a.user_id = u.user_id where  a.mobile = #{mobile} and a.process_type = 4;
 	</select>
  	<!-- 累计提现汇总 -->
 	 
@@ -372,10 +369,15 @@
 	</select> -->
 
 	<select id = "queryUserAccountBalanceByOrderSns" resultType="pd">
-		select order_sn,cur_balance from dl_user_account where order_sn in
+		select order_sn,cur_balance from dl_user_account where process_type = 3 and order_sn in
 		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
 			#{item}
 		</foreach>
+	</select>
+
+
+	<select id="getBalanceByMobile" parameterType="pd" resultType="java.lang.Double">
+		select (sm.money+sm.money_limit) balanceMoney from dl_user u left join dl_user_store_money sm on u.user_id = sm.user_id where u.mobile = #{mobile}
 	</select>
 	
 	

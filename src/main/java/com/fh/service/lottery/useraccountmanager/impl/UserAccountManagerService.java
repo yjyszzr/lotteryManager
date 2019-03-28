@@ -106,6 +106,11 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	}
 
 	@Override
+	public Double getTotalConsumByUserId(PageData pd) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalById", pd);
+	}
+
+	@Override
 	public Double getTotalConsumByUserId(Integer userId) throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalById", userId);
 	}
@@ -114,6 +119,12 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	public Double totalWithdraw(Integer userId) throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.totalWithdraw", userId);
 	}
+
+	@Override
+	public Double totalWithdraw(PageData pd) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.totalWithdraw", pd);
+	}
+
 
 	@Override
 	public Double getTotalRechargeByUserId(Integer userId) throws Exception {
@@ -170,6 +181,9 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.queryPayLogByPayOrderSn", pd);
 	}*/
 
+	@Override
+	public Double getBalanceByMobile(PageData pd) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.getBalanceByMobile", pd);
+	}
 
-	
 }

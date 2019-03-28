@@ -1,14 +1,20 @@
 package com.fh.controller.system.login;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.fh.controller.base.BaseController;
+import com.fh.entity.system.Menu;
+import com.fh.entity.system.Role;
+import com.fh.entity.system.User;
+import com.fh.service.fhoa.datajur.DatajurManager;
+import com.fh.service.system.appuser.AppuserManager;
+import com.fh.service.system.buttonrights.ButtonrightsManager;
+import com.fh.service.system.fhbutton.FhbuttonManager;
+import com.fh.service.system.fhlog.FHlogManager;
+import com.fh.service.system.loginimg.LogInImgManager;
+import com.fh.service.system.menu.MenuManager;
+import com.fh.service.system.organization.impl.OrganizationService;
+import com.fh.service.system.role.RoleManager;
+import com.fh.service.system.user.UserManager;
+import com.fh.util.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -20,29 +26,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fh.controller.base.BaseController;
-import com.fh.entity.system.Menu;
-import com.fh.entity.system.Role;
-import com.fh.entity.system.User;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+
 //import com.fh.service.dst.szystore.SzyStoreManager;
-import com.fh.service.fhoa.datajur.DatajurManager;
-import com.fh.service.system.appuser.AppuserManager;
-import com.fh.service.system.buttonrights.ButtonrightsManager;
-import com.fh.service.system.fhbutton.FhbuttonManager;
-import com.fh.service.system.fhlog.FHlogManager;
-import com.fh.service.system.loginimg.LogInImgManager;
-import com.fh.service.system.menu.MenuManager;
-import com.fh.service.system.organization.impl.OrganizationService;
-import com.fh.service.system.role.RoleManager;
-import com.fh.service.system.user.UserManager;
-import com.fh.util.AppUtil;
-import com.fh.util.Const;
-import com.fh.util.DateUtil;
-import com.fh.util.Jurisdiction;
-import com.fh.util.MD5Utils;
-import com.fh.util.PageData;
-import com.fh.util.RightsHelper;
-import com.fh.util.Tools;
 
 /**
  * 总入口

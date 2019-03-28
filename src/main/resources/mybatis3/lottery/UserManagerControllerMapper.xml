@@ -284,7 +284,7 @@
 		p.channel UNION
 		SELECT
 		0 count_user,
-		count(o.order_id) AS count_order,
+		count(distinct o.mobile) AS count_order,
 		sum( o.money_paid ) total_money,
 		u.device_channel channel,
 		p.channel_name
@@ -294,15 +294,16 @@
 		LEFT JOIN dl_phone_channel p ON p.channel = u.device_channel
 		WHERE
 		o.pay_status = 1
+		AND o.order_status != 10
 		AND o.add_time &gt;= #{pd.lastStart1}
 		AND o.add_time &lt;= #{pd.lastEnd1}
 		AND u.reg_time &gt;= #{pd.lastStart1}
 		AND u.reg_time &lt;= #{pd.lastEnd1}
 		GROUP BY
-		o.device_channel
+		channel
 		) k
 		GROUP BY
-		channel
+		k.channel
 	</select>
 
 
@@ -516,7 +517,7 @@
 		from
 		<include refid="tableName"></include>
 		left join dl_phone_channel pc on pc.channel = dl_user.device_channel
-		where 1=1
+		where 1=1 and mobile = 18501906460
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
 			AND reg_time &gt;= #{pd.lastStart1}
 		</if>

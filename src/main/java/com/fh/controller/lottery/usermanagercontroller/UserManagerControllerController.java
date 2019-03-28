@@ -104,10 +104,17 @@ public class UserManagerControllerController extends BaseController {
 			Map<String,String> orderBalanceMap = everyOrderCurBalance.stream().collect(Collectors.toMap(s->s.getString("order_sn"),s->s.getString("cur_balance")));
 			orderSnInfoList.stream().forEach(s->{
 				PageData newPd = new PageData();
-//				BeanUtils.copyProperties(s,newPd);
 				String orderBalance  = orderBalanceMap.get("order_sn");
+				newPd.put("order_sn",s.getString("order_sn"));
+				newPd.put("lottery_classify_id",s.getString("lottery_classify_id"));
+				newPd.put("money_paid",s.getString("money_paid"));
+				newPd.put("bonus",s.getString("bonus"));
+				newPd.put("winning_money",s.getString("winning_money"));
+				newPd.put("add_time",s.getString("add_time"));
 				if(!StringUtils.isEmpty(orderBalance)){
 					newPd.put("cur_balance",orderBalance);
+				}else{
+					newPd.put("cur_balance","0.00");
 				}
 				pdList.add(newPd);
 			});
@@ -116,7 +123,6 @@ public class UserManagerControllerController extends BaseController {
 		mv.setViewName("lottery/datastatistics/customer_see");
 		mv.addObject("varList", pdList);
 		return mv;
-
 	}
 
 
@@ -301,7 +307,7 @@ public class UserManagerControllerController extends BaseController {
 		Comparator<PageData> comparator = (h1, h2) -> Double.valueOf(h1.getString("curMoney")).compareTo(Double.valueOf(h2.getString("curMoney")));
 		newVarList.sort(comparator.reversed());
 		mv.setViewName("lottery/customer/sellerAchieve_list");
-		mv.addObject("varList", newVarList);
+		mv.addObject("4", newVarList);
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -922,4 +928,82 @@ public class UserManagerControllerController extends BaseController {
 		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
+
+	/**
+	 * 导出到excel
+	 *
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/excelOrders")
+	public ModelAndView exportExcelOrders(Page page) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "导出Order到excel");
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		List<String> titles = new ArrayList<String>();
+		titles.add("订单编号");
+		titles.add("购买彩种");
+		titles.add("投注金额");
+		titles.add("使用优惠券");
+		titles.add("中奖金额");
+		titles.add("购彩时间");
+		titles.add("账户余额");
+
+		dataMap.put("titles", titles);
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+
+		List<PageData> varList = new ArrayList<PageData>();
+		PageData vpd = new PageData();
+		List<PageData> pdList = new ArrayList<>();
+		String mobile = pd.getString("mobile");
+		PageData pdMobile = new PageData();
+		pdMobile.put("mobile",mobile);
+		page.setPd(pdMobile);
+		List<PageData> orderSnInfoList = ordermanagerService.queryOrderInfoByMobile(page);
+		if(orderSnInfoList.size() > 0){
+			List<String> orderSnList = orderSnInfoList.stream().map(s->s.getString("order_sn")).collect(Collectors.toList());
+			List<PageData> everyOrderCurBalance = useraccountService.queryUserAccountBalanceByOrderSns(orderSnList);
+			Map<String,String> orderBalanceMap = everyOrderCurBalance.stream().collect(Collectors.toMap(s->s.getString("order_sn"),s->s.getString("cur_balance")));
+			orderSnInfoList.stream().forEach(s->{
+				PageData newPd = new PageData();
+				String orderBalance  = orderBalanceMap.get("order_sn");
+				newPd.put("order_sn",s.getString("order_sn"));
+				newPd.put("lottery_classify_id",s.getString("lottery_classify_id"));
+				newPd.put("money_paid",s.getString("money_paid"));
+				newPd.put("bonus",s.getString("bonus"));
+				newPd.put("winning_money",s.getString("winning_money"));
+				newPd.put("add_time",s.getString("add_time"));
+				if(!StringUtils.isEmpty(orderBalance)){
+					newPd.put("cur_balance",orderBalance);
+				}else{
+					newPd.put("cur_balance","0.00");
+				}
+				pdList.add(newPd);
+			});
+		}
+
+		for(PageData varpd:pdList){
+			vpd.put("var1",varpd.getString("order_sn"));
+			String lotteryClassifyId = varpd.getString("lottery_classify_id");
+			String lotteryClassifyName = "";
+			if("1".equals(lotteryClassifyId)){
+				lotteryClassifyName = "竞彩足球";
+			}else if("2".equals(lotteryClassifyId)){
+				lotteryClassifyName = "竞彩蓝球";
+			}
+			vpd.put("var2",lotteryClassifyName);
+			vpd.put("var3",varpd.getString("money_paid"));
+			vpd.put("var4",varpd.getString("bonus"));
+			vpd.put("var5",varpd.getString("winning_money"));
+			vpd.put("var6",varpd.getString("add_time"));
+			vpd.put("var7",varpd.getString("cur_balance"));
+			varList.add(varpd);
+		}
+		dataMap.put("varList", varList);
+		ObjectExcelView erv = new ObjectExcelView();
+		mv = new ModelAndView(erv, dataMap);
+		return mv;
+	}
+
 }

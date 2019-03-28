@@ -124,5 +124,9 @@ public interface OrderManager {
 
 	public List<PageData> queryOrderInfoByMobile(Page page) throws Exception;
 
+	public Double getTotalById(PageData pd) throws Exception;
+
+	public Double getTotalAward(PageData pd) throws Exception;
+
 
 }
