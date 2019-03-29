@@ -1,5 +1,32 @@
 package com.fh.controller.system.login;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.druid.support.json.JSONUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.Menu;
 import com.fh.entity.system.Role;
@@ -14,21 +41,14 @@ import com.fh.service.system.menu.MenuManager;
 import com.fh.service.system.organization.impl.OrganizationService;
 import com.fh.service.system.role.RoleManager;
 import com.fh.service.system.user.UserManager;
-import com.fh.util.*;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import com.fh.util.AppUtil;
+import com.fh.util.Const;
+import com.fh.util.DateUtil;
+import com.fh.util.Jurisdiction;
+import com.fh.util.MD5Utils;
+import com.fh.util.PageData;
+import com.fh.util.RightsHelper;
+import com.fh.util.Tools;
 
 //import com.fh.service.dst.szystore.SzyStoreManager;
 
@@ -515,5 +535,149 @@ public class LoginController extends BaseController {
 			}
 		}
 		return null;
+	}
+	@RequestMapping(value = "/login_login2",method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
+	public void login_login2(HttpServletResponse response,@RequestBody JSONObject jsonStr) {
+		response.setCharacterEncoding("GBK");
+		response.setContentType("text/html; charset=GBK");
+		PrintWriter out=null;
+		try {
+			out = response.getWriter();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		HashMap<String,Object> resultMap = new HashMap<String,Object>();
+		try {
+			String msg="";
+			String code="";
+			PageData pd = new PageData();
+			boolean flag = jsonStr.containsKey("body");
+			if(flag) {
+				Map map = (Map) JSONUtils.parse(jsonStr.toJSONString());
+				pd  = new PageData((Map)map.get("body"));
+			}
+			String USERNAME = pd.getString("username");
+			if (null != USERNAME && !"".equals(USERNAME)) {
+				USERNAME = USERNAME.trim();
+				pd.put("USERNAME", USERNAME);
+			}
+			String PASSWORD = pd.getString("password");
+			if (null != PASSWORD && !"".equals(PASSWORD)) {
+				PASSWORD = PASSWORD.trim();
+			}
+			String passwd = MD5Utils.encrypt(PASSWORD);
+			pd.put("PASSWORD", passwd);
+			pd = userService.getUserByNameAndPwd(pd); // 根据用户名和密码去读取用户信息
+			if (pd != null) {
+				this.removeSession(USERNAME);// 清缓存
+				pd.put("LAST_LOGIN", DateUtil.getTime().toString());
+				userService.updateLastLogin(pd);
+				User user = new User();
+				user.setUSER_ID(pd.getString("USER_ID"));
+				user.setUSERNAME(pd.getString("USERNAME"));
+				user.setPASSWORD(pd.getString("PASSWORD"));
+				user.setNAME(pd.getString("NAME"));
+				user.setRIGHTS(pd.getString("RIGHTS"));
+				user.setROLE_ID(pd.getString("ROLE_ID"));
+				user.setLAST_LOGIN(pd.getString("LAST_LOGIN"));
+				user.setIP(pd.getString("IP"));
+				user.setSTATUS(pd.getString("STATUS"));
+				Jurisdiction.getSession().setAttribute(Const.SESSION_USER,user);
+				// shiro加入身份验证
+				Subject subject = SecurityUtils.getSubject();
+				UsernamePasswordToken token = new UsernamePasswordToken(USERNAME, PASSWORD);
+				try {
+					subject.login(token);
+				} catch (AuthenticationException e) {
+					msg = "身份验证失败！";
+					code = "2";
+				}
+				String sessionId = Jurisdiction.getSession().getId().toString();
+				resultMap.put("JSESSIONID", sessionId);
+				
+				Session session = Jurisdiction.getSession();
+				User userr = (User) session.getAttribute(Const.SESSION_USERROL); // 读取session中的用户信息(含角色信息)
+				if (null == userr) {
+					user = userService.getUserAndRoleById(user.getUSER_ID()); // 通过用户ID读取用户信息和角色信息
+					session.setAttribute(Const.SESSION_USERROL, user); // 存入session
+				} else {
+					user = userr;
+				}
+				Role role = user.getRole(); // 获取用户角色
+				String roleRights = role != null ? role.getRIGHTS() : ""; // 角色权限(菜单权限)
+				session.setAttribute(USERNAME + Const.SESSION_ROLE_RIGHTS, roleRights); // 将角色权限存入session
+				session.setAttribute(Const.SESSION_USERNAME, USERNAME); // 放入用户名到session
+				this.setAttributeToAllDEPARTMENT_ID(session, USERNAME); // 把用户的组织机构权限放到session里面
+				List<Menu> allmenuList = new ArrayList<Menu>();
+				allmenuList = this.getAttributeMenu(session, USERNAME, roleRights); // 菜单缓存
+				List<Menu> menuList = new ArrayList<Menu>();
+				menuList = this.changeMenuF(allmenuList, session, USERNAME, "index"); // 切换菜单
+				if (null == session.getAttribute(USERNAME + Const.SESSION_QX)) {
+					session.setAttribute(USERNAME + Const.SESSION_QX, this.getUQX(user.getUSERNAME()));// 按钮权限放到session中
+				}
+				// 获取数据权限
+				PageData pageData = new PageData();
+				List<PageData> pageDatas = new LinkedList<PageData>();
+				if (user.getRole().getROLE_ID().equals(Const.SYSTEM_MANAGER_ID)) {
+					// pageDatas = szyStoreManager.listAll(new PageData());
+				} else {
+					pageData.put("user_id", user.getUSER_ID());
+					pageDatas = organizationService.listDataRightsByUserId(pageData);
+				}
+				session.setAttribute(Const.SESSION_DATA_RIGHTS, pageDatas);
+				this.getRemortIP(USERNAME); // 更新登录IP
+			} else {
+				msg = "用户名和密码不匹配"; // 用户名或密码有误
+				code = "2";
+			}
+			if (Tools.isEmpty(msg)) {
+				msg = "验证通过";// 验证成功
+				code = "0"; 
+			}
+			
+			resultMap.put("code", code);
+			resultMap.put("msg", msg);
+			resultMap.put("data", pd);
+		} catch (Exception e) {
+			resultMap.put("code", "1");
+			resultMap.put("msg", "网络异常");
+		}finally {
+			out.print(JSONUtils.toJSONString(resultMap));
+			out.close();
+		}
+	}
+	@RequestMapping(value = "/logout2",method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
+	public void logout2(HttpServletResponse response,@RequestBody JSONObject jsonStr) {
+		response.setCharacterEncoding("GBK");
+		response.setContentType("text/html; charset=GBK");
+		PrintWriter out=null;
+		try {
+			out = response.getWriter();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		HashMap<String,Object> resultMap = new HashMap<String,Object>();
+		try {
+			PageData pd = new PageData();
+			boolean flag = jsonStr.containsKey("body");
+			if(flag) {
+				Map map = (Map) JSONUtils.parse(jsonStr.toJSONString());
+				pd  = new PageData((Map)map.get("body"));
+			}
+			String USERNAME = pd.getString("username");
+			if(USERNAME==null) {USERNAME="";}
+			this.removeSession(USERNAME);// 清缓存
+			// shiro销毁登录
+			Subject subject = SecurityUtils.getSubject();
+			subject.logout();
+			resultMap.put("code", "0");
+			resultMap.put("msg", "退出成功");
+		} catch (Exception e) {
+			resultMap.put("code", "1");
+			resultMap.put("msg", "网络异常");
+		}finally {
+			out.print(JSONUtils.toJSONString(resultMap));
+			out.close();
+		}
 	}
 }
