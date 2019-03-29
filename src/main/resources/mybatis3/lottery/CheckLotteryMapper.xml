@@ -25,7 +25,9 @@
 	<select id="findShopIDByUserId" resultType="String" parameterType="String">
 		select store_id from dl_store_sys_user where sys_user_id=#{userId }
 	</select>
-	
+	<select id="getShopNameById" resultType="String" parameterType="String">
+		select name from dl_store where id = #{store_id}
+	</select>
 	<select id="findShops" resultType="pd" parameterType="String">
 		select id,name from dl_store where id in 
 		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
@@ -120,9 +122,10 @@
 			IFNULL(merchant_no,'') merchant_no,
 			IFNULL(mobile,'') mobile,
 			IFNULL(merchant_order_sn,'') merchant_order_sn,
+			(select name from dl_store where id=store_id) as store_name,
 			<include refid="col_order"></include>
 		FROM
-			dl_order
+			dl_order 
 		WHERE order_id=#{orderno }
 	</select>
 	
