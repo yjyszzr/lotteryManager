@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CheckLotteryMapper">
+	
+	<sql id="col_order">
+		order_id,
+		IFNULL(order_sn,'') order_sn,
+		IFNULL(parent_sn,'') parent_sn,
+		IFNULL(order_status,'') order_status,
+		IFNULL(print_lottery_status,'') print_lottery_status,
+		IFNULL(pay_status,'') pay_status,
+		IFNULL(add_time,'') add_time,
+		IFNULL(order_type,'') order_type,
+		IFNULL(lottery_classify_id,'') lottery_classify_id,
+		IFNULL(lottery_play_classify_id,'') lottery_play_classify_id,
+		IFNULL(ticket_time,'') ticket_time,
+		IFNULL(pic,'') pic,
+		IFNULL(auditor_id,'') auditor_id,
+		IFNULL(store_id,'') store_id,
+		IFNULL(ckeck_status,'') ckeck_status,
+		IFNULL(check_remark,'') check_remark,
+		IFNULL(check_time,'') check_time
+	</sql>
+		
+	<select id="findShopIDByUserId" resultType="String" parameterType="String">
+		select store_id from dl_store_sys_user where sys_user_id=#{userId }
+	</select>
+	
+	<select id="findShops" resultType="pd" parameterType="String">
+		select id,name from dl_store where id in 
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+        	#{item}
+		</foreach>
+	</select>
+	<select id="getNumAndMon" parameterType="java.util.HashMap" resultType="pd">
+		select count(1) as ORDER_NUMS,IFNULL(sum(ticket_amount),0) as TICKENT_AMOUNT from dl_order
+		WHERE print_lottery_status is not null and print_lottery_status!=1
+		<if test="store_id != null and store_id != ''"> 
+			and store_id = #{store_id}
+		</if>
+		<if test="lastStart1 != null and lastStart1 != ''"> 
+			and ticket_time &gt;= #{lastStart1 }
+		</if>
+		<if test="lastEnd1 != null and lastEnd1 != ''"> 
+			and ticket_time &lt;= #{lastEnd1 }
+		</if>
+	</select>
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		SELECT
+			<include refid="col_order"></include>
+		FROM
+			dl_order 
+		WHERE print_lottery_status is not null and print_lottery_status!=1
+		<if test="pd.store_id != null and pd.store_id != ''"> 
+			and store_id = #{pd.store_id}
+		</if>
+		<if test="pd.print_lottery_status != null and pd.print_lottery_status != ''">
+			<!-- 	成功訂單 -->
+			<if test="pd.print_lottery_status == '1'">
+				and print_lottery_status=4 
+			</if>
+			<if test="pd.print_lottery_status != '1'">
+				and print_lottery_status!=4 
+			</if>
+		</if>
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and ticket_time &gt;= #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and ticket_time &lt;= #{pd.lastEnd1 }
+		</if>
+		order by ticket_time desc
+	</select>
+	<select id="dataAllList" parameterType="pd" resultType="pd">
+		SELECT
+			<include refid="col_order"></include>
+		FROM
+			dl_order
+		WHERE print_lottery_status is not null and print_lottery_status!=1
+		<if test="store_id != null and store_id != ''"> 
+			and store_id = #{store_id}
+		</if>
+		<if test="print_lottery_status != null and print_lottery_status != ''">
+			<if test="print_lottery_status == '1'">
+				and print_lottery_status=4 
+			</if>
+			<if test="print_lottery_status != '1'">
+				and print_lottery_status!=4 
+			</if>
+		</if>
+		<if test="lastStart1 != null and lastStart1 != ''"> 
+			and ticket_time &gt;= #{lastStart1 }
+		</if>
+		<if test="lastEnd1 != null and lastEnd1 != ''"> 
+			and ticket_time &lt;= #{lastEnd1 }
+		</if>
+		order by ticket_time desc
+	</select>
+	<select id="getOrderById" parameterType="String" resultType="pd">
+		SELECT
+			IFNULL(user_id,'') user_id,
+			IFNULL(print_lottery_refund_amount,'') print_lottery_refund_amount,
+			IFNULL(money_paid,'') money_paid,
+			IFNULL(ticket_amount,'') ticket_amount,
+			IFNULL(surplus,'') surplus,
+			IFNULL(user_surplus,'') user_surplus,
+			IFNULL(user_surplus_limit,'') user_surplus_limit,
+			IFNULL(third_party_paid,'') third_party_paid,
+			IFNULL(give_integral,'') give_integral,
+			IFNULL(order_from,'') order_from,
+			IFNULL(pay_time,'') pay_time,
+			IFNULL(winning_money,'') winning_money,
+			IFNULL(bet_num,'') bet_num,
+			IFNULL(cathectic,'') cathectic,
+			IFNULL(accept_time,'') accept_time,
+			IFNULL(forecast_money,'') forecast_money,
+			IFNULL(issue,'') issue,
+			IFNULL(ticket_num,'') ticket_num,
+			IFNULL(award_time,'') award_time,
+			IFNULL(merchant_no,'') merchant_no,
+			IFNULL(mobile,'') mobile,
+			IFNULL(merchant_order_sn,'') merchant_order_sn,
+			<include refid="col_order"></include>
+		FROM
+			dl_order
+		WHERE order_id=#{orderno }
+	</select>
+	
+	<update id="checkOrder" parameterType="pd">
+		update dl_order set 
+			auditor_id=#{auditor_id },
+			ckeck_status=#{ckeck_status },
+			check_remark=#{check_remark },
+			check_time=#{check_time }
+		where order_id=#{order_id }
+	</update>
+</mapper>
