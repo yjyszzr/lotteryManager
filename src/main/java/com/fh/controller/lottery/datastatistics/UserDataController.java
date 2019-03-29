@@ -9,7 +9,9 @@ import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
+import com.fh.service.switchappconfig.SwitchAppConfigManager;
 import com.fh.util.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,6 +51,9 @@ public class UserDataController extends BaseController {
 	@Resource(name = "orderService")
 	private OrderService orderService;
 
+	@Resource(name="switchappconfigService")
+	private SwitchAppConfigManager switchappconfigService;
+
 
 	/**
 	 * 列表
@@ -64,6 +69,13 @@ public class UserDataController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		String did = pd.getString("DICTIONARIES_ID");
+		if(StringUtils.isEmpty(did)){
+			pd.put("channel","");
+		}else{
+			pd.put("channel",pd.getString("DICTIONARIES_ID"));
+		}
+		pd.put("channel",pd.getString("DICTIONARIES_ID"));
 		String mobileC = pd.getString("mobile");
 		if (null != mobileC && !"".equals(mobileC)) {
 			pd.put("mobile1", mobileC);
@@ -75,16 +87,14 @@ public class UserDataController extends BaseController {
 			lastStart = lastStart + " 00:00:00";
 			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
 		}else{
-			lastEnd = LocalDate.now() + " 00:00:00";
-			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+			pd.put("lastStart1", "");
 		}
 
 		if (null != lastEnd && !"".equals(lastEnd)) {
 			lastEnd = lastEnd + " 23:59:59";
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		} else {
-			lastEnd = LocalDate.now() + " 23:59:59";
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+			pd.put("lastEnd1", "");
 		}
 
 		page.setPd(pd);
@@ -174,13 +184,24 @@ public class UserDataController extends BaseController {
 					userBalance = 0d;
 				}
 				pData.put("balance", userBalance);
-
 			}
 			page.setTotalResult(size);
 		}
+
+		List<PageData>	leveOldlList = new ArrayList<>();
+		List<PageData>	levelList = new ArrayList<>();
+		String DICTIONARIES_ID = "10";
+		leveOldlList = switchappconfigService.listSubDictByParentId(DICTIONARIES_ID); //用传过来的ID获取此ID下的子列表数据
+		for(PageData d :leveOldlList){
+			PageData pdf = new PageData();
+			pdf.put("DICTIONARIES_ID", d.getString("channel"));
+			pdf.put("NAME", d.getString("channel_name"));
+			levelList.add(pdf);
+		}
 		mv.setViewName("lottery/datastatistics/userdata_list");
 		mv.addObject("varList", varList);
-//		mv.addObject("pd", pd);
+		mv.addObject("levelList", levelList);
+		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
@@ -197,16 +218,19 @@ public class UserDataController extends BaseController {
 		if (!Jurisdiction.buttonJurisdiction(menuUrl, "cha")) {
 			return null;
 		}
+
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		List<String> titles = new ArrayList<String>();
 		titles.add("手机号");
+		titles.add("终端");
 		titles.add("地域");
 		titles.add("渠道");
 		titles.add("累计消费");
 		titles.add("累计充值");
 		titles.add("累计中奖");
+		titles.add("累计提现");
 		titles.add("账户余额");
 		titles.add("注册时间");
 
@@ -251,6 +275,8 @@ public class UserDataController extends BaseController {
 			String mobile = list.get(i).getString("mobile");
 			PageData pdmobile =new PageData();
 			pdmobile.put("mobile",mobile);
+
+			vpd.put("var2", list.get(i).getString("mobile"));// 10
 			String deviceChannel = (String) list.get(i).getString("device_channel");
 			if("h5".equals(deviceChannel)){
 				vpd.put("var2", "H5");
@@ -264,8 +290,8 @@ public class UserDataController extends BaseController {
 				String area = MobileAddressUtils.getProvinceByIp(mobile);
 				vpd.put("var3", area);// 10
 			}
+
 			vpd.put("var4", list.get(i).getString("phone_channel"));
-			Integer userId = (int) list.get(i).get("user_id");
 			Double val = orderService.getTotalById(pdmobile);
 			if (val == null) {
 				val = 0d;
@@ -300,11 +326,12 @@ public class UserDataController extends BaseController {
 				userBalance = 0d;
 			}
 
-			vpd.put("var5", Math.abs(val));
-			vpd.put("var6", valR);
-			vpd.put("var7", valA);
-			vpd.put("var8", valW);
+			vpd.put("var5", String.format("%.2f", val));
+			vpd.put("var6", String.format("%.2f", valR));
+			vpd.put("var7", String.format("%.2f", valA));
+			vpd.put("var8", String.format("%.2f", valW));
 			vpd.put("var9", userBalance);
+			vpd.put("var10", list.get(i).getString("add_time"));
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -327,7 +354,6 @@ public class UserDataController extends BaseController {
 			int u = year - Integer.parseInt("19" + dates);
 			return u;
 		}
-
 	}
 	
 	public boolean checkSumStart(PageData pd,Double val,String obj) {

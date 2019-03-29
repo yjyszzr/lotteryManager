@@ -959,6 +959,7 @@ public class UserManagerControllerController extends BaseController {
 		String mobile = pd.getString("mobile");
 		PageData pdMobile = new PageData();
 		pdMobile.put("mobile",mobile);
+		page.setShowCount(65000);// 单页显示条数，为了全部导出应用
 		page.setPd(pdMobile);
 		List<PageData> orderSnInfoList = ordermanagerService.queryOrderInfoByMobile(page);
 		if(orderSnInfoList.size() > 0){
@@ -984,7 +985,8 @@ public class UserManagerControllerController extends BaseController {
 		}
 
 		for(PageData varpd:pdList){
-			vpd.put("var1",varpd.getString("order_sn"));
+			PageData nvpd = new PageData();
+			nvpd.put("var1",varpd.getString("order_sn"));
 			String lotteryClassifyId = varpd.getString("lottery_classify_id");
 			String lotteryClassifyName = "";
 			if("1".equals(lotteryClassifyId)){
@@ -992,13 +994,13 @@ public class UserManagerControllerController extends BaseController {
 			}else if("2".equals(lotteryClassifyId)){
 				lotteryClassifyName = "竞彩蓝球";
 			}
-			vpd.put("var2",lotteryClassifyName);
-			vpd.put("var3",varpd.getString("money_paid"));
-			vpd.put("var4",varpd.getString("bonus"));
-			vpd.put("var5",varpd.getString("winning_money"));
-			vpd.put("var6",varpd.getString("add_time"));
-			vpd.put("var7",varpd.getString("cur_balance"));
-			varList.add(varpd);
+			nvpd.put("var2",lotteryClassifyName);
+			nvpd.put("var3",varpd.getString("money_paid"));
+			nvpd.put("var4",varpd.getString("bonus"));
+			nvpd.put("var5",varpd.getString("winning_money"));
+			nvpd.put("var6",varpd.getString("add_time"));
+			nvpd.put("var7",varpd.getString("cur_balance"));
+			varList.add(nvpd);
 		}
 		dataMap.put("varList", varList);
 		ObjectExcelView erv = new ObjectExcelView();

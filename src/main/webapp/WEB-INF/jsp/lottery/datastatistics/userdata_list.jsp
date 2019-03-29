@@ -41,11 +41,18 @@
 								<td>至</td>
 								<td style="padding-left:2px;"><input class="span10 date-picker" name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" data-date-format="yyyy-mm-dd" readonly="readonly" style="width:100px;" placeholder="注册结束日期" title="注册结束日期"/></td>
 								<td style="width:12px;"></td>
-								<td style="width:100px;">app渠道名称:</td>
+								<td style="width:100px;">球多多渠道名称:</td>
 								<td>
-									<select id="channel" title = "app渠道"  name="channel">
-										<option></option>
-									</select>
+									<%--<select id="channel" title = "app渠道"  name="channel" value="${pd.channel}">--%>
+										<%--<option value="${pd.channel}"></option>--%>
+									<%--</select>--%>
+
+										<select class="chosen-select form-control" name="DICTIONARIES_ID" id="DICTIONARIES_ID" value="${DICTIONARIES_ID}" class="nav-search-input"  data-placeholder="请选择渠道" style="vertical-align:top;width: 120px;">
+											<option value="">全部</option>
+											<c:forEach var="level" items="${levelList}">
+												<option value="${level.DICTIONARIES_ID}" <c:if test="${pd.DICTIONARIES_ID == level.DICTIONARIES_ID}">selected</c:if>>${level.NAME}</option>
+											</c:forEach>
+										</select>
 								</td>
 								<td style="vertical-align: top; padding-left: 2px;">
 									<span class="input-icon" style="width: 30px;"> </span>
@@ -54,9 +61,8 @@
 							</tr>
 							<tr>
 								<td><span class="input-icon" style="width: 70px;"> 手机号：</span></td>
-								<td style="padding-left:2px;"><input   name="mobile" id="mobile"  value="${pd.mobile }" type="text"  
+								<td style="padding-left:2px;"><input   name="mobile" id="mobile"  value="${pd.mobile}" type="text"
 								 	style="width:100px;border-radius: 5px !important;"  /></td>
-								<td> </td>
 								<td> </td>
 								<c:if test="${QX.cha == 1 }">
 									<td style="vertical-align: bottom;; padding-left: 2px">
@@ -105,11 +111,21 @@
 											${var.device_channel }
 											</c:if>
 											</td>
-											<td class="center">${var.total }</td>
-											<td class="center">${var.rtotal}</td>
-											<td class="center">${var.atotal}</td>
-											<td class="center">${var.wtotal}</td>
-											<td class="center">${ var.balance }</td>
+											<td class="center">
+												<fmt:formatNumber type="number" value="${var.total }" pattern="0.00" maxFractionDigits="2"/>
+											</td>
+											<td class="center">
+												<fmt:formatNumber type="number" value="${var.rtotal}" pattern="0.00" maxFractionDigits="2"/>
+											</td>
+											<td class="center">
+												<fmt:formatNumber type="number" value="${var.atotal}" pattern="0.00" maxFractionDigits="2"/>
+											</td>
+											<td class="center">
+												<fmt:formatNumber type="number" value="${var.wtotal}" pattern="0.00" maxFractionDigits="2"/>
+											</td>
+											<td class="center">
+												<fmt:formatNumber type="number" value="${var.balance}" pattern="0.00" maxFractionDigits="2"/>
+											</td>
 											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
 											<td class='center'>
 												<a class="btn btn-xs btn-success" title="查看" onclick="see('mobile=' + '${var.mobile}' + '');">
@@ -193,6 +209,7 @@
 				$("#mobile").val("");
 			}
 			top.jzts();
+            $("#channel").val("");
 			$("#Form").submit();
 		}
 		$(function() {
@@ -260,21 +277,22 @@
         }
 
         //初始第一级
-        $(function() {
-            $.ajax({
-                type: "POST",
-                url: '<%=basePath%>switchappconfig/getQiuDuoDuoLevels.do?tm='+new Date().getTime(),
-                data: {},
-                dataType:'json',
-                cache: false,
-                success: function(data){
-                    //$("#app_name").html('<option>app名称必选</option>');
-                    $.each(data.list, function(i, dvar){
-                        $("#channel").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");
-                    });
-                }
-            });
-        });
+        <%--$(function() {--%>
+            <%--$.ajax({--%>
+                <%--type: "POST",--%>
+                <%--url: '<%=basePath%>switchappconfig/getQiuDuoDuoLevels.do?tm='+new Date().getTime(),--%>
+                <%--data: {},--%>
+                <%--dataType:'json',--%>
+                <%--cache: false,--%>
+                <%--success: function(data){--%>
+                    <%--//$("#app_name").html('<option>app名称必选</option>');--%>
+                    <%--$.each(data.list, function(i, dvar){--%>
+                       <%--// $("#channel").append("<option value="+dvar.DICTIONARIES_ID+">"+dvar.NAME+"</option>");--%>
+                        <%--$("#channel").append("<option value="+dvar.NAME+">"+dvar.NAME+"</option>");--%>
+                    <%--});--%>
+                <%--}--%>
+            <%--});--%>
+        <%--});--%>
         //第一级值改变事件(初始第二级)
         <%--function change1(value){--%>
             <%--$.ajax({--%>

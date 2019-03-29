@@ -88,7 +88,7 @@
 								<tr>&nbsp;</tr>
 								<tr>&nbsp;</tr>
 								<tr><strong>订单记录</strong></tr>
-								<%--<tr><a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL" style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></tr>--%>
+								<tr><a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL" style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></tr>
 								<tr>
 								    <!--  
 									<th class="center" style="width:35px;">
