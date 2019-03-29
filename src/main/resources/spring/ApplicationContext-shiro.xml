@@ -41,6 +41,8 @@
 	           	/code.do 					= anon
 	           	/login_smsCode	 			= anon
 	           	/login_login	 			= anon
+	           	/login_login2	 			= anon
+	           	/logout2					= anon
 	           	/app**/** 					= anon
 	           	/weixin/** 					= anon
 	           	/**							= authc
