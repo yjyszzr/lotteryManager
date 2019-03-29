@@ -153,7 +153,14 @@ public class CheckLotteryController extends BaseController {
 			List<PageData> varList = checkLotteryService.list(page); // 列出Order列表
 			//获取当前店铺当前时间的订单数量和出票总金额
 			HashMap<String,Object> countMap = checkLotteryService.getNumAndMon(pd);
+			HashMap<String,Object> pageMap = new HashMap<String,Object>();
+			pageMap.put("showCount", page.getShowCount());//每页显示记录数
+			pageMap.put("totalPage", page.getTotalPage());//总页数
+			pageMap.put("totalResult", page.getTotalResult());//总记录数
+			pageMap.put("currentPage", page.getCurrentPage());//当前页
+			pageMap.put("currentResult", page.getCurrentResult());//当前记录起始索引
 			countMap.put("datalist", varList);
+			countMap.put("page", pageMap);
 			resultMap.put("code", "0");
 			resultMap.put("msg", "获取数据成功");
 			resultMap.put("data", countMap);
