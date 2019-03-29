@@ -51,7 +51,9 @@ public class PageData extends HashMap implements Map {
 		}
 		map = returnMap;
 	}
-
+	public PageData(Map maps) {
+		map = maps;
+	}
 	public PageData() {
 		map = new HashMap();
 	}
