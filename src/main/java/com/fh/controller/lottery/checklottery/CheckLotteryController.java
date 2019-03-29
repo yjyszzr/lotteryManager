@@ -2,7 +2,9 @@ package com.fh.controller.lottery.checklottery;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -285,11 +287,20 @@ public class CheckLotteryController extends BaseController {
 				Map map = (Map) JSONUtils.parse(jsonStr.toJSONString());
 				pd  = new PageData((Map)map.get("body"));
 			}
-			checkLotteryService.checkOrder(pd); // 核查order
-			pd = checkLotteryService.findById(pd.getString("order_id")); // 获取order详情
-			resultMap.put("code", "0");
-			resultMap.put("msg", "核查通过");
-			resultMap.put("data", pd);
+			User user = (User)Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+			if(user!=null){
+				pd.put("auditor_id",user.getUSER_ID());
+				pd.put("check_time", DateUtilNew.getMilliSecondsByStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
+				checkLotteryService.checkOrder(pd); // 核查order
+				pd = checkLotteryService.findById(pd.getString("order_id")); // 获取order详情
+				resultMap.put("code", "0");
+				resultMap.put("msg", "核查通过");
+				resultMap.put("data", pd);
+			}else {
+				resultMap.put("code", "2");
+				resultMap.put("msg", "用户登录过期，请重新登录.");
+			}
+			
 		} catch (Exception e) {
 			resultMap.put("code", "1");
 			resultMap.put("msg", "网络异常");
