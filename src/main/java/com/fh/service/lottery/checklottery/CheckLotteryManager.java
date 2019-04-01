@@ -2,7 +2,9 @@ package com.fh.service.lottery.checklottery;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -58,4 +60,11 @@ public interface CheckLotteryManager {
 	 * @throws Exception
 	 */
 	public void checkOrder(PageData pd) throws Exception;
+	/**
+	 * 查询出票方案
+	 * @param param
+	 * @param storeId
+	 * @return
+	 */
+	public Map<String,Object> getTicketScheme(PageData param) throws Exception;
 }
