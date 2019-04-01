@@ -93,11 +93,11 @@ public class CheckLotteryService implements CheckLotteryManager{
 				if (null != dLZQBetInfoDTO) {
 					List<PageData> orderLotteryBetInfos = (List<PageData>) dLZQBetInfoDTO.get("betCells");
 					if (CollectionUtils.isNotEmpty(orderLotteryBetInfos)) {
+						int cn = 0;
 						for (PageData betInfo : orderLotteryBetInfos) {
 							Integer status = Integer.parseInt(betInfo.get("status").toString());
 							List<PageData> dLBetMatchCellDTOs = (List<PageData>) betInfo.get("betCellList1");
 							if (CollectionUtils.isNotEmpty(dLBetMatchCellDTOs)) {
-								int cn = 0;
 								for (PageData pageData : dLBetMatchCellDTOs) {
 									PageData dto = new PageData();
 									dto.put("number",String.valueOf(++cn));
