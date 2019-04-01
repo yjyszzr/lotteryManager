@@ -141,7 +141,7 @@ public class CheckLotteryService implements CheckLotteryManager{
 		Map<Integer, String> playTypeNameMap = new HashMap<Integer, String>();
 		if(allPlays!=null) {
 			for(PageData type: allPlays) {
-				playTypeNameMap.put(Integer.parseInt(type.get("play_type").toString()), type.get("play_name").toString());
+				playTypeNameMap.put(Integer.parseInt(type.get("play_type").toString()), getCathecticData(Integer.parseInt(type.get("play_type").toString())));
 				//play_name没值
 			}
 		}
@@ -256,6 +256,25 @@ public class CheckLotteryService implements CheckLotteryManager{
 			}
 		}
 		return dtos;
+	}
+	private String getCathecticData(int playType) {
+		String msg = "";
+		if(playType == MatchPlayTypeEnum.PLAY_TYPE_HHAD.getcode()) {
+			msg="让球胜平负";
+		}else if(playType == MatchPlayTypeEnum.PLAY_TYPE_HAD.getcode()) {
+			msg="胜平负";
+		}else if(playType == MatchPlayTypeEnum.PLAY_TYPE_CRS.getcode()) {
+			msg="比分";
+		}else if(playType == MatchPlayTypeEnum.PLAY_TYPE_TTG.getcode()) {
+			msg="总进球";
+		}else if(playType == MatchPlayTypeEnum.PLAY_TYPE_HAFU.getcode()) {
+			msg="半全场";
+		}else if(playType == MatchPlayTypeEnum.PLAY_TYPE_MIX.getcode()) {
+			msg="混合过关";
+		}else if(playType == MatchPlayTypeEnum.PLAY_TYPE_TSO.getcode()) {
+			msg="2选1";
+		}
+		return msg;
 	}
 	private Map<String, String> printspMap(String printSp) {
 		Map<String, String> map = new HashMap<String, String>();
