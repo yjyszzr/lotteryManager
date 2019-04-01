@@ -250,5 +250,12 @@
 		select lottery_name lotteryName, lottery_img lotteryImg from
 		dl_lottery_classify where lottery_classify_id=#{classifyId}
 	</select>
-
+	<select id="findFailMsgByOrderSn" parameterType="String" resultType="String">
+		select 
+			IFNULL(fail_msg,'') fail_msg
+		from 
+			dl_log_operation
+		where 
+			order_sn = #{order_sn} and order_type=2
+	</select>
 </mapper>
