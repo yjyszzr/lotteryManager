@@ -260,6 +260,7 @@ public class CheckLotteryController extends BaseController {
 			resultMap.put("code", "0");
 			resultMap.put("msg", "获取数据成功");
 			resultMap.put("data", pd);
+			
 		} catch (Exception e) {
 			resultMap.put("code", "1");
 			resultMap.put("msg", "网络异常");
@@ -316,6 +317,40 @@ public class CheckLotteryController extends BaseController {
 			out.close();
 		}
 	}
+
+	@RequestMapping(value = "/getTicketScheme",method=RequestMethod.GET)
+	public void getTicketScheme(HttpServletResponse response){
+		response.setCharacterEncoding("GBK");
+		response.setContentType("text/html; charset=GBK");
+		PrintWriter out=null;
+		try {
+			out = response.getWriter();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		HashMap<String,Object> resultMap = new HashMap<String,Object>();
+		try {
+			PageData pd = new PageData();
+			pd = this.getPageData();
+//	    	pd.put("programmeSn", "订单编号");
+//	    	pd.put("OrderSn", "订单编号");
+			pd = checkLotteryService.getTicketScheme(pd);
+			resultMap.put("code", "0");
+			resultMap.put("msg", "获取数据成功");
+			resultMap.put("data", pd);
+		} catch (Exception e) {
+			resultMap.put("code", "1");
+			resultMap.put("msg", "网络异常");
+		} finally {
+			out.print(JSONUtils.toJSONString(resultMap));
+			out.close();
+		}
+		
+		
+	}
+    public void getTicketScheme() {
+    	
+    }
 	/**
 	 * 将接口返回结果写入本地文件中log 不需要 后删除
 	 * 
