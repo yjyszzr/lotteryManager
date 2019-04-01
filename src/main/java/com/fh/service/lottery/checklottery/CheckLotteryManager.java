@@ -66,5 +66,5 @@ public interface CheckLotteryManager {
 	 * @param storeId
 	 * @return
 	 */
-	public Map<String,Object> getTicketScheme(PageData param) throws Exception;
+	public List<PageData> getManualOrderList(PageData param) throws Exception;
 }
