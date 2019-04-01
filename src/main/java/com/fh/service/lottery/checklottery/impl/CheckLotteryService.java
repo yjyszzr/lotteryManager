@@ -112,7 +112,7 @@ public class CheckLotteryService implements CheckLotteryManager{
 					}
 				}
 			}
-			pd_1.put("ticketSchemeDetailDTOs", ticketSchemeDetailDTOs);
+			pd_1.put("ticketSchemeDetail", ticketSchemeDetailDTOs);
 		} else if (orderStatus.equals(0)||orderStatus.equals(1)) {
 			List<PageData> ticketSchemeDetailDTOs = new ArrayList<PageData>(1);
 			PageData dto = new PageData();
@@ -122,7 +122,7 @@ public class CheckLotteryService implements CheckLotteryManager{
 			dto.put("multiple","-");
 			dto.put("status",0);
 			ticketSchemeDetailDTOs.add(dto);
-			pd_1.put("ticketSchemeDetailDTOs", ticketSchemeDetailDTOs);
+			pd_1.put("ticketSchemeDetail", ticketSchemeDetailDTOs);
 		} else {
 			List<PageData> ticketSchemeDetailDTOs = new ArrayList<PageData>(1);
 			PageData dto = new PageData();
@@ -132,7 +132,7 @@ public class CheckLotteryService implements CheckLotteryManager{
 			dto.put("multiple","-");
 			dto.put("status",2);
 			ticketSchemeDetailDTOs.add(dto);
-			pd_1.put("ticketSchemeDetailDTOs", ticketSchemeDetailDTOs);
+			pd_1.put("ticketSchemeDetail", ticketSchemeDetailDTOs);
 		}
 		return pd_1;
 	}
