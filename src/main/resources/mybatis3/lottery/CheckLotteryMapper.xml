@@ -23,7 +23,7 @@
 		IFNULL(dl.check_status,'')
 		check_status,
 		IFNULL(dl.check_remark,'') check_remark,
-		IFNULL(dl.check_time,'99') check_time
+		IFNULL(dl.check_time,'') check_time
 	</sql>
 
 	<select id="findShopIDByUserId" resultType="String"
