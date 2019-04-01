@@ -256,6 +256,6 @@
 		from 
 			dl_log_operation
 		where 
-			order_sn = #{order_sn} and order_type=2
+			order_sn = #{order_sn} and type=2
 	</select>
 </mapper>
