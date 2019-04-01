@@ -17,7 +17,7 @@
 		IFNULL(dl.pic,'') pic,
 		IFNULL(dl.auditor_id,'') auditor_id,
 		IFNULL(dl.store_id,'') store_id,
-		IFNULL(dl.ckeck_status,'') ckeck_status,
+		IFNULL(dl.check_status,'') check_status,
 		IFNULL(dl.check_remark,'') check_remark,
 		IFNULL(dl.check_time,'') check_time
 	</sql>
@@ -144,7 +144,7 @@
 	<update id="checkOrder" parameterType="pd">
 		update dl_order set 
 			auditor_id=#{auditor_id },
-			ckeck_status=#{ckeck_status },
+			check_status=#{check_status },
 			check_remark=#{check_remark },
 			check_time=#{check_time }
 		where order_id=#{order_id }
