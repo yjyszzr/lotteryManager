@@ -318,8 +318,8 @@ public class CheckLotteryController extends BaseController {
 		}
 	}
 
-	@RequestMapping(value = "/getTicketScheme",method=RequestMethod.GET)
-	public void getTicketScheme(HttpServletResponse response){
+	@RequestMapping(value = "/getOrderInfo",method=RequestMethod.GET)
+	public void getOrderInfo(HttpServletResponse response){
 		response.setCharacterEncoding("GBK");
 		response.setContentType("text/html; charset=GBK");
 		PrintWriter out=null;
@@ -332,9 +332,12 @@ public class CheckLotteryController extends BaseController {
 		try {
 			PageData pd = new PageData();
 			pd = this.getPageData();
-//	    	pd.put("programmeSn", "订单编号");
-//	    	pd.put("OrderSn", "订单编号");
-			pd = checkLotteryService.getTicketScheme(pd);
+//	    	pd.put("store_id", "店铺ID");
+//	    	pd.put("order_sn", "订单编号");
+			List<PageData> rList = checkLotteryService.getManualOrderList(pd);
+			if(rList != null && rList.size() > 0) {
+				pd = rList.get(0);
+			}
 			resultMap.put("code", "0");
 			resultMap.put("msg", "获取数据成功");
 			resultMap.put("data", pd);
