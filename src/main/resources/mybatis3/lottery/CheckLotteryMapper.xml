@@ -91,7 +91,7 @@
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
 			and dl.ticket_time &lt;= #{pd.lastEnd1 }
 		</if>
-		order by dl.ticket_time desc
+		order by log.add_time desc
 	</select>
 	<select id="dataAllList" parameterType="pd" resultType="pd">
 		SELECT
@@ -124,7 +124,7 @@
 		<if test="lastEnd1 != null and lastEnd1 != ''">
 			and dl.ticket_time &lt;= #{lastEnd1 }
 		</if>
-		order by dl.ticket_time desc
+		order by log.add_time desc
 	</select>
 	<select id="getOrderById" parameterType="String" resultType="pd">
 		SELECT
