@@ -15,7 +15,6 @@
 		lottery_classify_id,
 		IFNULL(dl.lottery_play_classify_id,'')
 		lottery_play_classify_id,
-		IFNULL(dl.ticket_time,'') ticket_time,
 		IFNULL(dl.pic,'') pic,
 		IFNULL(dl.auditor_id,'') auditor_id,
 		IFNULL(dl.store_id,'') store_id,
@@ -52,10 +51,10 @@
 			and dl.store_id = #{store_id}
 		</if>
 		<if test="lastStart1 != null and lastStart1 != ''">
-			and dl.ticket_time &gt;= #{lastStart1 }
+			and log.add_time &gt;= #{lastStart1 }
 		</if>
 		<if test="lastEnd1 != null and lastEnd1 != ''">
-			and dl.ticket_time &lt;= #{lastEnd1 }
+			and log.add_time &lt;= #{lastEnd1 }
 		</if>
 	</select>
 	<select id="datalistPage" parameterType="page" resultType="pd">
@@ -64,6 +63,7 @@
 		IFNULL(dlc.lottery_img,'') lottery_img,
 		log.op_type print_lottery_status,
 		IFNULL(log.fail_msg,'') fail_msg,
+		IFNULL(log.add_time,'') ticket_time,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
@@ -86,10 +86,10 @@
 			</if>
 		</if>
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
-			and dl.ticket_time &gt;= #{pd.lastStart1 }
+			and log.add_time &gt;= #{pd.lastStart1 }
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
-			and dl.ticket_time &lt;= #{pd.lastEnd1 }
+			and log.add_time &lt;= #{pd.lastEnd1 }
 		</if>
 		order by log.add_time desc
 	</select>
@@ -99,6 +99,7 @@
 		IFNULL(dlc.lottery_img,'') lottery_img,
 		log.op_type print_lottery_status,
 		IFNULL(log.fail_msg,'') fail_msg,
+		IFNULL(log.add_time,'') ticket_time,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
@@ -119,10 +120,10 @@
 			</if>
 		</if>
 		<if test="lastStart1 != null and lastStart1 != ''">
-			and dl.ticket_time &gt;= #{lastStart1 }
+			and log.add_time &gt;= #{lastStart1 }
 		</if>
 		<if test="lastEnd1 != null and lastEnd1 != ''">
-			and dl.ticket_time &lt;= #{lastEnd1 }
+			and log.add_time &lt;= #{lastEnd1 }
 		</if>
 		order by log.add_time desc
 	</select>
@@ -155,6 +156,7 @@
 		(select name from dl_store where id=store_id) as store_name,
 		log.op_type print_lottery_status,
 		IFNULL(log.fail_msg,'') fail_msg,
+		IFNULL(log.add_time,'') ticket_time,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
@@ -217,6 +219,7 @@
 				dl.order_status,
 				log.op_type print_lottery_status,
 				IFNULL(log.fail_msg,'') fail_msg,
+				IFNULL(log.add_time,'') ticket_time,
 				(select name from dl_store where id=dl.store_id) as store_name
 		from dl_order dl
 		left join 
