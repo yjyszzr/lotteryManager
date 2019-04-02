@@ -422,7 +422,7 @@ public class CheckLotteryService implements CheckLotteryManager{
 				
 				orderDetailDTO.put("matchInfos",matchInfos);
 				orderDetailDTO.put("orderSn",order.get("order_sn"));
-				orderDetailDTO.put("fail_msg",dao.findForObject("CheckLotteryMapper.findFailMsgByOrderSn", order.get("order_sn").toString()));
+				orderDetailDTO.put("fail_msg",order.get("fail_msg"));
 				
 				PageData ticketSchemeParam = new PageData();
 				ticketSchemeParam.put("orderSn",order.get("order_sn"));
