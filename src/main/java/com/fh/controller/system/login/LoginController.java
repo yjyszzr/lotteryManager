@@ -585,13 +585,13 @@ public class LoginController extends BaseController {
 				Jurisdiction.getSession().setAttribute(Const.SESSION_USER,user);
 				// shiro加入身份验证
 				Subject subject = SecurityUtils.getSubject();
-//				UsernamePasswordToken token = new UsernamePasswordToken(USERNAME, PASSWORD);
-//				try {
-//					subject.login(token);
-//				} catch (AuthenticationException e) {
-//					msg = "身份验证失败！";
-//					code = "2";
-//				}
+				UsernamePasswordToken token = new UsernamePasswordToken(USERNAME, PASSWORD);
+				try {
+					subject.login(token);
+				} catch (AuthenticationException e) {
+					msg = "身份验证失败！";
+					code = "301011";
+				}
 				String sessionId = Jurisdiction.getSession().getId().toString();
 				resultMap.put("JSESSIONID", sessionId);
 				
