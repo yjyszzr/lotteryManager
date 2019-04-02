@@ -17,27 +17,13 @@
 		lottery_play_classify_id,
 		IFNULL(dl.pic,'') pic,
 		IFNULL(dl.auditor_id,'') auditor_id,
-		IFNULL(dl.store_id,'') store_id,
 		IFNULL(dl.check_status,'') check_status,
 		IFNULL(dl.check_remark,'') check_remark,
 		IFNULL(dl.check_time,'') check_time
 	</sql>
 
-	<select id="findShopIDByUserId" resultType="String"
-		parameterType="String">
-		select store_id from dl_store_sys_user where
-		sys_user_id=#{userId }
-	</select>
-	<select id="getShopNameById" resultType="String"
-		parameterType="String">
-		select name from dl_store where id = #{store_id}
-	</select>
 	<select id="findShops" resultType="pd" parameterType="String">
-		select id,name from dl_store where id in
-		<foreach item="item" index="index" collection="list" open="("
-			separator="," close=")">
-			#{item}
-		</foreach>
+		select phone id,name from dl_store
 	</select>
 	<select id="getNumAndMon" parameterType="java.util.HashMap"
 		resultType="pd">
@@ -48,7 +34,7 @@
 				on dl.order_sn=log.order_sn
 		WHERE log.type=2 
 		<if test="store_id != null and store_id != ''">
-			and dl.store_id = #{store_id}
+			and log.phone = #{store_id}
 		</if>
 		<if test="lastStart1 != null and lastStart1 != ''">
 			and log.add_time &gt;= #{lastStart1 }
@@ -64,6 +50,7 @@
 		log.op_type print_lottery_status,
 		IFNULL(log.fail_msg,'') fail_msg,
 		IFNULL(log.add_time,'') ticket_time,
+		IFNULL(log.phone,'') store_id,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
@@ -73,7 +60,7 @@
 		dl_log_operation log on dl.order_sn=log.order_sn
 		WHERE log.type=2 
 		<if test="pd.store_id != null and pd.store_id != ''">
-			and dl.store_id = #{pd.store_id}
+			and log.phone = #{pd.store_id}
 		</if>
 		<if
 			test="pd.print_lottery_status != null and pd.print_lottery_status != ''">
@@ -100,6 +87,7 @@
 		log.op_type print_lottery_status,
 		IFNULL(log.fail_msg,'') fail_msg,
 		IFNULL(log.add_time,'') ticket_time,
+		IFNULL(log.phone,'') store_id,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
@@ -109,7 +97,7 @@
 		dl_log_operation log on dl.order_sn=log.order_sn
 		WHERE log.type=2 
 		<if test="store_id != null and store_id != ''">
-			and dl.store_id = #{store_id}
+			and log.phone = #{store_id}
 		</if>
 		<if test="print_lottery_status != null and print_lottery_status != ''">
 			<if test="print_lottery_status == 1">
@@ -153,10 +141,11 @@
 		IFNULL(dl.merchant_order_sn,'') merchant_order_sn,
 		IFNULL(dlc.lottery_name,'') lottery_name,
 		IFNULL(dlc.lottery_img,'') lottery_img,
-		(select name from dl_store where id=store_id) as store_name,
+		(select name from dl_store where phone=log.phone) as store_name,
 		log.op_type print_lottery_status,
 		IFNULL(log.fail_msg,'') fail_msg,
 		IFNULL(log.add_time,'') ticket_time,
+		IFNULL(log.phone,'') store_id,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
@@ -210,7 +199,6 @@
 				dl.forecast_money,
 				dl.is_delete,
 				dl.device_channel,
-				dl.store_id,
 				dl.issue,
 				dl.max_level,
 				dl.accept_time,
@@ -220,7 +208,8 @@
 				log.op_type print_lottery_status,
 				IFNULL(log.fail_msg,'') fail_msg,
 				IFNULL(log.add_time,'') ticket_time,
-				(select name from dl_store where id=dl.store_id) as store_name
+				IFNULL(log.phone,'') store_id,
+				(select name from dl_store where phone=log.phone) as store_name
 		from dl_order dl
 		left join 
 		dl_log_operation log on dl.order_sn=log.order_sn
