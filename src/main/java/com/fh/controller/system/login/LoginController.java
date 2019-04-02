@@ -640,7 +640,7 @@ public class LoginController extends BaseController {
 			resultMap.put("data", pd);
 		} catch (Exception e) {
 			resultMap.put("code", "300500");
-			resultMap.put("msg", "网络异常");
+			resultMap.put("msg", "网络连接异常");
 		}finally {
 			out.print(JSONUtils.toJSONString(resultMap));
 			out.close();
@@ -674,7 +674,7 @@ public class LoginController extends BaseController {
 			resultMap.put("msg", "退出成功");
 		} catch (Exception e) {
 			resultMap.put("code", "300500");
-			resultMap.put("msg", "网络异常");
+			resultMap.put("msg", "网络连接异常");
 		}finally {
 			out.print(JSONUtils.toJSONString(resultMap));
 			out.close();
