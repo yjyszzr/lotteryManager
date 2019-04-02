@@ -335,6 +335,10 @@ public class CheckLotteryService implements CheckLotteryManager{
 			orderDetailDTO.put("playType",order.get("play_type").toString().replaceAll("0", ""));
 			orderDetailDTO.put("lotteryClassifyId",String.valueOf(lotteryClassifyId));
 			orderDetailDTO.put("lotteryPlayClassifyId",String.valueOf(lotteryPlayClassifyId));
+			orderDetailDTO.put("checkRemark",order.get("check_remark"));
+			orderDetailDTO.put("printLotteryStatus",order.get("print_lottery_status"));
+			orderDetailDTO.put("orderStatus",order.get("order_status"));
+			orderDetailDTO.put("storeName",order.get("store_name"));
 			orderDetailDTO.put("programmeSn",order.get("order_sn"));
 			orderDetailDTO.put("createTime",WeekDateUtil.getCurrentTimeString(Long.parseLong(order.get("add_time").toString()), WeekDateUtil.datetimeFormat));
 			long acceptTime = Long.parseLong(order.get("accept_time").toString());
