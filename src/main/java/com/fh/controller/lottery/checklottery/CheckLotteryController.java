@@ -77,7 +77,7 @@ public class CheckLotteryController extends BaseController {
 			resultMap.put("data", varList);
 		} catch (Exception e) {
 			resultMap.put("code", "300500");
-			resultMap.put("msg", "网络异常");
+			resultMap.put("msg", "网络连接异常");
 		} finally {
 			//begin寫入本地文件開始
 //			WriteStringToFile("==============shopList()  begin "+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"==================");
@@ -166,7 +166,7 @@ public class CheckLotteryController extends BaseController {
 			resultMap.put("data", countMap);
 		} catch (Exception e) {
 			resultMap.put("code", "300500");
-			resultMap.put("msg", "网络异常");
+			resultMap.put("msg", "网络连接异常");
 		} finally {
 			out.print(JSONUtils.toJSONString(resultMap));
 			out.close();
@@ -223,7 +223,7 @@ public class CheckLotteryController extends BaseController {
 			resultMap.put("data", countMap);
 		} catch (Exception e) {
 			resultMap.put("code", "300500");
-			resultMap.put("msg", "网络异常");
+			resultMap.put("msg", "网络连接异常");
 		} finally {
 			out.print(JSONUtils.toJSONString(resultMap));
 			out.close();
@@ -263,7 +263,7 @@ public class CheckLotteryController extends BaseController {
 			
 		} catch (Exception e) {
 			resultMap.put("code", "300500");
-			resultMap.put("msg", "网络异常");
+			resultMap.put("msg", "网络连接异常");
 		} finally {
 			out.print(JSONUtils.toJSONString(resultMap));
 			out.close();
@@ -311,7 +311,7 @@ public class CheckLotteryController extends BaseController {
 			
 		} catch (Exception e) {
 			resultMap.put("code", "300500");
-			resultMap.put("msg", "网络异常");
+			resultMap.put("msg", "网络连接异常");
 		} finally {
 			out.print(JSONUtils.toJSONString(resultMap));
 			out.close();
@@ -343,7 +343,7 @@ public class CheckLotteryController extends BaseController {
 			resultMap.put("data", pd);
 		} catch (Exception e) {
 			resultMap.put("code", "300500");
-			resultMap.put("msg", "网络异常");
+			resultMap.put("msg", "网络连接异常");
 		} finally {
 			out.print(JSONUtils.toJSONString(resultMap));
 			out.close();
