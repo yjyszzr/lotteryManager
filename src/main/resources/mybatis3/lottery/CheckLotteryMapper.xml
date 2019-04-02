@@ -202,7 +202,6 @@
 				dl.issue,
 				dl.max_level,
 				dl.accept_time,
-				dl.ticket_time,
 				dl.check_remark,
 				dl.order_status,
 				log.op_type print_lottery_status,
