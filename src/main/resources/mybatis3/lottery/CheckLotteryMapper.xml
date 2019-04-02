@@ -20,8 +20,7 @@
 		IFNULL(dl.pic,'') pic,
 		IFNULL(dl.auditor_id,'') auditor_id,
 		IFNULL(dl.store_id,'') store_id,
-		IFNULL(dl.check_status,'')
-		check_status,
+		IFNULL(dl.check_status,'') check_status,
 		IFNULL(dl.check_remark,'') check_remark,
 		IFNULL(dl.check_time,'') check_time
 	</sql>
@@ -75,10 +74,10 @@
 		<if
 			test="pd.print_lottery_status != null and pd.print_lottery_status != ''">
 			<!-- 成功訂單 -->
-			<if test="pd.print_lottery_status == '1'">
+			<if test="pd.print_lottery_status == 1">
 				and print_lottery_status=4
 			</if>
-			<if test="pd.print_lottery_status != '1'">
+			<if test="pd.print_lottery_status != 1">
 				and print_lottery_status!=4
 			</if>
 		</if>
@@ -106,10 +105,10 @@
 		</if>
 		<if
 			test="print_lottery_status != null and print_lottery_status != ''">
-			<if test="print_lottery_status == '1'">
+			<if test="print_lottery_status == 1">
 				and print_lottery_status=4
 			</if>
-			<if test="print_lottery_status != '1'">
+			<if test="print_lottery_status != 1">
 				and print_lottery_status!=4
 			</if>
 		</if>
@@ -171,7 +170,6 @@
 				order_sn,
 				parent_sn,
 				user_id,
-				order_status,
 				pay_status,
 				pay_id,
 				pay_code,
@@ -205,7 +203,11 @@
 				issue,
 				max_level,
 				accept_time,
-				ticket_time
+				ticket_time,
+				check_remark,
+				print_lottery_status,
+				order_status,
+				(select name from dl_store where id=store_id) as store_name
 		from dl_order where order_sn = #{orderSn}
 	</select>
 
