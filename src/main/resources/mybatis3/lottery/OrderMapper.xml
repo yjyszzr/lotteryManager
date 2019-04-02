@@ -941,4 +941,18 @@
 	<select id="getTotalAward"  resultType="java.lang.Double">
 		select sum(winning_money) winning_money from dl_order o where mobile = #{mobile} and order_status in(5,9) and pay_status = 1;
 	</select>
+	<!-- 根据手机号查询订单 -->
+	<select id="findByMobile"  resultType="pd">
+		SELECT
+			user_id,
+			pay_time
+		FROM
+			dl_order 
+		WHERE
+			mobile = #{mobile} 
+			AND add_time > 1541520000 
+		ORDER BY
+			add_time ASC 
+			LIMIT 1;
+	</select>
 </mapper>

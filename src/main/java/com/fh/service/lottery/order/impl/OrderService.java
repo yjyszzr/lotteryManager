@@ -1,13 +1,15 @@
 package com.fh.service.lottery.order.impl;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.order.OrderManager;
 import com.fh.util.PageData;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 说明： 订单模块 创建人：FH Q313596790 创建时间：2018-05-03
@@ -330,6 +332,11 @@ public class OrderService implements OrderManager {
 	@Override
 	public Double getTotalAward(PageData pd) throws Exception {
 		return (Double) dao.findForObject("OrderMapper.getTotalAward", pd);
+	}
+
+	@Override
+	public PageData findByMobile(PageData pdCustomerMobile)  throws Exception {
+		return (PageData) dao.findForObject("OrderMapper.findByMobile", pdCustomerMobile);
 	}
 
 }

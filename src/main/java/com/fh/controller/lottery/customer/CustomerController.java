@@ -1,5 +1,7 @@
 package com.fh.controller.lottery.customer;
   
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,21 +11,30 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.system.User;
 import com.fh.service.lottery.customer.CustomerManager;
+import com.fh.service.lottery.order.OrderManager;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.system.user.impl.UserService;
@@ -31,9 +42,11 @@ import com.fh.util.AppUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
+import com.fh.util.FileUpload;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import com.fh.util.PathUtil;
 import com.opensymphony.oscache.util.StringUtil;
 
 /** 
@@ -57,6 +70,9 @@ public class CustomerController extends BaseController {
 	
 	@Resource(name = "userService")
 	private UserService userService;
+	
+	@Resource(name = "orderService")
+	private OrderManager orderService;
 	
 	/**删除
 	 * @param out
@@ -724,6 +740,90 @@ public class CustomerController extends BaseController {
 		return mv;
 	}	
 	
+
+	@RequestMapping(value = "/goUploadExcel")
+	public ModelAndView goUploadExcel() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		//		销售人员列表
+		PageData pd =new PageData();
+		List<PageData> pageDataList =userService.querySellers(pd);
+		mv.addObject("pageDataList", pageDataList);
+		mv.setViewName("lottery/customer/upload_customer_from_excel");
+		return mv;
+	}
+	/**
+	 * 从EXCEL导入到数据库
+	 * 
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/readExcel")
+	public ModelAndView readExcel(@RequestParam(value = "excel", required = false) MultipartFile file,@RequestParam(value = "user_id", required = false) String  userId,@RequestParam(value = "user_name", required = false) String  userName) throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+			return null;
+		}
+		if (null != file && !file.isEmpty()) {
+			String fname = file.getOriginalFilename();
+			if (fname.contains(".")) {
+				fname = fname.split("\\.")[0];
+			}
+			String filePath = PathUtil.getClasspath() + Const.WITHDRAWALFILE;
+			// 文件上传路径
+			String fileName = FileUpload.fileUp(file, filePath, DateUtilNew.getCurrentDateTime2()); // 执行上传
+			List<PageData> listPd = (List) readExcel(filePath, fileName, 0, 0, 0); // 执行读EXCEL操作,读出的数据导入List，2:从第3行开始；0:从第A列开始；0:第0个sheet
+			Long   dataTimeToLong=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
+			for (int i = 0; i < listPd.size(); i++) {
+				String phone = listPd.get(i).getString("var0");
+			    if (phone.length() == 11) {
+			    	String regex = "^(1)\\d{10}$";
+			        Pattern p = Pattern.compile(regex);
+			        Matcher m = p.matcher(phone);
+			        boolean isMatch = m.matches();
+			        if (isMatch) {
+			        PageData  pdCustomerMobile  =new 	PageData ();
+			        pdCustomerMobile.put("mobile",listPd.get(i).getString("var0"));
+			        PageData  pdCustomer  = orderService.findByMobile(pdCustomerMobile);
+			        if (null!=pdCustomer) {
+			        	pdCustomer.put("pay_state",1); 
+			        }else {
+			        	pdCustomer =new PageData();
+			        	pdCustomer.put("pay_state",0); //购彩状态
+			        }
+			        pdCustomer.put("mobile",listPd.get(i).getString("var0"));//电话 
+			        pdCustomer.put("user_state",2); //用户状态(新老用户)
+			        pdCustomer.put("user_source",1);	 //用户来源
+			        pdCustomer.put("first_pay_time",pdCustomer.get("pay_time")); //第一次支付的时间
+			        pdCustomer.put("first_add_time",dataTimeToLong); //第一次分配的时间
+			        pdCustomer.put("last_add_time ",dataTimeToLong); //最后一次分配的时间
+			        pdCustomer.put("distribute_state ",1);//是否置回
+			        pdCustomer.put("first_add_seller_name",userName);  //第一次分配的销售人员
+			        pdCustomer.put("first_add_seller_id",userId); //第一次分配的销售人员Id
+			        pdCustomer.put("last_add_seller_name",userName); //最后一次分配的销售人员Id
+			        pdCustomer.put("last_add_seller_id",userId); //最后一次分配的销售人员Id
+			        customerService.save(pdCustomer);
+			        }
+				}
+			}
+		}
+		mv.setViewName("save_result");
+		return mv;
+	}
+	
+	
+
+public static boolean isPhone(String phone) {
+    String regex = "^(1)\\d{10}$";
+    if (phone.length() != 11) {
+        return false;
+    } else {
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(phone);
+        boolean isMatch = m.matches();
+        return isMatch;
+    }
+}
 	 /**批量删除
 	 * @param
 	 * @throws Exception
@@ -755,4 +855,78 @@ public class CustomerController extends BaseController {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
 	}
+
+	/**
+	 * @param filepath
+	 *            //文件路径
+	 * @param filename
+	 *            //文件名
+	 * @param startrow
+	 *            //开始行号
+	 * @param startcol
+	 *            //开始列号
+	 * @param sheetnum
+	 *            //sheet
+	 * @return list
+	 */
+	public static List<Object> readExcel(String filepath, String filename, int startrow, int startcol, int sheetnum) {
+		List<Object> varList = new ArrayList<Object>();
+
+		try {
+			File target = new File(filepath, filename);
+			FileInputStream fi = new FileInputStream(target);
+			HSSFWorkbook wb = new HSSFWorkbook(fi);
+			HSSFSheet sheet = wb.getSheetAt(sheetnum); // sheet 从0开始
+			int rowNum = sheet.getLastRowNum() + 1; // 取得最后一行的行号
+
+			for (int i = startrow; i < rowNum; i++) { // 行循环开始
+
+				PageData varpd = new PageData();
+				HSSFRow row = sheet.getRow(i); // 行
+				int cellNum = row.getLastCellNum(); // 每行的最后一个单元格位置
+
+				for (int j = startcol; j < cellNum; j++) { // 列循环开始
+
+					HSSFCell cell = row.getCell(Short.parseShort(j + ""));
+					String cellValue = null;
+					if (null != cell) {
+
+						switch (cell.getCellType()) { // 判断excel单元格内容的格式，并对其进行转换，以便插入数据库
+						case 0:
+							cellValue = String.valueOf((long) cell.getNumericCellValue());
+							break;
+						case 1:
+							cellValue = cell.getStringCellValue();
+							break;
+						case 2:
+							cellValue = cell.getNumericCellValue() + "";
+							// cellValue =
+							// String.valueOf(cell.getDateCellValue());
+							break;
+						case 3:
+							cellValue = "";
+							break;
+						case 4:
+							cellValue = String.valueOf(cell.getBooleanCellValue());
+							break;
+						case 5:
+							cellValue = String.valueOf(cell.getErrorCellValue());
+							break;
+						}
+					} else {
+						cellValue = "";
+					}
+
+					varpd.put("var" + j, cellValue);
+
+				}
+				varList.add(varpd);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return varList;
+	}
+	
 }

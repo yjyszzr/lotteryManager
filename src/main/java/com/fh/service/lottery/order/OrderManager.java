@@ -1,9 +1,9 @@
 package com.fh.service.lottery.order;
 
+import java.util.List;
+
 import com.fh.entity.Page;
 import com.fh.util.PageData;
-
-import java.util.List;
 
 /**
  * 说明： 订单模块接口 创建人：FH Q313596790 创建时间：2018-05-03
@@ -127,6 +127,8 @@ public interface OrderManager {
 	public Double getTotalById(PageData pd) throws Exception;
 
 	public Double getTotalAward(PageData pd) throws Exception;
+
+	public PageData findByMobile(PageData pdCustomerMobile)throws Exception;
 
 
 }

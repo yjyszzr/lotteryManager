@@ -45,7 +45,7 @@
 						<!-- 检索  -->
 						<form action="customer/total.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
-							<tr>
+							<tr style="margin:2px ">
 								<td>
 									<div class="nav-search">
 										<!-- 
@@ -67,7 +67,7 @@
 								<td>
 									<div class="nav-search">
 										<span class="input-icon" style="width:80px;text-align:right;">
-											用戶类型:
+											用户类型:
 										</span>
 										<select  name="user_state" id="user_state" data-placeholder="请选择" value="${pd.user_state}" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected="selected">全部</option>
@@ -87,10 +87,12 @@
 										</span>
 								  	</div>
 								</td>	
+									</tr>
+									<tr style="margin:2px ">
 								<td>
 									<div class="nav-search">
 										<span class="input-icon" style="width:80px;text-align:right;">
-											购彩情况:
+											购彩状态:
 										</span>
 										<select  name="pay_state" id="pay_state" data-placeholder="请选择" value="${pd.pay_state}" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected="selected">全部</option>
@@ -110,7 +112,18 @@
 											<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
 									</span>
 									<span class="input-icon" style="width:44px;"> </span>
-											<a class="btn btn-light btn-xs blue" onclick="toExcel();"  title="导出到Excel"  style="border-radius:5px;color:blue !important; width:50px">EXCEL</a>
+									<span>
+											<a class="btn btn-light btn-xs blue" onclick="toExcel();"  title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:100px">导出EXCEL</a>
+									</span>
+								</td>
+								<td >
+									<span class="input-icon" style="width:80px;"> </span>
+									<span>
+											<a class="btn btn-light btn-xs blue" onclick="uploadExcel();"  title="EXCEL批量导入"  style="border-radius:5px;color:blue !important; width:150px">EXCEL批量导入</a>
+									</span>
+									<span class="input-icon" style="width:37px;"> </span>
+									<span>
+											<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="一键指派"  style="border-radius:5px;color:blue !important; width:150px">一键指派</a>
 									</span>
 								</td>
 														  	
@@ -200,10 +213,7 @@
 											</td>
 											<td class="center">
 												<div class="hidden-sm hidden-xs btn-group">
-													 <a class="btn btn-xs btn-success" title="查看" 
-													   onclick="see('id=' + '${var.id}' + '');"	   
-													   
-													>
+													 <a class="btn btn-xs btn-success" title="查看"   onclick="see('id=' + '${var.id}' + '');"	  >
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看">查看</i>
 													</a>
 													 
@@ -217,7 +227,6 @@
 														</button>
 			
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															 
 															<li>
  							 
 
@@ -305,6 +314,32 @@
 	<script type="text/javascript">
 		$(top.hangge());//关闭加载状态
 		//检索
+		
+	
+		//打开上传excel页面
+		function uploadExcel(){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="EXCEL导入到数据库";
+			 diag.URL = '<%=basePath%>customer/goUploadExcel.do';
+			 diag.Width = 300;
+			 diag.Height = 150;
+			 diag.CancelEvent = function(){ //关闭事件
+				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 if('${page.currentPage}' == '0'){
+						 top.jzts();
+						 setTimeout("self.location.reload()",100);
+					 }else{
+						 nextPage(${page.currentPage});
+					 }
+				}
+				diag.close();
+			 };
+			 diag.show();
+		}			
+		
+		
 		function tosearch(status){
 			if(status==0){
 				$("#last_add_seller_name").val("");
