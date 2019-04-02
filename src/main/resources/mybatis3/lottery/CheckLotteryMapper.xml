@@ -8,7 +8,6 @@
 		IFNULL(dl.parent_sn,'') parent_sn,
 		IFNULL(dl.order_status,'')
 		order_status,
-		IFNULL(dl.print_lottery_status,'') print_lottery_status,
 		IFNULL(dl.pay_status,'') pay_status,
 		IFNULL(dl.add_time,'') add_time,
 		IFNULL(dl.order_type,'') order_type,
@@ -16,110 +15,105 @@
 		lottery_classify_id,
 		IFNULL(dl.lottery_play_classify_id,'')
 		lottery_play_classify_id,
-		IFNULL(dl.ticket_time,'') ticket_time,
 		IFNULL(dl.pic,'') pic,
 		IFNULL(dl.auditor_id,'') auditor_id,
-		IFNULL(dl.store_id,'') store_id,
-		IFNULL(dl.check_status,'')
-		check_status,
+		IFNULL(dl.check_status,'') check_status,
 		IFNULL(dl.check_remark,'') check_remark,
 		IFNULL(dl.check_time,'') check_time
 	</sql>
 
-	<select id="findShopIDByUserId" resultType="String"
-		parameterType="String">
-		select store_id from dl_store_sys_user where
-		sys_user_id=#{userId }
-	</select>
-	<select id="getShopNameById" resultType="String"
-		parameterType="String">
-		select name from dl_store where id = #{store_id}
-	</select>
 	<select id="findShops" resultType="pd" parameterType="String">
-		select id,name from dl_store where id in
-		<foreach item="item" index="index" collection="list" open="("
-			separator="," close=")">
-			#{item}
-		</foreach>
+		select phone id,name from dl_store
 	</select>
 	<select id="getNumAndMon" parameterType="java.util.HashMap"
 		resultType="pd">
 		select count(1) as ORDER_NUMS,IFNULL(sum(ticket_amount),0) as
-		TICKENT_AMOUNT from dl_order
-		WHERE print_lottery_status is not null and
-		print_lottery_status!=1
+		TICKENT_AMOUNT from dl_order dl
+		left join 
+			dl_log_operation log
+				on dl.order_sn=log.order_sn
+		WHERE log.type=2 
 		<if test="store_id != null and store_id != ''">
-			and store_id = #{store_id}
+			and log.phone = #{store_id}
 		</if>
 		<if test="lastStart1 != null and lastStart1 != ''">
-			and ticket_time &gt;= #{lastStart1 }
+			and log.add_time &gt;= #{lastStart1 }
 		</if>
 		<if test="lastEnd1 != null and lastEnd1 != ''">
-			and ticket_time &lt;= #{lastEnd1 }
+			and log.add_time &lt;= #{lastEnd1 }
 		</if>
 	</select>
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		SELECT
 		IFNULL(dlc.lottery_name,'') lottery_name,
 		IFNULL(dlc.lottery_img,'') lottery_img,
+		log.op_type print_lottery_status,
+		IFNULL(log.fail_msg,'') fail_msg,
+		IFNULL(log.add_time,'') ticket_time,
+		IFNULL(log.phone,'') store_id,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
 		left join
 		dl_lottery_classify dlc on dl.lottery_classify_id=dlc.lottery_classify_id
-		WHERE
-		print_lottery_status is not null and print_lottery_status!=1
+		left join 
+		dl_log_operation log on dl.order_sn=log.order_sn
+		WHERE log.type=2 
 		<if test="pd.store_id != null and pd.store_id != ''">
-			and store_id = #{pd.store_id}
+			and log.phone = #{pd.store_id}
 		</if>
 		<if
 			test="pd.print_lottery_status != null and pd.print_lottery_status != ''">
 			<!-- 成功訂單 -->
-			<if test="pd.print_lottery_status == '1'">
-				and print_lottery_status=4
+			<if test="pd.print_lottery_status == 1">
+				and log.op_type=1
 			</if>
-			<if test="pd.print_lottery_status != '1'">
-				and print_lottery_status!=4
+			<if test="pd.print_lottery_status != 1">
+				and log.op_type=2
 			</if>
 		</if>
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
-			and ticket_time &gt;= #{pd.lastStart1 }
+			and log.add_time &gt;= #{pd.lastStart1 }
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
-			and ticket_time &lt;= #{pd.lastEnd1 }
+			and log.add_time &lt;= #{pd.lastEnd1 }
 		</if>
-		order by ticket_time desc
+		order by log.add_time desc
 	</select>
 	<select id="dataAllList" parameterType="pd" resultType="pd">
 		SELECT
 		IFNULL(dlc.lottery_name,'') lottery_name,
 		IFNULL(dlc.lottery_img,'') lottery_img,
+		log.op_type print_lottery_status,
+		IFNULL(log.fail_msg,'') fail_msg,
+		IFNULL(log.add_time,'') ticket_time,
+		IFNULL(log.phone,'') store_id,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
 		left join
 		dl_lottery_classify dlc on dl.lottery_classify_id=dlc.lottery_classify_id
-		WHERE
-		print_lottery_status is not null and print_lottery_status!=1
+		left join 
+		dl_log_operation log on dl.order_sn=log.order_sn
+		WHERE log.type=2 
 		<if test="store_id != null and store_id != ''">
-			and store_id = #{store_id}
+			and log.phone = #{store_id}
 		</if>
-		<if
-			test="print_lottery_status != null and print_lottery_status != ''">
-			<if test="print_lottery_status == '1'">
-				and print_lottery_status=4
+		<if test="print_lottery_status != null and print_lottery_status != ''">
+			<if test="print_lottery_status == 1">
+				and log.op_type=1
 			</if>
-			<if test="print_lottery_status != '1'">
-				and print_lottery_status!=4
+			<if test="print_lottery_status != 1">
+				and log.op_type=2
 			</if>
 		</if>
 		<if test="lastStart1 != null and lastStart1 != ''">
-			and ticket_time &gt;= #{lastStart1 }
+			and log.add_time &gt;= #{lastStart1 }
 		</if>
 		<if test="lastEnd1 != null and lastEnd1 != ''">
-			and ticket_time &lt;= #{lastEnd1 }
+			and log.add_time &lt;= #{lastEnd1 }
 		</if>
-		order by ticket_time desc
+		order by log.add_time desc
 	</select>
 	<select id="getOrderById" parameterType="String" resultType="pd">
 		SELECT
@@ -147,14 +141,19 @@
 		IFNULL(dl.merchant_order_sn,'') merchant_order_sn,
 		IFNULL(dlc.lottery_name,'') lottery_name,
 		IFNULL(dlc.lottery_img,'') lottery_img,
-		(select name from dl_store where id=store_id) as store_name,
+		(select name from dl_store where phone=log.phone) as store_name,
+		log.op_type print_lottery_status,
+		IFNULL(log.fail_msg,'') fail_msg,
+		IFNULL(log.add_time,'') ticket_time,
+		IFNULL(log.phone,'') store_id,
 		<include refid="col_order"></include>
 		FROM
 		dl_order dl
 		left join
 		dl_lottery_classify dlc on dl.lottery_classify_id=dlc.lottery_classify_id
-		WHERE
-		order_id=#{orderno }
+		left join 
+		dl_log_operation log on dl.order_sn=log.order_sn
+		WHERE log.type=2 and dl.order_id=#{orderno }
 	</select>
 
 	<update id="checkOrder" parameterType="pd">
@@ -167,67 +166,74 @@
 	</update>
 
 	<select id="getOrderInfoByOrderSn" resultType="pd" parameterType="String">
-		select  order_id,
-				order_sn,
-				parent_sn,
-				user_id,
-				order_status,
-				pay_status,
-				pay_id,
-				pay_code,
-				pay_name,
-				pay_sn,
-				money_paid,
-				ticket_amount,
-				surplus,
-				user_surplus,
-				user_surplus_limit,
-				third_party_paid,
-				user_bonus_id,
-				bonus,
-				give_integral,
-				order_from,
-				add_time,
-				pay_time,
-				order_type,
-				lottery_classify_id,
-				lottery_play_classify_id,
-				match_time,
-				winning_money,
-				pass_type,
-				play_type,
-				cathectic,
-				bet_num,
-				forecast_money,
-				is_delete,
-				device_channel,
-				store_id,
-				issue,
-				max_level,
-				accept_time,
-				ticket_time
-		from dl_order where order_sn = #{orderSn}
+		select  dl.order_id,
+				dl.order_sn,
+				dl.parent_sn,
+				dl.user_id,
+				dl.pay_status,
+				dl.pay_id,
+				dl.pay_code,
+				dl.pay_name,
+				dl.pay_sn,
+				dl.money_paid,
+				dl.ticket_amount,
+				dl.surplus,
+				dl.user_surplus,
+				dl.user_surplus_limit,
+				dl.third_party_paid,
+				dl.user_bonus_id,
+				dl.bonus,
+				dl.give_integral,
+				dl.order_from,
+				dl.add_time,
+				dl.pay_time,
+				dl.order_type,
+				dl.lottery_classify_id,
+				dl.lottery_play_classify_id,
+				dl.match_time,
+				dl.winning_money,
+				dl.pass_type,
+				dl.play_type,
+				dl.cathectic,
+				dl.bet_num,
+				dl.forecast_money,
+				dl.is_delete,
+				dl.device_channel,
+				dl.issue,
+				dl.max_level,
+				dl.accept_time,
+				dl.check_remark,
+				dl.order_status,
+				log.op_type print_lottery_status,
+				IFNULL(log.fail_msg,'') fail_msg,
+				IFNULL(log.add_time,'') ticket_time,
+				IFNULL(log.phone,'') store_id,
+				(select name from dl_store where phone=log.phone) as store_name
+		from dl_order dl
+		left join 
+		dl_log_operation log on dl.order_sn=log.order_sn
+		WHERE log.type=2 and dl.order_sn = #{orderSn}
 	</select>
 
 	<select id="selectByOrderId" resultType="pd" parameterType="String">
 		select
-			dod.match_id matchId,
-			dod.changci changci,
-			dod.match_team matchTeam,
-			dod.match_result matchResult,
-			dod.ticket_data ticketData,
-			dod.ticket_status ticketStatus,
-			dod.give_integral giveIntegral,
-			dod.lottery_classify_id lotteryClassifyId,
-			dod.lottery_play_classify_id lotteryPlayClassifyId,
-			dod.is_guess isGuess,
-			dod.add_time addTime,
-			dod.is_dan isDan,
-			dod.match_time matchTime,
-			dod.fix_odds fixedodds,
-			dod.issue issue,
-			dod.lottery_play_classify_id playType,
-			dod.bet_type betType
+			IFNULL(dod.match_id,'') matchId,
+			IFNULL(dod.changci,'') changci,
+			IFNULL(dod.match_team,'') matchTeam,
+			IFNULL(dod.match_result,'') matchResult,
+			IFNULL(dod.ticket_data,'') ticketData,
+			IFNULL(dod.ticket_status,'') ticketStatus,
+			IFNULL(dod.give_integral,'') giveIntegral,
+			IFNULL(dod.lottery_classify_id,'') lotteryClassifyId,
+			IFNULL(dod.lottery_play_classify_id,'') lotteryPlayClassifyId,
+			IFNULL(dod.is_guess,'') isGuess,
+			IFNULL(dod.add_time,'') addTime,
+			IFNULL(dod.is_dan,'') isDan,
+			IFNULL(dod.match_time,'') matchTime,
+			IFNULL(dod.fix_odds,'') fixedodds,
+			IFNULL(dod.issue,'') issue,
+			IFNULL(dod.lottery_play_classify_id,'') playType,
+			IFNULL(dod.bet_type,'') betType
 			from
 		dl_order_detail dod
 		where dod.order_id = #{orderId}
@@ -249,13 +255,5 @@
 	<select id="lotteryClassify" resultType="pd" parameterType="String">
 		select lottery_name lotteryName, lottery_img lotteryImg from
 		dl_lottery_classify where lottery_classify_id=#{classifyId}
-	</select>
-	<select id="findFailMsgByOrderSn" parameterType="String" resultType="String">
-		select 
-			IFNULL(fail_msg,'') fail_msg
-		from 
-			dl_log_operation
-		where 
-			order_sn = #{order_sn} and type=2
 	</select>
 </mapper>
