@@ -49,12 +49,20 @@ public class CheckLotteryService implements CheckLotteryManager{
 	
 	@Override
 	public List<PageData> list(Page page) throws Exception {
-		return (List<PageData>) dao.findForList("CheckLotteryMapper.datalistPage", page);
+		List<PageData> list = (List<PageData>) dao.findForList("CheckLotteryMapper.datalistPage", page);
+		for (PageData pageData : list) {
+			pageData.put("lottery_img",imgFilePreUrl+pageData.get("lottery_img"));
+		}
+		return list;
 	}
 
 	@Override
 	public List<PageData> listAll(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("CheckLotteryMapper.dataAllList", pd);
+		List<PageData> list = (List<PageData>) dao.findForList("CheckLotteryMapper.dataAllList", pd);
+		for (PageData pageData : list) {
+			pageData.put("lottery_img",imgFilePreUrl+pageData.get("lottery_img"));
+		}
+		return list;
 	}
 
 	@Override
