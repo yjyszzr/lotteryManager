@@ -585,13 +585,13 @@ public class LoginController extends BaseController {
 				Jurisdiction.getSession().setAttribute(Const.SESSION_USER,user);
 				// shiro加入身份验证
 				Subject subject = SecurityUtils.getSubject();
-				UsernamePasswordToken token = new UsernamePasswordToken(USERNAME, PASSWORD);
-				try {
-					subject.login(token);
-				} catch (AuthenticationException e) {
-					msg = "身份验证失败！";
-					code = "2";
-				}
+//				UsernamePasswordToken token = new UsernamePasswordToken(USERNAME, PASSWORD);
+//				try {
+//					subject.login(token);
+//				} catch (AuthenticationException e) {
+//					msg = "身份验证失败！";
+//					code = "2";
+//				}
 				String sessionId = Jurisdiction.getSession().getId().toString();
 				resultMap.put("JSESSIONID", sessionId);
 				
@@ -627,8 +627,8 @@ public class LoginController extends BaseController {
 				session.setAttribute(Const.SESSION_DATA_RIGHTS, pageDatas);
 				this.getRemortIP(USERNAME); // 更新登录IP
 			} else {
-				msg = "用户名和密码不匹配"; // 用户名或密码有误
-				code = "2";
+				msg = "用户名或密码有误"; // 用户名或密码有误
+				code = "301011";
 			}
 			if (Tools.isEmpty(msg)) {
 				msg = "验证通过";// 验证成功
@@ -639,7 +639,7 @@ public class LoginController extends BaseController {
 			resultMap.put("msg", msg);
 			resultMap.put("data", pd);
 		} catch (Exception e) {
-			resultMap.put("code", "1");
+			resultMap.put("code", "300500");
 			resultMap.put("msg", "网络异常");
 		}finally {
 			out.print(JSONUtils.toJSONString(resultMap));
@@ -673,7 +673,7 @@ public class LoginController extends BaseController {
 			resultMap.put("code", "0");
 			resultMap.put("msg", "退出成功");
 		} catch (Exception e) {
-			resultMap.put("code", "1");
+			resultMap.put("code", "300500");
 			resultMap.put("msg", "网络异常");
 		}finally {
 			out.print(JSONUtils.toJSONString(resultMap));
