@@ -64,13 +64,13 @@
 								<td style="padding-left:2px;"><input   name="mobile" id="mobile"  value="${pd.mobile}" type="text"
 								 	style="width:100px;border-radius: 5px !important;"  /></td>
 								<td> </td>
-								<c:if test="${QX.cha == 1 }">
-									<td style="vertical-align: bottom;; padding-left: 2px">
-									<a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="搜索"
-												style="border-radius: 5px; color: blue !important; width: 50px">搜索</a>
-									</td>
-								</c:if>
-								<td style="vertical-align: top; padding-left: 2px">
+
+								<td style="vertical-align: bottom;; padding-left: 2px">
+								<a class="btn btn-light btn-xs blue" onclick="tosearch(1);" title="搜索"
+											style="border-radius: 5px; color: blue !important; width: 50px">搜索</a>
+								</td>
+
+								<td style="vertical-align: bottom; padding-left: 2px">
 								 <a class="btn btn-light btn-xs blue" onclick="tosearch(0);" title="清空"
 											style="border-radius: 5px; color: blue !important; width: 50px">清空</a>
 								</td>
@@ -126,7 +126,7 @@
 											<td class="center">
 												<fmt:formatNumber type="number" value="${var.balance}" pattern="0.00" maxFractionDigits="2"/>
 											</td>
-											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
+											<td class='center'>${var.reg_time}</td>
 											<td class='center'>
 												<a class="btn btn-xs btn-success" title="查看" onclick="see('mobile=' + '${var.mobile}' + '');">
 													<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看">查看</i>
@@ -205,8 +205,8 @@
 			if (status == 0) {
 				$("#lastStart").val("");
 				$("#lastEnd").val("");
-				$("#atotalStart").val("");
 				$("#mobile").val("");
+                $("#DICTIONARIES_ID").empty();
 			}
 			top.jzts();
             $("#channel").val("");
@@ -313,6 +313,12 @@
 
 		//导出excel
 		function toExcel(){
+            var lastStart = $("#lastStart").val();
+            var lastEnd = $("#lastEnd").val();
+            var DICTIONARIES_ID = $("#DICTIONARIES_ID").val();
+            if(lastStart == "" || lastEnd == "" || DICTIONARIES_ID == "" ){
+                $alert("数据量过大，请选择时间与渠道进行导出");
+			}
 			//window.location.href='<%=basePath%>matchdata/excel.do';
 			 $("#Form").attr("action","userdata/excel.do").submit();
 			 $("#Form").attr("action","userdata/list.do");

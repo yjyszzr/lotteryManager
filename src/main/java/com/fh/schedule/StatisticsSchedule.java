@@ -19,9 +19,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Configuration
@@ -123,8 +121,7 @@ public class StatisticsSchedule {
 	}
 
 
-//	public  Integer lastStart1 = 1552147200;
-//	public  Integer lastEnd1 = 1552233599;
+
 	@Scheduled(cron = "0 0 6 * * ?")
 	public void marketDataStatistics() throws Exception  {
 		MarketDataController marketDataController = new MarketDataController();
@@ -133,71 +130,35 @@ public class StatisticsSchedule {
 			return;
 		}
 
-		Integer lastStart1 = DateUtilNew.getTimeAfterDays(new Date(),0,0,0,0) - 86400;
-		Integer lastEnd1 = DateUtilNew.getTimeAfterDays(new Date(),0,23,59,59) - 86400;
-//		if(lastStart1 > 1553184000){
-//			return;
-//		}
 		logger.info("开始收集当天的市场数据))))");
+		Long lastStart1 = DateUtilNew.getYestoday0Long();
+		Long lastEnd1 = DateUtilNew.getYestoday24Long();
 		Page page = new Page();
 		PageData pd = new PageData();
-		LocalDate dateE = LocalDate.now();
-		LocalDate dateB = LocalDate.now();
-
-		String lastEnd = String.valueOf(lastEnd1);//pd.getString("lastEnd"); // 结束时间检索条件
-		if (null != lastEnd && !"".equals(lastEnd)) {
-			dateE = LocalDate.parse(DateUtilNew.getCurrentTimeString(Long.valueOf(lastEnd1),DateUtilNew.date_sdf), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		}
-		String lastStart = String.valueOf(lastStart1);//pd.getString("lastStart"); // 开始时间检索条件
-		if (null != lastStart && !"".equals(lastStart)) {
-			dateB = LocalDate.parse(DateUtilNew.getCurrentTimeString(Long.valueOf(lastStart1),DateUtilNew.date_sdf), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		}else {
-			dateB = dateE.plusDays(-1);
-		}
-		int days = (int) (dateE.toEpochDay()-dateB.toEpochDay());
 		List<PageData> varList = new ArrayList<PageData>();
-		for (int i = 0; i < days+1; i++) {
-			PageData pageData = new PageData();
-			LocalDate date = dateE.plusDays(-i);//当天的前i天
-			pd.put("lastStart1",DateUtilNew.getMilliSecondsByStr(date+" 00:00:00"));
-			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(date+" 23:59:59"));
-			page.setPd(pd);
-			List<PageData> userList = userManagerControllerService.getMarketList(page);
-			for (int k = 0; k < userList.size(); k++) {
-				pageData = userList.get(k);
-				pageData.put("date", date);
-				int userCount = Integer.parseInt(pageData.getString("count_order"));
-				String device_channel = pageData.getString("device_channel");
-				pageData.put("count2", getCount(date, date, 1, 1, userCount, device_channel));
-				pageData.put("count3", getCount(date, date, 2, 2, userCount, device_channel));
-				pageData.put("count7", getCount(date, date, 3, 6, userCount, device_channel));
-				pageData.put("count15", getCount(date, date, 7, 14, userCount, device_channel));
-				pageData.put("count30", getCount(date, date, 15, 29, userCount, device_channel));
-				pageData.put("count90", getCount(date, date, 30, 89, userCount, device_channel));
-				pageData.put("count180", getCount(date, date, 90, 179, userCount, device_channel));
-				pageData.put("count360", getCount(date, date, 180, 359, userCount, device_channel));
-				pageData.put("date_time",DateUtilNew.getCurrentTimeString(Long.valueOf(lastStart1), DateUtilNew.date_sdf));
-				pageData.put("add_time",lastStart1);
-				varList.add(pageData);
-			}
-		}
+		PageData pageData = new PageData();
+		pd.put("lastStart1",lastStart1);
+		pd.put("lastEnd1", lastEnd1);
+		page.setPd(pd);
+		List<PageData> userList = userManagerControllerService.getMarketList(page);
 
+		for (int k = 0; k < userList.size(); k++) {
+			pageData = userList.get(k);
+			int userCount = Integer.parseInt(pageData.getString("count_order"));
+			String device_channel = pageData.getString("device_channel");
+			pageData.put("date_time",DateUtilNew.getCurrentTimeString(Long.valueOf(lastStart1), DateUtilNew.date_sdf));
+			pageData.put("add_time",lastStart1);
+			varList.add(pageData);
+		}
 		if(CollectionUtils.isEmpty(varList)){
 			return;
 		}
-
 		for (int i = 0;i < varList.size();i++){
 			PageData insertPd = varList.get(i);
 			userManagerControllerService.saveMarketData(insertPd);
 		}
 
 		logger.info("结束收集当天的市场数据))))");
-	}
-
-
-	public List<PageData> queryCommon(Page page){
-
-		return null;
 	}
 
 

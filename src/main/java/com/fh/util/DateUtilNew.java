@@ -30,6 +30,21 @@ public class DateUtilNew {
 		return sdf.format(date);
 	}
 
+	public static Long getYestoday0Long(){
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)-1,0,0,0);
+		long tt = calendar.getTime().getTime()/1000;
+		return tt;
+	}
+
+
+	public static Long getYestoday24Long(){
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)-1,24,0,0);
+		long tt = calendar.getTime().getTime()/1000;
+		return tt;
+	}
+
 	/**
 	 * 时间是否在一周之内
 	 * 

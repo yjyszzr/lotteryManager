@@ -103,6 +103,17 @@ public interface UserAccountManagerManager {
 	 */
 	public Double getTotalConsumByUserId(PageData pd) throws Exception;
 
+
+	/***
+	 * 获取个人充值资金总额
+	 *
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public Double getTotalRecharge(PageData pd) throws Exception;
+
+
 	/****
 	 * 充值资金总额
 	 * 
@@ -170,6 +181,10 @@ public interface UserAccountManagerManager {
 	 * 根据手机号查询店铺用户总余额
 	 */
 	public Double getBalanceByMobile(PageData pd) throws Exception;
+
+
+
+
 
 
 }

@@ -6,6 +6,7 @@ import com.fh.dao.redis.impl.RedisDaoImpl;
 import com.fh.entity.Page;
 import com.fh.service.lottery.order.impl.OrderService;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
@@ -53,6 +54,9 @@ public class UserDataController extends BaseController {
 
 	@Resource(name="switchappconfigService")
 	private SwitchAppConfigManager switchappconfigService;
+
+	@Resource(name="useraccountService")
+	private  UserAccountService userAccountService;
 
 
 	/**
@@ -145,7 +149,7 @@ public class UserDataController extends BaseController {
 					}
 				pData.put("total", Math.abs(val));
 				// 获取个人充值总金额
-				Double valR = useraccountmanagerService.getTotalConsumByUserId(pdMobile); //orderService.getTotalById(pdMobile);
+				Double valR = userAccountService.getTotalRecharge(pdMobile); //orderService.getTotalById(pdMobile);
 				if (valR == null) {
 					valR = 0d;
 				}
@@ -169,17 +173,17 @@ public class UserDataController extends BaseController {
 					}
 				pData.put("atotal", valA);
 				// 获取个人累计提现
-				Double valW = useraccountmanagerService.totalWithdraw(pdMobile);
+				Double valW = userAccountService.totalWithdraw(pdMobile);
 				if (valW == null) {
 					valW = 0d;
 				}
-				pData.put("wtotal", valW);
+				pData.put("wtotal", Math.abs(valW));
 
 				if (!mobile.equals("") && mobile != null) {
 					String area = MobileAddressUtils.getProvinceByIp(mobile);
 					pData.put("area", area);
 				}
-				Double userBalance = useraccountmanagerService.getBalanceByMobile(pdMobile);
+				Double userBalance = userAccountService.getBalanceByMobile(pdMobile);
 				if(null == userBalance){
 					userBalance = 0d;
 				}
@@ -236,6 +240,14 @@ public class UserDataController extends BaseController {
 
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("titles", titles);
+
+		String did = pd.getString("DICTIONARIES_ID");
+		if(StringUtils.isEmpty(did)){
+			pd.put("channel","");
+		}else{
+			pd.put("channel",pd.getString("DICTIONARIES_ID"));
+		}
+		pd.put("channel",pd.getString("DICTIONARIES_ID"));
 		String mobileC = pd.getString("mobile");
 		if (null != mobileC && !"".equals(mobileC)) {
 			pd.put("mobile1", mobileC);
@@ -250,6 +262,7 @@ public class UserDataController extends BaseController {
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd+" 23:59:59"));
 			page.setShowCount(65000);// 单页显示条数，为了全部导出应用
 		}
+		page.setShowCount(65000);// 单页显示条数，为了全部导出应用
 		page.setPd(pd);
 
 		List<String> appstoreList = new ArrayList<>();
@@ -301,7 +314,7 @@ public class UserDataController extends BaseController {
                 continue;
             }
 			// 获取个人充值总金额
-			Double valR = useraccountmanagerService.getTotalConsumByUserId(pdmobile);
+			Double valR = useraccountmanagerService.getTotalRecharge(pdmobile);
 			if (valR == null) {
 				valR = 0d;
 			}
@@ -329,9 +342,10 @@ public class UserDataController extends BaseController {
 			vpd.put("var5", String.format("%.2f", val));
 			vpd.put("var6", String.format("%.2f", valR));
 			vpd.put("var7", String.format("%.2f", valA));
-			vpd.put("var8", String.format("%.2f", valW));
-			vpd.put("var9", userBalance);
-			vpd.put("var10", list.get(i).getString("add_time"));
+			vpd.put("var8", String.format("%.2f", Math.abs(valW)));
+			vpd.put("var9", String.format("%.2f", userBalance));
+			String regTime = list.get(i).getString("reg_time");//
+			vpd.put("var10", regTime);
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

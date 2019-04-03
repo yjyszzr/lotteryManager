@@ -192,6 +192,10 @@ public class UserAccountService implements UserAccountManagerManager {
 	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.queryPayLogByPayOrderSn", pd);
 	}*/
+
+	public Double getTotalRecharge(PageData pd) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalRecharge", pd);
+	}
 	
 	
 }

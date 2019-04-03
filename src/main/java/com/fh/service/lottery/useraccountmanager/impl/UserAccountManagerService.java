@@ -186,4 +186,17 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 		return (Double) dao.findForObject("UserAccountManagerMapper.getBalanceByMobile", pd);
 	}
 
+	/***
+	 * 获取个人充值资金总额
+	 *
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public Double getTotalRecharge(PageData pd) throws Exception {
+		return (Double) dao.findForObject("UserAccountManagerMapper.getTotalRecharge", pd);
+	}
+
+
 }

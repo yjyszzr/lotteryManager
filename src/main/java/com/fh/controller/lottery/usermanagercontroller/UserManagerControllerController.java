@@ -104,23 +104,30 @@ public class UserManagerControllerController extends BaseController {
 			Map<String,String> orderBalanceMap = everyOrderCurBalance.stream().collect(Collectors.toMap(s->s.getString("order_sn"),s->s.getString("cur_balance")));
 			orderSnInfoList.stream().forEach(s->{
 				PageData newPd = new PageData();
-				String orderBalance  = orderBalanceMap.get("order_sn");
 				newPd.put("order_sn",s.getString("order_sn"));
 				newPd.put("lottery_classify_id",s.getString("lottery_classify_id"));
 				newPd.put("money_paid",s.getString("money_paid"));
 				newPd.put("bonus",s.getString("bonus"));
 				newPd.put("winning_money",s.getString("winning_money"));
 				newPd.put("add_time",s.getString("add_time"));
-				if(!StringUtils.isEmpty(orderBalance)){
-					newPd.put("cur_balance",orderBalance);
+				String surplusStr = s.getString("surplus");
+				Double surplus = Double.valueOf(surplusStr);
+				if(surplus > 0.00){
+					String orderBalance  = orderBalanceMap.get(s.getString("order_sn"));
+					if(!StringUtils.isEmpty(orderBalance)){
+						newPd.put("cur_balance",orderBalance);
+					}else{
+						newPd.put("cur_balance","0.00");
+					}
 				}else{
-					newPd.put("cur_balance","0.00");
+					newPd.put("cur_balance","");
 				}
 				pdList.add(newPd);
 			});
 		}
 
 		mv.setViewName("lottery/datastatistics/customer_see");
+		mv.addObject("pd", pd);
 		mv.addObject("varList", pdList);
 		return mv;
 	}
@@ -307,7 +314,7 @@ public class UserManagerControllerController extends BaseController {
 		Comparator<PageData> comparator = (h1, h2) -> Double.valueOf(h1.getString("curMoney")).compareTo(Double.valueOf(h2.getString("curMoney")));
 		newVarList.sort(comparator.reversed());
 		mv.setViewName("lottery/customer/sellerAchieve_list");
-		mv.addObject("4", newVarList);
+		mv.addObject("varList", newVarList);
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -975,10 +982,17 @@ public class UserManagerControllerController extends BaseController {
 				newPd.put("bonus",s.getString("bonus"));
 				newPd.put("winning_money",s.getString("winning_money"));
 				newPd.put("add_time",s.getString("add_time"));
-				if(!StringUtils.isEmpty(orderBalance)){
-					newPd.put("cur_balance",orderBalance);
+				String surplusStr = s.getString("surplus");
+				Double surplus = Double.valueOf(surplusStr);
+				if(surplus > 0.00){
+					String orderBalanceSn  = orderBalanceMap.get(s.getString("order_sn"));
+					if(!StringUtils.isEmpty(orderBalanceSn)){
+						newPd.put("cur_balance",orderBalanceSn);
+					}else{
+						newPd.put("cur_balance","0.00");
+					}
 				}else{
-					newPd.put("cur_balance","0.00");
+					newPd.put("cur_balance","");
 				}
 				pdList.add(newPd);
 			});

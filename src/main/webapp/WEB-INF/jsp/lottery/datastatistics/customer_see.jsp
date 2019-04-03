@@ -32,7 +32,7 @@
 						
 						<!-- 检索  -->
 						<form action="usermanagercontroller/seeTotal.do" method="post" name="Form" id="Form">
-						<input type="hidden" name="mobile" id="store_id" value="${pd.mobile}"/>
+						<input type="hidden" name="mobile" id="mobile" value="${pd.mobile}"/>
 						<table style="margin-top: 5px;">
 							<%--<tbody>--%>
 									<%---<tr>--%>
@@ -88,6 +88,8 @@
 								<tr>&nbsp;</tr>
 								<tr>&nbsp;</tr>
 								<tr><strong>订单记录</strong></tr>
+                                <tr>&nbsp;</tr>
+                                <tr>&nbsp;</tr>
 								<tr><a class="btn btn-light btn-xs blue" onclick="toExcel();" title="导出EXCEL" style="border-radius: 5px; color: blue !important; width: 70px"> 导出EXCEL</a></tr>
 								<tr>
 								    <!--  
@@ -95,7 +97,6 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									-->
-									<th class="center">序号</th>
 									<th class="center">订单编号</th>
 									<th class="center">购买彩种</th>
 									<th class="center">投注金额</th>
@@ -113,7 +114,7 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.user_id_id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											 -->
-											<td class='center'>${var.index+1}</td>
+											<%--<td class='center'>${var.index+1}</td>--%>
 											<td class='center'>
 												${var.order_sn}
 											</td>

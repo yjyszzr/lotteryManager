@@ -1,21 +1,15 @@
 package com.fh.controller.lottery.customer;
   
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-
+import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
+import com.fh.entity.system.User;
+import com.fh.service.lottery.customer.CustomerManager;
+import com.fh.service.lottery.order.OrderManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
+import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.service.system.user.impl.UserService;
+import com.fh.util.*;
+import com.opensymphony.oscache.util.StringUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -30,24 +24,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
-import com.fh.entity.system.User;
-import com.fh.service.lottery.customer.CustomerManager;
-import com.fh.service.lottery.order.OrderManager;
-import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
-import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
-import com.fh.service.system.user.impl.UserService;
-import com.fh.util.AppUtil;
-import com.fh.util.Const;
-import com.fh.util.DateUtil;
-import com.fh.util.DateUtilNew;
-import com.fh.util.FileUpload;
-import com.fh.util.Jurisdiction;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.PathUtil;
-import com.opensymphony.oscache.util.StringUtil;
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** 
  * 说明：销售
@@ -182,7 +167,7 @@ public class CustomerController extends BaseController {
 			long _count = new Long(_pd.getString("_count"));
 			if (_count > 0) {
 				map.put("flag", false);
-				map.put("msg", "2019年11月7号之后有购过彩");
+				map.put("msg", "2018年11月7号之后有购过彩");
 				return AppUtil.returnObject(new PageData(), map);
 			}
 			
