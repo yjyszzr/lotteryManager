@@ -83,6 +83,9 @@
 												<c:if test="${customer.user_source == 6}">
 													 其它
 												</c:if>
+												<c:if test="${customer.user_source == 7}">
+													 维护资源
+												</c:if>
 										</td>
 										<td>
 										&nbsp;

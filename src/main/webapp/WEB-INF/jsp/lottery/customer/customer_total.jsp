@@ -23,13 +23,9 @@
 <script src="static/ace/js/bootbox.js"></script>
 <!-- ace scripts -->
 <script src="static/ace/js/ace/ace.js"></script>
-<script src="http://code.jquery.com/jquery-1.4.1.js"></script>
-<!-- 下拉框 -->
-<script src="static/ace/js/chosen.jquery.js"></script>
+<!-- <script src="http://code.jquery.com/jquery-1.4.1.js"></script> -->
 <!-- 日期框 -->
 <script src="static/ace/js/My97DatePicker/WdatePicker.js"></script>
-<!--提示框-->
-<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 </head>
 <body class="no-skin">
 
@@ -113,7 +109,7 @@
 									</span>
 									<span class="input-icon" style="width:44px;"> </span>
 									<span>
-											<a class="btn btn-light btn-xs blue" onclick="toExcel();"  title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:100px">导出EXCEL</a>
+											<a class="btn btn-light btn-xs blue" onclick="toExcel();"  title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:100px">全部导出</a>
 									</span>
 								</td>
 								<td >
@@ -123,7 +119,7 @@
 									</span>
 									<span class="input-icon" style="width:37px;"> </span>
 									<span>
-											<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="一键指派"  style="border-radius:5px;color:blue !important; width:150px">一键指派</a>
+											<a class="btn btn-light btn-xs blue" onclick="toAssign('确定要指派选中的数据吗?');"  title="一键指派"  style="border-radius:5px;color:blue !important; width:150px">一键指派</a>
 									</span>
 								</td>
 														  	
@@ -134,7 +130,9 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									 
+									 <th class="center" style="width:35px;">
+										<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
+									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">手机号</th>
 									<th class="center">用户名</th>
@@ -155,7 +153,16 @@
 									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											 
+											 <td class='center'>
+												<label class="pos-rel">
+<%-- 												<c:choose> --%>
+<%-- 												<c:when test="${ empty var.last_add_seller_id}"> --%>
+													 <input type='checkbox' name='ids' value="${var.id}" class="ace" />
+<%-- 												</c:when> --%>
+<%-- 												</c:choose> --%>
+												
+												<span class="lbl"></span></label>
+											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.user_name}</td>
@@ -185,6 +192,9 @@
 												</c:if>
 												<c:if test="${var.user_source == 6}">
 													 其它
+												</c:if>
+												<c:if test="${var.user_source == 7}">
+													维护资源
 												</c:if>
 											</td>
 											<td class='center'>
@@ -216,33 +226,18 @@
 													 <a class="btn btn-xs btn-success" title="查看"   onclick="see('id=' + '${var.id}' + '');"	  >
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看">查看</i>
 													</a>
-													 
-												
-														
 												</div>
 												<div class="hidden-md hidden-lg">
 													<div class="inline pos-rel">
 														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
 															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
 														</button>
-			
 														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 															<li>
- 							 
-
-																	
 															</li>
-														 
-														 
 															<li>
- 
-					
-																		
 															</li>
-														 
-															
 															<li>
-																
 															</li>
 														</ul>
 													</div>
@@ -338,6 +333,54 @@
 			 };
 			 diag.show();
 		}			
+	
+		//打开指派页面
+		function toAssign(msg){
+					var str = '';
+					for(var i=0;i < document.getElementsByName('ids').length;i++){
+					  if(document.getElementsByName('ids')[i].checked){
+					  	if(str=='') str += document.getElementsByName('ids')[i].value;
+					  	else str += ',' + document.getElementsByName('ids')[i].value;
+					  }
+					}
+					if(str==''){
+						bootbox.dialog({
+							message: "<span class='bigger-110'>您没有选择任何内容!</span>",
+							buttons: 			
+							{ "button":{ "label":"确定", "className":"btn-sm btn-success"}}
+						});
+						$("#zcheckbox").tips({
+							side:1,
+				            msg:'点这里全选',
+				            bg:'#AE81FF',
+				            time:8
+				        });
+						return;
+					}else{
+						 top.jzts();
+						 var diag = new top.Dialog();
+						 diag.Drag=true;
+						 diag.Title ="指派页面";
+						 diag.URL = '<%=basePath%>customer/toAssign.do?ids='+str;
+						 diag.Width = 300;
+						 diag.Height = 100;
+						 diag.CancelEvent = function(){ //关闭事件
+							 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+								 if('${page.currentPage}' == '0'){
+									 top.jzts();
+									 setTimeout("self.location.reload()",100);
+								 }else{
+									 nextPage(${page.currentPage});
+								 }
+							}
+							diag.close();
+						 };
+						 diag.show();
+					}			
+			
+			
+			
+		}
 		
 		
 		function tosearch(status){

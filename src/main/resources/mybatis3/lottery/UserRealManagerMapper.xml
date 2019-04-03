@@ -21,8 +21,7 @@
 		status,	
 		add_time,	
 		reason,
-		is_delete,	
-		real_id
+		is_delete
 	</sql>
 	
 	<!-- 字段值 -->

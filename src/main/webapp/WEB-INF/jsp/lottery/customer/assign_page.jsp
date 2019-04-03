@@ -24,10 +24,11 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							<form action="customer/readExcel.do" name="uploadExcelForm" id="uploadExcelForm" method="post" enctype="multipart/form-data">
+							<form action="customer/updateSaler.do" name="assignForm" id="assignForm" method="post" enctype="multipart/form-data">
 								<div id="zhongxin">
 								<table style="width:95%;" >
 									<input type="hidden"  id="user_name"  name="user_name" value=""  />
+									<input type="hidden"  id="ids"  name="ids" value="${ids}"  />
 									<tr>
 										<td style="padding-top: 20px;">
 											<select  name="user_id" id="user_id" data-placeholder="请选择"   style="width:262px;" onChange="changeUserSelect();"  >
@@ -39,13 +40,9 @@
 										</td>
 									</tr>
 									<tr>
-										<td style="padding-top: 20px;"><input type="file" id="excel" name="excel" style="width:50px;" onchange="fileType(this)" /></td>
-									</tr>
-									<tr>
 										<td style="text-align: center;padding-top: 10px;">
-											<a class="btn btn-mini btn-primary" onclick="save();">导入</a>
+											<a class="btn btn-mini btn-primary" onclick="save();">确认</a>
 											<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
-										<!-- 	<a class="btn btn-mini btn-success" onclick="window.location.href='<%=basePath%>/user/downExcel.do'">下载模版</a> -->
 										</td>
 									</tr>
 								</table>
@@ -75,20 +72,6 @@
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
 		$(top.hangge());
-		$(function() {
-			//上传
-			$('#excel').ace_file_input({
-				no_file:'请选择EXCEL ...',
-				btn_choose:'选择',
-				btn_change:'更改',
-				droppable:false,
-				onchange:null,
-				thumbnail:false, //| true | large
-				whitelist:'xls|xls',
-				blacklist:'gif|png|jpg|jpeg'
-				//onchange:''
-			});
-		});
 		function changeUserSelect(){
 		    var deptsSelect = $("#user_id").find("option:selected").text();
 		    $("#user_name").val(deptsSelect);
@@ -100,7 +83,7 @@
 		
 		//保存
 		function save(){
-		if($("#user_id").val()==""){
+			if($("#user_id").val()==""){
 				$("#user_id").tips({
 					side:3,
 		            msg:'请选择销售人员',
@@ -109,33 +92,9 @@
 		        });
 				return false;
 			}
-			if($("#excel").val()=="" || document.getElementById("excel").files[0] =='请选择xls格式的文件'){
-				
-				$("#excel").tips({
-					side:3,
-		            msg:'请选择文件',
-		            bg:'#AE81FF',
-		            time:3
-		        });
-				return false;
-			}
-	
-			$("#uploadExcelForm").submit();
+			$("#assignForm").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
-		}
-		function fileType(obj){
-			var fileType=obj.value.substr(obj.value.lastIndexOf(".")).toLowerCase();//获得文件后缀名
-		    if(fileType != '.xls'){
-		    	$("#excel").tips({
-					side:3,
-		            msg:'请上传xls格式的文件',
-		            bg:'#AE81FF',
-		            time:3
-		        });
-		    	$("#excel").val('');
-		    	document.getElementById("excel").files[0] = '请选择xls格式的文件';
-		    }
 		}
 	</script>
 

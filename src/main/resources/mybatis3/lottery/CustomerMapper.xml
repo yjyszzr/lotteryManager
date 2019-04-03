@@ -173,6 +173,27 @@
 		where 
 		id = #{id}
 	</update>
+
+	<update id="updateById" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			<if test="last_add_time != null and last_add_time != ''">
+				last_add_time = #{last_add_time},
+			</if>
+			<if test="last_add_seller_name != null and last_add_seller_name != ''">
+				last_add_seller_name = #{last_add_seller_name},
+			</if>
+			<if test="last_add_seller_id != null and last_add_seller_id != ''">
+				last_add_seller_id = #{last_add_seller_id},
+			</if>
+			<if test="user_source != null and user_source != ''">
+				user_source = #{user_source},
+			</if>
+			  id = #{id}
+		where 
+			id = #{id}
+	</update>
 	
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">

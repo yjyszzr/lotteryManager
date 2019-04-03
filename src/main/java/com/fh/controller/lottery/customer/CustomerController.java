@@ -1,15 +1,22 @@
 package com.fh.controller.lottery.customer;
   
-import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
-import com.fh.entity.system.User;
-import com.fh.service.lottery.customer.CustomerManager;
-import com.fh.service.lottery.order.OrderManager;
-import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
-import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
-import com.fh.service.system.user.impl.UserService;
-import com.fh.util.*;
-import com.opensymphony.oscache.util.StringUtil;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.annotation.Resource;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -24,15 +31,25 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
+import com.fh.entity.system.User;
+import com.fh.service.lottery.customer.CustomerManager;
+import com.fh.service.lottery.order.OrderManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
+import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
+import com.fh.service.system.user.impl.UserService;
+import com.fh.util.AppUtil;
+import com.fh.util.Const;
+import com.fh.util.DateUtil;
+import com.fh.util.DateUtilNew;
+import com.fh.util.FileUpload;
+import com.fh.util.Jurisdiction;
+import com.fh.util.ObjectExcelView;
+import com.fh.util.PageData;
+import com.fh.util.PathUtil;
+import com.opensymphony.oscache.util.StringUtil;
 
 /** 
  * 说明：销售
@@ -58,6 +75,9 @@ public class CustomerController extends BaseController {
 	
 	@Resource(name = "orderService")
 	private OrderManager orderService;
+
+	@Resource(name = "userrealmanagerService")
+	private UserRealManagerService userrealmanagerService;
 	
 	/**删除
 	 * @param out
@@ -726,6 +746,17 @@ public class CustomerController extends BaseController {
 	}	
 	
 
+	@RequestMapping(value = "/toAssign")
+	public ModelAndView toAssign(@RequestParam(value = "ids", required = false) String  ids) throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		//		销售人员列表
+		PageData pd =new PageData();
+		List<PageData> pageDataList =userService.querySellers(pd);
+		mv.addObject("pageDataList", pageDataList);
+		mv.addObject("ids", ids);
+		mv.setViewName("lottery/customer/assign_page");
+		return mv;
+	}
 	@RequestMapping(value = "/goUploadExcel")
 	public ModelAndView goUploadExcel() throws Exception {
 		ModelAndView mv = this.getModelAndView();
@@ -759,6 +790,10 @@ public class CustomerController extends BaseController {
 			String fileName = FileUpload.fileUp(file, filePath, DateUtilNew.getCurrentDateTime2()); // 执行上传
 			List<PageData> listPd = (List) readExcel(filePath, fileName, 0, 0, 0); // 执行读EXCEL操作,读出的数据导入List，2:从第3行开始；0:从第A列开始；0:第0个sheet
 			Long   dataTimeToLong=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
+			PageData pds  =new PageData();
+			List<PageData> customerList  = customerService.listAll(pds);
+			Map<String,PageData> customerMap =new HashMap<String,PageData>(customerList.size());
+			customerList.forEach(item -> customerMap.put(item.getString("mobile"), item));
 			for (int i = 0; i < listPd.size(); i++) {
 				String phone = listPd.get(i).getString("var0");
 			    if (phone.length() == 11) {
@@ -768,10 +803,14 @@ public class CustomerController extends BaseController {
 			        boolean isMatch = m.matches();
 			        if (isMatch) {
 			        PageData  pdCustomerMobile  =new 	PageData ();
-			        pdCustomerMobile.put("mobile",listPd.get(i).getString("var0"));
+			        pdCustomerMobile.put("mobile",phone);
 			        PageData  pdCustomer  = orderService.findByMobile(pdCustomerMobile);
 			        if (null!=pdCustomer) {
 			        	pdCustomer.put("pay_state",1); 
+			        	  PageData  pdRealUser =	userrealmanagerService.findById(pdCustomer);
+			        	  if(null!=pdRealUser) {
+			        		  pdCustomer.put("user_name",pdRealUser.getString("real_name")); 
+			        	  }
 			        }else {
 			        	pdCustomer =new PageData();
 			        	pdCustomer.put("pay_state",0); //购彩状态
@@ -781,13 +820,16 @@ public class CustomerController extends BaseController {
 			        pdCustomer.put("user_source",1);	 //用户来源
 			        pdCustomer.put("first_pay_time",pdCustomer.get("pay_time")); //第一次支付的时间
 			        pdCustomer.put("first_add_time",dataTimeToLong); //第一次分配的时间
-			        pdCustomer.put("last_add_time ",dataTimeToLong); //最后一次分配的时间
-			        pdCustomer.put("distribute_state ",1);//是否置回
+			        pdCustomer.put("last_add_time",dataTimeToLong); //最后一次分配的时间
+			        pdCustomer.put("distribute_state",1);//是否置回
 			        pdCustomer.put("first_add_seller_name",userName);  //第一次分配的销售人员
 			        pdCustomer.put("first_add_seller_id",userId); //第一次分配的销售人员Id
 			        pdCustomer.put("last_add_seller_name",userName); //最后一次分配的销售人员Id
 			        pdCustomer.put("last_add_seller_id",userId); //最后一次分配的销售人员Id
-			        customerService.save(pdCustomer);
+			        PageData  pdOldCustomer = customerMap.get(phone);
+				        if (null==pdOldCustomer) {
+				        	customerService.save(pdCustomer);
+						}
 			        }
 				}
 			}
@@ -795,20 +837,28 @@ public class CustomerController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+	@RequestMapping(value = "/updateSaler")
+	public ModelAndView updateSaler(@RequestParam(value = "user_id", required = false) String  userId,@RequestParam(value = "user_name", required = false) String  userName,@RequestParam(value = "ids", required = false) String  ids) throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return null;
+		}
+		List<String> idList = Arrays.asList(ids.split(","));
+		Long   dataTimeToLong=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
+		for (int i = 0; i < idList.size(); i++) {
+			PageData pd  =new PageData();
+			pd.put("id", idList.get(i));
+			pd.put("last_add_time",dataTimeToLong); //最后一次分配的时间
+			pd.put("last_add_seller_name",userName); //最后一次分配的销售人员Id
+			pd.put("last_add_seller_id",userId); //最后一次分配的销售人员Id
+			pd.put("user_source",7); //改为维护资源
+			customerService.updateById(pd);
+		}
+		
+		mv.setViewName("save_result");
+		return mv;
+	}
 	
-	
-
-public static boolean isPhone(String phone) {
-    String regex = "^(1)\\d{10}$";
-    if (phone.length() != 11) {
-        return false;
-    } else {
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(phone);
-        boolean isMatch = m.matches();
-        return isMatch;
-    }
-}
 	 /**批量删除
 	 * @param
 	 * @throws Exception

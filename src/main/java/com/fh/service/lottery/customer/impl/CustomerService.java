@@ -101,6 +101,12 @@ public class CustomerService implements CustomerManager{
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
 		dao.delete("CustomerMapper.deleteAll", ArrayDATA_IDS);
 	}
+
+	@Override
+	public void updateById(PageData pd) throws Exception {
+		dao.update("CustomerMapper.updateById", pd);
+		
+	}
 	
 }
 
