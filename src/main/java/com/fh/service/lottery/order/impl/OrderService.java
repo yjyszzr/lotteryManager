@@ -339,4 +339,9 @@ public class OrderService implements OrderManager {
 		return (PageData) dao.findForObject("OrderMapper.findByMobile", pdCustomerMobile);
 	}
 
+	@Override
+	public PageData findByUserIds(PageData pageDataUserIds) throws Exception {
+		return (PageData) dao.findForObject("OrderMapper.findByIds", pageDataUserIds);
+	}
+
 }

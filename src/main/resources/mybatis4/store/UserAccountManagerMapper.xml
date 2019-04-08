@@ -381,4 +381,8 @@
 	</select>
 	
 	
+	<select id="getOtherUserId" resultType="pd">
+	select * from dl_user_auths where third_user_id = #{user_id}
+	</select>
+	
 </mapper>

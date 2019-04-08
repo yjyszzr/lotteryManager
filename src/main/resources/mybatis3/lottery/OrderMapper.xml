@@ -950,7 +950,28 @@
 			dl_order 
 		WHERE
 			mobile = #{mobile} 
-			AND add_time > 1541520000 
+			AND add_time > 1541520000  
+			AND pay_status = 1
+		ORDER BY
+			add_time ASC 
+			LIMIT 1;
+	</select>
+	<select id="findByIds"  resultType="pd">
+		SELECT
+			user_id,
+			pay_time
+		FROM
+			dl_order 	
+			WHERE add_time > 1541520000  
+			AND pay_status = 1
+		<if test="user_id_1 != null and user_id_1 != ''">
+			AND user_id in( #{user_id_1}	
+			<if test="user_id_2 != null and user_id_2 != ''">
+			 	,#{user_id_2}	
+			</if>)
+		</if>
+	
+		
 		ORDER BY
 			add_time ASC 
 			LIMIT 1;

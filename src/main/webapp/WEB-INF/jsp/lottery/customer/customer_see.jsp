@@ -84,6 +84,9 @@
 												<c:if test="${customer.user_source == 6}">
 													 其它
 												</c:if>
+												<c:if test="${customer.user_source == 7}">
+													 维护资源
+												</c:if>
 										</td>
 									</tr>
 									</tbody>
@@ -117,7 +120,7 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.user_id_id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											 -->
-											<td class='center'>${var.index+1}</td>
+											<td class='center'>${vs.index+1}</td>
 											<td class='center'>
 <%-- 												${var.order_sn} --%>
 												${StringUtil.strReplace(var.order_sn, 8, 14, "XXXXXX")}

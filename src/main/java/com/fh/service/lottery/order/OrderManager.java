@@ -130,5 +130,7 @@ public interface OrderManager {
 
 	public PageData findByMobile(PageData pdCustomerMobile)throws Exception;
 
+	public PageData findByUserIds(PageData pageDataUserIds)throws Exception;
+
 
 }

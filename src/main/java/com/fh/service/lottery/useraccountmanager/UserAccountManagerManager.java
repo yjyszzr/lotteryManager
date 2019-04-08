@@ -1,10 +1,11 @@
 package com.fh.service.lottery.useraccountmanager;
 
-import com.fh.entity.Page;
-import com.fh.util.PageData;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import com.fh.entity.Page;
+import com.fh.util.PageData;
 
 /**
  * 说明： 流水相关接口 创建人：FH Q313596790 创建时间：2018-04-24
@@ -73,6 +74,8 @@ public interface UserAccountManagerManager {
 	public PageData getCountOrderByMobile(PageData pd) throws Exception; 
 	
 	public PageData getUserByUserId(PageData pd) throws Exception;
+	
+	public PageData getOtherUserId(PageData pd) throws Exception;
 
 	public List<PageData> findByUserIdStoreId(PageData pd) throws Exception;
 	

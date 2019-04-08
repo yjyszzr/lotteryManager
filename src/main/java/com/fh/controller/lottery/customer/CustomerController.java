@@ -36,6 +36,7 @@ import com.fh.entity.Page;
 import com.fh.entity.system.User;
 import com.fh.service.lottery.customer.CustomerManager;
 import com.fh.service.lottery.order.OrderManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
@@ -65,7 +66,10 @@ public class CustomerController extends BaseController {
 	private CustomerManager customerService;
 	
 	@Resource(name="useraccountService")
-	private UserAccountService userAccountManagerService;
+	private UserAccountService userAccountService;
+	
+	@Resource(name="useraccountmanagerService")
+	private UserAccountManagerService userAccountManagerService;
 	
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
@@ -176,7 +180,7 @@ public class CustomerController extends BaseController {
 			String user_id_2 = "";
 			PageData _pd = new PageData();
 			_pd.put("mobile", pd.getString("mobile"));
-			PageData _user = this.userAccountManagerService.getUserByMobile(_pd);
+			PageData _user = this.userAccountService.getUserByMobile(_pd);
 			if (null != _user) {
 				user_id_2 = _user.getString("user_id");
 			}
@@ -188,7 +192,7 @@ public class CustomerController extends BaseController {
 			if (_count > 0) {
 				map.put("flag", false);
 				map.put("msg", "2018年11月7号之后有购过彩");
-				return AppUtil.returnObject(new PageData(), map);
+				return AppUtil.returnObject(new PageData(), map); 
 			}
 			
 //			_pd = null;
@@ -255,7 +259,7 @@ public class CustomerController extends BaseController {
 			String user_id_2 = "";
 			PageData _pd = new PageData();
 			_pd.put("mobile", pd.getString("mobile"));
-			PageData _user = this.userAccountManagerService.getUserByMobile(_pd);
+			PageData _user = this.userAccountService.getUserByMobile(_pd);
 			if (null != _user) {
 				user_id_2 = _user.getString("user_id");
 			}
@@ -549,6 +553,8 @@ public class CustomerController extends BaseController {
 				user_source = "电话访问";
 			if (varOList.get(i).getString("user_source").equals("6"))
 				user_source = "其它";
+			if (varOList.get(i).getString("user_source").equals("7"))
+				user_source = "维护资源";
 			vpd.put("var4", user_source);	    //4
 			
 			String pay_state = "";
@@ -607,7 +613,7 @@ public class CustomerController extends BaseController {
 		}
 		
 		String user_id_2 = "";
-		PageData user_2 = this.userAccountManagerService.getUserByMobile(_pd);
+		PageData user_2 = this.userAccountService.getUserByMobile(_pd);
 		if (null != user_2) {
 			user_id_2 = user_2.getString("user_id");
 		}
@@ -681,7 +687,7 @@ public class CustomerController extends BaseController {
 		}
 		
 		String user_id_2 = "";
-		PageData user_2 = this.userAccountManagerService.getUserByMobile(_pd);
+		PageData user_2 = this.userAccountService.getUserByMobile(_pd);
 		if (null != user_2) {
 			user_id_2 = user_2.getString("user_id");
 		}
@@ -701,7 +707,8 @@ public class CustomerController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		_pd.put("start_add_time", start_add_time);
+		//不懂为啥有这个时间限制
+//		_pd.put("start_add_time", start_add_time);
 		
 		String user_id_s = "";
 		if (!StringUtil.isEmpty(user_id_1)) {
@@ -804,21 +811,31 @@ public class CustomerController extends BaseController {
 			        if (isMatch) {
 			        PageData  pdCustomerMobile  =new 	PageData ();
 			        pdCustomerMobile.put("mobile",phone);
-			        PageData  pdCustomer  = orderService.findByMobile(pdCustomerMobile);
-			        if (null!=pdCustomer) {
+			        PageData  pdCustomer  =new  PageData();
+			        PageData  pdCxmCustomer  = userAccountManagerService.getUserByMobile(pdCustomerMobile); 
+			        String userId1 = "";
+			        String userId2 = "";
+					if (null!=pdCxmCustomer) {
+						userId1 = pdCxmCustomer.getString("user_id");
+						PageData  pdSotreCustomer  =	userAccountService.getOtherUserId(pdCxmCustomer);
+						PageData PageDataUserIds =new PageData();
+						pdCustomer.put("user_id",userId1);//用户Id 
+						if (null!=pdSotreCustomer) {
+							userId2 = pdSotreCustomer.getString("user_id");
+						}
+			        	PageDataUserIds.put("user_id_1", userId1); 
+			        	PageDataUserIds.put("user_id_2", userId2); 
+		        	   PageData  pdCustomerOrder=	orderService.findByUserIds(PageDataUserIds);
 			        	pdCustomer.put("pay_state",1); 
-			        	  PageData  pdRealUser =	userrealmanagerService.findById(pdCustomer);
-			        	  if(null!=pdRealUser) {
-			        		  pdCustomer.put("user_name",pdRealUser.getString("real_name")); 
-			        	  }
+			        	pdCustomer.put("user_name",""); 
+			        	pdCustomer.put("first_pay_time",pdCustomerOrder.get("pay_time")); //第一次支付的时间
 			        }else {
 			        	pdCustomer =new PageData();
 			        	pdCustomer.put("pay_state",0); //购彩状态
 			        }
 			        pdCustomer.put("mobile",listPd.get(i).getString("var0"));//电话 
 			        pdCustomer.put("user_state",2); //用户状态(新老用户)
-			        pdCustomer.put("user_source",1);	 //用户来源
-			        pdCustomer.put("first_pay_time",pdCustomer.get("pay_time")); //第一次支付的时间
+			        pdCustomer.put("user_source",7);	 //用户来源
 			        pdCustomer.put("first_add_time",dataTimeToLong); //第一次分配的时间
 			        pdCustomer.put("last_add_time",dataTimeToLong); //最后一次分配的时间
 			        pdCustomer.put("distribute_state",1);//是否置回
