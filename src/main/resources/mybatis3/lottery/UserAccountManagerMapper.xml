@@ -10,7 +10,7 @@
 	<select id="getUserByMobile" parameterType="pd" resultType="pd">
 		select 
 		*
-		from user
+		from 
 		dl_user
 		where 
 			mobile = #{mobile}
