@@ -289,7 +289,7 @@
 		SELECT
 			SUM( a.amount ) AS amount
 		FROM
-			dl_user_account a  left  join dl_user u on a.user_id = u.user_id where  a.mobile = #{mobile} and a.process_type = 4;
+			dl_user_account a  left  join dl_user u on a.user_id = u.user_id where  u.mobile = #{mobile} and a.process_type = 4;
 	</select>
  	<!-- 累计提现汇总 -->
 	 
@@ -365,7 +365,7 @@
 	</select>
 	
 <!-- 	<select id ="queryPayLogByPayOrderSn" parameterType="pd" resultType="pd">
-		select * from dl_pay_log 
+		select * from dl_pay_log ß
 	</select> -->
 
 	<select id = "queryUserAccountBalanceByOrderSns" resultType="pd">
@@ -377,7 +377,7 @@
 
 
 	<select id="getBalanceByMobile" parameterType="pd" resultType="java.lang.Double">
-		select (sm.money+sm.money_limit) balanceMoney from dl_user u left join dl_user_store_money sm on u.user_id = sm.user_id where u.mobile = #{mobile}
+		select sum(sm.money+sm.money_limit) balanceMoney from dl_user u left join dl_user_store_money sm on u.user_id = sm.user_id where u.mobile = #{mobile}
 	</select>
 	
 	
