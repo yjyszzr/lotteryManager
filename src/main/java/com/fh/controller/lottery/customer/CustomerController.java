@@ -835,7 +835,7 @@ public class CustomerController extends BaseController {
 			        }
 			        pdCustomer.put("mobile",listPd.get(i).getString("var0"));//电话 
 			        pdCustomer.put("user_state",2); //用户状态(新老用户)
-			        pdCustomer.put("user_source",7);	 //用户来源
+			        pdCustomer.put("user_source",1);	 //用户来源
 			        pdCustomer.put("first_add_time",dataTimeToLong); //第一次分配的时间
 			        pdCustomer.put("last_add_time",dataTimeToLong); //最后一次分配的时间
 			        pdCustomer.put("distribute_state",1);//是否置回
