@@ -111,6 +111,7 @@ public class UserManagerControllerController extends BaseController {
 				newPd.put("winning_money",s.getString("winning_money"));
 				newPd.put("add_time",s.getString("add_time"));
 				String surplusStr = s.getString("surplus");
+				surplusStr = StringUtils.isEmpty(surplusStr)?"0.00":surplusStr;
 				Double surplus = Double.valueOf(surplusStr);
 				if(surplus > 0.00){
 					String orderBalance  = orderBalanceMap.get(s.getString("order_sn"));
