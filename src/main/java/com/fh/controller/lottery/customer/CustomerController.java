@@ -825,10 +825,14 @@ public class CustomerController extends BaseController {
 						}
 			        	PageDataUserIds.put("user_id_1", userId1); 
 			        	PageDataUserIds.put("user_id_2", userId2); 
-		        	   PageData  pdCustomerOrder=	orderService.findByUserIds(PageDataUserIds);
+		        	   PageData  pdCustomerOrder =	orderService.findByUserIds(PageDataUserIds);
 			        	pdCustomer.put("pay_state",1); 
 			        	pdCustomer.put("user_name",""); 
-			        	pdCustomer.put("first_pay_time",pdCustomerOrder.get("pay_time")); //第一次支付的时间
+			        	if (null != pdCustomerOrder) {
+			        		pdCustomer.put("first_pay_time",pdCustomerOrder.get("pay_time")); //第一次支付的时间
+						}else {
+							pdCustomer.put("first_pay_time",""); //第一次支付的时间
+						}
 			        }else {
 			        	pdCustomer =new PageData();
 			        	pdCustomer.put("pay_state",0); //购彩状态
