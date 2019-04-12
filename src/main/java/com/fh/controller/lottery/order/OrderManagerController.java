@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fh.common.ProjectConstant;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
-import com.fh.entity.dto.DlJcZqMatchCellDTO;  
+import com.fh.entity.dto.DlJcZqMatchCellDTO;
 import com.fh.entity.dto.MatchBetCellDTO;
 import com.fh.entity.system.User;
 import com.fh.enums.MatchBetTypeEnum;

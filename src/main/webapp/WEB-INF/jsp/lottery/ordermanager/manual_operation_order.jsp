@@ -74,7 +74,7 @@
 										  	</select>
 										  	</div>
 									</th>
-										<td>
+										<th>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
 													彩种:
@@ -85,7 +85,7 @@
 													<option value="2" <c:if test="${pd.lottery_classify_id == 2}">selected</c:if>>大乐透</option>
 										  	</select>
 										  	</div>
-									</td>
+									</th>
 										</tr>
 										<tr>
 									<th  >
@@ -131,6 +131,20 @@
 										</th>
 <%-- 									</c:if> --%>
 									</tr>
+									<tr>
+										<th>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													平台来源:
+												</span>
+										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  >
+													<option value="" selected="selected">全部来源</option>
+													<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
+													<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣合APP</option>
+										  	</select>
+										  	</div>
+									</th>
+									</tr>
 							</table>
 						<!-- 检索  -->
 					
@@ -147,7 +161,7 @@
 									 -->
 									<th class="center">手机号</th>
 									<th class="center">购买彩种</th>
-									<th class="center">店铺</th>
+									<th class="center">平台来源</th>
 									<th class="center">支付方式</th>
 									<th class="center">投注金额</th>
 									<th class="center">中奖金额</th>
@@ -178,7 +192,14 @@
 											 -->
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
-											<td class='center'>${var.name}</td>
+											<td class='center'>
+											<c:choose>
+												<c:when test="${var.app_code_name==10}">球多多</c:when>
+												<c:when test="${var.app_code_name==11}">圣合APP</c:when>
+												<c:otherwise>球多多</c:otherwise>
+											</c:choose>
+											
+											</td>
 											<th class="center">
 												  <c:choose>  
 													   <c:when test="${var.surplus > 0}">余额支付 
@@ -340,6 +361,7 @@
 				$("#order_status").empty();
 				$("#mo_status").empty();
 				$("#mobile").val("");
+				$("#app_code_name").empty();
 			}
 			top.jzts();
 			$("#Form").submit();

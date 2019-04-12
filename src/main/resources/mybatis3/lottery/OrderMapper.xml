@@ -45,8 +45,9 @@
 		forecast_money,	
 		issue,	
 		is_delete,	
-		ticket_num
-		,mobile 
+		ticket_num,
+		app_code_name,
+		mobile 
 	</sql>
 	
 	<!-- 字段值 -->
@@ -87,8 +88,9 @@
         #{forecast_money},	
         #{issue},	
         #{is_delete},	
-        #{ticket_num}	
-        ,#{mobile}
+        #{ticket_num},	
+        #{app_code_name},	
+        #{mobile}
 	</sql>
 	
 	<update id="setFirstPayTime" parameterType="java.util.Map">
@@ -318,8 +320,8 @@
 	<!-- 手动支付订单列表 -->
 	<select id="datalistPage2" parameterType="page" resultType="pd">
 		SELECT
-			l.`lottery_name`, 
-			s.`name`,
+			l.lottery_name, 
+			s.name,
 			o.order_id order_id,
 			o.order_sn order_sn,
 			o.user_id user_id,
@@ -335,6 +337,7 @@
 			o.add_time add_time,
 			o.pay_time pay_time,
 			o.pay_status pay_status,
+			o.app_code_name app_code_name,
 			a.order_status mo_status,
 			a.operation_time mo_add_time,
 			o.store_id 
@@ -343,8 +346,8 @@
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
-			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
-			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
+			LEFT JOIN dl_lottery_classify l ON l.lottery_classify_id = o.lottery_classify_id
+			LEFT JOIN dl_store s ON s.id = o.store_id
 		WHERE o.add_time > 1541520000
 		 
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
@@ -392,6 +395,9 @@
 		</if>
 		<if test="pd.order_status == null || pd.order_status == ''"> 
 				and o.order_status  <![CDATA[ <> ]]>  8
+		</if>
+		<if test="pd.app_code_name != null and pd.app_code_name != ''"> 
+				and o.app_code_name = #{pd.app_code_name}
 		</if>
 		order  by 	o.add_time desc
 	</select>
