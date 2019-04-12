@@ -126,7 +126,7 @@
 											<td class="center">
 												<fmt:formatNumber type="number" value="${var.balance}" pattern="0.00" maxFractionDigits="2"/>
 											</td>
-											<td class='center'>${var.reg_time}</td>
+											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
 											<td class='center'>
 												<a class="btn btn-xs btn-success" title="查看" onclick="see('mobile=' + '${var.mobile}' + '');">
 													<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看">查看</i>
