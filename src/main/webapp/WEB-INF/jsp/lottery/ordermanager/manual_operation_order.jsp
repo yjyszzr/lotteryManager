@@ -513,6 +513,7 @@
 				var orderStatus = $("#order_status").val();
 				var lastStart = $("#lastStart").val();
 				var lastEnd = $("#lastEnd").val();
+				var app_code_name = $("#app_code_name").val();
 				var str = '';
 					for(var i=0;i < document.getElementsByName('ids').length;i++){
 					  if(document.getElementsByName('ids')[i].checked){
@@ -520,10 +521,10 @@
 					  	else str += ',' + document.getElementsByName('ids')[i].value;
 					  }
 					}
-				if(lastStart =='' && lastEnd =='' && orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' ){
+				if(lastStart =='' && lastEnd =='' && orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' && app_code_name == ''){
 					alert("请选择要导出的数据。");
 				}else{
-				window.location.href='<%=basePath%>ordermanager/excelForMO.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&orderSn='+orderSn+'&moStatus='+moStatus+'&orderStatus='+orderStatus+'&idsStr='+str;
+				window.location.href='<%=basePath%>ordermanager/excelForMO.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&orderSn='+orderSn+'&moStatus='+moStatus+'&orderStatus='+orderStatus+'&idsStr='+str+'&app_code_name='+app_code_name;
 				}
 			}
 			

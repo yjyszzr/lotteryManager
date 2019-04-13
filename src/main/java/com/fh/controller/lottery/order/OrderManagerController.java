@@ -548,7 +548,7 @@ public class OrderManagerController extends BaseController {
 		titles.add("订单编号"); // 1
 		titles.add("手机号"); // 2
 		titles.add("购买彩种");  // 3
-		titles.add("店铺"); // 4
+		titles.add("平台来源"); // 4
 		titles.add("支付方式"); // 5
 		titles.add("投注金额"); // 6
 		titles.add("中奖金额"); // 7
@@ -600,7 +600,16 @@ public class OrderManagerController extends BaseController {
 			}
 			
 			vpd.put("var3", varOList.get(i).getString("lottery_name")); // 3
-			vpd.put("var4", varOList.get(i).getString("name")); // 5
+			String appCode = varOList.get(i).getString("app_code_name");
+			String appCodeStr = "";
+			if (appCode.equals("10")) {
+				appCodeStr = "球多多";
+			}else 	if (appCode.equals("11")) {
+				appCodeStr = "圣合APP";
+			}else {
+				appCodeStr = "球多多";
+			}
+			vpd.put("var4", appCodeStr); // 5
 			String surplusStr = "";
 			Double surplus = new Double(varOList.get(i).getString("surplus"));
 			if (surplus > 0) {
