@@ -320,7 +320,6 @@
         }else{
             $("#superWhiteUser").show();
         }
-
     });
 
     //新增
@@ -430,7 +429,8 @@
     }
 
     function goListAccount(str){
-
+        var app_code_name = $("#app_code_name").val();
+        str = str +'&app_code_name=' + app_code_name;
         top.jzts();
         var diag = new top.Dialog();
         diag.Drag=true;

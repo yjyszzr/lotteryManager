@@ -104,9 +104,9 @@
 									<th class="center">大礼包金额</th>
 									<th class="center">状态</th>
 									<th class="center">扣款原因</th>
-									<th class="center">充值时间</th>
-									<th class="center">店铺</th>
-									<th class="center">充值状态</th>
+									<th class="center">时间</th>
+									<th class="center">平台来源</th>
+									<th class="center">状态</th>
 									<th class="center">操作人</th>
 								</tr>
 							</thead>

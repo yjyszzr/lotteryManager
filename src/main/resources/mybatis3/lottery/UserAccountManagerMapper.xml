@@ -294,5 +294,30 @@
 	<select id="getBalanceByMobile" parameterType="pd" resultType="java.lang.Double">
 		select (u.user_money+u.user_money_limit) balanceMoney from dl_user u  where u.mobile = #{mobile}
 	</select>
+
+	<select id="datalistQddAccountPage" parameterType="page" resultType="pd">
+		SELECT user.`mobile`, user.app_code_name `name`, user_account.*
+		FROM `dl_user_account` user_account, `dl_user` user
+		WHERE user_account.`user_id` = user.user_id and user.app_code_name = #{app_code_name}
+		<if test="pd.user_id!= null and pd.user_id != ''">
+			and user_account.user_id LIKE CONCAT(CONCAT('%', #{pd.user_id}),'%')
+		</if>
+		<if test="pd.user_id!= null and pd.user_id != ''">
+			and user_account.user_id LIKE CONCAT(CONCAT('%', #{pd.user_id}),'%')
+		</if>
+		<if test="pd.store_id!= null and pd.store_id != ''">
+			and user_account.store_id LIKE CONCAT(CONCAT('%', #{pd.store_id}),'%')
+		</if>
+		<if test="pd.end_add_time!= null and pd.end_add_time != ''">
+			AND user_account.`add_time` &lt;= #{pd.end_add_time}
+		</if>
+		<if test="pd.start_add_time!= null and pd.start_add_time != ''">
+			AND user_account.`add_time` &gt;= #{pd.start_add_time}
+		</if>
+		<if test="pd.process_type!= null and pd.process_type != ''">
+			AND user_account.`process_type` = #{pd.process_type}
+		</if>
+		order by user_account.add_time desc
+	</select>
 	
 </mapper>

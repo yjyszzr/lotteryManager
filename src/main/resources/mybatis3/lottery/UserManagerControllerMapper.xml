@@ -644,7 +644,7 @@
 	<select id="getRegisterAndOrder" parameterType="pd" resultType="pd">
 
 		SELECT COALESCE(count(distinct od.user_id),0) as count,
-			   COALESCE(sum(od.money_paid),0) as amount,
+			   COALESCE(sum(od.money_paid),0) as amount,getUserByMobile
 		COALESCE(sum(od.ticket_amount),0) as amountTicket
 		FROM dl_user us  left join  dl_order od on
 													us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
@@ -676,7 +676,7 @@
 
 
 	<select id="queryUserByMobile" parameterType="pd" resultType="pd">
-		SELECT * from dl_user where mobile = #{mobile}
+		SELECT * from dl_user where mobile = #{mobile} and app_code_name = #{app_code_name}
 	</select>
 
 	<update id="refoundToUserMoneyLimit" >

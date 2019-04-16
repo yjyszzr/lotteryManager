@@ -184,9 +184,6 @@ public interface UserAccountManagerManager {
 	 */
 	public Double getBalanceByMobile(PageData pd) throws Exception;
 
-
-
-
-
+	public List<PageData> datalistQddAccountPage(Page pd) throws Exception;
 
 }

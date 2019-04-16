@@ -7,6 +7,7 @@ import com.fh.enums.SNBusinessCodeEnum;
 import com.fh.service.lottery.customer.CustomerManager;
 import com.fh.service.lottery.rechargecard.impl.RechargeCardService;
 import com.fh.service.lottery.superwhitelist.SuperWhiteListManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.usermanagercontroller.impl.UserManagerControllerService;
 import com.fh.util.*;
@@ -40,6 +41,10 @@ public class SuperWhiteListController extends BaseController {
 
 	@Resource(name="useraccountService")
 	private UserAccountService userAccountManagerService;
+
+
+	@Resource(name="useraccountmanagerService")
+	private UserAccountManagerService userAccountManagerService3;
 
 	@Resource(name="rechargecardService")
 	private RechargeCardService rechargecardService;
@@ -359,7 +364,13 @@ public class SuperWhiteListController extends BaseController {
 			pd.put("end_add_time", DateUtilNew.getMilliSecondsByStr(_end_add_time.trim()));
 		}
 		page.setPd(pd);
-		List<PageData>	varList = this.superwhitelistService.listAccount(page);
+		String appCodeName = pd.getString("app_code_name");
+		List<PageData> varList = new ArrayList<>();
+		if(appCodeName.equals("11")){
+			varList =  userAccountManagerService3.datalistQddAccountPage(page);
+		}else{
+			varList = this.superwhitelistService.listAccount(page);
+		}
 
 		pd.put("start_add_time", _start_add_time.trim());
 		pd.put("end_add_time", _end_add_time.trim());
@@ -554,7 +565,7 @@ public class SuperWhiteListController extends BaseController {
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
 		pd.put("admin_user", user.getNAME());
 		pd.put("amount", pd.get("number"));
-		PageData pdMobile = userManagerControllerService.queryUserByMobile(pd.getString("mobile"));
+		PageData pdMobile = userManagerControllerService.queryUserByMobile(pd);
 		BigDecimal bigMoney = new BigDecimal( null != pdMobile.getString("user_money") ? pdMobile.getString("user_money") : "0");
 		BigDecimal bigMoneyLimit = new BigDecimal(null != pdMobile.getString("user_money_limit") ? pdMobile.getString("user_money_limit") : "0");
 		BigDecimal curBalance = bigMoney.add(bigMoneyLimit);
@@ -565,9 +576,8 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("add_time",time);
 		pd.put("process_type", "8");//退款
 		pd.put("status", "1");
-		pd.put("id", "");
 
-		userAccountManagerService.save(pd);
+		userAccountManagerService3.save(pd);
 
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
