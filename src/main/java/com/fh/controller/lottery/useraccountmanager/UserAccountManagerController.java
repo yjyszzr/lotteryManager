@@ -1,37 +1,5 @@
 package com.fh.controller.lottery.useraccountmanager;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.entity.dto.PayAllDTO;
@@ -42,8 +10,28 @@ import com.fh.util.AppUtil;
 import com.fh.util.Jurisdiction;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
-/** 
+import javax.annotation.Resource;
+import java.io.*;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
  * 说明：流水相关
  * 创建人：FH Q313596790
  * 创建时间：2018-04-24
@@ -51,14 +39,14 @@ import com.fh.util.PageData;
 @Controller
 @RequestMapping(value="/useraccountmanager")
 public class UserAccountManagerController extends BaseController {
-	
+
 	String menuUrl = "useraccountmanager/list.do"; //菜单地址(权限用)
 	@Resource(name="useraccountmanagerService")
 	private UserAccountManagerManager useraccountmanagerService;
-	
+
 	@Resource(name="paylogService")
 	private PayLogService payLogService;
-	
+
 	/**保存
 	 * @param
 	 * @throws Exception
@@ -92,7 +80,7 @@ public class UserAccountManagerController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
+
 	/**删除
 	 * @param out
 	 * @throws Exception
@@ -107,7 +95,7 @@ public class UserAccountManagerController extends BaseController {
 		out.write("success");
 		out.close();
 	}
-	
+
 	/**修改
 	 * @param
 	 * @throws Exception
@@ -124,7 +112,7 @@ public class UserAccountManagerController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
+
 	/**列表
 	 * @param page
 	 * @throws Exception
@@ -148,7 +136,7 @@ public class UserAccountManagerController extends BaseController {
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
 	}
-	
+
 	/**去新增页面
 	 * @param
 	 * @throws Exception
@@ -162,9 +150,9 @@ public class UserAccountManagerController extends BaseController {
 		mv.addObject("msg", "save");
 		mv.addObject("pd", pd);
 		return mv;
-	}	
-	
-	 /**去修改页面
+	}
+
+	/**去修改页面
 	 * @param
 	 * @throws Exception
 	 */
@@ -178,9 +166,9 @@ public class UserAccountManagerController extends BaseController {
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
 		return mv;
-	}	
-	
-	 /**批量删除
+	}
+
+	/**批量删除
 	 * @param
 	 * @throws Exception
 	 */
@@ -189,7 +177,7 @@ public class UserAccountManagerController extends BaseController {
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除UserAccountManager");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
-		PageData pd = new PageData();		
+		PageData pd = new PageData();
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
@@ -205,9 +193,9 @@ public class UserAccountManagerController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
-	
-	 /**conpareMoney
+
+
+	/**conpareMoney
 	 * @param
 	 * @throws Exception
 	 */
@@ -217,7 +205,7 @@ public class UserAccountManagerController extends BaseController {
 		List<PayLogDTO> excelPdList = new ArrayList<>();
 		Map<String,String> map = new HashMap<>();
 		PageData pd = new PageData();
-		PayAllDTO payAllDto = this.resolvePayOrderSnExcel("D:\\wxPayInfo.xls"); 
+		PayAllDTO payAllDto = this.resolvePayOrderSnExcel("D:\\wxPayInfo.xls");
 		excelPdList = payAllDto.getPayLogDTOList();
 		Map<String, PayLogDTO> excelMap = excelPdList.stream().collect(Collectors.toMap(PayLogDTO::getTradeNo, a -> a,(k1,k2)->k1));
 		Map<String, PayLogDTO> dbMap = this.queryDBPayLogList(excelPdList);
@@ -238,22 +226,22 @@ public class UserAccountManagerController extends BaseController {
 		System.out.println("比较结束");
 		return AppUtil.returnObject(pd, map);
 	}
-	
-	/** 
+
+	/**
 	 * 以我们的db为比较基础
 	 * @param dbMap
 	 * @param excelMap
 	 */
 	public void  compareDBMapAndExcelMap(Map<String, PayLogDTO> dbMap,  Map<String, PayLogDTO> excelMap) {
-		 for (Map.Entry<String, PayLogDTO> entry : dbMap.entrySet()) {
-			   String key = entry.getKey().toString();
-			   PayLogDTO value = entry.getValue();
-			   if(null == excelMap.get(key)) {
-				   System.out.println("excel 中不存在"+key);
-			   }
+		for (Map.Entry<String, PayLogDTO> entry : dbMap.entrySet()) {
+			String key = entry.getKey().toString();
+			PayLogDTO value = entry.getValue();
+			if(null == excelMap.get(key)) {
+				System.out.println("excel 中不存在"+key);
+			}
 		}
 	}
-	
+
 	public Map<String,PayLogDTO> queryDBPayLogList(List<PayLogDTO> excelPdList) throws Exception{
 		List<String> payOrderSns = excelPdList.stream().map(s->s.getTradeNo()).collect(Collectors.toList());
 		PageData pd = new PageData();
@@ -267,74 +255,74 @@ public class UserAccountManagerController extends BaseController {
 			pld.setIsPaid("true".equals(s.getString("is_paid"))?1:0);
 			dbPdDTOList.add(pld);
 		});
-		
+
 		Double dbTotalMoney = dbPdDTOList.stream().mapToDouble(PayLogDTO::getReceiveAmout).sum();
 		System.out.println("db 中的总金额："+dbTotalMoney);
 		Map<String, PayLogDTO> dbMap = dbPdDTOList.stream().collect(Collectors.toMap(PayLogDTO::getTradeNo, a -> a,(k1,k2)->k1));
 		return dbMap;
 	}
-	
+
 	/**
 	 * 解析excel
 	 * @return
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
 	public PayAllDTO resolvePayOrderSnExcel(String bonusExcelUrl) throws FileNotFoundException, IOException {
 		PayAllDTO payAallDto = new PayAllDTO();
 		List<PayLogDTO> payLogDTOList = new ArrayList<>();
-        File file=new File(bonusExcelUrl);
-        HSSFWorkbook workbook=new HSSFWorkbook(new FileInputStream(file));
-        Sheet sheet=workbook.getSheetAt(0);//读取第一个 sheet
-        Row row=null;
-        int count=sheet.getPhysicalNumberOfRows();
-        //逐行处理 excel 数据
-        DecimalFormat df = new DecimalFormat("#.00"); 
-        for (int i = 2; i < count - 1; i++) {
-        	PayLogDTO pld = new PayLogDTO();
-        	row=sheet.getRow(i);
-            Cell tradeNoCell = row.getCell(2);
-            Cell receiveMoneyCell = row.getCell(4);
-            Cell sxfCell = row.getCell(5);
-            pld.setTradeNo(this.returnCellData(tradeNoCell));
-            Double ra = Double.parseDouble(this.returnCellData(receiveMoneyCell));
-            pld.setReceiveAmout(ra);
-            Double sxf = Double.parseDouble(this.returnCellData(sxfCell));
-            if(Double.doubleToLongBits(sxf) != Double.doubleToLongBits(this.leave2Num(ra.doubleValue() * 0.006))) {
-            	System.out.println(this.returnCellData(tradeNoCell)+"手续费不对");
-            }
-            pld.setSxf(sxf);
-            payLogDTOList.add(pld);
-        }
-        workbook.close();
-        
-        Double totalReceiveMoney = payLogDTOList.stream().mapToDouble(PayLogDTO::getReceiveAmout).sum();
-        payAallDto.setPayLogDTOList(payLogDTOList);
-        payAallDto.setTotalPayMoney(totalReceiveMoney);
-        System.out.println("excel中总的金额："+totalReceiveMoney);
+		File file=new File(bonusExcelUrl);
+		HSSFWorkbook workbook=new HSSFWorkbook(new FileInputStream(file));
+		Sheet sheet=workbook.getSheetAt(0);//读取第一个 sheet
+		Row row=null;
+		int count=sheet.getPhysicalNumberOfRows();
+		//逐行处理 excel 数据
+		DecimalFormat df = new DecimalFormat("#.00");
+		for (int i = 2; i < count - 1; i++) {
+			PayLogDTO pld = new PayLogDTO();
+			row=sheet.getRow(i);
+			Cell tradeNoCell = row.getCell(2);
+			Cell receiveMoneyCell = row.getCell(4);
+			Cell sxfCell = row.getCell(5);
+			pld.setTradeNo(this.returnCellData(tradeNoCell));
+			Double ra = Double.parseDouble(this.returnCellData(receiveMoneyCell));
+			pld.setReceiveAmout(ra);
+			Double sxf = Double.parseDouble(this.returnCellData(sxfCell));
+			if(Double.doubleToLongBits(sxf) != Double.doubleToLongBits(this.leave2Num(ra.doubleValue() * 0.006))) {
+				System.out.println(this.returnCellData(tradeNoCell)+"手续费不对");
+			}
+			pld.setSxf(sxf);
+			payLogDTOList.add(pld);
+		}
+		workbook.close();
+
+		Double totalReceiveMoney = payLogDTOList.stream().mapToDouble(PayLogDTO::getReceiveAmout).sum();
+		payAallDto.setPayLogDTOList(payLogDTOList);
+		payAallDto.setTotalPayMoney(totalReceiveMoney);
+		System.out.println("excel中总的金额："+totalReceiveMoney);
 		return payAallDto;
 	}
-	
+
 	public double leave2Num(double d) {
 		BigDecimal bigDecimal = new BigDecimal(d);
 		double d1 = bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		return d1;
 	}
-	
+
 	public BigDecimal strToBigDecimal(String str) {
-		BigDecimal bMin = new BigDecimal(str); 
+		BigDecimal bMin = new BigDecimal(str);
 		return bMin.setScale(2, BigDecimal.ROUND_HALF_UP);
 	}
-	
+
 	public String returnCellData(Cell cell) {
-        String data =  cell.getStringCellValue(); //nf.format(cell.getNumericCellValue());
-        if (data.indexOf(",") >= 0) {
-        	data = data.replace(",", "");
-        }
-        return data;
+		String data =  cell.getStringCellValue(); //nf.format(cell.getNumericCellValue());
+		if (data.indexOf(",") >= 0) {
+			data = data.replace(",", "");
+		}
+		return data;
 	}
-	
-	 /**导出到excel
+
+	/**导出到excel
 	 * @param
 	 * @throws Exception
 	 */
@@ -399,7 +387,7 @@ public class UserAccountManagerController extends BaseController {
 		mv = new ModelAndView(erv,dataMap);
 		return mv;
 	}
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");

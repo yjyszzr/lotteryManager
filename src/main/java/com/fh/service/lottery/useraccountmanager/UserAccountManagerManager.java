@@ -1,15 +1,14 @@
 package com.fh.service.lottery.useraccountmanager;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 说明： 流水相关接口 创建人：FH Q313596790 创建时间：2018-04-24
- * 
+ *
  * @version
  */
 public interface UserAccountManagerManager {
@@ -20,12 +19,12 @@ public interface UserAccountManagerManager {
 	public static final int ACC_PRO_TYPE_BUY = 3; // 购彩
 	public static final int ACC_PRO_TYPE_CASH = 4; // 提现
 	public static final int ACC_PRO_TYPE_REDPKG = 5;// 红包
-	
+
 	public PageData getUserByMobile(PageData pd) throws Exception;
 
 	/**
 	 * 新增
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -33,7 +32,7 @@ public interface UserAccountManagerManager {
 
 	/**
 	 * 删除
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -41,7 +40,7 @@ public interface UserAccountManagerManager {
 
 	/**
 	 * 修改
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -49,7 +48,7 @@ public interface UserAccountManagerManager {
 
 	/**
 	 * 列表
-	 * 
+	 *
 	 * @param page
 	 * @throws Exception
 	 */
@@ -57,7 +56,7 @@ public interface UserAccountManagerManager {
 
 	/**
 	 * 列表(全部)
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -65,23 +64,23 @@ public interface UserAccountManagerManager {
 
 	/**
 	 * 通过id获取数据
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
 	public PageData findById(PageData pd) throws Exception;
-	
-	public PageData getCountOrderByMobile(PageData pd) throws Exception; 
-	
+
+	public PageData getCountOrderByMobile(PageData pd) throws Exception;
+
 	public PageData getUserByUserId(PageData pd) throws Exception;
-	
+
 	public PageData getOtherUserId(PageData pd) throws Exception;
 
 	public List<PageData> findByUserIdStoreId(PageData pd) throws Exception;
-	
+
 	/**
 	 * 批量删除
-	 * 
+	 *
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
@@ -99,7 +98,7 @@ public interface UserAccountManagerManager {
 
 	/***
 	 * 获取个人消费资金总额
-	 * 
+	 *
 	 * @param pd
 	 * @return
 	 * @throws Exception
@@ -119,7 +118,7 @@ public interface UserAccountManagerManager {
 
 	/****
 	 * 充值资金总额
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws Exception
@@ -128,7 +127,7 @@ public interface UserAccountManagerManager {
 
 	/****
 	 * 累计中奖
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws Exception
@@ -152,7 +151,7 @@ public interface UserAccountManagerManager {
 
 	/****
 	 * 累计提现
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws Exception
@@ -161,23 +160,23 @@ public interface UserAccountManagerManager {
 
 	/****
 	 * 根据操作类型返回列表
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws Exception
 	 */
 	public List<PageData> findByProcessType(Page page) throws Exception;
 
-	
-	
+
+
 	/****
 	 * 根据交易号查询交易记录
-	 * 
+	 *
 	 * @param userId
 	 * @return
 	 * @throws Exception
 	 */
-/*	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception;*/
+	/*	public List<PageData> queryPayLogByPayOrderSn(PageData pd) throws Exception;*/
 
 
 	/**

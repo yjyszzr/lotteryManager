@@ -1,19 +1,17 @@
 package com.fh.service.lottery.useraccountmanager.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import com.fh.dao.DaoSupport4;
 import com.fh.entity.Page;
 import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.util.PageData;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 说明： 流水相关 创建人：FH Q313596790 创建时间：2018-04-24
- * 
+ *
  * @version
  */
 @Service("useraccountService")
@@ -21,19 +19,19 @@ public class UserAccountService implements UserAccountManagerManager {
 
 	@Resource(name = "daoSupport4")
 	private DaoSupport4 dao;
-	
+
 	@SuppressWarnings("unchecked")
 	public List<PageData> getOrdes(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("UserAccountManagerMapper.getOrdes", pd);
 	}
-	
+
 	public PageData getUserByMobile(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.getUserByMobile", pd);
 	}
 
 	/**
 	 * 新增
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -44,7 +42,7 @@ public class UserAccountService implements UserAccountManagerManager {
 
 	/**
 	 * 删除
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -55,7 +53,7 @@ public class UserAccountService implements UserAccountManagerManager {
 
 	/**
 	 * 修改
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -66,7 +64,7 @@ public class UserAccountService implements UserAccountManagerManager {
 
 	/**
 	 * 列表
-	 * 
+	 *
 	 * @param page
 	 * @throws Exception
 	 */
@@ -78,7 +76,7 @@ public class UserAccountService implements UserAccountManagerManager {
 
 	/**
 	 * 列表(全部)
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -90,7 +88,7 @@ public class UserAccountService implements UserAccountManagerManager {
 
 	/**
 	 * 通过id获取数据
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -98,28 +96,28 @@ public class UserAccountService implements UserAccountManagerManager {
 	public PageData findById(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.findById", pd);
 	}
-	
-	
-	
-	
+
+
+
+
 	public PageData getUserByUserId(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.getUserByUserId", pd);
 	}
-	
+
 	public PageData getCountOrderByMobile(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.getCountOrderByMobile", pd);
 	}
-	
-	
+
+
 	@Override
 	public List<PageData> findByUserIdStoreId(PageData pd) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByUserIdStoreId", pd);
 	}
- 
+
 
 	/**
 	 * 批量删除
-	 * 
+	 *
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
@@ -180,7 +178,7 @@ public class UserAccountService implements UserAccountManagerManager {
 	public double totalAwardForAll() throws Exception {
 		return (Double) dao.findForObject("UserAccountManagerMapper.totalAwardForAll", null);
 	}
-	 
+
 	@SuppressWarnings("unchecked")
 	public List<PageData> findByProcessType(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByProcessType", page);
@@ -203,6 +201,6 @@ public class UserAccountService implements UserAccountManagerManager {
 	public PageData getOtherUserId(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserAccountManagerMapper.getOtherUserId", pd);
 	}
-	
-	
+
+
 }

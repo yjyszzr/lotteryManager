@@ -8,7 +8,7 @@
 %>
 <!DOCTYPE html>
 <html lang="en">
-	<head>
+<head>
 	<base href="<%=basePath%>">
 	<!-- 下拉框 -->
 	<link rel="stylesheet" href="static/ace/css/chosen.css" />
@@ -36,79 +36,80 @@
 			<div class="page-content">
 				<div class="row">
 					<div class="col-xs-12">
-					
-					<form action="superwhitelist/${msg}.do" name="Form" id="Form" method="post">
-						<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
-						<input type="hidden" name="store_id" id="store_id" value="${pd.store_id}"/>
-						<div id="zhongxin" style="padding-top: 13px;">
-						<table id="table_report" class="table table-striped table-bordered table-hover">
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">用户id:</td>
-								<td>						
-									 ${pd.user_id}
-								</td>	 
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">手机号:</td>
-								<td id="mobile">									
-								 	${pd.mobile}
-								 </td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">店铺:</td>
-								<td id="store_name">
-									${pd.name}
-								</td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>
-								<td  >
-									${pd.money_limit}
-								</td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">可提现余额:</td>
-								<td id="money">
-									${pd.money}
-								</td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">充值原因:</td>
-								<td>
-									<select id="type" name="type"  value="" style ="width:42%">
-								        <option value="1" >帐户充值</option>
-								        <option value="0" >帐户退款</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>
-								<td><input type="number" name="number" id="number" value="" maxlength="32" placeholder="这里输入充值金额" title="充值金额" style="width:42%;"/></td>
-							</tr>
-							<tr>
-								<td style="width:110px;text-align: right;padding-top: 13px;">大礼包:</td>
-								<td>
-									<!-- 
-									<input type="number" name="number2" id="number2" value="" maxlength="32" placeholder="这里输入充值送金额" title="这里输入充值送金额" style="width:42%;"/>
-									 -->
-									  <select  name="recharge_card_id" id="recharge_card_id" value=""  style="width:204px;border-radius:5px !important">
-									  			<option  value="">不使用大礼包</option>
-      											<c:forEach items="${pd.rechargeCardList}" var="rechargeCard">
-									        		<option  value="${rechargeCard.recharge_card_id},${rechargeCard.real_value}"  >${rechargeCard.name}</option>
-									    	</c:forEach>
-									    </select>
-								</td>
-							</tr>
-							<tr>
-								<td style="text-align: center;" colspan="10">
-									<a class="btn btn-mini btn-primary" onclick="save();">确认</a>
-									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
-								</td>
-							</tr>
-						</table>
-						</div>
-						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
-					</form>
+
+						<form action="superwhitelist/${msg}.do" name="Form" id="Form" method="post">
+							<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
+							<input type="hidden" name="store_id" id="store_id" value="${pd.store_id}"/>
+							<div id="zhongxin" style="padding-top: 13px;">
+								<table id="table_report" class="table table-striped table-bordered table-hover">
+									<tr>
+										<td style="width:75px;text-align: right;padding-top: 13px;">用户id:</td>
+										<td>
+											${pd.user_id}
+										</td>
+									</tr>
+									<tr>
+										<td style="width:75px;text-align: right;padding-top: 13px;">手机号:</td>
+										<td id="mobile">
+											${pd.mobile}
+										</td>
+									</tr>
+									<tr>
+										<td style="width:75px;text-align: right;padding-top: 13px;">店铺:</td>
+										<td id="store_name">
+											${pd.name}
+										</td>
+									</tr>
+									<tr>
+										<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>
+										<td  >
+											${pd.money_limit}
+										</td>
+									</tr>
+									<tr>
+										<td style="width:75px;text-align: right;padding-top: 13px;">可提现余额:</td>
+										<td id="money">
+											${pd.money}
+										</td>
+									</tr>
+
+									<tr>
+										<td style="width:75px;text-align: right;padding-top: 13px;">充值原因:</td>
+										<td>
+											<select id="type" name="type"  value="" style ="width:42%">
+												<option value="1" >帐户充值</option>
+												<option value="0" >帐户退款</option>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>
+										<td><input type="number" name="number" id="number" value="" maxlength="32" placeholder="这里输入充值金额" title="充值金额" style="width:42%;"/></td>
+									</tr>
+									<tr>
+										<td style="width:110px;text-align: right;padding-top: 13px;">大礼包:</td>
+										<td>
+											<!--
+                                            <input type="number" name="number2" id="number2" value="" maxlength="32" placeholder="这里输入充值送金额" title="这里输入充值送金额" style="width:42%;"/>
+                                             -->
+											<select  name="recharge_card_id" id="recharge_card_id" value=""  style="width:204px;border-radius:5px !important">
+												<option  value="">不使用大礼包</option>
+												<c:forEach items="${pd.rechargeCardList}" var="rechargeCard">
+													<option  value="${rechargeCard.recharge_card_id},${rechargeCard.real_value}"  >${rechargeCard.name}</option>
+												</c:forEach>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td style="text-align: center;" colspan="10">
+											<a class="btn btn-mini btn-primary" onclick="save();">确认</a>
+											<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>
+						</form>
 					</div>
 					<!-- /.col -->
 				</div>
@@ -122,18 +123,18 @@
 <!-- /.main-container -->
 
 
-	<!-- 页面底部js¨ -->
-	<%@ include file="../../system/index/foot.jsp"%>
-	<!-- 下拉框 -->
-	<script src="static/ace/js/chosen.jquery.js"></script>
-	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
-	<!--提示框-->
-	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
-		<script type="text/javascript">
-		$(top.hangge());
-		//保存
-		function save(){
+<!-- 页面底部js¨ -->
+<%@ include file="../../system/index/foot.jsp"%>
+<!-- 下拉框 -->
+<script src="static/ace/js/chosen.jquery.js"></script>
+<!-- 日期框 -->
+<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+<!--提示框-->
+<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+<script type="text/javascript">
+    $(top.hangge());
+    //保存
+    function save(){
 // 			if($("#user_name").val()==""){
 // 				$("#user_name").tips({
 // 					side:3,
@@ -144,7 +145,37 @@
 // 				$("#user_name").focus();
 // 			return false;
 // 			}
-			if($("#email").val()==""){
+
+        var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "")
+        if($("#number").val() < 0){
+            $("#number").tips({
+                side:3,
+                msg:'充值金额应大于0',
+                bg:'#AE81FF',
+                time:2
+            });
+            $("#frozen_money").focus();
+            return false;
+        }
+
+        try {
+            var length = $("#number").val().toString().split(".")[1].length
+//	 			alert("length=" + length)
+            if (length > 2) {
+                $("#number").tips({
+                    side:3,
+                    msg:'小数点位最多支持两位',
+                    bg:'#AE81FF',
+                    time:2
+                });
+                $("#frozen_money").focus();
+                return false;
+            }
+        } catch (e) {
+            // TODO: handle exception
+        }
+
+        /**if($("#email").val()==""){
 				$("#email").tips({
 					side:3,
 		            msg:'请输入备注4',
@@ -154,38 +185,9 @@
 				$("#email").focus();
 			return false;
 			}
-			
-			var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "")
-			if($("#number").val() < 0){
-				$("#number").tips({
-					side:3,
-		            msg:'充值金额应大于0',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#frozen_money").focus();
-				return false;
-			}
-			
-			try {
-				var length = $("#number").val().toString().split(".")[1].length
-//	 			alert("length=" + length)
-				if (length > 2) {
-					$("#number").tips({
-						side:3,
-			            msg:'小数点位最多支持两位',
-			            bg:'#AE81FF',
-			            time:2
-			        });
-					$("#frozen_money").focus();
-					return false;
-				}
-			} catch (e) {
-				// TODO: handle exception
-			}
 
-			
-			if($("#password").val()==""){
+
+         if($("#password").val()==""){
 				$("#password").tips({
 					side:3,
 		            msg:'请输入备注5',
@@ -195,7 +197,7 @@
 				$("#password").focus();
 			return false;
 			}
-			if($("#salt").val()==""){
+         if($("#salt").val()==""){
 				$("#salt").tips({
 					side:3,
 		            msg:'请输入备注6',
@@ -205,7 +207,7 @@
 				$("#salt").focus();
 			return false;
 			}
-			if($("#nickname").val()==""){
+         if($("#nickname").val()==""){
 				$("#nickname").tips({
 					side:3,
 		            msg:'请输入备注7',
@@ -215,7 +217,7 @@
 				$("#nickname").focus();
 			return false;
 			}
-			if($("#sex").val()==""){
+         if($("#sex").val()==""){
 				$("#sex").tips({
 					side:3,
 		            msg:'请输入备注8',
@@ -225,7 +227,7 @@
 				$("#sex").focus();
 			return false;
 			}
-			if($("#birthday").val()==""){
+         if($("#birthday").val()==""){
 				$("#birthday").tips({
 					side:3,
 		            msg:'请输入备注9',
@@ -235,7 +237,7 @@
 				$("#birthday").focus();
 			return false;
 			}
-			if($("#detail_address").val()==""){
+         if($("#detail_address").val()==""){
 				$("#detail_address").tips({
 					side:3,
 		            msg:'请输入备注10',
@@ -245,7 +247,7 @@
 				$("#detail_address").focus();
 			return false;
 			}
-			if($("#headimg").val()==""){
+         if($("#headimg").val()==""){
 				$("#headimg").tips({
 					side:3,
 		            msg:'请输入备注11',
@@ -255,7 +257,7 @@
 				$("#headimg").focus();
 			return false;
 			}
-			if($("#user_money_limit").val()==""){
+         if($("#user_money_limit").val()==""){
 				$("#user_money_limit").tips({
 					side:3,
 		            msg:'请输入备注13',
@@ -265,7 +267,7 @@
 				$("#user_money_limit").focus();
 			return false;
 			}
-			if($("#number").val()==""){
+         if($("#number").val()==""){
 				$("#number").tips({
 					side:3,
 		            msg:'请输入充值金额',
@@ -275,7 +277,7 @@
 				$("#frozen_money").focus();
 			return false;
 			}
-			if($("#pay_point").val()==""){
+         if($("#pay_point").val()==""){
 				$("#pay_point").tips({
 					side:3,
 		            msg:'请输入备注15',
@@ -285,7 +287,7 @@
 				$("#pay_point").focus();
 			return false;
 			}
-			if($("#rank_point").val()==""){
+         if($("#rank_point").val()==""){
 				$("#rank_point").tips({
 					side:3,
 		            msg:'请输入备注16',
@@ -295,7 +297,7 @@
 				$("#rank_point").focus();
 			return false;
 			}
-			if($("#reg_time").val()==""){
+         if($("#reg_time").val()==""){
 				$("#reg_time").tips({
 					side:3,
 		            msg:'请输入备注17',
@@ -305,7 +307,7 @@
 				$("#reg_time").focus();
 			return false;
 			}
-			if($("#reg_ip").val()==""){
+         if($("#reg_ip").val()==""){
 				$("#reg_ip").tips({
 					side:3,
 		            msg:'请输入备注18',
@@ -315,7 +317,7 @@
 				$("#reg_ip").focus();
 			return false;
 			}
-			if($("#last_time").val()==""){
+         if($("#last_time").val()==""){
 				$("#last_time").tips({
 					side:3,
 		            msg:'请输入备注19',
@@ -325,7 +327,7 @@
 				$("#last_time").focus();
 			return false;
 			}
-			if($("#last_ip").val()==""){
+         if($("#last_ip").val()==""){
 				$("#last_ip").tips({
 					side:3,
 		            msg:'请输入备注20',
@@ -335,7 +337,7 @@
 				$("#last_ip").focus();
 			return false;
 			}
-			if($("#mobile_supplier").val()==""){
+         if($("#mobile_supplier").val()==""){
 				$("#mobile_supplier").tips({
 					side:3,
 		            msg:'请输入备注21',
@@ -345,7 +347,7 @@
 				$("#mobile_supplier").focus();
 			return false;
 			}
-			if($("#mobile_province").val()==""){
+         if($("#mobile_province").val()==""){
 				$("#mobile_province").tips({
 					side:3,
 		            msg:'请输入备注22',
@@ -355,7 +357,7 @@
 				$("#mobile_province").focus();
 			return false;
 			}
-			if($("#mobile_city").val()==""){
+         if($("#mobile_city").val()==""){
 				$("#mobile_city").tips({
 					side:3,
 		            msg:'请输入备注23',
@@ -365,7 +367,7 @@
 				$("#mobile_city").focus();
 			return false;
 			}
-			if($("#reg_from").val()==""){
+         if($("#reg_from").val()==""){
 				$("#reg_from").tips({
 					side:3,
 		            msg:'请输入备注24',
@@ -375,7 +377,7 @@
 				$("#reg_from").focus();
 			return false;
 			}
-			if($("#surplus_password").val()==""){
+         if($("#surplus_password").val()==""){
 				$("#surplus_password").tips({
 					side:3,
 		            msg:'请输入备注25',
@@ -385,7 +387,7 @@
 				$("#surplus_password").focus();
 			return false;
 			}
-			if($("#pay_pwd_salt").val()==""){
+         if($("#pay_pwd_salt").val()==""){
 				$("#pay_pwd_salt").tips({
 					side:3,
 		            msg:'请输入备注26',
@@ -395,7 +397,7 @@
 				$("#pay_pwd_salt").focus();
 			return false;
 			}
-			if($("#user_status").val()==""){
+         if($("#user_status").val()==""){
 				$("#user_status").tips({
 					side:3,
 		            msg:'请输入备注27',
@@ -405,7 +407,7 @@
 				$("#user_status").focus();
 			return false;
 			}
-			if($("#pass_wrong_count").val()==""){
+         if($("#pass_wrong_count").val()==""){
 				$("#pass_wrong_count").tips({
 					side:3,
 		            msg:'请输入备注28',
@@ -415,7 +417,7 @@
 				$("#pass_wrong_count").focus();
 			return false;
 			}
-			if($("#user_type").val()==""){
+         if($("#user_type").val()==""){
 				$("#user_type").tips({
 					side:3,
 		            msg:'请输入备注29',
@@ -425,7 +427,7 @@
 				$("#user_type").focus();
 			return false;
 			}
-			if($("#is_real").val()==""){
+         if($("#is_real").val()==""){
 				$("#is_real").tips({
 					side:3,
 		            msg:'请输入备注30',
@@ -435,7 +437,7 @@
 				$("#is_real").focus();
 			return false;
 			}
-			if($("#user_remark").val()==""){
+         if($("#user_remark").val()==""){
 				$("#user_remark").tips({
 					side:3,
 		            msg:'请输入备注31',
@@ -445,7 +447,7 @@
 				$("#user_remark").focus();
 			return false;
 			}
-			if($("#add_time").val()==""){
+         if($("#add_time").val()==""){
 				$("#add_time").tips({
 					side:3,
 		            msg:'请输入备注32',
@@ -455,7 +457,7 @@
 				$("#add_time").focus();
 			return false;
 			}
-			if($("#push_key").val()==""){
+         if($("#push_key").val()==""){
 				$("#push_key").tips({
 					side:3,
 		            msg:'请输入备注33',
@@ -465,7 +467,7 @@
 				$("#push_key").focus();
 			return false;
 			}
-			if($("#device_channel").val()==""){
+         if($("#device_channel").val()==""){
 				$("#device_channel").tips({
 					side:3,
 		            msg:'请输入备注34',
@@ -475,7 +477,7 @@
 				$("#device_channel").focus();
 			return false;
 			}
-			if($("#is_business").val()==""){
+         if($("#is_business").val()==""){
 				$("#is_business").tips({
 					side:3,
 		            msg:'请输入备注35',
@@ -485,7 +487,7 @@
 				$("#is_business").focus();
 			return false;
 			}
-			if($("#lon").val()==""){
+         if($("#lon").val()==""){
 				$("#lon").tips({
 					side:3,
 		            msg:'请输入备注36',
@@ -495,7 +497,7 @@
 				$("#lon").focus();
 			return false;
 			}
-			if($("#lat").val()==""){
+         if($("#lat").val()==""){
 				$("#lat").tips({
 					side:3,
 		            msg:'请输入备注37',
@@ -505,7 +507,7 @@
 				$("#lat").focus();
 			return false;
 			}
-			if($("#city").val()==""){
+         if($("#city").val()==""){
 				$("#city").tips({
 					side:3,
 		            msg:'请输入备注38',
@@ -515,7 +517,7 @@
 				$("#city").focus();
 			return false;
 			}
-			if($("#province").val()==""){
+         if($("#province").val()==""){
 				$("#province").tips({
 					side:3,
 		            msg:'请输入备注39',
@@ -525,7 +527,7 @@
 				$("#province").focus();
 			return false;
 			}
-			if($("#has_third_user_id").val()==""){
+         if($("#has_third_user_id").val()==""){
 				$("#has_third_user_id").tips({
 					side:3,
 		            msg:'请输入备注40',
@@ -535,7 +537,7 @@
 				$("#has_third_user_id").focus();
 			return false;
 			}
-			if($("#is_super_white").val()==""){
+         if($("#is_super_white").val()==""){
 				$("#is_super_white").tips({
 					side:3,
 		            msg:'请输入备注41',
@@ -544,10 +546,10 @@
 		        });
 				$("#is_super_white").focus();
 			return false;
-			}
-			
+			}*/
+
 // 			var str = "请确认"
-			
+
 // 			alert("-1");
 // 			bootbox.confirm(str, function(result) {
 // 				alert("0");
@@ -557,37 +559,37 @@
 // 					$("#Form").submit();
 // 				}
 // 			});
-			
+
 // 			alert("2");
 
-			var str = "请确认，\n"
-					+ "\手机号：" + $("#mobile").text().replace(/(^\s*)|(\s*$)/g, "")
-					+ "\n店铺：" + $("#store_name").text().replace(/(^\s*)|(\s*$)/g, "")
-					+ "\n充值金额：" + $("#number").val() 
-					;
-			
-			if ("" == $("#recharge_card_id").val()) {
-			} else {
-				str += "\n大礼包：" + $("#recharge_card_id option:selected").text();
-			}
-					
+        var str = "请确认，\n"
+            + "\手机号：" + $("#mobile").text().replace(/(^\s*)|(\s*$)/g, "")
+            + "\n店铺：" + $("#store_name").text().replace(/(^\s*)|(\s*$)/g, "")
+            + "\n充值金额：" + $("#number").val()
+        ;
+
+        if ("" == $("#recharge_card_id").val()) {
+        } else {
+            str += "\n大礼包：" + $("#recharge_card_id option:selected").text();
+        }
+
 // 			alert("str=" + str)
-			if (window.confirm(str)) {
-				$("#Form").submit();
-                return true;
-             }else{
-                //alert("取消");
-                return false;
-            }
-			
-			$("#zhongxin").hide();
-			$("#zhongxin2").show();
-		}
-		
-		$(function() {
-			//日期框
-			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
-		});
-		</script>
+        if (window.confirm(str)) {
+            $("#Form").submit();
+            return true;
+        }else{
+            //alert("取消");
+            return false;
+        }
+
+        $("#zhongxin").hide();
+        $("#zhongxin2").show();
+    }
+
+    $(function() {
+        //日期框
+        $('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+    });
+</script>
 </body>
 </html>
