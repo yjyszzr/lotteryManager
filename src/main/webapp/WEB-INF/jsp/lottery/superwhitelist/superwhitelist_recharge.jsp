@@ -55,9 +55,14 @@
 										</td>
 									</tr>
 									<tr>
-										<td style="width:75px;text-align: right;padding-top: 13px;">店铺:</td>
+										<td style="width:75px;text-align: right;padding-top: 13px;">平台来源:</td>
 										<td id="store_name">
-											${pd.name}
+											<c:if test="${var.app_code_name == '10'}">
+												球多多
+											</c:if>
+											<c:if test="${var.app_code_name == '11'}">
+												圣和彩店
+											</c:if>
 										</td>
 									</tr>
 									<tr>

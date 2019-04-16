@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 说明： 用户列表接口 创建人：FH Q313596790 创建时间：2018-04-23
- * 
+ *
  * @version
  */
 public interface UserManagerControllerManager {
@@ -17,7 +17,7 @@ public interface UserManagerControllerManager {
 
 	/**
 	 * 新增
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -43,7 +43,7 @@ public interface UserManagerControllerManager {
 
 	/**
 	 * 删除
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -51,24 +51,24 @@ public interface UserManagerControllerManager {
 
 	/**
 	 * 修改
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
 	public void edit(PageData pd) throws Exception;
 
-	
+
 	/**
 	 * 修改用户的交易开关
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
 	public void changeUserSwitch(PageData pd) throws Exception;
-	
+
 	/**
 	 * 列表
-	 * 
+	 *
 	 * @param page
 	 * @throws Exception
 	 */
@@ -77,7 +77,7 @@ public interface UserManagerControllerManager {
 
 	/**
 	 * 列表(全部)˙
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -85,7 +85,7 @@ public interface UserManagerControllerManager {
 
 	/**
 	 * 通过id获取数据
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -93,7 +93,7 @@ public interface UserManagerControllerManager {
 
 	/**
 	 * 批量删除
-	 * 
+	 *
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
@@ -104,9 +104,9 @@ public interface UserManagerControllerManager {
 	public Double findUserBonusByUserId(PageData pd) throws Exception;
 
 	public List<PageData> findAll() throws Exception;
-	
+
 	public List<PageData> getMarketList(Page page) throws Exception;
-	
+
 	public List<PageData> getRemainUserCount(Page page) throws Exception;
 	/**认证并购彩
 	 * @param pd
@@ -118,25 +118,25 @@ public interface UserManagerControllerManager {
 	 * @throws Exception
 	 */
 	public List<PageData> getRealAndRegister(Page page)throws Exception;
-	
+
 	/**注册并充值
 	 * @param pd
 	 * @throws Exception
 	 */
 	public List<PageData> getRegisterAndRecharge(Page page)throws Exception;
-	
+
 	/**根据手机号查询用户
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData queryUserByMobile(String mobile)throws Exception;	
-	
+	public PageData queryUserByMobile(String mobile)throws Exception;
+
 	/**注册并购彩
 	 * @param pd
 	 * @throws Exception
 	 */
 	public List<PageData> getRegisterAndOrder(Page page)throws Exception;
-	
+
 	/**注册并购彩(复购)
 	 * @param pd
 	 * @throws Exception
@@ -203,13 +203,13 @@ public interface UserManagerControllerManager {
 	 * @throws Exception
 	 */
 	public List<PageData> queryBuyTotal(List<PageData> varList)throws Exception;
-	
-	
+
+
 	/**
 	 * 查询单个销售人员的顾客id
 	 */
 	public List<String> queryUserIdsBySellersId(String sellerId)throws Exception;
-	
+
 	/**
 	 * 根据多个销售员id 查询多个顾客的userId
 	 */
@@ -220,5 +220,19 @@ public interface UserManagerControllerManager {
 	 * 根据时间查询市场数据
 	 */
 	public List<PageData> queryMarketDataByTime(Page page) throws Exception;
-	
+
+	/**
+	 * 获取圣和彩店注册人员
+	 */
+	public List<PageData> getShenHeUserList(Page page)throws Exception;
+
+	/**
+	 * 根据手机号查询用户
+	 */
+	public PageData queryUserByMobile(PageData pagedata)throws Exception;
+
+	/**
+	 * 退款到不可提现金额
+	 */
+	public PageData refoundToUserMoneyLimit(PageData pagedata)throws Exception;
 }

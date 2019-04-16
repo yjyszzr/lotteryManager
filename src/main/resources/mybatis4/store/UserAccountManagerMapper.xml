@@ -1,181 +1,181 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="UserAccountManagerMapper">
-	
+
 	<!--表名 -->
 	<sql id="tableName">
 		dl_user_account
 	</sql>
-	
+
 	<select id="getUserByMobile" parameterType="pd" resultType="pd">
-		select 
-		*
-		from 
-		dl_user
-		where 
+		select
+			*
+		from
+			dl_user
+		where
 			mobile = #{mobile}
 	</select>
-	
+
 	<select id="getOrdes" parameterType="pd" resultType="pd">
- 
-		SELECT 
+
+		SELECT
 		_order.*
 		FROM `dl_order` _order
 		WHERE 1 = 1
 		<if test="user_id != null and user_id != ''">
-		AND _order.`user_id` = #{user_id}
+			AND _order.`user_id` = #{user_id}
 		</if>
 		<if test="pay_status != null and pay_status != ''">
-		AND _order.`pay_status` = #{pay_status}
+			AND _order.`pay_status` = #{pay_status}
 		</if>
-		<if test="end_add_time!= null and end_add_time != ''"> 
-		AND _order.`add_time` &lt;= #{end_add_time}
- 		</if>
-		<if test="start_add_time!= null and start_add_time != ''"> 
-		AND _order.`add_time` &gt;= #{start_add_time}
- 		</if>
+		<if test="end_add_time!= null and end_add_time != ''">
+			AND _order.`add_time` &lt;= #{end_add_time}
+		</if>
+		<if test="start_add_time!= null and start_add_time != ''">
+			AND _order.`add_time` &gt;= #{start_add_time}
+		</if>
 		ORDER BY _order.`add_time` DESC
-	 
-		
+
+
 	</select>
-	
+
 	<!-- 字段 -->
 	<sql id="Field">
-		id,	
-		account_sn,	
+		id,
+		account_sn,
 		user_id,
-		admin_user,	
-		amount,	
-		cur_balance,	
-		add_time,	
-		last_time,	
-		note,	
-		process_type,	
-		order_sn,	
-		parent_sn,	
-		pay_id,	
-		payment_name,	
-		third_part_name,	
-		third_part_paid,	
-		user_surplus,	
-		user_surplus_limit,	
-		bonus_price,	
+		admin_user,
+		amount,
+		cur_balance,
+		add_time,
+		last_time,
+		note,
+		process_type,
+		order_sn,
+		parent_sn,
+		pay_id,
+		payment_name,
+		third_part_name,
+		third_part_paid,
+		user_surplus,
+		user_surplus_limit,
+		bonus_price,
 		status
 	</sql>
-	
+
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-     	#{id},	
-        #{account_sn},	
-        #{user_id},	
-        #{admin_user},	
-        #{amount},	
-        #{cur_balance},	
-        #{add_time},	
-        #{last_time},	
-        #{note},	
-        #{process_type},	
-        #{order_sn},	
-        #{parent_sn},	
-        #{pay_id},	
-        #{payment_name},	
-        #{third_part_name},	
-        #{third_part_paid},	
-        #{user_surplus},	
-        #{user_surplus_limit},	
-        #{bonus_price},	
-        #{store_id},	
-        #{status}	
+		#{id},
+		#{account_sn},
+		#{user_id},
+		#{admin_user},
+		#{amount},
+		#{cur_balance},
+		#{add_time},
+		#{last_time},
+		#{note},
+		#{process_type},
+		#{order_sn},
+		#{parent_sn},
+		#{pay_id},
+		#{payment_name},
+		#{third_part_name},
+		#{third_part_paid},
+		#{user_surplus},
+		#{user_surplus_limit},
+		#{bonus_price},
+		#{store_id},
+		#{status}
 	</sql>
-	
+
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
-		insert into 
-	<include refid="tableName"></include>
+		insert into
+		<include refid="tableName"></include>
 		(
-	        account_sn,	
-	        user_id,	
-	        admin_user,	
-	        amount,	
-	        cur_balance,	
-	        add_time,	
-	        last_time,	
-	        note,	
-	        process_type,	
-	        order_sn,	
-	        parent_sn,	
-	        pay_id,	
-	        payment_name,	
-	        third_part_name,	
-	        third_part_paid,	
-	        user_surplus,	
-	        user_surplus_limit,	
-	        bonus_price,	
-	        store_id,
-	        status	
-	        
-	        <if test="recharge_card_id != null and recharge_card_id != ''">
-	        , recharge_card_id
-	        , recharge_card_real_value
-	        </if>
+		account_sn,
+		user_id,
+		admin_user,
+		amount,
+		cur_balance,
+		add_time,
+		last_time,
+		note,
+		process_type,
+		order_sn,
+		parent_sn,
+		pay_id,
+		payment_name,
+		third_part_name,
+		third_part_paid,
+		user_surplus,
+		user_surplus_limit,
+		bonus_price,
+		store_id,
+		status
+
+		<if test="recharge_card_id != null and recharge_card_id != ''">
+			, recharge_card_id
+			, recharge_card_real_value
+		</if>
 		) values (
-		 	#{account_sn},	
-	        #{user_id},	
-	        #{admin_user},	
-	        #{amount},	
-	        #{cur_balance},	
-	        #{add_time},	
-	        #{last_time},	
-	        #{note},	
-	        #{process_type},	
-	        #{order_sn},	
-	        #{parent_sn},	
-	        #{pay_id},	
-	        #{payment_name},	
-	        #{third_part_name},	
-	        #{third_part_paid},	
-	        #{user_surplus},	
-	        #{user_surplus_limit},	
-	        #{bonus_price},	
-	        #{store_id},	
-	        #{status}	
-	         <if test="recharge_card_id != null and recharge_card_id != ''">
-	        , #{recharge_card_id}
-	        , #{recharge_card_real_value}
-	        </if>
+		#{account_sn},
+		#{user_id},
+		#{admin_user},
+		#{amount},
+		#{cur_balance},
+		#{add_time},
+		#{last_time},
+		#{note},
+		#{process_type},
+		#{order_sn},
+		#{parent_sn},
+		#{pay_id},
+		#{payment_name},
+		#{third_part_name},
+		#{third_part_paid},
+		#{user_surplus},
+		#{user_surplus_limit},
+		#{bonus_price},
+		#{store_id},
+		#{status}
+		<if test="recharge_card_id != null and recharge_card_id != ''">
+			, #{recharge_card_id}
+			, #{recharge_card_real_value}
+		</if>
 		)
 	</insert>
-	
+
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
 		delete from
 		<include refid="tableName"></include>
-		where 
-			id = #{id}
+		where
+		id = #{id}
 	</delete>
-	
+
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
 		<include refid="tableName"></include>
-		set 
-			process_type = #{process_type},
-			order_sn = #{order_sn},
-			pay_id = #{pay_id},
-			payment_name = #{payment_name}
-		where 
+		set
+		process_type = #{process_type},
+		order_sn = #{order_sn},
+		pay_id = #{pay_id},
+		payment_name = #{payment_name}
+		where
 		id = #{id}
 	</update>
-	
+
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
+		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
 		where 1 = 1
 		and	id = #{id}
-		
+
 		<!-- 
 		<if test="id != null and id != ''">
 		and	id = #{id}
@@ -185,89 +185,89 @@
 		</if>
 		 -->
 	</select>
-	
+
 	<select id="getCountOrderByMobile" parameterType="pd" resultType="pd">
 		SELECT COUNT(_order.`order_id`) as _count
 		FROM dl_order _order, dl_user _user
 		WHERE _order.`user_id` = _user.`user_id`
-		AND _order.`pay_status` = 1
-		AND _order.`add_time` >= 1546790400000
-		AND _user.`mobile` = #{mobile}
+					AND _order.`pay_status` = 1
+							  AND _order.`add_time` >= 1546790400000
+										AND _user.`mobile` = #{mobile}
 	</select>
-	
-	
+
+
 	<select id="findByUserIdStoreId" parameterType="pd" resultType="pd">
-		select 
+		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
 		where 1 = 1
 		and user_id = #{user_id}
 		and store_id = #{store_id}
-		ORDER BY add_time DESC	
+		ORDER BY add_time DESC
 	</select>
-	
+
 	<select id="getUserByUserId" parameterType="pd" resultType="pd">
-		select 
-		*
-		from 
-		dl_user
-		where 
+		select
+			*
+		from
+			dl_user
+		where
 			user_id = #{user_id}
 	</select>
-	
+
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
 		where 1=1
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
-				(
-				user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-				<!--	根据需求自己加检索条件
-					字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-					 or 
-					字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
-				-->
-				)
+			(
+			user_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			<!--	根据需求自己加检索条件
+                字段1 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+                 or
+                字段2 LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            -->
+			)
 		</if>
-		<if test="pd.process_type!= null and pd.process_type != ''"> 
+		<if test="pd.process_type!= null and pd.process_type != ''">
 			and process_type = #{pd.process_type}
 		</if>
 	</select>
-	
+
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-			 SELECT
-		 	o.*, 
+		SELECT
+			o.*,
 			a.pay_time as pay_time,
 			a.award_time as award_time,
 			a.ticket_amount as ticket_amount,
 			u.user_name as user_name,
 			u.mobile as mobile,
-			c.lottery_name as lottery_name 
+			c.lottery_name as lottery_name
 		FROM
 			dl_user_account o
-			LEFT JOIN dl_order a ON o.order_sn = a.order_sn
-			LEFT JOIN dl_user u ON o.user_id = u.user_id
-			LEFT JOIN dl_lottery_classify c ON a.lottery_classify_id = c.lottery_classify_id 
+				LEFT JOIN dl_order a ON o.order_sn = a.order_sn
+				LEFT JOIN dl_user u ON o.user_id = u.user_id
+				LEFT JOIN dl_lottery_classify c ON a.lottery_classify_id = c.lottery_classify_id
 		order by a.pay_time desc
 	</select>
-	
+
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
-		where 
-			id in
+		where
+		id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                 #{item}
+			#{item}
 		</foreach>
 	</delete>
-	
+
 	<!-- 获取单个人购彩 -->
 	<select id="getTotalById" parameterType="java.lang.Integer" resultType="java.lang.Double">
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 3;
@@ -276,7 +276,7 @@
 	<select id="getTotalRecharge" parameterType="java.lang.String" resultType="java.lang.Double">
 		SELECT sum(amount) FROM dl_user_account a  left  join dl_user u on a.user_id = u.user_id where  mobile = #{mobile} and a.process_type = 2;
 	</select>
-	
+
 	<!-- 累计获奖汇总 -->
 	<select id="getTotalAward" parameterType="java.lang.Integer" resultType="java.lang.Double">
 		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 1;
@@ -291,82 +291,82 @@
 		FROM
 			dl_user_account a  left  join dl_user u on a.user_id = u.user_id where  u.mobile = #{mobile} and a.process_type = 4;
 	</select>
- 	<!-- 累计提现汇总 -->
-	 
-	
+	<!-- 累计提现汇总 -->
+
+
 	<select id="findByUserId" parameterType="java.lang.Integer"  resultType="pd">
 		SELECT * FROM dl_user_account WHERE user_id = #{userId} order by last_time DESC;
 	</select>
-	
+
 	<select id="listPageForReward"  parameterType="page" resultType="pd">
-		 SELECT
-		 	o.order_sn as order_sn, 
-		 	o.amount as amount, 
-			a.pay_time as pay_time,
-			a.award_time as award_time,
-			a.ticket_amount as ticket_amount,
-			u.user_name as user_name,
-			u.mobile as mobile,
-			c.lottery_name as lottery_name 
+		SELECT
+		o.order_sn as order_sn,
+		o.amount as amount,
+		a.pay_time as pay_time,
+		a.award_time as award_time,
+		a.ticket_amount as ticket_amount,
+		u.user_name as user_name,
+		u.mobile as mobile,
+		c.lottery_name as lottery_name
 		FROM
-			dl_user_account o
-			LEFT JOIN dl_order a ON o.order_sn = a.order_sn
-			LEFT JOIN dl_user u ON o.user_id = u.user_id
-			LEFT JOIN dl_lottery_classify c ON a.lottery_classify_id = c.lottery_classify_id 
+		dl_user_account o
+		LEFT JOIN dl_order a ON o.order_sn = a.order_sn
+		LEFT JOIN dl_user u ON o.user_id = u.user_id
+		LEFT JOIN dl_lottery_classify c ON a.lottery_classify_id = c.lottery_classify_id
 		WHERE
-			o.process_type = 1
-				<if test="pd.user_name!= null and pd.user_name != ''"> 
-						AND u.user_name LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
-				</if>
-				<if test="pd.mobile!= null and pd.mobile != ''"> 
-						AND u.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
-				</if>
-				<if test="pd.order_sn != null and pd.order_sn != ''"> 
-						AND o.order_sn LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
-				</if>
-				<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-						AND a.pay_time &gt;= #{pd.lastStart1} 
-				</if>
-				<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-						AND a.pay_time &lt;= #{pd.lastEnd1} 
-				</if>
-				<if test="pd.amountStart != null and pd.amountStart != ''"> 
-						AND o.amount   &gt;=  #{pd.amountStart} 
-				</if>
-				<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
-						AND o.amount   &lt;=   #{pd.amountEnd} 
-				</if>
-				Order By a.pay_time DESC
+		o.process_type = 1
+		<if test="pd.user_name!= null and pd.user_name != ''">
+			AND u.user_name LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		</if>
+		<if test="pd.mobile!= null and pd.mobile != ''">
+			AND u.mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
+		<if test="pd.order_sn != null and pd.order_sn != ''">
+			AND o.order_sn LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
+		</if>
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+			AND a.pay_time &gt;= #{pd.lastStart1}
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+			AND a.pay_time &lt;= #{pd.lastEnd1}
+		</if>
+		<if test="pd.amountStart != null and pd.amountStart != ''">
+			AND o.amount   &gt;=  #{pd.amountStart}
+		</if>
+		<if test="pd.amountEnd != null and pd.amountEnd != ''">
+			AND o.amount   &lt;=   #{pd.amountEnd}
+		</if>
+		Order By a.pay_time DESC
 	</select>
 	<select id="findAwardNumByQuestionsId"  parameterType="java.lang.Integer" resultType="java.lang.Integer">
-			select count(*) from dl_questions_and_answers_user where  question_id = #{questionId} and  get_award = 1
+		select count(*) from dl_questions_and_answers_user where  question_id = #{questionId} and  get_award = 1
 	</select>
 	<select id="findByProcessType"  parameterType="page" resultType="pd">
-		 SELECT
-		 	COALESCE(count(DISTINCT ua.user_id),0) as userCount,
-		 	COALESCE(sum(ua.amount),0) as amountSum,
-		 	ua.process_type
+		SELECT
+		COALESCE(count(DISTINCT ua.user_id),0) as userCount,
+		COALESCE(sum(ua.amount),0) as amountSum,
+		ua.process_type
 		FROM
-			dl_user_account ua left join dl_user us on ua.user_id=us.user_id
-		WHERE 1 = 1 and ua.status=1 
-				<if test="pd.process_type!= null and pd.process_type != ''"> 
-					and ua.process_type = #{pd.process_type}
-				</if>
-				<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-						AND ua.add_time &gt;= #{pd.lastStart1} 
-				</if>
-				<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
-						AND ua.add_time &lt;= #{pd.lastEnd1} 
-				</if>
-				<if test="pd.device_channel != null and pd.device_channel != ''"> 
-						AND us.device_channel =#{pd.device_channel} 
-				</if>
+		dl_user_account ua left join dl_user us on ua.user_id=us.user_id
+		WHERE 1 = 1 and ua.status=1
+		<if test="pd.process_type!= null and pd.process_type != ''">
+			and ua.process_type = #{pd.process_type}
+		</if>
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''">
+			AND ua.add_time &gt;= #{pd.lastStart1}
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
+			AND ua.add_time &lt;= #{pd.lastEnd1}
+		</if>
+		<if test="pd.device_channel != null and pd.device_channel != ''">
+			AND us.device_channel =#{pd.device_channel}
+		</if>
 		GROUP BY ua.process_type;
 	</select>
-	
-<!-- 	<select id ="queryPayLogByPayOrderSn" parameterType="pd" resultType="pd">
-		select * from dl_pay_log ß
-	</select> -->
+
+	<!-- 	<select id ="queryPayLogByPayOrderSn" parameterType="pd" resultType="pd">
+            select * from dl_pay_log ß
+        </select> -->
 
 	<select id = "queryUserAccountBalanceByOrderSns" resultType="pd">
 		select order_sn,cur_balance from dl_user_account where process_type = 3 and order_sn in
@@ -379,10 +379,10 @@
 	<select id="getBalanceByMobile" parameterType="pd" resultType="java.lang.Double">
 		select sum(sm.money+sm.money_limit) balanceMoney from dl_user u left join dl_user_store_money sm on u.user_id = sm.user_id where u.mobile = #{mobile}
 	</select>
-	
-	
+
+
 	<select id="getOtherUserId" resultType="pd">
-	select * from dl_user_auths where third_user_id = #{user_id}
+		select * from dl_user_auths where third_user_id = #{user_id}
 	</select>
-	
+
 </mapper>

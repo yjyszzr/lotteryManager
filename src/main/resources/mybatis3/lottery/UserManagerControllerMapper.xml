@@ -95,7 +95,7 @@
 		#{count90},
 		#{count180},
 		#{count360},
-        #{add_time}
+		#{add_time}
 	</sql>
 
 	<!-- 新增-->
@@ -115,7 +115,7 @@
 		count90,
 		count180,
 		count360,
-        add_time)
+		add_time)
 		values (
 		<include refid="MarketFieldValue"></include>
 		)
@@ -217,16 +217,16 @@
 		select count(1) todayCount from dl_market_data where to_days(from_unixtime(add_time, '%Y-%m-%d')) = to_days(now())
 	</select>
 
-    <select id="queryMarketDataByTime" parameterType="page"  resultType="pd">
-        select
+	<select id="queryMarketDataByTime" parameterType="page"  resultType="pd">
+		select
 			channel as channel,
-               date_time,
+			date_time,
 			sum(count_user) as count_user,
 			sum(count_order) as count_order,
 			sum(amount_sum) as amount_sum
-        from dl_market_data where add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
+		from dl_market_data where add_time &gt;= #{pd.lastStart1}  AND add_time &lt;= #{pd.lastEnd1}
 		group by channel
-    </select>
+	</select>
 
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
@@ -261,49 +261,49 @@
 	<!-- 设备渠道注册人数汇总列表 -->
 	<select id="marketlist" parameterType="page" resultType="pd">
 		SELECT
-		sum( k.count_user ) count_user,
-		sum(count_order)  count_order,
-		sum( k.total_money ) amount_sum,
-		k.channel device_channel,
-		k.channel_name channel
+			sum( k.count_user ) count_user,
+			sum(count_order)  count_order,
+			sum( k.total_money ) amount_sum,
+			k.channel device_channel,
+			k.channel_name channel
 		FROM
-		(
-		SELECT
-		count( u.mobile ) count_user,
-		0 AS count_order,
-		0 AS total_money,
-		p.channel channel,
-		p.channel_name
-		FROM
-		dl_user u
-		LEFT JOIN dl_phone_channel p ON u.device_channel = p.channel
-		WHERE
-		u.reg_time &gt;= #{pd.lastStart1}
-		AND u.reg_time &lt;= #{pd.lastEnd1}
+			(
+				SELECT
+					count( u.mobile ) count_user,
+					0 AS count_order,
+					0 AS total_money,
+					p.channel channel,
+					p.channel_name
+				FROM
+					dl_user u
+						LEFT JOIN dl_phone_channel p ON u.device_channel = p.channel
+				WHERE
+					u.reg_time &gt;= #{pd.lastStart1}
+				  AND u.reg_time &lt;= #{pd.lastEnd1}
+				GROUP BY
+					p.channel UNION
+				SELECT
+					0 count_user,
+					count(distinct o.mobile) AS count_order,
+					sum( o.money_paid ) total_money,
+					u.device_channel channel,
+					p.channel_name
+				FROM
+					dl_order o
+						LEFT JOIN dl_user u ON o.mobile = u.mobile
+						LEFT JOIN dl_phone_channel p ON p.channel = u.device_channel
+				WHERE
+					o.pay_status = 1
+				  AND o.order_status != 10
+				  AND o.add_time &gt;= #{pd.lastStart1}
+				  AND o.add_time &lt;= #{pd.lastEnd1}
+				  AND u.reg_time &gt;= #{pd.lastStart1}
+				  AND u.reg_time &lt;= #{pd.lastEnd1}
+				GROUP BY
+					channel
+			) k
 		GROUP BY
-		p.channel UNION
-		SELECT
-		0 count_user,
-		count(distinct o.mobile) AS count_order,
-		sum( o.money_paid ) total_money,
-		u.device_channel channel,
-		p.channel_name
-		FROM
-		dl_order o
-		LEFT JOIN dl_user u ON o.mobile = u.mobile
-		LEFT JOIN dl_phone_channel p ON p.channel = u.device_channel
-		WHERE
-		o.pay_status = 1
-		AND o.order_status != 10
-		AND o.add_time &gt;= #{pd.lastStart1}
-		AND o.add_time &lt;= #{pd.lastEnd1}
-		AND u.reg_time &gt;= #{pd.lastStart1}
-		AND u.reg_time &lt;= #{pd.lastEnd1}
-		GROUP BY
-		channel
-		) k
-		GROUP BY
-		k.channel
+			k.channel
 	</select>
 
 
@@ -380,14 +380,14 @@
 	<select id="queryBuyTotal" resultType="pd">
 		select sum(moneyPaid) moneyPaid,last_add_seller_id from
 		(select o.money_paid moneyPaid,cc.last_add_seller_id  from dl_customer cc
-		 left join dl_order o on o.mobile = cc.mobile
-		 where  o.pay_status = 1 and o.add_time > 1546272000 and  o.order_status != 10 and cc.distribute_state = 1
-		 and o.mobile in(select c.mobile from dl_customer c where c.last_add_seller_id in
-			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-				#{item}
-			</foreach>
-			)
-		  ) tmp group by last_add_seller_id;
+		left join dl_order o on o.mobile = cc.mobile
+		where  o.pay_status = 1 and o.add_time > 1546272000 and  o.order_status != 10 and cc.distribute_state = 1
+		and o.mobile in(select c.mobile from dl_customer c where c.last_add_seller_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		)
+		) tmp group by last_add_seller_id;
 	</select>
 
 	<!-- 查询销售人员业绩查询 -->
@@ -667,4 +667,19 @@
 			GROUP BY user_id HAVING count(od.order_sn)>1
 			)a
 	</select>
+
+	<select id="datalistPageThree" parameterType="page" resultType="pd">
+		SELECT
+			user_id,user_name,nickname,mobile,user_money_limit money_limit,user_money money,0 recharge_card_real_value,app_code_name name,app_code_name
+		from dl_user where app_code_name = #{pd.app_code_name} order by reg_time DESC
+	</select>
+
+
+	<select id="queryUserByMobile" parameterType="pd" resultType="pd">
+		SELECT * from dl_user where mobile = #{mobile}
+	</select>
+
+	<update id="refoundToUserMoneyLimit" >
+		update dl_user set user_money_limit = user_money_limit + #{user_money_limit} where user_id = #{user_id}
+	</update>
 </mapper>

@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * 说明： 用户列表 创建人：FH Q313596790 创建时间：2018-04-23
- * 
+ *
  * @version
  */
 @Service("usermanagercontrollerService")
@@ -22,7 +22,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 
 	/**
 	 * 新增
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -47,13 +47,13 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	 * @param pd
 	 * @throws Exception
 	 */
-	 public List<PageData> queryMarketDataByTime(Page page) throws Exception {
-		 return (List<PageData>) dao.findForList("UserManagerControllerMapper.queryMarketDataByTime", page);
-	 }
+	public List<PageData> queryMarketDataByTime(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.queryMarketDataByTime", page);
+	}
 
 	/**
 	 * 删除
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -63,7 +63,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 
 	/**
 	 * 修改
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -73,17 +73,17 @@ public class UserManagerControllerService implements UserManagerControllerManage
 
 	/**
 	 * 修改
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
 	public void changeUserSwitch(PageData pd) throws Exception {
 		dao.update("UserManagerControllerMapper.changeUserSwitch", pd);
 	}
-	
+
 	/**
 	 * 列表
-	 * 
+	 *
 	 * @param page
 	 * @throws Exception
 	 */
@@ -98,7 +98,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 
 	/**
 	 * 列表(全部)
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -109,7 +109,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 
 	/**
 	 * 通过id获取数据
-	 * 
+	 *
 	 * @param pd
 	 * @throws Exception
 	 */
@@ -119,7 +119,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 
 	/**
 	 * 批量删除
-	 * 
+	 *
 	 * @param ArrayDATA_IDS
 	 * @throws Exception
 	 */
@@ -152,12 +152,12 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public Integer getmarketCountToday(PageData page) throws Exception {
 		return (Integer) dao.findForObject("UserManagerControllerMapper.marketCountToday", page);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<PageData> getRemainUserCount(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.remainUserCount", page);
 	}
-	
+
 	/**
 	 * 根据用户手机号查询用户
 	 * @param pd
@@ -167,10 +167,10 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public PageData queryUserByMobile(String mobile) throws Exception {
 		return (PageData)dao.findForObject("UserManagerControllerMapper.getUserByMobile", mobile);
 	}
-	
-	
+
+
 	/**注册并认证统计（购彩）
-	 * 
+	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -178,7 +178,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRealAndRegister", page);
 	}
 	/**注册并充值
-	 * 
+	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -186,16 +186,16 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRegisterAndRecharge", page);
 	}
 	/**注册并购彩
-	 * 
+	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getRegisterAndOrder(Page page) throws Exception {
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRegisterAndOrder", page);
 	}
-	
+
 	/**注册并购彩(复购)
-	 * 
+	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -222,7 +222,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public List<PageData> sellerAchieveList(Page page)throws Exception{
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.sellerAchieveList", page);
 	}
-	
+
 
 	/** 获取销售人员每个月的业绩查询
 	 * @param pd
@@ -260,8 +260,16 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public List<PageData> sellerUserBonushList(PageData page)throws Exception{
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerUserBonushList", page);
 	}
-	
-	
+
+	/** 获取圣和彩店注册人员
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> getShenHeUserList(Page page)throws Exception{
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.datalistPageThree", page);
+	}
+
+
 	/** 获取销售人员下的人员红包总量
 	 * @param pd
 	 * @throws Exception
@@ -273,7 +281,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		}
 		return (PageData)dao.findForObject("UserManagerControllerMapper.sellerUserBonushTotal", userIdList);
 	}
-	
+
 
 	/**
 	 * 查询月售彩额度
@@ -287,7 +295,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		}
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.queryBuyByMonth", userIdList);
 	}
-	
+
 	/**
 	 * 查询多人总售彩额度
 	 * @param PageData page
@@ -307,7 +315,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public List<String> queryUserIdsBySellersId(String sellerId)throws Exception{
 		return (List<String>)dao.findForList("UserManagerControllerMapper.querySellersUserIds", sellerId);
 	}
-	
+
 	@Override
 	public List<PageData> sellerBuyMoneyhList(PageData pd) throws Exception {
 		// TODO Auto-generated method stub
@@ -319,4 +327,14 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	public PageData queryUserByMobile(PageData pagedata)throws Exception{
+		return (PageData)dao.findForObject("UserManagerControllerMapper.queryUserByMobile", pagedata);
+	}
+
+	public PageData refoundToUserMoneyLimit(PageData pagedata)throws Exception{
+		return (PageData)dao.findForObject("UserManagerControllerMapper.refoundToUserMoneyLimit", pagedata);
+	}
+
 }

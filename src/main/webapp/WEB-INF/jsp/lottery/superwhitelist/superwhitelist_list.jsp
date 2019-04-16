@@ -541,6 +541,7 @@
         var nickname = $("#nickname").val();
         var mobile = $("#mobile").val();
         var store_name = $("#store_name").val();
+        var appCodeName = $("#app_code_name").val();
 
         var url = '<%=basePath%>superwhitelist/excel.do?tm=' + new Date().getTime()
             + "&user_id=" + user_id
@@ -548,6 +549,7 @@
             + "&nickname=" + nickname
             + "&mobile=" + mobile
             + "&store_name=" + store_name
+			+ "&app_code_name=" + appCodeName
         ;
 
         window.location.href= url;

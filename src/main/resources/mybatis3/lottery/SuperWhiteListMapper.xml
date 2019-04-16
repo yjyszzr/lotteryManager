@@ -1,269 +1,353 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="SuperWhiteListMapper">
-	
+
 	<!--表名 -->
 	<sql id="tableName">
 		dl_user
 	</sql>
-	
+
 	<!-- 字段 -->
 	<sql id="Field">
-		user_id,	
-		user_name,	
-		mobile,	
-		email,	
-		password,	
-		salt,	
-		nickname,	
-		sex,	
-		birthday,	
-		detail_address,	
-		headimg,	
-		user_money,	
-		user_money_limit,	
-		frozen_money,	
-		pay_point,	
-		rank_point,	
-		reg_time,	
-		reg_ip,	
-		last_time,	
-		last_ip,	
-		mobile_supplier,	
-		mobile_province,	
-		mobile_city,	
-		reg_from,	
-		surplus_password,	
-		pay_pwd_salt,	
-		user_status,	
-		pass_wrong_count,	
-		user_type,	
-		is_real,	
-		user_remark,	
-		add_time,	
-		push_key,	
-		device_channel,	
-		is_business,	
-		lon,	
-		lat,	
-		city,	
-		province,	
-		has_third_user_id,	
-		is_super_white,	
+		user_id,
+		user_name,
+		mobile,
+		email,
+		password,
+		salt,
+		nickname,
+		sex,
+		birthday,
+		detail_address,
+		headimg,
+		user_money,
+		user_money_limit,
+		frozen_money,
+		pay_point,
+		rank_point,
+		reg_time,
+		reg_ip,
+		last_time,
+		last_ip,
+		mobile_supplier,
+		mobile_province,
+		mobile_city,
+		reg_from,
+		surplus_password,
+		pay_pwd_salt,
+		user_status,
+		pass_wrong_count,
+		user_type,
+		is_real,
+		user_remark,
+		add_time,
+		push_key,
+		device_channel,
+		is_business,
+		lon,
+		lat,
+		city,
+		province,
+		has_third_user_id,
+		is_super_white,
 		user_id_id
 	</sql>
-	
+
 	<!-- 字段值 -->
 	<sql id="FieldValue">
-        #{user_id},	
-        #{user_name},	
-        #{mobile},	
-        #{email},	
-        #{password},	
-        #{salt},	
-        #{nickname},	
-        #{sex},	
-        #{birthday},	
-        #{detail_address},	
-        #{headimg},	
-        #{user_money},	
-        #{user_money_limit},	
-        #{frozen_money},	
-        #{pay_point},	
-        #{rank_point},	
-        #{reg_time},	
-        #{reg_ip},	
-        #{last_time},	
-        #{last_ip},	
-        #{mobile_supplier},	
-        #{mobile_province},	
-        #{mobile_city},	
-        #{reg_from},	
-        #{surplus_password},	
-        #{pay_pwd_salt},	
-        #{user_status},	
-        #{pass_wrong_count},	
-        #{user_type},	
-        #{is_real},	
-        #{user_remark},	
-        #{add_time},	
-        #{push_key},	
-        #{device_channel},	
-        #{is_business},	
-        #{lon},	
-        #{lat},	
-        #{city},	
-        #{province},	
-        #{has_third_user_id},	
-        #{is_super_white}	
+		#{user_id},
+		#{user_name},
+		#{mobile},
+		#{email},
+		#{password},
+		#{salt},
+		#{nickname},
+		#{sex},
+		#{birthday},
+		#{detail_address},
+		#{headimg},
+		#{user_money},
+		#{user_money_limit},
+		#{frozen_money},
+		#{pay_point},
+		#{rank_point},
+		#{reg_time},
+		#{reg_ip},
+		#{last_time},
+		#{last_ip},
+		#{mobile_supplier},
+		#{mobile_province},
+		#{mobile_city},
+		#{reg_from},
+		#{surplus_password},
+		#{pay_pwd_salt},
+		#{user_status},
+		#{pass_wrong_count},
+		#{user_type},
+		#{is_real},
+		#{user_remark},
+		#{add_time},
+		#{push_key},
+		#{device_channel},
+		#{is_business},
+		#{lon},
+		#{lat},
+		#{city},
+		#{province},
+		#{has_third_user_id},
+		#{is_super_white}
 	</sql>
-	
+
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
-		insert into 
-	<include refid="tableName"></include>
+		insert into
+		<include refid="tableName"></include>
 		(
-		        user_id,	
-		        user_name,	
-		        mobile,	
-		        email,	
-		        password,	
-		        salt,	
-		        nickname,	
-		        sex,	
-		        birthday,	
-		        detail_address,	
-		        headimg,	
-		        user_money,	
-		        user_money_limit,	
-		        frozen_money,	
-		        pay_point,	
-		        rank_point,	
-		        reg_time,	
-		        reg_ip,	
-		        last_time,	
-		        last_ip,	
-		        mobile_supplier,	
-		        mobile_province,	
-		        mobile_city,	
-		        reg_from,	
-		        surplus_password,	
-		        pay_pwd_salt,	
-		        user_status,	
-		        pass_wrong_count,	
-		        user_type,	
-		        is_real,	
-		        user_remark,	
-		        add_time,	
-		        push_key,	
-		        device_channel,	
-		        is_business,	
-		        lon,	
-		        lat,	
-		        city,	
-		        province,	
-		        has_third_user_id,	
-		        is_super_white	
+		user_id,
+		user_name,
+		mobile,
+		email,
+		password,
+		salt,
+		nickname,
+		sex,
+		birthday,
+		detail_address,
+		headimg,
+		user_money,
+		user_money_limit,
+		frozen_money,
+		pay_point,
+		rank_point,
+		reg_time,
+		reg_ip,
+		last_time,
+		last_ip,
+		mobile_supplier,
+		mobile_province,
+		mobile_city,
+		reg_from,
+		surplus_password,
+		pay_pwd_salt,
+		user_status,
+		pass_wrong_count,
+		user_type,
+		is_real,
+		user_remark,
+		add_time,
+		push_key,
+		device_channel,
+		is_business,
+		lon,
+		lat,
+		city,
+		province,
+		has_third_user_id,
+		is_super_white
 		) values (
-	<include refid="FieldValue"></include>
+		<include refid="FieldValue"></include>
 		)
 	</insert>
-	
+
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
 		delete from
 		<include refid="tableName"></include>
-		where 
-			user_id_id = #{user_id_id}
+		where
+		user_id_id = #{user_id_id}
 	</delete>
-	
+
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
 		update
 		<include refid="tableName"></include>
-		set 
-			user_name = #{user_name},
-			email = #{email},
-			password = #{password},
-			salt = #{salt},
-			nickname = #{nickname},
-			sex = #{sex},
-			birthday = #{birthday},
-			detail_address = #{detail_address},
-			headimg = #{headimg},
-			user_money_limit = #{user_money_limit},
-			frozen_money = #{frozen_money},
-			pay_point = #{pay_point},
-			rank_point = #{rank_point},
-			reg_time = #{reg_time},
-			reg_ip = #{reg_ip},
-			last_time = #{last_time},
-			last_ip = #{last_ip},
-			mobile_supplier = #{mobile_supplier},
-			mobile_province = #{mobile_province},
-			mobile_city = #{mobile_city},
-			reg_from = #{reg_from},
-			surplus_password = #{surplus_password},
-			pay_pwd_salt = #{pay_pwd_salt},
-			user_status = #{user_status},
-			pass_wrong_count = #{pass_wrong_count},
-			user_type = #{user_type},
-			is_real = #{is_real},
-			user_remark = #{user_remark},
-			add_time = #{add_time},
-			push_key = #{push_key},
-			device_channel = #{device_channel},
-			is_business = #{is_business},
-			lon = #{lon},
-			lat = #{lat},
-			city = #{city},
-			province = #{province},
-			has_third_user_id = #{has_third_user_id},
-			is_super_white = #{is_super_white},
+		set
+		user_name = #{user_name},
+		email = #{email},
+		password = #{password},
+		salt = #{salt},
+		nickname = #{nickname},
+		sex = #{sex},
+		birthday = #{birthday},
+		detail_address = #{detail_address},
+		headimg = #{headimg},
+		user_money_limit = #{user_money_limit},
+		frozen_money = #{frozen_money},
+		pay_point = #{pay_point},
+		rank_point = #{rank_point},
+		reg_time = #{reg_time},
+		reg_ip = #{reg_ip},
+		last_time = #{last_time},
+		last_ip = #{last_ip},
+		mobile_supplier = #{mobile_supplier},
+		mobile_province = #{mobile_province},
+		mobile_city = #{mobile_city},
+		reg_from = #{reg_from},
+		surplus_password = #{surplus_password},
+		pay_pwd_salt = #{pay_pwd_salt},
+		user_status = #{user_status},
+		pass_wrong_count = #{pass_wrong_count},
+		user_type = #{user_type},
+		is_real = #{is_real},
+		user_remark = #{user_remark},
+		add_time = #{add_time},
+		push_key = #{push_key},
+		device_channel = #{device_channel},
+		is_business = #{is_business},
+		lon = #{lon},
+		lat = #{lat},
+		city = #{city},
+		province = #{province},
+		has_third_user_id = #{has_third_user_id},
+		is_super_white = #{is_super_white},
 		user_id_id = user_id_id
-		where 
+		where
 		user_id_id = #{user_id_id}
 	</update>
-	
+
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
-		select 
+		select
 		<include refid="Field"></include>
-		from 
+		from
 		<include refid="tableName"></include>
-		where 
-			user_id_id = #{user_id_id}
+		where
+		user_id_id = #{user_id_id}
 	</select>
-	
+
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		select
-		<include refid="Field"></include>
-		from 
+		user_id,
+		user_name,
+		mobile,
+		email,
+		password,
+		salt,
+		nickname,
+		sex,
+		birthday,
+		detail_address,
+		headimg,
+		user_money,
+		user_money_limit,
+		frozen_money,
+		pay_point,
+		rank_point,
+		reg_time,
+		reg_ip,
+		last_time,
+		last_ip,
+		mobile_supplier,
+		mobile_province,
+		mobile_city,
+		reg_from,
+		surplus_password,
+		pay_pwd_salt,
+		user_status,
+		pass_wrong_count,
+		user_type,
+		is_real,
+		user_remark,
+		add_time,
+		push_key,
+		device_channel,
+		is_business,
+		lon,
+		lat,
+		city,
+		province,
+		has_third_user_id,
+		is_super_white,
+		user_id_id,
+		10 as app_code_name
+		from
 		<include refid="tableName"></include>
 		where 1=1
-		
+
 		<if test="pd.mobile != null and pd.mobile != ''">
-			and mobile  
+			and mobile
 			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
 		</if>
-		<if test="pd.user_id!= null and pd.user_id != ''"> 
-				and user_id LIKE CONCAT(CONCAT('%', #{pd.user_id}),'%')
- 		</if>
- 		<if test="pd.user_name != null and pd.user_name != ''"> 
-			and user_name  
-				LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		<if test="pd.user_id!= null and pd.user_id != ''">
+			and user_id LIKE CONCAT(CONCAT('%', #{pd.user_id}),'%')
 		</if>
- 		<if test="pd.nickname!= null and pd.nickname != ''"> 
-				and nickname LIKE CONCAT(CONCAT('%', #{pd.nickname}),'%')
- 		</if>
-		<if test="pd.mobile!= null and pd.mobile != ''"> 
-				and mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
- 		</if> 
+		<if test="pd.user_name != null and pd.user_name != ''">
+			and user_name
+			LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		</if>
+		<if test="pd.nickname!= null and pd.nickname != ''">
+			and nickname LIKE CONCAT(CONCAT('%', #{pd.nickname}),'%')
+		</if>
+		<if test="pd.mobile!= null and pd.mobile != ''">
+			and mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
 	</select>
-	
+
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
 		select
-		<include refid="Field"></include>
-		from 
+		user_id,
+		user_name,
+		mobile,
+		email,
+		password,
+		salt,
+		nickname,
+		sex,
+		birthday,
+		detail_address,
+		headimg,
+		user_money,
+		user_money_limit,
+		frozen_money,
+		pay_point,
+		rank_point,
+		reg_time,
+		reg_ip,
+		last_time,
+		last_ip,
+		mobile_supplier,
+		mobile_province,
+		mobile_city,
+		reg_from,
+		surplus_password,
+		pay_pwd_salt,
+		user_status,
+		pass_wrong_count,
+		user_type,
+		is_real,
+		user_remark,
+		add_time,
+		push_key,
+		device_channel,
+		is_business,
+		lon,
+		lat,
+		city,
+		province,
+		has_third_user_id,
+		is_super_white,
+		user_id_id,
+		10 as name
+		from
 		<include refid="tableName"></include>
 	</select>
-	
+
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from
 		<include refid="tableName"></include>
-		where 
-			user_id_id in
+		where
+		user_id_id in
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
-                 #{item}
+			#{item}
 		</foreach>
 	</delete>
-	
+
 	<update id="setIsSupperWhite" parameterType="pd">
-		UPDATE dl_user SET is_super_white = 1 WHERE mobile = #{mobile} 
+		UPDATE dl_user SET is_super_white = 1 WHERE mobile = #{mobile}
 	</update>
-	
+
 	<!-- fh313596790qq(青苔) -->
 </mapper>

@@ -57,6 +57,12 @@
 								 </td>
 							</tr>
 							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">平台来源:</td>
+								<td id="store_name">
+										圣和彩店
+								</td>
+							</tr>
+							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">退款原因:</td>
 								<td>
 									<select id="type" name="type"  value="" style ="width:42%">
