@@ -42,10 +42,10 @@ public class ActivityController extends BaseController {
 	private ActivityManager activityService;
 	@Resource(name="userActionLogService")
 	private UserActionLogService ACLOG;
-	/**保存
+	/**保存xiugai
 	 * @param
 	 * @throws Exception
-	 */
+	 */  
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增Activity");
