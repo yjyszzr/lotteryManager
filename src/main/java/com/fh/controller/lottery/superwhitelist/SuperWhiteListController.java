@@ -11,6 +11,7 @@ import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.usermanagercontroller.impl.UserManagerControllerService;
 import com.fh.util.*;
+import org.apache.axis.utils.StringUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -364,7 +365,8 @@ public class SuperWhiteListController extends BaseController {
 			pd.put("end_add_time", DateUtilNew.getMilliSecondsByStr(_end_add_time.trim()));
 		}
 		page.setPd(pd);
-		String appCodeName = pd.getString("app_code_name");
+		String appCodeNameStr = pd.getString("app_code_name");
+		String appCodeName = StringUtils.isEmpty(appCodeNameStr)?"10":appCodeNameStr;
 		List<PageData> varList = new ArrayList<>();
 		if(appCodeName.equals("11")){
 			varList =  userAccountManagerService3.datalistQddAccountPage(page);
@@ -410,12 +412,23 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("大礼包余额");
 		titles.add("状态");	//5
 		titles.add("扣款原因");	//6
-		titles.add("充值时间");	//7
-		titles.add("店铺");	//8
-		titles.add("充值状态");	//9
+		titles.add("时间");	//7
+		titles.add("平台来源");	//8
+		titles.add("状态");	//9
 		titles.add("操作人");	//9
 		dataMap.put("titles", titles);
-		List<PageData> varOList = superwhitelistService.listAccountAll(pd);
+
+		List<PageData> varOList = new ArrayList<>();
+		String appCodeName = pd.getString("app_code_name");
+		if(appCodeName.equals("11")){
+			Page page = new Page();
+			page.setShowCount(65000);
+			page.setPd(pd);
+			varOList = userAccountManagerService3.datalistQddAccountPage(page);
+		}else{
+			varOList = superwhitelistService.listAccountAll(pd);
+		}
+
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
@@ -548,7 +561,7 @@ public class SuperWhiteListController extends BaseController {
 
 	@RequestMapping(value="/refound")
 	public ModelAndView refound() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"充值SuperWhiteList");
+		logBefore(logger, Jurisdiction.getUsername()+"退款SuperWhiteList");
 		if(!Jurisdiction.buttonJurisdiction(menuUrl, "refound")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
@@ -569,7 +582,6 @@ public class SuperWhiteListController extends BaseController {
 		BigDecimal bigMoney = new BigDecimal( null != pdMobile.getString("user_money") ? pdMobile.getString("user_money") : "0");
 		BigDecimal bigMoneyLimit = new BigDecimal(null != pdMobile.getString("user_money_limit") ? pdMobile.getString("user_money_limit") : "0");
 		BigDecimal curBalance = bigMoney.add(bigMoneyLimit);
-		curBalance = curBalance.add(new BigDecimal( null != pd.getString("number") ? pd.getString("number") : "0"));
 		pd.put("cur_balance", curBalance.toString());
 		pd.put("user_id", pdMobile.getString("user_id"));
 		pd.put("store_id", "1");

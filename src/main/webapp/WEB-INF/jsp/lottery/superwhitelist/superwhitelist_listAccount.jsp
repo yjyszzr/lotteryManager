@@ -33,6 +33,7 @@
 						<form action="superwhitelist/listAccount.do" method="post" name="Form" id="Form">
 						<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
 						<input type="hidden" name="store_id" id="store_id" value="${pd.store_id}"/>
+						<input type="hidden" name="app_code_name" id="app_code_name" value="${pd.app_code_name}"/>
 						<table style="margin-top: 5px;">
 									<tr>
 										<td>
@@ -143,7 +144,12 @@
 											</c:choose>
 											</td>
 											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
-											<td class='center'>${var.name}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.name == '10'}">球多多</c:when>
+													<c:when test="${var.name == '11'}">圣和彩店</c:when>
+												</c:choose>
+											</td>
 											<td class='center'>
 											<c:choose>
 												<c:when test="${var.status == 0}">未完成</c:when>
@@ -285,12 +291,14 @@
 				var start_add_time = $("#start_add_time").val();
 				var end_add_time = $("#end_add_time").val();
 				var process_type = $("#process_type").val();
+                var app_code_name = $("#app_code_name").val();
 				var url = '<%=basePath%>superwhitelist/excelAccount.do?tm=' + new Date().getTime() 
 					+ "&user_id=" + user_id 
 					+ "&store_id=" + store_id		
 					+ "&start_add_time=" + start_add_time
 					+ "&end_add_time=" + end_add_time
 					+ "&process_type=" + process_type
+					+ "&app_code_name=" + app_code_name
 					;
 				
 // 				alert("url=" + url);

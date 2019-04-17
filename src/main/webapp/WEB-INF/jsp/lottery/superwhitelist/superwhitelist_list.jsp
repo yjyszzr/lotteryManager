@@ -118,7 +118,7 @@
 													<td class='center'>${var.user_name}</td>
 													<td class='center'>${var.nickname}</td>
 													<td class='center'>
-														<a title="查看流水" onclick="goListAccount('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}');">
+														<a title="查看流水" onclick="goListAccount('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}' + '&app_code_name=' + '${var.app_code_name}');">
 																${var.mobile}
 														</a>
 													</td>
@@ -412,7 +412,7 @@
         top.jzts();
         var diag = new top.Dialog();
         diag.Drag=true;
-        diag.Title ="充值";
+        diag.Title ="";
         diag.URL = '<%=basePath%>superwhitelist/goRecharge.do?'+str;
         diag.Width = 450;
         diag.Height = 355;
@@ -429,8 +429,6 @@
     }
 
     function goListAccount(str){
-        var app_code_name = $("#app_code_name").val();
-        str = str +'&app_code_name=' + app_code_name;
         top.jzts();
         var diag = new top.Dialog();
         diag.Drag=true;
