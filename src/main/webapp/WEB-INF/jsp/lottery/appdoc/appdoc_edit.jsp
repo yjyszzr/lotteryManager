@@ -37,6 +37,7 @@
 					<div class="col-xs-12">
 					
 					<form action="appdoc/${msg }.do" name="Form" id="Form" method="post">
+						<input type="hidden"  id="id"  name="id"   value="${pd.id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
