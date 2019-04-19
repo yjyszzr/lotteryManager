@@ -669,9 +669,12 @@
 	</select>
 
 	<select id="datalistPageThree" parameterType="page" resultType="pd">
-		SELECT
-			user_id,user_name,nickname,mobile,user_money_limit money_limit,user_money money,0 recharge_card_real_value,app_code_name name,app_code_name
-		from dl_user where app_code_name = #{pd.app_code_name} order by reg_time DESC
+		SELECT user_id,user_name,nickname,mobile,user_money_limit money_limit,user_money money,0 recharge_card_real_value,app_code_name name,app_code_name
+		from dl_user where app_code_name = #{pd.app_code_name}
+		<if test="pd.mobile!= null and pd.mobile != ''">
+			and mobile LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
+		order by reg_time DESC
 	</select>
 
 

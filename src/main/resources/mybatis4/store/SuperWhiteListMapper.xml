@@ -359,7 +359,7 @@
 	</select>
 
 	<select id="datalistAccountPage" parameterType="page" resultType="pd">
-		SELECT user.`mobile`, store.`name`, user_account.*
+		SELECT user.`mobile`,10  `name`, user_account.*
 		FROM `dl_user_account` user_account, `dl_user` user, `dl_store` store
 		WHERE user_account.`user_id` = user.user_id AND user_account.`store_id` = store.`id`
 		<if test="pd.user_id!= null and pd.user_id != ''">

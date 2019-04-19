@@ -420,6 +420,7 @@ public class SuperWhiteListController extends BaseController {
 
 		List<PageData> varOList = new ArrayList<>();
 		String appCodeName = pd.getString("app_code_name");
+		String name = appCodeName.equals("11")?"圣和彩店":"球多多";
 		if(appCodeName.equals("11")){
 			Page page = new Page();
 			page.setShowCount(65000);
@@ -484,7 +485,7 @@ public class SuperWhiteListController extends BaseController {
 			vpd.put("var7", processTypeStr2);	    //6
 
 			vpd.put("var8", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time"))*1000));	    //7
-			vpd.put("var9", varOList.get(i).get("name").toString());	//8
+			vpd.put("var9", name);	//8
 
 			String statusStr = varOList.get(i).get("status").toString();
 			if (null != statusStr && statusStr.equals("0")) {
