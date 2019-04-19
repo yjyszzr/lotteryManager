@@ -56,6 +56,16 @@ public class UserWithdrawService implements UserWithdrawManager {
 		dao.update("UserWithdrawMapper.edit", pd);
 	}
 
+	@Override
+	public void withdrawOperation(PageData pd) throws Exception {
+		dao.update("UserWithdrawMapper.withdrawOperation", pd);
+	}
+
+	@Override
+	public void saveUserWithdrawLog(PageData pd) throws Exception {
+		dao.update("UserWithdrawMapper.saveUserWithdrawLog", pd);
+	}
+
 	/**
 	 * 列表
 	 * 
@@ -66,6 +76,18 @@ public class UserWithdrawService implements UserWithdrawManager {
 	@SuppressWarnings("unchecked")
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserWithdrawMapper.datalistPage", page);
+	}
+
+	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<PageData> temporaryWithdrawList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("UserWithdrawMapper.datalistPage2", page);
 	}
 
 	/**

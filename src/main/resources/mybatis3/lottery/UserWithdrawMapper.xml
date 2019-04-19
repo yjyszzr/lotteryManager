@@ -39,6 +39,14 @@
         #{bank_name}	
 	</sql>
 	
+	<!-- 字段值 -->
+	<sql id="FieldValue1">
+                  #{withdraw_sn},		
+		           #{log_time},	
+		           #{log_code},	
+		          #{log_name}
+	</sql>
+	
 	<!-- 新增-->
 	<insert id="save" parameterType="pd">
 		insert into 
@@ -60,6 +68,16 @@
 	<include refid="FieldValue"></include>
 		)
 	</insert>
+	<insert id="saveUserWithdrawLog" parameterType="pd">
+		insert into  dl_user_withdraw_log (
+		        withdraw_sn,	
+		        log_time,	
+		        log_code,	
+		        log_name 
+		) values (
+			<include refid="FieldValue1"></include>
+		)
+	</insert>
 	
 	<!-- 删除-->
 	<delete id="delete" parameterType="pd">
@@ -77,6 +95,19 @@
 			status = #{status} 
 		where 
 		id = #{id}
+	</update>
+	
+	<update id="withdrawOperation" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			remarks = #{remarks},
+			audit_time = #{audit_time},
+			auditor = #{auditor},
+			auditor_id = #{auditor_id},
+			status = #{status}
+		where 
+			withdrawal_sn = #{withdrawal_sn}
 	</update>
 	<!-- 修改备注 -->
 	<update id="updateRemarks" parameterType="pd">
@@ -157,6 +188,47 @@
 		</if>
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
 			and a.pay_time &lt;= #{pd.lastEnd1 }
+		</if>
+		order by  a.add_time DESC
+	</select>
+	<select id="datalistPage2" parameterType="page" resultType="pd">
+		SELECT
+			a.id,
+			a.withdrawal_sn,
+			a.user_id,
+			a.amount,
+			a.account_id,
+			a.add_time,
+			a.status,
+			a.real_name,
+			a.card_no,
+			a.pay_time,
+			a.payment_id,
+			a.bank_name,
+			a.remarks,
+			b.user_name,
+			b.mobile
+		FROM
+			dl_user_withdraw a
+			LEFT JOIN dl_user b ON b.user_id = a.user_id
+			where 1 = 1
+		<if test="pd.withdrawal_sn != null and pd.withdrawal_sn != ''"> 
+			and a.withdrawal_sn  LIKE CONCAT(CONCAT('%', #{pd.withdrawal_sn}),'%')
+		</if>
+		<if test="pd.mobile != null and pd.mobile != ''">
+			and b.mobile  LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+		</if>
+		<if test="pd.user_name != null and pd.user_name != ''"> 
+			and a.real_name  LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
+		</if>
+		<if test="pd.status != null and pd.status != ''"> 
+			and a.status = #{pd.status }
+		</if>
+		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+			and a.add_time &gt;= #{pd.lastStart1 }
+		</if>
+		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''"> 
+			and a.add_time &lt;= #{pd.lastEnd1 }
 		</if>
 		order by  a.add_time DESC
 	</select>
