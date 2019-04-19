@@ -325,6 +325,7 @@
 			o.order_id order_id,
 			o.order_sn order_sn,
 			o.user_id user_id,
+			o.money_paid money_paid,
 			u.user_name user_name,
 			u.mobile mobile,
 			o.order_status order_status,
@@ -653,9 +654,12 @@
 					and o.order_status = #{orderStatus }
 				</if>
 			</if>
-			<if test="pd.lottery_classify_id != null and pd.lottery_classify_id != ''"> 
-				and l.lottery_classify_id = #{pd.lottery_classify_id }
-			</if>
+			<if test="lottery_classify_id != null and lottery_classify_id != ''"> 
+				and l.lottery_classify_id = #{lottery_classify_id }
+			</if> 
+				<if test="app_code_name != null and app_code_name != ''"> 
+				and o.app_code_name = #{app_code_name}
+				</if>
 			order  by 	o.add_time desc
 			
 	</select>

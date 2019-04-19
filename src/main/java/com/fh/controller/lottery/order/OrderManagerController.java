@@ -568,6 +568,10 @@ public class OrderManagerController extends BaseController {
 		if (null != lastEnd && !"".equals(lastEnd)) {
 			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
 		}
+		String lottery_classify_id = pd.getString("lottery_classify_id");
+		if (null != lottery_classify_id && !"".equals(lottery_classify_id)) {
+			pd.put("lottery_classify_id", lottery_classify_id);
+		}
 		List<PageData> varOList =new 		ArrayList<PageData> ();
 		if (null != idsStr && !"".equals(idsStr)) {
 			String ArrayDATA_IDS[] = idsStr.split(",");
@@ -605,7 +609,7 @@ public class OrderManagerController extends BaseController {
 			if (appCode.equals("10")) {
 				appCodeStr = "球多多";
 			}else 	if (appCode.equals("11")) {
-				appCodeStr = "圣合APP";
+				appCodeStr = "圣和APP";
 			}else {
 				appCodeStr = "球多多";
 			}
@@ -679,7 +683,12 @@ public class OrderManagerController extends BaseController {
 //				vpd.put("var11", DateUtil.toSDFTime(Long.parseLong(big9.multiply(bigmo1000).toString()))); // 9
 //			}
 			try {
-				vpd.put("var11", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time"))*1000));
+				if (null != varOList.get(i).getString("mo_add_time") && !varOList.get(i).getString("mo_add_time").equals("0")) {
+					vpd.put("var11", DateUtil.toSDFTime(new Long(varOList.get(i).getString("mo_add_time")) * 1000));
+				} else {
+					vpd.put("var11", "--- ---");
+
+				}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

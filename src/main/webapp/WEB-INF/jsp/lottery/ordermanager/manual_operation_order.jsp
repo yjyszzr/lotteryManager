@@ -17,15 +17,12 @@
 </head>
 <body class="no-skin">
 
-	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
-		<!-- /section:basics/sidebar -->
 		<div class="main-content">
 			<div class="main-content-inner">
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-						<!-- 检索  -->
 						<form action="ordermanager/moOrder.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
@@ -47,14 +44,9 @@
 										 	<select  name="order_status" id="order_status" data-placeholder="请选择" value="${pd.order_status }" style="width:154px;border-radius:5px !important"  >
 												<option value="" selected="selected">全部</option>
 													<option value="0" <c:if test="${pd.order_status!=NULL && pd.order_status!='' && pd.order_status == 0}">selected</c:if>>待付款</option>
-<%-- 													<option value="1" <c:if test="${pd.order_status == 1}">selected</c:if>>待出票</option> --%>
-<%-- 													<option value="2" <c:if test="${pd.order_status == 2}">selected</c:if>>出票失败</option> --%>
 													<option value="3" <c:if test="${pd.order_status == 3}">selected</c:if>>已付款</option>
 													<option value="4" <c:if test="${pd.order_status == 4}">selected</c:if>>未中奖</option>
 													<option value="5" <c:if test="${pd.order_status == 5}">selected</c:if>>已中奖</option>
-<%-- 													<option value="6" <c:if test="${pd.order_status == 6}">selected</c:if>>派奖中</option> --%>
-<%-- 													<option value="7" <c:if test="${pd.order_status == 7}">selected</c:if>>审核中</option> --%>
-<%-- 													<option value="8" <c:if test="${pd.order_status == 8}">selected</c:if>>支付失败</option> --%>
 													<option value="9" <c:if test="${pd.order_status == 9}">selected</c:if>>已派奖</option>
 													<option value="10" <c:if test="${pd.order_status == 10}">selected</c:if>>已退款</option>
 										  	</select>
@@ -80,7 +72,7 @@
 													彩种:
 												</span>
 										 	<select  name="lottery_classify_id" id="lottery_classify_id" data-placeholder="请选择" value="${pd.lottery_classify_id }" style="width:154px;border-radius:5px !important"  >
-											<option value="" selected="selected">全部</option>
+													<option value="" selected="selected">全部</option>
 													<option value="1" <c:if test="${pd.lottery_classify_id == 1}">selected</c:if>>竞彩足球</option>
 													<option value="2" <c:if test="${pd.lottery_classify_id == 2}">selected</c:if>>大乐透</option>
 										  	</select>
@@ -122,14 +114,12 @@
 										</th>
 											
 									
-<%-- 									<c:if test="${QX.toExcel == 1 }"> --%>
 										<th style="vertical-align:top;padding-left:2px">
 										<span class="input-icon" style="width:80px;"> </span>
 											<span>
 												<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:150px">导出到EXCEL </a>
 											</span>
 										</th>
-<%-- 									</c:if> --%>
 									</tr>
 									<tr>
 										<th>
@@ -140,13 +130,12 @@
 										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  >
 													<option value="" selected="selected">全部来源</option>
 													<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
-													<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣合APP</option>
+													<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和APP</option>
 										  	</select>
 										  	</div>
 									</th>
 									</tr>
 							</table>
-						<!-- 检索  -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover get_set_time" style="margin-top:5px;">	
 							<thead>
@@ -156,9 +145,6 @@
 									</th>
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">订单编号</th>
-									<!-- 
-									<th class="center">用户名称</th>
-									 -->
 									<th class="center">手机号</th>
 									<th class="center">购买彩种</th>
 									<th class="center">平台来源</th>
@@ -176,7 +162,6 @@
 							</thead>
 													
 							<tbody>
-<!-- 							开始循环	 -->
 							<c:choose>
 								<c:when test="${not empty varList}">
 									<c:if test="${QX.cha == 1 }">
@@ -187,51 +172,45 @@
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'><a onclick="toDetail('${var.order_id}');" style=" cursor:pointer;">${var.order_sn}</a></td>
-											<!-- 
-											<td class='center'>${var.user_name}</td>
-											 -->
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.lottery_name}</td>
 											<td class='center'>
 											<c:choose>
 												<c:when test="${var.app_code_name==10}">球多多</c:when>
-												<c:when test="${var.app_code_name==11}">圣合APP</c:when>
+												<c:when test="${var.app_code_name==11}">圣和APP</c:when>
 												<c:otherwise>球多多</c:otherwise>
 											</c:choose>
 											
 											</td>
-													<c:choose>
-												<c:when test="${var.order_status == 0 }"><<th class='center'>--</th></c:when>
+										
+											<c:choose>
+												<c:when test="${var.order_status == 0 }"><th class='center'>--</th></c:when>
 												<c:otherwise>
 													<th class='center'>
 														<c:if test="${var.surplus !='0.00' }">
-														余额：	${var.surplus }
+																余额：	${var.surplus }
 														</c:if>
-														<c:if test="${var.third_party_paid !='0.00' }">
-															<c:if test="${!empty var.pay_name }">
-																${var.pay_name}：${var.third_party_paid }
-															</c:if>
-															<c:if test="${empty var.pay_name }">
-																第三方：${var.third_party_paid }
-															</c:if>
-														</c:if>
+														<c:choose>
+															<c:when test="${var.third_party_paid !='0.00' }">
+																	<c:if test="${!empty var.pay_name }">
+																		${var.pay_name}：${var.third_party_paid }
+																	</c:if>
+																	<c:if test="${empty var.pay_name }">
+																		第三方：${var.third_party_paid }
+																	</c:if>
+															 </c:when>
+															<c:otherwise>
+																<c:if test="${var.surplus == '0.00' }">
+																		模拟支付：${var.money_paid }
+																</c:if>
+															 </c:otherwise>
+														</c:choose>
 														<c:if test="${var.bonus !='0.00' }">
 															代金券：	${var.bonus }
 														</c:if>
-	<%-- 												<c:if test="${!empty var.pay_name}">${var.pay_name}</c:if> --%>
-	<%-- 												<c:if test="${ var.surplus > 0}">&nbsp余额</c:if> --%>
-	<%-- 												<c:if test="${ var.bonus > 0}">&nbsp红包</c:if> --%>
 													</th>
 												</c:otherwise>
 											</c:choose>
-<!-- 											<th class="center"> -->
-<%-- 												  <c:choose>   --%>
-<%-- 													   <c:when test="${var.surplus > 0}">余额支付  --%>
-<%-- 													   </c:when>   --%>
-<%-- 													   <c:otherwise>线下支付  --%>
-<%-- 													   </c:otherwise>   --%>
-<%-- 												</c:choose>   --%>
-<!-- 											</th> -->
 											<td class='center'>${var.ticket_amount}</td>
 											<td class='center'>${var.winning_money}</td>
 											<td class='center get_time'>${DateUtil.toSDFTime(var.add_time*1000)}</td>
@@ -286,19 +265,13 @@
 											
 												<c:choose>
 													<c:when test="${var.order_status == 0 && var.pay_status == 0}"> 
-														<a class="btn btn-xs btn-success" title="确认付款" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',1,'${var.ticket_amount}');"> 确认付款</a>
+														<c:choose>
+															<c:when test="${var.app_code_name==10}">
+																	<a class="btn btn-xs btn-success" title="确认付款" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',1,'${var.ticket_amount}');"> 确认付款</a>
+															</c:when>
+														</c:choose>
 													</c:when>
-													 
 												</c:choose>
-												
-		 
-		 										<!-- 
-		 										var.surplus <= 0  \\ 线下支付
-		 										var.order_status != 5}	\\  不是已中奖
-		 										var.mo_status == 1  \\ 出票成动	
-		 										
-		 										 ((var.surplus <= 0 && var.order_status != 5) || var.mo_status == 1) 
-		 										 -->
 												<c:choose>  
 													   <c:when test="${ var.surplus <= 0 && var.order_status == 5 }">
 													   		<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.winning_money}');"> 派奖</a> 
@@ -538,6 +511,7 @@
 				var lastStart = $("#lastStart").val();
 				var lastEnd = $("#lastEnd").val();
 				var app_code_name = $("#app_code_name").val();
+				var lottery_classify_id = $("#lottery_classify_id").val();
 				var str = '';
 					for(var i=0;i < document.getElementsByName('ids').length;i++){
 					  if(document.getElementsByName('ids')[i].checked){
@@ -545,10 +519,10 @@
 					  	else str += ',' + document.getElementsByName('ids')[i].value;
 					  }
 					}
-				if(lastStart =='' && lastEnd =='' && orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' && app_code_name == ''){
+				if(lastStart =='' && lastEnd =='' && orderSn =='' && moStatus == ''  && orderStatus == '' &&  str == '' && app_code_name == '' && lottery_classify_id == ''){
 					alert("请选择要导出的数据。");
 				}else{
-				window.location.href='<%=basePath%>ordermanager/excelForMO.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&orderSn='+orderSn+'&moStatus='+moStatus+'&orderStatus='+orderStatus+'&idsStr='+str+'&app_code_name='+app_code_name;
+				window.location.href='<%=basePath%>ordermanager/excelForMO.do?lastStart='+lastStart+'&lastEnd='+lastEnd+'&orderSn='+orderSn+'&moStatus='+moStatus+'&orderStatus='+orderStatus+'&idsStr='+str+'&app_code_name='+app_code_name+'&lottery_classify_id='+lottery_classify_id;
 				}
 			}
 			
