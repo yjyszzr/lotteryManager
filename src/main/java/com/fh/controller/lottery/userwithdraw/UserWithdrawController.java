@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,7 +14,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.apache.axis.utils.SessionUtils;
-import org.apache.commons.lang.SystemUtils;
 import org.apache.shiro.session.Session;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -31,11 +28,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSON;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
-import com.fh.controller.lottery.actionlog.ActionLogController;
 import com.fh.entity.Page;
-import com.fh.entity.system.Role;
 import com.fh.entity.system.User;
-import com.fh.service.lottery.banner.BannerManager;
 import com.fh.service.lottery.thresholdvalue.ThresholdValueManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.service.lottery.userwithdraw.UserWithdrawManager;
@@ -44,17 +38,14 @@ import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.FileUpload;
-import com.fh.util.GetPinyin;
 import com.fh.util.JsonUtils;
 import com.fh.util.Jurisdiction;
-import com.fh.util.MD5Utils;
 import com.fh.util.ManualAuditUtil;
 import com.fh.util.ObjectExcelRead;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 import com.fh.util.PathUtil;
 import com.fh.util.StringUtil;
-import com.fh.util.Tools;
 import com.google.gson.JsonObject;
 
 /**
@@ -148,6 +139,41 @@ public class UserWithdrawController extends BaseController {
 	}
 
 	/**
+	 * 修改
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/withdrawOperation")
+	public void withdrawOperation(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "修改UserWithdraw");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		Session session = Jurisdiction.getSession();
+		User user = (User) session.getAttribute(Const.SESSION_USERROL);
+		pd.put("remarks", pd.getString("remarks"));
+		pd.put("audit_time", DateUtilNew.getCurrentTimeLong());
+		pd.put("auditor", user.getUSERNAME());
+		pd.put("auditor_id", user.getUSER_ID());
+		userwithdrawService.withdrawOperation(pd);
+		PageData pdLog = new PageData();
+		pdLog.put("withdraw_sn", pd.getString("withdrawal_sn"));
+		pdLog.put("log_time", DateUtilNew.getCurrentTimeLong());
+		if (pd.getString("status").equals("1")) {
+			pdLog.put("log_code", 3);
+			pdLog.put("log_name", "提现成功");
+		} else {
+			pdLog.put("log_code", 4);
+			pdLog.put("log_name", "提现失败");
+		}
+		userwithdrawService.saveUserWithdrawLog(pdLog);
+		out.write("success");
+		out.close();
+	}
+
+	/**
 	 * 列表
 	 * 
 	 * @param page
@@ -219,6 +245,75 @@ public class UserWithdrawController extends BaseController {
 		return mv;
 	}
 	
+	/**
+	 * 列表
+	 * 
+	 * @param page
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/temporaryWithdrawList")
+	public ModelAndView temporaryWithdrawList(Page page, ModelAndView mvv) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "列表UserWithdraw");
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		String account_sn = pd.getString("account_sn");
+		if (null != account_sn && !"".equals(account_sn)) {
+			pd.put("account_sn", account_sn.trim());
+		}
+		String mobile = pd.getString("mobile");
+		if (null != mobile && !"".equals(mobile)) {
+			pd.put("mobile", mobile.trim());
+		}
+		String user_name = pd.getString("user_name");
+		if (null != user_name && !"".equals(user_name)) {
+			pd.put("user_name", user_name.trim());
+		}
+		String lastStart = pd.getString("lastStart");
+		if (null != lastStart && !"".equals(lastStart)) {
+			pd.put("lastStart1", DateUtilNew.getMilliSecondsByStr(lastStart));
+		}
+		String lastEnd = pd.getString("lastEnd");
+		if (null != lastEnd && !"".equals(lastEnd)) {
+			pd.put("lastEnd1", DateUtilNew.getMilliSecondsByStr(lastEnd));
+		}
+		page.setPd(pd);
+		List<PageData> varList = userwithdrawService.temporaryWithdrawList(page); // 列出UserWithdraw列表
+		double failAmount = 0;
+		double successAmount = 0;
+		double unfinished = 0;
+		for (int i = 0; i < varList.size(); i++) {
+			PageData pageData = new PageData();
+			pageData = varList.get(i);
+			if (null != pageData.get("status") && !"".equals(pageData.get("status"))) {
+				if ("1".equals(pageData.get("status").toString())) {
+					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+						successAmount += Double.parseDouble(pageData.get("amount").toString());
+					}
+				} else if ("2".equals(pageData.get("status").toString())) {
+					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+						failAmount += Double.parseDouble(pageData.get("amount").toString());
+					}
+				} else if ("0".equals(pageData.get("status").toString())) {
+					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+						unfinished += Double.parseDouble(pageData.get("amount").toString());
+					}
+				}
+			}
+		}
+		PageData bannerPd = new PageData();
+		bannerPd.put("business_id", "12");
+		PageData threshold = thresholdvalueService.findByBusinessID(bannerPd);
+		pd.put("personal", new BigDecimal(threshold.getString("value")).intValue());
+		mv.setViewName("lottery/userwithdraw/temporary_withdraw_list");
+		mv.addObject("varList", varList);
+		mv.addObject("successAmount", successAmount);
+		mv.addObject("failAmount", failAmount);
+		mv.addObject("unfinished", unfinished);
+		mv.addObject("pd", pd);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
 	
 	/**
 	 * 去新增页面
@@ -308,6 +403,33 @@ public class UserWithdrawController extends BaseController {
 		mv.addObject("msg", "manualAudit");
 		mv.addObject("pd", pd);
 		mv.addObject("pageDataList", pageDataList);
+		mv.addObject("awardAmount", awardAmount);
+		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
+		return mv;
+	}
+
+	/**
+	 * 去修改页面
+	 * 
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/goWithdrawDetail")
+	public ModelAndView goWithdrawDetail() throws Exception {
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd = userwithdrawService.findById(pd); // 根据ID读取
+		mv.setViewName("lottery/userwithdraw/temporary_withdraw_detail");
+//		List<PageData> pageDataList = new ArrayList<PageData>();
+		BigDecimal awardAmount = new BigDecimal(BigInteger.ZERO);
+		if (!StringUtil.isEmptyStr(pd.getString("user_id"))) {
+//			pageDataList = userwithdrawService.findByUserId(Integer.parseInt(pd.getString("user_id")));
+			awardAmount = userwithdrawService.findTotalAwardById(Integer.parseInt(pd.getString("user_id")));
+		}
+		mv.addObject("msg", "manualAudit");
+		mv.addObject("pd", pd);
+//		mv.addObject("pageDataList", pageDataList);
 		mv.addObject("awardAmount", awardAmount);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;

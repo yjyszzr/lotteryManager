@@ -137,7 +137,7 @@
 			}
 
 			var str = "请确认，\n"
-					+ "\手机号：" + $("#mobile").text().replace(/(^\s*)|(\s*$)/g, "")
+					+ "\手机号：" + $("#mobile").val()
 					+ "\n店铺：" + $("#store_name").text().replace(/(^\s*)|(\s*$)/g, "")
 					+ "\n退款金额：" + $("#number").val()
 					;

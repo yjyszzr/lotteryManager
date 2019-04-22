@@ -274,7 +274,11 @@
 												</c:choose>
 												<c:choose>  
 													   <c:when test="${ var.surplus <= 0 && var.order_status == 5 }">
+													   	<c:choose>
+															<c:when test="${var.app_code_name==10}">
 													   		<a class="btn btn-xs btn-primary" title="派奖" style="border-radius: 5px;" onclick="operationOrder('${var.order_sn}',9,'${var.winning_money}');"> 派奖</a> 
+															</c:when>
+														</c:choose>
 													   </c:when>  
 													   
 											    </c:choose>

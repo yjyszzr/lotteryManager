@@ -37,6 +37,10 @@ public interface UserWithdrawManager {
 	 */
 	public void edit(PageData pd) throws Exception;
 
+	public void withdrawOperation(PageData pd) throws Exception;
+
+	public void saveUserWithdrawLog(PageData pd) throws Exception;
+
 	/**
 	 * 列表
 	 * 
@@ -44,6 +48,15 @@ public interface UserWithdrawManager {
 	 * @throws Exception
 	 */
 	public List<PageData> list(Page page) throws Exception;
+
+	/**
+	 * 临时提现列表
+	 * 
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<PageData> temporaryWithdrawList(Page page) throws Exception;
 
 	/**
 	 * 列表(全部)
