@@ -587,7 +587,7 @@ public class OrderManagerController extends BaseController {
 			
 			vpd.put("var2", varOList.get(i).getString("mobile")); // 2
 			try {
-				String mobile = "";
+				String mobile = " ";
 				String store_id = varOList.get(i).getString("store_id");
 				String user_id = varOList.get(i).getString("user_id");
 				if (null != store_id && !"".equals(store_id)
@@ -614,13 +614,30 @@ public class OrderManagerController extends BaseController {
 				appCodeStr = "球多多";
 			}
 			vpd.put("var4", appCodeStr); // 5
-			String surplusStr = "";
+			String surplusStr = " ";
 			Double surplus = new Double(varOList.get(i).getString("surplus"));
+			Double bonus = new Double(varOList.get(i).getString("bonus"));
+			Double third_party_paid = new Double(varOList.get(i).getString("third_party_paid"));
 			if (surplus > 0) {
-				surplusStr = "余额支付";
-			} else {
-				surplusStr = "线下支付";
+				surplusStr += "余额支付、";
 			}
+			if(third_party_paid > 0) {
+				String payName = varOList.get(i).getString("pay_name");
+				if(StringUtil.isEmptyStr(payName)) {
+					surplusStr +="第三方、";
+				} else {
+					surplusStr += payName+"、";
+				}
+				
+			} else {
+				if (surplus == 0) {
+					surplusStr += "模拟支付、";
+				}
+			}
+			if(bonus > 0) {
+				surplusStr += "代金券支付、";
+			}
+			surplusStr = surplusStr.substring(0, surplusStr.length()-1);
 			vpd.put("var5", surplusStr); // 5
 			vpd.put("var6", varOList.get(i).getString("ticket_amount")); // 6
 			vpd.put("var7", varOList.get(i).getString("winning_money")); // 7
