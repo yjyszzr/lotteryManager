@@ -40,7 +40,8 @@
 		article_pv,	
 		article_uv,
 		label_defaults,
-		video_url 
+		video_url,
+		app_code_name
 	</sql>
 	
 	<!-- 字段值 -->
@@ -76,7 +77,8 @@
         #{article_pv},	
         #{article_uv},
         #{label_defaults},
-        #{video_url} 
+        #{video_url}, 
+        #{app_code_name} 
 	</sql>
 	
 	<!-- 新增-->
@@ -115,7 +117,8 @@
 		        article_pv,	
 		        article_uv,
 		        label_defaults,
-		        video_url 
+		        video_url,
+		        app_code_name 
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -162,7 +165,8 @@
 			article_pv = #{article_pv},
 			article_uv = #{article_uv},
 			label_defaults = #{label_defaults},
-			video_url=#{video_url} 
+			video_url=#{video_url},
+			app_code_name=#{app_code_name}
 		where 
 		article_id = #{article_id}
 	</update>
@@ -222,6 +226,9 @@
 		</if>
 		<if test="pd.status != null and pd.status!= ''"> 
 			and status = #{pd.status}
+		</if>
+		<if test="pd.app_code_name != null and pd.app_code_name != ''"> 
+			and app_code_name = #{pd.app_code_name}
 		</if>
 		<if test="pd.match_id != null and pd.match_id!= ''"> 
 			and match_id = #{pd.match_id}

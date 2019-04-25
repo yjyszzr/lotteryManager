@@ -20,7 +20,8 @@
 		create_time,	
 		start_time,	
 		end_time,
-		show_position
+		show_position,
+		app_code_name
 	</sql>
 	
 	<!-- 字段值 -->
@@ -36,7 +37,8 @@
         #{create_time},	
         #{start_time},	
         #{end_time}	,
-        #{show_position}
+        #{show_position},
+        #{app_code_name}
 	</sql>
 	
 	<!-- 新增-->
@@ -55,7 +57,8 @@
 		        create_time,	
 		        start_time,	
 		        end_time,
-		        show_position
+		        show_position,
+		        app_code_name
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -83,7 +86,8 @@
 			is_transaction = #{is_transaction},
 			start_time = #{start_time},
 			end_time = #{end_time},
-			show_position = #{show_position}
+			show_position = #{show_position},
+			app_code_name = #{app_code_name}
 		where 
 		id = #{id}
 	</update>
@@ -114,6 +118,9 @@
 		</if>
 		<if test="pd.is_transaction != null and pd.is_transaction != ''">
 			and is_transaction = #{pd.is_transaction }
+		</if>
+		<if test="pd.app_code_name != null and pd.app_code_name != ''">
+			and app_code_name = #{pd.app_code_name }
 		</if>
 		<if test="pd.startTimeStart1 != null and pd.startTimeStart1 != ''"> 
 			and start_time &gt; #{pd.startTimeStart1 }

@@ -83,6 +83,15 @@
 								</div>
                             </div>
 	   						     <div class="row"  style="padding:5px">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">发布平台：</label>
+									 <div class="col-sm-9">
+									    <select  name="app_code_name" id="app_code_name" value="${pd.app_code_name}"  style="width:235px;">
+									        <option value="10"  selected<c:if test="${pd.app_code_name==10}">selected</c:if>>球多多</option>
+									        <option value="11" <c:if test="${pd.app_code_name==11}">selected</c:if>>圣和彩店</option>
+									    </select>
+								</div>
+                            </div>
+	   						     <div class="row"  style="padding:5px">
 								<label class="col-sm-3 control-label no-padding-right" for="form-field-1">展示位置：</label>
 									 <div class="col-sm-9">
 									    <select  name="show_position" id="show_position" value="${pd.show_position}"  style="width:235px;">
