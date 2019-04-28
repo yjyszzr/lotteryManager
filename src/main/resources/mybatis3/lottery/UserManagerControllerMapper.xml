@@ -619,7 +619,7 @@
 
 	<!-- 根据手机号查询用户 -->
 	<select id="getUserByMobile" parameterType="java.lang.String" resultType="pd">
-		select * from dl_user where mobile = #{mobile}
+		select * from dl_user where mobile = #{mobile} and app_code_name = 10
 	</select>
 
 	<select id="getUserIdListByMobileList"  parameterType="java.lang.String" resultType="java.lang.Integer">

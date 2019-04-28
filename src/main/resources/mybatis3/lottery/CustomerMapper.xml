@@ -226,8 +226,9 @@
 			</if>
 		)
 		AND _order.`pay_status` = 1
-		AND _order.`pay_time` &lt;= 1541520000
+		AND _order.`pay_time` &gt;= 1541520000
 		AND _user.`mobile` = #{mobile}
+		AND _user.app_code_name = 10
 	</select>
 	
 	

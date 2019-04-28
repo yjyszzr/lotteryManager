@@ -177,7 +177,7 @@ public class CustomerController extends BaseController {
 			long _count = new Long(_pd.getString("_count"));
 			if (_count > 0) {
 				map.put("flag", false);
-				map.put("msg", "2018年11月7号之前有购过彩");
+				map.put("msg", "2018年11月7号之后有购过彩");
 				return AppUtil.returnObject(new PageData(), map);
 			}
 
@@ -251,7 +251,6 @@ public class CustomerController extends BaseController {
 			}
 			pd.put("user_id_2", user_id_2);
 
-			_pd = null;
 			_pd = this.customerService.getCountOrderByMobile(pd); // 1
 			long _count = new Long(_pd.getString("_count"));
 			if (_count > 0) {
@@ -676,8 +675,6 @@ public class CustomerController extends BaseController {
 //		if (null != user_2) {
 //			user_id_2 = user_2.getString("user_id");
 //		}
-
-		_pd = new PageData();
 		_pd.put("pay_status", 1);
 
 		String start_add_time = "";

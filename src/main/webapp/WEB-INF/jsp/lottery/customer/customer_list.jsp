@@ -186,7 +186,7 @@
 											<td class="center">
 												<div class="hidden-sm hidden-xs btn-group">
 													 <a class="btn btn-xs btn-success" title="查看" 
-													   onclick="see('mobile=' + '${var.mobile}'  + '&id=' + '${var.id}');"
+													   onclick="see('mobile=' + '${var.mobile}'  + '&id=' + '${var.id}' + '');"
 													   
 													>
 														<i class="ace-icon fa fa-pencil-square-o bigger-120" title="查看">查看</i>
