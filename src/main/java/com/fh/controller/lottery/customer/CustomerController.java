@@ -177,7 +177,7 @@ public class CustomerController extends BaseController {
 			long _count = new Long(_pd.getString("_count"));
 			if (_count > 0) {
 				map.put("flag", false);
-				map.put("msg", "2018年11月7号之后有购过彩");
+				map.put("msg", "2018年11月7号之前有购过彩");
 				return AppUtil.returnObject(new PageData(), map);
 			}
 
@@ -662,7 +662,7 @@ public class CustomerController extends BaseController {
 		PageData customer = this.customerService.findById(pd);
 
 		List<PageData> ordes = null;
-		String mobile = customer.getString("mobile");
+		String mobile = pd.getString("mobile");
 		PageData _pd = new PageData();
 		_pd.put("mobile", mobile);
 //		String user_id_1 = "";

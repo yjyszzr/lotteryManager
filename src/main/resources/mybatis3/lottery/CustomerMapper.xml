@@ -226,7 +226,7 @@
 			</if>
 		)
 		AND _order.`pay_status` = 1
-		AND _order.`pay_time` >= 1541520000
+		AND _order.`pay_time` &lt;= 1541520000
 		AND _user.`mobile` = #{mobile}
 	</select>
 	
@@ -328,7 +328,7 @@
 		<!--</if>-->
 
 		<if test="mobile != null and mobile != ''">
-			AND _order.`mobile` = #{mobile}
+		AND _order.`mobile` = #{mobile}
 		</if>
 		<if test="pay_status != null and pay_status != ''">
 		AND _order.`pay_status` = #{pay_status}
