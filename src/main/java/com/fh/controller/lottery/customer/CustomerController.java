@@ -1,22 +1,17 @@
 package com.fh.controller.lottery.customer;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Resource;
-
+import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
+import com.fh.entity.system.User;
+import com.fh.service.lottery.customer.CustomerManager;
+import com.fh.service.lottery.order.OrderManager;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
+import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
+import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
+import com.fh.service.system.user.impl.UserService;
+import com.fh.util.*;
+import com.opensymphony.oscache.util.StringUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -31,26 +26,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
-import com.fh.entity.system.User;
-import com.fh.service.lottery.customer.CustomerManager;
-import com.fh.service.lottery.order.OrderManager;
-import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
-import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
-import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
-import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
-import com.fh.service.system.user.impl.UserService;
-import com.fh.util.AppUtil;
-import com.fh.util.Const;
-import com.fh.util.DateUtil;
-import com.fh.util.DateUtilNew;
-import com.fh.util.FileUpload;
-import com.fh.util.Jurisdiction;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.PathUtil;
-import com.opensymphony.oscache.util.StringUtil;
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 说明：销售 创建人：FH Q313596790 创建时间：2019-01-14
@@ -674,7 +658,6 @@ public class CustomerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-
 //		id
 		PageData customer = this.customerService.findById(pd);
 
@@ -682,17 +665,17 @@ public class CustomerController extends BaseController {
 		String mobile = customer.getString("mobile");
 		PageData _pd = new PageData();
 		_pd.put("mobile", mobile);
-		String user_id_1 = "";
-		PageData user_1 = this.customerService.getUserByMobile(_pd);
-		if (null != user_1) {
-			user_id_1 = user_1.getString("user_id");
-		}
-
-		String user_id_2 = "";
-		PageData user_2 = this.userAccountService.getUserByMobile(_pd);
-		if (null != user_2) {
-			user_id_2 = user_2.getString("user_id");
-		}
+//		String user_id_1 = "";
+//		PageData user_1 = this.customerService.getUserByMobile(_pd);
+//		if (null != user_1) {
+//			user_id_1 = user_1.getString("user_id");
+//		}
+//
+//		String user_id_2 = "";
+//		PageData user_2 = this.userAccountService.getUserByMobile(_pd);
+//		if (null != user_2) {
+//			user_id_2 = user_2.getString("user_id");
+//		}
 
 		_pd = new PageData();
 		_pd.put("pay_status", 1);
@@ -711,25 +694,24 @@ public class CustomerController extends BaseController {
 		}
 		// 不懂为啥有这个时间限制
 //		_pd.put("start_add_time", start_add_time);
+//		String user_id_s = "";
+//		if (!StringUtil.isEmpty(user_id_1)) {
+//			user_id_s = user_id_1;
+//		}
+//		if (!StringUtil.isEmpty(user_id_2)) {
+//			user_id_s += "," + user_id_2;
+//		}
+//
+//		_pd.put("user_id_s", user_id_s);
+//		_pd.put("user_id_1", user_id_1);
+//		_pd.put("user_id_2", user_id_2);
+//		if (StringUtil.isEmpty(user_id_s)) {
+//			ordes = null;
+//		} else {
+//			ordes = this.customerService.getOrdes(_pd);
+//		}
 
-		String user_id_s = "";
-		if (!StringUtil.isEmpty(user_id_1)) {
-			user_id_s = user_id_1;
-		}
-		if (!StringUtil.isEmpty(user_id_2)) {
-			user_id_s += "," + user_id_2;
-		}
-
-		_pd.put("user_id_s", user_id_s);
-		_pd.put("user_id_1", user_id_1);
-		_pd.put("user_id_2", user_id_2);
-
-		if (StringUtil.isEmpty(user_id_s)) {
-			ordes = null;
-		} else {
-			ordes = this.customerService.getOrdes(_pd);
-		}
-
+		ordes = this.customerService.getOrdes(_pd);
 		mv.setViewName("lottery/customer/customer_see");
 //		mv.addObject("msg", "save");
 		mv.addObject("customer", customer);
