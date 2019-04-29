@@ -218,17 +218,12 @@
 		AND _user.`mobile` = '13241675826'
 		 -->
 		SELECT COUNT(_order.`order_id`) as _count
-		FROM dl_order _order, dl_user _user
-		WHERE 1=1
-		AND (_order.`user_id` = _user.`user_id`
-			<if test="user_id_2 != null and user_id_2 != ''">
-			OR _order.`user_id` = #{user_id_2}
-			</if>
-		)
-		AND _order.`pay_status` = 1
-		AND _order.`pay_time` &gt;= 1541520000
-		AND _user.`mobile` = #{mobile}
-		AND _user.app_code_name = 10
+		FROM dl_order _order
+		WHERE
+		_order.`pay_status` = 1
+		AND _order.`pay_time` >= 1541520000
+		AND _order.`mobile` = #{mobile}
+		AND _order.app_code_name = 10
 	</select>
 	
 	

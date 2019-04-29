@@ -175,7 +175,7 @@ public class CustomerController extends BaseController {
 			_pd = null;
 			_pd = this.customerService.getCountOrderByMobile(pd);
 			long _count = new Long(_pd.getString("_count"));
-			if (_count > 0) {
+			if (_count >= 0) {
 				map.put("flag", false);
 				map.put("msg", "2018年11月7号之后有购过彩");
 				return AppUtil.returnObject(new PageData(), map);
