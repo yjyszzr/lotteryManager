@@ -190,6 +190,13 @@
 		where order_id=#{order_id }
 	</update>
 
+	<update id="checkPrize" parameterType="pd">
+		update dl_order set
+		check_winning_status = #{check_winning_status },
+		check_winning_time=#{check_winning_time }
+		where order_id=#{order_id }
+	</update>
+
 	<select id="getOrderInfoByOrderSn" resultType="pd" parameterType="String">
 		select  dl.order_id,
 				dl.order_sn,

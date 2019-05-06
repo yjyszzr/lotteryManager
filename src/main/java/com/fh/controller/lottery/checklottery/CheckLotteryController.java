@@ -316,6 +316,52 @@ public class CheckLotteryController extends BaseController {
 			out.close();
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * @param response
+	 * @param jsonStr
+	 */
+	@RequestMapping(value = "/checkPrize",method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
+	public void checkPrize(HttpServletResponse response,@RequestBody JSONObject jsonStr) {
+		response.setCharacterEncoding("GBK");
+		response.setContentType("text/html; charset=GBK");
+		PrintWriter out=null;
+		try {
+			out = response.getWriter();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		HashMap<String,Object> resultMap = new HashMap<String,Object>();
+		try {
+			PageData pd = new PageData();
+			boolean flag = jsonStr.containsKey("body");
+			if(flag) {
+				Map map = (Map) JSONUtils.parse(jsonStr.toJSONString());
+				pd  = new PageData((Map)map.get("body"));
+			}
+			User user = (User)Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+			if(user!=null){
+				pd.put("check_winning_time", DateUtilNew.getMilliSecondsByStr(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())));
+				checkLotteryService.checkPrize(pd); // 核查order
+				pd = checkLotteryService.findById(pd.getString("order_id")); // 获取order详情
+				resultMap.put("code", "0");
+				resultMap.put("msg", "核查通过");
+				resultMap.put("data", pd);
+			}else {
+				resultMap.put("code", "2");
+				resultMap.put("msg", "用户登录过期，请重新登录.");
+			}
+			
+		} catch (Exception e) {
+			resultMap.put("code", "300500");
+			resultMap.put("msg", "网络连接异常");
+		} finally {
+			out.print(JSONUtils.toJSONString(resultMap));
+			out.close();
+		}
+	}
 
 	@RequestMapping(value = "/getOrderInfo",method=RequestMethod.GET)
 	public void getOrderInfo(HttpServletResponse response){
