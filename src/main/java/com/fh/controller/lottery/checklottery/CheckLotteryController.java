@@ -271,14 +271,11 @@ public class CheckLotteryController extends BaseController {
 			out.close();
 		}
 	}
-	/**
-	 * 核查订单
-	 * @ApiOperation(value = "模拟生成订单", notes = "模拟生成订单")
-	   @PostMapping("/createOrder")
-	 * @param out
-	 * @result json:result=返回状态success:error
-	 * @throws Exception
-	 */
+ /**
+  * 
+  * @param response
+  * @param jsonStr
+  */
 	@RequestMapping(value = "/checkOrder",method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	public void checkOrder(HttpServletResponse response,@RequestBody JSONObject jsonStr) {
 		response.setCharacterEncoding("GBK");

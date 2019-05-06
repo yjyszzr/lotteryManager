@@ -6,8 +6,7 @@
 		dl.order_id,
 		IFNULL(dl.order_sn,'') order_sn,
 		IFNULL(dl.parent_sn,'') parent_sn,
-		IFNULL(dl.order_status,'')
-		order_status,
+		IFNULL(dl.order_status,'') order_status,
 		IFNULL(dl.pay_status,'') pay_status,
 		IFNULL(dl.add_time,'') add_time,
 		IFNULL(dl.order_type,'') order_type,
@@ -19,12 +18,14 @@
 		IFNULL(dl.auditor_id,'') auditor_id,
 		IFNULL(dl.check_status,'') check_status,
 		IFNULL(dl.check_remark,'') check_remark,
+		IFNULL(dl.winning_money,'') winning_money,
 		IFNULL(dl.check_time,'') check_time
 	</sql>
 
 	<select id="findShops" resultType="pd" parameterType="String">
 		select phone id,name from dl_store
 	</select>
+	
 	<select id="getNumAndMon" parameterType="java.util.HashMap"
 		resultType="pd">
 		select count(1) as ORDER_NUMS,IFNULL(sum(ticket_amount),0) as
@@ -33,6 +34,14 @@
 			dl_log_operation log
 				on dl.order_sn=log.order_sn
 		WHERE log.type=2 
+		<if test="check_winning_status != null and check_winning_status != ''">
+			<if test="check_winning_status == 1">
+				and dl.order_status in(3,4)
+			</if>
+			<if test="check_winning_status == 2">
+				and dl.order_status in(6,7,9)
+			</if>
+		</if>
 		<if test="store_id != null and store_id != ''">
 			and log.phone = #{store_id}
 		</if>
