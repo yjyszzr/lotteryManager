@@ -113,6 +113,11 @@ public class CheckLotteryController extends BaseController {
 			if (null != store_id && !"".equals(store_id)) {
 				pd.put("store_id", store_id.trim());
 			}
+			//新增按照开奖状态查询
+			String check_winning_status = pd.getString("check_winning_status");
+			if (null != check_winning_status && !"".equals(check_winning_status)) {
+				pd.put("check_winning_status", check_winning_status.trim());
+			}
 			String print_lottery_status = pd.getString("print_lottery_status");
 			if (null != print_lottery_status && !"".equals(print_lottery_status)) {
 				pd.put("print_lottery_status", print_lottery_status.trim());
@@ -189,6 +194,11 @@ public class CheckLotteryController extends BaseController {
 			if(flag) {
 				Map map = (Map) JSONUtils.parse(jsonStr.toJSONString());
 				pd  = new PageData((Map)map.get("body"));
+			}
+			//新增按照开奖状态查询
+			String check_winning_status = pd.getString("check_winning_status");
+			if (null != check_winning_status && !"".equals(check_winning_status)) {
+				pd.put("check_winning_status", check_winning_status.trim());
 			}
 			String store_id = pd.getString("store_id");
 			if (null != store_id && !"".equals(store_id)) {

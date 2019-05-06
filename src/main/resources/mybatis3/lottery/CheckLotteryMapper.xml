@@ -62,8 +62,15 @@
 		<if test="pd.store_id != null and pd.store_id != ''">
 			and log.phone = #{pd.store_id}
 		</if>
-		<if
-			test="pd.print_lottery_status != null and pd.print_lottery_status != ''">
+		<if test="pd.check_winning_status != null and pd.check_winning_status != ''">
+			<if test="pd.check_winning_status == 1">
+				and dl.order_status in(3,4)
+			</if>
+			<if test="pd.check_winning_status == 2">
+				and dl.order_status in(6,7,9)
+			</if>
+		</if>
+		<if test="pd.print_lottery_status != null and pd.print_lottery_status != ''">
 			<!-- 成功訂單 -->
 			<if test="pd.print_lottery_status == 1">
 				and log.op_type=1
@@ -96,9 +103,18 @@
 		left join 
 		dl_log_operation log on dl.order_sn=log.order_sn
 		WHERE log.type=2 
+		 <if test="check_winning_status != null and check_winning_status != ''">
+			<if test="check_winning_status == 1">
+				and dl.order_status in(3,4)
+			</if>
+			<if test="check_winning_status == 2">
+				and dl.order_status in(6,7,9)
+			</if>
+		</if>
 		<if test="store_id != null and store_id != ''">
 			and log.phone = #{store_id}
 		</if>
+	
 		<if test="print_lottery_status != null and print_lottery_status != ''">
 			<if test="print_lottery_status == 1">
 				and log.op_type=1
