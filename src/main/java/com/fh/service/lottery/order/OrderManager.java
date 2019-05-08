@@ -132,5 +132,7 @@ public interface OrderManager {
 
 	public PageData findByUserIds(PageData pageDataUserIds)throws Exception;
 
+    public List<PageData> findPayOperationList(List<PageData> varList)throws Exception;
+
 
 }

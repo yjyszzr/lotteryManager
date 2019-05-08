@@ -214,10 +214,17 @@ public class OrderManagerController extends BaseController {
 		List<PageData> varList = ordermanagerService.getOrderListForMO(page); // 列出手工出票OrderManager列表
 		Double allAmountD = 0D;
 		if (varList.size() > 0) {
-			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);
+			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);    
+			List<PageData> payOperationList = ordermanagerService.findPayOperationList(varList);
+			Map<String, String> orderSnMap =new HashMap<String, String>();
+			for (int i = 0; i < payOperationList.size(); i++) {
+			    orderSnMap.put(payOperationList.get(i).getString("order_sn"), payOperationList.get(i).getString("name"));
+            }
+			
 			Map<String, PageData> payLogMap = new HashMap<String, PageData>(payLogList.size());
 			payLogList.forEach(item -> payLogMap.put(item.getString("order_sn"), item));
 			for (int i = 0; i < varList.size(); i++) {
+ 			    varList.get(i).put("store_name",orderSnMap.get(varList.get(i).getString("order_sn")));
 				PageData pageData = payLogMap.get(varList.get(i).getString("order_sn"));
 				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
@@ -226,10 +233,10 @@ public class OrderManagerController extends BaseController {
 				try {
 					String store_id = varList.get(i).getString("store_id");
 					String user_id = varList.get(i).getString("user_id");
-					if (null != store_id && !"".equals(store_id)
+					if (null != store_id && !"".equals(store_id) 
 						&& new Long(store_id) > 0	
-					) {
-						PageData _pd = new PageData();
+					) { 
+						PageData _pd = new PageData(); 
 						_pd.put("user_id", user_id);
 						PageData user = this.UserAccountService.getUserByUserId(_pd);
 						varList.get(i).put("mobile", user.getString("mobile"));
@@ -558,6 +565,7 @@ public class OrderManagerController extends BaseController {
 		titles.add("手动出票状态"); // 11
 		titles.add("手动出票时间"); // 12
 		titles.add("代金卷金额");
+		titles.add("店铺名称");
 		dataMap.put("titles", titles);
 		String idsStr = pd.getString("idsStr");
 		String lastStart = pd.getString("lastStart");
@@ -579,6 +587,13 @@ public class OrderManagerController extends BaseController {
 		}else {
 			varOList = ordermanagerService.exportExcelForMO(pd);
 		}
+		List<PageData> payOperationList = ordermanagerService.findPayOperationList(varOList);
+		  Map<String, String> orderSnMap =new HashMap<String, String>();
+          for (int i = 0; i < payOperationList.size(); i++) {
+              orderSnMap.put(payOperationList.get(i).getString("order_sn"), payOperationList.get(i).getString("name"));
+          }
+		
+		
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
@@ -712,6 +727,7 @@ public class OrderManagerController extends BaseController {
 //			DateUtil.toSDFTime(var.add_time*1000)
 			
 			vpd.put("var12", varOList.get(i).getString("bonus")); 
+			vpd.put("var13", orderSnMap.get(varOList.get(i).getString("order_sn"))); 
 			
 			varList.add(vpd);
 		}

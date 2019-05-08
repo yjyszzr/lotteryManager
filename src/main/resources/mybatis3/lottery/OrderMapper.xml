@@ -201,7 +201,7 @@
 	<!-- 通过ID获取数据 -->
 	<select id="findById" parameterType="pd" resultType="pd">
 		select 
-		<include refid="Field"></include>
+			*
 		from 
 		<include refid="tableName"></include>
 		where 
@@ -992,4 +992,28 @@
 			add_time ASC 
 			LIMIT 1;
 	</select>
+	
+	<select id="findPayOperationList" resultType="pd">
+		SELECT
+			a.order_sn order_sn,
+			a.phone phone,
+			b.name name 
+		FROM (
+			SELECT
+				* 
+			FROM
+				dl_log_operation 
+			WHERE
+				order_sn IN 
+					<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			                #{item}
+					</foreach>
+					and type = 2
+			GROUP BY
+				order_sn 
+			) a
+			LEFT JOIN dl_store b ON a.phone = b.phone
+	</select>
+	
+	
 </mapper>

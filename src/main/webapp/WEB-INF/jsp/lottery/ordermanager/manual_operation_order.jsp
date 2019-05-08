@@ -154,6 +154,7 @@
 									<th class="center">购彩时间</th>
 									<th class="center">支付倒计时</th>
 									<th class="center">订单状态</th>
+									<th class="center">店铺名称</th>
 									<th class="center">手动出票状态</th>
 									<th class="center">手动出票时间</th>
 									<th class="center">代金卷金额</th>
@@ -230,6 +231,7 @@
 													<c:when test="${var.order_status == 10}">已退款</c:when>
 												</c:choose>
 											</td>
+											<td class='center'>${var.store_name}</td>
 											<td class='center'>   
 												<c:choose>
 															<c:when test="${var.order_status == 8}">--- ---</c:when>

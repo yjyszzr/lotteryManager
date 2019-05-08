@@ -36,6 +36,8 @@
 									<th class="center">注数</th>
 									<th class="center">订单状态</th>
 									<th class="center">中奖金额</th>
+									<th class="center">兑奖状态</th>
+									<th class="center">兑奖时间</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -57,11 +59,24 @@
 												<c:when test="${pd.order_status == 6}">派奖中</c:when>
 												<c:when test="${pd.order_status == 7}">已派奖</c:when>
 												<c:when test="${pd.order_status == 8}">支付失败</c:when>
-												<c:when test="${var.order_status == 9}">已派奖</c:when>
-												<c:when test="${var.order_status == 10}">已退款</c:when>
+												<c:when test="${pd.order_status == 9}">已派奖</c:when>
+												<c:when test="${pd.order_status == 10}">已退款</c:when>
 											</c:choose>
 											</td>
 											<td class='center'>${pd.winning_money}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${pd.check_winning_status == 0}">未兑奖</c:when>
+													<c:when test="${pd.check_winning_status == 1}">已兑奖</c:when>
+													<c:otherwise>未兑奖</c:otherwise>
+												</c:choose> 
+											</td>
+											<td class='center'>
+											<c:choose>
+													<c:when test="${pd.check_winning_time == null}">-- --</c:when>
+													<c:otherwise>${DateUtil.toSDFTime(pd.check_winning_time*1000)}</c:otherwise>
+												</c:choose> 
+											</td>
 										</tr>
 									</c:if>
 									<c:if test="${QX.cha == 0 }">

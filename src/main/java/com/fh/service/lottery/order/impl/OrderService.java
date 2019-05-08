@@ -344,4 +344,13 @@ public class OrderService implements OrderManager {
 		return (PageData) dao.findForObject("OrderMapper.findByIds", pageDataUserIds);
 	}
 
+    @Override
+    public List<PageData> findPayOperationList(List<PageData> varList) throws Exception {
+        String[] orderSns = new String[varList.size()];
+        for (int i = 0; i < varList.size(); i++) {
+            orderSns[i] = varList.get(i).getString("order_sn");
+        }
+        return (List<PageData>) dao.findForList("OrderMapper.findPayOperationList", orderSns);
+    }
+
 }
