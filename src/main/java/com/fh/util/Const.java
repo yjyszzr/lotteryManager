@@ -2,6 +2,10 @@ package com.fh.util;
 
 import org.springframework.context.ApplicationContext;
 
+import com.fh.entity.system.User;
+
+import net.sf.json.util.JSONUtils;
+
 /**
  * 项目名称：
  * 
@@ -57,4 +61,12 @@ public class Const {
 	public static final String[] APP_GETAPPUSER_PARAM_ARRAY = new String[] { "USERNAME" };
 	public static final String[] APP_GETAPPUSER_VALUE_ARRAY = new String[] { "用户名" };
 
+	
+	public static void main(String[] args) {
+		User user = new User();
+		user.setIP("111");
+		user.setNAME("dsfsdf");
+		user.setLAST_LOGIN("490239");
+		System.out.println(JsonUtils.beanToJSONString(user));
+	}
 }
