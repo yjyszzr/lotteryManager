@@ -94,7 +94,7 @@
 		<if test="pd.lastEnd1 != null and pd.lastEnd1 != ''">
 			and log.add_time &lt;= #{pd.lastEnd1 }
 		</if>
-		order by log.add_time desc
+		order by dl.check_time,log.add_time desc
 	</select>
 	<select id="dataAllList" parameterType="pd" resultType="pd">
 		SELECT
@@ -138,7 +138,7 @@
 		<if test="lastEnd1 != null and lastEnd1 != ''">
 			and log.add_time &lt;= #{lastEnd1 }
 		</if>
-		order by log.add_time desc
+		order by dl.check_time,log.add_time desc
 	</select>
 	<select id="getOrderById" parameterType="String" resultType="pd">
 		SELECT
