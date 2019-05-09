@@ -557,8 +557,19 @@
                     </webResources>
                 </configuration>
             </plugin>
-        </plugins>
-	</build>
+      <plugin>
+      <groupId>org.apache.tomcat.maven</groupId>
+      <artifactId>tomcat7-maven-plugin</artifactId>
+      <configuration>
+      <url>http://39.106.18.39:8082/lotteryManager/index</url>
+        <path>/</path>
+      <server>tomcat</server>
+      <username>lwj</username>
+      <password>lwj</password>
+      </configuration>
+      </plugin>
+    </plugins>
+  </build>
 	<profiles>
         <profile>
             <id>dev</id>
