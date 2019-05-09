@@ -13,7 +13,7 @@
 		from 
 		dl_user
 		where 
-			mobile = #{mobile}
+			mobile = #{mobile} limit 1
 	</select>
 	
 	<!-- 字段 -->

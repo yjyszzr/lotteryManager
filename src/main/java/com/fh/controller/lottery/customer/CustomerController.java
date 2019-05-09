@@ -174,8 +174,8 @@ public class CustomerController extends BaseController {
 
 			_pd = null;
 			_pd = this.customerService.getCountOrderByMobile(pd);
-			long _count = new Long(_pd.getString("_count"));
-			if (_count >= 0) {
+			Integer _count = Integer.valueOf(_pd.getString("_count"));
+			if (_count > 0) {
 				map.put("flag", false);
 				map.put("msg", "2018年11月7号之后有购过彩");
 				return AppUtil.returnObject(new PageData(), map);
@@ -397,6 +397,11 @@ public class CustomerController extends BaseController {
 		System.out.println("last_add_seller_id=" + last_add_seller_id);
 		pd.put("last_add_seller_id", last_add_seller_id);
 
+//		String userName = pd.getString("user_name");
+//		if(!StringUtils.isEmpty(userName)){
+//			pd.put("last_add_seller_name",userName.trim());
+//		}
+
 		page.setPd(pd);
 		List<PageData> varList = customerService.list(page); // 列出Customer列表
 
@@ -583,52 +588,17 @@ public class CustomerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 
-//		id
 		PageData customer = this.customerService.findById(pd);
-//		user_id_1 = customer.getString("user_id");
 		String last_add_time = customer.getString("last_add_time");
 		String mobile = customer.getString("mobile");
 		PageData _pd = new PageData();
+		List<PageData> ordes = new ArrayList<>();
 		_pd.put("mobile", mobile);
-
-		String user_id_1 = "";
-		PageData user_1 = this.customerService.getUserByMobile(_pd);
-		if (null != user_1) {
-			user_id_1 = user_1.getString("user_id");
-		}
-
-		String user_id_2 = "";
-		PageData user_2 = this.userAccountService.getUserByMobile(_pd);
-		if (null != user_2) {
-			user_id_2 = user_2.getString("user_id");
-		}
-
-		_pd = new PageData();
-		_pd.put("start_add_time", last_add_time);
-
-		String user_id_s = "";
-		if (!StringUtil.isEmpty(user_id_1)) {
-			user_id_s = user_id_1;
-		}
-		if (!StringUtil.isEmpty(user_id_2)) {
-			user_id_s += "," + user_id_2;
-		}
-		_pd.put("user_id_s", user_id_s);
-		_pd.put("user_id_1", user_id_1);
-		_pd.put("user_id_2", user_id_2);
-
 		_pd.put("pay_status", 1);
-
-		List<PageData> ordes = null;
-
-		if (StringUtil.isEmpty(user_id_s)) {
-			ordes = null;
-		} else {
-			ordes = this.customerService.getOrdes(_pd);
-		}
+		_pd.put("start_add_time", last_add_time);
+		ordes = this.customerService.getOrdes(_pd);
 
 		mv.setViewName("lottery/customer/customer_see_total");
-//		mv.addObject("msg", "save");
 		mv.addObject("customer", customer);
 		mv.addObject("varList", ordes);
 		return mv;
@@ -799,27 +769,33 @@ public class CustomerController extends BaseController {
 						String userId1 = "";
 						String userId2 = "";
 						if (null != pdCxmCustomer) {
-							userId1 = pdCxmCustomer.getString("user_id");
-							PageData pdSotreCustomer = userAccountService.getOtherUserId(pdCxmCustomer);
-							PageData PageDataUserIds = new PageData();
-							pdCustomer.put("user_id", userId1);// 用户Id
-							if (null != pdSotreCustomer) {
-								userId2 = pdSotreCustomer.getString("user_id");
-							}
-							PageDataUserIds.put("user_id_1", userId1);
-							PageDataUserIds.put("user_id_2", userId2);
-							PageData pdCustomerOrder = orderService.findByUserIds(PageDataUserIds);
-							pdCustomer.put("pay_state", 1);
-							pdCustomer.put("user_name", "");
-							if (null != pdCustomerOrder) {
-								pdCustomer.put("first_pay_time", pdCustomerOrder.get("pay_time")); // 第一次支付的时间
+//							userId1 = pdCxmCustomer.getString("user_id");
+//							PageData pdSotreCustomer = userAccountService.getOtherUserId(pdCxmCustomer);
+//							PageData PageDataUserIds = new PageData();
+//							pdCustomer.put("user_id", userId1);// 用户Id
+//							if (null != pdSotreCustomer) {
+//								userId2 = pdSotreCustomer.getString("user_id");
+//							}
+//							PageDataUserIds.put("user_id_1", userId1);
+//							PageDataUserIds.put("user_id_2", userId2);
+
+							//根据手机号查询订单的最早支付时间
+							PageData pdMobile = new PageData();
+							pdMobile.put("mobile",phone);
+							PageData oldOrder = orderService.findByMobile(pdMobile);
+							if (null != oldOrder) {
+								pdCustomer.put("pay_state", 1);
+								pdCustomer.put("first_pay_time", oldOrder.get("pay_time")); // 第一次支付的时间
 							} else {
+								pdCustomer.put("pay_state", 0);
 								pdCustomer.put("first_pay_time", ""); // 第一次支付的时间
 							}
 						} else {
 							pdCustomer = new PageData();
 							pdCustomer.put("pay_state", 0); // 购彩状态
+							pdCustomer.put("first_pay_time", ""); // 第一次支付的时间
 						}
+						pdCustomer.put("user_name", "");
 						pdCustomer.put("mobile", listPd.get(i).getString("var0"));// 电话
 						pdCustomer.put("user_state", 2); // 用户状态(新老用户)
 						pdCustomer.put("user_source", 1); // 用户来源
