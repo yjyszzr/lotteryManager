@@ -98,26 +98,31 @@
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where  status = 1 
-		<if test="pd.bank_name!= null and pd.bank_name != ''"> 
-			and bank_name LIKE CONCAT(CONCAT('%', #{pd.bank_name}),'%')
-		</if>
-		<if test="pd.card_no!= null and pd.card_no != ''"> 
-			and card_no LIKE CONCAT(CONCAT('%', #{pd.card_no}),'%')
-		</if>
-		<if test="pd.real_name!= null and pd.real_name != ''"> 
-			and real_name LIKE CONCAT(CONCAT('%', #{pd.real_name}),'%') 
-		</if>
-			<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
-			and  add_time &gt; #{pd.lastStart1 }
-		</if>
-		<if test="pd.lastEnd1 != null and pd.lastEnd1!= ''"> 
-			and  add_time &lt; #{pd.lastEnd1 }
-		</if>
+		SELECT
+			a.*,
+			b.app_code_name 
+		FROM
+			dl_user_bank a
+			LEFT JOIN dl_user b ON a.user_id = b.user_id 
+			where  status = 1 
+			<if test="pd.bank_name!= null and pd.bank_name != ''"> 
+				and a.bank_name LIKE CONCAT(CONCAT('%', #{pd.bank_name}),'%')
+			</if>
+			<if test="pd.card_no!= null and pd.card_no != ''"> 
+				and a.card_no LIKE CONCAT(CONCAT('%', #{pd.card_no}),'%')
+			</if>
+			<if test="pd.real_name!= null and pd.real_name != ''"> 
+				and a.real_name LIKE CONCAT(CONCAT('%', #{pd.real_name}),'%') 
+			</if>
+				<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
+				and a.add_time &gt; #{pd.lastStart1 }
+			</if>
+			<if test="pd.lastEnd1 != null and pd.lastEnd1!= ''"> 
+				and a.add_time &lt; #{pd.lastEnd1 }
+			</if>
+			<if test="pd.app_code_name != null and pd.app_code_name != ''"> 
+				and b.app_code_name = #{pd.app_code_name }
+			</if>
 		order by add_time DESC
 	</select>
 	

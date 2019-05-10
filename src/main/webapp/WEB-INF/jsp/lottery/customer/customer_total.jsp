@@ -40,18 +40,16 @@
 							
 						<!-- 检索  -->
 						<form action="customer/total.do" method="post" name="Form" id="Form">
-						<table style="margin-top:5px;">
+						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;">
 							<tr style="margin:2px ">
 								<td>
 									<div class="nav-search">
-										<!-- 
 										<span class="input-icon" style="width:80px;text-align:right;">
 											手机号:
 										</span>
 										<span class="input-icon">
 											<input type="text" placeholder="手机号" style="width:154px;" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"   onkeyup="value=value.replace(/[^\d]/g,'')"  />
 										</span>
-										 -->
 										<span class="input-icon" style="width:80px;text-align:right;">
 											销售员:
 										</span>
@@ -72,19 +70,18 @@
 										</select>
 								  	</div>
 								</td>	
+							</tr>
+							<tr style="margin:2px ">
 								<td>
-									<div class="nav-search">
-										<span class="input-icon" style="width:80px;text-align:right;">
-											录入时间:
-										</span>
-										<span class="input-icon">
-											<input name="start_last_add_time" id="start_last_add_time"  value="${pd.start_last_add_time }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:170px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
-											<input name="end_last_add_time" id="end_last_add_time"  value="${pd.end_last_add_time }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:170px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
-										</span>
-								  	</div>
+									<span class="input-icon" style="width:80px;text-align:right;">
+										录入时间:
+									</span>
+									<span>
+										<input name="start_last_add_time" id="start_last_add_time"  value="${pd.start_last_add_time }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
+										<input name="end_last_add_time" id="end_last_add_time"  value="${pd.end_last_add_time }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"   readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
+									</span>
 								</td>	
-									</tr>
-									<tr style="margin:2px ">
+									
 								<td>
 									<div class="nav-search">
 										<span class="input-icon" style="width:80px;text-align:right;">
@@ -96,16 +93,17 @@
 											<option value="0" <c:if test="${pd.pay_state == 0}">selected</c:if>>未购彩</option>
 										</select>
 								  	</div>
-								</td>		  	
-									  	
+								</td>
+							</tr>
+							<tr style="margin:2px ">		  	
 								<td >
 									<span class="input-icon" style="width:80px;"> </span>
 									<span>
-											<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+											<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:100px">搜索</a>
 									</span>
 									<span class="input-icon" style="width:44px;"> </span>
 									<span>
-											<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+											<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:100px">清空</a>
 									</span>
 									<span class="input-icon" style="width:44px;"> </span>
 									<span>
@@ -115,11 +113,11 @@
 								<td >
 									<span class="input-icon" style="width:80px;"> </span>
 									<span>
-											<a class="btn btn-light btn-xs blue" onclick="uploadExcel();"  title="EXCEL批量导入"  style="border-radius:5px;color:blue !important; width:150px">EXCEL批量导入</a>
+											<a class="btn btn-light btn-xs blue" onclick="uploadExcel();"  title="EXCEL批量导入"  style="border-radius:5px;color:blue !important; width:100px">EXCEL批量导入</a>
 									</span>
 									<span class="input-icon" style="width:37px;"> </span>
 									<span>
-											<a class="btn btn-light btn-xs blue" onclick="toAssign('确定要指派选中的数据吗?');"  title="一键指派"  style="border-radius:5px;color:blue !important; width:150px">一键指派</a>
+											<a class="btn btn-light btn-xs blue" onclick="toAssign('确定要指派选中的数据吗?');"  title="一键指派"  style="border-radius:5px;color:blue !important; width:100px">一键指派</a>
 									</span>
 								</td>
 														  	

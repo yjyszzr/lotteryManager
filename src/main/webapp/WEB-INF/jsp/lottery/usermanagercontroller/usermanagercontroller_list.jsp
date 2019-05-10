@@ -110,6 +110,18 @@
 											</span>
 										</div>
 									</td>
+									<td>
+										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
+													平台来源:
+												</span>
+										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  >
+											<option value="" selected>全部</option>
+											<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
+											<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和彩店</option>
+										  	</select>
+									  	</div>
+									</td>
 									<c:if test="${QX.cha == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
 											<span class="input-icon" style="width:80px;"> </span>
@@ -146,8 +158,8 @@
 									<th class="center">可提现余额</th>
 									<th class="center">注册时间</th>
 									<th class="center">最后登录时间</th>
-<!-- 									<th class="center">状态</th> -->
 									<th class="center">注册来源</th>
+									<th class="center">平台来源</th>
 								</tr>
 							</thead>
 													
@@ -171,14 +183,13 @@
 											<td class="center">${var.user_money}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
-<!-- 											<td class='center'>  -->
-<%-- 												<c:choose> --%>
-<%-- 													<c:when test="${var.user_status == 0 }">正常</c:when> --%>
-<%-- 													<c:when test="${var.user_status == 1 }"><lable style = "color:yellow">锁定</c:when> --%>
-<%-- 													<c:when test="${var.user_status == 2 }"><lable style = "color:red">冻结</c:when> --%>
-<%-- 												</c:choose> --%>
-<!-- 											</td> -->
 											<td class='center'>${var.reg_from}</td>
+											<td class='center'> 
+												<c:choose>
+													<c:when test="${var.app_code_name == 10 }">球多多</c:when>
+													<c:when test="${var.app_code_name == 11 }">圣和彩店</c:when>
+												</c:choose>
+											</td>
 										</tr>
 									</c:forEach>
 									</c:if>
@@ -253,6 +264,7 @@
 				$("#nickname").val("");
 				$("#user_status").empty();
 				$("#is_real").empty();
+				$("#app_code_name").empty();
 				$("#lastStart").val("");
 				$("#lastEnd").val("");
 			}

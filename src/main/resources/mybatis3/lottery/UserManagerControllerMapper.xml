@@ -466,7 +466,8 @@
 		p.channel_name AS phone_channel,
 		u.device_channel,
 		log.brand,
-		u.is_business
+		u.is_business,
+		u.app_code_name
 		FROM
 		dl_user u
 		LEFT JOIN (select * from dl_user_real where is_delete = 0) u_r ON u_r.user_id = u.user_id
@@ -503,6 +504,9 @@
 		<!-- 		实名认证 -->
 		<if test="pd.is_real != null and pd.is_real != ''">
 			and u.is_real = #{pd.is_real}
+		</if>
+		<if test="pd.app_code_name != null and pd.app_code_name != ''">
+			and u.app_code_name = #{pd.app_code_name}
 		</if>
 		order by u.reg_time DESC
 	</select>

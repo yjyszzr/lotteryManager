@@ -383,6 +383,10 @@ public class CustomerController extends BaseController {
 //		String pay_state = pd.getString("pay_state");
 //		pd.put("pay_state", pay_state);
 
+		String mobile = pd.getString("mobile");
+		if (null != mobile && !"".equals(mobile)) {
+		    pd.put("mobile", mobile.trim());
+		}
 		String _start_last_add_time = pd.getString("start_last_add_time");
 		if (null != _start_last_add_time && !"".equals(_start_last_add_time)) {
 			pd.put("start_last_add_time", DateUtilNew.getMilliSecondsByStr(_start_last_add_time.trim()));
@@ -432,7 +436,10 @@ public class CustomerController extends BaseController {
 //		if(null != keywords && !"".equals(keywords)){
 //			pd.put("keywords", keywords.trim());
 //		}
-
+	    String mobile = pd.getString("mobile");
+        if (null != mobile && !"".equals(mobile)) {
+            pd.put("mobile", mobile.trim());
+        }
 		String _start_last_add_time = pd.getString("start_last_add_time");
 		if (null != _start_last_add_time && !"".equals(_start_last_add_time)) {
 			pd.put("start_last_add_time", DateUtilNew.getMilliSecondsByStr(_start_last_add_time.trim()));
