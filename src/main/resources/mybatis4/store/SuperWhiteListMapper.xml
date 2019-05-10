@@ -160,21 +160,27 @@
 	</delete>
 
 	<update id="recharge" parameterType="pd">
-		INSERT INTO dl_user_store_money(user_id, store_id, money, last_time) VALUES(#{user_id}, #{store_id}, #{number}, #{last_time})
-																				   ON DUPLICATE KEY
-		UPDATE money = money + #{number},
-			user_id = #{user_id},
-			store_id = #{store_id},
-			last_time = #{last_time}
+		UPDATE dl_user_store_money set
+		<if test="money!= null and money != ''">
+			money = money + #{money},
+		</if>
+		<if test="money_limit != null and money_limit != ''">
+			money_limit = money_limit + #{money_limit},
+		</if>
+		last_time = #{last_time}
+		where user_id = #{user_id} and store_id = #{store_id}
 	</update>
 
 	<update id="rechargeToMoneyLimit" parameterType="pd">
-		INSERT INTO dl_user_store_money(user_id, store_id, money_limit, last_time) VALUES(#{user_id}, #{store_id}, #{number}, #{last_time})
-																						 ON DUPLICATE KEY
-		UPDATE money_limit = money_limit + #{number},
-			user_id = #{user_id},
-			store_id = #{store_id},
-			last_time = #{last_time}
+		UPDATE dl_user_store_money set
+			<if test="pd.money_limit!= null and pd.money_limit != ''">
+				money_limit = money_limit + #{money_limit},
+			</if>
+			<if test="pd.user_money_limit!= null and pd.user_money_limit != ''">
+				user_money_limit = user_money_limit + #{user_money_limit},
+			</if>
+		last_time = #{last_time}
+		where user_id = #{user_id} and store_id = #{store_id}
 	</update>
 
 	<update id="saveUserBonus" parameterType="pd">
@@ -220,12 +226,15 @@
 	</update>
 
 	<update id="deduction" parameterType="pd">
-		INSERT INTO dl_user_store_money(user_id, store_id, money, last_time) VALUES(#{user_id}, #{store_id}, -#{number}, #{last_time})
-																				   ON DUPLICATE KEY
-		UPDATE money = money - #{number},
-			user_id = #{user_id},
-			store_id = #{store_id},
-			last_time = #{last_time}
+		UPDATE dl_user_store_money set
+		<if test="money!= null and money != ''">
+			money = money - #{money},
+		</if>
+		<if test="money_limit!= null and money_limit != ''">
+			money_limit = money_limit - #{money_limit},
+		</if>
+		last_time = #{last_time}
+		where user_id = #{user_id} and store_id = #{store_id}
 	</update>
 
 	<update id="deductionToMoneyLimit" parameterType="pd">

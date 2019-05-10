@@ -65,6 +65,17 @@
 									</select>
 								</td>
 							</tr>
+
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">扣款位置:</td>
+								<td>
+									<select id="refound_loc" name="refound_loc"  value="" style ="width:42%">
+										<option value="1" >充值金额</option>
+										<option value="0" >可提现金额</option>
+									</select>
+								</td>
+							</tr>
+
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">扣款金额:</td>
 								<td><input type="number" name="number" id="number" value="" maxlength="32" placeholder="这里输入扣款金额" title="扣款金额" style="width:42%;"/></td>

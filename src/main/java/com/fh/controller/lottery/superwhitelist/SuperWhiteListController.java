@@ -67,11 +67,12 @@ public class SuperWhiteListController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-//		pd.put("user_id_id", this.get32UUID());	//主键
+
 		pd.put("user_id", "0");	//用户id
 		pd.put("mobile", "");	//手机号
 		pd.put("user_money", "");	//账户余额
 		superwhitelistService.save(pd);
+
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -536,8 +537,17 @@ public class SuperWhiteListController extends BaseController {
 
 		pd.put("last_time", time);
 		boolean flag = true;
+
+        pd.put("money","");
+        pd.put("money_limit","");
+		String refoundLoc = pd.getString("refound_loc");
+		if("0".equals(refoundLoc)){// 可提现金额
+			pd.put("money",pd.getString("number"));
+		}else if("1".equals(refoundLoc)){//充值金额
+			pd.put("money_limit",pd.getString("number"));
+		}
+
 		superwhitelistService.deduction(pd);
-//		superwhitelistService.deductionToMoneyLimit(pd);
 
 		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
@@ -552,6 +562,7 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
 		pd.put("status", "1");
+		pd.put("process_type",8);
 		pd.put("id", "");
 		userAccountManagerService.save(pd);
 
@@ -573,6 +584,7 @@ public class SuperWhiteListController extends BaseController {
 		String appCodeName = pd.getString("app_code_name");
 		pd.put("user_money_limit",pd.getString("number"));
 		pd.put("store_id","1");
+
 		userManagerControllerService.refoundToUserMoneyLimit(pd);
 
 		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
@@ -608,13 +620,20 @@ public class SuperWhiteListController extends BaseController {
 		Integer time = DateUtilNew.getCurrentTimeLong();
 		pd.put("last_time", time);
 		boolean flag = true;
-//		superwhitelistService.recharge(pd);
 		String appCodeName = pd.getString("app_code_name");
 
+        pd.put("money","");
+        pd.put("money_limit","");
+		String rechargeLoc = pd.getString("recharge_loc");
+		if("0".equals(rechargeLoc)){//可提现金额
+			pd.put("money",pd.getString("number"));
+		}else if("1".equals(rechargeLoc)){//充值金额
+			pd.put("money_limit",pd.getString("number"));
+		}
+
 		//充值到不可提现余额
-		superwhitelistService.rechargeToMoneyLimit(pd);
-//		recharge_card_id
-//		recharge_card_real_value
+		superwhitelistService.recharge(pd);
+
 		String _recharge_card_id = pd.getString("recharge_card_id");
 		String recharge_card_id = "";
 		String recharge_card_real_value = "";
@@ -628,7 +647,6 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
 		pd.put("admin_user", user.getNAME());
-//		pd.put("amount", pd.get("type").equals("-") ? "-" + pd.get("number") : pd.get("number"));
 		pd.put("amount", pd.get("number"));
 		PageData _pd = new PageData();
 		_pd = superwhitelistService.findById(pd);
