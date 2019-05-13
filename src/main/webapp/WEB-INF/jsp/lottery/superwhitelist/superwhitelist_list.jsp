@@ -37,9 +37,13 @@
 									<td >
 										<div class="nav-search">
 											手机号:
-											<span class="input-icon">
+										<span class="input-icon">
 											<input type="text" placeholder="手机号" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"  onkeyup="value=value.replace(/[^\d]/g,'')" />
 										</span>
+                                        <span  >
+                                            <input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" />
+                                            <input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间"/>
+                                        </span>
 										</div>
 									</td>
 									<c:if test="${QX.cha == 1 }">
@@ -99,6 +103,7 @@
 									<th class="center">昵称</th>
 									<th class="center">手机号</th>
 									<th class="center">充值金额</th>
+									<th class="center">最近充值时间</th>
 									<th class="center">可提现余额</th>
 									<th class="center">大礼包总金额</th>
 									<th class="center">平台来源</th>
@@ -123,6 +128,7 @@
 														</a>
 													</td>
 													<td class='center'>${var.money_limit}</td>
+													<td class='center'>${var.recharge_time_latest}</td>
 													<td class='center'>${var.money}</td>
 													<td class='center'>${var.recharge_card_real_value}</td>
 													<td class='center'>
@@ -250,6 +256,8 @@
 <script src="static/ace/js/ace/ace.js"></script>
 <!-- 下拉框 -->
 <script src="static/ace/js/chosen.jquery.js"></script>
+<!-- 日期框 -->
+<script src="static/ace/js/My97DatePicker/WdatePicker.js"></script>
 <!-- 日期框 -->
 <script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
 <!--提示框-->

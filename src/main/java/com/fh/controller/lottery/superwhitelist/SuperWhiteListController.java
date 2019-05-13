@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 说明：超级白名单
@@ -139,6 +140,26 @@ public class SuperWhiteListController extends BaseController {
 			varList = userManagerControllerService.getShenHeUserList(page);
 		}else {
 			varList = superwhitelistService.list(page);	//列出SuperWhiteList列表
+		}
+
+		//填入该用户最近充值时间
+		List<Integer> userIdList = varList.stream().map(s->Integer.valueOf(s.getString("user_id"))).collect(Collectors.toList());
+		PageData rPageData = new PageData();
+		rPageData.put("userIdList",userIdList);
+		Long lastStart = StringUtils.isEmpty(pd.getString("lastStart"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastStart"));
+		Long lastEnd   = StringUtils.isEmpty(pd.getString("lastEnd"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastEnd"));
+		rPageData.put("lastStart",lastStart == 0l?"":lastStart);
+		rPageData.put("lastEnd", lastEnd == 0l?"":lastEnd);
+		List<PageData> latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
+		Map<String,Long> rMap = latestRechargeDataList.stream().collect(Collectors.toMap(s->s.getString("user_id"),s-> Long.valueOf(s.getString("add_time"))));
+ 		for(PageData pdd:varList){
+ 			String puserId = pdd.getString("user_id");
+			Long latestR = rMap.get(puserId);
+			if(null != latestR){
+				pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
+			}else {
+				pdd.put("recharge_time_latest","");
+			}
 		}
 
 		mv.setViewName("lottery/superwhitelist/superwhitelist_list");

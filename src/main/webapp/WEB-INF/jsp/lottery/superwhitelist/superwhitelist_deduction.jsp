@@ -51,7 +51,13 @@
 								</td>
 							</tr>
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">账户余额:</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>
+								<td id="money_limit">
+									${pd.money_limit}
+								</td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">可提现金额:</td>
 								<td id="money">
 									${pd.money}
 								</td>
@@ -123,25 +129,41 @@
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#frozen_money").focus();
+				$("#number").focus();
 				return false;
 			}
-			var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "")
-			if(parseFloat($("#number").val()) > parseFloat(money)){
+
+			debugger;
+            var refoundLoc = $("#refound_loc").val();
+
+
+			var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "");
+            var moneyLimit = $("#money_limit").text().replace(/(^\s*)|(\s*$)/g, "");
+
+			if(refoundLoc == "1"  && parseFloat($("#number").val()) > parseFloat(moneyLimit)){
 				$("#number").tips({
 					side:3,
-		            msg:'扣款金额应小于或等于帐户余额',
+		            msg:'扣款金额应小于或等于充值金额',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#frozen_money").focus();
+				$("#number").focus();
 				return false;
 			}
-			
-		//	alert("----")
+
+            if(refoundLoc == "0"  && parseFloat($("#number").val()) > parseFloat(money)){
+                $("#number").tips({
+                    side:3,
+                    msg:'扣款金额应小于或等于可提现金额',
+                    bg:'#AE81FF',
+                    time:2
+                });
+                $("#number").focus();
+                return false;
+            }
+
 			try {
 				var length = $("#number").val().toString().split(".")[1].length
-// 				alert("length=" + length)
 				if (length > 2) {
 					$("#number").tips({
 						side:3,
@@ -149,394 +171,17 @@
 			            bg:'#AE81FF',
 			            time:2
 			        });
-					$("#frozen_money").focus();
+					$("#number").focus();
 					return false;
 				}
 			} catch (e) {
 				// TODO: handle exception
 			}
 
-			
-// 			if($("#user_name").val()==""){
-// 				$("#user_name").tips({
-// 					side:3,
-// 		            msg:'请输入备注2',
-// 		            bg:'#AE81FF',
-// 		            time:2
-// 		        });
-// 				$("#user_name").focus();
-// 			return false;
-// 			}
-			if($("#email").val()==""){
-				$("#email").tips({
-					side:3,
-		            msg:'请输入备注4',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#email").focus();
-			return false;
-			}
-			if($("#password").val()==""){
-				$("#password").tips({
-					side:3,
-		            msg:'请输入备注5',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#password").focus();
-			return false;
-			}
-			if($("#salt").val()==""){
-				$("#salt").tips({
-					side:3,
-		            msg:'请输入备注6',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#salt").focus();
-			return false;
-			}
-			if($("#nickname").val()==""){
-				$("#nickname").tips({
-					side:3,
-		            msg:'请输入备注7',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#nickname").focus();
-			return false;
-			}
-			if($("#sex").val()==""){
-				$("#sex").tips({
-					side:3,
-		            msg:'请输入备注8',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#sex").focus();
-			return false;
-			}
-			if($("#birthday").val()==""){
-				$("#birthday").tips({
-					side:3,
-		            msg:'请输入备注9',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#birthday").focus();
-			return false;
-			}
-			if($("#detail_address").val()==""){
-				$("#detail_address").tips({
-					side:3,
-		            msg:'请输入备注10',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#detail_address").focus();
-			return false;
-			}
-			if($("#headimg").val()==""){
-				$("#headimg").tips({
-					side:3,
-		            msg:'请输入备注11',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#headimg").focus();
-			return false;
-			}
-			if($("#user_money_limit").val()==""){
-				$("#user_money_limit").tips({
-					side:3,
-		            msg:'请输入备注13',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#user_money_limit").focus();
-			return false;
-			}
-			if($("#frozen_money").val()==""){
-				$("#frozen_money").tips({
-					side:3,
-		            msg:'请输入备注14',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#frozen_money").focus();
-			return false;
-			}
-			if($("#pay_point").val()==""){
-				$("#pay_point").tips({
-					side:3,
-		            msg:'请输入备注15',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#pay_point").focus();
-			return false;
-			}
-			if($("#rank_point").val()==""){
-				$("#rank_point").tips({
-					side:3,
-		            msg:'请输入备注16',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#rank_point").focus();
-			return false;
-			}
-			if($("#reg_time").val()==""){
-				$("#reg_time").tips({
-					side:3,
-		            msg:'请输入备注17',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#reg_time").focus();
-			return false;
-			}
-			if($("#reg_ip").val()==""){
-				$("#reg_ip").tips({
-					side:3,
-		            msg:'请输入备注18',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#reg_ip").focus();
-			return false;
-			}
-			if($("#last_time").val()==""){
-				$("#last_time").tips({
-					side:3,
-		            msg:'请输入备注19',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#last_time").focus();
-			return false;
-			}
-			if($("#last_ip").val()==""){
-				$("#last_ip").tips({
-					side:3,
-		            msg:'请输入备注20',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#last_ip").focus();
-			return false;
-			}
-			if($("#mobile_supplier").val()==""){
-				$("#mobile_supplier").tips({
-					side:3,
-		            msg:'请输入备注21',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#mobile_supplier").focus();
-			return false;
-			}
-			if($("#mobile_province").val()==""){
-				$("#mobile_province").tips({
-					side:3,
-		            msg:'请输入备注22',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#mobile_province").focus();
-			return false;
-			}
-			if($("#mobile_city").val()==""){
-				$("#mobile_city").tips({
-					side:3,
-		            msg:'请输入备注23',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#mobile_city").focus();
-			return false;
-			}
-			if($("#reg_from").val()==""){
-				$("#reg_from").tips({
-					side:3,
-		            msg:'请输入备注24',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#reg_from").focus();
-			return false;
-			}
-			if($("#surplus_password").val()==""){
-				$("#surplus_password").tips({
-					side:3,
-		            msg:'请输入备注25',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#surplus_password").focus();
-			return false;
-			}
-			if($("#pay_pwd_salt").val()==""){
-				$("#pay_pwd_salt").tips({
-					side:3,
-		            msg:'请输入备注26',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#pay_pwd_salt").focus();
-			return false;
-			}
-			if($("#user_status").val()==""){
-				$("#user_status").tips({
-					side:3,
-		            msg:'请输入备注27',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#user_status").focus();
-			return false;
-			}
-			if($("#pass_wrong_count").val()==""){
-				$("#pass_wrong_count").tips({
-					side:3,
-		            msg:'请输入备注28',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#pass_wrong_count").focus();
-			return false;
-			}
-			if($("#user_type").val()==""){
-				$("#user_type").tips({
-					side:3,
-		            msg:'请输入备注29',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#user_type").focus();
-			return false;
-			}
-			if($("#is_real").val()==""){
-				$("#is_real").tips({
-					side:3,
-		            msg:'请输入备注30',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_real").focus();
-			return false;
-			}
-			if($("#user_remark").val()==""){
-				$("#user_remark").tips({
-					side:3,
-		            msg:'请输入备注31',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#user_remark").focus();
-			return false;
-			}
-			if($("#add_time").val()==""){
-				$("#add_time").tips({
-					side:3,
-		            msg:'请输入备注32',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#add_time").focus();
-			return false;
-			}
-			if($("#push_key").val()==""){
-				$("#push_key").tips({
-					side:3,
-		            msg:'请输入备注33',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#push_key").focus();
-			return false;
-			}
-			if($("#device_channel").val()==""){
-				$("#device_channel").tips({
-					side:3,
-		            msg:'请输入备注34',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#device_channel").focus();
-			return false;
-			}
-			if($("#is_business").val()==""){
-				$("#is_business").tips({
-					side:3,
-		            msg:'请输入备注35',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_business").focus();
-			return false;
-			}
-			if($("#lon").val()==""){
-				$("#lon").tips({
-					side:3,
-		            msg:'请输入备注36',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#lon").focus();
-			return false;
-			}
-			if($("#lat").val()==""){
-				$("#lat").tips({
-					side:3,
-		            msg:'请输入备注37',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#lat").focus();
-			return false;
-			}
-			if($("#city").val()==""){
-				$("#city").tips({
-					side:3,
-		            msg:'请输入备注38',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#city").focus();
-			return false;
-			}
-			if($("#province").val()==""){
-				$("#province").tips({
-					side:3,
-		            msg:'请输入备注39',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#province").focus();
-			return false;
-			}
-			if($("#has_third_user_id").val()==""){
-				$("#has_third_user_id").tips({
-					side:3,
-		            msg:'请输入备注40',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#has_third_user_id").focus();
-			return false;
-			}
-			if($("#is_super_white").val()==""){
-				$("#is_super_white").tips({
-					side:3,
-		            msg:'请输入备注41',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#is_super_white").focus();
-			return false;
-			}
+
+
+
+
 			
 			var str = "请确认，\n"
 				+ "\n手机号：" + $("#mobile").text().replace(/(^\s*)|(\s*$)/g, "")

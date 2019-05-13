@@ -207,4 +207,12 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 		return (List<PageData>) dao.findForList("UserAccountManagerMapper.datalistQddAccountPage", page);
 	}
 
+	/** 获取	用户最新的充值流水
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> queryUserAccountRechargeLatest(PageData pd)throws Exception{
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.queryUserAccountRechargeLatest", pd);
+	}
+
 }

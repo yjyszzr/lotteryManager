@@ -186,4 +186,6 @@ public interface UserAccountManagerManager {
 
 	public List<PageData> datalistQddAccountPage(Page pd) throws Exception;
 
+	public List<PageData> queryUserAccountRechargeLatest(PageData pd)throws Exception;
+
 }

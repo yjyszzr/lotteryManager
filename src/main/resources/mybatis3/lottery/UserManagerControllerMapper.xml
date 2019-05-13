@@ -680,9 +680,31 @@
 		</if>
 		order by reg_time DESC
 	</select>
+	
+	<select id="queryUserAccountRechargeLatest" parameterType="pd" resultType="pd">
+		SELECT
+			user_id,
+			max(add_time) add_time
+		FROM
+			dl_user_account
+		WHERE
+			process_type = 2
+        <if test="lastStart != null and lastStart != ''">
+            AND add_time > #{lastStart}
+        </if>
+        <if test="lastEnd != null and lastEnd != ''">
+            AND add_time &lt; #{lastEnd}
+        </if>
+		AND user_id IN
+		<foreach item="item" index="index" collection="userIdList" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		group by
+			user_id;
+	</select>
 
 
-	<select id="queryUserByMobile" parameterType="pd" resultType="pd">
+	<select id="queryUserByMobile" parameterType="java.lang.String" resultType="pd">
 		SELECT * from dl_user where mobile = #{mobile} and app_code_name = #{app_code_name}
 	</select>
 

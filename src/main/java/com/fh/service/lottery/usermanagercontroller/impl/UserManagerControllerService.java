@@ -269,6 +269,13 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.datalistPageThree", page);
 	}
 
+	/** 获取	用户最新的充值流水
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> queryUserAccountRechargeLatest(PageData pd)throws Exception{
+		return (List<PageData>)dao.findForList("UserManagerControllerMapper.queryUserAccountRechargeLatest", pd);
+	}
 
 	/** 获取销售人员下的人员红包总量
 	 * @param pd

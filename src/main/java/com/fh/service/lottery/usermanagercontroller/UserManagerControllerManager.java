@@ -235,4 +235,9 @@ public interface UserManagerControllerManager {
 	 * 退款到不可提现金额
 	 */
 	public PageData refoundToUserMoneyLimit(PageData pagedata)throws Exception;
+
+	/**
+	 * 获取	用户最新的充值流水
+	 */
+	public List<PageData> queryUserAccountRechargeLatest(PageData pagedata)throws Exception;
 }
