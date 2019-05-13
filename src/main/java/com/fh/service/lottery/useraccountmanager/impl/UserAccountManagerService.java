@@ -212,7 +212,7 @@ public class UserAccountManagerService implements UserAccountManagerManager {
 	 * @throws Exception
 	 */
 	public List<PageData> queryUserAccountRechargeLatest(PageData pd)throws Exception{
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.queryUserAccountRechargeLatest", pd);
+		return (List<PageData>)dao.findForList("UserAccountManagerMapper.queryUserAccountRechargeLatest", pd);
 	}
 
     @Override
