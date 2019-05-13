@@ -210,4 +210,13 @@ public class UserAccountService implements UserAccountManagerManager {
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.queryUserAccountRechargeLatest", pd);
 	}
 
+    @Override
+    public List<PageData> findByOrderSns(List<PageData> varList) throws Exception {
+        String[] orderSns = new String[varList.size()];
+        for (int i = 0; i < varList.size(); i++) {
+            orderSns[i] = varList.get(i).getString("recharge_sn");
+        }
+        return (List<PageData>) dao.findForList("UserManagerControllerMapper.findByOrderSns", orderSns);
+    }
+
 }

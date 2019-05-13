@@ -320,4 +320,11 @@
 		order by user_account.add_time desc
 	</select>
 	
+	<select id="findByOrderSns" resultType="pd">
+		select * from dl_user_account where order_sn in 
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
+	
 </mapper>

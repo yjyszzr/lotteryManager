@@ -188,4 +188,6 @@ public interface UserAccountManagerManager {
 
 	public List<PageData> queryUserAccountRechargeLatest(PageData pd)throws Exception;
 
+    public List<PageData> findByOrderSns(List<PageData> varList)throws Exception;
+
 }

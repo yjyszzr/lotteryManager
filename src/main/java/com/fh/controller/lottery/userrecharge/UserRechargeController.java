@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.service.lottery.useraccountmanager.UserAccountManagerManager;
 import com.fh.service.lottery.userrecharge.UserRechargeManager;
 import com.fh.util.DateUtil;
 import com.fh.util.DateUtilNew;
@@ -33,6 +34,8 @@ public class UserRechargeController extends BaseController {
 	@Resource(name = "userrechargeService")
 	private UserRechargeManager userrechargeService;
 
+	@Resource(name="useraccountmanagerService")
+    private UserAccountManagerManager useraccountmanagerService;
 	/**
 	 * 列表
 	 * 
@@ -71,27 +74,33 @@ public class UserRechargeController extends BaseController {
 		BigDecimal successAmount = new BigDecimal(0);
 		BigDecimal unfinished = new BigDecimal(0);
 		List<PageData> varList = userrechargeService.list(page); // 列出UserRecharge列表
-		for (int i = 0; i < varList.size(); i++) {
-			PageData pageData = new PageData();
-			pageData = varList.get(i);
-			if (null != pageData.get("status") && !"".equals(pageData.get("status"))) {
-				if ("1".equals(pageData.get("status").toString())) {
-					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
-						BigDecimal Big1 = new BigDecimal(pageData.getString("amount"));
-						successAmount = successAmount.add(Big1);
-					}
-				} else if ("2".equals(pageData.get("status").toString())) {
-					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
-						BigDecimal Big2 = new BigDecimal(pageData.getString("amount"));
-						failAmount = failAmount.add(Big2);
-					}
-				} else if ("0".equals(pageData.get("status").toString())) {
-					if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
-						BigDecimal Big0 = new BigDecimal(pageData.getString("amount"));
-						unfinished = unfinished.add(Big0);
-					}
-				}
-			}
+		if (varList.size() > 0) {
+		    List<PageData> useraccountList = useraccountmanagerService.findByOrderSns(varList);
+		    Map<String, String> useraccountMap = new HashMap<String, String>(useraccountList.size());
+		    useraccountList.forEach(item -> useraccountMap.put(item.getString("order_sn"), item.getString("donation_money")));
+		    for (int i = 0; i < varList.size(); i++) {
+		        PageData pageData = new PageData();
+		        pageData = varList.get(i);
+		        if (null != pageData.get("status") && !"".equals(pageData.get("status"))) {
+		            if ("1".equals(pageData.get("status").toString())) {
+		                if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+		                    BigDecimal Big1 = new BigDecimal(pageData.getString("amount"));
+		                    successAmount = successAmount.add(Big1);
+		                }
+		            } else if ("2".equals(pageData.get("status").toString())) {
+		                if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+		                    BigDecimal Big2 = new BigDecimal(pageData.getString("amount"));
+		                    failAmount = failAmount.add(Big2);
+		                }
+		            } else if ("0".equals(pageData.get("status").toString())) {
+		                if (null != pageData.get("amount") && !"".equals(pageData.get("amount"))) {
+		                    BigDecimal Big0 = new BigDecimal(pageData.getString("amount"));
+		                    unfinished = unfinished.add(Big0);
+		                }
+		            }
+		        }
+		        varList.get(i).put("donationMoney", useraccountMap.get(pageData.getString("recharge_sn")));
+		    }
 		}
 		mv.setViewName("lottery/userrecharge/userrecharge_list");
 		mv.addObject("varList", varList);

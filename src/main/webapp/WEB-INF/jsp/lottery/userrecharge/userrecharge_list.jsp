@@ -115,6 +115,7 @@
 									<th class="center">用户昵称</th>
 									<th class="center">电话</th>
 									<th class="center">充值金额</th>
+									<th class="center">赠送金额</th>
 									<th class="center">充值方式</th>
 									<th class="center">充值时间</th>
 									<th class="center">状态</th>
@@ -133,6 +134,7 @@
 											<td class='center'>${var.user_name}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.amount}元</td>
+											<td class='center'>${var.donationMoney}元</td>
 											<td class='center'>${var.payment_name}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.add_time*1000)} </td>
 											<td class='center'> 

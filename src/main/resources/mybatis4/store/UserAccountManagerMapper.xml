@@ -406,5 +406,4 @@
 		group by
 		user_id;
 	</select>
-
 </mapper>
