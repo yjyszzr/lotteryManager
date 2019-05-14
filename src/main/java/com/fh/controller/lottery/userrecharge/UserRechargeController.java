@@ -134,34 +134,41 @@ public class UserRechargeController extends BaseController {
 		titles.add("用户昵称"); // 3
 		titles.add("电话"); // 4
 		titles.add("充值金额"); // 5
-		titles.add("充值方式"); // 6
-		titles.add("状态"); // 7
-		titles.add("时间"); // 8
+		titles.add("赠送金额"); // 6
+		titles.add("充值方式"); // 7
+		titles.add("状态"); // 8
+		titles.add("时间"); // 9
 		dataMap.put("titles", titles);
 		List<PageData> varOList = userrechargeService.listAll(pd);
-		List<PageData> varList = new ArrayList<PageData>();
-		for (int i = 0; i < varOList.size(); i++) {
-			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).getString("recharge_sn")); // 1
-			vpd.put("var2", varOList.get(i).getString("payment_id")); // 2
-			vpd.put("var3", varOList.get(i).getString("user_name")); // 3
-			vpd.put("var4", varOList.get(i).getString("mobile")); // 4
-			vpd.put("var5", varOList.get(i).getString("amount") + "元"); // 5
-			vpd.put("var6", varOList.get(i).getString("payment_name")); // 6
-			BigDecimal big = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
-			BigDecimal big1000 = new BigDecimal(1000);
-			vpd.put("var7", DateUtil.toSDFTime(Long.parseLong(big.multiply(big1000).toString()))); // 7
-			String status = varOList.get(i).getString("status");
-			if (status.equals("1")) {
-				vpd.put("var8", "成功"); // 8
-			} else if (status.equals("2")) {
-				vpd.put("var8", "失败"); // 8
-			} else {
-				vpd.put("var8", "未完成"); // 8
-			}
-			varList.add(vpd);
-		}
+		if (varOList.size() > 0) {
+            List<PageData> useraccountList = useraccountmanagerService.findByOrderSns(varOList);
+            Map<String, String> useraccountMap = new HashMap<String, String>(useraccountList.size());
+            useraccountList.forEach(item -> useraccountMap.put(item.getString("order_sn"), item.getString("donation_money")));
+    		List<PageData> varList = new ArrayList<PageData>();
+    		for (int i = 0; i < varOList.size(); i++) {
+    			PageData vpd = new PageData();
+    			vpd.put("var1", varOList.get(i).getString("recharge_sn")); // 1
+    			vpd.put("var2", varOList.get(i).getString("payment_id")); // 2
+    			vpd.put("var3", varOList.get(i).getString("user_name")); // 3
+    			vpd.put("var4", varOList.get(i).getString("mobile")); // 4
+    			vpd.put("var5", varOList.get(i).getString("amount") + "元"); // 5
+    			vpd.put("var6",  useraccountMap.get( varOList.get(i).getString("recharge_sn")) + "元"); // 6
+    			vpd.put("var7", varOList.get(i).getString("payment_name")); // 7
+    			BigDecimal big = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
+    			BigDecimal big1000 = new BigDecimal(1000);
+    			vpd.put("var8", DateUtil.toSDFTime(Long.parseLong(big.multiply(big1000).toString()))); // 8
+    			String status = varOList.get(i).getString("status");
+    			if (status.equals("1")) {
+    				vpd.put("var9", "成功"); // 9
+    			} else if (status.equals("2")) {
+    				vpd.put("var9", "失败"); // 9
+    			} else {
+    				vpd.put("var9", "未完成"); // 9
+    			}
+    			varList.add(vpd);
+    		}
 		dataMap.put("varList", varList);
+		}
 		ObjectExcelView erv = new ObjectExcelView();
 		mv = new ModelAndView(erv, dataMap);
 		return mv;
