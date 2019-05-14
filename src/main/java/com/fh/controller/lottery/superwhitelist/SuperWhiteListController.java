@@ -144,21 +144,23 @@ public class SuperWhiteListController extends BaseController {
 
 		//填入该用户最近充值时间
 		List<Integer> userIdList = varList.stream().map(s->Integer.valueOf(s.getString("user_id"))).collect(Collectors.toList());
-		PageData rPageData = new PageData();
-		rPageData.put("userIdList",userIdList);
-		Long lastStart = StringUtils.isEmpty(pd.getString("lastStart"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastStart"));
-		Long lastEnd   = StringUtils.isEmpty(pd.getString("lastEnd"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastEnd"));
-		rPageData.put("lastStart",lastStart == 0l?"":lastStart);
-		rPageData.put("lastEnd", lastEnd == 0l?"":lastEnd);
-		List<PageData> latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
-		Map<String,Long> rMap = latestRechargeDataList.stream().collect(Collectors.toMap(s->s.getString("user_id"),s-> Long.valueOf(s.getString("add_time"))));
- 		for(PageData pdd:varList){
- 			String puserId = pdd.getString("user_id");
-			Long latestR = rMap.get(puserId);
-			if(null != latestR){
-				pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
-			}else {
-				pdd.put("recharge_time_latest","");
+		if(userIdList.size() > 0){
+			PageData rPageData = new PageData();
+			rPageData.put("userIdList",userIdList);
+			Long lastStart = StringUtils.isEmpty(pd.getString("lastStart"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastStart"));
+			Long lastEnd   = StringUtils.isEmpty(pd.getString("lastEnd"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastEnd"));
+			rPageData.put("lastStart",lastStart == 0l?"":lastStart);
+			rPageData.put("lastEnd", lastEnd == 0l?"":lastEnd);
+			List<PageData> latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
+			Map<String,Long> rMap = latestRechargeDataList.stream().collect(Collectors.toMap(s->s.getString("user_id"),s-> Long.valueOf(s.getString("add_time"))));
+			for(PageData pdd:varList){
+				String puserId = pdd.getString("user_id");
+				Long latestR = rMap.get(puserId);
+				if(null != latestR){
+					pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
+				}else {
+					pdd.put("recharge_time_latest","");
+				}
 			}
 		}
 
@@ -200,6 +202,7 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("用户名");	//2
 		titles.add("昵称");	//3
 		titles.add("手机号");	//4
+		titles.add("最近充值时间");
 		titles.add("充值金额");	//5
 		titles.add("可提现余额");	//6
 		titles.add("大礼包总金额");	//7
@@ -223,6 +226,28 @@ public class SuperWhiteListController extends BaseController {
 			varOList = userManagerControllerService.getShenHeUserList(page);
 		}
 
+		//填入该用户最近充值时间
+		List<Integer> userIdList = varOList.stream().map(s->Integer.valueOf(s.getString("user_id"))).collect(Collectors.toList());
+		if(userIdList.size() > 0){
+			PageData rPageData = new PageData();
+			rPageData.put("userIdList",userIdList);
+			Long lastStart = StringUtils.isEmpty(pd.getString("lastStart"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastStart"));
+			Long lastEnd   = StringUtils.isEmpty(pd.getString("lastEnd"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastEnd"));
+			rPageData.put("lastStart",lastStart == 0l?"":lastStart);
+			rPageData.put("lastEnd", lastEnd == 0l?"":lastEnd);
+			List<PageData> latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
+			Map<String,Long> rMap = latestRechargeDataList.stream().collect(Collectors.toMap(s->s.getString("user_id"),s-> Long.valueOf(s.getString("add_time"))));
+			for(PageData pdd:varOList){
+				String puserId = pdd.getString("user_id");
+				Long latestR = rMap.get(puserId);
+				if(null != latestR){
+					pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
+				}else {
+					pdd.put("recharge_time_latest","");
+				}
+			}
+		}
+
 		List<PageData> varList = new ArrayList<PageData>();
 		String name = appCodeName.equals("11")?"圣和彩店":"球多多";
 		for(int i=0;i<varOList.size();i++){
@@ -231,8 +256,9 @@ public class SuperWhiteListController extends BaseController {
 			vpd.put("var2", varOList.get(i).getString("user_name"));	    //2
 			vpd.put("var3", varOList.get(i).getString("nickname"));	    //3
 			vpd.put("var4", varOList.get(i).getString("mobile"));	    //4
-			vpd.put("var5", varOList.get(i).getString("money_limit"));
-			vpd.put("var6", varOList.get(i).getString("money"));
+			vpd.put("var5", varOList.get(i).getString("recharge_time_latest"));
+			vpd.put("var6", varOList.get(i).getString("money_limit"));
+			vpd.put("var7", varOList.get(i).getString("money"));
 
 			if(appCodeName.equals("10")){
 				try {
@@ -240,15 +266,15 @@ public class SuperWhiteListController extends BaseController {
 					PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(varOList.get(i));
 					if (null != _pageData) {
 						recharge_card_real_value = _pageData.getString("recharge_card_real_value");
-						vpd.put("var7", recharge_card_real_value);
+						vpd.put("var8", recharge_card_real_value);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}else if(appCodeName.equals("11")){
-				vpd.put("var7", 0);
+				vpd.put("var8", 0);
 			}
-			vpd.put("var8", name);
+			vpd.put("var9", name);
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -678,11 +704,12 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
-		if (pd.getString("type").equals("1")) {
-			pd.put("process_type", "2");
-		} else if (pd.getString("type").equals("0")) {
-			pd.put("process_type", "8");
-		}
+		pd.put("process_type", "2");
+//		if (pd.getString("type").equals("1")) {
+//			pd.put("process_type", "2");
+//		} else if (pd.getString("type").equals("0")) {
+//			pd.put("process_type", "8");
+//		}
 		pd.put("status", "1");
 		pd.put("id", "");
 

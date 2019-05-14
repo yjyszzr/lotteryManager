@@ -73,15 +73,16 @@
 										</td>
 									</tr>
 
-									<tr>
-										<td style="width:75px;text-align: right;padding-top: 13px;">充值:</td>
+									<%--<tr>--%>
+										<%--<td style="width:75px;text-align: right;padding-top: 13px;">充值:</td>--%>
+										<%--<td style="width:75px;text-align: right;padding-top: 13px;">充值</td>--%>
 										<%--<td>--%>
 											<%--<select id="type" name="type"  value="" style ="width:42%">--%>
 												<%--<option value="1" >帐户充值</option>--%>
 												<%--<option value="0" >帐户退款</option>--%>
 											<%--</select>--%>
 										<%--</td>--%>
-									</tr>
+									<%--</tr>--%>
 
 									<tr>
 										<td style="width:75px;text-align: right;padding-top: 13px;">充值:</td>

@@ -62,15 +62,16 @@
 									${pd.money}
 								</td>
 							</tr>
-							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">扣款:</td>
+							<%--<tr>--%>
+								<%--<td style="width:75px;text-align: right;padding-top: 13px;">扣款:</td>--%>
+								<%--<td style="width:75px;text-align: right;padding-top: 13px;">扣款</td>--%>
 								<%--<td>--%>
 									<%--<select id="process_type" name="process_type"  value="" style ="width:42%">--%>
 								        <%--<option value="4" >提现</option>--%>
 								        <%--<option value="9" >输入错误</option>--%>
 									<%--</select>--%>
 								<%--</td>--%>
-							</tr>
+							<%--</tr>--%>
 
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">扣款位置:</td>
