@@ -106,7 +106,10 @@
 									-->
 									<th class="center">序号</th>
 									<th class="center">订单编号</th>
+									<th class="center">平台来源</th>
 									<th class="center">投注金额</th>
+									<th class="center">中奖状态</th>
+									<th class="center">中奖金额</th>
 									<th class="center">使用代金卷金额</th>
 									<th class="center">投注时间</th>
 									
@@ -121,12 +124,30 @@
 											</td>
 											 -->
 											<td class='center'>${vs.index+1}</td>
+											<td class='center'>${StringUtil.strReplace(var.order_sn, 8, 14, "XXXXXX")}</td>
 											<td class='center'>
-<%-- 												${var.order_sn} --%>
-												${StringUtil.strReplace(var.order_sn, 8, 14, "XXXXXX")}
+												<c:choose>
+													<c:when test="${var.app_code_name==10}">球多多</c:when>
+													<c:when test="${var.app_code_name==11}">圣和APP</c:when>
+													<c:otherwise>球多多</c:otherwise>
+												</c:choose>
 											</td>
-											<td class='center'>${var.ticket_amount}</td>
-											<td class='center'>${var.bonus}</td>
+											<td class='center'>${var.ticket_amount}元</td>
+											
+											<td class='center'> 
+												<c:choose> 
+													<c:when test="${var.order_status=='0'}">待付款</c:when>
+													<c:when test="${var.order_status=='1'}">待出票</c:when>
+													<c:when test="${var.order_status=='2'}">出票失败</c:when>
+													<c:when test="${var.order_status=='3'}">待开奖</c:when>
+													<c:when test="${var.order_status=='4'}">未中奖</c:when>
+													<c:when test="${var.order_status=='5'}">已中奖</c:when>
+													<c:when test="${var.order_status=='6'}">派奖中</c:when>
+													<c:when test="${var.order_status=='7'}">审核中</c:when>
+												</c:choose>
+											</td>
+											<td class='center'>${var.winning_money}元</td>
+											<td class='center'>${var.bonus}元</td>
 											
 											<td class='center'>
 												<c:choose>
