@@ -152,7 +152,7 @@ public class UserRechargeController extends BaseController {
     			vpd.put("var3", varOList.get(i).getString("user_name")); // 3
     			vpd.put("var4", varOList.get(i).getString("mobile")); // 4
     			vpd.put("var5", varOList.get(i).getString("amount") + "元"); // 5
-    			vpd.put("var6",  useraccountMap.get( varOList.get(i).getString("recharge_sn")) + "元"); // 6
+    			vpd.put("var6", StringUtil.isEmptyStr(useraccountMap.get(varOList.get(i).getString("recharge_sn"))) ? "0" : useraccountMap.get(varOList.get(i).getString("recharge_sn")) + "元"); // 6
     			vpd.put("var7", varOList.get(i).getString("payment_name")); // 7
     			BigDecimal big = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
     			BigDecimal big1000 = new BigDecimal(1000);
