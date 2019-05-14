@@ -85,6 +85,9 @@ public class SuperWhiteListController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		superwhitelistService.setIsSupperWhite(pd);
+
+		//如果没有钱包，则产生对应的钱包
+
 		out.write("success");
 		out.close();
 	}
@@ -143,6 +146,7 @@ public class SuperWhiteListController extends BaseController {
 		}
 
 		//填入该用户最近充值时间
+		List<PageData> varNewList = new ArrayList<>();
 		List<Integer> userIdList = varList.stream().map(s->Integer.valueOf(s.getString("user_id"))).collect(Collectors.toList());
 		if(userIdList.size() > 0){
 			PageData rPageData = new PageData();
@@ -156,10 +160,20 @@ public class SuperWhiteListController extends BaseController {
 			for(PageData pdd:varList){
 				String puserId = pdd.getString("user_id");
 				Long latestR = rMap.get(puserId);
-				if(null != latestR){
-					pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
-				}else {
-					pdd.put("recharge_time_latest","");
+				if(lastStart > 0l && lastEnd >0l){
+					if(null != latestR){
+						pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
+						varNewList.add(pdd);
+					}else {
+						pdd.put("recharge_time_latest","");
+					}
+				}else{
+					if(null != latestR){
+						pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
+					}else {
+						pdd.put("recharge_time_latest","");
+					}
+					varNewList.add(pdd);
 				}
 			}
 		}
@@ -181,7 +195,7 @@ public class SuperWhiteListController extends BaseController {
 
 		}
 
-		mv.addObject("varList", varList);
+		mv.addObject("varList", varNewList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
 		return mv;
@@ -505,11 +519,17 @@ public class SuperWhiteListController extends BaseController {
 			if (null != processTypeStr && processTypeStr.equals("1")) {
 				processTypeStr = "中奖";
 			} else if (null != processTypeStr && processTypeStr.equals("2")) {
-				processTypeStr = "充值";
+				processTypeStr = "充值到充值金额";
+			}else if (null != processTypeStr && processTypeStr.equals("10")) {
+				processTypeStr = "充值到可提现金额";
 			} else if (null != processTypeStr && processTypeStr.equals("3")) {
 				processTypeStr = "购彩";
 			} else if (null != processTypeStr && processTypeStr.equals("5")) {
 				processTypeStr = "红包";
+			} else if (null != processTypeStr && processTypeStr.equals("11")) {
+				processTypeStr = "扣款充值金额";
+			} else if (null != processTypeStr && processTypeStr.equals("12")) {
+				processTypeStr = "扣款可提现金额";
 			} else if (null != processTypeStr && processTypeStr.equals("6")) {
 				processTypeStr = "账户回滚";
 			} else if (null != processTypeStr && processTypeStr.equals("7")) {
@@ -590,8 +610,10 @@ public class SuperWhiteListController extends BaseController {
 		String refoundLoc = pd.getString("refound_loc");
 		if("0".equals(refoundLoc)){// 可提现金额
 			pd.put("money",pd.getString("number"));
+			pd.put("process_type",12);
 		}else if("1".equals(refoundLoc)){//充值金额
 			pd.put("money_limit",pd.getString("number"));
+			pd.put("process_type",11);
 		}
 
 		superwhitelistService.deduction(pd);
@@ -609,7 +631,6 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
 		pd.put("status", "1");
-		pd.put("process_type",8);
 		pd.put("id", "");
 		userAccountManagerService.save(pd);
 
@@ -674,8 +695,10 @@ public class SuperWhiteListController extends BaseController {
 		String rechargeLoc = pd.getString("recharge_loc");
 		if("0".equals(rechargeLoc)){//可提现金额
 			pd.put("money",pd.getString("number"));
+			pd.put("process_type", "10");
 		}else if("1".equals(rechargeLoc)){//充值金额
 			pd.put("money_limit",pd.getString("number"));
+			pd.put("process_type", "2");
 		}
 
 		//充值到不可提现余额
@@ -704,34 +727,10 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("user_id", _pd.getString("user_id"));
 		pd.put("store_id", _pd.getString("store_id"));
 		pd.put("add_time",time);
-		pd.put("process_type", "2");
-//		if (pd.getString("type").equals("1")) {
-//			pd.put("process_type", "2");
-//		} else if (pd.getString("type").equals("0")) {
-//			pd.put("process_type", "8");
-//		}
 		pd.put("status", "1");
 		pd.put("id", "");
 
 		userAccountManagerService.save(pd);
-
-//		try {
-//			if (pd.getString("type").equals("1")) {
-//				String user_id = _pd.getString("user_id");
-//				PageData _customer = new PageData();
-//				_customer.put("user_id", user_id);
-//				_customer.put("first_pay_time", time);
-//				String mobile = "";
-//				PageData _user = this.superwhitelistService.findUserByUserid(_pd);
-//				mobile = _user.getString("mobile");
-//				_customer.put("mobile", mobile);
-//
-//				this.customerService.setFirstPayTime(_customer);
-//			}
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
 
 		if (null != pd.getString("recharge_card_id") && !"".equals(pd.getString("recharge_card_id"))) {
 			pd.put("bonus_sn", SNGenerator.nextSN(6));

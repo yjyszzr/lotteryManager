@@ -41,8 +41,8 @@
 											<input type="text" placeholder="手机号" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"  onkeyup="value=value.replace(/[^\d]/g,'')" />
 										</span>
                                         <span  >
-                                            <input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" />
-                                            <input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间"/>
+                                            <input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" style="width:50;overflow-x:visible;overflow-y:visible;"   onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" />
+                                            <input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" style="width:50;overflow-x:visible;overflow-y:visible;" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间"/>
                                         </span>
 										</div>
 									</td>
@@ -272,6 +272,8 @@
             $("#nickname").val("");
             $("#mobile").val("");
             $("#store_name").val("");
+            $("#lastStart").val("");
+            $("#lastEnd").val("");
         }
         top.jzts();
         $("#Form").submit();
