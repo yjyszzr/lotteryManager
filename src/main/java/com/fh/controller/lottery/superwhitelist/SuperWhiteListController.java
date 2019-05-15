@@ -131,7 +131,6 @@ public class SuperWhiteListController extends BaseController {
 	@RequestMapping(value="/list")
 	public ModelAndView list(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"列表SuperWhiteList");
-		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -164,8 +163,6 @@ public class SuperWhiteListController extends BaseController {
 					if(null != latestR){
 						pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
 						varNewList.add(pdd);
-					}else {
-						pdd.put("recharge_time_latest","");
 					}
 				}else{
 					if(null != latestR){
@@ -192,7 +189,6 @@ public class SuperWhiteListController extends BaseController {
 					e.printStackTrace();
 				}
 			}
-
 		}
 
 		mv.addObject("varList", varNewList);
@@ -220,7 +216,6 @@ public class SuperWhiteListController extends BaseController {
 		titles.add("可提现余额");	//6
 		titles.add("大礼包总金额");	//7
 		titles.add("平台来源");	//8
-
 		dataMap.put("titles", titles);
 
 		String appCodeName = pd.getString("app_code_name");
@@ -253,8 +248,6 @@ public class SuperWhiteListController extends BaseController {
 					if(null != latestR){
 						pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
 						varNewList.add(pdd);
-					}else {
-						pdd.put("recharge_time_latest","");
 					}
 				}else{
 					if(null != latestR){
@@ -271,18 +264,18 @@ public class SuperWhiteListController extends BaseController {
 		String name = appCodeName.equals("11")?"圣和彩店":"球多多";
 		for(int i=0;i<varNewList.size();i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("user_id").toString());	//1
-			vpd.put("var2", varOList.get(i).getString("user_name"));	    //2
-			vpd.put("var3", varOList.get(i).getString("nickname"));	    //3
-			vpd.put("var4", varOList.get(i).getString("mobile"));	    //4
-			vpd.put("var5", varOList.get(i).getString("recharge_time_latest"));
-			vpd.put("var6", varOList.get(i).getString("money_limit"));
-			vpd.put("var7", varOList.get(i).getString("money"));
+			vpd.put("var1", varNewList.get(i).get("user_id").toString());	//1
+			vpd.put("var2", varNewList.get(i).getString("user_name"));	    //2
+			vpd.put("var3", varNewList.get(i).getString("nickname"));	    //3
+			vpd.put("var4", varNewList.get(i).getString("mobile"));	    //4
+			vpd.put("var5", varNewList.get(i).getString("recharge_time_latest"));
+			vpd.put("var6", varNewList.get(i).getString("money_limit"));
+			vpd.put("var7", varNewList.get(i).getString("money"));
 
 			if(appCodeName.equals("10")){
 				try {
 					String recharge_card_real_value = "";
-					PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(varOList.get(i));
+					PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(varNewList.get(i));
 					if (null != _pageData) {
 						recharge_card_real_value = _pageData.getString("recharge_card_real_value");
 						vpd.put("var8", recharge_card_real_value);
