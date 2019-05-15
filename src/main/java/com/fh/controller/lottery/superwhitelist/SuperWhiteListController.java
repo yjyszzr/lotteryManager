@@ -205,7 +205,6 @@ public class SuperWhiteListController extends BaseController {
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"导出SuperWhiteList到excel");
-//		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -224,11 +223,6 @@ public class SuperWhiteListController extends BaseController {
 
 		dataMap.put("titles", titles);
 
-
-//		String mobile = pd.getString("mobile");
-//		if (null != mobile && !"".equals(mobile)) {
-//			pd.put("mobile", mobile.trim());
-//		}
 		String appCodeName = pd.getString("app_code_name");
 		List<PageData> varOList = new ArrayList<>();
 		if(appCodeName.equals("10")){
@@ -241,6 +235,7 @@ public class SuperWhiteListController extends BaseController {
 		}
 
 		//填入该用户最近充值时间
+		List<PageData> varNewList = new ArrayList<>();
 		List<Integer> userIdList = varOList.stream().map(s->Integer.valueOf(s.getString("user_id"))).collect(Collectors.toList());
 		if(userIdList.size() > 0){
 			PageData rPageData = new PageData();
@@ -254,17 +249,27 @@ public class SuperWhiteListController extends BaseController {
 			for(PageData pdd:varOList){
 				String puserId = pdd.getString("user_id");
 				Long latestR = rMap.get(puserId);
-				if(null != latestR){
-					pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
-				}else {
-					pdd.put("recharge_time_latest","");
+				if(lastStart > 0l && lastEnd >0l){
+					if(null != latestR){
+						pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
+						varNewList.add(pdd);
+					}else {
+						pdd.put("recharge_time_latest","");
+					}
+				}else{
+					if(null != latestR){
+						pdd.put("recharge_time_latest",DateUtilNew.getCurrentTimeString(latestR,DateUtilNew.datetimeFormat));
+					}else {
+						pdd.put("recharge_time_latest","");
+					}
+					varNewList.add(pdd);
 				}
 			}
 		}
 
 		List<PageData> varList = new ArrayList<PageData>();
 		String name = appCodeName.equals("11")?"圣和彩店":"球多多";
-		for(int i=0;i<varOList.size();i++){
+		for(int i=0;i<varNewList.size();i++){
 			PageData vpd = new PageData();
 			vpd.put("var1", varOList.get(i).get("user_id").toString());	//1
 			vpd.put("var2", varOList.get(i).getString("user_name"));	    //2
@@ -296,45 +301,6 @@ public class SuperWhiteListController extends BaseController {
 		mv = new ModelAndView(erv,dataMap);
 		return mv;
 	}
-
-
-//	/**列表
-//	 * @param page
-//	 * @throws Exception
-//	 */
-//	@RequestMapping(value="/listUserAccount")
-//	public ModelAndView listUserAccount(Page page) throws Exception{
-//		logBefore(logger, Jurisdiction.getUsername()+"列表SuperWhiteList");
-//		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
-//		ModelAndView mv = this.getModelAndView();
-//		PageData pd = new PageData();
-//		pd = this.getPageData();
-//
-//		String user_id = pd.getString("user_id");
-//		if(null != user_id && !"".equals(user_id)){
-//			pd.put("user_id", user_id.trim());
-//		}
-////		String user_name = pd.getString("user_name");
-////		if (null != user_name && !"".equals(user_name)) {
-////			pd.put("user_name", user_name.trim());
-////		}
-////		String nickname = pd.getString("nickname");
-////		if (null != nickname && !"".equals(nickname)) {
-////			pd.put("nickname", nickname.trim());
-////		}
-////		String mobile = pd.getString("mobile");
-////		if (null != mobile && !"".equals(mobile)) {
-////			pd.put("mobile", mobile.trim());
-////		}
-//
-//		page.setPd(pd);
-//		List<PageData>	varList = this.userAccountManagerService.list(page);	//列出SuperWhiteList列表
-//		mv.setViewName("lottery/superwhitelist/superwhitelist_listUserAccount");
-//		mv.addObject("varList", varList);
-//		mv.addObject("pd", pd);
-//		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
-//		return mv;
-//	}
 
 	/**去新增页面
 	 * @param
@@ -492,6 +458,7 @@ public class SuperWhiteListController extends BaseController {
 			varOList = superwhitelistService.listAccountAll(pd);
 		}
 
+
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
@@ -499,22 +466,7 @@ public class SuperWhiteListController extends BaseController {
 			vpd.put("var2", varOList.get(i).getString("mobile"));	    //2
 			vpd.put("var3", varOList.get(i).getString("cur_balance"));	    //3
 			vpd.put("var4", varOList.get(i).getString("amount"));	    //4
-
-//			String recharge_card_real_value = "";
-//			try {
-////				String user_id = pageData.getString("user_id");
-////				String store_id = pageData.getString("store_id");
-//
-//				PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(varOList.get(i));
-//				if (null != _pageData) {
-//					recharge_card_real_value = _pageData.getString("recharge_card_real_value");
-//				}
-//			} catch (Exception e) {
-//				// TODO: handle exception
-//				e.printStackTrace();
-//			}
 			vpd.put("var5", varOList.get(i).getString("recharge_card_real_value"));
-
 			String processTypeStr = varOList.get(i).getString("process_type");
 			if (null != processTypeStr && processTypeStr.equals("1")) {
 				processTypeStr = "中奖";
