@@ -421,19 +421,19 @@
 	        });
 		return false;
 		}
-		if($("#readnum").val()==""){
-			$("#readnum").tips({
+		if($("#click_number").val()==""){
+			$("#click_number").tips({
 				side:3,
 	            msg:'请输入阅读量',
 	            bg:'#AE81FF',
 	            time:2
 	        });
-			$("#readnum").focus();
+			$("#click_number").focus();
 			return false;
 		}else{
-			var ival = parseInt($("#readnum").val());//如果变量val是字符类型的数则转换为int类型 如果不是则ival为NaN
+			var ival = parseInt($("#click_number").val());//如果变量val是字符类型的数则转换为int类型 如果不是则ival为NaN
 		    if(isNaN(ival)){
-		    	$("#readnum").tips({
+		    	$("#click_number").tips({
 					side:3,
 		            msg:'阅读量只能为正整数',
 		            bg:'#AE81FF',
