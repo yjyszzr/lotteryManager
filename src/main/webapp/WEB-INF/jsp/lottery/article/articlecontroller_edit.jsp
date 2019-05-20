@@ -164,6 +164,12 @@
 																				    </select>
 																				    </div>
 											                            </div>
+											                            <div class="row"  style="padding:5px">
+																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>阅读量：</label>
+																			<div class="col-sm-9">
+																				<input type="text" id="click_number" name="click_number" placeholder="阅读量" class="col-xs-10 col-sm-5"    autocomplete="off"    value="${pd.click_number}"/>
+																			</div>
+											                            </div>
 											                                <div class="row"  style="padding:5px">
 																			<label class="col-sm-3 control-label no-padding-right" for="form-field-1"><lable style="color:red;">*</lable>是否原创：</label>
 											                                <div class="col-sm-9">
@@ -415,6 +421,28 @@
 	        });
 		return false;
 		}
+		if($("#readnum").val()==""){
+			$("#readnum").tips({
+				side:3,
+	            msg:'请输入阅读量',
+	            bg:'#AE81FF',
+	            time:2
+	        });
+			$("#readnum").focus();
+			return false;
+		}else{
+			var ival = parseInt($("#readnum").val());//如果变量val是字符类型的数则转换为int类型 如果不是则ival为NaN
+		    if(isNaN(ival)){
+		    	$("#readnum").tips({
+					side:3,
+		            msg:'阅读量只能为正整数',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+		        return false;
+		    }
+		}
+		
 		var content = editor.txt.html();
 		    $("#content").val(content);
 		    $("#status").val(status);

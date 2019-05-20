@@ -78,7 +78,7 @@
         #{article_uv},
         #{label_defaults},
         #{video_url}, 
-        #{app_code_name} 
+        #{app_code_name}
 	</sql>
 	
 	<!-- 新增-->
@@ -118,7 +118,7 @@
 		        article_uv,
 		        label_defaults,
 		        video_url,
-		        app_code_name 
+		        app_code_name
 		) values (
 	<include refid="FieldValue"></include>
 		)

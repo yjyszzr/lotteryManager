@@ -76,7 +76,7 @@ public class ArticleControllerController extends BaseController {
 		if (pd.get("article_id") == "" || "".equals(pd.get("article_id"))) {
 			pd.put("is_show", 0);
 			pd.put("is_stick", 0);
-			pd.put("click_number", 0);
+//			pd.put("click_number", 0);
 			pd.put("article_id", 0);
 			pd.put("match_id", 0);
 			articlecontrollerService.save(pd);
