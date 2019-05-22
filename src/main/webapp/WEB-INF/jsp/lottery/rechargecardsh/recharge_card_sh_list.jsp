@@ -17,7 +17,6 @@
 <link rel="stylesheet" href="static/ace/css/datepicker.css" />
 </head>
 <body class="no-skin">
-圣和
 	<!-- /section:basics/navbar.layout -->
 	<div class="main-container" id="main-container">
 		<!-- /section:basics/sidebar -->
@@ -28,7 +27,7 @@
 						<div class="col-xs-12">
 							
 						<!-- 检索  -->
-						<form action="rechargecard/list.do" method="post" name="Form" id="Form">
+						<form action="rechargecardsh/list.do" method="post" name="Form" id="Form">
 						<!-- 检索  -->
 					
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	

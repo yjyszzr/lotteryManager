@@ -34,7 +34,7 @@
         #{real_value},	
         #{max_donation},
         #{type},	
-        #{limit_recharge_money}，
+        #{limit_recharge_money},
         #{effective_day}
         	
 	</sql>
@@ -54,7 +54,7 @@
 		        real_value,	
 		        max_donation,
 		        type,
-		        limit_recharge_money，
+		        limit_recharge_money,
 		        effective_day	
 		) values (
 	<include refid="FieldValue"></include>
@@ -123,7 +123,7 @@
 	</select>
 	
 	<select id = "findByRealValue" parameterType="pd" resultType="pd">
-	    select * from dl_donation_recharge_card where real_value = #{real_value}
+	    select * from dl_donation_recharge_card where real_value = #{real_value} and type = #{type}
 	</select>
 	
 	<!-- 批量删除 -->

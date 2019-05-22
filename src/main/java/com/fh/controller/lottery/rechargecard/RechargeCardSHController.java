@@ -57,7 +57,6 @@ public class RechargeCardSHController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("is_delete", "0");	
-		pd.put("type", "1");	//充值卡类型
 		pd.put("add_user", user.getNAME());
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong());
 		pd.put("img_url", "");
@@ -65,6 +64,7 @@ public class RechargeCardSHController extends BaseController {
 		
 		PageData queryPd = new PageData();
 		queryPd.put("real_value", pd.getString("real_value"));
+		queryPd.put("type", pd.getString("type"));
 		PageData samePd = rechargecardSHService.findByRealValue(queryPd);	//根据ID读取
 		if(null != samePd) {
 			mv.addObject("msg","已经有相同价值的充值卡，请输入其他金额");
@@ -114,25 +114,6 @@ public class RechargeCardSHController extends BaseController {
 		rechargecardSHService.delete(pd);
 		out.write("success");
 		out.close();
-	}
-	
-	/**修改
-	 * @param
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/edit")
-	public ModelAndView edit() throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"修改RechargeCard");
-		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		
-		rechargecardSHService.edit(pd);
-		mv.addObject("msg","success");
-		mv.setViewName("save_result");
-		return mv;
 	}
 	
 	/**列表

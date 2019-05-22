@@ -27,21 +27,21 @@
 				<div class="row">
 					<div class="col-xs-12">
 					
-					<form action="rechargecard/${msg }.do" name="Form" id="Form" method="post">
+					<form action="rechargecardsh/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="recharge_card_id_id" id="recharge_card_id_id" value="${pd.recharge_card_id_id}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr style="display: none;">
 								<td style="width:75px;text-align: right;padding-top: 13px;">优惠券大礼包id:</td>
-								<td><input type="number" name="recharge_card_id" id="recharge_card_id" value="${pd.recharge_card_id}" maxlength="32" placeholder="这里输入备注1" title="备注1" style="width:98%;"/></td>
+								<td><input type="number" name="recharge_card_id" id="recharge_card_id" value="${pd.recharge_card_id}" maxlength="32" style="width:98%;"/></td>
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">优惠券大礼包名称:</td>
-								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="50" placeholder="优惠券大礼包名称不能重复,删除和修改都会影响统计数据，例如:1000元优惠券大礼包" title="优惠券大礼包名称" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
+								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="50" placeholder="优惠券大礼包名称不能重复,删除和修改都会影响统计数据，例如:1000元优惠券大礼包"  autocomplete="off" style="width:98%;" /></td>
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">优惠券大礼包描述:</td>
-								<td><input type="text" name="description" id="description" value="${pd.description}" maxlength="200" placeholder="优惠券大礼包描述" title="优惠券大礼包描述" style="width:98%;"  onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')" /></td>
+								<td><input type="text" name="description" id="description" value="${pd.description}" maxlength="200" placeholder="优惠券大礼包描述" autocomplete="off" style="width:98%;" /></td>
 							</tr>
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">实际价值:</td>
