@@ -10,7 +10,7 @@
 #   Check if swap backing store is full
 #   Use 64 bit Java on a 64 bit OS
 #   Decrease Java heap size (-Xmx/-Xms)
-#   Decrease number of Java threads
+#   Decrease number of Java threads 
 #   Decrease Java thread stack sizes (-Xss)
 #   Set larger code cache with -XX:ReservedCodeCacheSize=
 # This output file may be truncated or incomplete.
