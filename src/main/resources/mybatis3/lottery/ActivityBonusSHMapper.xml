@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ActivityBonusSHMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		dl_activity_bonus
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		bonus_id,	
+		bonus_type,	
+		bonus_name,	
+		bonus_desc,	
+		bonus_image,	
+		bonus_amount,	
+		receive_count,	
+		bonus_number,	
+		use_range,	
+		min_goods_amount,	
+		start_time,	
+		end_time,	
+		is_enable,	
+		is_delete,	
+		add_time,	
+		recharge_card_id,
+		recharge_chance,
+		exchange_points,	
+		exchange_goods_number
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{bonus_id},	
+        #{bonus_type},	
+        #{bonus_name},	
+        #{bonus_desc},	
+        #{bonus_image},	
+        #{bonus_amount},	
+        #{receive_count},	
+        #{bonus_number},	
+        #{use_range},	
+        #{min_goods_amount},	
+        #{start_time},	
+        #{end_time},	
+        #{is_enable},	
+        #{is_delete},	
+        #{add_time},	
+        #{recharge_card_id},
+		#{recharge_chance},
+        #{exchange_points},	
+        #{exchange_goods_number}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        bonus_id,	
+		        bonus_type,	
+		        bonus_name,	
+		        bonus_desc,	
+		        bonus_image,	
+		        bonus_amount,	
+		        receive_count,	
+		        bonus_number,	
+		        use_range,	
+		        min_goods_amount,	
+		        start_time,	
+		        end_time,	
+		        is_enable,	
+		        is_delete,	
+		        add_time,	
+		        recharge_card_id,
+				recharge_chance,
+		        exchange_points,	
+		        exchange_goods_number	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			bonus_id = #{bonus_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set  bonus_id = #{bonus_id}
+		<if test="bonus_amount != null and bonus_amount != ''">
+			, bonus_amount = #{bonus_amount}
+		</if>
+		<if test="min_goods_amount != null and min_goods_amount != ''">
+			, min_goods_amount = #{min_goods_amount}
+		</if>
+		<if test="bonus_number != null and bonus_number != ''">
+			, bonus_number = #{bonus_number}
+		</if>
+		
+		<if test="recharge_chance != null and recharge_chance != ''">
+			, recharge_chance = #{recharge_chance}
+		</if>
+		<if test="recharge_card_id != null and recharge_card_id != ''">
+			, recharge_card_id = #{recharge_card_id}
+		</if>
+		
+		<if test="start_time != null and start_time != ''">
+			 ,start_time = #{start_time}
+		</if>
+		<if test="end_time != null and end_time  != ''">
+			, end_time  = #{end_time }
+		</if>
+		<if test="is_enable != null and is_enable  != ''">
+			, is_enable  = #{is_enable }
+		</if>
+	 where 
+		bonus_id = #{bonus_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			bonus_id = #{bonus_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		SELECT
+			a.*,
+			( SELECT count( * ) FROM dl_user_bonus b WHERE b.bonus_id = a.bonus_id ) AS receive_quantity,
+			( SELECT count( * ) FROM dl_user_bonus b WHERE b.bonus_status = 1 AND b.bonus_id = a.bonus_id ) AS use_count 
+		FROM
+			dl_activity_bonus a
+		WHERE 1=1
+		<if test="pd.amountStart != null and pd.amountStart != ''"> 
+			and  a.bonus_amount   &gt; #{pd.amountStart }
+		</if>
+		<if test="pd.amountEnd != null and pd.amountEnd != ''"> 
+			and a.bonus_amount  &lt; #{pd.amountEnd }
+		</if>
+		<if test="pd.is_enable!= null and pd.is_enable != ''"> 
+			and a.is_enable = #{pd.is_enable }
+		</if>
+		order by recharge_card_id asc,add_time desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="queryListByType" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		 where bonus_type = #{bonus_type} and is_enable = 1 and is_delete = 0
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			bonus_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<select id="queryTotalBonusByMonth" resultType="pd"> 
+		SELECT
+			sum( bonus_price ) bonusTotalPrice,
+			FROM_UNIXTIME( receive_time, '%Y-%m' ) eveMon
+		FROM
+			dl_user_bonus 
+		WHERE
+			bonus_status = 1 
+			AND user_id IN 
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+	                 #{item}
+		</foreach>
+		GROUP BY
+			FROM_UNIXTIME( receive_time, '%Y-%m' )
+	</select>
+	
+	<select id="sellerUserBonushTotal"  resultType="pd">
+		SELECT
+					sum( bonus_price ) totalBonus
+				FROM
+					dl_user_bonus bonus
+				WHERE
+					bonus_status = 1 and bonus.user_id IN 
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			    #{item}
+		</foreach>
+	</select>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>
