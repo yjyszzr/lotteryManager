@@ -81,7 +81,7 @@ public class ActivityBonusSHController extends BaseController {
 		Integer totalMoney = doubleRechargeCardMoney.intValue()+Integer.parseInt(pd.getString("bonus_amount"));
 		Double doubleRealValue =  Double.parseDouble(pdRechargeCard.getString("real_value"));
 		if(totalMoney > doubleRealValue.intValue()) {
-			mv.addObject("msg","优惠券总金额大于大礼包总金额，无法创建！");
+			mv.addObject("msg","金额已超出礼包价值请重新输入！");
 			mv.setViewName("save_result");
 			return mv;
 		}
