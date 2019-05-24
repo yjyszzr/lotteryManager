@@ -37,13 +37,15 @@
 									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
 									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center" style="display: none;">优惠券大礼包id</th>
+<!-- 									<th class="center" style="display: none;">优惠券大礼包id</th> -->
 									<th class="center">优惠券大礼包名称</th>
-									<th class="center">已领取</th>
-									<th class="center">添加人</th>
-									<th class="center">添加时间</th>
-									<th class="center">优惠券大礼包描述</th>
+									<th class="center">派发数量</th>
+									<th class="center">设置人</th>
+									<th class="center">设置时间</th>
+									<th class="center">派发条件</th>
 									<th class="center">实际价值</th>
+									<th class="center">有效期</th>
+									<th class="center">状态</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -59,13 +61,21 @@
 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.recharge_card_id}" class="ace" /><span class="lbl"></span></label>
 											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center' style="display: none;">${var.recharge_card_id}</td>
+<%-- 											<td class='center' style="display: none;">${var.recharge_card_id}</td> --%>
 											<td class='center'>${var.name}</td>
 											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.add_user}</td>
 											<td class='center'>${var.add_time}</td>
-											<td class='center'>${var.description}</td>
-											<td class='center'>${var.real_value}</td>
+											<td class='center'> 
+												<c:if test="${var.type==20 }">首次充值</c:if>
+												<c:if test="${var.type==30 }">单笔充值</c:if>
+												${var.limit_recharge_money }元</td>
+											<td class='center'>${var.real_value}元</td>
+											<td class='center'>${var.effective_day}天</td>
+											<td class='center'> 
+												<c:if test="${var.status==0 }">可使用</c:if>
+												<c:if test="${var.status==1 }">已过期</c:if>
+											</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -244,7 +254,7 @@
 			bootbox.confirm("确定要删除吗?", function(result) {
 				if(result) {
 					top.jzts();
-					var url = "<%=basePath%>rechargecard/delete.do?recharge_card_id="+Id+"&tm="+new Date().getTime();
+					var url = "<%=basePath%>rechargecardsh/delete.do?recharge_card_id="+Id+"&tm="+new Date().getTime();
 					$.get(url,function(data){
 						tosearch();
 					});
@@ -252,26 +262,7 @@
 			});
 		}
 		
-		//修改
-		function edit(Id){
-			 top.jzts();
-			 var diag = new top.Dialog();
-			 diag.Drag=true;
-			 diag.Title ="编辑";
-			 diag.URL = '<%=basePath%>rechargecard/goEdit.do?recharge_card_id='+Id;
-			 diag.Width = 450;
-			 diag.Height = 355;
-			 diag.Modal = true;				//有无遮罩窗口
-			 diag. ShowMaxButton = true;	//最大化按钮
-		     diag.ShowMinButton = true;		//最小化按钮 
-			 diag.CancelEvent = function(){ //关闭事件
-				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
-					 tosearch();
-				}
-				diag.close();
-			 };
-			 diag.show();
-		}
+		 
 		
 		//批量操作
 		function makeAll(msg){

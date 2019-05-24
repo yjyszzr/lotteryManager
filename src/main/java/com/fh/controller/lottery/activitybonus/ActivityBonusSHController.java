@@ -289,7 +289,24 @@ public class ActivityBonusSHController extends BaseController {
 		map.put("list", pdList);
 		return AppUtil.returnObject(pd, map);
 	}
-	
+
+	/**
+	 * 删除
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/delete")
+	public void delete(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "删除ActivityBonus");
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		PageData pdOld = activitybonusSHService.findById(pd);
+		activitybonusSHService.delete(pd);
+		ACLOG.save("1", "2", "优惠券管理：删除优惠券", pdOld.toString());
+		out.write("success");
+		out.close();
+	}
 	
 	/**
 	 * 导出到excel
