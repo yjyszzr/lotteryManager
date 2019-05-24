@@ -177,7 +177,7 @@
 			LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
 		</if>
 		<if test="pd.user_name != null and pd.user_name != ''"> 
-			and b.user_name  
+			and a.real_name  
 			LIKE CONCAT(CONCAT('%', #{pd.user_name}),'%')
 		</if>
 		<if test="pd.status != null and pd.status != ''"> 

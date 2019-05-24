@@ -33,23 +33,29 @@
 								<tr style="margin:2px ">
 									<td>
 										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
 												订单编号:
-											<span class="input-icon">
+											</span>
+											<span class="input-icon" style="width:80px;text-align:right;">
 												<input type="text" placeholder="订单编号" class="nav-search-input" id="withdrawal_sn" autocomplete="off" name="withdrawal_sn" value="${pd.withdrawal_sn }"/>
 											</span>
 										</div>
 									</td>
 									<td>
 										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
 												手机号:
-											<span class="input-icon">
+											</span>
+											<span class="input-icon" >
 												<input type="text" placeholder="手机号" class="nav-search-input" id="mobile" autocomplete="off" name="mobile" value="${pd.mobile}"   onkeyup="value=value.replace(/[^\d]/g,'')" />
 											</span>
 										</div>
 									</td>
 									<td>
 										<div class="nav-search">
+											<span class="input-icon" style="width:80px;text-align:right;">
 												用户昵称:
+											</span>
 											<span class="input-icon">
 												<input type="text" placeholder="用户昵称" class="nav-search-input" id="user_name" autocomplete="off" name="user_name" value="${pd.user_name}" />
 											</span>
@@ -58,7 +64,9 @@
 									</tr>
 									<tr style="margin:2px">
 									<td >
+									<span class="input-icon" style="width:80px;text-align:right;">
 												提现时间:
+												</span>
 											<span  >
 												<input name="lastStart" id="lastStart"  value="${pd.lastStart }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="开始时间" title="开始时间"/>
 												<input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
@@ -66,7 +74,9 @@
 									</td>
 									<td>
 										<div class="nav-search">
-													提现状态:
+											<span class="input-icon" style="width:80px;text-align:right;">
+												提现状态:
+											</span>
 										 	<select  name="status" id="status" data-placeholder="请选择" value="${pd.status }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
 											<option value="0" <c:if test="${pd.status!=NULL && pd.status!='' && pd.status == 0}">selected</c:if>>待审核</option>
@@ -78,21 +88,21 @@
 									</td>
 									<c:if test="${QX.cha == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
-											<span class="input-icon" style="width:40px;"> </span>
+											<span class="input-icon" style="width:80px;"> </span>
 											<span>
-													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:85px">搜索</a>
 											</span>
-											<span class="input-icon" style="width:23px;"> </span>
+											<span class="input-icon" style="width:43px;"> </span>
 											<span>
-													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
+													<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:85px">清空</a>
 											</span>
 										</td>
 									</c:if>
 									<c:if test="${QX.toExcel == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
-										<span class="input-icon" style="width:20px;"> </span>
+										<span class="input-icon" style="width:43px;"> </span>
 											<span>
-												<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:80px">导出到EXCEL </a>
+												<a class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL"  style="border-radius:5px;color:blue !important; width:85px">导出到EXCEL </a>
 											</span>
 										</td>
 									</c:if>
