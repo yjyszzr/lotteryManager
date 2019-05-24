@@ -219,16 +219,17 @@
 			} */
 
 
-/* 			if($("#start_time").val()==""){
-				$("#start_time").tips({
+			if($("#end_time").val()==""){
+				$("#end_time").tips({
 					side:3,
-		            msg:'请输起始天数',
+		            msg:'请输入天数',
 		            bg:'#AE81FF',
 		            time:2
 		        });
-				$("#start_time").focus();
+				$("#end_time").focus();
 			return false;
 			}
+			/* 
 			if($("#end_time").val()==""){
 				$("#end_time").tips({
 					side:3,

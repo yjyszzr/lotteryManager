@@ -77,7 +77,7 @@ public class ActivityBonusSHController extends BaseController {
 		}
 		PageData pdRechargeCard = activitybonusSHService.findRechargeCardByRechargeCardId(pd);
 		PageData pdRechargeCardMoney = activitybonusSHService.findBonusByRechargeCardId(pd);
-		Double doubleRechargeCardMoney = Double.parseDouble(pdRechargeCardMoney.getString("total_bonus_amount"));
+		Double doubleRechargeCardMoney = Double.parseDouble(null == pdRechargeCardMoney ? "0.00":pdRechargeCardMoney.getString("total_bonus_amount"));
 		Integer totalMoney = doubleRechargeCardMoney.intValue()+Integer.parseInt(pd.getString("bonus_amount"));
 		Double doubleRealValue =  Double.parseDouble(pdRechargeCard.getString("real_value"));
 		if(totalMoney > doubleRealValue.intValue()) {
