@@ -212,5 +212,11 @@
 		</foreach>
 	</select>
 	
-	<!-- fh313596790qq(青苔) -->
+	<select id="findRechargeCardByRechargeCardId" resultType="pd">
+		select * from dl_donation_recharge_card where  recharge_card_id = #{recharge_card_id}
+	</select>
+	
+	<select id="findBonusByRechargeCardId" resultType="pd">
+		select sum(bonus_amount) total_bonus_amount from dl_activity_bonus where  recharge_card_id = #{recharge_card_id}
+	</select>
 </mapper>

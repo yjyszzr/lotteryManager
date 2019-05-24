@@ -75,7 +75,16 @@ public class ActivityBonusSHController extends BaseController {
 			pd.put("recharge_chance", null);
 			pd.put("recharge_card_id", null);
 		}
-
+		PageData pdRechargeCard = activitybonusSHService.findRechargeCardByRechargeCardId(pd);
+		PageData pdRechargeCardMoney = activitybonusSHService.findBonusByRechargeCardId(pd);
+		Double doubleRechargeCardMoney = Double.parseDouble(pdRechargeCardMoney.getString("total_bonus_amount"));
+		Integer totalMoney = doubleRechargeCardMoney.intValue()+Integer.parseInt(pd.getString("bonus_amount"));
+		Double doubleRealValue =  Double.parseDouble(pdRechargeCard.getString("real_value"));
+		if(totalMoney > doubleRealValue.intValue()) {
+			mv.addObject("msg","优惠券总金额大于大礼包总金额，无法创建！");
+			mv.setViewName("save_result");
+			return mv;
+		}
 		pd.put("bonus_id", "0");
 		pd.put("receive_count", "0");
 		pd.put("is_enable", "0");

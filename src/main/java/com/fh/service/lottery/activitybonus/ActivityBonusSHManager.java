@@ -72,6 +72,9 @@ public interface ActivityBonusSHManager{
 	
 	public PageData sellerUserBonushTotal(List<String> varList)throws Exception;
 
+	public PageData findRechargeCardByRechargeCardId(PageData pd)throws Exception;
+
+	public  PageData findBonusByRechargeCardId(PageData pd)throws Exception;
 	
 }
 

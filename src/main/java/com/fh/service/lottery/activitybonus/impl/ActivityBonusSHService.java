@@ -183,4 +183,14 @@ public class ActivityBonusSHService implements ActivityBonusSHManager {
 		return (PageData) dao.findForObject("ActivityBonusSHMapper.sellerUserBonushTotal", userIdList);
 	}
 
+	@Override
+	public PageData findRechargeCardByRechargeCardId(PageData pd) throws Exception{
+		return (PageData) dao.findForObject("ActivityBonusSHMapper.findRechargeCardByRechargeCardId", pd);
+	}
+
+	@Override
+	public PageData findBonusByRechargeCardId(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("ActivityBonusSHMapper.findBonusByRechargeCardId", pd);
+	}
+
 }
