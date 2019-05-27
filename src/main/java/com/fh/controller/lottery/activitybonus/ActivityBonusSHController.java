@@ -78,9 +78,9 @@ public class ActivityBonusSHController extends BaseController {
 		PageData pdRechargeCard = activitybonusSHService.findRechargeCardByRechargeCardId(pd);
 		PageData pdRechargeCardMoney = activitybonusSHService.findBonusByRechargeCardId(pd);
 		Double doubleRechargeCardMoney = Double.parseDouble(null == pdRechargeCardMoney ? "0.00":pdRechargeCardMoney.getString("total_bonus_amount"));
-		Integer totalMoney = doubleRechargeCardMoney.intValue()+Integer.parseInt(pd.getString("bonus_amount"));
+		Double totalMoney = doubleRechargeCardMoney +Double.parseDouble(pd.getString("bonus_amount"));
 		Double doubleRealValue =  Double.parseDouble(pdRechargeCard.getString("real_value"));
-		if(totalMoney > doubleRealValue.intValue()) {
+		if(totalMoney > doubleRealValue) {
 			mv.addObject("msg","金额已超出礼包价值请重新输入！");
 			mv.setViewName("save_result");
 			return mv;

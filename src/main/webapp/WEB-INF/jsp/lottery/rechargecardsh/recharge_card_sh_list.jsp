@@ -73,7 +73,7 @@
 											<td class='center'>${var.real_value}元</td>
 											<td class='center'>${var.effective_day}天</td>
 											<td class='center'> 
-												<c:if test="${var.status==0 }">可使用</c:if>
+												<c:if test="${var.status==0 }">有效</c:if>
 												<c:if test="${var.status==1 }">已过期</c:if>
 											</td>
 											<td class="center">
