@@ -101,10 +101,11 @@ public class ActivityBonusSHController extends BaseController {
 	 * 圣和列表
 	 * 
 	 * @param page
+	 * @param PageData 
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/shlist")
-	public ModelAndView shlist(Page page) throws Exception {
+	public ModelAndView shlist(Page page, Object PageData) throws Exception {
 //		System.out.println("====== list start ======");
 		try {
 			logBefore(logger, Jurisdiction.getUsername() + "列表ActivityBonus");
@@ -125,9 +126,20 @@ public class ActivityBonusSHController extends BaseController {
 			List<PageData> varList = activitybonusSHService.list(page); // 列出ActivityBonus列表
 			Map<String,String> rechargeCardMap = this.createRechareCardMap();
 			mv.setViewName("lottery/activitybonussh/activity_bonus_sh_list");
-			if (null != varList)
+			if (null != varList) {
+				PageData pageData1 = new PageData();
+				List<PageData> var1List = rechargecardSHService.listAll(pageData1);
+				Map<String, PageData> mapList = new HashMap<String, PageData>();
+				for (int i = 0; i < var1List.size(); i++) {
+					mapList.put(var1List.get(i).getString("recharge_card_id"), var1List.get(i));
+				}
 				for (int i = 0; i < varList.size(); i++) {
 					try {
+						PageData pageDataUser = mapList.get(varList.get(i).getString("recharge_card_id"));
+						if (null!=pageDataUser) {
+							varList.get(i).put("addUser",pageDataUser.getString("add_user"));
+							varList.get(i).put("addTime", pageDataUser.getString("add_time"));
+						}
 						PageData pageData = new PageData();
 						pageData = varList.get(i);
 						String min_goods_amount = pageData.getString("min_goods_amount");
@@ -169,6 +181,8 @@ public class ActivityBonusSHController extends BaseController {
 						e.printStackTrace();
 					}
 				}
+			}
+				
 			mv.addObject("varList", varList);
 			mv.addObject("pd", pd);
 			

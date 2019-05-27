@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@page import="com.fh.util.DateUtil"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
@@ -32,15 +33,17 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center">ID</th>
-									<th class="center">券类型</th>
+									<th class="center">序号</th>
+<!-- 									<th class="center">券类型</th> -->
 									<th class="center">金额</th>
 									<th class="center">使用条件</th>
-									<th class="center">彩种限制</th>
+<!-- 									<th class="center">彩种限制</th> -->
+									<th class="center">设置人</th>
+									<th class="center">设置时间</th>
 									<th class="center">有效期</th>
-									<th class="center">优惠券大礼包名称</th>
-									<th class="center">已领取</th>
-									<th class="center">已使用</th>
+									<th class="center">所属礼包</th>
+									<th class="center">派发数量</th>
+									<th class="center">使用数量</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -51,18 +54,24 @@
 								<c:when test="${not empty varList}">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>${var.bonus_id}</td>
-											<td class='center'> 
-												<c:if test="${var.bonus_type==1 }">注册送红包</c:if>
-												<c:if test="${var.bonus_type==2 }">西安活动红包</c:if>
-												<c:if test="${var.bonus_type==3 }">充值活动红包</c:if>
-												<c:if test="${var.bonus_type==4 }">指定赠送红包(用于派发)</c:if>
-											</td>
+											<td class='center' style="width: 30px;">${vs.index+1}</td>
+<%-- 											<td class='center'>${var.bonus_id}</td> --%>
+<!-- 											<td class='center'>  -->
+<%-- 												<c:if test="${var.bonus_type==1 }">注册送红包</c:if> --%>
+<%-- 												<c:if test="${var.bonus_type==2 }">西安活动红包</c:if> --%>
+<%-- 												<c:if test="${var.bonus_type==3 }">充值活动红包</c:if> --%>
+<%-- 												<c:if test="${var.bonus_type==4 }">指定赠送红包(用于派发)</c:if> --%>
+<!-- 											</td> -->
 											<td class='center'>${var.bonus_amount}</td>
 											<td class='center'>${var.min_goods_amount}</td>
-											<td class='center'> 
-												<c:if test="${var.use_range==0}">通用</c:if>
-											</td>
+<!-- 											<td class='center'>  -->
+<%-- 												<c:if test="${var.use_range==0}">通用</c:if> --%>
+<!-- 											</td> -->
+											<td class='center'>${var.addUser} </td>
+											<td class='center'>
+											<c:if test="${null != var.addTime  }">
+												${DateUtil.toSDFTime(var.addTime*1000)}</td>
+											</c:if>
 											<td class='center'>${var.end_time}天</td>
 											<td class='center'>${var.recharge_card_name}</td>
 						
