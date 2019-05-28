@@ -83,6 +83,12 @@ public class RechargeCardSHService implements RechargeCardSHManager{
 	public PageData findByRealValue(PageData pd) throws Exception {
 		return (PageData)dao.findForObject("RechargeCardSHMapper.findByRealValue", pd);
 	}
+
+	@Override
+	public void onOrOffLine(PageData pd) throws Exception {
+		dao.update("RechargeCardSHMapper.onOrOffLine", pd);
+		
+	}
 	
 }
 

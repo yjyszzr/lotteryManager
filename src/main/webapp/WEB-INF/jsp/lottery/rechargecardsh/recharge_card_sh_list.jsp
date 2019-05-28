@@ -41,7 +41,8 @@
 									<th class="center">优惠券大礼包名称</th>
 									<th class="center">派发数量</th>
 									<th class="center">设置人</th>
-									<th class="center">设置时间</th>
+									<th class="center">添加时间</th>
+									<th class="center">上架时间</th>
 									<th class="center">派发条件</th>
 									<th class="center">实际价值</th>
 									<th class="center">有效期</th>
@@ -66,6 +67,7 @@
 											<td class='center'>${var.receive_quantity}</td>
 											<td class='center'>${var.add_user}</td>
 											<td class='center'>${var.add_time}</td>
+											<td class='center'>${var.online_time}</td>
 											<td class='center'> 
 												<c:if test="${var.type==20 }">首次充值</c:if>
 												<c:if test="${var.type==30 }">单笔充值</c:if>
@@ -75,6 +77,7 @@
 											<td class='center'> 
 												<c:if test="${var.status==0 }">有效</c:if>
 												<c:if test="${var.status==1 }">已过期</c:if>
+												<c:if test="${var.status== -1 }">待上架</c:if>
 											</td>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
@@ -82,29 +85,15 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:if test="${QX.del == 1 }">
-													<a class="btn btn-xs btn-danger" onclick="del('${var.recharge_card_id}');">
-														<i class="ace-icon fa fa-trash-o bigger-120" title="删除"></i>
-													</a>
+														<a class="btn btn-xs btn-danger"  style="border-radius: 5px;"  onclick="del('${var.recharge_card_id}');">删除</a>
 													</c:if>
-												</div>
-												<div class="hidden-md hidden-lg">
-													<div class="inline pos-rel">
-														<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-															<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
-														</button>
-			
-														<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-															<c:if test="${QX.edit == 1 }">
-															<li>
-																<a style="cursor:pointer;" onclick="edit('${var.recharge_card_id}');" class="tooltip-success" data-rel="tooltip" title="修改">
-																	<span class="green">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
-																	</span>
-																</a>
-															</li>
-															</c:if>
-														</ul>
-													</div>
+													<c:choose>
+													<c:when test="${var.status == -1}">
+														<c:if test="${QX.edit == 1 }">
+															<a class="btn btn-xs btn-primary" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('0','${var.recharge_card_id}');"> 上架</a>
+														</c:if>
+													</c:when>
+													</c:choose>
 												</div>
 											</td>
 										</tr>
@@ -130,7 +119,7 @@
 							<tr>
 								<td style="vertical-align:top;">
 									<c:if test="${QX.add == 1 }">
-									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
+									<a class="btn btn-mini btn-success"  style="border-radius: 5px;"   onclick="add();">新增</a>
 									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
@@ -293,7 +282,7 @@
 							top.jzts();
 							$.ajax({
 								type: "POST",
-								url: '<%=basePath%>rechargecard/deleteAll.do?tm='+new Date().getTime(),
+								url: '<%=basePath%>rechargecardsh/deleteAll.do?tm='+new Date().getTime(),
 						    	data: {DATA_IDS:str},
 								dataType:'json',
 								//beforeSend: validateData,
@@ -309,6 +298,18 @@
 				}
 			});
 		};
+		
+		
+		
+		
+		//上架和下架 1-已发布 2-草稿箱
+		function onOrOffLine(status,rechargeCardId){   
+				top.jzts();
+				var url = "<%=basePath%>rechargecardsh/onOrOffLine.do?recharge_card_id="+rechargeCardId+"&tm="+new Date().getTime()+"&status="+status;
+				$.get(url,function(data){
+					tosearch(0);
+				});
+		}
 		
 		//导出excel
 		function toExcel(){

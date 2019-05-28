@@ -59,6 +59,8 @@ public interface RechargeCardSHManager{
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
+
+	public void onOrOffLine(PageData pd)throws Exception;
 	
 }
 

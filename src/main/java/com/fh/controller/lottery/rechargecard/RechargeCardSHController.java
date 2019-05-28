@@ -60,7 +60,7 @@ public class RechargeCardSHController extends BaseController {
 		pd.put("add_user", user.getNAME());
 		pd.put("add_time", DateUtilNew.getCurrentTimeLong());
 		pd.put("img_url", "");
-		pd.put("status", "0");		
+		pd.put("status", "-1");		
 		
 		PageData queryPd = new PageData();
 		queryPd.put("real_value", pd.getString("real_value"));
@@ -134,6 +134,7 @@ public class RechargeCardSHController extends BaseController {
 		page.setPd(pd);
 		List<PageData>	varList = rechargecardSHService.list(page);	//列出RechargeCard列表
 		for(PageData pageData:varList) {
+			pageData.put("online_time", DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("online_time"))), DateUtilNew.datetimeFormat));
 			pageData.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("add_time"))), DateUtilNew.datetimeFormat));
 		}
 		
@@ -159,6 +160,26 @@ public class RechargeCardSHController extends BaseController {
 		return mv;
 	}	
  
+	
+	/**上架下架
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/onOrOffLine")
+	public ModelAndView onOrOffLine() throws Exception{
+		logBefore(logger, Jurisdiction.getUsername()+"修改RechargeCard");
+		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
+		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		ModelAndView mv = this.getModelAndView();
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		pd.put("online_time", DateUtilNew.getCurrentTimeLong());
+		rechargecardSHService.onOrOffLine(pd);
+		mv.addObject("msg","success");
+		mv.setViewName("save_result");
+		return mv;
+	}
+	
 	 /**批量删除
 	 * @param
 	 * @throws Exception

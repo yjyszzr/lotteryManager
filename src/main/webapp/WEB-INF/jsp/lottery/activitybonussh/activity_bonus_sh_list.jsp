@@ -70,7 +70,7 @@
 											<td class='center'>${var.addUser} </td>
 											<td class='center'>
 											<c:if test="${null != var.addTime  }">
-												${DateUtil.toSDFTime(var.addTime*1000)}</td>
+												${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											</c:if>
 											<td class='center'>${var.end_time}天</td>
 											<td class='center'>${var.recharge_card_name}</td>

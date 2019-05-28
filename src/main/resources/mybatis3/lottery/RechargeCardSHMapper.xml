@@ -137,5 +137,15 @@
 		</foreach>
 	</delete>
 	
-	<!-- fh313596790qq(青苔) -->
+	<!-- 上下线 -->
+	<update id="onOrOffLine" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = #{status},
+			online_time = #{online_time}
+		where 
+		recharge_card_id= #{recharge_card_id}
+	</update>
+	
 </mapper>
