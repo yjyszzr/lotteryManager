@@ -134,8 +134,8 @@ public class RechargeCardSHController extends BaseController {
 		page.setPd(pd);
 		List<PageData>	varList = rechargecardSHService.list(page);	//列出RechargeCard列表
 		for(PageData pageData:varList) {
-			pageData.put("online_time", DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("online_time"))), DateUtilNew.datetimeFormat));
-			pageData.put("add_time", DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("add_time"))), DateUtilNew.datetimeFormat));
+			pageData.put("online_time", pageData.get("online_time") == null?null:DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("online_time"))), DateUtilNew.datetimeFormat));
+			pageData.put("add_time", pageData.get("online_time") == null?null:DateUtilNew.getCurrentTimeString(Long.valueOf(String.valueOf(pageData.get("add_time"))), DateUtilNew.datetimeFormat));
 		}
 		
 		mv.setViewName("lottery/rechargecardsh/recharge_card_sh_list");
