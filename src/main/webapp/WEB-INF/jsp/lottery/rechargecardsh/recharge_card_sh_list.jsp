@@ -221,7 +221,7 @@
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>rechargecardsh/goAdd.do';
 			 diag.Width = 450;
-			 diag.Height = 395;
+			 diag.Height = 330;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = false;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮

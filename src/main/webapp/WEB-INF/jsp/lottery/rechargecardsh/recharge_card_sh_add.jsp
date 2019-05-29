@@ -39,10 +39,10 @@
 								<td style="width:95px;text-align: right;padding-top: 13px;">优惠券大礼包名称:</td>
 								<td><input type="text" name="name" id="name" value="${pd.name}" maxlength="50" placeholder="优惠券大礼包名称不能重复,删除和修改都会影响统计数据，例如:1000元优惠券大礼包"  autocomplete="off" style="width:98%;" /></td>
 							</tr>
-							<tr>
-								<td style="width:95px;text-align: right;padding-top: 13px;">优惠券大礼包描述:</td>
-								<td><input type="text" name="description" id="description" value="${pd.description}" maxlength="200" placeholder="优惠券大礼包描述" autocomplete="off" style="width:98%;" /></td>
-							</tr>
+<!-- 							<tr> -->
+<!-- 								<td style="width:95px;text-align: right;padding-top: 13px;">优惠券大礼包描述:</td> -->
+<%-- 								<td><input type="text" name="description" id="description" value="${pd.description}" maxlength="200" placeholder="优惠券大礼包描述" autocomplete="off" style="width:98%;" /></td> --%>
+<!-- 							</tr> -->
 							<tr>
 								<td style="width:95px;text-align: right;padding-top: 13px;">实际价值:</td>
 								<td><input type="number" name="real_value" id="real_value" value="${pd.real_value}" 
@@ -119,16 +119,16 @@
 				$("#name").focus();
 			return false;
 			}
-			if($("#description").val()==""){
-				$("#description").tips({
-					side:3,
-		            msg:'请输入充值卡描述',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#description").focus();
-			return false;
-			}
+// 			if($("#description").val()==""){
+// 				$("#description").tips({
+// 					side:3,
+// 		            msg:'请输入充值卡描述',
+// 		            bg:'#AE81FF',
+// 		            time:2
+// 		        });
+// 				$("#description").focus();
+// 			return false;
+// 			}
 			if($("#real_value").val()==""){
 				$("#real_value").tips({
 					side:3,
