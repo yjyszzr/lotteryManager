@@ -161,7 +161,6 @@ public class SuperWhiteListController extends BaseController {
                 latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
             }
 
-
 			Map<String,Long> rMap = latestRechargeDataList.stream().collect(Collectors.toMap(s->s.getString("user_id"),s-> Long.valueOf(s.getString("add_time"))));
 			for(PageData pdd:varList){
 				String puserId = pdd.getString("user_id");
@@ -200,7 +199,7 @@ public class SuperWhiteListController extends BaseController {
 
 		mv.addObject("varList", varNewList);
 		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
+		mv.addObject("QX",Jurisdiction.getHC());//按钮权限
 		return mv;
 	}
 
@@ -231,8 +230,7 @@ public class SuperWhiteListController extends BaseController {
 			varOList = superwhitelistService.listAll(pd);
 		}else if(appCodeName.equals("11")){
 			page.setPd(pd);
-			//page.setShowCount(65000);// 单页显示条数，为了全部导出应用
-			varOList = userManagerControllerService.getShenHeUserList(page);
+			varOList = userManagerControllerService.listAllNew(pd);
 		}
 
 		//填入该用户最近充值时间

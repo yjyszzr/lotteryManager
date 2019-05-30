@@ -552,6 +552,17 @@
 	</select>
 
 
+    <!-- 列表(全部) -->
+    <select id="listAllNew" parameterType="pd" resultType="pd">
+        SELECT user_id,user_name,nickname,mobile,user_money_limit money_limit,user_money money,0 recharge_card_real_value,app_code_name name,app_code_name
+        from dl_user where app_code_name = #{app_code_name}
+        <if test="mobile!= null and mobile != ''">
+            and mobile LIKE CONCAT(CONCAT('%', #{mobile}),'%')
+        </if>
+        order by reg_time DESC
+    </select>
+
+
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from

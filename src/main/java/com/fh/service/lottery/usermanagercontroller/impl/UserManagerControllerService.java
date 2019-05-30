@@ -107,6 +107,18 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.listAll", pd);
 	}
 
+    /**
+     * 列表(全部)
+     *
+     * @param pd
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public List<PageData> listAllNew(PageData pd) throws Exception {
+        return (List<PageData>) dao.findForList("UserManagerControllerMapper.listAllNew", pd);
+    }
+
+
 	/**
 	 * 通过id获取数据
 	 *
