@@ -144,24 +144,14 @@
 															<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
 														</c:if>
 														<div class="hidden-sm hidden-xs btn-group">
-															<c:choose>
-																<c:when test="${var.app_code_name == '10'}">
-																	<a class="btn btn-xs btn-success" title="充值"
-																	   onclick="recharge('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}' + '&mobile=' + '${var.mobile}');">
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120" title="充值">充值</i>
-																	</a>
-																	<a class="btn btn-xs btn-success" title="扣款"
-																	   onclick="deduction('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}');" >
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120" title="扣款">扣款</i>
-																	</a>
-																</c:when>
-																<c:otherwise>
-																	<a class="btn btn-xs btn-success" title="退款"
-																	   onclick="recharge('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}' + '&mobile=' + '${var.mobile}');" >
-																		<i class="ace-icon fa fa-pencil-square-o bigger-120" title="退款">退款</i>
-																	</a>
-																</c:otherwise>
-															</c:choose>
+																<a class="btn btn-xs btn-success" title="充值"
+																   onclick="recharge('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}' + '&mobile=' + '${var.mobile}');">
+																	<i class="ace-icon fa fa-pencil-square-o bigger-120" title="充值">充值</i>
+																</a>
+																<a class="btn btn-xs btn-success" title="扣款"
+																   onclick="deduction('user_id=' + '${var.user_id}' + '&store_id=' + '${var.store_id}');" >
+																	<i class="ace-icon fa fa-pencil-square-o bigger-120" title="扣款">扣款</i>
+																</a>
 														</div>
 														<div class="hidden-md hidden-lg">
 															<div class="inline pos-rel">
@@ -464,6 +454,8 @@
     }
 
     function deduction(str){
+        var app_code_name = $("#app_code_name").val();
+        str = str +'&app_code_name=' + app_code_name;
         top.jzts();
         var diag = new top.Dialog();
         diag.Drag=true;

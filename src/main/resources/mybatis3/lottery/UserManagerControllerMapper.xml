@@ -704,11 +704,43 @@
 	</select>
 
 
+
 	<select id="queryUserByMobile" parameterType="java.lang.String" resultType="pd">
 		SELECT * from dl_user where mobile = #{mobile} and app_code_name = #{app_code_name}
+	</select>
+
+
+    <select id="queryUserByMobileNew" parameterType="java.lang.String" resultType="pd">
+		SELECT 1 store_id,  '圣和彩店' as name,user.user_id, user.user_name, user.nickname,user.mobile,user.user_money money,user.user_money_limit money_limit
+		from dl_user user where mobile = #{mobile} and app_code_name = #{app_code_name}
 	</select>
 
 	<update id="refoundToUserMoneyLimit" >
 		update dl_user set user_money_limit = user_money_limit + #{user_money_limit} where user_id = #{user_id}
 	</update>
+
+
+    <update id="recharge" parameterType="pd">
+        update dl_user set
+        <if test="money!= null and money != ''">
+            user_money = user_money + #{money}
+        </if>
+        <if test="money_limit != null and money_limit != ''">
+            user_money_limit = user_money_limit + #{money_limit}
+        </if>
+        where user_id = #{user_id}
+    </update>
+
+
+    <update id="deduction" parameterType="pd">
+        update dl_user set
+        <if test="money!= null and money != ''">
+            user_money = user_money - #{money}
+        </if>
+        <if test="money_limit != null and money_limit != ''">
+            user_money_limit = user_money_limit - #{money_limit}
+        </if>
+        where user_id = #{user_id}
+    </update>
+
 </mapper>

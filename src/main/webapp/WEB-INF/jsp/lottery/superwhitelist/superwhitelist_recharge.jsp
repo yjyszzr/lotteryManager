@@ -40,6 +40,7 @@
 						<form action="superwhitelist/${msg}.do" name="Form" id="Form" method="post">
 							<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
 							<input type="hidden" name="store_id" id="store_id" value="${pd.store_id}"/>
+                            <input type="hidden" name="app_code_name" id="app_code_name" value="${pd.app_code_name}"/>
 							<div id="zhongxin" style="padding-top: 13px;">
 								<table id="table_report" class="table table-striped table-bordered table-hover">
 									<tr>
@@ -56,9 +57,14 @@
 									</tr>
 									<tr>
 										<td style="width:75px;text-align: right;padding-top: 13px;">平台来源:</td>
-										<td id="store_name">
-												球多多
-										</td>
+                                        <td id="store_name">
+                                            <c:if test="${pd.app_code_name == '10'}">
+                                                球多多
+                                            </c:if>
+                                            <c:if test="${pd.app_code_name == '11'}">
+                                                圣和彩店
+                                            </c:if>
+                                        </td>
 									</tr>
 									<tr>
 										<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>
@@ -99,18 +105,23 @@
 										<td><input type="number" name="number" id="number" value="" maxlength="32" placeholder="这里输入充值金额" title="充值金额" style="width:42%;"/></td>
 									</tr>
 									<tr>
-										<td style="width:110px;text-align: right;padding-top: 13px;">大礼包:</td>
-										<td>
-											<!--
-                                            <input type="number" name="number2" id="number2" value="" maxlength="32" placeholder="这里输入充值送金额" title="这里输入充值送金额" style="width:42%;"/>
-                                             -->
-											<select  name="recharge_card_id" id="recharge_card_id" value=""  style="width:204px;border-radius:5px !important">
-												<option  value="">不使用大礼包</option>
-												<c:forEach items="${pd.rechargeCardList}" var="rechargeCard">
-													<option  value="${rechargeCard.recharge_card_id},${rechargeCard.real_value}"  >${rechargeCard.name}</option>
-												</c:forEach>
-											</select>
-										</td>
+                                        <c:if test="${pd.app_code_name == '10'}">
+                                            <td style="width:110px;text-align: right;padding-top: 13px;">大礼包:</td>
+                                            <td>
+                                                <!--
+                                                <input type="number" name="number2" id="number2" value="" maxlength="32" placeholder="这里输入充值送金额" title="这里输入充值送金额" style="width:42%;"/>
+                                                 -->
+                                                <select  name="recharge_card_id" id="recharge_card_id" value=""  style="width:204px;border-radius:5px !important">
+                                                    <option  value="">不使用大礼包</option>
+                                                    <c:forEach items="${pd.rechargeCardList}" var="rechargeCard">
+                                                        <option  value="${rechargeCard.recharge_card_id},${rechargeCard.real_value}"  >${rechargeCard.name}</option>
+                                                    </c:forEach>
+                                                </select>
+                                            </td>
+                                        </c:if>
+                                        <c:if test="${pd.app_code_name == '11'}">
+
+                                        </c:if>
 									</tr>
 									<tr>
 										<td style="text-align: center;" colspan="10">

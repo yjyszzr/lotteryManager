@@ -30,6 +30,7 @@
 					<form action="superwhitelist/${msg}.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="user_id" id="user_id" value="${pd.user_id}"/>
 						<input type="hidden" name="store_id" id="store_id" value="${pd.store_id}"/>
+                        <input type="hidden" name="app_code_name" id="app_code_name" value="${pd.app_code_name}"/>
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
@@ -46,9 +47,14 @@
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">平台来源:</td>
-								<td id="store_name">
-									球多多
-								</td>
+                                <td id="store_name">
+                                    <c:if test="${pd.app_code_name == '10'}">
+                                        球多多
+                                    </c:if>
+                                    <c:if test="${pd.app_code_name == '11'}">
+                                        圣和彩店
+                                    </c:if>
+                                </td>
 							</tr>
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">充值金额:</td>

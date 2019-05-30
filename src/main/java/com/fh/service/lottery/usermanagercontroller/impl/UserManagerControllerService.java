@@ -117,6 +117,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (PageData) dao.findForObject("UserManagerControllerMapper.findById", pd);
 	}
 
+
 	/**
 	 * 批量删除
 	 *
@@ -269,6 +270,23 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (List<PageData>)dao.findForList("UserManagerControllerMapper.datalistPageThree", page);
 	}
 
+
+    /** 给圣和彩店用户后台充值
+     * @param pd
+     * @throws Exception
+     */
+    public void recharge(PageData pd)throws Exception{
+        dao.update("UserManagerControllerMapper.recharge", pd);
+    }
+
+    /** 给圣和彩店用户后台扣款
+     * @param pd
+     * @throws Exception
+     */
+    public void deduction(PageData pd)throws Exception{
+        dao.update("UserManagerControllerMapper.deduction", pd);
+    }
+
 	/** 获取	用户最新的充值流水
 	 * @param pd
 	 * @throws Exception
@@ -339,6 +357,10 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public PageData queryUserByMobile(PageData pagedata)throws Exception{
 		return (PageData)dao.findForObject("UserManagerControllerMapper.queryUserByMobile", pagedata);
 	}
+
+    public PageData queryUserByMobileNew(PageData pagedata)throws Exception{
+        return (PageData)dao.findForObject("UserManagerControllerMapper.queryUserByMobileNew", pagedata);
+    }
 
 	public PageData refoundToUserMoneyLimit(PageData pagedata)throws Exception{
 		return (PageData)dao.findForObject("UserManagerControllerMapper.refoundToUserMoneyLimit", pagedata);

@@ -223,6 +223,6 @@ public class UserAccountManagerService implements UserAccountManagerManager {
         }
         return (List<PageData>) dao.findForList("UserAccountManagerMapper.findByOrderSns", orderSns);
     }
-    
+
 
 }

@@ -154,7 +154,14 @@ public class SuperWhiteListController extends BaseController {
 			Long lastEnd   = StringUtils.isEmpty(pd.getString("lastEnd"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastEnd"));
 			rPageData.put("lastStart",lastStart == 0l?"":lastStart);
 			rPageData.put("lastEnd", lastEnd == 0l?"":lastEnd);
-			List<PageData> latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
+            List<PageData> latestRechargeDataList = new ArrayList<>();
+			if("11".equals(appCodeName)){
+                latestRechargeDataList = userManagerControllerService.queryUserAccountRechargeLatest(rPageData);
+            }else if("10".equals(appCodeName)){
+                latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
+            }
+
+
 			Map<String,Long> rMap = latestRechargeDataList.stream().collect(Collectors.toMap(s->s.getString("user_id"),s-> Long.valueOf(s.getString("add_time"))));
 			for(PageData pdd:varList){
 				String puserId = pdd.getString("user_id");
@@ -199,7 +206,7 @@ public class SuperWhiteListController extends BaseController {
 
 
 	@RequestMapping(value="/excel")
-	public ModelAndView exportExcel() throws Exception{
+	public ModelAndView exportExcel(Page page) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"导出SuperWhiteList到excel");
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
@@ -223,9 +230,8 @@ public class SuperWhiteListController extends BaseController {
 		if(appCodeName.equals("10")){
 			varOList = superwhitelistService.listAll(pd);
 		}else if(appCodeName.equals("11")){
-			Page  page = new Page();
 			page.setPd(pd);
-			page.setShowCount(65000);// 单页显示条数，为了全部导出应用
+			//page.setShowCount(65000);// 单页显示条数，为了全部导出应用
 			varOList = userManagerControllerService.getShenHeUserList(page);
 		}
 
@@ -239,7 +245,12 @@ public class SuperWhiteListController extends BaseController {
 			Long lastEnd   = StringUtils.isEmpty(pd.getString("lastEnd"))?0l:DateUtilNew.getMilliSecondsByStr(pd.getString("lastEnd"));
 			rPageData.put("lastStart",lastStart == 0l?"":lastStart);
 			rPageData.put("lastEnd", lastEnd == 0l?"":lastEnd);
-			List<PageData> latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
+            List<PageData> latestRechargeDataList = new ArrayList<>();
+            if("11".equals(appCodeName)){
+                latestRechargeDataList = userManagerControllerService.queryUserAccountRechargeLatest(rPageData);
+            }else if("10".equals(appCodeName)){
+                latestRechargeDataList = userAccountManagerService.queryUserAccountRechargeLatest(rPageData);
+            }
 			Map<String,Long> rMap = latestRechargeDataList.stream().collect(Collectors.toMap(s->s.getString("user_id"),s-> Long.valueOf(s.getString("add_time"))));
 			for(PageData pdd:varOList){
 				String puserId = pdd.getString("user_id");
@@ -353,9 +364,9 @@ public class SuperWhiteListController extends BaseController {
 		String msg = "";
 		if("11".equals(appCodeName)){
 			pd.put("store_id","1");
-			viewName = "lottery/superwhitelist/superwhitelist_refound";
-			msg = "refound";
-			pd = userManagerControllerService.queryUserByMobile(pd);
+			viewName = "lottery/superwhitelist/superwhitelist_recharge";
+			msg = "recharge";
+			pd = userManagerControllerService.queryUserByMobileNew(pd);
 		}else{
 			viewName = "lottery/superwhitelist/superwhitelist_recharge";
 			msg = "recharge";
@@ -366,6 +377,7 @@ public class SuperWhiteListController extends BaseController {
 		pd.put("rechargeCardList", rechargeCardList);
 		mv.setViewName(viewName);
 		mv.addObject("msg", msg);
+		pd.put("app_code_name",appCodeName);
 		mv.addObject("pd", pd);
 		return mv;
 	}
@@ -515,7 +527,6 @@ public class SuperWhiteListController extends BaseController {
 			try {
 				vpd.put("var11", varOList.get(i).get("admin_user").toString());	//9
 			} catch (Exception e) {
-				// TODO: handle exception
 			}
 
 			varList.add(vpd);
@@ -531,7 +542,16 @@ public class SuperWhiteListController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd = superwhitelistService.findById(pd);	//根据ID读取
+		String appCodeName = pd.getString("app_code_name");
+		if(appCodeName.equals("10")){
+            pd = superwhitelistService.findById(pd);//根据ID读取
+        }else if(appCodeName.equals("11")){
+            pd = userManagerControllerService.findById(pd);
+            pd.put("money_limit",pd.getString("user_money_limit"));
+            pd.put("money",pd.getString("user_money"));
+        }
+
+        pd.put("app_code_name",appCodeName);
 		mv.setViewName("lottery/superwhitelist/superwhitelist_deduction");
 		mv.addObject("msg", "deduction");
 		mv.addObject("pd", pd);
@@ -561,23 +581,47 @@ public class SuperWhiteListController extends BaseController {
 			pd.put("process_type",11);
 		}
 
-		superwhitelistService.deduction(pd);
+        String appCodeName = pd.getString("app_code_name");
+        if(appCodeName.equals("10")){
+            superwhitelistService.deduction(pd);
 
-		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
-		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
-		pd.put("admin_user", user.getNAME());
-		pd.put("amount", "-" + pd.get("number"));
-		PageData _pd = new PageData();
-		_pd = superwhitelistService.findById(pd);
-		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
-		BigDecimal bigMoneyLimit = new BigDecimal(null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
-		pd.put("cur_balance", bigMoney.add(bigMoneyLimit).toString());
-		pd.put("user_id", _pd.getString("user_id"));
-		pd.put("store_id", _pd.getString("store_id"));
-		pd.put("add_time",time);
-		pd.put("status", "1");
-		pd.put("id", "");
-		userAccountManagerService.save(pd);
+            pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
+            User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+            pd.put("admin_user", user.getNAME());
+            pd.put("amount", "-" + pd.get("number"));
+            PageData _pd = new PageData();
+            _pd = superwhitelistService.findById(pd);
+            BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+            BigDecimal bigMoneyLimit = new BigDecimal(null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
+            pd.put("cur_balance", bigMoney.add(bigMoneyLimit).toString());
+            pd.put("user_id", _pd.getString("user_id"));
+            pd.put("store_id", _pd.getString("store_id"));
+            pd.put("add_time",time);
+            pd.put("status", "1");
+            pd.put("id", "");
+            userAccountManagerService.save(pd);
+
+        }else if(appCodeName.equals("11")){
+            userManagerControllerService.deduction(pd);
+
+            pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
+            User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+            pd.put("admin_user", user.getNAME());
+            pd.put("amount", pd.get("number"));
+            PageData pdMobile = userManagerControllerService.findById(pd);
+            BigDecimal bigMoney = new BigDecimal( null != pdMobile.getString("user_money") ? pdMobile.getString("user_money") : "0");
+            BigDecimal bigMoneyLimit = new BigDecimal(null != pdMobile.getString("user_money_limit") ? pdMobile.getString("user_money_limit") : "0");
+            BigDecimal curBalance = bigMoney.add(bigMoneyLimit);
+            pd.put("cur_balance", curBalance.toString());
+            pd.put("user_id", pdMobile.getString("user_id"));
+            pd.put("store_id", "1");
+            pd.put("add_time",time);
+            pd.put("process_type", "8");//退款
+            pd.put("status", "1");
+
+            userAccountManagerService3.save(pd);
+
+        }
 
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
@@ -646,36 +690,58 @@ public class SuperWhiteListController extends BaseController {
 			pd.put("process_type", "2");
 		}
 
-		//充值到不可提现余额
-		superwhitelistService.recharge(pd);
+		if(appCodeName.equals("11")){
+            userManagerControllerService.recharge(pd);
 
-		String _recharge_card_id = pd.getString("recharge_card_id");
-		String recharge_card_id = "";
-		String recharge_card_real_value = "";
-		if (null != _recharge_card_id && !"".equals(_recharge_card_id)) {
-			recharge_card_id = _recharge_card_id.split("\\,")[0].toString();
-			recharge_card_real_value = _recharge_card_id.split("\\,")[1].toString();
-			pd.put("recharge_card_id", recharge_card_id);
-			pd.put("recharge_card_real_value", recharge_card_real_value);
-		}
+            pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
+            User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+            pd.put("admin_user", user.getNAME());
+            pd.put("amount", pd.get("number"));
+            PageData pdMobile = userManagerControllerService.findById(pd);
+            BigDecimal bigMoney = new BigDecimal( null != pdMobile.getString("user_money") ? pdMobile.getString("user_money") : "0");
+            BigDecimal bigMoneyLimit = new BigDecimal(null != pdMobile.getString("user_money_limit") ? pdMobile.getString("user_money_limit") : "0");
+            BigDecimal curBalance = bigMoney.add(bigMoneyLimit);
+            pd.put("cur_balance", curBalance.toString());
+            pd.put("user_id", pdMobile.getString("user_id"));
+            pd.put("store_id", "1");
+            pd.put("add_time",time);
+            pd.put("process_type", "2");//充值
+            pd.put("status", "1");
 
-		pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
-		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
-		pd.put("admin_user", user.getNAME());
-		pd.put("amount", pd.get("number"));
-		PageData _pd = new PageData();
-		_pd = superwhitelistService.findById(pd);
-		BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
-		BigDecimal bigMoneyLimit = new BigDecimal(null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
-		pd.put("cur_balance", bigMoney.add(bigMoneyLimit).toString());
+            userAccountManagerService3.save(pd);
 
-		pd.put("user_id", _pd.getString("user_id"));
-		pd.put("store_id", _pd.getString("store_id"));
-		pd.put("add_time",time);
-		pd.put("status", "1");
-		pd.put("id", "");
+        }else if(appCodeName.equals("10")){
+            superwhitelistService.recharge(pd);//充值到不可提现余额
 
-		userAccountManagerService.save(pd);
+            String _recharge_card_id = pd.getString("recharge_card_id");
+            String recharge_card_id = "";
+            String recharge_card_real_value = "";
+            if (null != _recharge_card_id && !"".equals(_recharge_card_id)) {
+                recharge_card_id = _recharge_card_id.split("\\,")[0].toString();
+                recharge_card_real_value = _recharge_card_id.split("\\,")[1].toString();
+                pd.put("recharge_card_id", recharge_card_id);
+                pd.put("recharge_card_real_value", recharge_card_real_value);
+            }
+
+            pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
+            User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+            pd.put("admin_user", user.getNAME());
+            pd.put("amount", pd.get("number"));
+            PageData _pd = new PageData();
+            _pd = superwhitelistService.findById(pd);
+            BigDecimal bigMoney = new BigDecimal( null != _pd.getString("money") ? _pd.getString("money") : "0");
+            BigDecimal bigMoneyLimit = new BigDecimal(null != _pd.getString("money_limit") ? _pd.getString("money_limit") : "0");
+            pd.put("cur_balance", bigMoney.add(bigMoneyLimit).toString());
+
+            pd.put("user_id", _pd.getString("user_id"));
+            pd.put("store_id", _pd.getString("store_id"));
+            pd.put("add_time",time);
+            pd.put("status", "1");
+            pd.put("id", "");
+
+            userAccountManagerService.save(pd);
+        }
+
 
 		if (null != pd.getString("recharge_card_id") && !"".equals(pd.getString("recharge_card_id"))) {
 			pd.put("bonus_sn", SNGenerator.nextSN(6));
