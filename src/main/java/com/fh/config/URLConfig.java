@@ -4,6 +4,7 @@ public class URLConfig {
 
 	private String serviceSmsUrl;
 	private String imgShowUrl;
+	private String donationBonusUrl;
 	private String manualAuditUrl;
 	private String manualRewardUrl;
 	private String manualRewardToUserMoneyLimitUrl;
@@ -17,7 +18,15 @@ public class URLConfig {
 	private String username3;
 	private String password3;
 
-	public String getUploadCommonFileUrl() {
+    public String getDonationBonusUrl() {
+        return donationBonusUrl;
+    }
+
+    public void setDonationBonusUrl(String donationBonusUrl) {
+        this.donationBonusUrl = donationBonusUrl;
+    }
+
+    public String getUploadCommonFileUrl() {
 		return uploadCommonFileUrl;
 	}
 

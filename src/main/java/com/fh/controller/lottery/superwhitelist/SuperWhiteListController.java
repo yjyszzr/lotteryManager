@@ -1,7 +1,11 @@
 package com.fh.controller.lottery.superwhitelist;
 
+import com.alibaba.fastjson.JSON;
+import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
+import com.fh.controller.lottery.userwithdraw.ReqCashEntity;
 import com.fh.entity.Page;
+import com.fh.entity.param.DonationBonusParam;
 import com.fh.entity.system.User;
 import com.fh.enums.SNBusinessCodeEnum;
 import com.fh.service.lottery.customer.CustomerManager;
@@ -11,7 +15,10 @@ import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.usermanagercontroller.impl.UserManagerControllerService;
 import com.fh.util.*;
+import com.google.gson.JsonObject;
+import org.apache.axis.utils.SessionUtils;
 import org.apache.axis.utils.StringUtils;
+import org.apache.shiro.session.Session;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -56,6 +63,9 @@ public class SuperWhiteListController extends BaseController {
 
 	@Resource(name="usermanagercontrollerService")
 	private UserManagerControllerService userManagerControllerService;
+
+    @Resource(name = "urlConfig")
+    private URLConfig urlConfig;
 
 	/**保存
 	 * @param
@@ -461,7 +471,6 @@ public class SuperWhiteListController extends BaseController {
 			varOList = superwhitelistService.listAccountAll(pd);
 		}
 
-
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
@@ -614,11 +623,9 @@ public class SuperWhiteListController extends BaseController {
             pd.put("user_id", pdMobile.getString("user_id"));
             pd.put("store_id", "1");
             pd.put("add_time",time);
-            pd.put("process_type", "8");//退款
             pd.put("status", "1");
 
             userAccountManagerService3.save(pd);
-
         }
 
 		mv.addObject("msg","success");
@@ -689,8 +696,7 @@ public class SuperWhiteListController extends BaseController {
 		}
 
 		if(appCodeName.equals("11")){
-            userManagerControllerService.recharge(pd);
-
+		    String recahrgeSn = SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode());
             pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
             User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
             pd.put("admin_user", user.getNAME());
@@ -703,10 +709,21 @@ public class SuperWhiteListController extends BaseController {
             pd.put("user_id", pdMobile.getString("user_id"));
             pd.put("store_id", "1");
             pd.put("add_time",time);
-            pd.put("process_type", "2");//充值
+            if("1".equals(rechargeLoc)){//充值到充值金额
+                pd.put("process_type", "2");
+            }else if("0".equals(rechargeLoc)){
+                pd.put("process_type", "10");//充值到可提现金额
+            }
             pd.put("status", "1");
 
             userAccountManagerService3.save(pd);
+
+            userManagerControllerService.recharge(pd);
+
+            if("1".equals(rechargeLoc)){//如果是充值到充值金额的时候送用户大礼包
+                Integer userId = Integer.valueOf(pd.getString("user_id"));
+                this.donationBonus(userId,new BigDecimal(pd.getString("number")),recahrgeSn);
+            }
 
         }else if(appCodeName.equals("10")){
             superwhitelistService.recharge(pd);//充值到不可提现余额
@@ -752,6 +769,27 @@ public class SuperWhiteListController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+
+    public  void donationBonus(Integer userId,BigDecimal rechargeAmount,String rechargeSn){
+        ReqCashEntity reqCashEntity = new ReqCashEntity();
+        SessionUtils.generateSession();
+        Session session = Jurisdiction.getSession();
+        DonationBonusParam donationBonusParam = new DonationBonusParam();
+        donationBonusParam.setPayLogId("200000");
+        donationBonusParam.setUserId(userId);
+        donationBonusParam.setOrderAmount(rechargeAmount);
+        donationBonusParam.setAccountSn(rechargeSn);
+        String reqStr = JSON.toJSONString(donationBonusParam);
+        String result = ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getDonationBonusUrl(), true);
+        JsonObject json = JsonUtils.NewStringToJsonObject(result);
+        if(json.get("code").getAsString().equals("0")) {
+            logger.info("用户"+userId+"充值"+rechargeAmount+"赠送优惠券成功");
+        }else if(json.get("code").getAsString().equals("301051")) {
+            logger.info("赠送优惠券活动过期不进行赠送");
+        }else{
+            logger.error("用户"+userId+"充值"+rechargeAmount+"赠送优惠券失败");
+        }
+    }
 
 
 	/**批量删除
