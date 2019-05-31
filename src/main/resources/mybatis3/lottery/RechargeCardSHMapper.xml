@@ -97,7 +97,7 @@
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		SELECT
 		a.*,
-		( SELECT count( * ) FROM dl_user_account b WHERE a.recharge_card_id = b.recharge_card_id ) AS receive_quantity
+		( SELECT count( * ) FROM dl_recharge_card_account_relation b WHERE a.recharge_card_id = b.recharge_card_id ) AS receive_quantity
 		FROM
 		dl_donation_recharge_card a
 		where 1=1
