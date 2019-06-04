@@ -1,15 +1,13 @@
 package com.fh.service.lottery.userrecharge.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.userrecharge.UserRechargeManager;
 import com.fh.util.PageData;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 说明： 用户提现模块 创建人：FH Q313596790 创建时间：2018-05-02
@@ -104,5 +102,15 @@ public class UserRechargeService implements UserRechargeManager {
 	public PageData findTotalRecharge(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserRechargeMapper.findTotalRecharge", pd);
 	}
+
+    /**
+     *查询个人个人充值赠送的大礼包金额综合
+     *
+     * @throws Exception
+     */
+    @Override
+    public List<PageData> queryTotalRechareCardByMobiles(PageData pd) throws Exception {
+        return (List<PageData>) dao.findForList("UserRechargeMapper.queryTotalRechareCardByMobiles", pd);
+    }
 
 }

@@ -163,6 +163,18 @@
                  #{item}
 		</foreach>
 	</delete>
+
+    <select id="queryTotalRechareCardByMobiles" parameterType="pd" resultType="pd">
+       select sum(re.recharge_card_real_value) rechareTotal,u.mobile from dl_user u
+            left join dl_user_account ac on u.user_id = ac.user_id
+            left join dl_recharge_card_account_relation re on ac.account_sn = re.account_sn
+            where ac.process_type = 2 and mobile in
+        <foreach item="item" index="index" collection="mobileList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+       group by u.mobile;
+    </select>
+
 	
 	<!-- fh313596790qq(青苔) -->
 </mapper>
