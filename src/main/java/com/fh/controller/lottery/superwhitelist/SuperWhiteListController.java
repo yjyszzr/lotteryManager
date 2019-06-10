@@ -721,7 +721,7 @@ public class SuperWhiteListController extends BaseController {
 
 		if(appCodeName.equals("11")){
 		    String recahrgeSn = SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode());
-            pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
+            pd.put("account_sn", recahrgeSn);
             User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
             pd.put("admin_user", user.getNAME());
             pd.put("amount", pd.get("number"));
