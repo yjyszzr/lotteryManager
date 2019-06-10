@@ -124,7 +124,7 @@
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.cur_balance}</td>
 											<td class='center'>${var.amount}</td>
-											<td class='center'>${var.recharge_card_real_value}</td>
+											<td class='center'>${var.recharge_card_value}</td>
 											<td class='center'>
 											<c:choose>
 												<c:when test="${var.process_type == 1}">中奖</c:when>

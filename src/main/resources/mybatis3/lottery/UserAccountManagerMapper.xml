@@ -296,27 +296,27 @@
 	</select>
 
 	<select id="datalistQddAccountPage" parameterType="page" resultType="pd">
-        select a.*,sum(re.recharge_card_real_value) recharge_card_real_value from(
+        select * from (
+        select sum(ar.recharge_card_real_value) recharge_card_value,a.* from (
         SELECT user.`mobile`, user.app_code_name `name`, user_account.*
-		FROM `dl_user_account` user_account, `dl_user` user
-		WHERE user_account.`user_id` = user.user_id and user.app_code_name = #{pd.app_code_name} ) a left join dl_recharge_card_account_relation re on a.account_sn = re.account_sn
+        FROM `dl_user_account` user_account, `dl_user` user
+        WHERE user_account.`user_id` = user.user_id and user.app_code_name = 11
+        order by user_account.add_time desc) a left join dl_recharge_card_account_relation ar on a.account_sn = ar.account_sn
+        group by a.account_sn order by a.add_time desc
+        ) b where 1=1
 		<if test="pd.user_id!= null and pd.user_id != ''">
-			and a.user_id = #{pd.user_id}
-		</if>
-		<if test="pd.store_id!= null and pd.store_id != ''">
-			and a.store_id LIKE CONCAT(CONCAT('%', #{pd.store_id}),'%')
+			and b.user_id = #{pd.user_id}
 		</if>
 		<if test="pd.end_add_time!= null and pd.end_add_time != ''">
-			AND a.`add_time` &lt;= #{pd.end_add_time}
+			AND b.`add_time` &lt;= #{pd.end_add_time}
 		</if>
 		<if test="pd.start_add_time!= null and pd.start_add_time != ''">
-			AND a.`add_time` &gt;= #{pd.start_add_time}
+			AND b.`add_time` &gt;= #{pd.start_add_time}
 		</if>
 		<if test="pd.process_type!= null and pd.process_type != ''">
-			AND a.`process_type` = #{pd.process_type}
+			AND b.`process_type` = #{pd.process_type}
 		</if>
-        group by a.account_sn
-        order by a.add_time desc
+		order by b.add_time desc
 	</select>
 	
 	<select id="findByOrderSns" resultType="pd">
