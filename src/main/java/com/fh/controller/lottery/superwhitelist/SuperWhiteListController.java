@@ -14,6 +14,7 @@ import com.fh.service.lottery.superwhitelist.SuperWhiteListManager;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountManagerService;
 import com.fh.service.lottery.useraccountmanager.impl.UserAccountService;
 import com.fh.service.lottery.usermanagercontroller.impl.UserManagerControllerService;
+import com.fh.service.lottery.userrecharge.impl.UserRechargeService;
 import com.fh.util.*;
 import com.google.gson.JsonObject;
 import org.apache.axis.utils.SessionUtils;
@@ -57,6 +58,9 @@ public class SuperWhiteListController extends BaseController {
 
 	@Resource(name="rechargecardService")
 	private RechargeCardService rechargecardService;
+
+	@Resource(name="userrechargeService")
+    private UserRechargeService userRechargeService;
 
 	@Resource(name="customerService")
 	private CustomerManager customerService;
@@ -192,20 +196,40 @@ public class SuperWhiteListController extends BaseController {
 		}
 
 		mv.setViewName("lottery/superwhitelist/superwhitelist_list");
-		if (null != varList && varList.size() > 0) {
-			for (PageData pageData : varList) {
-				try {
-					String recharge_card_real_value = "";
-					PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(pageData);
-					if (null != _pageData) {
-						recharge_card_real_value = _pageData.getString("recharge_card_real_value");
-						pageData.put("recharge_card_real_value", recharge_card_real_value);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+
+		if(appCodeName.equals("10")){
+            if (null != varNewList && varNewList.size() > 0) {
+                for (PageData pageData : varNewList) {
+                    try {
+                        String recharge_card_real_value = "";
+                        PageData _pageData = this.superwhitelistService.getSumRechargeCardRealValue(pageData);
+                        if (null != _pageData) {
+                            recharge_card_real_value = _pageData.getString("recharge_card_real_value");
+                            pageData.put("recharge_card_real_value", recharge_card_real_value);
+                        }else{
+                            pageData.put("recharge_card_real_value", "0.00");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }else{
+            List<String> mobileList = varNewList.stream().map(s->s.getString("mobile")).collect(Collectors.toList());
+		    PageData mobPd = new PageData();
+            mobPd.put("mobileList",mobileList);
+            List<PageData> mobilePdList = this.userRechargeService.queryTotalRechareCardByMobiles(mobPd);
+            Map<String, String> mobileReMap = mobilePdList.stream().collect(Collectors.toMap(s->s.getString("mobile"), s->s.getString("rechareTotal")));
+            for(PageData newPd:varNewList){
+                String mobile = newPd.getString("mobile");
+                String reValue = mobileReMap.get(mobile);
+                if(!StringUtils.isEmpty(reValue)){
+                    newPd.put("recharge_card_real_value", reValue);
+                }else{
+                    newPd.put("recharge_card_real_value", "0.00");
+                }
+            }
+        }
 
 		mv.addObject("varList", varNewList);
 		mv.addObject("pd", pd);
@@ -697,7 +721,7 @@ public class SuperWhiteListController extends BaseController {
 
 		if(appCodeName.equals("11")){
 		    String recahrgeSn = SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode());
-            pd.put("account_sn", SNGenerator.nextSN(SNBusinessCodeEnum.ACCOUNT_SN.getCode()));
+            pd.put("account_sn", recahrgeSn);
             User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
             pd.put("admin_user", user.getNAME());
             pd.put("amount", pd.get("number"));

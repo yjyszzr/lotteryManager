@@ -1,8 +1,9 @@
 package com.fh.service.lottery.userrecharge;
 
-import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+
+import java.util.List;
 
 /** 
  * 说明： 用户提现模块接口
@@ -60,6 +61,13 @@ public interface UserRechargeManager{
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
+
+    /**
+     *查询个人个人充值赠送的大礼包金额综合
+     *
+     * @throws Exception
+     */
+    public List<PageData> queryTotalRechareCardByMobiles(PageData pd) throws Exception;
 	
 }
 

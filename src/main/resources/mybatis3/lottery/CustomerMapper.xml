@@ -223,7 +223,6 @@
 		_order.`pay_status` = 1
 		AND _order.`pay_time` >= 1541520000
 		AND _order.`mobile` = #{mobile}
-		AND _order.app_code_name = 10
 	</select>
 	
 	
