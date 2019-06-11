@@ -183,7 +183,7 @@
 														<c:choose>
 															<c:when test="${var.status == 0 }"> 
 																<a class="btn btn-xs btn-primary" title="上架" style="border-radius: 5px;" onclick="withdrawOperation('1','${var.withdrawal_sn}');">通过</a>
-																<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="withdrawOperation('2','${var.withdrawal_sn}');">拒绝</a>
+																<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="withdrawOperation('4','${var.withdrawal_sn}');">拒绝</a>
 																<a class="btn btn-xs btn-default" title="详情" style="border-radius: 5px;" onclick="edit('${var.id}');">详情</a>
 															</c:when>
 															<c:when test="${var.status == 1 }">	<a class="btn btn-xs btn-default" title="详情" style="border-radius: 5px;" onclick="edit('${var.id}');">详情</a></c:when>
