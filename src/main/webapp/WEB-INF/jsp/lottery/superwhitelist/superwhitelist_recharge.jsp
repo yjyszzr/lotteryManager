@@ -192,7 +192,6 @@
             + "\n充值金额：" + $("#number").val()
         ;
 
-        debugger;
         if ("" == $("#recharge_card_id").val() || undefined == $("#recharge_card_id").val()) {
         } else {
             str += "\n大礼包：" + $("#recharge_card_id option:selected").text();

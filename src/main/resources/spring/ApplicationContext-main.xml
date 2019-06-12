@@ -30,11 +30,11 @@
 	<!-- 读取参数配置 -->
 	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
 		<property name="locations">  
-			<list>  
-				<value>classpath:dbconfig-test.properties</value>
-				<value>classpath:redis-test.properties</value>
-<!--                <value>classpath:dbconfig.properties</value>
-				<value>classpath:redis.properties</value>-->
+			<list>
+                <!--				<value>classpath:dbconfig-test.properties</value>
+                                <value>classpath:redis-test.properties</value> -->
+                                <value>classpath:dbconfig.properties</value>
+                                <value>classpath:redis.properties</value>
             </list>  
         </property>  
 	</bean> 
