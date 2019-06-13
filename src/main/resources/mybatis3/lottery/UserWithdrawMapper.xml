@@ -108,6 +108,7 @@
 			status = #{status}
 		where 
 			withdrawal_sn = #{withdrawal_sn}
+			and status = 0
 	</update>
 	<!-- 修改备注 -->
 	<update id="updateRemarks" parameterType="pd">
