@@ -122,10 +122,10 @@
 														<td style="text-align: center;width:200px" >
 														</td>
 														<td style="text-align: right;width:200px" >
-															<a class="btn btn-mini btn-primary" onclick="toManualAudit('1','${pd.withdrawal_sn}');">通过</a>
+<%-- 															<a class="btn btn-mini btn-primary" onclick="toManualAudit('1','${pd.withdrawal_sn}');">通过</a> --%>
 														</td>
 														<td style="text-align: left;width:200px" >
-															<a class="btn btn-mini btn-danger" onclick="toManualAudit('2','${pd.withdrawal_sn}');">拒绝</a>
+<%-- 															<a class="btn btn-mini btn-danger" onclick="toManualAudit('2','${pd.withdrawal_sn}');">拒绝</a> --%>
 														</td>
 														<td style="text-align: center;width:200px" >
 														</td>
