@@ -378,4 +378,10 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (PageData)dao.findForObject("UserManagerControllerMapper.refoundToUserMoneyLimit", pagedata);
 	}
 
+
+	@Override
+	public void isOrNotOld(PageData pd) throws Exception {
+		dao.update("UserManagerControllerMapper.isOrNotOld", pd);
+	}
+
 }

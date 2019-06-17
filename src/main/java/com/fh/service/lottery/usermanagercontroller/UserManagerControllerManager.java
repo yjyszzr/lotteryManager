@@ -240,4 +240,7 @@ public interface UserManagerControllerManager {
 	 * 获取	用户最新的充值流水
 	 */
 	public List<PageData> queryUserAccountRechargeLatest(PageData pagedata)throws Exception;
+
+
+	public void isOrNotOld(PageData pd)throws Exception;
 }

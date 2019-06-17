@@ -115,6 +115,14 @@
 									</c:choose>
 								 </lable></td>
 							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">来源:</td>
+								<td style="padding: 13px;"> <lable >${entity.reg_from}</lable></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;"></td>
+								<td style="padding: 13px;"> <lable ></lable></td>
+								<td style="width:75px;text-align: right;padding-top: 13px;"></td>
+								<td style="padding: 13px;"> <lable ></lable></td>
+							</tr>
 						</table>
 						</div>
 						<div id="zhongxin2" class="center" style="display:none"><br/><br/><br/><br/><br/><img src="static/images/jiazai.gif" /><br/><h4 class="lighter block green">提交中...</h4></div>

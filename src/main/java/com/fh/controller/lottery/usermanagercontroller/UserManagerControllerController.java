@@ -629,6 +629,26 @@ public class UserManagerControllerController extends BaseController {
 	}
 
 	/**
+	 * 置顶和上线
+	 * 
+	 * @param out
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/isOrNotOld")
+	public void isOrNotOld(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "置为新老用户操作");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+			return;
+		} // 校验权限
+		PageData pd = new PageData();
+		pd = this.getPageData();
+		usermanagercontrollerService.isOrNotOld(pd);
+		out.write("success");
+		out.close();
+	}
+	
+	
+	/**
 	 * 去新增页面
 	 * 
 	 * @param

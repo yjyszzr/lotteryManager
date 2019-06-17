@@ -467,7 +467,9 @@
 		u.device_channel,
 		log.brand,
 		u.is_business,
-		u.app_code_name
+		u.app_code_name,
+		u.is_old,
+		(select count(*) from dl_order ord where ord.user_id = u.user_id and pay_status = 1) AS order_count
 		FROM
 		dl_user u
 		LEFT JOIN (select * from dl_user_real where is_delete = 0) u_r ON u_r.user_id = u.user_id
@@ -739,6 +741,14 @@
         </if>
         <if test="money_limit != null and money_limit != ''">
             user_money_limit = user_money_limit + #{money_limit}
+        </if>
+        where user_id = #{user_id}
+    </update>
+
+    <update id="isOrNotOld" parameterType="pd">
+        update dl_user set
+        <if test="is_old!= null and is_old != ''">
+            is_old = #{is_old}
         </if>
         where user_id = #{user_id}
     </update>

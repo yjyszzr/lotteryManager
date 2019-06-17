@@ -31,26 +31,26 @@
 						
 						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
-									<td>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-												真实姓名:
-											</span>
-											<span class="input-icon">
-												<input type="text" placeholder="真实姓名" class="nav-search-input" id="real_name" autocomplete="off" name="real_name" value="${pd.real_name}"  />
-											</span>
-										</div>
-									</td>
-									<td>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-												身份证号:
-											</span>
-											<span class="input-icon">
-												<input type="text" placeholder="身份证号" class="nav-search-input" id="id_code" autocomplete="off" name="id_code" value="${pd.id_code}" />
-											</span>
-										</div>
-									</td>
+<!-- 									<td> -->
+<!-- 										<div class="nav-search"> -->
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 												真实姓名: -->
+<!-- 											</span> -->
+<!-- 											<span class="input-icon"> -->
+<%-- 												<input type="text" placeholder="真实姓名" class="nav-search-input" id="real_name" autocomplete="off" name="real_name" value="${pd.real_name}"  /> --%>
+<!-- 											</span> -->
+<!-- 										</div> -->
+<!-- 									</td> -->
+<!-- 									<td> -->
+<!-- 										<div class="nav-search"> -->
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 												身份证号: -->
+<!-- 											</span> -->
+<!-- 											<span class="input-icon"> -->
+<%-- 												<input type="text" placeholder="身份证号" class="nav-search-input" id="id_code" autocomplete="off" name="id_code" value="${pd.id_code}" /> --%>
+<!-- 											</span> -->
+<!-- 										</div> -->
+<!-- 									</td> -->
 									<td>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
@@ -62,8 +62,7 @@
 										</div>
 									</td>
 							
-									</tr>
-									<tr style="margin:2px">
+									
 									<td >
 										<span class="input-icon" style="width:80px;text-align:right;">
 												注册时间:
@@ -86,6 +85,8 @@
 										  	</select>
 										  	</div>
 									</td>
+									</tr>
+									<tr style="margin:2px">
 									<td>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
@@ -98,8 +99,7 @@
 										  	</select>
 										  	</div>
 									</td>
-									</tr>
-									<tr style="margin:2px">
+									
 									<td>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
@@ -122,6 +122,8 @@
 										  	</select>
 									  	</div>
 									</td>
+									</tr>
+									<tr style="margin:2px">
 									<c:if test="${QX.cha == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
 											<span class="input-icon" style="width:80px;"> </span>
@@ -148,9 +150,10 @@
 									<th class="center" style="width:50px;">序号</th>
 									<th class="center">用户昵称</th>
 									<th class="center">手机号</th>
-									<th class="center">真实姓名</th>
-									<th class="center">身份证号</th>
+<!-- 									<th class="center">真实姓名</th> -->
+<!-- 									<th class="center">身份证号</th> -->
 									<th class="center">累计消费</th>
+									<th class="center">累计购买</th>
 									<th class="center">累计充值</th>
 									<th class="center">累计中奖</th>
 									<th class="center">累计提现</th>
@@ -158,8 +161,9 @@
 									<th class="center">可提现余额</th>
 									<th class="center">注册时间</th>
 									<th class="center">最后登录时间</th>
-									<th class="center">注册来源</th>
+<!-- 									<th class="center">注册来源</th> -->
 									<th class="center">平台来源</th>
+									<th class="center">操作</th>
 								</tr>
 							</thead>
 													
@@ -173,9 +177,10 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'><a onclick="toDetail('${var.user_id}');" style=" cursor:pointer;">${var.nickname}</a></td>
 											<td class='center'>${var.mobile}</td>
-											<td class="center">${var.real_name}</td>
-											<td class="center">${var.id_code}</td>
+<%-- 											<td class="center">${var.real_name}</td> --%>
+<%-- 											<td class="center">${var.id_code}</td> --%>
 											<td class="center"><c:if test="${var.total == 0 }">${var.total }</c:if><c:if test="${var.total != 0 }"><a onclick="toConsumeDetail('${var.user_id}');" style=" cursor:pointer;" title="消费详情">${-var.total }</a></c:if></td>
+											<td class="center">${var.order_count}单</td>
 											<td class="center">${var.rtotal}</td>
 											<td class="center">${var.atotal}</td>
 											<td class="center">${var.totalWithdraw}</td>
@@ -183,11 +188,17 @@
 											<td class="center">${var.user_money}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.last_time*1000)}</td>
-											<td class='center'>${var.reg_from}</td>
+<%-- 											<td class='center'>${var.reg_from}</td> --%>
 											<td class='center'> 
 												<c:choose>
 													<c:when test="${var.app_code_name == 10 }">球多多</c:when>
 													<c:when test="${var.app_code_name == 11 }">圣和彩店</c:when>
+												</c:choose>
+											</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.is_old == 0 || var.is_old == null }"><a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="isOrNotOld('1','${var.user_id}');">置为老用户</a></c:when>
+													<c:when test="${var.is_old == 1 }"><a class="btn btn-xs btn-success" style="border-radius: 5px;" onclick="isOrNotOld('0','${var.user_id}');">置为新用户</a></c:when>
 												</c:choose>
 											</td>
 										</tr>
@@ -271,6 +282,16 @@
 			top.jzts();
 			$("#Form").submit();
 		}
+		
+		//上架和下架 1-已发布 2-草稿箱
+		function isOrNotOld(is_old,user_id){   
+				top.jzts();
+				var url = "<%=basePath%>usermanagercontroller/isOrNotOld.do?user_id="+user_id+"&is_old="+is_old;
+				$.get(url,function(data){
+					tosearch(0);
+				});
+		}
+		
 		
 		function toConsumeDetail(userId){
 			 top.jzts();
