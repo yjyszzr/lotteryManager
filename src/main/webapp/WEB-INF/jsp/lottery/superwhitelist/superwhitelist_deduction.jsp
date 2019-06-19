@@ -11,11 +11,14 @@
 	<head>
 	<base href="<%=basePath%>">
 	<!-- 下拉框 -->
-	<link rel="stylesheet" href="static/ace/css/chosen.css" />
+<!-- 	<link rel="stylesheet" href="static/ace/css/chosen.css" /> -->
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../../system/index/top.jsp"%>
 	<!-- 日期框 -->
-	<link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<!-- 	<link rel="stylesheet" href="static/ace/css/datepicker.css" /> -->
+	<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
+<!--提示框-->
+<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 </head>
 <body class="no-skin">
 <!-- /section:basics/navbar.layout -->
@@ -130,10 +133,10 @@
 		//保存
 		function save(){
 			 $("#saveMoney").attr("disabled",false);
-			if($("#number").val()==""){
+			if($("#number").val()=="" || $("#number").val() < 0){
 				$("#number").tips({
 					side:3,
-		            msg:'请输入扣款金额',
+		            msg:'请输入正确的扣款金额',
 		            bg:'#AE81FF',
 		            time:2
 		        });
@@ -211,10 +214,10 @@
 			 $("#saveMoney").attr("disabled",true);
 		}
 		
-		$(function() {
-			//日期框
-			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
-		});
+// 		$(function() {
+// 			//日期框
+// 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+// 		});
 		</script>
 </body>
 </html>

@@ -164,7 +164,7 @@
         if($("#number").val() < 0 || $("#number").val() == '' ){
             $("#number").tips({
                 side:3,
-                msg:'充值金额应大于0',
+                msg:'请输入正确的充值金额',
                 bg:'#AE81FF',
                 time:2
             });
