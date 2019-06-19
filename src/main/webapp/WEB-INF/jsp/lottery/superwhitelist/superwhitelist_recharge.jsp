@@ -11,21 +11,22 @@
 <head>
 	<base href="<%=basePath%>">
 	<!-- 下拉框 -->
-	<link rel="stylesheet" href="static/ace/css/chosen.css" />
+<!-- 	<link rel="stylesheet" href="static/ace/css/chosen.css" /> -->
 	<!-- 删除时确认窗口 -->
-	<script src="static/ace/js/bootbox.js"></script>
+<!-- 	<script src="static/ace/js/bootbox.js"></script> -->
 	<!-- ace scripts -->
-	<script src="static/ace/js/ace/ace.js"></script>
+<!-- 	<script src="static/ace/js/ace/ace.js"></script> -->
 	<!-- 下拉框 -->
-	<script src="static/ace/js/chosen.jquery.js"></script>
+<!-- 	<script src="static/ace/js/chosen.jquery.js"></script> -->
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+<!-- 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script> -->
 	<!--提示框-->
-	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+	<script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
+<!-- 	<script type="text/javascript" src="static/js/jquery.tips.js"></script> -->
 	<!-- jsp文件头和头部 -->
 	<%@ include file="../../system/index/top.jsp"%>
 	<!-- 日期框 -->
-	<link rel="stylesheet" href="static/ace/css/datepicker.css" />
+<!-- 	<link rel="stylesheet" href="static/ace/css/datepicker.css" /> -->
 </head>
 <body class="no-skin">
 <!-- /section:basics/navbar.layout -->
@@ -149,9 +150,9 @@
 <!-- 页面底部js¨ -->
 <%@ include file="../../system/index/foot.jsp"%>
 <!-- 下拉框 -->
-<script src="static/ace/js/chosen.jquery.js"></script>
+<!-- <script src="static/ace/js/chosen.jquery.js"></script> -->
 <!-- 日期框 -->
-<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+<!-- <script src="static/ace/js/date-time/bootstrap-datepicker.js"></script> -->
 <!--提示框-->
 <script type="text/javascript" src="static/js/jquery.tips.js"></script>
 <script type="text/javascript">
@@ -160,7 +161,7 @@
     function save(){
     	$("#saveRecharge").attr("disabled",false);
         var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "")
-        if($("#number").val() < 0){
+        if($("#number").val() < 0 || $("#number").val() == '' ){
             $("#number").tips({
                 side:3,
                 msg:'充值金额应大于0',
@@ -210,10 +211,10 @@
         $("#saveRecharge").attr("disabled",true);
     }
 
-    $(function() {
-        //日期框
-        $('.date-picker').datepicker({autoclose: true,todayHighlight: true});
-    });
+//     $(function() {
+//         //日期框
+//         $('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+//     });
 </script>
 </body>
 </html>

@@ -120,11 +120,11 @@
 	<!-- 页面底部js¨ -->
 	<%@ include file="../../system/index/foot.jsp"%>
 	<!-- 下拉框 -->
-	<script src="static/ace/js/chosen.jquery.js"></script>
+<!-- 	<script src="static/ace/js/chosen.jquery.js"></script> -->
 	<!-- 日期框 -->
-	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script>
+<!-- 	<script src="static/ace/js/date-time/bootstrap-datepicker.js"></script> -->
 	<!--提示框-->
-	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
+<!-- 	<script type="text/javascript" src="static/js/jquery.tips.js"></script> -->
 		<script type="text/javascript">
 		$(top.hangge());
 		//保存
