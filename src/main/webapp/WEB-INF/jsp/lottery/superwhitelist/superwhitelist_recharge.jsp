@@ -125,7 +125,7 @@
 									</tr>
 									<tr>
 										<td style="text-align: center;" colspan="10">
-											<a class="btn btn-mini btn-primary" onclick="save();">确认</a>
+											<a class="btn btn-mini btn-primary" onclick="save();" id = "saveRecharge">确认</a>
 											<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 										</td>
 									</tr>
@@ -158,6 +158,7 @@
     $(top.hangge());
     //保存
     function save(){
+    	$("#saveRecharge").attr("disabled",false);
         var money = $("#money").text().replace(/(^\s*)|(\s*$)/g, "")
         if($("#number").val() < 0){
             $("#number").tips({
@@ -206,6 +207,7 @@
 
         $("#zhongxin").hide();
         $("#zhongxin2").show();
+        $("#saveRecharge").attr("disabled",true);
     }
 
     $(function() {

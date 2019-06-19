@@ -96,7 +96,7 @@
 							
 							<tr>
 								<td style="text-align: center;" colspan="10">
-									<a class="btn btn-mini btn-primary" onclick="save();">确认</a>
+									<a class="btn btn-mini btn-primary" onclick="save();" id = "saveMoney">确认</a>
 									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 								</td>
 							</tr>
@@ -129,6 +129,7 @@
 		$(top.hangge());
 		//保存
 		function save(){
+			 $("#saveMoney").attr("disabled",false);
 			if($("#number").val()==""){
 				$("#number").tips({
 					side:3,
@@ -207,6 +208,7 @@
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
+			 $("#saveMoney").attr("disabled",true);
 		}
 		
 		$(function() {

@@ -415,10 +415,10 @@
         diag.Title ="";
         diag.URL = '<%=basePath%>superwhitelist/goRecharge.do?'+str;
         diag.Width = 450;
-        diag.Height = 355;
+        diag.Height = 425;
         diag.Modal = true;				//有无遮罩窗口
-        diag.ShowMaxButton = true;	//最大化按钮
-        diag.ShowMinButton = true;		//最小化按钮
+        diag.ShowMaxButton = false;	//最大化按钮
+        diag.ShowMinButton = false;		//最小化按钮
         diag.CancelEvent = function(){ //关闭事件
             if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
                 tosearch();
@@ -462,10 +462,10 @@
         diag.Title ="扣款";
         diag.URL = '<%=basePath%>superwhitelist/goDeduction.do?' + str;
         diag.Width = 450;
-        diag.Height = 355;
+        diag.Height = 425;
         diag.Modal = true;				//有无遮罩窗口
-        diag.ShowMaxButton = true;	//最大化按钮
-        diag.ShowMinButton = true;		//最小化按钮
+        diag.ShowMaxButton = false;	//最大化按钮
+        diag.ShowMinButton = false;		//最小化按钮
         diag.CancelEvent = function(){ //关闭事件
             if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
                 tosearch();
