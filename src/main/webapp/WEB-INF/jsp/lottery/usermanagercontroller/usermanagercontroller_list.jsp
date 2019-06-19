@@ -100,16 +100,16 @@
 										  	</div>
 									</td>
 									
-									<td>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-												昵称:
-											</span>
-											<span class="input-icon">
-												<input type="text" placeholder="昵称" class="nav-search-input" id="nickname" autocomplete="off" name="nickname" value="${pd.nickname}" />
-											</span>
-										</div>
-									</td>
+<!-- 									<td> -->
+<!-- 										<div class="nav-search"> -->
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 												昵称: -->
+<!-- 											</span> -->
+<!-- 											<span class="input-icon"> -->
+<%-- 												<input type="text" placeholder="昵称" class="nav-search-input" id="nickname" autocomplete="off" name="nickname" value="${pd.nickname}" /> --%>
+<!-- 											</span> -->
+<!-- 										</div> -->
+<!-- 									</td> -->
 									<td>
 										<div class="nav-search">
 											<span class="input-icon" style="width:80px;text-align:right;">
@@ -122,8 +122,7 @@
 										  	</select>
 									  	</div>
 									</td>
-									</tr>
-									<tr style="margin:2px">
+								
 									<c:if test="${QX.cha == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
 											<span class="input-icon" style="width:80px;"> </span>
@@ -179,7 +178,8 @@
 											<td class='center'>${var.mobile}</td>
 <%-- 											<td class="center">${var.real_name}</td> --%>
 <%-- 											<td class="center">${var.id_code}</td> --%>
-											<td class="center"><c:if test="${var.total == 0 }">${var.total }</c:if><c:if test="${var.total != 0 }"><a onclick="toConsumeDetail('${var.user_id}');" style=" cursor:pointer;" title="消费详情">${-var.total }</a></c:if></td>
+<%-- 											<td class="center"><c:if test="${var.total == 0 }">${var.total }</c:if><c:if test="${var.total != 0 }"><a onclick="toConsumeDetail('${var.user_id}');" style=" cursor:pointer;" title="消费详情">${-var.total }</a></c:if></td> --%>
+											<td class="center">${var.total }</td>
 											<td class="center">${var.order_count}单</td>
 											<td class="center">${var.rtotal}</td>
 											<td class="center">${var.atotal}</td>
@@ -298,7 +298,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="消费详情";
-			 diag.URL = '<%=basePath%>usermanagercontroller/toSellerDetail.do?user_id='+userId;
+			 diag.URL = '<%=basePath%>usermanagercontroller/toConsumeDetail.do?user_id='+userId;
 			 diag.Width = 1200;
 			 diag.Height = 600;
 			 diag.Modal = true;				//有无遮罩窗口

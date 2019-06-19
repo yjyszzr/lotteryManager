@@ -189,7 +189,7 @@
 	
 	<!-- 获取单个人购彩 -->
 	<select id="getTotalById" parameterType="java.lang.Integer" resultType="java.lang.Double">
-		SELECT SUM(amount) FROM dl_user_account WHERE user_id = #{userId} and process_type = 3;
+		SELECT SUM(ticket_amount) FROM dl_order WHERE user_id = #{userId} and pay_status = 1;
 	</select>
 	<!-- 获取单个人充值汇总 -->
 	<select id="getTotalRecharge" parameterType="java.lang.Integer" resultType="java.lang.Double">
