@@ -216,19 +216,21 @@ public class SuperWhiteListController extends BaseController {
             }
         }else{
             List<String> mobileList = varNewList.stream().map(s->s.getString("mobile")).collect(Collectors.toList());
-		    PageData mobPd = new PageData();
-            mobPd.put("mobileList",mobileList);
-            List<PageData> mobilePdList = this.userRechargeService.queryTotalRechareCardByMobiles(mobPd);
-            Map<String, String> mobileReMap = mobilePdList.stream().collect(Collectors.toMap(s->s.getString("mobile"), s->s.getString("rechareTotal")));
-            for(PageData newPd:varNewList){
-                String mobile = newPd.getString("mobile");
-                String reValue = mobileReMap.get(mobile);
-                if(!StringUtils.isEmpty(reValue)){
-                    newPd.put("recharge_card_real_value", reValue);
-                }else{
-                    newPd.put("recharge_card_real_value", "0.00");
-                }
-            }
+            if (mobileList.size()>0) {
+            	PageData mobPd = new PageData();
+            	mobPd.put("mobileList",mobileList);
+            	List<PageData> mobilePdList = this.userRechargeService.queryTotalRechareCardByMobiles(mobPd);
+            	Map<String, String> mobileReMap = mobilePdList.stream().collect(Collectors.toMap(s->s.getString("mobile"), s->s.getString("rechareTotal")));
+            	for(PageData newPd:varNewList){
+            		String mobile = newPd.getString("mobile");
+            		String reValue = mobileReMap.get(mobile);
+            		if(!StringUtils.isEmpty(reValue)){
+            			newPd.put("recharge_card_real_value", reValue);
+            		}else{
+            			newPd.put("recharge_card_real_value", "0.00");
+            		}
+            	}
+			}
         }
 
 		mv.addObject("varList", varNewList);
