@@ -181,7 +181,7 @@
 			DATE_FORMAT( FROM_UNIXTIME( ticket_time ), '%Y-%m-%d %H:%i' ) AS ticket_time_str 
 		FROM
 			dl_order 
-		WHERE order_status IN ( 3, 4, 5, 6, 7 )
+		WHERE order_status IN ( 3, 4, 5, 6, 7 ) and is_delete!=1
 			<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
 				and add_time &gt; #{pd.lastStart1 }
 			</if>
@@ -230,7 +230,7 @@
 			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
 		WHERE
-			o.order_status = 7
+			o.order_status = 7  and o.is_delete!=1
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  
 				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
@@ -281,7 +281,7 @@
 			dl_order o
 			LEFT JOIN dl_lottery_classify l ON o.lottery_classify_id = l.lottery_classify_id
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
-		WHERE 1 = 1
+		WHERE  o.is_delete!=1
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  
 				LIKE CONCAT(CONCAT('%', #{pd.order_sn}),'%')
@@ -349,7 +349,7 @@
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
 			LEFT JOIN dl_lottery_classify l ON l.lottery_classify_id = o.lottery_classify_id
 			LEFT JOIN dl_store s ON s.id = o.store_id
-		WHERE o.add_time > 1541520000
+		WHERE o.add_time > 1541520000  and o.is_delete!=1
 		 
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
 			and o.order_sn  
@@ -435,7 +435,7 @@
 			LEFT JOIN dl_user u ON o.user_id = u.user_id  
 			LEFT JOIN dl_pay_log p ON o.order_sn = p.order_sn  
 			
-		WHERE 1 = 1
+		WHERE  o.is_delete!=1
 			<if test="lastStart1 != null and lastStart1 != ''"> 
 			and o.add_time &gt; #{lastStart1 }
 		</if>
@@ -474,7 +474,7 @@
 			LEFT JOIN dl_pay_log p ON o.order_sn = p.order_sn  
 			LEFT JOIN (select print.order_sn,print_lottery_com from dl_print_lottery print group by print.order_sn) printTemp ON printTemp.order_sn=o.order_sn 
 		  	LEFT JOIN	dl_ticket_channel channel ON printTemp.print_lottery_com=channel.id
-		where o.order_sn LIKE CONCAT(CONCAT(#{selectionTime}),'%')
+		where o.order_sn LIKE CONCAT(CONCAT(#{selectionTime}),'%')  and o.is_delete!=1
 	</select>
 	
 	<!-- 
@@ -537,7 +537,7 @@
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
 			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
 			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
-		WHERE o.add_time > 1541520000
+		WHERE o.add_time > 1541520000  and o.is_delete!=1
 			 	and o.order_id IN  
 	 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                  #{item}
@@ -627,7 +627,7 @@
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
 			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
 			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
-		WHERE o.add_time > 1541520000
+		WHERE o.add_time > 1541520000  and o.is_delete!=1
 			<if test="orderSn != null and orderSn != ''"> 
 			 	and o.order_sn = #{orderSn }
 			</if>
@@ -674,7 +674,7 @@
 			dl_order 
 		WHERE
 			DATE_FORMAT( FROM_UNIXTIME( ticket_time ), '%Y-%m-%d %H:%i' ) = #{addTime}
-			AND order_status IN ( 3, 4, 5, 6, 7 )
+			AND order_status IN ( 3, 4, 5, 6, 7 )  and is_delete!=1
 	</select>
 	<select id="toDetail" parameterType="Integer" resultType="pd">
 		SELECT
@@ -690,12 +690,12 @@
 			 	COALESCE(sum(a.amount),0) as amount,
 			 	COALESCE(sum(a.amountTicket),0) as amountTicket
 		from  (SELECT  user_id,money_paid  AS amount,ticket_amount  AS amountTicket  from dl_order 
-			where order_status in ('3','4','5','6','7') GROUP BY user_id 
+			where order_status in ('3','4','5','6','7')  and is_delete!=1 GROUP BY user_id 
 			HAVING min(add_time) &gt;= #{pd.lastStart1} and  min(add_time) &lt;= #{pd.lastEnd1} ) a;
 	</select>
 	<select id="getFirstOrderForUserList" parameterType="page" resultType="pd">
 		 SELECT  user_id from dl_order
-			where order_status in ('3','4','5','6','7') GROUP BY user_id 
+			where order_status in ('3','4','5','6','7')  and is_delete!=1 GROUP BY user_id 
 			HAVING min(add_time) &gt;= #{pd.lastStart1} and  min(add_time) &lt;= #{pd.lastEnd1}  ;
 	</select>
 	<!-- 新增购彩用户 
@@ -719,7 +719,7 @@
 		from dl_order   
 		where user_id not in 
 			(SELECT  user_id from dl_order 
-			where order_status in ('3','4','5','6','7') GROUP BY user_id 
+			where order_status in ('3','4','5','6','7')  and is_delete!=1 GROUP BY user_id 
 			HAVING min(add_time) &gt;= #{pd.lastStart1} and  min(add_time) &lt;= #{pd.lastEnd1} )
 			and add_time &gt;= #{pd.lastStart1} and  add_time &lt;= #{pd.lastEnd1}
 			and order_status in ('3','4','5','6','7');
@@ -732,16 +732,16 @@
 		from dl_order   
 		where order_sn not in 
 				(SELECT 	order_sn from dl_order 
-				where order_status in ('3','4','5','6','7') GROUP BY user_id 
+				where order_status in ('3','4','5','6','7')  and is_delete!=1 GROUP BY user_id 
 				HAVING min(add_time) &gt; #{pd.lastStart1} and  min(add_time) &lt; #{pd.lastEnd1}
 				)
 			and user_id not in (
 				SELECT  user_id  from dl_order 
 				where add_time &lt; #{pd.lastStart1} 
-						and order_status in ('3','4','5','6','7')
+						and order_status in ('3','4','5','6','7')  and is_delete!=1
 				GROUP BY user_id  having count(user_id)>1
 				) 
-			and   order_status in ('3','4','5','6','7')
+			and   order_status in ('3','4','5','6','7')  and is_delete!=1
 			and add_time  &gt; #{pd.lastStart1} and  add_time &lt; #{pd.lastEnd1}
 	</select>
 	<!-- 数据统计中-订单数据 -->
@@ -760,7 +760,7 @@
 				o.award_time  
 		FROM dl_order o LEFT JOIN dl_order_detail d on o.order_id = d.order_id 
 						LEFT JOIN dl_lottery_play_classify lpc on o.lottery_play_classify_id=lpc.lottery_play_classify_id
-		where o.add_time &gt; #{pd.lastStart1} and  o.add_time &lt; #{pd.lastEnd1}
+		where o.add_time &gt; #{pd.lastStart1} and  o.add_time &lt; #{pd.lastEnd1}  and o.is_delete!=1
 			<if test="pd.orderSN != null and pd.orderSN != ''"> 
 				and o.order_sn = #{pd.orderSN }
 			</if>
@@ -801,7 +801,7 @@
 					sum(o.ticket_amount) as amount,
 					sum(o.money_paid) as paidAmount
 		FROM dl_order o  LEFT JOIN dl_lottery_play_classify lpc on o.lottery_play_classify_id=lpc.lottery_play_classify_id
-	  where order_status in ('3','4','5','6','7') 
+	  where order_status in ('3','4','5','6','7')  and o.is_delete!=1
 	  	<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
 			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &gt;= #{pd.lastStart1 }
 		</if>
@@ -817,7 +817,7 @@
 	SELECT COALESCE(sum( ticket_amount ),0) as amount,
 			DATE_FORMAT( FROM_UNIXTIME( add_time ), '%H' ) as time
     FROM dl_order 
-		where order_status in ('3','4','5','6','7') and 
+		where order_status in ('3','4','5','6','7')  and is_delete!=1 and 
 		DATE_FORMAT( FROM_UNIXTIME( add_time ), '%Y-%m-%d' ) = #{pd.dayHour }
 		GROUP BY time 
 	</select>
@@ -829,7 +829,7 @@
 		FROM dl_order o LEFT JOIN dl_order_detail d ON o.order_id = d.order_id 
 		WHERE DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &gt;= #{pd.lastStart1 }
 				AND DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &lt;= #{pd.lastEnd1 }
-				AND o.order_status IN ( '3', '4', '5', '6', '7' ) 
+				AND o.order_status IN ( '3', '4', '5', '6', '7' )  and o.is_delete!=1
 				AND d.changci NOT IN ('T56','T57')
 		GROUP BY o.order_sn 
 		) a ON a.order_id = det.order_id 
@@ -841,7 +841,7 @@
 		FROM dl_order o LEFT JOIN dl_order_detail d ON o.order_id = d.order_id 
 		WHERE DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &gt;= #{pd.lastStart1 }
 				AND DATE_FORMAT( FROM_UNIXTIME( d.add_time ), '%Y-%m-%d' ) &lt;= #{pd.lastEnd1 }
-				AND o.order_status IN ( '3', '4', '5', '6', '7' ) 
+				AND o.order_status IN ( '3', '4', '5', '6', '7' )  and o.is_delete!=1
 				AND d.changci IN ('T56','T57')
 		GROUP BY o.order_sn 
 		) a ON a.order_id = det.order_id 
@@ -858,7 +858,7 @@
 			COALESCE(sum(o.third_party_paid),0) as thirdSum,
 			COALESCE(sum(o.bonus),0) as bonusSum
 	from dl_order o left join dl_user u on o.user_id = u.user_id
-	where o.order_status in ( '3', '4', '5', '6', '7' ) 
+	where o.order_status in ( '3', '4', '5', '6', '7' )  and o.is_delete!=1
 	<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
 			and DATE_FORMAT( FROM_UNIXTIME( o.add_time ), "%Y-%m-%d" ) &gt;= #{pd.lastStart1 }
 		</if>
@@ -876,7 +876,7 @@
 		COALESCE(sum(money_paid),0) as paidSum,
 		order_status as status
 	FROM dl_order 
-	where 1=1
+	where is_delete!=1
 		<if test="pd.lastStart1 != null and pd.lastStart1 != ''"> 
 			and DATE_FORMAT( FROM_UNIXTIME( add_time ), "%Y-%m-%d" ) &gt;= #{pd.lastStart1 }
 		</if>
@@ -897,7 +897,7 @@
 		</foreach>
 	</delete>
 	<select id="findByUserId"   resultType="pd">
-		select * from dl_order where user_id = #{userId}
+		select * from dl_order where user_id = #{userId}  and is_delete!=1
 	</select>
 	<update id="updatePayStatus">
 		update dl_order 
@@ -923,7 +923,7 @@
 		FROM
 		dl_order
 		WHERE
-		order_status != 10 and pay_status = 1 and add_time >1546272000 and  mobile IN
+		order_status != 10  and is_delete!=1 and pay_status = 1 and add_time >1546272000 and  mobile IN
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
 			#{item}
 		</foreach>
@@ -937,7 +937,7 @@
 		FROM
 		dl_order
 		WHERE
-		order_status != 10 and pay_status = 1 and add_time >1546272000 and  mobile IN
+		order_status != 10  and is_delete!=1 and pay_status = 1 and add_time >1546272000 and  mobile IN
 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
 			#{item}
 		</foreach>
@@ -945,17 +945,17 @@
 
 	<select id="datalistPageTwo" parameterType="page" resultType="pd">
 		select order_sn,lottery_classify_id,money_paid,bonus,winning_money,FROM_UNIXTIME(add_time, '%Y-%m-%d %H:%i:%S') add_time
-		from dl_order where mobile = #{pd.mobile}
+		from dl_order where mobile = #{pd.mobile}  and is_delete!=1
 	</select>
 
 	<!-- 获取单个人购彩 -->
 	<select id="getTotalById"  resultType="java.lang.Double">
-		select sum(money_paid) money_paid from dl_order  where  mobile = #{mobile} and order_status in(5,9) and pay_status = 1;
+		select sum(money_paid) money_paid from dl_order  where  mobile = #{mobile} and order_status in(5,9) and pay_status = 1  and is_delete!=1;
 	</select>
 
 	<!-- 累计获奖汇总 -->
 	<select id="getTotalAward"  resultType="java.lang.Double">
-		select sum(winning_money) winning_money from dl_order o where mobile = #{mobile} and order_status in(5,9) and pay_status = 1;
+		select sum(winning_money) winning_money from dl_order o where mobile = #{mobile} and order_status in(5,9) and pay_status = 1  and is_delete!=1;
 	</select>
 	<!-- 根据手机号查询订单 -->
 	<select id="findByMobile"  resultType="pd">
@@ -968,6 +968,7 @@
 			mobile = #{mobile} 
 			AND add_time > 1541520000  
 			AND pay_status = 1
+			and is_delete!=1
 		ORDER BY
 			add_time ASC 
 			LIMIT 1;
@@ -979,7 +980,7 @@
 		FROM
 			dl_order 	
 			WHERE add_time > 1541520000  
-			AND pay_status = 1
+			AND pay_status = 1  and is_delete!=1
 		<if test="user_id_1 != null and user_id_1 != ''">
 			AND user_id in( #{user_id_1}	
 			<if test="user_id_2 != null and user_id_2 != ''">
@@ -1003,8 +1004,7 @@
 				* 
 			FROM
 				dl_log_operation 
-			WHERE
-				order_sn IN 
+			WHERE order_sn IN 
 					<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
 			                #{item}
 					</foreach>
