@@ -1,8 +1,9 @@
 package com.fh.service.lottery.rechargecard;
 
-import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+
+import java.util.List;
 
 /** 
  * 说明： RechargeCard接口
@@ -41,6 +42,13 @@ public interface RechargeCardSHManager{
 	 * @throws Exception
 	 */
 	public List<PageData> listAll(PageData pd)throws Exception;
+
+    /** 查询部分列表
+     * @param pd
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public List<PageData> listSomeByType(PageData pd)throws Exception;
 	
 	/**通过id获取数据
 	 * @param pd

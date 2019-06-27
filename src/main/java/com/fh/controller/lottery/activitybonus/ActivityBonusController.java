@@ -5,6 +5,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.activitybonus.ActivityBonusManager;
 import com.fh.service.lottery.rechargecard.RechargeCardManager;
+import com.fh.service.lottery.rechargecard.impl.RechargeCardSHService;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
 import com.fh.util.*;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -29,12 +30,18 @@ import java.util.*;
 public class ActivityBonusController extends BaseController {
 
 	String menuUrl = "activitybonus/list.do"; // 菜单地址(权限用)
+
 	@Resource(name = "activitybonusService")
 	private ActivityBonusManager activitybonusService;
+
 	@Resource(name="userActionLogService")
 	private UserActionLogService ACLOG;
+
 	@Resource(name="rechargecardService")
 	private RechargeCardManager rechargecardService;
+
+    @Resource(name="rechargecardSHService")
+    public RechargeCardSHService rechargeCardSHService;
 	
 	/**
 	 * 保存
@@ -260,6 +267,18 @@ public class ActivityBonusController extends BaseController {
 		List<PageData> bonusList = activitybonusService.queryListByType(pd);
 		return bonusList;
 	}
+
+    /**
+     * query queryRechargeCardListByActType by actBonusType
+     * @return
+     * @throws Exception
+     */
+    public List<PageData> queryRechargeCardListByActType(Integer bonusType) throws Exception{
+        PageData pd = new PageData();
+        pd.put("bonus_type", bonusType);
+        List<PageData> bonusList = activitybonusService.queryListByType(pd);
+        return bonusList;
+    }
 	
 	/**
 	 * query Bonus Name List by bonusType
@@ -270,20 +289,46 @@ public class ActivityBonusController extends BaseController {
 	@ResponseBody
 	public Object queryActivityBonusListForDistribute() throws Exception{
 		Map<String,Object> map = new HashMap<String,Object>();
-		List<PageData> bonusList = this.queryActivityBonusListByActType(ProjectConstant.Bonus_TYPE_GIVE_USER);
+		PageData bonusTypePd = new PageData();
+        bonusTypePd.put("type",40);
+		List<PageData> rechargeCardList = rechargeCardSHService.listSomeByType(bonusTypePd);
 		
 		List<PageData> newbonusList = new ArrayList<>();
-		bonusList.stream().forEach(s->{
+        rechargeCardList.stream().forEach(s->{
 			PageData newPd = new PageData();
-			newPd.put("bonus_id", s.getString("bonus_id"));
-			newPd.put("min_goods_amount", s.getString("min_goods_amount"));
-			newPd.put("bonus_price", s.getString("bonus_amount"));
+			newPd.put("recharge_card_id", s.getString("recharge_card_id"));
+			newPd.put("name", s.getString("name"));
+			newPd.put("real_value", s.getString("real_value"));
 			newbonusList.add(newPd);
 		});
 		
 		map.put("list", newbonusList);
 		return AppUtil.returnObject(new PageData(), map);
 	}
+
+    /**
+     * 查询派送的大礼包
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value="/getDistributeRechargeCardList")
+    @ResponseBody
+    public Object getDistributeRechargeCardList() throws Exception{
+        Map<String,Object> map = new HashMap<String,Object>();
+        List<PageData> bonusList = this.queryActivityBonusListByActType(ProjectConstant.Bonus_TYPE_GIVE_USER);
+
+        List<PageData> newbonusList = new ArrayList<>();
+        bonusList.stream().forEach(s->{
+            PageData newPd = new PageData();
+            newPd.put("bonus_id", s.getString("bonus_id"));
+            newPd.put("min_goods_amount", s.getString("min_goods_amount"));
+            newPd.put("bonus_price", s.getString("bonus_amount"));
+            newbonusList.add(newPd);
+        });
+
+        map.put("list", newbonusList);
+        return AppUtil.returnObject(new PageData(), map);
+    }
 	
 	/**
 	 * 查询充值卡List

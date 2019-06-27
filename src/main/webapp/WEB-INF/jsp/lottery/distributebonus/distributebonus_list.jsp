@@ -29,7 +29,6 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-							
 						<!-- 检索  -->
 						<form action="distributebonus/list.do" method="post" name="Form" id="Form">
 						<table style="margin-top:5px;">
@@ -37,7 +36,7 @@
 								<td>
 									<div class="nav-search">
 										<span class="input-icon">
-											<input type="text" placeholder="红包id,接收人,文件名,提交人" style="width:240px;"  class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="红包id,接收人,文件名,提交人"/>
+											<input type="text" placeholder="大礼包名称,接收人,文件名,发送人" style="width:240px;"  class="nav-search-input" id="nav-search-input" autocomplete="off" name="keywords" value="${pd.keywords }" placeholder="大礼包名称,接收人,文件名,提交人"/>
 											<i class="ace-icon fa fa-search nav-search-icon"></i>
 										</span>
 									</div>
@@ -52,52 +51,42 @@
 						<table id="simple-table" class="table table-striped table-bordered table-hover" style="margin-top:5px;">	
 							<thead>
 								<tr>
-									<th class="center" style="width:35px;">
-									<label class="pos-rel"><input type="checkbox" class="ace" id="zcheckbox" /><span class="lbl"></span></label>
-									</th>
 									<th class="center" style="width:50px;">序号</th>
-									<th class="center">活动红包</th>
-									<th class="center">接收人手机号</th>
-									<th class="center">excel文件名</th>
-									<th class="center">已发放红包个数</th>
-									<th class="center">添加时间</th>
-									<th class="center">提交人</th>
-									<th class="center">审核时间</th>
-									<th class="center">审核人</th>
-									<th class="center">派发状态</th>
+									<th class="center">大礼包名称</th>
+									<th class="center">接收人</th>
+									<th class="center">发放礼包个数</th>
+									<th class="center">发送时间</th>
+									<th class="center">发送人</th>
+									<th class="center">发送状态</th>
 								</tr>
 							</thead>
 													
 							<tbody>
-							<!-- 开始循环 -->	
+							<!-- 开始循环 -->
 							<c:choose>
 								<c:when test="${not empty varList}">
-									<c:if test="${QX.cha == 1 }">
 									<c:forEach items="${varList}" var="var" varStatus="vs">
 										<tr>
-											<td class='center'>
-												<label class="pos-rel"><input type='checkbox' name='ids' value="${var.id_id}" class="ace" /><span class="lbl"></span></label>
-											</td>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-											<td class='center'>${var.bonus_id}</td>
-											<td class='center'>${var.receiver}</td>
-											<td class='center'><a href="${var.file_url}">${var.file_name}</a></td>
+                                            <td class='center'>${var.bonus_name}</td>
+											<td class='center'>
+                                                <c:choose>
+                                                    <c:when test="${var.receiver == ''}"><a href="${var.file_url}">${var.file_name}</a></c:when>
+                                                    <c:when test="${var.receiver != ''}">${var.receiver}</c:when>
+                                                </c:choose>
+                                            </td>
 											<td class='center'>${var.bonus_num}</td>
 											<td class='center'>${var.add_time}</td>
-											<td class='center'>${var.add_user}</td>
-											<td class='center'>${var.pass_time}</td>
-											<td class='center'>${var.pass_user}</td>
+                                            <td class='center'>${var.add_user}</td>
 											<td class='center'>
 												<c:choose>
-													<c:when test="${var.status==0}"><font color="green">待审核</font></c:when>
-													<c:when test="${var.status==1}"><font color="blue">通过</font></c:when>
-													<c:when test="${var.status==2}"><font color="red">拒绝</font></c:when>
+													<c:when test="${var.status==1}"><font color="blue">成功</font></c:when>
+													<c:when test="${var.status==2}"><font color="red">失败</font></c:when>
 												</c:choose>
 											</td>
 										</tr>
 									
 									</c:forEach>
-									</c:if>
 									<c:if test="${QX.cha == 0 }">
 										<tr>
 											<td colspan="100" class="center">您无权查看</td>
@@ -116,9 +105,7 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
 									<a class="btn btn-mini btn-success" onclick="add();">新增</a>
-									</c:if>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

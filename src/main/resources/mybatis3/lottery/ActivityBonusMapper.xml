@@ -157,6 +157,10 @@
 		from 
 		<include refid="tableName"></include>
 	</select>
+
+    <select id="queryActBonusByRechargeCardId" parameterType="pd" resultType="pd">
+        select * from dl_activity_bonus where recharge_card_id = #{rechargeCardId} and is_delete = 0 order by recharge_chance asc
+    </select>
 	
 	<!-- 列表(全部) -->
 	<select id="queryListByType" parameterType="pd" resultType="pd">

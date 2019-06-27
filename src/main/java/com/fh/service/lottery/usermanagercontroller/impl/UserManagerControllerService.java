@@ -182,6 +182,16 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	}
 
 
+    /**
+     * 根据用户手机号查询用户 圣和
+     * @param pd
+     * @return
+     * @throws Exception
+     */
+    public PageData queryUserByMobileSH(String mobile) throws Exception {
+        return (PageData)dao.findForObject("UserManagerControllerMapper.getUserByMobileSH", mobile);
+    }
+
 	/**注册并认证统计（购彩）
 	 *
 	 */

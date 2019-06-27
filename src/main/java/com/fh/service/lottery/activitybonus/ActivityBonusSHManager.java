@@ -1,9 +1,10 @@
 package com.fh.service.lottery.activitybonus;
 
-import java.util.List;
 import com.fh.entity.Page;
 import com.fh.entity.param.BonusParam;
 import com.fh.util.PageData;
+
+import java.util.List;
 
 /** 
  * 说明： 优惠券接口
@@ -75,6 +76,8 @@ public interface ActivityBonusSHManager{
 	public PageData findRechargeCardByRechargeCardId(PageData pd)throws Exception;
 
 	public  PageData findBonusByRechargeCardId(PageData pd)throws Exception;
+
+    public List<PageData> queryActBonusByRechargeCardId(PageData pd)throws Exception;
 	
 }
 

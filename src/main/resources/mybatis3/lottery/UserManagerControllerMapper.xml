@@ -639,6 +639,11 @@
 		select * from dl_user where mobile = #{mobile} and app_code_name = 10
 	</select>
 
+    <!-- 根据手机号查询用户 -->
+    <select id="getUserByMobileSH" parameterType="java.lang.String" resultType="pd">
+		select * from dl_user where mobile = #{mobile} and app_code_name = 11
+	</select>
+
 	<select id="getUserIdListByMobileList"  parameterType="java.lang.String" resultType="java.lang.Integer">
 		select user_id from dl_user where mobile in
 		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">

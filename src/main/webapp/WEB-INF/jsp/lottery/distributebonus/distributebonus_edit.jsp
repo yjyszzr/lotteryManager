@@ -29,12 +29,14 @@
 					
 					<form action="distributebonus/${msg }.do" name="Form" id="Form" method="post">
 						<div id="zhongxin" style="padding-top: 13px;">
+                        <input type="hidden" name="bonus_name" id="bonus_name" value="${pd.bonus_name}"/>
+                        <input type="hidden" name="real_value" id="real_value" value="${pd.real_value}"/>
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
-								<td style="width:75px;text-align: right;padding-top: 13px;">活动赠送红包</td>
+								<td style="width:75px;text-align: right;padding-top: 13px;">手动充值大礼包</td>
 								<td colspan="4">
 									<select style="width:260px" name="selectBonus" id ="selectBonus"  >
-										<option>请选择红包</option>
+
 									</select>
 								</td>
 							</tr>
@@ -43,16 +45,16 @@
 								<td colspan="4" id = "phone_td"><input type="text" name="receiver" id="receiver" value="${pd.receiver}" maxlength="11" placeholder="这里输入接收人手机号" title="接收人手机号" style="width:98%;"/></td>
 							</tr>
 							<tr>
-								<td style="width:120px;text-align: right;padding-top: 13px;"><input type= "radio" name = "chooseOne" value = "2" />excel</input> </td>
+								<td style="width:120px;text-align: right;padding-top: 13px;"><input type= "radio" name = "chooseOne" value = "2" />excel(列为圣和用户的user_id)</input> </td>
 								<td colspan="3" id="file_td">
-									<input  type="file" id="fileUpload" name="file"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
+									<input  type="file" id="fileUpload" name="file" placeholder="excel中填写用户的user_id"  onchange="ajaxFileUpload(this,'fileUpload')" style="display:none"/>
 									<input type="text" style="width:100%" name="file_url" id="file_url" readonly="readonly" onmouseover="this.title=this.value"  value="${pd.file_url}" />
 								</td >
 								<td id="file_upload_td"><span class="btn btn-mini btn-primary" onclick="$('#fileUpload').trigger('click');">excel上传</span></td>						
 							</tr>
 							<tr>
 								<td style="text-align: center;" colspan="10">
-									<a class="btn btn-mini btn-primary" onclick="commitProv();">提交审批</a>
+									<a class="btn btn-mini btn-primary" onclick="commitProv();">确认</a>
 									<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
 								</td>
 							</tr>
@@ -90,25 +92,14 @@
 			if($("#selectBonus").val()==""){
 				$("#selectBonus").tips({
 					side:3,
-		            msg:'请选择活动赠送红包',
+		            msg:'请选择大礼包',
 		            bg:'#AE81FF',
 		            time:2
 		        });
 				$("#selectBonus").focus();
 			return false;
 			}
-			
-/* 			if($("#receiver").val()==""){
-				$("#receiver").tips({
-					side:3,
-		            msg:'请输入接收人手机号',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#receiver").focus();
-			return false;
-			} */
-			
+
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
@@ -140,7 +131,9 @@
 				cache: false,
 				success: function(data){
 						 $.each(data.list, function(i, dvar){
-								$("#selectBonus").append("<option value="+dvar.bonus_id+">"+dvar.bonus_id +"(满"+ dvar.min_goods_amount +"元减"+dvar.bonus_price+"元)"+  "</option>");
+                             $("#selectBonus").append("<option value="+dvar.recharge_card_id+">"+dvar.name + "</option>");
+                             $("#bonus_name").val(dvar.name);
+                             $("#real_value").val(dvar.real_value);
 						 });
 				}
 			}); 

@@ -10,7 +10,8 @@
 	<!-- 字段 -->
 	<sql id="Field">
 		id,	
-		bonus_id,	
+		bonus_id,
+		bonus_name,
 		receiver,	
 		user_id,	
 		file_url,	
@@ -26,7 +27,8 @@
 	<!-- 字段值 -->
 	<sql id="FieldValue">
         #{id},	
-        #{bonus_id},	
+        #{bonus_id},
+        #{bonus_name},
         #{receiver},	
         #{user_id},	
         #{file_url},	
@@ -45,7 +47,8 @@
 	<include refid="tableName"></include>
 		(
 		        id,	
-		        bonus_id,	
+		        bonus_id,
+                bonus_name,
 		        receiver,	
 		        user_id,	
 		        file_url,	
@@ -101,7 +104,7 @@
 		<if test="pd.keywords!= null and pd.keywords != ''">
 			and file_url LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 			or add_user LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
-			or bonus_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+			or bonus_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 			or receiver LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 		</if>
 		<if test="pd.lastStart != null and pd.lastStart != ''"> 
@@ -110,6 +113,7 @@
 		<if test="pd.lastEnd != null and pd.lastEnd != ''"> 
 			and add_time &lt; #{pd.lastEnd}
 		</if>
+		order by add_time desc
 	</select>
 	
 	<!-- 列表(全部) -->
@@ -119,7 +123,7 @@
 		from 
 		<include refid="tableName"></include>
 	</select>
-	
+
 	<!-- 批量删除 -->
 	<delete id="deleteAll" parameterType="String">
 		delete from

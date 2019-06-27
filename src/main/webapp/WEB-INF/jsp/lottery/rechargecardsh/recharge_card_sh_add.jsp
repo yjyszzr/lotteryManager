@@ -57,9 +57,10 @@
 								<tr>
 									<td style="width:95px;text-align: right;padding-top: 13px;">优惠券类型：</td>
                                 		<td>
-											    <select  name="type" id="type" value="${pd.type}"  style="width:98%; border-radius:5px !important">
+											    <select  name="type" id="type" value="${pd.type}" onchange="changeType()" style="width:98%; border-radius:5px !important">
 											        <option value="20" <c:if test="${pd.type==20}">selected</c:if> >首次充值</option>
 											        <option value="30" <c:if test="${pd.type==30}">selected</c:if> >单笔充值</option>
+                                                    <option value="40" <c:if test="${pd.type==40}">selected</c:if> >手动派发</option>
 											    </select>
 	                                	</td>
 	                                </td>
@@ -137,8 +138,19 @@
 		            time:2
 		        });
 				$("#real_value").focus();
-			return false;
+			    return false;
 			}
+
+            if($("#effective_day").val()==""){
+                $("#effective_day").tips({
+                    side:3,
+                    msg:'请输入有效期',
+                    bg:'#AE81FF',
+                    time:2
+                });
+                $("#effective_day").focus();
+                return false;
+            }
 			if($("#max_donation").val()==""){
 				$("#max_donation").tips({
 					side:3,
@@ -167,6 +179,14 @@
 	                event.returnValue = false;
 	           }
 	    }
+
+	    function changeType(){
+           if($("#type").val() == '40'){
+               $("#limit_recharge_money").attr("disabled", true);
+           }else{
+               $("#limit_recharge_money").attr("disabled", false);
+           }
+        }
 		
 		//初始第一级
 		$(function() {
@@ -187,6 +207,7 @@
 		$(function() {
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});
+            $("#limit_recharge_money").val("0");
 		});
 		</script>
 </body>

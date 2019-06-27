@@ -62,6 +62,15 @@ public class RechargeCardSHService implements RechargeCardSHManager{
 	public List<PageData> listAll(PageData pd)throws Exception{
 		return (List<PageData>)dao.findForList("RechargeCardSHMapper.listAll", pd);
 	}
+
+    /**列表(全部)
+     * @param pd
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public List<PageData> listSomeByType(PageData pd)throws Exception{
+        return (List<PageData>)dao.findForList("RechargeCardSHMapper.listSomeByType", pd);
+    }
 	
 	/**通过id获取数据
 	 * @param pd

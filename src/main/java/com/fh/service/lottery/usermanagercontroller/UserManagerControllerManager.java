@@ -131,6 +131,13 @@ public interface UserManagerControllerManager {
 	 */
 	public PageData queryUserByMobile(String mobile)throws Exception;
 
+
+    /**根据手机号查询用户 圣和
+     * @param pd
+     * @throws Exception
+     */
+    public PageData queryUserByMobileSH(String mobile)throws Exception;
+
 	/**注册并购彩
 	 * @param pd
 	 * @throws Exception

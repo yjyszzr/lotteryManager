@@ -1,13 +1,5 @@
 package com.fh.service.lottery.activitybonus.impl;
 
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import com.fh.config.URLConfig;
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
@@ -16,6 +8,12 @@ import com.fh.service.lottery.activitybonus.ActivityBonusSHManager;
 import com.fh.util.PageData;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.util.List;
 
 /**
  * 说明： 优惠券 创建人：FH Q313596790 创建时间：2018-05-05
@@ -192,5 +190,15 @@ public class ActivityBonusSHService implements ActivityBonusSHManager {
 	public PageData findBonusByRechargeCardId(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("ActivityBonusSHMapper.findBonusByRechargeCardId", pd);
 	}
+
+    /**
+     * 根据充值卡大礼包ID查询红包集合
+     *
+     * @param pd
+     * @throws Exception
+     */
+    public List<PageData> queryActBonusByRechargeCardId(PageData pd) throws Exception {
+        return (List<PageData>) dao.findForList("ActivityBonusMapper.queryActBonusByRechargeCardId",pd);
+    }
 
 }

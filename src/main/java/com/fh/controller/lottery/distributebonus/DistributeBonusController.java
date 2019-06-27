@@ -1,20 +1,18 @@
 package com.fh.controller.lottery.distributebonus;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.alibaba.druid.util.StringUtils;
+import com.fh.config.URLConfig;
+import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
+import com.fh.entity.param.BonusParam;
+import com.fh.entity.system.User;
+import com.fh.enums.SNBusinessCodeEnum;
+import com.fh.service.lottery.activitybonus.ActivityBonusManager;
+import com.fh.service.lottery.activitybonus.impl.ActivityBonusSHService;
+import com.fh.service.lottery.distributebonus.DistributeBonusManager;
+import com.fh.service.lottery.rechargecardaccountrelation.impl.RechargeCardAccountRelationService;
+import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
+import com.fh.util.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -27,23 +25,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.druid.util.StringUtils;
-import com.fh.config.URLConfig;
-import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
-import com.fh.entity.param.BonusParam;
-import com.fh.entity.system.User;
-import com.fh.enums.SNBusinessCodeEnum;
-import com.fh.service.lottery.activitybonus.ActivityBonusManager;
-import com.fh.service.lottery.distributebonus.DistributeBonusManager;
-import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
-import com.fh.util.AppUtil;
-import com.fh.util.Const;
-import com.fh.util.DateUtilNew;
-import com.fh.util.Jurisdiction;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.SNGenerator;
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /** 
  * 说明：派发红包管理
@@ -65,7 +55,13 @@ public class DistributeBonusController extends BaseController {
 	
 	@Resource(name = "activitybonusService")
 	private ActivityBonusManager activitybonusService;
-	
+
+    @Resource(name = "activitybonusSHService")
+    public ActivityBonusSHService activityBonusSHService;
+
+    @Resource(name = "rechargeCardAccountRelationService")
+    public RechargeCardAccountRelationService rechargeCardAccountRelationService;
+
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
 	
@@ -83,12 +79,15 @@ public class DistributeBonusController extends BaseController {
 		pd = this.getPageData();
 		String type = pd.getString("chooseOne");
         pd.put("bonus_id", pd.getString("selectBonus"));
-        pd.put("status", "0");
+        pd.put("bonus_name", pd.getString("bonus_name"));
         pd.put("add_time", DateUtilNew.getCurrentTimeLong());
         pd.put("add_user", user.getNAME());
         pd.put("type", type);
         if("1".equals(type)) {
-	       	PageData userPd = usermanagercontrollerService.queryUserByMobile(pd.getString("receiver"));
+            PageData mPd = new PageData();
+            mPd.put("mobile",pd.getString("receiver"));
+            mPd.put("app_code_name","11");
+	       	PageData userPd = usermanagercontrollerService.queryUserByMobile(mPd);
 	       	if(null == userPd) {
 	    		mv.addObject("msg","没有该用户,请核查");
 	    		mv.setViewName("save_result");
@@ -96,15 +95,74 @@ public class DistributeBonusController extends BaseController {
 	       	}
 	       	String userId = userPd.getString("user_id");
 	       	pd.put("user_id", Integer.valueOf(userId));
-	       	pd.put("receiver",pd.getString("receiver"));
+	       	pd.put("receiver",pd.getString("receiver").trim());
         }else if("2".equals(type)) {
         	pd.put("file_url", pd.getString("file_url"));
         }
-		distributebonusService.save(pd);
+
+        Integer rSize = 0;
+        try{
+            rSize = this.donationBonusList(pd);
+        }catch(Exception exception){
+            pd.put("status", "2");
+            logger.error("赠送大礼包异常:"+exception.getLocalizedMessage());
+        }
+        pd.put("status", "1");
+        pd.put("bonus_num", rSize);
+        distributebonusService.save(pd);
+
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
 	}
+
+    /**
+     * 赠送大礼包对应的红包集合
+     */
+	public Integer donationBonusList(PageData pageData) throws Exception{
+        String rechargeCardId = pageData.getString("selectBonus");
+        String realValue = pageData.getString("real_value");
+        List<Integer> bonusIdList = new ArrayList<>();
+        PageData pdRid = new PageData();
+        pdRid.put("rechargeCardId",rechargeCardId);
+        List<PageData> bonusDataList = activityBonusSHService.queryActBonusByRechargeCardId(pdRid);
+        bonusDataList.forEach(s->{
+            String bonusId = s.getString("bonus_id");
+            bonusIdList.add(Integer.valueOf(bonusId));
+        });
+
+        List<Integer> userIdList = new ArrayList<>();
+        Integer rSize = 0;
+        String receiver = pageData.getString("receiver");
+        if(StringUtils.isEmpty(receiver)) {
+            userIdList = this.resolveUserBonusExcel(pageData.getString("file_url"));
+            rSize = userIdList.size();
+        }else {
+            PageData mPd = new PageData();
+            mPd.put("mobile",receiver);
+            mPd.put("app_code_name","11");
+            PageData userPd = usermanagercontrollerService.queryUserByMobile(mPd);
+            String userId = userPd.getString("user_id");
+            userIdList.add(Integer.valueOf(userId));
+            rSize = 1;
+        }
+
+        for(Integer bonusId:bonusIdList){
+            BonusParam bp = this.createBonusParam(bonusId);
+            int rst = this.giveUserBonus(userIdList, bp);
+        }
+
+        //赠送礼包管理表中增加记录
+        PageData rPd = new PageData();
+        for(Integer userId:userIdList){
+            rPd.put("account_sn",userId);
+            rPd.put("recharge_card_id",rechargeCardId);
+            rPd.put("recharge_card_real_value",realValue);
+            rechargeCardAccountRelationService.save(rPd);
+        }
+
+        return rSize;
+    }
 	
 	/**删除
 	 * @param out
@@ -287,7 +345,7 @@ public class DistributeBonusController extends BaseController {
 		Date todayDate  = new Date();
 		PageData pd = new PageData();
 		pd.put("bonus_id", bonusId);
-		PageData actBonus = activitybonusService.findById(pd);
+		PageData actBonus = activityBonusSHService.findById(pd);
 	
 		bp.setBonusId(bonusId);
 		bp.setBonusSn(SNGenerator.nextSN(SNBusinessCodeEnum.BONUS_SN.getCode()));
@@ -298,7 +356,7 @@ public class DistributeBonusController extends BaseController {
 		bp.setReceiveTime(DateUtilNew.getCurrentTimeLong());
 		bp.setAddTime(DateUtilNew.getCurrentTimeLong());
 		bp.setStartTime(DateUtilNew.getTimeAfterDays(todayDate, Integer.valueOf(actBonus.getString("start_time")), 0, 0, 0));
-		bp.setEndTime(DateUtilNew.getTimeAfterDays(todayDate, Integer.valueOf(actBonus.getString("end_time")), 0, 0, 0));
+		bp.setEndTime(DateUtilNew.getTimeAfterDays(todayDate, Integer.valueOf(actBonus.getString("end_time")), 23, 59, 59));
 		bp.setBonusStatus(0);
 		bp.setIsDelete(0);
 		bp.setIsRead(0);
@@ -331,9 +389,6 @@ public class DistributeBonusController extends BaseController {
         workbook.close();
 		return userIdList;
 	}
-	
-	
-
 
 	/**
 	 * 给用户派发红包
