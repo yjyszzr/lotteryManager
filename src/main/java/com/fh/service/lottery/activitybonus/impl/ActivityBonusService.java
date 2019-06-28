@@ -1,5 +1,6 @@
 package com.fh.service.lottery.activitybonus.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.fh.config.URLConfig;
 import com.fh.dao.DaoSupport4;
 import com.fh.entity.Page;
@@ -8,6 +9,8 @@ import com.fh.service.lottery.activitybonus.ActivityBonusManager;
 import com.fh.util.PageData;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +27,8 @@ import java.util.List;
 public class ActivityBonusService implements ActivityBonusManager {
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
+
+    private final static Logger logger = LoggerFactory.getLogger(ActivityBonusService.class);
 	
 	@Resource(name = "daoSupport4")
 	private DaoSupport4 dao;
@@ -127,6 +132,8 @@ public class ActivityBonusService implements ActivityBonusManager {
 	 * @param list
 	 */
 	public int batchInsertUserBonus(List<Integer> userIdlist,BonusParam bonusParam) {
+        logger.info(userIdlist.toString());
+        logger.info(JSON.toJSONString(bonusParam));
 		Connection conn = null;
 		try {
 			Class.forName(urlConfig.getDriverClassName3());
@@ -157,13 +164,8 @@ public class ActivityBonusService implements ActivityBonusManager {
 			conn.commit();
 			conn.close();
 		} catch (Exception ex) {
-			try {
-				conn.rollback();
-			} catch (Exception e) {
-				e.printStackTrace();
-//				/logger.error(DateUtilNew.getCurrentDateTime() + "执行updateOrderStatus异常，且回滚异常:" + ex.getMessage());
-				return -1;
-			}
+            ex.printStackTrace();
+			return -1;
 		}
 		return 1;
 	}

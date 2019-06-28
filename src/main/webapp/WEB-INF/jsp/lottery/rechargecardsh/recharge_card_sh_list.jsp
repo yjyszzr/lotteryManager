@@ -69,9 +69,9 @@
 											<td class='center'>${var.add_time}</td>
 											<td class='center'>${var.online_time}</td>
 											<td class='center'> 
-												<c:if test="${var.type==20 }">首次充值</c:if>
-												<c:if test="${var.type==30 }">单笔充值</c:if>
-												${var.limit_recharge_money }元</td>
+												<c:if test="${var.type==20 }">首次充值  ${var.limit_recharge_money }元 </c:if>
+												<c:if test="${var.type==30 }">单笔充值  ${var.limit_recharge_money }元 </c:if>
+											</td>
 											<td class='center'>${var.real_value}元</td>
 											<td class='center'>${var.effective_day}天</td>
 											<td class='center'> 

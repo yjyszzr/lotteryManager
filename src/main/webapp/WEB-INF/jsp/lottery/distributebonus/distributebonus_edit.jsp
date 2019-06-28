@@ -29,13 +29,13 @@
 					
 					<form action="distributebonus/${msg }.do" name="Form" id="Form" method="post">
 						<div id="zhongxin" style="padding-top: 13px;">
-                        <input type="hidden" name="bonus_name" id="bonus_name" value="${pd.bonus_name}"/>
+                        <input  name="sname" id="sname" />
                         <input type="hidden" name="real_value" id="real_value" value="${pd.real_value}"/>
 						<table id="table_report" class="table table-striped table-bordered table-hover">
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">手动充值大礼包</td>
 								<td colspan="4">
-									<select style="width:260px" name="selectBonus" id ="selectBonus"  >
+									<select style="width:260px" name="selectBonus"  id ="selectBonus"  >
 
 									</select>
 								</td>
@@ -99,7 +99,8 @@
 				$("#selectBonus").focus();
 			return false;
 			}
-
+            $("#sname").val($("select[name='sname']").val());
+			return;
 			$("#Form").submit();
 			$("#zhongxin").hide();
 			$("#zhongxin2").show();
@@ -131,14 +132,14 @@
 				cache: false,
 				success: function(data){
 						 $.each(data.list, function(i, dvar){
-                             $("#selectBonus").append("<option value="+dvar.recharge_card_id+">"+dvar.name + "</option>");
+                             $("#selectBonus").append("<option value="+dvar.recharge_card_id+" sname="+dvar.name+" >" + dvar.name + "</option>");
                              $("#bonus_name").val(dvar.name);
                              $("#real_value").val(dvar.real_value);
 						 });
 				}
 			}); 
 		});
-		
+
 		function ajaxFileUpload(fileObj,fileId){
 		    $.ajaxFileUpload({
 		        url:'<%=basePath%>pictures/excelFileUpload.do',

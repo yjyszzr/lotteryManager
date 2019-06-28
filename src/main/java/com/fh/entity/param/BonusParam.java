@@ -1,8 +1,10 @@
 package com.fh.entity.param;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class BonusParam {
+
+public class BonusParam implements Serializable {
 
     private Integer bonusId;
 
