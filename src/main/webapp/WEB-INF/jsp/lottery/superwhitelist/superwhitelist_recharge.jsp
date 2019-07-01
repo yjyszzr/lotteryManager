@@ -201,14 +201,14 @@
 
         if (window.confirm(str)) {
             $("#Form").submit();
-            return true;
+
         }else{
-            return false;
+
         }
 
         $("#zhongxin").hide();
         $("#zhongxin2").show();
-        $("#saveRecharge").attr("disabled",true);
+
     }
 
 //     $(function() {

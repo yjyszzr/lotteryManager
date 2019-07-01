@@ -807,14 +807,19 @@ public class SuperWhiteListController extends BaseController {
         donationBonusParam.setAccountSn(rechargeSn);
         String reqStr = JSON.toJSONString(donationBonusParam);
         String result = ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getDonationBonusUrl(), true);
-        JsonObject json = JsonUtils.NewStringToJsonObject(result);
-        if(json.get("code").getAsString().equals("0")) {
-            logger.info("用户"+userId+"充值"+rechargeAmount+"赠送优惠券成功");
-        }else if(json.get("code").getAsString().equals("301051")) {
-            logger.info("赠送优惠券活动过期不进行赠送");
+        if(!StringUtils.isEmpty(result)){
+            JsonObject json = JsonUtils.NewStringToJsonObject(result);
+            if(json.get("code").getAsString().equals("0")) {
+                logger.info("用户"+userId+"充值"+rechargeAmount+"赠送优惠券成功");
+            }else if(json.get("code").getAsString().equals("301051")) {
+                logger.info("赠送优惠券活动过期不进行赠送");
+            }else{
+                logger.error("用户"+userId+"充值"+rechargeAmount+"赠送优惠券失败");
+            }
         }else{
-            logger.error("用户"+userId+"充值"+rechargeAmount+"赠送优惠券失败");
+            logger.info("赠送优惠券活动返回数据为空");
         }
+
     }
 
 

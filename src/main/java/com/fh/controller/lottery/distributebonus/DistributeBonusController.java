@@ -72,14 +72,14 @@ public class DistributeBonusController extends BaseController {
 	@RequestMapping(value="/save")
 	public ModelAndView save() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"新增DistributeBonus");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);// 操作人
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String type = pd.getString("chooseOne");
         pd.put("bonus_id", pd.getString("selectBonus"));
-        pd.put("bonus_name", pd.getString("bonus_name"));
+        pd.put("bonus_name", pd.getString("sname"));
         pd.put("add_time", DateUtilNew.getCurrentTimeLong());
         pd.put("add_user", user.getNAME());
         pd.put("type", type);
@@ -157,7 +157,7 @@ public class DistributeBonusController extends BaseController {
         for(Integer userId:userIdList){
             rPd.put("account_sn",userId);
             rPd.put("recharge_card_id",rechargeCardId);
-            rPd.put("recharge_card_real_value",realValue);
+            rPd.put("recharge_card_real_value",0);//不需要存储这个值
             rechargeCardAccountRelationService.save(rPd);
         }
 
@@ -171,7 +171,7 @@ public class DistributeBonusController extends BaseController {
 	@RequestMapping(value="/delete")
 	public void delete(PrintWriter out) throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"删除DistributeBonus");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		distributebonusService.delete(pd);
@@ -186,7 +186,7 @@ public class DistributeBonusController extends BaseController {
 	@RequestMapping(value="/edit")
 	public ModelAndView edit() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"修改DistributeBonus");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -438,7 +438,7 @@ public class DistributeBonusController extends BaseController {
 	@ResponseBody
 	public Object deleteAll() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"批量删除DistributeBonus");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return null;} //校验权限
 		PageData pd = new PageData();		
 		Map<String,Object> map = new HashMap<String,Object>();
 		pd = this.getPageData();
@@ -463,7 +463,7 @@ public class DistributeBonusController extends BaseController {
 	@RequestMapping(value="/excel")
 	public ModelAndView exportExcel() throws Exception{
 		logBefore(logger, Jurisdiction.getUsername()+"导出DistributeBonus到excel");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
+		//if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
 		ModelAndView mv = new ModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
