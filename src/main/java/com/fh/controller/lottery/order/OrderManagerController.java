@@ -23,6 +23,10 @@ import com.fh.entity.Page;
 import com.fh.entity.dto.DlJcZqMatchCellDTO;
 import com.fh.entity.dto.MatchBetCellDTO;
 import com.fh.entity.system.User;
+import com.fh.enums.BasketBallHILOLeverlEnum;
+import com.fh.enums.MatchBasketBallResultHDCEnum;
+import com.fh.enums.MatchBasketBallResultHILOEnum;
+import com.fh.enums.MatchBasketPlayTypeEnum;
 import com.fh.enums.MatchBetTypeEnum;
 import com.fh.enums.MatchPlayTypeEnum;
 import com.fh.enums.MatchResultCrsEnum;
@@ -383,10 +387,45 @@ public class OrderManagerController extends BaseController {
 			
 			mv.addObject("orderSnList",orderSnPageDataList);
 			mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
+		} else if (pd.getString("lottery_classify_id").equals("3")) {
+			//篮球详情
+			for (int i = 0; i < orderDetailsList.size(); i++) {
+				String nameStr = "";
+				if (orderDetailsList.get(i).getString("changci").equals("T56") || orderDetailsList.get(i).getString("changci").equals("T57")) {
+					String ticketData = orderDetailsList.get(i).getString("ticket_data");
+					String[] splitsjb = ticketData.split("@");
+					nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("match_team") + "&nbsp" + "【" + splitsjb[1] + "】  </div>";
+				} else {
+					List<MatchBetCellDTO> list = getStringBasket(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
+					for (int j = 0; j < list.size(); j++) {
+						for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
+							String fixOdds = StringUtil.isEmptyStr(orderDetailsList.get(i).getString("fix_odds"))?"0":orderDetailsList.get(i).getString("fix_odds");
+							if (list.get(j).getPlayType().equals("02")) {// 判断是不是<让分胜负>,是的话添加上让分数
+								nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
+							} else {
+								nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
+							}
+						}
+					}
+				}
+				orderDetailsList.get(i).put("list", nameStr);
+				String matchResult = orderDetailsList.get(i).getString("match_result");
+				String matchResultStr = "";
+				List<String> matchResults = null;
+				if (StringUtils.isNotEmpty(matchResult) && !ProjectConstant.ORDER_MATCH_RESULT_CANCEL.equals(matchResult)) {
+					matchResults = Arrays.asList(matchResult.split(";"));
+					for (String matchStr : matchResults) {
+						String rstPlayType = matchStr.substring(0, matchStr.indexOf("|"));
+						String rstPlayCells = matchStr.substring(matchStr.lastIndexOf("|") + 1);
+						matchResultStr = getBasketCathecticData(rstPlayType, rstPlayCells);
+					}
+				}
+				orderDetailsList.get(i).put("matchResultStr", matchResultStr);
+			}
+			mv.addObject("orderSnList",orderSnPageDataList);
+			mv.setViewName("lottery/ordermanager/ordermanager_jclq_details_for_mo");
 		}
 		
-		
-
 		mv.addObject("varList", orderDetailsList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
@@ -422,7 +461,36 @@ public class OrderManagerController extends BaseController {
 		}
 		return matchBetCells;
 	}
-
+	@SuppressWarnings("unused")
+	private List<MatchBetCellDTO> getStringBasket(String ticketsStr, String orderSn) {
+		List<MatchBetCellDTO> matchBetCells = new ArrayList<MatchBetCellDTO>();
+		String[] tickets = ticketsStr.split(";");
+		String playCode = null;
+		for (String tikcket : tickets) {
+			String[] split = tikcket.split("\\|");
+			if (split.length != 3) {
+				logger.error("getBetInfoByOrderInfo ticket has error, orderSn=" + orderSn + " ticket=" + tikcket);
+				continue;
+			}
+			String playType = split[0];
+			if (null == playCode) {
+				playCode = split[1];
+			}
+			String[] split2 = split[2].split(",");
+			List<DlJcZqMatchCellDTO> betCells = Arrays.asList(split2).stream().map(str -> {
+				String[] split3 = str.split("@");
+				String matchResult = getBasketCathecticData(split[0], split3[0]);
+				DlJcZqMatchCellDTO dto = new DlJcZqMatchCellDTO(split3[0], matchResult, split3[1]);
+				return dto;
+			}).collect(Collectors.toList());
+			MatchBetCellDTO matchBetCell = new MatchBetCellDTO();
+			matchBetCell.setPlayType(playType);
+			matchBetCell.setBetCells(betCells);
+			matchBetCells.add(matchBetCell);
+		}
+		return matchBetCells;
+	}
+	
 	private String getCathecticData(String playType, String cathecticStr) {
 		int playCode = Integer.parseInt(playType);
 		String cathecticData = "";
@@ -446,6 +514,25 @@ public class OrderManagerController extends BaseController {
 		return cathecticData;
 	}
 
+	private String getBasketCathecticData(String playType, String cathecticStr) {
+		int playCode = Integer.parseInt(playType);
+		String cathecticData = "";
+		if (MatchBasketPlayTypeEnum.PLAY_TYPE_MNL.getcode() == playCode) {
+			cathecticData += "【胜负】";
+			cathecticData += MatchBasketBallResultHDCEnum.getName(Integer.valueOf(cathecticStr));
+		} else if (MatchBasketPlayTypeEnum.PLAY_TYPE_HDC.getcode() == playCode) {
+			cathecticData += "【让分胜负】";
+			cathecticData += MatchBasketBallResultHDCEnum.getName(Integer.valueOf(cathecticStr));
+		} else if (MatchBasketPlayTypeEnum.PLAY_TYPE_HILO.getcode() == playCode) {
+			cathecticData += "【大小分】";
+			cathecticData += MatchBasketBallResultHILOEnum.getName(cathecticStr);
+		} else if (MatchBasketPlayTypeEnum.PLAY_TYPE_WNM.getcode() == playCode) {
+			cathecticData += "【胜分差】";
+			cathecticData += BasketBallHILOLeverlEnum.getName(cathecticStr);
+		}
+		return cathecticData;
+	}
+	
 	/**
 	 * 导出到excel
 	 * 

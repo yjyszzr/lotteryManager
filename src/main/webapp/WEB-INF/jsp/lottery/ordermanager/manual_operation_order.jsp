@@ -75,6 +75,7 @@
 													<option value="" selected="selected">全部</option>
 													<option value="1" <c:if test="${pd.lottery_classify_id == 1}">selected</c:if>>竞彩足球</option>
 													<option value="2" <c:if test="${pd.lottery_classify_id == 2}">selected</c:if>>大乐透</option>
+													<option value="3" <c:if test="${pd.lottery_classify_id == 3}">selected</c:if>>竞彩蓝球</option>
 										  	</select>
 										  	</div>
 									</th>
