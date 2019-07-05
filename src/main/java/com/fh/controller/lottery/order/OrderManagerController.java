@@ -400,7 +400,7 @@ public class OrderManagerController extends BaseController {
 					for (int j = 0; j < list.size(); j++) {
 						for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
 							String fixOdds = StringUtil.isEmptyStr(orderDetailsList.get(i).getString("fix_odds"))?"0":orderDetailsList.get(i).getString("fix_odds");
-							if (list.get(j).getPlayType().equals("02")) {// 判断是不是<让分胜负>,是的话添加上让分数
+							if (list.get(j).getPlayType().equals("01")) {// 判断是不是<让分胜负>,是的话添加上让分数
 								nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
 							} else {
 								nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + "&nbsp" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
