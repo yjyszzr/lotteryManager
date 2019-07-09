@@ -27,6 +27,7 @@ import com.fh.enums.BasketBallHILOLeverlEnum;
 import com.fh.enums.MatchBasketBallResultHDCEnum;
 import com.fh.enums.MatchBasketBallResultHILOEnum;
 import com.fh.enums.MatchBasketPlayTypeEnum;
+import com.fh.enums.MatchBasketResultHdEnum;
 import com.fh.enums.MatchBetTypeEnum;
 import com.fh.enums.MatchPlayTypeEnum;
 import com.fh.enums.MatchResultCrsEnum;
@@ -743,7 +744,7 @@ public class OrderManagerController extends BaseController {
 			cathecticData += MatchBasketBallResultHDCEnum.getName(Integer.valueOf(cathecticStr));
 		} else if (MatchBasketPlayTypeEnum.PLAY_TYPE_HDC.getcode() == playCode) {
 			cathecticData += "【让分胜负】";
-			cathecticData += MatchBasketBallResultHDCEnum.getName(Integer.valueOf(cathecticStr));
+			cathecticData += MatchBasketResultHdEnum.getName(Integer.valueOf(cathecticStr));
 		} else if (MatchBasketPlayTypeEnum.PLAY_TYPE_HILO.getcode() == playCode) {
 			cathecticData += "【大小分】";
 			cathecticData += MatchBasketBallResultHILOEnum.getName(cathecticStr);

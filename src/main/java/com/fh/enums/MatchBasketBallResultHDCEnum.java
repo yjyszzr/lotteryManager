@@ -3,7 +3,7 @@ package com.fh.enums;
 public enum MatchBasketBallResultHDCEnum {
 	
 	HHD_H(1, "主胜"),
-	HHD_A(2, "主负");
+	HHD_A(2, "客胜");
 	
 	private Integer code;
 	private String msg;
