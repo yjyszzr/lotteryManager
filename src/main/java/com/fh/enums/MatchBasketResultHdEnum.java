@@ -2,8 +2,8 @@ package com.fh.enums;
 
 public enum MatchBasketResultHdEnum {
 	
-	HD_H(1, "主胜"),
-	HD_D(2, "主负");
+	HD_H(1, "让分主胜"),
+	HD_D(2, "让分客胜");
 	
 	private Integer code;
 	private String msg;
