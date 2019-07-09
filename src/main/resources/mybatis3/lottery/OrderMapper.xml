@@ -341,14 +341,15 @@
 			o.app_code_name app_code_name,
 			a.order_status mo_status,
 			a.operation_time mo_add_time,
-			o.store_id 
-			 
+			o.store_id,
+			log.phone
 		FROM
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
 			LEFT JOIN dl_lottery_classify l ON l.lottery_classify_id = o.lottery_classify_id
 			LEFT JOIN dl_store s ON s.id = o.store_id
+			LEFT JOIN ( SELECT * FROM dl_log_operation WHERE type = 2 GROUP BY order_sn) log ON o.order_sn = log.order_sn
 		WHERE o.add_time > 1541520000  and o.is_delete!=1
 		 
 			<if test="pd.order_sn != null and pd.order_sn != ''"> 
@@ -399,6 +400,9 @@
 		</if>
 		<if test="pd.app_code_name != null and pd.app_code_name != ''"> 
 				and o.app_code_name = #{pd.app_code_name}
+		</if>
+		<if test="pd.phone != null and pd.phone != ''"> 
+				and log.phone = #{pd.phone}
 		</if>
 		order  by 	o.add_time desc
 	</select>
@@ -597,7 +601,7 @@
 		</if>
 	</select>
 	 -->
-	 <select id="exportExcelForMO" parameterType="pd" resultType="pd">
+	 <select id="exportExcelForMO" parameterType="pd" resultType="pd"> 
 		SELECT
 			l.`lottery_name`, 
 			s.`name`,
@@ -627,6 +631,7 @@
 			LEFT JOIN dl_artifi_print_lottery a ON o.order_sn = a.order_sn
 			LEFT JOIN dl_lottery_classify l ON l.`lottery_classify_id` = o.`lottery_classify_id`
 			LEFT JOIN dl_store s ON s.`id` = o.`store_id`
+			LEFT JOIN ( SELECT * FROM dl_log_operation WHERE type = 2 GROUP BY order_sn) log ON o.order_sn = log.order_sn
 		WHERE o.add_time > 1541520000  and o.is_delete!=1
 			<if test="orderSn != null and orderSn != ''"> 
 			 	and o.order_sn = #{orderSn }
@@ -658,7 +663,10 @@
 				and l.lottery_classify_id = #{lottery_classify_id }
 			</if> 
 				<if test="app_code_name != null and app_code_name != ''"> 
-				and o.app_code_name = #{app_code_name}
+					and o.app_code_name = #{app_code_name}
+				</if>
+				<if test="phone != null and phone != ''"> 
+					and log.phone = #{phone}
 				</if>
 			order  by 	o.add_time desc
 			

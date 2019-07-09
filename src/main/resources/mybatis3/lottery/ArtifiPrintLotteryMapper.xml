@@ -169,8 +169,16 @@
 		</foreach>
 	</delete>
 	<select id="findByTime"  parameterType="pd" resultType="pd">
-	select * from dl_artifi_print_lottery where DATE_FORMAT( FROM_UNIXTIME( add_time ), "%Y-%m-%d" )  = #{currentTime}
-	
+	 	SELECT
+			a.*,log.money_paid
+		FROM
+			dl_artifi_print_lottery a
+			LEFT JOIN ( SELECT * FROM dl_log_operation WHERE type = 2 GROUP BY order_sn ) log ON a.order_sn = log.order_sn 
+		WHERE
+			DATE_FORMAT( FROM_UNIXTIME( a.add_time ), "%Y-%m-%d" ) = #{currentTime}
+			<if test="phone!= null and phone != ''">
+				AND log.phone = #{phone}
+			</if>
 	</select>
  
 <!-- 	出票数量统计(开始) -->

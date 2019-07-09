@@ -81,9 +81,10 @@ public class ArtifiPrintLotteryService implements ArtifiPrintLotteryManager{
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<PageData> findByTime(String currentTimeString) throws Exception {
+	public List<PageData> findByTime(String currentTimeString,String phone) throws Exception {
 		PageData pd =new PageData();
 		pd.put("currentTime", currentTimeString);
+		pd.put("phone", phone);
 		return (List<PageData>)dao.findForList("ArtifiPrintLotteryMapper.findByTime", pd);
 	}
  

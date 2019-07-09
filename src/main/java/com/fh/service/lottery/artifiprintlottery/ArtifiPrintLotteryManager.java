@@ -54,7 +54,7 @@ public interface ArtifiPrintLotteryManager{
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception;
 
-	public List<PageData> findByTime(String currentTimeString)throws Exception;
+	public List<PageData> findByTime(String currentTimeString,String phone)throws Exception;
 
 	public PageData statisticalPrintData(PageData pd)throws Exception;
 
