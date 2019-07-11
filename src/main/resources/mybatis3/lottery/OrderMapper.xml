@@ -342,7 +342,7 @@
 			a.order_status mo_status,
 			a.operation_time mo_add_time,
 			o.store_id,
-			a.admin_name
+			a.admin_name phone
 		FROM
 			dl_order o
 			LEFT JOIN dl_user u ON o.user_id = u.user_id 
@@ -623,7 +623,7 @@
 			a.operation_time mo_add_time,
 			o.app_code_name app_code_name,
 			o.store_id,
-			a.admin_name
+			a.admin_name phone
 			 
 		FROM
 			dl_order o
