@@ -42,7 +42,7 @@
 												</span>
 										 	<select  name="order_status" id="order_status" data-placeholder="请选择" value="${pd.order_status }" style="width:154px;border-radius:5px !important"  >
 												<option value="" selected="selected">全部</option>
-													<option value="0" <c:if test="${pd.order_status!=NULL && pd.order_status!='' && pd.order_status == 0}">selected</c:if>>待付款</option>
+<%-- 													<option value="0" <c:if test="${pd.order_status!=NULL && pd.order_status!='' && pd.order_status == 0}">selected</c:if>>待付款</option> --%>
 													<option value="3" <c:if test="${pd.order_status == 3}">selected</c:if>>已付款</option>
 													<option value="4" <c:if test="${pd.order_status == 4}">selected</c:if>>未中奖</option>
 													<option value="5" <c:if test="${pd.order_status == 5}">selected</c:if>>已中奖</option>
@@ -61,7 +61,7 @@
 													<option value="0" <c:if test="${pd.mo_status!=NULL && pd.mo_status!='' && pd.mo_status == 0}">selected</c:if>>待出票</option>
 													<option value="1" <c:if test="${pd.mo_status == 1}">selected</c:if>>出票成功</option>
 													<option value="2" <c:if test="${pd.mo_status == 2}">selected</c:if>>出票失败</option>
-													<option value="4" <c:if test="${pd.mo_status == 4}">selected</c:if>>--- ---</option>
+<%-- 													<option value="4" <c:if test="${pd.mo_status == 4}">selected</c:if>>--- ---</option> --%>
 										  	</select>
 										  	</div>
 									</th>
