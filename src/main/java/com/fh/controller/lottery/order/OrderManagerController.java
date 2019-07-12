@@ -741,16 +741,24 @@ public class OrderManagerController extends BaseController {
 		String cathecticData = "";
 		if (MatchBasketPlayTypeEnum.PLAY_TYPE_MNL.getcode() == playCode) {
 			cathecticData += "【胜负】";
-			cathecticData += MatchBasketBallResultHDCEnum.getName(Integer.valueOf(cathecticStr));
+			if (!cathecticStr.equals("null")) {
+				cathecticData += MatchBasketBallResultHDCEnum.getName(Integer.valueOf(cathecticStr));
+			}
 		} else if (MatchBasketPlayTypeEnum.PLAY_TYPE_HDC.getcode() == playCode) {
 			cathecticData += "【让分胜负】";
-			cathecticData += MatchBasketResultHdEnum.getName(Integer.valueOf(cathecticStr));
+			if (!cathecticStr.equals("null")) {
+				cathecticData += MatchBasketResultHdEnum.getName(Integer.valueOf(cathecticStr));
+			}
 		} else if (MatchBasketPlayTypeEnum.PLAY_TYPE_HILO.getcode() == playCode) {
 			cathecticData += "【大小分】";
-			cathecticData += MatchBasketBallResultHILOEnum.getName(cathecticStr);
+			if (!cathecticStr.equals("null")) {
+				cathecticData += MatchBasketBallResultHILOEnum.getName(cathecticStr);
+			}
 		} else if (MatchBasketPlayTypeEnum.PLAY_TYPE_WNM.getcode() == playCode) {
 			cathecticData += "【胜分差】";
-			cathecticData += BasketBallHILOLeverlEnum.getName(cathecticStr);
+			if (!cathecticStr.equals("null")) {
+				cathecticData += BasketBallHILOLeverlEnum.getName(cathecticStr);
+			}
 		}
 		return cathecticData;
 	}
