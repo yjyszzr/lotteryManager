@@ -180,6 +180,10 @@
 											<td class='center'>${var.banner_sort}</td>
 											<td class='center'>
 												<c:if test="${var.show_position ==0}">首页轮播图</c:if>
+												<c:if test="${var.show_position ==1}">发现页轮播图</c:if>
+												<c:if test="${var.show_position ==2}">大厅页面开屏图</c:if>
+												<c:if test="${var.show_position ==3}">商城轮播图</c:if>
+												<c:if test="${var.show_position ==4}">首页悬浮图</c:if>
 											</td>
 											<td class='center'> 
 												<c:choose>

@@ -99,6 +99,7 @@
 									    	<option value="1" <c:if test="${pd.show_position==1}">selected</c:if>>发现页轮播图</option>
 											<option value="2" <c:if test="${pd.show_position==2}">selected</c:if>>大厅页面开屏图</option>
 											<option value="3" <c:if test="${pd.show_position==3}">selected</c:if>>商城轮播图</option>
+											<option value="4" <c:if test="${pd.show_position==4}">selected</c:if>>首页悬浮图</option>
 									    </select>
 								</div>
                             </div>
