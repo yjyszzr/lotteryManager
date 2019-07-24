@@ -63,6 +63,15 @@
 		where 
 			recharge_card_id = #{recharge_card_id}
 	</delete>
+	<!-- 修改 -->
+	<update id="updateIsDelete" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			is_delete = 1
+		where 
+		recharge_card_id= #{recharge_card_id}
+	</update>
 	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
@@ -95,7 +104,7 @@
 		( SELECT count( * ) FROM dl_user_account b WHERE a.recharge_card_id = b.recharge_card_id ) AS receive_quantity
 		FROM
 		dl_donation_recharge_card a
-		where 1=1
+		where is_delete=0
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
@@ -115,10 +124,11 @@
 		<include refid="Field"></include>
 		from 
 		<include refid="tableName"></include>
+		where is_delete=0
 	</select>
 	
 	<select id = "findByRealValue" parameterType="pd" resultType="pd">
-	    select * from dl_donation_recharge_card where real_value = #{real_value}
+	    select * from dl_donation_recharge_card where real_value = #{real_value}  and is_delete=0
 	</select>
 	
 	<!-- 批量删除 -->
@@ -131,6 +141,17 @@
                  #{item}
 		</foreach>
 	</delete>
-	
+	<!-- 修改 -->
+	<update id="updateIsDeleteAll" parameterType="String">
+		update
+		<include refid="tableName"></include>
+		set 
+			is_delete = 1
+		where 
+			recharge_card_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</update>
 	<!-- fh313596790qq(青苔) -->
 </mapper>

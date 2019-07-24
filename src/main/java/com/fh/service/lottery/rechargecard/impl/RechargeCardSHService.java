@@ -34,7 +34,7 @@ public class RechargeCardSHService implements RechargeCardSHManager{
 	 * @throws Exception
 	 */
 	public void delete(PageData pd)throws Exception{
-		dao.delete("RechargeCardSHMapper.delete", pd);
+		dao.update("RechargeCardSHMapper.updateIsDelete", pd);
 	}
 	
 	/**修改
@@ -85,7 +85,7 @@ public class RechargeCardSHService implements RechargeCardSHManager{
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
-		dao.delete("RechargeCardSHMapper.deleteAll", ArrayDATA_IDS);
+		dao.update("RechargeCardSHMapper.updateIsDeleteAll", ArrayDATA_IDS);
 	}
 
 	@Override

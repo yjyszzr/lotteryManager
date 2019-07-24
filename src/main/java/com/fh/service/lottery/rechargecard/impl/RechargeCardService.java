@@ -34,7 +34,7 @@ public class RechargeCardService implements RechargeCardManager{
 	 * @throws Exception
 	 */
 	public void delete(PageData pd)throws Exception{
-		dao.delete("RechargeCardMapper.delete", pd);
+		dao.update("RechargeCardMapper.updateIsDelete", pd);
 	}
 	
 	/**修改
@@ -76,7 +76,7 @@ public class RechargeCardService implements RechargeCardManager{
 	 * @throws Exception
 	 */
 	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
-		dao.delete("RechargeCardMapper.deleteAll", ArrayDATA_IDS);
+		dao.update("RechargeCardMapper.updateIsDeleteAll", ArrayDATA_IDS);
 	}
 
 	@Override
