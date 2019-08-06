@@ -12,6 +12,7 @@ import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
 import com.fh.service.system.user.impl.UserService;
 import com.fh.util.*;
 import com.opensymphony.oscache.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -174,6 +175,12 @@ public class CustomerController extends BaseController {
 
 			_pd = null;
 			_pd = this.customerService.getCountOrderByMobile(pd);
+            String parentUserId =_user.getString("parent_user_id");
+            if(StringUtils.isNotEmpty(parentUserId)){
+                map.put("flag", false);
+                map.put("msg", "该用户已经被顾客邀请，不能由销售人员录入");
+                return AppUtil.returnObject(new PageData(), map);
+            }
 			Integer _count = Integer.valueOf(_pd.getString("_count"));
 			if (_count > 0) {
 				map.put("flag", false);
@@ -226,7 +233,7 @@ public class CustomerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 
-		// ~~~~~~~~~~~~~~~
+
 		boolean flag = true;
 
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
@@ -241,11 +248,11 @@ public class CustomerController extends BaseController {
 		}
 
 		if (flag) {
-
 			String user_id_2 = "";
 			PageData _pd = new PageData();
 			_pd.put("mobile", pd.getString("mobile"));
 			PageData _user = this.userAccountService.getUserByMobile(_pd);
+
 			if (null != _user) {
 				user_id_2 = _user.getString("user_id");
 			}
@@ -354,7 +361,7 @@ public class CustomerController extends BaseController {
 
 		}
 
-////		pd.put("_id", this.get32UUID());	//主键
+//		pd.put("_id", this.get32UUID());	//主键
 //		customerService.save(pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
