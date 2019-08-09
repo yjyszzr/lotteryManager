@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ActivityUserInfoMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		dl_activity_user_info
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		id,	
+		user_id,	
+		mobile,	
+		invitation_number,	
+		withdrawable_reward,	
+		history_total_withdrawable_reward,	
+		month_return_reward,	
+		invitation_number_reward,	
+		history_total_return_reward,	
+		invitation_add_reward,	
+		history_invitation_number,	
+		history_invitation_number_reward
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{id},	
+        #{user_id},	
+        #{mobile},	
+        #{invitation_number},	
+        #{withdrawable_reward},	
+        #{history_total_withdrawable_reward},	
+        #{month_return_reward},	
+        #{invitation_number_reward},	
+        #{history_total_return_reward},	
+        #{invitation_add_reward},	
+        #{history_invitation_number},	
+        #{history_invitation_number_reward}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+		        id,	
+		        user_id,	
+		        mobile,	
+		        invitation_number,	
+		        withdrawable_reward,	
+		        history_total_withdrawable_reward,	
+		        month_return_reward,	
+		        invitation_number_reward,	
+		        history_total_return_reward,	
+		        invitation_add_reward,	
+		        history_invitation_number,	
+		        history_invitation_number_reward	
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			mobile = #{mobile},
+			invitation_number = #{invitation_number},
+			withdrawable_reward = #{withdrawable_reward},
+			history_total_withdrawable_reward = #{history_total_withdrawable_reward},
+			month_return_reward = #{month_return_reward},
+			invitation_number_reward = #{invitation_number_reward},
+			history_total_return_reward = #{history_total_return_reward},
+			invitation_add_reward = #{invitation_add_reward},
+			history_invitation_number = #{history_invitation_number},
+			history_invitation_number_reward = #{history_invitation_number_reward}
+		where 
+		id = #{id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			id = #{id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 1=1
+			<if test="pd.mobile!= null and pd.mobile != ''"> 
+				and mobile  
+					LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
+			</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<select id="findChildInfoByUserId" parameterType="pd" resultType="pd">
+		SELECT
+			u.user_id,
+			u.mobile,
+			( SELECT SUM( money_paid ) money_paid FROM dl_order o WHERE o.user_id = u.user_id AND o.pay_status = 1 ) total_money_paid,
+			( SELECT SUM( amount ) recharge_money FROM dl_user_account a WHERE a.user_id = u.user_id AND a.process_type = 2 ) total_recharge_money,
+			u.reg_time 
+		FROM
+			dl_user u 
+		WHERE
+			u.parent_user_id = #{user_id}
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PopularizeActivityMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		dl_activity
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		act_id,	
+		act_name,	
+		act_title,	
+		act_type,	
+		act_img,	
+		act_url,	
+		start_time,	
+		end_time,	
+		is_finish,	
+		purchase_num,	
+		status,	
+		use_range,	
+		reward_money,	
+		number,	
+		is_del
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+        #{act_id},	
+        #{act_name},	
+        #{act_title},	
+        #{act_type},	
+        #{act_img},	
+        #{act_url},	
+        #{start_time},	
+        #{end_time},	
+        #{is_finish},	
+        #{purchase_num},	
+        #{status},	
+        #{use_range},	
+        #{reward_money},	
+        #{number},	
+        #{is_del}	
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd" useGeneratedKeys="true" keyProperty="act_id" >
+		insert into 
+		<include refid="tableName"></include>
+			(
+			        act_id,	
+			        act_name,	
+			        act_title,	
+			        act_type,	
+			        act_img,	
+			        act_url,	
+			        start_time,	
+			        end_time,	
+			        is_finish,	
+			        purchase_num,	
+			        status,	
+			        use_range,	
+			        reward_money,	
+			        number,	
+			        is_del	
+			) values (
+		<include refid="FieldValue"></include>
+			)
+	</insert>
+	
+	<!-- 新增-->
+	<insert id="saveConfig" parameterType="pd">
+		insert into 
+			dl_activity_config
+			(
+				id,
+		        act_id,	
+		        gear_position,	
+		        gear_position_money,	
+		        add_time
+			) values (
+				  #{id},	
+				  #{act_id},	
+	        	  #{gear_position},	
+	        	  #{gear_position_money},	
+	        	  #{add_time}	
+			)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			act_id = #{act_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			act_name = #{act_name},
+			act_title = #{act_title},
+			act_type = #{act_type},
+			act_img = #{act_img},
+			act_url = #{act_url},
+			start_time = #{start_time},
+			end_time = #{end_time},
+			is_finish = #{is_finish},
+			purchase_num = #{purchase_num},
+			status = #{status},
+			use_range = #{use_range},
+			reward_money = #{reward_money},
+			number = #{number},
+			is_del = #{is_del} 
+		where 
+		act_id = #{act_id}
+	</update>
+	<!-- 修改 -->
+	<update id="updateById" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			is_finish = #{is_finish}
+		where 
+		act_id = #{act_id}
+	</update>
+	<update id="deleteById" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			is_del = #{is_del} 
+		where 
+		act_id = #{act_id}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			act_id = #{act_id}
+	</select>
+	<!-- 通过ID获取数据 -->
+	<select id="findConfigByActId" parameterType="pd" resultType="pd">
+		select 
+		*
+		from 
+		dl_activity_config
+		where 
+			act_id = #{act_id}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+		where act_type in (3,4) and  is_del = 0
+		<if test="pd.act_name!= null and pd.act_name != ''"> 
+					and  act_name  
+						LIKE CONCAT(CONCAT('%', #{pd.act_name}),'%')
+		</if>
+		<if test="pd.is_finish != null and pd.is_finish != ''">
+			and  is_finish = #{pd.is_finish}
+		</if>
+		<if test="pd.act_type != null and pd.act_type != ''">
+			and  act_type = #{pd.act_type}
+		</if>
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			act_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- fh313596790qq(青苔) -->
+</mapper>

@@ -95,7 +95,7 @@
 		end_time
 		from 
 		<include refid="tableName"></include>
-		where 1=1
+		where act_type in (0,1,2)
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
