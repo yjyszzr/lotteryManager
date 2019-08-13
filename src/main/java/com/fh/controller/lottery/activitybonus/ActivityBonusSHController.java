@@ -58,31 +58,36 @@ public class ActivityBonusSHController extends BaseController {
 		} else {
 			pd.put("min_goods_amount", pd.getString("min_goods_amount"));
 		}
-		
+
+        String endTime = pd.getString("end_time");
+        pd.put("start_time", 0);
+        pd.put("end_time", Integer.valueOf(endTime));
+
 		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
 //			Number num = Float.parseFloat(pd.getString("recharge_chance"));
 //			Integer rechargeChanceInt = num.intValue();
 //			NumberFormat numberFormat = NumberFormat.getInstance();  
 //			numberFormat.setMaximumFractionDigits(2);    
-//			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
+//			numberFormat.setMaximumFractionDigits(2);
+//			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );
 //			pd.put("recharge_chance", rechargeChance);
-			String endTime = pd.getString("end_time");
-			pd.put("start_time", 0);
-			pd.put("end_time", Integer.valueOf(endTime));
+
+            PageData pdRechargeCard = activitybonusSHService.findRechargeCardByRechargeCardId(pd);
+            PageData pdRechargeCardMoney = activitybonusSHService.findBonusByRechargeCardId(pd);
+            Double doubleRechargeCardMoney = Double.parseDouble(null == pdRechargeCardMoney ? "0.00":pdRechargeCardMoney.getString("total_bonus_amount"));
+            Double totalMoney = doubleRechargeCardMoney +Double.parseDouble(pd.getString("bonus_amount"));
+            Double doubleRealValue =  Double.parseDouble(pdRechargeCard.getString("real_value"));
+            if(totalMoney > doubleRealValue) {
+                mv.addObject("msg","金额已超出礼包价值请重新输入！");
+                mv.setViewName("save_result");
+                return mv;
+            }
 		}else {
+
 			pd.put("recharge_chance", null);
 			pd.put("recharge_card_id", null);
 		}
-		PageData pdRechargeCard = activitybonusSHService.findRechargeCardByRechargeCardId(pd);
-		PageData pdRechargeCardMoney = activitybonusSHService.findBonusByRechargeCardId(pd);
-		Double doubleRechargeCardMoney = Double.parseDouble(null == pdRechargeCardMoney ? "0.00":pdRechargeCardMoney.getString("total_bonus_amount"));
-		Double totalMoney = doubleRechargeCardMoney +Double.parseDouble(pd.getString("bonus_amount"));
-		Double doubleRealValue =  Double.parseDouble(pdRechargeCard.getString("real_value"));
-		if(totalMoney > doubleRealValue) {
-			mv.addObject("msg","金额已超出礼包价值请重新输入！");
-			mv.setViewName("save_result");
-			return mv;
-		}
+
 		pd.put("bonus_id", "0");
 		pd.put("receive_count", "0");
 		pd.put("is_enable", "0");

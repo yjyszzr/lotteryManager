@@ -97,10 +97,10 @@
                                 	</td>
                                 		<td style="text-align: left;" colspan="10">
 	                                		 <div class="col-sm-4">
-											    <select  name="bonus_type" id="bonus_type" value="${pd.bonus_type}"  style="width:204px;border-radius:5px !important">
-											        <!-- <option value="1" <c:if test="${pd.bonus_type==1}">selected</c:if> >注册送红包</option> -->
+											    <select  name="bonus_type" id="bonus_type" value="${pd.bonus_type}" onchange="swithType()"  style="width:204px;border-radius:5px !important">
 													<!-- <option value="2" <c:if test="${pd.bonus_type==2}">selected</c:if> >西安活动红包</option> -->
 											        <option value="3" <c:if test="${pd.bonus_type==3}">selected</c:if> >充值送红包</option>
+                                                    <option value="1" <c:if test="${pd.bonus_type==1}">selected</c:if> >注册送红包</option>
 											        <!--  <option value="4" <c:if test="${pd.bonus_type==4}">selected</c:if> >指定赠送红包(用于派发)</option> -->
 											    </select>
 											</div>
@@ -279,12 +279,24 @@
 			var bonusType = '${pd.bonus_type}';
 			if('3' == bonusType){
 				var range_style = document.getElementById('range_tr').style;
-				var chance_style = document.getElementById('chance_tr').style;
 				range_style.display = 'table-row';
-				chance_style.display = 'table-row';			
 			}
 
 		});
+
+        /**
+         * 切换红包类型
+         */
+        function swithType(){
+            var bonusType = $("#bonus_type").val();
+            var range_style = document.getElementById('range_tr').style;
+            if("1" == bonusType){
+                range_style.display = 'none';
+            }else{
+                range_style.display = 'table-row';
+            }
+        }
+
 		$(function() {
 			//日期框
 			$('.date-picker').datepicker({autoclose: true,todayHighlight: true});

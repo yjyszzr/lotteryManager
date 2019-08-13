@@ -34,7 +34,7 @@
 							<thead>
 								<tr>
 									<th class="center">序号</th>
-<!-- 									<th class="center">券类型</th> -->
+									<th class="center">券类型</th>
 									<th class="center">金额</th>
 									<th class="center">使用条件</th>
 <!-- 									<th class="center">彩种限制</th> -->
@@ -56,12 +56,12 @@
 										<tr>
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 <%-- 											<td class='center'>${var.bonus_id}</td> --%>
-<!-- 											<td class='center'>  -->
-<%-- 												<c:if test="${var.bonus_type==1 }">注册送红包</c:if> --%>
+ 											<td class='center'>
+ 												<c:if test="${var.bonus_type==1 }">注册送红包</c:if>
 <%-- 												<c:if test="${var.bonus_type==2 }">西安活动红包</c:if> --%>
-<%-- 												<c:if test="${var.bonus_type==3 }">充值活动红包</c:if> --%>
+ 												<c:if test="${var.bonus_type==3 }">充值活动红包</c:if>
 <%-- 												<c:if test="${var.bonus_type==4 }">指定赠送红包(用于派发)</c:if> --%>
-<!-- 											</td> -->
+											</td>
 											<td class='center'>${var.bonus_amount}</td>
 											<td class='center'>${var.min_goods_amount}</td>
 <!-- 											<td class='center'>  -->
