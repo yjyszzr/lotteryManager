@@ -67,9 +67,9 @@
 <!-- 											<td class='center'>  -->
 <%-- 												<c:if test="${var.use_range==0}">通用</c:if> --%>
 <!-- 											</td> -->
-											<td class='center'>${var.addUser} </td>
+											<td class='center'>${var.add_user} </td>
 											<td class='center'>
-											<c:if test="${null != var.addTime  }">
+											<c:if test="${null != var.add_time  }">
 												${DateUtil.toSDFTime(var.add_time*1000)}</td>
 											</c:if>
 											<td class='center'>${var.end_time}天</td>

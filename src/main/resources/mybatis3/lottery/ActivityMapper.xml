@@ -21,6 +21,7 @@
 		purchase_num,	
 		status,	
 		use_range
+
 	</sql>
 	
 	<!-- 字段值 -->
@@ -36,7 +37,8 @@
         #{is_finish},	
         #{purchase_num},	
         #{status},	
-        #{use_range}	
+        #{use_range}
+
 	</sql>
 	
 	<!-- 新增-->
@@ -44,14 +46,16 @@
 		insert into 
 	<include refid="tableName"></include>
 		(
-		        act_id,	
+                act_type,
 		        act_name,		
 		        start_time,	
-		        end_time,	
-		        is_finish
+		        end_time
 		) values (
-	<include refid="FieldValue"></include>
-		)
+        #{act_type},
+        #{act_name},
+        #{start_time},
+        #{end_time}
+        )
 	</insert>
 	
 	<!-- 删除-->
@@ -83,6 +87,15 @@
 		where 
 			act_id = #{act_id}
 	</select>
+
+    <select id="findByType" parameterType="pd" resultType="pd">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        act_type = #{act_type}
+    </select>
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">

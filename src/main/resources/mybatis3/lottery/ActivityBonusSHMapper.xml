@@ -27,7 +27,8 @@
 		recharge_card_id,
 		recharge_chance,
 		exchange_points,	
-		exchange_goods_number
+		exchange_goods_number,
+		add_user
 	</sql>
 	
 	<!-- 字段值 -->
@@ -50,7 +51,8 @@
         #{recharge_card_id},
 		#{recharge_chance},
         #{exchange_points},	
-        #{exchange_goods_number}	
+        #{exchange_goods_number}	,
+        #{add_user}
 	</sql>
 	
 	<!-- 新增-->
@@ -76,7 +78,8 @@
 		        recharge_card_id,
 				recharge_chance,
 		        exchange_points,	
-		        exchange_goods_number	
+		        exchange_goods_number,
+		        add_user
 		) values (
 	<include refid="FieldValue"></include>
 		)

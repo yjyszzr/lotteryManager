@@ -3,6 +3,7 @@ package com.fh.controller.lottery.activitybonus;
 import com.fh.common.ProjectConstant;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.User;
 import com.fh.service.lottery.activitybonus.ActivityBonusSHManager;
 import com.fh.service.lottery.rechargecard.RechargeCardSHManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
@@ -62,6 +63,8 @@ public class ActivityBonusSHController extends BaseController {
         String endTime = pd.getString("end_time");
         pd.put("start_time", 0);
         pd.put("end_time", Integer.valueOf(endTime));
+        User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+        pd.put("add_user",user.getNAME());
 
 		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
 //			Number num = Float.parseFloat(pd.getString("recharge_chance"));
@@ -140,8 +143,8 @@ public class ActivityBonusSHController extends BaseController {
 					try {
 						PageData pageDataUser = mapList.get(varList.get(i).getString("recharge_card_id"));
 						if (null!=pageDataUser) {
-							varList.get(i).put("addUser",pageDataUser.getString("add_user"));
-							varList.get(i).put("addTime", pageDataUser.getString("add_time"));
+							varList.get(i).put("add_user",pageDataUser.getString("add_user"));
+							varList.get(i).put("add_time", pageDataUser.getString("add_time"));
 						}
 						PageData pageData = new PageData();
 						pageData = varList.get(i);

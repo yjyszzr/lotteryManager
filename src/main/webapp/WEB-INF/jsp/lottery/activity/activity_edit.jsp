@@ -136,19 +136,37 @@
 			return false;
 			}
 
-/* 			var actName = $("#act_name").val();
-			var actType = $("#act_type").val();
-			var startTime = laydate.render({
-				elem: '#start_time' //指定元素
-			});
-			var endTime = laydate.render({
-			    elem: '#end_time' //指定元素
-			 }); */
-			
-			$("#Form").submit();
-			$("#zhongxin").hide();
-			$("#zhongxin2").show();
-		}
+            var message = '${msg}';
+            console.log(message);
+
+            if(message == "save"){
+                var actType = $("#act_type").val();
+                var s = $.ajax({
+                    type: "POST",
+                    url: '<%=basePath%>activity/checkType.do?t='+new Date().getTime()
+                        + "&act_type=" + actType,
+                    data: {},
+                    dataType:'json',
+                    cache: false,
+                    success: function(data){
+
+                        if (data.flag == false) {
+                            alert(data.msg);
+                            return false;
+                        } else {
+                            $("#Form").submit();
+                            $("#zhongxin").hide();
+                            $("#zhongxin2").show();
+                        }
+                    }
+                });
+
+            }else if(message == "edit"){
+                $("#Form").submit();
+                $("#zhongxin").hide();
+                $("#zhongxin2").show();
+            }
+        }
 		
 		$(function() {
 			//日期框

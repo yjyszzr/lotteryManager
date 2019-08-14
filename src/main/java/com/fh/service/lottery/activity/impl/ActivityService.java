@@ -1,13 +1,13 @@
 package com.fh.service.lottery.activity.impl;
 
-import java.util.List;
-import javax.annotation.Resource;
-import org.springframework.stereotype.Service;
-import com.fh.dao.DaoSupport;
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
-import com.fh.util.PageData;
 import com.fh.service.lottery.activity.ActivityManager;
+import com.fh.util.PageData;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /** 
  * 说明： 活动管理
@@ -28,6 +28,14 @@ public class ActivityService implements ActivityManager{
 	public void save(PageData pd)throws Exception{
 		dao.save("ActivityMapper.save", pd);
 	}
+
+    /**根据类型查询
+     * @param pd
+     * @throws Exception
+     */
+    public PageData findByType(PageData pd)throws Exception{
+        return (PageData)dao.findForObject("ActivityMapper.findByType", pd);
+    }
 	
 	/**删除
 	 * @param pd
