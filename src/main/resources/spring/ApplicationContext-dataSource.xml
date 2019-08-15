@@ -248,6 +248,7 @@
     	<property name="serviceSmsUrl" value="${serviceSmsUrl}"></property>
         <property name="imgShowUrl" value="${imgShowUrl}"></property>
         <property name="donationBonusUrl" value="${donationBonusUrl}"></property>
+        <property name="tgActUrl" value="${tgActUrl}"></property>
         <property name="manualAuditUrl" value="${manualAuditUrl}"></property>
         <property name="manualRewardUrl" value="${manualRewardUrl}"></property>
         <property name="uploadURL" value="${uploadURL}"></property>

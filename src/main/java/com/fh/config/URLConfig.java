@@ -5,6 +5,7 @@ public class URLConfig {
 	private String serviceSmsUrl;
 	private String imgShowUrl;
 	private String donationBonusUrl;
+	private String tgActUrl;
 	private String manualAuditUrl;
 	private String manualRewardUrl;
 	private String manualRewardToUserMoneyLimitUrl;
@@ -17,6 +18,15 @@ public class URLConfig {
 	private String driverClassName3;
 	private String username3;
 	private String password3;
+
+
+    public String getTgActUrl() {
+        return tgActUrl;
+    }
+
+    public void setTgActUrl(String tgActUrl) {
+        this.tgActUrl = tgActUrl;
+    }
 
     public String getDonationBonusUrl() {
         return donationBonusUrl;

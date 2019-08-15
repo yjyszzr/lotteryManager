@@ -6,6 +6,7 @@ import com.fh.controller.base.BaseController;
 import com.fh.controller.lottery.userwithdraw.ReqCashEntity;
 import com.fh.entity.Page;
 import com.fh.entity.param.DonationBonusParam;
+import com.fh.entity.param.RechargePraiseParam;
 import com.fh.entity.system.User;
 import com.fh.enums.SNBusinessCodeEnum;
 import com.fh.service.lottery.customer.CustomerManager;
@@ -746,10 +747,14 @@ public class SuperWhiteListController extends BaseController {
 
             userManagerControllerService.recharge(pd);
 
-            if("1".equals(rechargeLoc)){//如果是充值到充值金额的时候送用户大礼包
+            if("1".equals(rechargeLoc)){//如果是充值到充值金额的时候送用户大礼包;充值的时候给予邀请奖励
                 Integer userId = Integer.valueOf(pd.getString("user_id"));
                 this.donationBonus(userId,new BigDecimal(pd.getString("number")),recahrgeSn);
+
+                this.rechargeCount(userId,new BigDecimal(pd.getString("number")));
             }
+
+
 
         }else if(appCodeName.equals("10")){
             superwhitelistService.recharge(pd);//充值到不可提现余额
@@ -795,6 +800,31 @@ public class SuperWhiteListController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+
+    /**
+     * 充值的时候给予邀请奖励
+     * @param userId
+     * @param rechargeAmount
+     * @param rechargeSn
+     */
+    public  void rechargeCount(Integer userId,BigDecimal rechargeAmount){
+        RechargePraiseParam rechargePraiseParam = new RechargePraiseParam();
+        rechargePraiseParam.setUserId(userId);
+        rechargePraiseParam.setMoney(rechargeAmount);
+        String reqStr = JSON.toJSONString(rechargePraiseParam);
+        String result = ManualAuditUtil.ManualAuditUtil(reqStr, urlConfig.getTgActUrl(), true);
+        if(!StringUtils.isEmpty(result)){
+            JsonObject json = JsonUtils.NewStringToJsonObject(result);
+            if(json.get("code").getAsString().equals("0")) {
+                logger.info("用户"+userId+"充值"+rechargeAmount+"给予邀请奖励成功");
+            }else{
+                logger.error("用户"+userId+"充值"+rechargeAmount+"给予邀请奖励失败");
+            }
+        }else{
+            logger.info("充值的时候给予邀请奖励返回数据为空");
+        }
+
+    }
 
     public  void donationBonus(Integer userId,BigDecimal rechargeAmount,String rechargeSn){
         ReqCashEntity reqCashEntity = new ReqCashEntity();
