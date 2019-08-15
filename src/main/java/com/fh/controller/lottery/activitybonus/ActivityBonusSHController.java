@@ -3,6 +3,7 @@ package com.fh.controller.lottery.activitybonus;
 import com.fh.common.ProjectConstant;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
+import com.fh.entity.system.User;
 import com.fh.service.lottery.activitybonus.ActivityBonusSHManager;
 import com.fh.service.lottery.rechargecard.RechargeCardSHManager;
 import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
@@ -58,31 +59,38 @@ public class ActivityBonusSHController extends BaseController {
 		} else {
 			pd.put("min_goods_amount", pd.getString("min_goods_amount"));
 		}
-		
+
+        String endTime = pd.getString("end_time");
+        pd.put("start_time", 0);
+        pd.put("end_time", Integer.valueOf(endTime));
+        User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
+        pd.put("add_user",user.getNAME());
+
 		if(String.valueOf(ProjectConstant.Bonus_TYPE_RECHARGE).equals(pd.getString("bonus_type"))) {
 //			Number num = Float.parseFloat(pd.getString("recharge_chance"));
 //			Integer rechargeChanceInt = num.intValue();
 //			NumberFormat numberFormat = NumberFormat.getInstance();  
 //			numberFormat.setMaximumFractionDigits(2);    
-//			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );  
+//			numberFormat.setMaximumFractionDigits(2);
+//			String rechargeChance = numberFormat.format((float) rechargeChanceInt / (float) 100 );
 //			pd.put("recharge_chance", rechargeChance);
-			String endTime = pd.getString("end_time");
-			pd.put("start_time", 0);
-			pd.put("end_time", Integer.valueOf(endTime));
+
+            PageData pdRechargeCard = activitybonusSHService.findRechargeCardByRechargeCardId(pd);
+            PageData pdRechargeCardMoney = activitybonusSHService.findBonusByRechargeCardId(pd);
+            Double doubleRechargeCardMoney = Double.parseDouble(null == pdRechargeCardMoney ? "0.00":pdRechargeCardMoney.getString("total_bonus_amount"));
+            Double totalMoney = doubleRechargeCardMoney +Double.parseDouble(pd.getString("bonus_amount"));
+            Double doubleRealValue =  Double.parseDouble(pdRechargeCard.getString("real_value"));
+            if(totalMoney > doubleRealValue) {
+                mv.addObject("msg","金额已超出礼包价值请重新输入！");
+                mv.setViewName("save_result");
+                return mv;
+            }
 		}else {
+
 			pd.put("recharge_chance", null);
 			pd.put("recharge_card_id", null);
 		}
-		PageData pdRechargeCard = activitybonusSHService.findRechargeCardByRechargeCardId(pd);
-		PageData pdRechargeCardMoney = activitybonusSHService.findBonusByRechargeCardId(pd);
-		Double doubleRechargeCardMoney = Double.parseDouble(null == pdRechargeCardMoney ? "0.00":pdRechargeCardMoney.getString("total_bonus_amount"));
-		Double totalMoney = doubleRechargeCardMoney +Double.parseDouble(pd.getString("bonus_amount"));
-		Double doubleRealValue =  Double.parseDouble(pdRechargeCard.getString("real_value"));
-		if(totalMoney > doubleRealValue) {
-			mv.addObject("msg","金额已超出礼包价值请重新输入！");
-			mv.setViewName("save_result");
-			return mv;
-		}
+
 		pd.put("bonus_id", "0");
 		pd.put("receive_count", "0");
 		pd.put("is_enable", "0");
@@ -135,8 +143,8 @@ public class ActivityBonusSHController extends BaseController {
 					try {
 						PageData pageDataUser = mapList.get(varList.get(i).getString("recharge_card_id"));
 						if (null!=pageDataUser) {
-							varList.get(i).put("addUser",pageDataUser.getString("add_user"));
-							varList.get(i).put("addTime", pageDataUser.getString("add_time"));
+							varList.get(i).put("add_user",pageDataUser.getString("add_user"));
+							varList.get(i).put("add_time", pageDataUser.getString("add_time"));
 						}
 						PageData pageData = new PageData();
 						pageData = varList.get(i);

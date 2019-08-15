@@ -1,15 +1,10 @@
 package com.fh.controller.lottery.activity;
 
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Resource;
+import com.fh.controller.base.BaseController;
+import com.fh.entity.Page;
+import com.fh.service.lottery.activity.ActivityManager;
+import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
+import com.fh.util.*;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -17,16 +12,12 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
-import com.fh.util.AppUtil;
-import com.fh.util.DateUtilNew;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
-import com.fh.service.lottery.activity.ActivityManager;
-import com.fh.service.lottery.useractionlog.impl.UserActionLogService;
+
+import javax.annotation.Resource;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /** 
  * 说明：活动管理
@@ -59,12 +50,38 @@ public class ActivityController extends BaseController {
 		long end = DateUtilNew.getMilliSecondsByStr(lastEnd);
 		pd.put("start_time", start);
 		pd.put("end_time", end);
+
 		activityService.save(pd);
 		ACLOG.save("1", "1", "活动管理："+pd.getString("act_name"), "活动名称："+pd.getString("act_name"));
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
 	}
+
+
+    /**校验是否重复活动类型
+     * @param
+     * @throws Exception
+     */
+    @RequestMapping(value="/checkType")
+    @ResponseBody
+    public Object checkType() throws Exception{
+        Map<String, Object> map = new HashMap<String, Object>();
+        ModelAndView mv = this.getModelAndView();
+        PageData pd = new PageData();
+        pd = this.getPageData();
+        PageData typePd = new PageData();
+        typePd.put("act_type",pd.get("act_type"));
+        PageData rstPd = activityService.findByType(typePd);
+        if(rstPd != null){
+            map.put("flag", false);
+            map.put("msg", "不能添加重复的活动");
+            return AppUtil.returnObject(new PageData(), map);
+        }
+        map.put("flag", true);
+        map.put("msg", "可以添加");
+        return AppUtil.returnObject(new PageData(), map);
+    }
 
 	/**
 	 * 上线

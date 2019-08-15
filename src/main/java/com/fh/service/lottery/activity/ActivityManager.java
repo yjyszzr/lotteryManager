@@ -1,8 +1,9 @@
 package com.fh.service.lottery.activity;
 
-import java.util.List;
 import com.fh.entity.Page;
 import com.fh.util.PageData;
+
+import java.util.List;
 
 /** 
  * 说明： 活动管理接口
@@ -17,6 +18,13 @@ public interface ActivityManager{
 	 * @throws Exception
 	 */
 	public void save(PageData pd)throws Exception;
+
+
+    /**根据类型查询
+     * @param pd
+     * @throws Exception
+     */
+    public PageData findByType(PageData pd)throws Exception;
 	
 	/**删除
 	 * @param pd
