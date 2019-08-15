@@ -62,8 +62,9 @@
 												</span>
 										 	<select  name="is_finish" id="is_finish" data-placeholder="请选择" value="${pd.is_finish }" style="width:154px;border-radius:5px !important"  >
 											<option value="" selected>全部</option>
-											<option value="0" <c:if test="${pd.is_finish == 0}">selected</c:if>>未结束</option>
-											<option value="1" <c:if test="${pd.is_finish == 1}">selected</c:if>>结束</option>
+											<option value="0" <c:if test="${pd.is_finish!= NULL && pd.is_finish!='' && pd.is_finish == 0 }">selected</c:if>>进行中</option>
+											<option value="1" <c:if test="${pd.is_finish == 1}">selected</c:if>>已结束</option>
+											<option value="-1" <c:if test="${pd.is_finish == -1}">selected</c:if>>未开始</option>
 										  	</select>
 										  	</div>
 									</td>		
@@ -96,8 +97,8 @@
 									<th class="center">开始时间</th>
 									<th class="center">结束时间</th>
 									<th class="center">是否结束</th>
-									<th class="center">奖励金</th>
-									<th class="center">邀请数量</th>
+<!-- 									<th class="center">奖励金</th> -->
+<!-- 									<th class="center">邀请数量</th> -->
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -119,12 +120,12 @@
 											<td class='center'>${DateUtil.toSDFTime(var.start_time*1000)} </td>
 											<td class='center'>${DateUtil.toSDFTime(var.end_time*1000)} </td>
 											<td class='center'>
-												<c:if test="${var.is_finish == 0 }">未结束</c:if>
+												<c:if test="${var.is_finish == 0 }">进行中</c:if>
 												<c:if test="${var.is_finish == 1 }">已结束</c:if>
-												<c:if test="${empty var.is_finish }">-- --</c:if>
+												<c:if test="${empty var.is_finish }">未开始</c:if>
 											</td>
-											<td class='center'>${var.reward_money}</td>
-											<td class='center'>${var.number}</td>
+<%-- 											<td class='center'>${var.reward_money}</td> --%>
+<%-- 											<td class='center'>${var.number}</td> --%>
 															<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>

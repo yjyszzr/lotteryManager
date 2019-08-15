@@ -259,7 +259,7 @@
 			$inputArr.each(function(){
 				if ($(this).val()=="") {
 					alert("输入人数不能为空");
-					return false;
+					return;
 				}
 				gearPosition.push($(this).val());//遍历存入数组
 			});
@@ -267,7 +267,7 @@
 			$inputArr1.each(function(){
 				if ($(this).val()=="") {
 					alert("输入金额不能为空");
-					return false;
+					return;
 				}
 				gearPositionMoney.push($(this).val());//遍历存入数组
 			});
