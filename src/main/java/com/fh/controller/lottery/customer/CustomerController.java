@@ -165,17 +165,19 @@ public class CustomerController extends BaseController {
 			}
 
 			String user_id_2 = "";
+            String parentUserId = "";
 			PageData _pd = new PageData();
 			_pd.put("mobile", pd.getString("mobile"));
 			PageData _user = this.userAccountService.getUserByMobile(_pd);
 			if (null != _user) {
 				user_id_2 = _user.getString("user_id");
+                parentUserId =_user.getString("parent_user_id");
 			}
 			pd.put("user_id_2", user_id_2);
 
 			_pd = null;
 			_pd = this.customerService.getCountOrderByMobile(pd);
-            String parentUserId =_user.getString("parent_user_id");
+
             if(StringUtils.isNotEmpty(parentUserId)){
                 map.put("flag", false);
                 map.put("msg", "该用户已经被顾客邀请，不能由销售人员录入");
@@ -233,7 +235,6 @@ public class CustomerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 
-
 		boolean flag = true;
 
 		User user = (User) Jurisdiction.getSession().getAttribute(Const.SESSION_USER);
@@ -273,8 +274,8 @@ public class CustomerController extends BaseController {
 //			_pd = this.userAccountManagerService.getCountOrderByMobile(pd); //2 
 //			_count = new Long(_pd.getString("_count"));
 //			if (_count > 0) {
-////				map.put("flag", false);
-////				map.put("msg", "2019年11月7号之后有购过彩");
+//				map.put("flag", false);
+//				map.put("msg", "2019年11月7号之后有购过彩");
 //				flag = false;
 //			}
 //		}
