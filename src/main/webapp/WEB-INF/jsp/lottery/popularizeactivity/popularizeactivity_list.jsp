@@ -242,7 +242,7 @@
 			 diag.Drag=true;
 			 diag.Title ="新增活动";
 			 diag.URL = '<%=basePath%>popularizeactivity/goAdd.do';
-			 diag.Width = 410;
+			 diag.Width = 430;
 			 diag.Height = 410;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = false;	//最大化按钮
@@ -280,8 +280,8 @@
 			 diag.Drag=true;
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>popularizeactivity/goEdit.do?act_id='+Id;
-			 diag.Width = 410;
-			 diag.Height = 455;
+			 diag.Width = 430;
+			 diag.Height = 410;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = false;	//最大化按钮
 		     diag.ShowMinButton = false;	//最小化按钮 

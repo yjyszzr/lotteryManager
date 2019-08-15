@@ -61,6 +61,8 @@ public interface PopularizeActivityManager{
 	public  List<PageData>  findConfigByActId(PageData pd)throws Exception;
 
 	public void saveConfig(PageData pdConfig)throws Exception;
+
+	public void deleteConfigByActId(PageData pd)throws Exception;
 	
 }
 

@@ -29,6 +29,7 @@
 					<div class="col-xs-12">
 					<form action="popularizeactivity/${msg }.do" name="Form" id="Form" method="post">
 						<input type="hidden" name="act_id" id="act_id" value="${pd.act_id}"/>
+						<input type="hidden" name="is_finish" id="is_finish" value="${pd.is_finish}"/>
 						<input type="hidden" name="params" id="params" />
 						<div id="zhongxin" style="padding-top: 13px;">
 						<table id="table_report" class="table table-striped table-bordered table-hover">
@@ -63,10 +64,10 @@
 								<td style="width:75px;text-align: right;padding-top: 13px;">奖励设置:</td>
 								<td>
 									<span class ="yaoqing">邀请人数:</span>
-									<input type="text" name="reward_money" id="reward_money" value="${pd.reward_money}" maxlength="12" title="奖励金" style="width:50px;border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
+									<input type="text" name="reward_money" id="reward_money" value="${pd.reward_money}" maxlength="12" title="奖励金" style="width:75px;border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
 									<span class ="yaoqingnum">奖励金额:</span>
-									<input type="text" name="number" id="number" value="${pd.number}" maxlength="32" title="邀请数量" style="width:50px;border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>&nbsp;&nbsp;
-										<button type="button" class="btn btn-mini btn-success" style="border-radius:5px !important" id='btn'>添加</button>
+									<input type="text" name="number" id="number" value="${pd.number}" maxlength="32" title="邀请数量" style="width:75px;border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>&nbsp;&nbsp;
+										
 								</td>
 							</tr>
 <!-- 							<tr> -->
@@ -83,7 +84,12 @@
 										<input type="text" name="gear_position"   class = "gear_position" id="gear_position" style="width:50px; border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');" value = "${var.gear_position }"/>
 										<span >额外奖励:</span>
 										<input type="text" name="gear_position_money"   class = "gear_position_money" id="gear_position_money" style="width:50px; border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');" value = "${var.gear_position_money }"/>&nbsp;&nbsp;
-										<button style="border-radius:5px !important" class="btn btn-mini btn-danger" type="button" onClick="sbtn(this)">删除</button>
+										<c:if test="${vs.index == 0 }">
+											<button type="button" class="btn btn-mini btn-success" style="border-radius:5px !important" id='btn'>添加</button>
+										</c:if>
+										<c:if test="${vs.index != 0 }">
+											<button type="button" class="btn btn-mini btn-danger" style="border-radius:5px !important" onClick="sbtn(this)">删除</button>
+										</c:if>
 									</td>
 								</tr>
 							</c:forEach>
@@ -96,7 +102,7 @@
 										<input type="text" name="gear_position"  class = "gear_position" id="gear_position" style="width:50px; border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
 										<span  >额外奖励:</span>
 										<input type="text" name="gear_position_money"  class = "gear_position_money" id="gear_position_money" style="width:50px; border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>&nbsp;&nbsp;
-										<button style="border-radius:5px !important" class="btn btn-mini btn-danger" type="button" onClick="sbtn(this)">删除</button>
+										<button type="button" class="btn btn-mini btn-success" style="border-radius:5px !important" id='btn'>添加</button>
 									</td>
 								</tr>
 							</c:otherwise>
@@ -144,7 +150,7 @@
 				$(" .yaoqingewai").text("邀请人数:");
 			}else if(actType == 4){
 				$(" .yaoqing").text("消费奖励:");
-				$(" .yaoqingnum").text("比值上限:");
+				$(" .yaoqingnum").text("%,奖励上限:");
 				$(" .yaoqingewai").text("累计金额:");
 			}
 		}

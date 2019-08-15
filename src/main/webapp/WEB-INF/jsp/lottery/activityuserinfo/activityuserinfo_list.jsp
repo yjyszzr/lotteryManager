@@ -73,15 +73,10 @@
 <!-- 									<th class="center">id</th> -->
 									<th class="center">用户ID</th>
 									<th class="center">电话</th>
-									<th class="center">下级有效用户量</th>
-<!-- 									<th class="center">可提现收益</th> -->
-<!-- 									<th class="center">历史总可提现收益</th> -->
-<!-- 									<th class="center">当月返利</th> -->
-									<th class="center">人数奖励</th>
-									<th class="center">历史返利</th>
-<!-- 									<th class="center">累计购彩金额</th> -->
-<!-- 									<th class="center">历史邀请人数</th> -->
-									<th class="center">历史邀请人数奖励</th>
+									<th class="center">下级有效用户数量</th>
+									<th class="center">邀请人数奖励总计</th>
+									<th class="center">消费百分比返利奖总计</th>
+									<th class="center">档位累计消费奖励总计</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -97,18 +92,12 @@
 <%-- 												<label class="pos-rel"><input type='checkbox' name='ids' value="${var._id}" class="ace" /><span class="lbl"></span></label> --%>
 <!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
-<%-- 											<td class='center'>${var.id}</td> --%>
 											<td class='center'>${var.user_id}</td>
 											<td class='center'>${var.mobile}</td>
 											<td class='center'>${var.invitation_number}</td>
-<%-- 											<td class='center'>${var.withdrawable_reward}</td> --%>
-<%-- 											<td class='center'>${var.history_total_withdrawable_reward}</td> --%>
-<%-- 											<td class='center'>${var.month_return_reward}</td> --%>
 											<td class='center'>${var.invitation_number_reward}</td>
 											<td class='center'>${var.history_total_return_reward}</td>
-<%-- 											<td class='center'>${var.invitation_add_reward}</td> --%>
-<%-- 											<td class='center'>${var.history_invitation_number}</td> --%>
-											<td class='center'>${var.history_invitation_number_reward}</td>
+											<td class='center'>${var.dwljxf_reward}</td>
 											<td class="center" >
 												<a class="btn btn-xs btn-success" title="详情" style="border-radius: 5px;" onclick="details('${var.user_id}');">详情</a>
 											</td>

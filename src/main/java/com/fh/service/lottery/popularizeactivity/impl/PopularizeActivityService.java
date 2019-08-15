@@ -97,6 +97,12 @@ public class PopularizeActivityService implements PopularizeActivityManager{
 	public void saveConfig(PageData pdConfig) throws Exception {
     dao.save("PopularizeActivityMapper.saveConfig", pdConfig);
 	}
+
+	@Override
+	public void deleteConfigByActId(PageData pd) throws Exception {
+		dao.delete("PopularizeActivityMapper.deleteConfigByActId", pd);
+		
+	}
 	
 }
 

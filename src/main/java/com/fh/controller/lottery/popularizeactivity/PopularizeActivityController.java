@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.druid.support.json.JSONUtils;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -25,8 +27,6 @@ import com.fh.util.DateUtilNew;
 import com.fh.util.ObjectExcelView;
 import com.fh.util.PageData;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import oracle.net.aso.f;
 
 import com.fh.util.Jurisdiction;
@@ -65,14 +65,25 @@ public class PopularizeActivityController extends BaseController {
 		pd.put("end_time", end);
 		pd.put("act_id", "0");	//id
 		pd.put("is_del", "0");	//is_del
-//		pd.put("is_finish", "0");	//活动状态 0-有效 1-无效
+		pd.put("is_finish", "0");	//活动状态 0-有效 1-无效
 		  popularizeactivityService.save(pd);
-//		   JSONObject jsonObject = new JSONObject(pd.getString("param"));
-//	       JSONArray param = new JSONArray(jsonObject.get("gear_position"));
-		   
-		  PageData pdConfig = new PageData();
+			if (pd.getString("params")!=null) {
+			   Map map = (Map)JSONUtils.parse(pd.getString("params"));
+			   List gearList = (ArrayList)JSONUtils.parse(map.get("gear_position").toString());
+			   List moneyList = (ArrayList)JSONUtils.parse(map.get("gear_position_money").toString());
+				 for (int i = 0; i < gearList.size(); i++) {
+					 PageData pdConfig = new PageData();
+					 pdConfig.put("id", "0"); 
+					 pdConfig.put("act_id", pd.getString("act_id"));
+					 pdConfig.put("gear_position",gearList.get(i));
+					 pdConfig.put("gear_position_money", moneyList.get(i));
+					 pdConfig.put("add_time", DateUtilNew.getCurrentTimeLong()); // 时间
+				 popularizeactivityService.saveConfig(pdConfig);
+			 	}	
+			 }
+
+		 
 		  
-		  popularizeactivityService.saveConfig(pdConfig);
 		mv.addObject("msg","success");
 		mv.setViewName("save_result");
 		return mv;
@@ -124,30 +135,25 @@ public class PopularizeActivityController extends BaseController {
 		long end = DateUtilNew.getMilliSecondsByStr(lastEnd);
 		pd.put("start_time", start);
 		pd.put("end_time", end);
-//		popularizeactivityService.edit(pd);
+		pd.put("is_del", "0");	//is_del
+		popularizeactivityService.edit(pd);
+		
+		popularizeactivityService.deleteConfigByActId(pd);
+		
 		if (pd.getString("params")!=null) {
-			
-			try{
-				JSONObject jsonObject =   JSONObject.fromObject(pd.getString("params"));
-//				String str = 
-//				JSONObject jsonObject = JSONObject.fromObject(jsonObject.get("gear_position"));  //把转为json对象。
-				String array= jsonObject.getString("gear_position"); //获取list的值。
-				JSONArray jsonArray = JSONArray.fromObject(array); //把list的值转为json数组对象。
-				Object[] strs = jsonArray.toArray(); //json转为数组。
-				for(Object s:strs){
-				System.out.println(s);
-				}
-				}catch(Exception e){e.printStackTrace();}
-			
-			
-//	       JSONArray param = new JSONArray(jsonObject.get("gear_position"));
-			Object arr = new String[] {};
-//			arr = jsonObject.get("gear_position");
-			List list = Arrays.asList(arr);
-			for (int i = 0; i <list.size(); i++) {
-				System.out.println(list.get(i));
+			   Map map = (Map)JSONUtils.parse(pd.getString("params"));
+			   List gearList = (ArrayList)JSONUtils.parse(map.get("gear_position").toString());
+			   List moneyList = (ArrayList)JSONUtils.parse(map.get("gear_position_money").toString());
+			 for (int i = 0; i < gearList.size(); i++) {
+				 PageData pdConfig = new PageData();
+					 pdConfig.put("id", "0"); 
+					 pdConfig.put("act_id", pd.getString("act_id"));
+					 pdConfig.put("gear_position",gearList.get(i));
+					 pdConfig.put("gear_position_money", moneyList.get(i));
+					 pdConfig.put("add_time", DateUtilNew.getCurrentTimeLong()); // 时间
+				 popularizeactivityService.saveConfig(pdConfig);
 			}
-			PageData pdConfig = new PageData();
+ 
 		}
 		
 		
@@ -301,5 +307,15 @@ public class PopularizeActivityController extends BaseController {
 	public void initBinder(WebDataBinder binder){
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
+	}
+	
+	
+	
+	
+	public static void main(String[] args) {
+		   String pd="{\"gear_position\":[\"10\",\"20\"],\"gear_position_money\":[\"20\",\"30\"]}";
+		   Map map = (Map)JSONUtils.parse(pd);
+		 List list = (ArrayList)JSONUtils.parse(map.get("gear_position").toString());
+		 System.out.println();
 	}
 }

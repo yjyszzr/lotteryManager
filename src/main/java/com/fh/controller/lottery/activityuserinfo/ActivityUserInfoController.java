@@ -1,6 +1,7 @@
 package com.fh.controller.lottery.activityuserinfo;
 
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,6 +108,12 @@ public class ActivityUserInfoController extends BaseController {
 		page.setPd(pd);
 		List<PageData>	varList = activityuserinfoService.list(page);	//列出ActivityUserInfo列表
 		mv.setViewName("lottery/activityuserinfo/activityuserinfo_list");
+		for (int i = 0; i < varList.size(); i++) {
+			BigDecimal  history_total_withdrawable_reward = new BigDecimal(varList.get(i).getString("history_total_withdrawable_reward")== "" ?"0":varList.get(i).getString("history_total_withdrawable_reward"));
+			BigDecimal  history_invitation_number_reward = new BigDecimal(varList.get(i).getString("history_invitation_number_reward") == "" ?"0":varList.get(i).getString("history_invitation_number_reward"));
+			BigDecimal  history_total_return_reward = new BigDecimal(varList.get(i).getString("history_total_return_reward")== "" ?"0":varList.get(i).getString("history_total_return_reward"));
+			varList.get(i).put("dwljxf_reward",  history_total_withdrawable_reward.subtract(history_invitation_number_reward).subtract(history_total_return_reward));
+		}
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
@@ -195,35 +202,26 @@ public class ActivityUserInfoController extends BaseController {
 		pd = this.getPageData();
 		Map<String,Object> dataMap = new HashMap<String,Object>();
 		List<String> titles = new ArrayList<String>();
-		titles.add("id");	//1
-		titles.add("userId");	//2
-		titles.add("电话");	//3
-		titles.add("邀请人数");	//4
-		titles.add("可提现收益");	//5
-		titles.add("历史总可提现收益");	//6
-		titles.add("当月返利");	//7
-		titles.add("人数奖励");	//8
-		titles.add("历史返利");	//9
-		titles.add("累计购彩金额");	//10
-		titles.add("历史邀请人数");	//11
-		titles.add("历史邀请人数奖励");	//12
+		titles.add("（用户ID）");	//1
+		titles.add("电话");	//2
+		titles.add("下级有效用户数量");	//3
+		titles.add("邀请人数奖励总计");	//4
+		titles.add("消费百分比返利奖总计");	//5
+		titles.add("档位累计消费奖励总计");	//6
 		dataMap.put("titles", titles);
 		List<PageData> varOList = activityuserinfoService.listAll(pd);
 		List<PageData> varList = new ArrayList<PageData>();
 		for(int i=0;i<varOList.size();i++){
 			PageData vpd = new PageData();
-			vpd.put("var1", varOList.get(i).get("id").toString());	//1
-			vpd.put("var2", varOList.get(i).get("user_id").toString());	//2
-			vpd.put("var3", varOList.get(i).getString("mobile"));	    //3
-			vpd.put("var4", varOList.get(i).get("invitation_number").toString());	//4
-			vpd.put("var5", varOList.get(i).getString("withdrawable_reward"));	    //5
-			vpd.put("var6", varOList.get(i).getString("history_total_withdrawable_reward"));	    //6
-			vpd.put("var7", varOList.get(i).getString("month_return_reward"));	    //7
-			vpd.put("var8", varOList.get(i).getString("invitation_number_reward"));	    //8
-			vpd.put("var9", varOList.get(i).getString("history_total_return_reward"));	    //9
-			vpd.put("var10", varOList.get(i).getString("invitation_add_reward"));	    //10
-			vpd.put("var11", varOList.get(i).get("history_invitation_number").toString());	//11
-			vpd.put("var12", varOList.get(i).getString("history_invitation_number_reward"));	    //12
+			vpd.put("var1", varOList.get(i).get("user_id").toString());	//1
+			vpd.put("var2", varOList.get(i).getString("mobile"));	    //2
+			vpd.put("var3", varOList.get(i).get("invitation_number").toString());	//3
+			vpd.put("var4", varOList.get(i).getString("history_invitation_number_reward"));	    //4
+			vpd.put("var5", varOList.get(i).getString("history_total_return_reward"));	    //5
+			BigDecimal  history_total_withdrawable_reward = new BigDecimal(varOList.get(i).getString("history_total_withdrawable_reward")== "" ?"0":varOList.get(i).getString("history_total_withdrawable_reward"));
+			BigDecimal  history_invitation_number_reward = new BigDecimal(varOList.get(i).getString("history_invitation_number_reward")== "" ?"0":varOList.get(i).getString("history_invitation_number_reward"));
+			BigDecimal  history_total_return_reward = new BigDecimal(varOList.get(i).getString("history_total_return_reward")== "" ?"0":varOList.get(i).getString("history_total_return_reward"));
+			vpd.put("var6",  history_total_withdrawable_reward.subtract(history_invitation_number_reward).subtract(history_total_return_reward));	    //6
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);

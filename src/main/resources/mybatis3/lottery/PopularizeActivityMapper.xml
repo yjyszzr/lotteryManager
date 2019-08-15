@@ -96,6 +96,13 @@
 		where 
 			act_id = #{act_id}
 	</delete>
+	<!-- 删除-->
+	<delete id="deleteConfigByActId" parameterType="pd">
+		delete from
+			dl_activity_config
+		where 
+			act_id = #{act_id}
+	</delete>
 	
 	<!-- 修改 -->
 	<update id="edit" parameterType="pd">
