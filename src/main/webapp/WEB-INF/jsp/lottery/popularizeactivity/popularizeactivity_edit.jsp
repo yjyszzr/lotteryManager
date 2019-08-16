@@ -64,10 +64,9 @@
 								<td style="width:75px;text-align: right;padding-top: 13px;">奖励设置:</td>
 								<td>
 									<span class ="yaoqing">邀请人数:</span>
-									<input type="text" name="reward_money" id="reward_money" value="${pd.reward_money}" maxlength="12" title="奖励金" style="width:75px;border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
-									<span class ="yaoqingnum">奖励金额:</span>
 									<input type="text" name="number" id="number" value="${pd.number}" maxlength="32" title="邀请数量" style="width:75px;border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>&nbsp;&nbsp;
-										
+									<span class ="yaoqingnum">奖励金额:</span>
+									<input type="text" name="reward_money" id="reward_money" value="${pd.reward_money}" maxlength="12" title="奖励金额" style="width:75px;border-radius:5px !important" oninput="this.value = this.value.replace(/[^0-9]/g, '');"/>
 								</td>
 							</tr>
 <!-- 							<tr> -->
