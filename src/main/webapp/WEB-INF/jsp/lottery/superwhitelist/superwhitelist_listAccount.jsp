@@ -64,6 +64,7 @@
 													<option value="10" <c:if test="${pd.process_type==10}">selected</c:if>>充值到可提现余额</option>
 													<option value="11" <c:if test="${pd.process_type==11}">selected</c:if>>扣除充值金额</option>
 													<option value="12" <c:if test="${pd.process_type==12}">selected</c:if>>扣除可提现金额</option>
+													<option value="13" <c:if test="${pd.process_type==13}">selected</c:if>>收益</option>
 												  	</select>	
 												</span> 
 											</div>
@@ -138,6 +139,7 @@
 												<c:when test="${var.process_type == 10}">充值到可提现余额</c:when>
 												<c:when test="${var.process_type == 11}">扣除充值金额</c:when>
 												<c:when test="${var.process_type == 12}">扣除可提现金额</c:when>
+												<c:when test="${var.process_type == 13}">收益</c:when>
 											</c:choose>
 											</td>
 											<td class='center'>

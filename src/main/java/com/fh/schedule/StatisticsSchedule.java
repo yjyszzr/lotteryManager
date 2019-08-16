@@ -5,6 +5,7 @@ import com.fh.controller.lottery.datastatistics.MarketDataController;
 import com.fh.entity.Page;
 import com.fh.service.lottery.artifiprintlottery.ArtifiPrintLotteryManager;
 import com.fh.service.lottery.artifiprintlotterystatisticaldata.ArtifiPrintLotteryStatisticalDataManager;
+import com.fh.service.lottery.popularizeactivity.PopularizeActivityManager;
 import com.fh.service.lottery.usermanagercontroller.impl.UserManagerControllerService;
 import com.fh.util.DateUtilNew;
 import com.fh.util.PageData;
@@ -37,7 +38,9 @@ public class StatisticsSchedule {
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerService userManagerControllerService;
 
-
+	@Resource(name="popularizeactivityService")
+	private PopularizeActivityManager popularizeactivityService;
+	
 	@Scheduled(cron = "52 * * * * ? ")
 	public void moOrderStatistics()   {
 		try {
@@ -201,4 +204,28 @@ public class StatisticsSchedule {
 		return remainc.divide(userc, 2,BigDecimal.ROUND_HALF_UP);
 	}
 
+	
+
+/**
+ * 关闭活动
+ */
+	@Scheduled(cron = "0 0/1 * * * ?")
+	public void closeActivity() throws Exception {
+		PageData pd = new PageData();
+			List<PageData> list= popularizeactivityService.listAll(pd);
+			Integer timeLong =	DateUtilNew.getCurrentTimeLong();
+			logger.info("查询活动定时开始...");
+			for (int i = 0; i < list.size(); i++) {
+				PageData pda = list.get(i);
+				if (pda.getString("is_finish").equals("0")) {
+					if (Integer.parseInt(pda.getString("end_time"))<timeLong) {
+						logger.info("该活动已被置位结束:"+pda);
+						pda.put("is_finish", 1);
+						popularizeactivityService.updateById(pda);
+					}
+					
+				}
+			}
+			logger.info("查询活动定时结束...");
+	}
 }

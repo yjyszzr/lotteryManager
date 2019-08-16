@@ -48,8 +48,8 @@
 										<tr>
 											<td class='center'>${var.user_id}</td>
 											<td class='center'>${var.mobile}</td>
-											<td class='center'>${var.total_money_paid}</td>
 											<td class='center'>${var.total_recharge_money}</td>
+											<td class='center'>${var.total_money_paid}</td>
 											<td class='center'>${DateUtil.toSDFTime(var.reg_time*1000)}</td>
 										</tr>
 									
