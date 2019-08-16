@@ -231,16 +231,6 @@
 				$("#end_time").focus();
 			return false;
 			}
-			if($("#reward_money").val()==""){
-				$("#reward_money").tips({
-					side:3,
-		            msg:'请输入奖励金',
-		            bg:'#AE81FF',
-		            time:2
-		        });
-				$("#reward_money").focus();
-			return false;
-			}
 			if($("#number").val()==""){
 				$("#number").tips({
 					side:3,
@@ -251,25 +241,43 @@
 				$("#number").focus();
 			return false;
 			}
+			if($("#reward_money").val()==""){
+				$("#reward_money").tips({
+					side:3,
+		            msg:'请输入奖励金',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#reward_money").focus();
+			return false;
+			}
+	
 			var params={} ;
 			var gearPosition=new Array();//定义数组对象
 			var gearPositionMoney=new Array();//定义数组对象
 			var $inputArr = $('.gear_position');//获取class为gear_position的input对象
+			var sum = 0;
 			$inputArr.each(function(){
 				if ($(this).val()=="") {
-					alert("输入人数不能为空");
-					return;
+					sum++;
 				}
 				gearPosition.push($(this).val());//遍历存入数组
 			});
+				if (sum > 0) {
+					alert("您有未输入项,请检查!");
+					return;
+				}
 			var $inputArr1 = $('.gear_position_money');//获取class为gear_position_money的input对象
 			$inputArr1.each(function(){
 				if ($(this).val()=="") {
-					alert("输入金额不能为空");
-					return;
+					sum++;
 				}
 				gearPositionMoney.push($(this).val());//遍历存入数组
 			});
+				if (sum > 0) {
+					alert("您有未输入项,请检查!");
+					return;
+				}
 		params['gear_position']=gearPosition; 
 		params['gear_position_money']=gearPositionMoney; 
 		var str = JSON.stringify(params);
