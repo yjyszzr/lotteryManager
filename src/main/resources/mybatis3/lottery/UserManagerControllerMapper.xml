@@ -40,7 +40,8 @@
 		user_type,
 		is_real,
 		user_remark,
-		is_business
+		is_business,
+		passsign
 	</sql>
 
 	<!-- 字段值 -->
@@ -77,6 +78,7 @@
 		#{is_real},
 		#{user_remark},
 		#{is_business}
+		#{passsign}
 	</sql>
 
 	<!-- 字段值 -->

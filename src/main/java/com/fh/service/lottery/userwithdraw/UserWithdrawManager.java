@@ -40,7 +40,7 @@ public interface UserWithdrawManager {
 	public void withdrawOperation(PageData pd) throws Exception;
 
 	public void saveUserWithdrawLog(PageData pd) throws Exception;
-
+	public PageData findByWithdrawSn(PageData pd) throws Exception;
 	/**
 	 * 列表
 	 * 

@@ -142,6 +142,22 @@
 			a.id = #{id}  
 	</select>
 	
+	<!-- 通过提现单号获取数据 -->
+	<select id="findByWithdrawSn" parameterType="pd" resultType="pd">
+		SELECT
+			a.user_id,
+		    a.real_name,
+			a.card_no,
+			a.bank_name,
+			b.password
+		FROM
+			dl_user_withdraw a
+			LEFT JOIN  dl_user_bank b on a.user_id=b.user_id and a.card_no=b.card_no
+			
+		WHERE 
+			a.withdrawal_sn=#{withdrawal_sn} limit 1;
+	</select>
+	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
 		SELECT

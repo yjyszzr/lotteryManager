@@ -40,6 +40,7 @@ import com.fh.util.DateUtilNew;
 import com.fh.util.FileUpload;
 import com.fh.util.JsonUtils;
 import com.fh.util.Jurisdiction;
+import com.fh.util.MD5;
 import com.fh.util.ManualAuditUtil;
 import com.fh.util.ObjectExcelRead;
 import com.fh.util.ObjectExcelView;
@@ -151,6 +152,13 @@ public class UserWithdrawController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		if (pd.getString("status").equals("1")) {//提现通过按钮
+			PageData resultPd = userwithdrawService.findByWithdrawSn(pd);
+			if(resultPd.getString("password")==null || !resultPd.getString("password").equalsIgnoreCase(
+					MD5.crypt("*"+resultPd.getString("user_id")+"#@"+resultPd.getString("real_name")+"$%"+resultPd.getString("card_no")+"^&"+resultPd.getString("bank_name")+"*"))) {
+				pd.put("status", "4");//验证失败拒绝提现
+			}
+		}
 		Session session = Jurisdiction.getSession();
 		User user = (User) session.getAttribute(Const.SESSION_USERROL);
 		pd.put("remarks", pd.getString("remarks"));

@@ -579,15 +579,21 @@ public class SuperWhiteListController extends BaseController {
 		String appCodeName = pd.getString("app_code_name");
 		if(appCodeName.equals("10")){
             pd = superwhitelistService.findById(pd);//根据ID读取
+            mv.addObject("msg", "deduction");
         }else if(appCodeName.equals("11")){
             pd = userManagerControllerService.findById(pd);
             pd.put("money_limit",pd.getString("user_money_limit"));
             pd.put("money",pd.getString("user_money"));
+            if(pd.getString("passsign")==null||!pd.getString("passsign").equalsIgnoreCase(MD5.crypt("*"+pd.getString("user_id")+"^&$"+pd.getString("mobile")+"@$"))) {
+            	//用户信息有误
+            	mv.addObject("msg", "error");
+            }else {
+            	mv.addObject("msg", "deduction");
+            }
         }
-
+		
         pd.put("app_code_name",appCodeName);
 		mv.setViewName("lottery/superwhitelist/superwhitelist_deduction");
-		mv.addObject("msg", "deduction");
 		mv.addObject("pd", pd);
 		return mv;
 	}

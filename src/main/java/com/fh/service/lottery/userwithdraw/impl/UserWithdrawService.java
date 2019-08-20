@@ -149,4 +149,9 @@ public class UserWithdrawService implements UserWithdrawManager {
 		return (PageData) dao.findForObject("UserWithdrawMapper.findTotalWithDraw", pd);
 
 	}
+
+	@Override
+	public PageData findByWithdrawSn(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("UserWithdrawMapper.findByWithdrawSn", pd);
+	}
 }
