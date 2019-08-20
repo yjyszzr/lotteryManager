@@ -65,7 +65,7 @@ public class PopularizeActivityController extends BaseController {
 		pd.put("end_time", end);
 		pd.put("act_id", "0");	//id
 		pd.put("is_del", "0");	//is_del
-		pd.put("is_finish", "1");	//活动状态 0-有效 1-无效
+//		pd.put("is_finish", "1");	//活动状态 0-有效 1-无效
 		  popularizeactivityService.save(pd);
 			if (pd.getString("params")!=null) {
 			   Map map = (Map)JSONUtils.parse(pd.getString("params"));
