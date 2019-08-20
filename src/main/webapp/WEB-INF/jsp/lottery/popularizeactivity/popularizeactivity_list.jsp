@@ -133,7 +133,9 @@
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:choose>
 													<c:when test="${var.is_finish==1 || empty var.is_finish}"> 
+													<c:if test="${var.onLineOrOffLine==0}">
 														<a class="btn btn-xs btn-primary" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('0','${var.act_id}');"> 上架</a>
+													</c:if>
 														<a class="btn btn-xs btn-info" title="编辑" style="border-radius: 5px;" onclick="edit('${var.act_id}');"> 编辑</a>
 														<c:if test="${QX.del == 1 }">
 															<a class="btn btn-xs btn-danger" style="border-radius: 5px;"  onclick="del('${var.act_id}');">删除</a>

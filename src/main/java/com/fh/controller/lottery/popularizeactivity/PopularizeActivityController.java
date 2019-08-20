@@ -182,6 +182,15 @@ public class PopularizeActivityController extends BaseController {
 		page.setPd(pd);
 		List<PageData>	varList = popularizeactivityService.list(page);	//列出PopularizeActivity列表
 		mv.setViewName("lottery/popularizeactivity/popularizeactivity_list");
+		Integer timeLong =	DateUtilNew.getCurrentTimeLong();
+		for (int i = 0; i < varList.size(); i++) {
+			PageData pda = varList.get(i);
+				if (Integer.parseInt(pda.getString("end_time"))<timeLong) {
+					pda.put("onLineOrOffLine", 1);
+				}else {
+					pda.put("onLineOrOffLine", 0);
+				}
+			}
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
