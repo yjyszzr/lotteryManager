@@ -175,12 +175,12 @@
 						LIKE CONCAT(CONCAT('%', #{pd.act_name}),'%')
 		</if>
 		<if test="pd.is_finish != null and pd.is_finish != ''">
-			<if test="pd.is_finish == -1">
-				and  is_finish is null
-			</if>
-			<if test="pd.is_finish != -1">
+<!-- 			<if test="pd.is_finish == -1"> -->
+<!-- 				and  is_finish is null -->
+<!-- 			</if> -->
+<!-- 			<if test="pd.is_finish != -1"> -->
 				and  is_finish = #{pd.is_finish}
-			</if>
+<!-- 			</if> -->
 		</if>
 		<if test="pd.act_type != null and pd.act_type != ''">
 			and  act_type = #{pd.act_type}
