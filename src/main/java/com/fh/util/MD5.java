@@ -1,5 +1,6 @@
 package com.fh.util;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 /** 
@@ -17,7 +18,7 @@ public class MD5 {
      * @return Encoded String
      * @throws Exception
      */
-    public static String crypt(String str)
+    public static String cryptForUTF(String str)
     {
         if (str == null || str.length() == 0) {
             throw new IllegalArgumentException("String to encript cannot be null or zero length");
@@ -27,7 +28,12 @@ public class MD5 {
         
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md.update(str.getBytes());
+            try {
+				md.update(str.getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             byte[] hash = md.digest();
             
             for (int i = 0; i < hash.length; i++) {
@@ -71,7 +77,6 @@ public class MD5 {
 		return str;
 	}
 	public static void main(String[] args) {
-		
-		System.out.println(crypt("1000000196"+"18810969495"));
+		System.out.println(cryptForUTF("*1000000025#@孙泽强$%6212260200166407128^&中国工商银行*"));
 	}
 }

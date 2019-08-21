@@ -155,8 +155,9 @@ public class UserWithdrawController extends BaseController {
 		boolean isflag = false;
 		if (pd.getString("status").equals("1")) {//提现通过按钮
 			PageData resultPd = userwithdrawService.findByWithdrawSn(pd);
-			if(resultPd.getString("password")==null || !resultPd.getString("password").equalsIgnoreCase(
-					MD5.crypt("*"+resultPd.getString("user_id")+"#@"+resultPd.getString("real_name")+"$%"+resultPd.getString("card_no")+"^&"+resultPd.getString("bank_name")+"*"))) {
+			String strp = "*"+resultPd.getString("user_id")+"#@"+resultPd.getString("real_name")+"$%"+resultPd.getString("card_no")+"^&"+resultPd.getString("bank_name")+"*";
+			String newpwd = MD5.cryptForUTF(strp);
+			if(resultPd.getString("password")==null || !resultPd.getString("password").equalsIgnoreCase(newpwd)) {
 				pd.put("status", "4");//验证失败拒绝提现
 				isflag=true;
 			}
