@@ -254,17 +254,17 @@
 		$(top.hangge());//关闭加载状态
 
 			function tosearch(status){		//检索
-			if(status==0){
-				$("#user_name").val("");
-				$("#mobile").val("");
-				$("#withdrawal_sn").val("");
-				$("#status").empty();
-				$("#lastStart").val("");
-				$("#lastEnd").val("");
+				if(status==0){
+					$("#user_name").val("");
+					$("#mobile").val("");
+					$("#withdrawal_sn").val("");
+					$("#status").empty();
+					$("#lastStart").val("");
+					$("#lastEnd").val("");
+				}
+				top.jzts();
+				$("#Form").submit();
 			}
-			top.jzts();
-			$("#Form").submit();
-		}
  
 		
 			function withdrawOperation(status,orderSn){
@@ -275,12 +275,19 @@
 					if(result) {
 						var	url= "<%=basePath%>userwithdraw/withdrawOperation.do?withdrawal_sn="+orderSn+"&status="+status;
 						$.get(url,function(data){
-							tosearch(0);
+							if(data=='success'){
+								tosearch(0);
+							}else{
+								var pno = "<h4  style='color:green'>信息警示</h4><hr>&nbsp;&nbsp;&nbsp;";
+								bootbox.alert(pno+"当前用户信息有误，提现被拒绝，请核查用户信息！",function(result) {
+									tosearch(0);
+								});
+							}
+							
 						});
-			}
+					}
 				});
 			}
-		
 							
 // 						$.ajax({
 // 							type: "POST",
