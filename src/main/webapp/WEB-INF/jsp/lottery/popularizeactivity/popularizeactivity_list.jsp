@@ -122,7 +122,7 @@
 											<td class='center'>
 												<c:if test="${var.is_finish == 0 }">进行中</c:if>
 												<c:if test="${var.is_finish == 1 }">已结束</c:if>
-												<c:if test="${empty var.is_finish }">未开始</c:if>
+												<c:if test="${var.is_finish == -1}">未开始</c:if>
 											</td>
 <%-- 											<td class='center'>${var.reward_money}</td> --%>
 <%-- 											<td class='center'>${var.number}</td> --%>
@@ -132,7 +132,7 @@
 												</c:if>
 												<div class="hidden-sm hidden-xs btn-group">
 													<c:choose>
-													<c:when test="${var.is_finish==1 || empty var.is_finish}"> 
+													<c:when test="${var.is_finish==1 || var.is_finish ==-1}"> 
 													<c:if test="${var.onLineOrOffLine==0}">
 														<a class="btn btn-xs btn-primary" title="上架" style="border-radius: 5px;" onclick="onOrOffLine('0','${var.act_id}');"> 上架</a>
 													</c:if>
