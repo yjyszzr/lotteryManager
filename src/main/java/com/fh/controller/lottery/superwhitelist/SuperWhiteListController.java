@@ -402,6 +402,10 @@ public class SuperWhiteListController extends BaseController {
 			viewName = "lottery/superwhitelist/superwhitelist_recharge";
 			msg = "recharge";
 			pd = userManagerControllerService.queryUserByMobileNew(pd);
+			if(pd.getString("passsign")==null||!pd.getString("passsign").equalsIgnoreCase(MD5.crypt("*"+pd.getString("user_id")+"^&$"+pd.getString("mobile")+"@$"))) {
+            	//用户信息有误
+            	msg = "error";
+            }
 		}else{
 			viewName = "lottery/superwhitelist/superwhitelist_recharge";
 			msg = "recharge";

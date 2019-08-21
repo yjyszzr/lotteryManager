@@ -126,8 +126,14 @@
 									</tr>
 									<tr>
 										<td style="text-align: center;" colspan="10">
-											<a class="btn btn-mini btn-primary" onclick="save();" id = "saveRecharge">确认</a>
-											<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+											<c:if test="${msg == 'error'}">
+												<font color="red">用户信息有误！</font>
+											</c:if>
+											<c:if test="${msg != 'error'}">
+												<a class="btn btn-mini btn-primary" onclick="save();" id = "saveRecharge">确认</a>
+												<a class="btn btn-mini btn-danger" onclick="top.Dialog.close();">取消</a>
+											</c:if>
+											
 										</td>
 									</tr>
 								</table>
