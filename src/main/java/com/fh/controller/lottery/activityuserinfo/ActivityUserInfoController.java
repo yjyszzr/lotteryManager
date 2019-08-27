@@ -215,7 +215,7 @@ public class ActivityUserInfoController extends BaseController {
 			PageData vpd = new PageData();
 			vpd.put("var1", varOList.get(i).get("user_id").toString());	//1
 			vpd.put("var2", varOList.get(i).getString("mobile"));	    //2
-			vpd.put("var3", varOList.get(i).get("invitation_number").toString());	//3
+			vpd.put("var3", varOList.get(i).get("history_invitation_number").toString());	//3
 			vpd.put("var4", varOList.get(i).getString("history_invitation_number_reward"));	    //4
 			vpd.put("var5", varOList.get(i).getString("history_total_return_reward"));	    //5
 			BigDecimal  history_total_withdrawable_reward = new BigDecimal(varOList.get(i).getString("history_total_withdrawable_reward")== "" ?"0":varOList.get(i).getString("history_total_withdrawable_reward"));

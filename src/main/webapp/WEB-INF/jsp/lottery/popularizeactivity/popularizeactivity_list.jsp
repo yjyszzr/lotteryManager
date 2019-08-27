@@ -173,9 +173,9 @@
 						<table style="width:100%;">
 							<tr>
 								<td style="vertical-align:top;">
-									<c:if test="${QX.add == 1 }">
+<%-- 									<c:if test="${QX.add == 1 }"> --%>
 									<a class="btn btn-mini btn-success" style="border-radius: 5px;"  onclick="add();">新增</a>
-									</c:if>
+<%-- 									</c:if> --%>
 								</td>
 								<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;">${page.pageStr}</div></td>
 							</tr>

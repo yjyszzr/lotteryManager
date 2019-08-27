@@ -57,7 +57,9 @@
 										</td>
 									</c:if>
 									
-								<c:if test="${QX.toExcel == 1 }"><td style="vertical-align:top;padding-left:2px;">&nbsp;&nbsp;&nbsp;<a style="border-radius:5px; "  class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL">导出到EXCEL</a></td></c:if>
+<%-- 								<c:if test="${QX.toExcel == 1 }"> --%>
+									<td style="vertical-align:top;padding-left:2px;">&nbsp;&nbsp;&nbsp;<a style="border-radius:5px; "  class="btn btn-light btn-xs" onclick="toExcel();" title="导出到EXCEL">导出到EXCEL</a></td>
+<%-- 								</c:if> --%>
 									
 								</tr>
 						</table>
@@ -94,8 +96,8 @@
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.user_id}</td>
 											<td class='center'>${var.mobile}</td>
-											<td class='center'>${var.invitation_number}</td>
-											<td class='center'>${var.invitation_number_reward}</td>
+											<td class='center'>${var.history_invitation_number}</td>
+											<td class='center'>${var.history_invitation_number_reward}</td>
 											<td class='center'>${var.history_total_return_reward}</td>
 											<td class='center'>${var.dwljxf_reward}</td>
 											<td class="center" >
