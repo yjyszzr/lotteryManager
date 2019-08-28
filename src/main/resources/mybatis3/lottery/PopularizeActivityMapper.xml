@@ -207,4 +207,34 @@
 	</delete>
 	
 	<!-- fh313596790qq(青苔) -->
+	
+<!-- 	定时器执行sql -->	
+	
+<!-- 	数据备份 -->
+	<insert id="insertHisToUserInfo">
+		insert into dl_activity_user_info_history select s.*,NOW() from dl_activity_user_info s
+	</insert>
+<!--  伯乐奖数据清零 -->
+	<update id="updateActivityUserInfoByBl">
+		UPDATE dl_activity_user_info set 
+			invitation_number=0,
+			invitation_number_reward=0
+	</update>
+<!--  荣耀奖数据清零 -->
+	<update id="updateActivityUserInfoByRy">
+		UPDATE dl_activity_user_info set 
+			month_return_reward=0,
+			invitation_add_reward=0,
+			buy_add_reward=0
+	</update>
+	<select id ="queryActivityConfigList"  resultType="String" parameterType="pd">
+	  	select id from dl_activity_config where act_id=#{act_id}
+	  </select>
+	<delete id="deleteConfigRecByConfigId" parameterType="String">
+		delete from dl_activity_config_user_receive where config_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
 </mapper>

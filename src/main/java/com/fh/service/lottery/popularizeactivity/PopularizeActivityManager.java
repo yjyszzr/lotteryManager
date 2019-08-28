@@ -1,6 +1,9 @@
 package com.fh.service.lottery.popularizeactivity;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.fh.entity.Page;
 import com.fh.util.PageData;
 
@@ -63,6 +66,19 @@ public interface PopularizeActivityManager{
 	public void saveConfig(PageData pdConfig)throws Exception;
 
 	public void deleteConfigByActId(PageData pd)throws Exception;
+	
+	
+	//定时器执行方法********************//
+
+	Integer insertHisToUserInfo() throws Exception;
+	
+	Integer updateActivityUserInfoByBl() throws Exception;
+	
+	Integer updateActivityUserInfoByRy() throws Exception;
+	
+	List<String> queryActivityConfigList(PageData pd) throws Exception;
+	
+	int deleteConfigRecByConfigId(String[] configId) throws Exception;
 	
 }
 
