@@ -107,8 +107,7 @@ public class PopularizeActivityController extends BaseController {
 				popularizeactivityService.updateActivityUserInfoByBl();//清楚此次活动数据
 				List<String> aclist = popularizeactivityService.queryActivityConfigList(activity);//查询当前活动档位
 				if(aclist!=null && aclist.size()>0) {
-					String[] configIdArr = (String[]) aclist.toArray();
-					popularizeactivityService.deleteConfigRecByConfigId(configIdArr);//删除挡位领取记录
+					popularizeactivityService.deleteConfigRecByConfigId(aclist);//删除挡位领取记录
 				}
 			}
 			if("4".equals(activity.getString("act_type"))) {//荣耀奖
@@ -116,13 +115,12 @@ public class PopularizeActivityController extends BaseController {
 				popularizeactivityService.updateActivityUserInfoByRy();//清楚此次活动数据
 				List<String> aclist = popularizeactivityService.queryActivityConfigList(activity);//查询当前活动档位
 				if(aclist!=null && aclist.size()>0) {
-					String[] configIdArr = (String[]) aclist.toArray();
-					popularizeactivityService.deleteConfigRecByConfigId(configIdArr);//删除挡位领取记录
+					popularizeactivityService.deleteConfigRecByConfigId(aclist);//删除挡位领取记录
 				}
 			}
 		}
 		popularizeactivityService.updateById(pd);
-		if("0".equals(pd.getString("is_finish"))) {//上架操作 上架新活动后 将冗余过期活动和手动下架活动删除（避免定时器重跑）
+		if("0".equals(pd.getString("is_finish"))) {//上架操作 上架新活动后 将冗余同类过期活动和手动下架活动删除（避免定时器重跑）
 			popularizeactivityService.deleteByType(activity.getString("act_type"));
 		}
 		out.write("success");

@@ -80,7 +80,7 @@ public interface PopularizeActivityManager{
 	
 	List<String> queryActivityConfigList(PageData pd) throws Exception;
 	
-	int deleteConfigRecByConfigId(String[] configId) throws Exception;
+	int deleteConfigRecByConfigId(List<String> configId) throws Exception;
 	
 }
 

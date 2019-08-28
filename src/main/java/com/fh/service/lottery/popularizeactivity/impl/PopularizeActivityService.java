@@ -125,7 +125,7 @@ public class PopularizeActivityService implements PopularizeActivityManager{
 	}
 
 	@Override
-	public int deleteConfigRecByConfigId(String[] configId) throws Exception {
+	public int deleteConfigRecByConfigId(List<String> configId) throws Exception {
 		return (Integer) dao.delete("PopularizeActivityMapper.deleteConfigRecByConfigId", configId);
 	}
 
