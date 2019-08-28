@@ -60,6 +60,8 @@ public interface PopularizeActivityManager{
 	public void updateById(PageData pd)throws Exception;
 	
 	public void deleteById(PageData pd)throws Exception;
+	
+	public void deleteByType(String type)throws Exception;
 
 	public  List<PageData>  findConfigByActId(PageData pd)throws Exception;
 

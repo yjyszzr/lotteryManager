@@ -236,5 +236,13 @@
                  #{item}
 		</foreach>
 	</delete>
-	
+<!--  删除过期活动和手动下架未使用活动	 -->
+	<update id="deleteById" parameterType="String">
+		update
+		<include refid="tableName"></include>
+		set 
+			is_del = 1
+		where 
+		act_type = #{act_type}
+	</update>
 </mapper>

@@ -100,8 +100,8 @@ public class PopularizeActivityController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		if("1".equals(pd.getString("is_finish"))) {//下架操作
-			PageData activity = popularizeactivityService.findById(pd);
+		PageData activity = popularizeactivityService.findById(pd);
+		if("1".equals(pd.getString("is_finish"))) {//下架操作 清楚活动数据
 			if("3".equals(activity.getString("act_type"))) {//伯乐奖
 				popularizeactivityService.insertHisToUserInfo();//将现有数据备份到历史表
 				popularizeactivityService.updateActivityUserInfoByBl();//清楚此次活动数据
@@ -122,6 +122,9 @@ public class PopularizeActivityController extends BaseController {
 			}
 		}
 		popularizeactivityService.updateById(pd);
+		if("0".equals(pd.getString("is_finish"))) {//上架操作 上架新活动后 将冗余过期活动和手动下架活动删除（避免定时器重跑）
+			popularizeactivityService.deleteByType(activity.getString("act_type"));
+		}
 		out.write("success");
 		out.close();
 	}
