@@ -103,6 +103,37 @@ public class PopularizeActivityService implements PopularizeActivityManager{
 		dao.delete("PopularizeActivityMapper.deleteConfigByActId", pd);
 		
 	}
+
+	@Override
+	public Integer insertHisToUserInfo() throws Exception {
+		return (Integer) dao.save("PopularizeActivityMapper.insertHisToUserInfo", null);
+	}
+
+	@Override
+	public Integer updateActivityUserInfoByBl() throws Exception {
+		return (Integer) dao.update("PopularizeActivityMapper.updateActivityUserInfoByBl", null);
+	}
+
+	@Override
+	public Integer updateActivityUserInfoByRy() throws Exception {
+		return (Integer) dao.update("PopularizeActivityMapper.updateActivityUserInfoByRy", null);
+	}
+
+	@Override
+	public List<String> queryActivityConfigList(PageData pd) throws Exception {
+		return (List<String>) dao.findForList("PopularizeActivityMapper.queryActivityConfigList", pd);
+	}
+
+	@Override
+	public int deleteConfigRecByConfigId(List<String> configId) throws Exception {
+		return (Integer) dao.delete("PopularizeActivityMapper.deleteConfigRecByConfigId", configId);
+	}
+
+	@Override
+	public void deleteByType(String type) throws Exception {
+		dao.delete("PopularizeActivityMapper.deleteByType", type);
+		
+	}
 	
 }
 

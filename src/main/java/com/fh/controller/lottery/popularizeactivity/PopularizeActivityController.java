@@ -88,7 +88,10 @@ public class PopularizeActivityController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
-	
+	/**上下架
+	 * @param out
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/onLineOrOffLine")
 	public void onLineOrOffLine(PrintWriter out) throws Exception {
 		logBefore(logger, Jurisdiction.getUsername() + "置顶或者上线操作");
@@ -97,7 +100,29 @@ public class PopularizeActivityController extends BaseController {
 		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		PageData activity = popularizeactivityService.findById(pd);
+		if("1".equals(pd.getString("is_finish"))) {//下架操作 清楚活动数据
+			if("3".equals(activity.getString("act_type"))) {//伯乐奖
+				popularizeactivityService.insertHisToUserInfo();//将现有数据备份到历史表
+				popularizeactivityService.updateActivityUserInfoByBl();//清楚此次活动数据
+				List<String> aclist = popularizeactivityService.queryActivityConfigList(activity);//查询当前活动档位
+				if(aclist!=null && aclist.size()>0) {
+					popularizeactivityService.deleteConfigRecByConfigId(aclist);//删除挡位领取记录
+				}
+			}
+			if("4".equals(activity.getString("act_type"))) {//荣耀奖
+				popularizeactivityService.insertHisToUserInfo();//将现有数据备份到历史表
+				popularizeactivityService.updateActivityUserInfoByRy();//清楚此次活动数据
+				List<String> aclist = popularizeactivityService.queryActivityConfigList(activity);//查询当前活动档位
+				if(aclist!=null && aclist.size()>0) {
+					popularizeactivityService.deleteConfigRecByConfigId(aclist);//删除挡位领取记录
+				}
+			}
+		}
 		popularizeactivityService.updateById(pd);
+		if("0".equals(pd.getString("is_finish"))) {//上架操作 上架新活动后 将冗余同类过期活动和手动下架活动删除（避免定时器重跑）
+			popularizeactivityService.deleteByType(activity.getString("act_type"));
+		}
 		out.write("success");
 		out.close();
 	}
