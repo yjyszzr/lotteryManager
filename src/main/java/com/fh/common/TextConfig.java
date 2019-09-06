@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class TextConfig {
 	// public static final String URL_SMS_CODE =
-	// "http://39.106.18.39:7071/sms/sendSmsCode";
+	// "http://49.232.65.109:7071/sms/sendSmsCode";
 
 	public static final String URL_SMS_CODE = "http://api.caixiaomi.net/api/member/sms/sendServiceSmsCode";
 	// 图片展示
