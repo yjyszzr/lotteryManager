@@ -368,25 +368,33 @@ public class DistributeBonusController extends BaseController {
 	 * @return
 	 * @throws Exception 
 	 */
-	public List<Integer> resolveUserBonusExcel(String bonusExcelUrl) throws Exception {
+	public List<Integer> resolveUserBonusExcel(String bonusExcelUrl) {
 		List<Integer> userIdList = new ArrayList<>();
         File file=new File(urlConfig.getUploadCommonFileUrl()+bonusExcelUrl);
-        XSSFWorkbook workbook=new XSSFWorkbook(new FileInputStream(file));
-        Sheet sheet=workbook.getSheetAt(0);//读取第一个 sheet
-        Row row=null;
-        int count=sheet.getPhysicalNumberOfRows();
-        //逐行处理 excel 数据
-        NumberFormat nf = NumberFormat.getInstance();
-        for (int i = 0; i < count; i++) {
-            row=sheet.getRow(i);
-            Cell cell0 = row.getCell(0);
-            String data = nf.format(cell0.getNumericCellValue());
-            if (data.indexOf(",") >= 0) {
-            	data = data.replace(",", "");
-            }
-            userIdList.add(Integer.valueOf(data));
-        }
-        workbook.close();
+        try {
+        	XSSFWorkbook workbook=new XSSFWorkbook(new FileInputStream(file));
+        	Sheet sheet=workbook.getSheetAt(0);//读取第一个 sheet
+        	Row row=null;
+        	int count=sheet.getPhysicalNumberOfRows();
+        	//逐行处理 excel 数据
+        	NumberFormat nf = NumberFormat.getInstance();
+        	for (int i = 0; i < count; i++) {
+        		row=sheet.getRow(i);
+        		Cell cell0 = row.getCell(0);
+        		String data = nf.format(cell0.getNumericCellValue());
+        		if (data.indexOf(",") >= 0) {
+        			data = data.replaceAll(",", "");
+        		}
+        		if(!StringUtils.isEmpty(data)) {
+        			userIdList.add(Integer.valueOf(data));
+        		}
+        		
+        	}
+        	workbook.close();
+		} catch (Exception e) {
+			System.out.println("eeeeeeeeeeeeeeeee=="+e);
+			  logger.error("excel解析异常================:"+e.getLocalizedMessage());
+		}
 		return userIdList;
 	}
 
