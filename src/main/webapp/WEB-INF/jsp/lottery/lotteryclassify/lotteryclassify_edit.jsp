@@ -70,7 +70,7 @@
 							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">所属店铺:</td>
 								<td>
-								    <select  name="status" id="app_code_name" value="${pd.app_code_name}" style="width:98%;">
+								    <select  name="app_code_name" id="app_code_name" value="${pd.app_code_name}" style="width:98%;">
 								        <option value="" >请选择</option>
 								        <option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
 								        <option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和彩店</option>
