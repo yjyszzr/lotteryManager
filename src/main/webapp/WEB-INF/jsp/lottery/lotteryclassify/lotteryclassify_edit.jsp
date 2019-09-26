@@ -62,6 +62,22 @@
 								</td>
 							</tr>
 							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">状态原因:</td>
+								<td>
+								   <input type="text" name="status_reason" id="status_reason" value="${pd.status_reason}" maxlength="50" placeholder="这里输入停售原因" style="width:98%;"/>
+								</td>
+							</tr>
+							<tr>
+								<td style="width:75px;text-align: right;padding-top: 13px;">所属店铺:</td>
+								<td>
+								    <select  name="status" id="app_code_name" value="${pd.app_code_name}" style="width:98%;">
+								        <option value="" >请选择</option>
+								        <option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
+								        <option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和彩店</option>
+								    </select>
+								</td>
+							</tr>
+							<tr>
 								<td style="width:75px;text-align: right;padding-top: 13px;">是否显示:</td>
 								<td>
 									<select  name="is_show" id="is_show" value="${pd.is_show}" style="width:98%;">
@@ -149,6 +165,26 @@
 		            time:2
 		        });
 				$("#status").focus();
+			return false;
+			}
+			if($("#status_reason").val()==""){
+				$("#status_reason").tips({
+					side:3,
+		            msg:'请输入当前状态下的描述',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#status_reason").focus();
+			return false;
+			}
+			if($("#app_code_name").val()==""){
+				$("#app_code_name").tips({
+					side:3,
+		            msg:'请选择店铺',
+		            bg:'#AE81FF',
+		            time:2
+		        });
+				$("#app_code_name").focus();
 			return false;
 			}
 			if($("#is_show").val()==""){

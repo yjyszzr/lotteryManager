@@ -70,10 +70,12 @@
 									<th class="center">彩种名称</th>
 									<th class="center">彩种logo</th>
 									<th class="center">排序</th>
-									<th class="center">状态</th>
-									<th class="center">是否展示</th>
-									<th class="center">创建时间</th>
+<!-- 									<th class="center">创建时间</th> -->
 									<th class="center">跳转链接</th>
+									<th class="center">所属店铺</th>
+									<th class="center">是否展示</th>
+									<th class="center">状态</th>
+									<th class="center">状态描述</th>
 									<th class="center">操作</th>
 								</tr>
 							</thead>
@@ -93,22 +95,33 @@
 											<td class='center'>${var.lottery_name}</td>
 											<td class='center'><img src="${var.lottery_img}" width="24px" hight="24px"/></td>
 											<td class='center'>${var.sort}</td>
-											<td class='center'>
-												<c:choose>
-													<c:when test="${var.status==0}"> 售卖 </c:when>
-													<c:when test="${var.status==1}"> 停售 </c:when>
-													<c:otherwise>--</c:otherwise>
-												</c:choose>
-											</td>
+				
+<%-- 											<td class='center'>${DateUtil.toSDFTime(var.create_time*1000)}</td> --%>
+											<td class='center'>${var.redirect_url}</td>
+													<td class='center'>
+														<c:if test="${var.app_code_name == '10'}">
+															球多多
+														</c:if>
+														<c:if test="${var.app_code_name == '11'}">
+															圣和彩店
+														</c:if>
+													</td>
 											<td class='center'> 
 												<c:choose>
-													<c:when test="${var.is_show==0}">不显示</c:when>
-													<c:when test="${var.is_show==1}">显示</c:when>
+													<c:when test="${var.is_show==0}"><a style="color:red;font-weight:900">不显示</a></c:when>
+													<c:when test="${var.is_show==1}"><a style="color:green;font-weight:600">显示</a></c:when>
 													<c:otherwise>--</c:otherwise>
 												</c:choose>
 											</td>
-											<td class='center'>${DateUtil.toSDFTime(var.create_time*1000)}</td>
-											<td class='center'>${var.redirect_url}</td>
+											<td class='center'>
+												<c:choose>
+													<c:when test="${var.status==0}"> <a style="color:green;font-weight:900">售卖</a></c:when>
+													<c:when test="${var.status==1}"> <a style="color:red;font-weight:900">停售</a></c:when>
+													<c:otherwise>--</c:otherwise>
+												</c:choose>
+											</td>
+											<td class='center'>${var.status_reason}</td>
+<%-- 											<td class='center'>${var.app_code_name}</td> --%>
 											<td class="center">
 												<c:if test="${QX.edit != 1 && QX.del != 1 }">
 												<span class="label label-large label-grey arrowed-in-right arrowed-in"><i class="ace-icon fa fa-lock" title="无权限"></i></span>
@@ -244,7 +257,7 @@
 			 diag.Title ="新增";
 			 diag.URL = '<%=basePath%>lotteryclassify/goAdd.do';
 			 diag.Width = 450;
-			 diag.Height = 365;
+			 diag.Height = 465;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮
@@ -282,7 +295,7 @@
 			 diag.Title ="编辑";
 			 diag.URL = '<%=basePath%>lotteryclassify/goEdit.do?lottery_classify_id='+Id;
 			 diag.Width = 450;
-			 diag.Height = 365;
+			 diag.Height = 465;
 			 diag.Modal = true;				//有无遮罩窗口
 			 diag. ShowMaxButton = true;	//最大化按钮
 		     diag.ShowMinButton = true;		//最小化按钮 

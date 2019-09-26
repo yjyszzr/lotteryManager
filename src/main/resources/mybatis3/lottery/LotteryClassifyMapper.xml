@@ -16,7 +16,9 @@
 		status,	
 		is_show,	
 		create_time,	
-		redirect_url
+		redirect_url,
+		status_reason,
+		app_code_name
 	</sql>
 	
 	<!-- 字段值 -->
@@ -28,7 +30,9 @@
         #{status},	
         #{is_show},	
         #{create_time},	
-        #{redirect_url}	
+        #{redirect_url},
+        #{status_reason},
+        #{app_code_name}	
 	</sql>
 	
 	<!-- 新增-->
@@ -43,7 +47,9 @@
 		        status,	
 		        is_show,	
 		        create_time,	
-		        redirect_url	
+		        redirect_url,
+		        status_reason,
+		        app_code_name	
 		) values (
 	<include refid="FieldValue"></include>
 		)
@@ -67,6 +73,8 @@
 			sort = #{sort},
 			status = #{status},
 			is_show = #{is_show},
+		  	status_reason = #{status_reason},
+			app_code_name = #{app_code_name},
 			redirect_url = #{redirect_url}
 		where 
 		lottery_classify_id = #{lottery_classify_id}
