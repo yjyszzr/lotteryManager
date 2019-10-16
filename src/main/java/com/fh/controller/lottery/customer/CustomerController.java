@@ -156,7 +156,7 @@ public class CustomerController extends BaseController {
 			_pd.put("mobile", pd.getString("mobile"));
 			PageData _user = customerService.getUserByMobile11(_pd);
 
-            if(null != _user)){
+            if(null != _user){
                 map.put("flag", false);
                 map.put("msg", "已注册用户不能录入");
                 return AppUtil.returnObject(new PageData(), map);
