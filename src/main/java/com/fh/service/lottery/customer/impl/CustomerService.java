@@ -30,6 +30,10 @@ public class CustomerService implements CustomerManager{
 		return (PageData) dao.findForObject("CustomerMapper.getUserByMobile", pd);
 	}
 	
+	public PageData getUserByMobile11(PageData pd) throws Exception {
+		return (PageData) dao.findForObject("CustomerMapper.getUserByMobile11", pd);
+	}
+	
 	/**新增
 	 * @param pd
 	 * @throws Exception

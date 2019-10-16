@@ -133,20 +133,6 @@ public class CustomerController extends BaseController {
 	@RequestMapping(value = "/checkMobile")
 	@ResponseBody
 	public Object checkMobile() throws Exception {
-		/**
-		 * Map<String,Object> map = new HashMap<String,Object>(); List<PageData>
-		 * bonusList =
-		 * this.queryActivityBonusListByActType(ProjectConstant.Bonus_TYPE_GIVE_USER);
-		 * 
-		 * List<PageData> newbonusList = new ArrayList<>();
-		 * bonusList.stream().forEach(s->{ PageData newPd = new PageData();
-		 * newPd.put("bonus_id", s.getString("bonus_id")); newPd.put("min_goods_amount",
-		 * s.getString("min_goods_amount")); newPd.put("bonus_price",
-		 * s.getString("bonus_amount")); newbonusList.add(newPd); });
-		 * 
-		 * map.put("list", newbonusList); return AppUtil.returnObject(new PageData(),
-		 * map);
-		 **/
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
 
@@ -168,7 +154,8 @@ public class CustomerController extends BaseController {
             String parentUserId = "";
 			PageData _pd = new PageData();
 			_pd.put("mobile", pd.getString("mobile"));
-			PageData _user = this.userAccountService.getUserByMobile(_pd);
+			PageData _user = customerService.getUserByMobile11(_pd);
+			
 			if (null != _user) {
 				user_id_2 = _user.getString("user_id");
                 parentUserId =_user.getString("parent_user_id");
