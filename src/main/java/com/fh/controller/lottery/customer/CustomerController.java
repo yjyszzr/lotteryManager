@@ -155,6 +155,12 @@ public class CustomerController extends BaseController {
 			PageData _pd = new PageData();
 			_pd.put("mobile", pd.getString("mobile"));
 			PageData _user = customerService.getUserByMobile11(_pd);
+
+            if(null != _user)){
+                map.put("flag", false);
+                map.put("msg", "已注册用户不能录入");
+                return AppUtil.returnObject(new PageData(), map);
+            }
 			
 			if (null != _user) {
 				user_id_2 = _user.getString("user_id");
@@ -165,27 +171,6 @@ public class CustomerController extends BaseController {
 			_pd = null;
 			_pd = this.customerService.getCountOrderByMobile(pd);
 
-            if(StringUtils.isNotEmpty(parentUserId)){
-                map.put("flag", false);
-                map.put("msg", "该用户已经被顾客邀请，不能由销售人员录入");
-                return AppUtil.returnObject(new PageData(), map);
-            }
-			Integer _count = Integer.valueOf(_pd.getString("_count"));
-			if (_count > 0) {
-				map.put("flag", false);
-				map.put("msg", "2018年11月7号之后有购过彩");
-				return AppUtil.returnObject(new PageData(), map);
-			}
-
-//			_pd = null;
-//			_count = 0;
-//			_pd = this.userAccountManagerService.getCountOrderByMobile(pd);
-//			_count = new Long(_pd.getString("_count"));
-//			if (_count > 0) {
-//				map.put("flag", false);
-//				map.put("msg", "2019年11月7号之后有购过彩");
-//				return AppUtil.returnObject(new PageData(), map);
-//			}
 
 			_pd = null;
 			_pd = this.customerService.findById(pd);
