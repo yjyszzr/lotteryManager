@@ -214,6 +214,8 @@ public class ArtifiPrintLotteryStatisticalDataController extends BaseController 
 		titles.add("付款金额"); // 3
 		titles.add("出票量"); // 4
 		titles.add("派奖总金额"); // 5
+		titles.add("可提现余额"); // 6
+		titles.add("不可提现余额"); // 7
 		dataMap.put("titles", titles);
 
 		String idsStr = pd.getString("idsStr");
@@ -233,6 +235,8 @@ public class ArtifiPrintLotteryStatisticalDataController extends BaseController 
 			vpd.put("var3", varOList.get(i).getString("total_paid_amount")); // 3
 			vpd.put("var4", varOList.get(i).get("print_num").toString()); // 4
 			vpd.put("var5", varOList.get(i).getString("total_award_amount")); // 5
+			vpd.put("var6", varOList.get(i).getString("total_user_money")); // 6
+			vpd.put("var7", varOList.get(i).getString("total_user_money_limit")); // 7
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
