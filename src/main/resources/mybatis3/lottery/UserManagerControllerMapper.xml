@@ -771,5 +771,13 @@
         </if>
         where user_id = #{user_id}
     </update>
-
+    
+	<select id="findUserMoney" parameterType="pd" resultType="pd">
+		SELECT
+			sum( user_money_limit ) user_money_limit,
+			sum( user_money ) user_money 
+		FROM
+			dl_user;
+	</select>
+	
 </mapper>

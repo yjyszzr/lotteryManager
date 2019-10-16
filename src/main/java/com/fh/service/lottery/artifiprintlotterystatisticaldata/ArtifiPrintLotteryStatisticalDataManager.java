@@ -72,16 +72,18 @@ public interface ArtifiPrintLotteryStatisticalDataManager {
 
 	public PageData findByTime(PageData pd) throws Exception;
 
-	public void savePrintStatistical(PageData pdPrintHasStatisticalA)throws Exception;
+	public void savePrintStatistical(PageData pdPrintHasStatisticalA) throws Exception;
 
-	public void editPrintStatistical(PageData pdPrintHasStatisticalA)throws Exception;
+	public void editPrintStatistical(PageData pdPrintHasStatisticalA) throws Exception;
 
-	public void savePaidStatistical(PageData pdPaidHasStatisticalA)throws Exception;
+	public void savePaidStatistical(PageData pdPaidHasStatisticalA) throws Exception;
 
-	public void editPaidStatistical(PageData pdPaidHasStatisticalA)throws Exception;
+	public void editPaidStatistical(PageData pdPaidHasStatisticalA) throws Exception;
 
-	public void saveRewardStatistical(PageData pdRewardHasStatisticalA)throws Exception;
+	public void saveRewardStatistical(PageData pdRewardHasStatisticalA) throws Exception;
 
-	public void editRewardStatistical(PageData pdRewardHasStatisticalA)throws Exception;
+	public void editRewardStatistical(PageData pdRewardHasStatisticalA) throws Exception;
+
+	public void updateUserMoney(PageData pdMoney) throws Exception;
 
 }

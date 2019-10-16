@@ -14,7 +14,9 @@
 		paid_order_num,	
 		total_paid_amount,	
 		print_num,	
-		total_award_amount
+		total_award_amount,
+		total_user_money,
+		total_user_money_limit
 	</sql>
 	
 	<!-- 字段值 -->
@@ -24,7 +26,9 @@
         #{paid_order_num},	
         #{total_paid_amount},	
         #{print_num},	
-        #{total_award_amount}	
+        #{total_award_amount},
+        #{total_user_money},
+        #{total_user_money_limit}	
 	</sql>
 	
 	<!-- 新增-->
@@ -142,6 +146,19 @@
 		set 
 			paid_order_num = #{paid_order_num},
 			total_paid_amount = #{total_paid_amount}
+		where 
+			data_str = #{data_str}
+	</update>
+	
+	
+	
+	<!-- 修改用户金额 -->
+	<update id="updateUserMoney" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			total_user_money = #{user_money},
+			total_user_money_limit = #{user_money_limit}
 		where 
 			data_str = #{data_str}
 	</update>

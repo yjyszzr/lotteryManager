@@ -1,13 +1,15 @@
 package com.fh.service.lottery.usermanagercontroller.impl;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
 import com.fh.dao.DaoSupport3;
 import com.fh.entity.Page;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.util.PageData;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 说明： 用户列表 创建人：FH Q313596790 创建时间：2018-04-23
@@ -29,7 +31,6 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public void save(PageData pd) throws Exception {
 		dao.save("UserManagerControllerMapper.save", pd);
 	}
-
 
 	/**
 	 * 新增市场统计数据
@@ -91,6 +92,7 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public List<PageData> list(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.datalistPage", page);
 	}
+
 	@SuppressWarnings("unchecked")
 	public List<PageData> listDetailTwo(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.datalistPageTwo", page);
@@ -107,17 +109,16 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.listAll", pd);
 	}
 
-    /**
-     * 列表(全部)
-     *
-     * @param pd
-     * @throws Exception
-     */
-    @SuppressWarnings("unchecked")
-    public List<PageData> listAllNew(PageData pd) throws Exception {
-        return (List<PageData>) dao.findForList("UserManagerControllerMapper.listAllNew", pd);
-    }
-
+	/**
+	 * 列表(全部)
+	 *
+	 * @param pd
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public List<PageData> listAllNew(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.listAllNew", pd);
+	}
 
 	/**
 	 * 通过id获取数据
@@ -128,7 +129,6 @@ public class UserManagerControllerService implements UserManagerControllerManage
 	public PageData findById(PageData pd) throws Exception {
 		return (PageData) dao.findForObject("UserManagerControllerMapper.findById", pd);
 	}
-
 
 	/**
 	 * 批量删除
@@ -161,7 +161,6 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.marketlist", page);
 	}
 
-
 	public Integer getmarketCountToday(PageData page) throws Exception {
 		return (Integer) dao.findForObject("UserManagerControllerMapper.marketCountToday", page);
 	}
@@ -173,194 +172,218 @@ public class UserManagerControllerService implements UserManagerControllerManage
 
 	/**
 	 * 根据用户手机号查询用户
+	 * 
 	 * @param pd
 	 * @return
 	 * @throws Exception
 	 */
 	public PageData queryUserByMobile(String mobile) throws Exception {
-		return (PageData)dao.findForObject("UserManagerControllerMapper.getUserByMobile", mobile);
+		return (PageData) dao.findForObject("UserManagerControllerMapper.getUserByMobile", mobile);
 	}
 
+	/**
+	 * 根据用户手机号查询用户 圣和
+	 * 
+	 * @param pd
+	 * @return
+	 * @throws Exception
+	 */
+	public PageData queryUserByMobileSH(String mobile) throws Exception {
+		return (PageData) dao.findForObject("UserManagerControllerMapper.getUserByMobileSH", mobile);
+	}
 
-    /**
-     * 根据用户手机号查询用户 圣和
-     * @param pd
-     * @return
-     * @throws Exception
-     */
-    public PageData queryUserByMobileSH(String mobile) throws Exception {
-        return (PageData)dao.findForObject("UserManagerControllerMapper.getUserByMobileSH", mobile);
-    }
-
-	/**注册并认证统计（购彩）
+	/**
+	 * 注册并认证统计（购彩）
 	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getRealAndRegister(Page page) throws Exception {
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRealAndRegister", page);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.getRealAndRegister", page);
 	}
-	/**注册并充值
+
+	/**
+	 * 注册并充值
 	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getRegisterAndRecharge(Page page) throws Exception {
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRegisterAndRecharge", page);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.getRegisterAndRecharge", page);
 	}
-	/**注册并购彩
+
+	/**
+	 * 注册并购彩
 	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getRegisterAndOrder(Page page) throws Exception {
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRegisterAndOrder", page);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.getRegisterAndOrder", page);
 	}
 
-	/**注册并购彩(复购)
+	/**
+	 * 注册并购彩(复购)
 	 *
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PageData> getRegisterAndAgainOrder(Page page) throws Exception {
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRegisterAndAgainOrder", page);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.getRegisterAndAgainOrder", page);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<PageData> getRealAndOrder(Page page) throws Exception {
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.getRealAndOrder", page);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.getRealAndOrder", page);
 	}
 
 	@Override
 	public List<Integer> getUserIdListByMobileList(List mobileList) throws Exception {
-		return (List<Integer>)dao.findForList("UserManagerControllerMapper.getUserIdListByMobileList", mobileList);
+		return (List<Integer>) dao.findForList("UserManagerControllerMapper.getUserIdListByMobileList", mobileList);
 	}
 
-
-	/** 获取销售人员业绩总体查询
+	/**
+	 * 获取销售人员业绩总体查询
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> sellerAchieveList(Page page)throws Exception{
+	public List<PageData> sellerAchieveList(Page page) throws Exception {
 		return (List<PageData>) dao.findForList("UserManagerControllerMapper.sellerAchieveList", page);
 	}
 
-
-	/** 获取销售人员每个月的业绩查询
+	/**
+	 * 获取销售人员每个月的业绩查询
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> sellerAchieveByMonthList(PageData page)throws Exception{
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerAchieveByMonthList", page);
+	public List<PageData> sellerAchieveByMonthList(PageData page) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.sellerAchieveByMonthList", page);
 	}
 
-	/** 获取销售人员每个月录入的用户数量
+	/**
+	 * 获取销售人员每个月录入的用户数量
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> sellerWriteUserhList(PageData page)throws Exception{
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerWriteUserhList", page);
+	public List<PageData> sellerWriteUserhList(PageData page) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.sellerWriteUserhList", page);
 	}
 
-	/** 获取销售人员下的人员每个月的购彩量
+	/**
+	 * 获取销售人员下的人员每个月的购彩量
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> sellerBuyMoneyhList(List<PageData> varList)throws Exception{
+	public List<PageData> sellerBuyMoneyhList(List<PageData> varList) throws Exception {
 		String[] userIdList = new String[varList.size()];
 		for (int i = 0; i < varList.size(); i++) {
 			userIdList[i] = varList.get(i).getString("user_id");
 		}
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerBuyMoneyhList", userIdList);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.sellerBuyMoneyhList", userIdList);
 	}
 
-
-	/** 获取销售人员下的人员每个月的红包量
+	/**
+	 * 获取销售人员下的人员每个月的红包量
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> sellerUserBonushList(PageData page)throws Exception{
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.sellerUserBonushList", page);
+	public List<PageData> sellerUserBonushList(PageData page) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.sellerUserBonushList", page);
 	}
 
-	/** 获取圣和彩店注册人员
+	/**
+	 * 获取圣和彩店注册人员
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> getShenHeUserList(Page page)throws Exception{
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.datalistPageThree", page);
+	public List<PageData> getShenHeUserList(Page page) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.datalistPageThree", page);
 	}
 
-
-    /** 给圣和彩店用户后台充值
-     * @param pd
-     * @throws Exception
-     */
-    public void recharge(PageData pd)throws Exception{
-        dao.update("UserManagerControllerMapper.recharge", pd);
-    }
-
-    /** 给圣和彩店用户后台扣款
-     * @param pd
-     * @throws Exception
-     */
-    public void deduction(PageData pd)throws Exception{
-        dao.update("UserManagerControllerMapper.deduction", pd);
-    }
-
-	/** 获取	用户最新的充值流水
+	/**
+	 * 给圣和彩店用户后台充值
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public List<PageData> queryUserAccountRechargeLatest(PageData pd)throws Exception{
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.queryUserAccountRechargeLatest", pd);
+	public void recharge(PageData pd) throws Exception {
+		dao.update("UserManagerControllerMapper.recharge", pd);
 	}
 
-	/** 获取销售人员下的人员红包总量
+	/**
+	 * 给圣和彩店用户后台扣款
+	 * 
 	 * @param pd
 	 * @throws Exception
 	 */
-	public PageData sellerUserBonushTotal(List<String> varList)throws Exception{
+	public void deduction(PageData pd) throws Exception {
+		dao.update("UserManagerControllerMapper.deduction", pd);
+	}
+
+	/**
+	 * 获取 用户最新的充值流水
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public List<PageData> queryUserAccountRechargeLatest(PageData pd) throws Exception {
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.queryUserAccountRechargeLatest", pd);
+	}
+
+	/**
+	 * 获取销售人员下的人员红包总量
+	 * 
+	 * @param pd
+	 * @throws Exception
+	 */
+	public PageData sellerUserBonushTotal(List<String> varList) throws Exception {
 		String[] userIdList = new String[varList.size()];
 		for (int i = 0; i < varList.size(); i++) {
 			userIdList[i] = varList.get(i);
 		}
-		return (PageData)dao.findForObject("UserManagerControllerMapper.sellerUserBonushTotal", userIdList);
+		return (PageData) dao.findForObject("UserManagerControllerMapper.sellerUserBonushTotal", userIdList);
 	}
-
 
 	/**
 	 * 查询月售彩额度
+	 * 
 	 * @param PageData page
 	 * @throws Exception
 	 */
-	public List<PageData> queryBuyByMonth(List<PageData> varList)throws Exception{
+	public List<PageData> queryBuyByMonth(List<PageData> varList) throws Exception {
 		String[] userIdList = new String[varList.size()];
 		for (int i = 0; i < varList.size(); i++) {
 			userIdList[i] = varList.get(i).getString("user_id");
 		}
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.queryBuyByMonth", userIdList);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.queryBuyByMonth", userIdList);
 	}
 
 	/**
 	 * 查询多人总售彩额度
+	 * 
 	 * @param PageData page
 	 * @throws Exception
 	 */
-	public List<PageData> queryBuyTotal(List<PageData> varList)throws Exception{
+	public List<PageData> queryBuyTotal(List<PageData> varList) throws Exception {
 		String[] userIdList = new String[varList.size()];
 		for (int i = 0; i < varList.size(); i++) {
 			userIdList[i] = varList.get(i).getString("user_id");
 		}
-		return (List<PageData>)dao.findForList("UserManagerControllerMapper.queryBuyTotal", userIdList);
+		return (List<PageData>) dao.findForList("UserManagerControllerMapper.queryBuyTotal", userIdList);
 	}
 
 	/**
 	 * 查询单个销售人员的多个顾客id
 	 */
-	public List<String> queryUserIdsBySellersId(String sellerId)throws Exception{
-		return (List<String>)dao.findForList("UserManagerControllerMapper.querySellersUserIds", sellerId);
+	public List<String> queryUserIdsBySellersId(String sellerId) throws Exception {
+		return (List<String>) dao.findForList("UserManagerControllerMapper.querySellersUserIds", sellerId);
 	}
 
 	@Override
@@ -375,23 +398,25 @@ public class UserManagerControllerService implements UserManagerControllerManage
 		return null;
 	}
 
-
-	public PageData queryUserByMobile(PageData pagedata)throws Exception{
-		return (PageData)dao.findForObject("UserManagerControllerMapper.queryUserByMobile", pagedata);
+	public PageData queryUserByMobile(PageData pagedata) throws Exception {
+		return (PageData) dao.findForObject("UserManagerControllerMapper.queryUserByMobile", pagedata);
 	}
 
-    public PageData queryUserByMobileNew(PageData pagedata)throws Exception{
-        return (PageData)dao.findForObject("UserManagerControllerMapper.queryUserByMobileNew", pagedata);
-    }
-
-	public PageData refoundToUserMoneyLimit(PageData pagedata)throws Exception{
-		return (PageData)dao.findForObject("UserManagerControllerMapper.refoundToUserMoneyLimit", pagedata);
+	public PageData queryUserByMobileNew(PageData pagedata) throws Exception {
+		return (PageData) dao.findForObject("UserManagerControllerMapper.queryUserByMobileNew", pagedata);
 	}
 
+	public PageData refoundToUserMoneyLimit(PageData pagedata) throws Exception {
+		return (PageData) dao.findForObject("UserManagerControllerMapper.refoundToUserMoneyLimit", pagedata);
+	}
 
 	@Override
 	public void isOrNotOld(PageData pd) throws Exception {
 		dao.update("UserManagerControllerMapper.isOrNotOld", pd);
+	}
+
+	public PageData findUserMoney(PageData pdMoney) throws Exception {
+		return (PageData) dao.findForObject("UserManagerControllerMapper.findUserMoney", pdMoney);
 	}
 
 }

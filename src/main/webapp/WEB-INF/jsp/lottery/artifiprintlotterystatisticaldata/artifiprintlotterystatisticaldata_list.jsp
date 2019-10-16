@@ -63,6 +63,8 @@
 									<th class="center">付款金额</th>
 									<th class="center">出票量</th>
 									<th class="center">派奖总金额</th>
+									<th class="center">可提现余额</th>
+									<th class="center">不可提现余额</th>
 								</tr>
 							</thead>
 													
@@ -82,6 +84,8 @@
 											<td class='center'>${var.total_paid_amount}</td>
 											<td class='center'>${var.print_num}</td>
 											<td class='center'>${var.total_award_amount}</td>
+											<td class='center'>${var.total_user_money}</td>
+											<td class='center'>${var.total_user_money_limit}</td>
 										</tr>
 									
 									</c:forEach>
