@@ -1,12 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-		 pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +29,7 @@
 
 						<!-- 检索  -->
 						<form action="superwhitelist/list.do" method="post" name="Form" id="Form">
+						<input type = "hidden" id ="app_code_name" name = "app_code_name" value = "11"/>
 							<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px">
 									<td >
@@ -53,13 +51,13 @@
 												<a class="btn btn-light btn-xs blue" onclick="tosearch(1);"  title="搜索"  style="border-radius:5px;color:blue !important; width:50px">搜索</a>
 										</span>
 
-											<span class="input-icon" style="width:80px;text-align:right;">
-											平台来源:
-										</span>
-											<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important" onchange="changgeStyle()" >
-												<option value="10" <c:if test="${pd.app_code_name !='' && pd.app_code_name == '10'}">selected</c:if>>球多多</option>
-												<option value="11" <c:if test="${pd.app_code_name == '11'}">selected</c:if>> 圣和彩店 </option>
-											</select>
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 											平台来源: -->
+<!-- 										</span> -->
+<%-- 											<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important" onchange="changgeStyle()" > --%>
+<%-- 												<option value="10" <c:if test="${pd.app_code_name !='' && pd.app_code_name == '10'}">selected</c:if>>球多多</option> --%>
+<%-- 												<option value="11" <c:if test="${pd.app_code_name == '11'}">selected</c:if>> 圣和彩店 </option> --%>
+<!-- 											</select> -->
 											<span class="input-icon" style="width:23px;"> </span>
 											<span>
 												<a class="btn btn-light btn-xs blue" onclick="tosearch(0);"  title="清空"  style="border-radius:5px;color:blue !important; width:50px">清空</a>
@@ -73,9 +71,9 @@
 										</span>
 											<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										</span>
-											<span>
-												<a id="superWhiteUser" class="btn btn-light btn-xs blue" onclick="setIsSupperWhite();"  title="加超级白名单"  style="border-radius:5px;color:blue !important; width:100px">加超级白名单</a>
-										</span>
+<!-- 											<span> -->
+<!-- 												<a id="superWhiteUser" class="btn btn-light btn-xs blue" onclick="setIsSupperWhite();"  title="加超级白名单"  style="border-radius:5px;color:blue !important; width:100px">加超级白名单</a> -->
+<!-- 										</span> -->
 
 										</td>
 
@@ -136,7 +134,7 @@
 															球多多
 														</c:if>
 														<c:if test="${var.app_code_name == '11'}">
-															圣和彩店
+															每日赛事
 														</c:if>
 													</td>
 													<td class="center">
