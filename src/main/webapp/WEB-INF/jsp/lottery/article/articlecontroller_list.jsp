@@ -28,8 +28,9 @@
 						<div class="col-xs-12">
 						<!-- 检索  -->
 						<form action="articlecontroller/list.do" method="post" name="Form" id="Form">
+							<input type = "hidden" id ="app_code_name" name = "app_code_name" value = "11"/>
 						<div id="zhongxin" style="padding-top: 13px;">
-												<input type="hidden"  id="match_id" autocomplete="off" name="match_id" value="${pd.match_id }"  />
+						 <input type="hidden"  id="match_id" autocomplete="off" name="match_id" value="${pd.match_id }"  />
 						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
 									<td>
@@ -79,19 +80,19 @@
 										</div>
 									</td>
 									
-									<td>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-													发布平台:
-												</span>
-										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  >
-											<option value="" selected>全部</option>
-											<option value="1" <c:if test="${pd.app_code_name == 1}">selected</c:if>>通用</option>
-											<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
-											<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和彩店</option>
-										  	</select>
-										  	</div>
-									</td>		
+<!-- 									<td> -->
+<!-- 										<div class="nav-search"> -->
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 													发布平台: -->
+<!-- 												</span> -->
+<%-- 										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  > --%>
+<!-- 											<option value="" selected>全部</option> -->
+<%-- 											<option value="1" <c:if test="${pd.app_code_name == 1}">selected</c:if>>通用</option> --%>
+<%-- 											<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option> --%>
+<%-- 											<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和彩店</option> --%>
+<!-- 										  	</select> -->
+<!-- 										  	</div> -->
+<!-- 									</td>		 -->
 								
 									<td >
 										<span class="input-icon" style="width:80px;text-align:right;">
@@ -102,8 +103,8 @@
 												<input name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text"  onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"  readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 											</span>
 									</td>
-										</tr>
-									<tr>
+<!-- 										</tr> -->
+<!-- 									<tr> -->
 									<c:if test="${QX.cha == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
 											<span class="input-icon" style="width:80px;"> </span>
@@ -162,7 +163,7 @@
 												<c:choose>
 													<c:when test="${var.app_code_name==1}">通用</c:when>
 													<c:when test="${var.app_code_name==10}">球多多</c:when>
-													<c:when test="${var.app_code_name==11}"> 圣和彩店</c:when>
+													<c:when test="${var.app_code_name==11}"> 每日赛事</c:when>
 													<c:otherwise>球多多</c:otherwise>
 												</c:choose>
 											</td>	

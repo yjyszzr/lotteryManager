@@ -60,20 +60,19 @@ public class OrderManagerController extends BaseController {
 
 	@Resource(name = "userService")
 	private UserManager userService;
-	
+
 	@Resource(name = "usermanagercontrollerService")
 	private UserManagerControllerManager usermanagercontrollerService;
 
 	@Resource(name = "logoperationService")
 	private LogOperationManager logoperationService;
 
-	@Resource(name="artifiprintlotteryService")
+	@Resource(name = "artifiprintlotteryService")
 	private ArtifiPrintLotteryManager artifiprintlotteryService;
-	
-	@Resource(name="useraccountService")
+
+	@Resource(name = "useraccountService")
 	private UserAccountManagerManager UserAccountService;
-	
-	
+
 	/**
 	 * 列表
 	 * 
@@ -158,8 +157,7 @@ public class OrderManagerController extends BaseController {
 				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
-				
-				
+
 			}
 		}
 		mv.setViewName("lottery/ordermanager/ordermanager_list");
@@ -182,6 +180,7 @@ public class OrderManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("app_code_name", 11);
 
 		String order_sn = pd.getString("order_sn");
 		if (null != order_sn && !"".equals(order_sn)) {
@@ -219,29 +218,27 @@ public class OrderManagerController extends BaseController {
 		List<PageData> varList = ordermanagerService.getOrderListForMO(page); // 列出手工出票OrderManager列表
 		Double allAmountD = 0D;
 		if (varList.size() > 0) {
-			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);    
+			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);
 			List<PageData> payOperationList = ordermanagerService.findPayOperationList(varList);
-			Map<String, String> orderSnMap =new HashMap<String, String>();
+			Map<String, String> orderSnMap = new HashMap<String, String>();
 			for (int i = 0; i < payOperationList.size(); i++) {
-			    orderSnMap.put(payOperationList.get(i).getString("order_sn"), payOperationList.get(i).getString("name"));
-            }
-			
+				orderSnMap.put(payOperationList.get(i).getString("order_sn"), payOperationList.get(i).getString("name"));
+			}
+
 			Map<String, PageData> payLogMap = new HashMap<String, PageData>(payLogList.size());
 			payLogList.forEach(item -> payLogMap.put(item.getString("order_sn"), item));
 			for (int i = 0; i < varList.size(); i++) {
- 			    varList.get(i).put("store_name",orderSnMap.get(varList.get(i).getString("order_sn")));
+				varList.get(i).put("store_name", orderSnMap.get(varList.get(i).getString("order_sn")));
 				PageData pageData = payLogMap.get(varList.get(i).getString("order_sn"));
 				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
-				
+
 				try {
 					String store_id = varList.get(i).getString("store_id");
 					String user_id = varList.get(i).getString("user_id");
-					if (null != store_id && !"".equals(store_id) 
-						&& new Long(store_id) > 0	
-					) { 
-						PageData _pd = new PageData(); 
+					if (null != store_id && !"".equals(store_id) && new Long(store_id) > 0) {
+						PageData _pd = new PageData();
 						_pd.put("user_id", user_id);
 						PageData user = this.UserAccountService.getUserByUserId(_pd);
 						varList.get(i).put("mobile", user.getString("mobile"));
@@ -250,16 +247,16 @@ public class OrderManagerController extends BaseController {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
-				
+
 			}
 		}
-		
+
 		int printNum = 0;
 		int payNum = 0;
-		Long   mm=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
-		List<PageData> payLogList = artifiprintlotteryService.findByTime(DateUtilNew.getCurrentTimeString( mm-60*60*24,DateUtilNew.date_sdf),null);
+		Long mm = Long.parseLong(DateUtilNew.getCurrentTimeLong().toString());
+		List<PageData> payLogList = artifiprintlotteryService.findByTime(DateUtilNew.getCurrentTimeString(mm - 60 * 60 * 24, DateUtilNew.date_sdf), null);
 		for (int i = 0; i < payLogList.size(); i++) {
-			PageData pageData =new PageData();
+			PageData pageData = new PageData();
 			pageData = payLogList.get(i);
 			payNum += 1;
 			if (pageData.getString("order_status").equals("1")) {
@@ -268,7 +265,7 @@ public class OrderManagerController extends BaseController {
 		}
 		pd.put("printNum", printNum);
 		pd.put("payNum", payNum);
-		
+
 		mv.setViewName("lottery/ordermanager/manual_operation_order");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -276,6 +273,7 @@ public class OrderManagerController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
+
 	/**
 	 * 财务手动操作订单manual operation order
 	 * 
@@ -289,7 +287,7 @@ public class OrderManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("phone", "13722300002");
-		
+
 		String order_sn = pd.getString("order_sn");
 		if (null != order_sn && !"".equals(order_sn)) {
 			pd.put("order_sn", order_sn.trim());
@@ -326,29 +324,27 @@ public class OrderManagerController extends BaseController {
 		List<PageData> varList = ordermanagerService.getOrderListForMO(page); // 列出手工出票OrderManager列表
 		Double allAmountD = 0D;
 		if (varList.size() > 0) {
-			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);    
+			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);
 			List<PageData> payOperationList = ordermanagerService.findPayOperationList(varList);
-			Map<String, String> orderSnMap =new HashMap<String, String>();
+			Map<String, String> orderSnMap = new HashMap<String, String>();
 			for (int i = 0; i < payOperationList.size(); i++) {
 				orderSnMap.put(payOperationList.get(i).getString("order_sn"), payOperationList.get(i).getString("name"));
 			}
-			
+
 			Map<String, PageData> payLogMap = new HashMap<String, PageData>(payLogList.size());
 			payLogList.forEach(item -> payLogMap.put(item.getString("order_sn"), item));
 			for (int i = 0; i < varList.size(); i++) {
-				varList.get(i).put("store_name",orderSnMap.get(varList.get(i).getString("order_sn")));
+				varList.get(i).put("store_name", orderSnMap.get(varList.get(i).getString("order_sn")));
 				PageData pageData = payLogMap.get(varList.get(i).getString("order_sn"));
 				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
-				
+
 				try {
 					String store_id = varList.get(i).getString("store_id");
 					String user_id = varList.get(i).getString("user_id");
-					if (null != store_id && !"".equals(store_id) 
-							&& new Long(store_id) > 0	
-							) { 
-						PageData _pd = new PageData(); 
+					if (null != store_id && !"".equals(store_id) && new Long(store_id) > 0) {
+						PageData _pd = new PageData();
 						_pd.put("user_id", user_id);
 						PageData user = this.UserAccountService.getUserByUserId(_pd);
 						varList.get(i).put("mobile", user.getString("mobile"));
@@ -357,17 +353,17 @@ public class OrderManagerController extends BaseController {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
-				
+
 			}
 		}
-		
+
 		int printNum = 0;
 		int payNum = 0;
 		double money = 0;
-		Long   mm=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
-		List<PageData> payLogList = artifiprintlotteryService.findByTime(DateUtilNew.getCurrentTimeString( mm-60*60*24,DateUtilNew.date_sdf),pd.getString("phone"));
+		Long mm = Long.parseLong(DateUtilNew.getCurrentTimeLong().toString());
+		List<PageData> payLogList = artifiprintlotteryService.findByTime(DateUtilNew.getCurrentTimeString(mm - 60 * 60 * 24, DateUtilNew.date_sdf), pd.getString("phone"));
 		for (int i = 0; i < payLogList.size(); i++) {
-			PageData pageData =new PageData();
+			PageData pageData = new PageData();
 			pageData = payLogList.get(i);
 			payNum += 1;
 			money += Double.parseDouble(pageData.getString("money_paid"));
@@ -379,7 +375,7 @@ public class OrderManagerController extends BaseController {
 		pd.put("payNum", payNum);
 		pd.put("img", "moOrderForHTCD");
 		pd.put("money", money);
-		
+
 		mv.setViewName("lottery/ordermanager/manual_operation_order_for_finance");
 		mv.addObject("varList", varList);
 		mv.addObject("pd", pd);
@@ -387,6 +383,7 @@ public class OrderManagerController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
+
 	/**
 	 * 财务手动操作订单manual operation order
 	 * 
@@ -400,7 +397,7 @@ public class OrderManagerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd.put("phone", "13722300001");
-		
+
 		String order_sn = pd.getString("order_sn");
 		if (null != order_sn && !"".equals(order_sn)) {
 			pd.put("order_sn", order_sn.trim());
@@ -437,29 +434,27 @@ public class OrderManagerController extends BaseController {
 		List<PageData> varList = ordermanagerService.getOrderListForMO(page); // 列出手工出票OrderManager列表
 		Double allAmountD = 0D;
 		if (varList.size() > 0) {
-			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);    
+			List<PageData> payLogList = ordermanagerService.findPayLogList(varList);
 			List<PageData> payOperationList = ordermanagerService.findPayOperationList(varList);
-			Map<String, String> orderSnMap =new HashMap<String, String>();
+			Map<String, String> orderSnMap = new HashMap<String, String>();
 			for (int i = 0; i < payOperationList.size(); i++) {
 				orderSnMap.put(payOperationList.get(i).getString("order_sn"), payOperationList.get(i).getString("name"));
 			}
-			
+
 			Map<String, PageData> payLogMap = new HashMap<String, PageData>(payLogList.size());
 			payLogList.forEach(item -> payLogMap.put(item.getString("order_sn"), item));
 			for (int i = 0; i < varList.size(); i++) {
-				varList.get(i).put("store_name",orderSnMap.get(varList.get(i).getString("order_sn")));
+				varList.get(i).put("store_name", orderSnMap.get(varList.get(i).getString("order_sn")));
 				PageData pageData = payLogMap.get(varList.get(i).getString("order_sn"));
 				varList.get(i).put("pay_order_sn", pageData == null ? "--" : pageData.getString("pay_order_sn"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("surplus").equals("") ? "0" : varList.get(i).getString("surplus"));
 				allAmountD += Double.parseDouble(varList.get(i).getString("third_party_paid").equals("") ? "0" : varList.get(i).getString("third_party_paid"));
-				
+
 				try {
 					String store_id = varList.get(i).getString("store_id");
 					String user_id = varList.get(i).getString("user_id");
-					if (null != store_id && !"".equals(store_id) 
-							&& new Long(store_id) > 0	
-							) { 
-						PageData _pd = new PageData(); 
+					if (null != store_id && !"".equals(store_id) && new Long(store_id) > 0) {
+						PageData _pd = new PageData();
 						_pd.put("user_id", user_id);
 						PageData user = this.UserAccountService.getUserByUserId(_pd);
 						varList.get(i).put("mobile", user.getString("mobile"));
@@ -468,17 +463,17 @@ public class OrderManagerController extends BaseController {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
-				
+
 			}
 		}
-		
+
 		int printNum = 0;
 		int payNum = 0;
 		double money = 0;
-		Long   mm=Long.parseLong(DateUtilNew.getCurrentTimeLong().toString())  ;
-		List<PageData> payLogList = artifiprintlotteryService.findByTime(DateUtilNew.getCurrentTimeString( mm-60*60*24,DateUtilNew.date_sdf),pd.getString("phone"));
+		Long mm = Long.parseLong(DateUtilNew.getCurrentTimeLong().toString());
+		List<PageData> payLogList = artifiprintlotteryService.findByTime(DateUtilNew.getCurrentTimeString(mm - 60 * 60 * 24, DateUtilNew.date_sdf), pd.getString("phone"));
 		for (int i = 0; i < payLogList.size(); i++) {
-			PageData pageData =new PageData();
+			PageData pageData = new PageData();
 			pageData = payLogList.get(i);
 			payNum += 1;
 			money += Double.parseDouble(pageData.getString("money_paid"));
@@ -511,7 +506,7 @@ public class OrderManagerController extends BaseController {
 		String orderSN = pd.getString("order_sn");
 		PageData pdOrderSN = new PageData();
 		pdOrderSN.put("order_sn", orderSN);
-		List<PageData> orderSnPageDataList =	logoperationService.findByOrderSn(pdOrderSN);
+		List<PageData> orderSnPageDataList = logoperationService.findByOrderSn(pdOrderSN);
 		String[] passTypeArr = passType.split(",");
 		String passTypeStr = "";
 		for (int i = 0; i < passTypeArr.length; i++) {
@@ -521,10 +516,11 @@ public class OrderManagerController extends BaseController {
 		if (indx != -1) {
 			passTypeStr = passTypeStr.substring(0, indx) + passTypeStr.substring(indx + 1, passTypeStr.length());
 		}
-		if (passTypeStr == null || passTypeStr.equals("null")) passTypeStr = "";
+		if (passTypeStr == null || passTypeStr.equals("null"))
+			passTypeStr = "";
 		pd.put("pass_type", passTypeStr);
 		List<PageData> orderDetailsList = ordermanagerService.toDetail(pd); // 列出OrderManager列表
-		logBefore(logger,    " orderDetailsList详情列表==============" + orderDetailsList);
+		logBefore(logger, " orderDetailsList详情列表==============" + orderDetailsList);
 		if (pd.getString("lottery_classify_id").equals("1")) {
 			for (int i = 0; i < orderDetailsList.size(); i++) {
 				String nameStr = "";
@@ -562,8 +558,8 @@ public class OrderManagerController extends BaseController {
 
 			if (statusType.equals("1")) {
 				mv.setViewName("lottery/ordermanager/ordermanager_details_for_mo");
-				mv.addObject("orderSnList",orderSnPageDataList);
-			}else	if (statusType.equals("0"))  {
+				mv.addObject("orderSnList", orderSnPageDataList);
+			} else if (statusType.equals("0")) {
 				mv.setViewName("lottery/ordermanager/ordermanager_details");
 			}
 		} else if (pd.getString("lottery_classify_id").equals("2")) {
@@ -598,19 +594,19 @@ public class OrderManagerController extends BaseController {
 
 				}
 				orderDetailsList.get(i).put("redBileList", redBileList);
-				logBefore(logger,    " redBileList列表==============" + redBileList);
+				logBefore(logger, " redBileList列表==============" + redBileList);
 				orderDetailsList.get(i).put("redTowingList", redTowingList);
-				logBefore(logger,    "redTowingList列表==============" + redTowingList);
+				logBefore(logger, "redTowingList列表==============" + redTowingList);
 				orderDetailsList.get(i).put("blueBileList", blueBileList);
-				logBefore(logger,    " blueBileList列表==============" + blueBileList);
+				logBefore(logger, " blueBileList列表==============" + blueBileList);
 				orderDetailsList.get(i).put("blueTowingList", blueTowingList);
-				logBefore(logger,    " blueTowingList列表==============" + blueTowingList);
+				logBefore(logger, " blueTowingList列表==============" + blueTowingList);
 			}
-			
-			mv.addObject("orderSnList",orderSnPageDataList);
+
+			mv.addObject("orderSnList", orderSnPageDataList);
 			mv.setViewName("lottery/ordermanager/ordermanager_dlt_details");
 		} else if (pd.getString("lottery_classify_id").equals("3")) {
-			//篮球详情
+			// 篮球详情
 			for (int i = 0; i < orderDetailsList.size(); i++) {
 				String nameStr = "";
 				if (orderDetailsList.get(i).getString("changci").equals("T56") || orderDetailsList.get(i).getString("changci").equals("T57")) {
@@ -621,7 +617,7 @@ public class OrderManagerController extends BaseController {
 					List<MatchBetCellDTO> list = getStringBasket(orderDetailsList.get(i).getString("ticket_data"), orderDetailsList.get(i).getString("order_sn"));
 					for (int j = 0; j < list.size(); j++) {
 						for (int j2 = 0; j2 < list.get(j).getBetCells().size(); j2++) {
-							String fixOdds = StringUtil.isEmptyStr(orderDetailsList.get(i).getString("fix_odds"))?"0":orderDetailsList.get(i).getString("fix_odds");
+							String fixOdds = StringUtil.isEmptyStr(orderDetailsList.get(i).getString("fix_odds")) ? "0" : orderDetailsList.get(i).getString("fix_odds");
 							if (list.get(j).getPlayType().equals("01")) {// 判断是不是<让分胜负>,是的话添加上让分数
 								nameStr += "<div style='margin:10px'>" + orderDetailsList.get(i).getString("changci") + " [" + fixOdds + "]" + list.get(j).getBetCells().get(j2).getCellName() + "【" + list.get(j).getBetCells().get(j2).getCellOdds() + "】  </div>";
 							} else {
@@ -644,10 +640,10 @@ public class OrderManagerController extends BaseController {
 				}
 				orderDetailsList.get(i).put("matchResultStr", matchResultStr);
 			}
-			mv.addObject("orderSnList",orderSnPageDataList);
+			mv.addObject("orderSnList", orderSnPageDataList);
 			mv.setViewName("lottery/ordermanager/ordermanager_jclq_details_for_mo");
 		}
-		
+
 		mv.addObject("varList", orderDetailsList);
 		mv.addObject("pd", pd);
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
@@ -683,6 +679,7 @@ public class OrderManagerController extends BaseController {
 		}
 		return matchBetCells;
 	}
+
 	@SuppressWarnings("unused")
 	private List<MatchBetCellDTO> getStringBasket(String ticketsStr, String orderSn) {
 		List<MatchBetCellDTO> matchBetCells = new ArrayList<MatchBetCellDTO>();
@@ -712,7 +709,7 @@ public class OrderManagerController extends BaseController {
 		}
 		return matchBetCells;
 	}
-	
+
 	private String getCathecticData(String playType, String cathecticStr) {
 		int playCode = Integer.parseInt(playType);
 		String cathecticData = "";
@@ -762,7 +759,7 @@ public class OrderManagerController extends BaseController {
 		}
 		return cathecticData;
 	}
-	
+
 	/**
 	 * 导出到excel
 	 * 
@@ -838,7 +835,7 @@ public class OrderManagerController extends BaseController {
 				orderStatusStr = "审核中";
 			} else if (orderStatus.equals("8")) {
 				orderStatusStr = "支付失败";
-				
+
 				continue;
 			}
 			vpd.put("var11", orderStatusStr); // 11
@@ -871,7 +868,7 @@ public class OrderManagerController extends BaseController {
 		List<String> titles = new ArrayList<String>();
 		titles.add("订单编号"); // 1
 		titles.add("手机号"); // 2
-		titles.add("购买彩种");  // 3
+		titles.add("购买彩种"); // 3
 		titles.add("平台来源"); // 4
 		titles.add("支付方式"); // 5
 		titles.add("投注金额"); // 6
@@ -897,34 +894,31 @@ public class OrderManagerController extends BaseController {
 		if (null != lottery_classify_id && !"".equals(lottery_classify_id)) {
 			pd.put("lottery_classify_id", lottery_classify_id);
 		}
-		List<PageData> varOList =new 		ArrayList<PageData> ();
+		List<PageData> varOList = new ArrayList<PageData>();
 		if (null != idsStr && !"".equals(idsStr)) {
 			String ArrayDATA_IDS[] = idsStr.split(",");
-			  varOList = ordermanagerService.exportExcelForMOByIds(ArrayDATA_IDS);
-		}else {
+			varOList = ordermanagerService.exportExcelForMOByIds(ArrayDATA_IDS);
+		} else {
 			varOList = ordermanagerService.exportExcelForMO(pd);
 		}
 		List<PageData> payOperationList = ordermanagerService.findPayOperationList(varOList);
-		  Map<String, String> orderSnMap =new HashMap<String, String>();
-          for (int i = 0; i < payOperationList.size(); i++) {
-              orderSnMap.put(payOperationList.get(i).getString("order_sn"), payOperationList.get(i).getString("name"));
-          }
-		
-		
+		Map<String, String> orderSnMap = new HashMap<String, String>();
+		for (int i = 0; i < payOperationList.size(); i++) {
+			orderSnMap.put(payOperationList.get(i).getString("order_sn"), payOperationList.get(i).getString("name"));
+		}
+
 		List<PageData> varList = new ArrayList<PageData>();
 		for (int i = 0; i < varOList.size(); i++) {
 			PageData vpd = new PageData();
 //			vpd.put("var1", varOList.get(i).getString("order_id")); // 1
 			vpd.put("var1", varOList.get(i).getString("order_sn")); // 1
-			
+
 			vpd.put("var2", varOList.get(i).getString("mobile")); // 2
 			try {
 				String mobile = " ";
 				String store_id = varOList.get(i).getString("store_id");
 				String user_id = varOList.get(i).getString("user_id");
-				if (null != store_id && !"".equals(store_id)
-					&& new Long(store_id) > 0	
-				) {
+				if (null != store_id && !"".equals(store_id) && new Long(store_id) > 0) {
 					PageData _pd = new PageData();
 					_pd.put("user_id", user_id);
 					PageData user = this.UserAccountService.getUserByUserId(_pd);
@@ -934,15 +928,15 @@ public class OrderManagerController extends BaseController {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
-			
+
 			vpd.put("var3", varOList.get(i).getString("lottery_name")); // 3
 			String appCode = varOList.get(i).getString("app_code_name");
 			String appCodeStr = "";
 			if (appCode.equals("10")) {
 				appCodeStr = "球多多";
-			}else 	if (appCode.equals("11")) {
+			} else if (appCode.equals("11")) {
 				appCodeStr = "圣和APP";
-			}else {
+			} else {
 				appCodeStr = "球多多";
 			}
 			vpd.put("var4", appCodeStr); // 5
@@ -953,33 +947,33 @@ public class OrderManagerController extends BaseController {
 			if (surplus > 0) {
 				surplusStr += "余额支付、";
 			}
-			if(third_party_paid > 0) {
+			if (third_party_paid > 0) {
 				String payName = varOList.get(i).getString("pay_name");
-				if(StringUtil.isEmptyStr(payName)) {
-					surplusStr +="第三方、";
+				if (StringUtil.isEmptyStr(payName)) {
+					surplusStr += "第三方、";
 				} else {
-					surplusStr += payName+"、";
+					surplusStr += payName + "、";
 				}
-				
+
 			} else {
 				if (surplus == 0) {
 					surplusStr += "模拟支付、";
 				}
 			}
-			if(bonus > 0) {
+			if (bonus > 0) {
 				surplusStr += "代金券支付、";
 			}
-			surplusStr = surplusStr.substring(0, surplusStr.length()-1);
+			surplusStr = surplusStr.substring(0, surplusStr.length() - 1);
 			vpd.put("var5", surplusStr); // 5
 			vpd.put("var6", varOList.get(i).getString("ticket_amount")); // 6
 			vpd.put("var7", varOList.get(i).getString("winning_money")); // 7
-			
-			vpd.put("var8", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time"))*1000)); // 8
-			
+
+			vpd.put("var8", DateUtil.toSDFTime(new Long(varOList.get(i).getString("add_time")) * 1000)); // 8
+
 //			BigDecimal big1000 = new BigDecimal(1000);
 //			BigDecimal big6 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("add_time")) ? "0" : varOList.get(i).getString("add_time"));
 //			vpd.put("var9", DateUtil.toSDFTime(Long.parseLong(big6.multiply(big1000).toString()))); // 9
-			
+
 			String orderStatus = varOList.get(i).getString("order_status");
 			String orderStatusStr = "";
 			if (orderStatus.equals("0")) {
@@ -1000,29 +994,29 @@ public class OrderManagerController extends BaseController {
 				orderStatusStr = "审核中";
 			} else if (orderStatus.equals("8")) {
 				orderStatusStr = "支付失败";
-				
+
 				continue;
-				
+
 			} else if (orderStatus.equals("9")) {
 				orderStatusStr = "已派奖";
 			} else if (orderStatus.equals("10")) {
 				orderStatusStr = "已退款";
 			}
 			vpd.put("var9", orderStatusStr); // 10
-			
+
 			String moStatus = varOList.get(i).getString("mo_status");
 			String moStatusStr = "";
 			if (moStatus.equals("0")) {
-				moStatusStr ="待出票";
-			} else if(moStatus.equals("1")) {
-				moStatusStr ="出票成功";
-			} else if(moStatus.equals("2")) {
-				moStatusStr ="出票失败";
-			}else {
-				moStatusStr ="--- ---";
+				moStatusStr = "待出票";
+			} else if (moStatus.equals("1")) {
+				moStatusStr = "出票成功";
+			} else if (moStatus.equals("2")) {
+				moStatusStr = "出票失败";
+			} else {
+				moStatusStr = "--- ---";
 			}
 			vpd.put("var10", moStatusStr); // 11
-			
+
 //			BigDecimal bigmo1000 = new BigDecimal(1000);
 //			BigDecimal big9 = new BigDecimal(StringUtil.isEmptyStr(varOList.get(i).getString("mo_add_time")) ? "0" : varOList.get(i).getString("mo_add_time"));
 //			BigDecimal bigmo0 = new BigDecimal(0);
@@ -1042,10 +1036,10 @@ public class OrderManagerController extends BaseController {
 				// TODO: handle exception
 			}
 //			DateUtil.toSDFTime(var.add_time*1000)
-			
-			vpd.put("var12", varOList.get(i).getString("bonus")); 
-			vpd.put("var13", orderSnMap.get(varOList.get(i).getString("order_sn"))); 
-			
+
+			vpd.put("var12", varOList.get(i).getString("bonus"));
+			vpd.put("var13", orderSnMap.get(varOList.get(i).getString("order_sn")));
+
 			varList.add(vpd);
 		}
 		dataMap.put("varList", varList);
@@ -1097,50 +1091,45 @@ public class OrderManagerController extends BaseController {
 		pdForlogoperation.put("phone", pduser.getString("PHONE"));
 		pdForlogoperation.put("lottery_classify_id", lotteryClassifyId);
 		logoperationService.save(pdForlogoperation);
-		
-		
+
 		try {
 			System.out.println("[customer] start ================================= ");
-			if (flag) { 
+			if (flag) {
 				String userId = "";
 				String mobile = "";
 				String firstPayTime = "";
-			 
-				PageData _order =  this.ordermanagerService.findByOrderSn(pd.getString("id"));
-				if(_order != null) {
+
+				PageData _order = this.ordermanagerService.findByOrderSn(pd.getString("id"));
+				if (_order != null) {
 					firstPayTime = _order.getString("pay_time");
 					userId = _order.getString("user_id");
 					mobile = _order.getString("mobile").trim();
 				}
-				
+
 //				PageData _user = new PageData();
 //				_user.put("user_id", userId);
 //				_user = this.usermanagercontrollerService.findById(_user);
 //				mobile = _user.getString("mobile");
 //				if (mobile!= null) mobile = mobile.trim();
-				
+
 //				System.out.println("[customer] userId:" + userId); 
 //				System.out.println("[customer] mobile:" + mobile);
 //				System.out.println("[customer] firstPayTime:" + firstPayTime);
-				
+
 				System.out.println("customer|userId:" + userId + "|mobile:" + mobile + "|firstPayTime:" + firstPayTime);
-				
-				if (null != userId
-					&& !StringUtil.isEmptyStr(mobile)
-					&& !StringUtil.isEmptyStr(firstPayTime)
-				) {
+
+				if (null != userId && !StringUtil.isEmptyStr(mobile) && !StringUtil.isEmptyStr(firstPayTime)) {
 					this.ordermanagerService.setFirstPayTime(userId + "", mobile, firstPayTime);
 					System.out.println("[customer] to db");
 				}
-			
-			} 
+
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			System.out.println("[customer] end ================================= ");
 		}
-		
-		
+
 		out.write("success");
 		out.close();
 	}
@@ -1161,21 +1150,26 @@ public class OrderManagerController extends BaseController {
 		map.put("updateCount", result);
 		return map;
 	}
-	/**添加退款备注
+
+	/**
+	 * 添加退款备注
+	 * 
 	 * @param out
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/addRefundRemark")
-	public void addRefundRemark(PrintWriter out) throws Exception{
-		logBefore(logger, Jurisdiction.getUsername()+"删除LogOperation");
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
+	@RequestMapping(value = "/addRefundRemark")
+	public void addRefundRemark(PrintWriter out) throws Exception {
+		logBefore(logger, Jurisdiction.getUsername() + "删除LogOperation");
+		if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+			return;
+		} // 校验权限
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		logoperationService.addRefundRemark(pd);
-		//修改订单状态 置为已退款
+		// 修改订单状态 置为已退款
 		ordermanagerService.updateOrderStatusByOrderSn(pd);
 		out.write("success");
 		out.close();
 	}
-	
+
 }

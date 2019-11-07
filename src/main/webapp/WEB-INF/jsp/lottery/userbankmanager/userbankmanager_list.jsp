@@ -30,6 +30,7 @@
 							
 						<!-- 检索  -->
 						<form action="userbankmanager/list.do" method="post" name="Form" id="Form">
+							<input type = "hidden" id ="app_code_name" name = "app_code_name" value = "11"/>
 						<table  style="margin-top:5px;border-collapse:separate; border-spacing:10px;">
 								<tr style="margin:2px ">
 									<td>
@@ -73,18 +74,18 @@
 												<input  name="lastEnd" id="lastEnd"  value="${pd.lastEnd }" type="text" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" style="width:74px;border-radius:5px !important" placeholder="结束时间" title="结束时间"/>
 											</span>
 									</td>
-									<td>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-													平台来源:
-												</span>
-										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  >
-											<option value="" selected>全部</option>
-											<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
-											<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和彩店</option>
-										  	</select>
-									  	</div>
-									</td>
+<!-- 									<td> -->
+<!-- 										<div class="nav-search"> -->
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 													平台来源: -->
+<!-- 												</span> -->
+<%-- 										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  > --%>
+<!-- 											<option value="" selected>全部</option> -->
+<%-- 											<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option> --%>
+<%-- 											<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>每日赛事</option> --%>
+<!-- 										  	</select> -->
+<!-- 									  	</div> -->
+<!-- 									</td> -->
 									<c:if test="${QX.cha == 1 }">
 										<td style="vertical-align:top;padding-left:2px">
 											<span class="input-icon" style="width:80px;"> </span>
@@ -132,7 +133,7 @@
 											<td class='center'> 
 												<c:choose>
 													<c:when test="${var.app_code_name == 10 }">球多多</c:when>
-													<c:when test="${var.app_code_name == 11 }">圣和彩店</c:when>
+													<c:when test="${var.app_code_name == 11 }">每日赛事</c:when>
 												</c:choose>
 											</td>
 										</tr>

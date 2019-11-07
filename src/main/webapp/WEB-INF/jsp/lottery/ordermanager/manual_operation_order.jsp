@@ -24,6 +24,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 						<form action="ordermanager/moOrder.do" method="post" name="Form" id="Form">
+						<input type = "hidden" id ="app_code_name" name = "app_code_name" value = "11"/>
 						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
 									<th>
@@ -123,18 +124,18 @@
 										</th>
 									</tr>
 									<tr>
-										<th>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-													平台来源:
-												</span>
-										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  >
-													<option value="" selected="selected">全部来源</option>
-													<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
-													<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和APP</option>
-										  	</select>
-										  	</div>
-									</th>
+<!-- 										<th> -->
+<!-- 										<div class="nav-search"> -->
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 													平台来源: -->
+<!-- 												</span> -->
+<%-- 										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  > --%>
+<!-- 													<option value="" selected="selected">全部来源</option> -->
+<%-- 													<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option> --%>
+<%-- 													<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和APP</option> --%>
+<!-- 										  	</select> -->
+<!-- 										  	</div> -->
+<!-- 									</th> -->
 									</tr>
 							</table>
 					
@@ -180,7 +181,7 @@
 											<td class='center'>
 											<c:choose>
 												<c:when test="${var.app_code_name==10}">球多多</c:when>
-												<c:when test="${var.app_code_name==11}">圣和APP</c:when>
+												<c:when test="${var.app_code_name==11}">每日赛事</c:when>
 												<c:otherwise>球多多</c:otherwise>
 											</c:choose>
 											
@@ -356,7 +357,7 @@
 	<!--提示框-->
 	<script type="text/javascript" src="static/js/jquery.tips.js"></script>
 	<script type="text/javascript">
-		$(top.hangge());//关闭加载状态
+		$(  top.hangge());//关闭加载状态
 		//检索
 			function tosearch(status){
 			if(status==0){
@@ -366,7 +367,7 @@
 				$("#order_status").empty();
 				$("#mo_status").empty();
 				$("#mobile").val("");
-				$("#app_code_name").empty();
+// 				$("#app_code_name").empty();
 			}
 			top.jzts();
 			$("#Form").submit();

@@ -126,6 +126,7 @@ public class ArticleControllerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("app_code_name", 11);
 		String article_id = pd.getString("article_id");
 		if (null != article_id && !"".equals(article_id)) {
 			pd.put("article_id", article_id.trim());

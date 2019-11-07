@@ -1,5 +1,18 @@
 package com.fh.controller.lottery.banner;
 
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
@@ -9,17 +22,6 @@ import com.fh.util.AppUtil;
 import com.fh.util.DateUtilNew;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.annotation.Resource;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 说明1：banner模块 创建人：FH Q313596790 创建时间：2018-04-28
@@ -31,11 +33,12 @@ public class BannerController extends BaseController {
 	String menuUrl = "banner/list.do"; // 菜单地址(权限用)
 	@Resource(name = "bannerService")
 	private BannerManager bannerService;
-	
+
 	@Resource(name = "urlConfig")
 	private URLConfig urlConfig;
-	@Resource(name="userActionLogService")
+	@Resource(name = "userActionLogService")
 	private UserActionLogService ACLOG;
+
 	/**
 	 * 保存
 	 * 
@@ -61,7 +64,7 @@ public class BannerController extends BaseController {
 		pd.put("end_time", end);
 		pd.put("create_time", DateUtilNew.getCurrentTimeLong()); // 创建时间
 		bannerService.save(pd);
-		ACLOG.save("1", "1", "Banner管理："+pd.getString("id"), "标题："+pd.getString("banner_name"));
+		ACLOG.save("1", "1", "Banner管理：" + pd.getString("id"), "标题：" + pd.getString("banner_name"));
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -83,7 +86,7 @@ public class BannerController extends BaseController {
 		pd = this.getPageData();
 		PageData pdOld = bannerService.findById(pd);
 		bannerService.delete(pd);
-		ACLOG.save("1", "2", "Banner管理："+pd.getString("id"), "标题："+pd.getString("banner_name"));
+		ACLOG.save("1", "2", "Banner管理：" + pd.getString("id"), "标题：" + pd.getString("banner_name"));
 		out.write("success");
 		out.close();
 	}
@@ -111,7 +114,7 @@ public class BannerController extends BaseController {
 		pd.put("start_time", start);
 		pd.put("end_time", end);
 		bannerService.edit(pd);
-		ACLOG.saveByObject("1", "Banner管理："+pdOld.getString("banner_name"), pdOld, pd);
+		ACLOG.saveByObject("1", "Banner管理：" + pdOld.getString("banner_name"), pdOld, pd);
 		mv.addObject("msg", "success");
 		mv.setViewName("save_result");
 		return mv;
@@ -131,6 +134,7 @@ public class BannerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("app_code_name", 11);
 		String startTimeStart = pd.getString("startTimeStart");
 		if (null != startTimeStart && !"".equals(startTimeStart)) {
 			pd.put("startTimeStart1", DateUtilNew.getMilliSecondsByStr(startTimeStart));
@@ -153,7 +157,7 @@ public class BannerController extends BaseController {
 		for (int i = 0; i < varList.size(); i++) {
 			PageData pageData = varList.get(i);
 			String imgValue = pageData.getString("banner_image");
-			pageData.put("banner_image", urlConfig.getImgShowUrl()+ imgValue);
+			pageData.put("banner_image", urlConfig.getImgShowUrl() + imgValue);
 		}
 		mv.setViewName("lottery/banner/banner_list");
 		mv.addObject("varList", varList);
@@ -191,7 +195,7 @@ public class BannerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		pd = bannerService.findById(pd); // 根据ID读取
-		pd.put("banner_image_show", urlConfig.getImgShowUrl()+ pd.getString("banner_image"));
+		pd.put("banner_image_show", urlConfig.getImgShowUrl() + pd.getString("banner_image"));
 		mv.setViewName("lottery/banner/banner_edit");
 		mv.addObject("msg", "edit");
 		mv.addObject("pd", pd);
@@ -244,18 +248,18 @@ public class BannerController extends BaseController {
 		pd = this.getPageData();
 		PageData pdOld = bannerService.findById(pd);
 		bannerService.updateByKey(pd);
-		if(pd.getString("is_show").equals("1")) {
-			ACLOG.save("1", "0", "Banner管理："+pdOld.getString("banner_name"), "发布");
+		if (pd.getString("is_show").equals("1")) {
+			ACLOG.save("1", "0", "Banner管理：" + pdOld.getString("banner_name"), "发布");
 		}
-		if(pd.getString("is_show").equals("0")) { 
-			if(pdOld.getString("is_show").equals("2")) {
-				ACLOG.save("1", "0", "Banner管理："+pdOld.getString("banner_name"), "恢复过期");
-			}else {
-				ACLOG.save("1", "0", "Banner管理："+pdOld.getString("banner_name"), "置为过期");
+		if (pd.getString("is_show").equals("0")) {
+			if (pdOld.getString("is_show").equals("2")) {
+				ACLOG.save("1", "0", "Banner管理：" + pdOld.getString("banner_name"), "恢复过期");
+			} else {
+				ACLOG.save("1", "0", "Banner管理：" + pdOld.getString("banner_name"), "置为过期");
 			}
 		}
-		if(pd.getString("is_show").equals("2")) { 
-			ACLOG.save("1", "0", "Banner管理："+pdOld.getString("banner_name"), "置为删除");
+		if (pd.getString("is_show").equals("2")) {
+			ACLOG.save("1", "0", "Banner管理：" + pdOld.getString("banner_name"), "置为删除");
 		}
 		out.write("success");
 		out.close();

@@ -115,6 +115,7 @@ public class UserBankManagerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("app_code_name", 11);
 		String realName = pd.getString("real_name"); // 关键词检索条件
 		if (null != realName && !"".equals(realName)) {
 			pd.put("real_name", realName.trim());
