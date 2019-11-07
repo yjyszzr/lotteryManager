@@ -202,7 +202,13 @@
 	</select>
 	<!-- 累计获奖汇总 -->
 	<select id="totalAwardForAll"   resultType="java.lang.Double">
-		SELECT SUM(amount) FROM dl_user_account WHERE   process_type = 1;
+		SELECT
+			IF
+				( SUM( amount ), NULL, 0 ) 
+			FROM
+				dl_user_account 
+			WHERE
+				process_type = 1;
 	</select>
 	<select id="totalWithdraw"  parameterType="java.lang.Integer"   resultType="java.lang.Double">
 		SELECT
