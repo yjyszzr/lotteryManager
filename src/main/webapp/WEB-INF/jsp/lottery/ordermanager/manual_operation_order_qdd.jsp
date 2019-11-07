@@ -23,7 +23,8 @@
 				<div class="page-content">
 					<div class="row">
 						<div class="col-xs-12">
-						<form action="ordermanager/moOrder.do" method="post" name="Form" id="Form">
+						<form action="ordermanager/moOrderQDD.do" method="post" name="Form" id="Form">
+						 <input  type = "hidden" id="app_code_name"  value="10"/>
 						<table style="margin-top:5px;border-collapse:separate; border-spacing:10px;" >
 								<tr style="margin:2px ">
 									<th>
@@ -123,18 +124,18 @@
 										</th>
 									</tr>
 									<tr>
-										<th>
-										<div class="nav-search">
-											<span class="input-icon" style="width:80px;text-align:right;">
-													平台来源:
-												</span>
-										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  >
-													<option value="" selected="selected">全部来源</option>
-													<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option>
-													<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和APP</option>
-										  	</select>
-										  	</div>
-									</th>
+<!-- 										<th> -->
+<!-- 										<div class="nav-search"> -->
+<!-- 											<span class="input-icon" style="width:80px;text-align:right;"> -->
+<!-- 													平台来源: -->
+<!-- 												</span> -->
+<%-- 										 	<select  name="app_code_name" id="app_code_name" data-placeholder="请选择" value="${pd.app_code_name }" style="width:154px;border-radius:5px !important"  > --%>
+<!-- 													<option value="" selected="selected">全部来源</option> -->
+<%-- 													<option value="10" <c:if test="${pd.app_code_name == 10}">selected</c:if>>球多多</option> --%>
+<%-- 													<option value="11" <c:if test="${pd.app_code_name == 11}">selected</c:if>>圣和APP</option> --%>
+<!-- 										  	</select> -->
+<!-- 										  	</div> -->
+<!-- 									</th> -->
 									</tr>
 							</table>
 					

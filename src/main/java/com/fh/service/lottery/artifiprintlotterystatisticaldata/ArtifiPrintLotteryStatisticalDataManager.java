@@ -86,4 +86,6 @@ public interface ArtifiPrintLotteryStatisticalDataManager {
 
 	public void updateUserMoney(PageData pdMoney) throws Exception;
 
+	public PageData getByTime(String currentTime) throws Exception;
+
 }

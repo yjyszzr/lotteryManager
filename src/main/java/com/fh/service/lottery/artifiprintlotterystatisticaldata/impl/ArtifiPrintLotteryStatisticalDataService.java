@@ -140,4 +140,11 @@ public class ArtifiPrintLotteryStatisticalDataService implements ArtifiPrintLott
 		dao.update("ArtifiPrintLotteryStatisticalDataMapper.updateUserMoney", pdMoney);
 	}
 
+	@Override
+	public PageData getByTime(String currentTime) throws Exception {
+		PageData pd = new PageData();
+		pd.put("data_str", currentTime);
+		return (PageData) dao.findForObject("ArtifiPrintLotteryStatisticalDataMapper.getByTime", pd);
+	}
+
 }

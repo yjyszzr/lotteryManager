@@ -182,7 +182,7 @@
 		from 
 		<include refid="tableName"></include>
 		where 
-			data_str = #{add_time}
+			data_str = #{add_time} 
 	</select>
 	
 	<!-- 列表 -->
@@ -227,6 +227,14 @@
 	 		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
                  #{item}
 		</foreach>
+	</select>
+	
+	<select id="getByTime" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include>
+			 	where  data_str  = #{data_str}  
 	</select>
 	
 	<!-- 批量删除 -->

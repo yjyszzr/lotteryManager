@@ -100,23 +100,25 @@
 	
 	<!-- 列表 -->
 	<select id="datalistPage" parameterType="page" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
-		where 1=1
+		SELECT
+			( SELECT COUNT( * ) register_count FROM dl_user o WHERE o.parent_user_id = a.user_id ) total_register_count,
+			a.* 
+		FROM
+			dl_activity_user_info a
+		WHERE 1=1
 			<if test="pd.mobile!= null and pd.mobile != ''"> 
-				and mobile  
+				and a.mobile  
 					LIKE CONCAT(CONCAT('%', #{pd.mobile}),'%')
 			</if>
 	</select>
 	
 	<!-- 列表(全部) -->
 	<select id="listAll" parameterType="pd" resultType="pd">
-		select
-		<include refid="Field"></include>
-		from 
-		<include refid="tableName"></include>
+		SELECT
+			( SELECT COUNT( * ) register_count FROM dl_user o WHERE o.parent_user_id = a.user_id ) total_register_count,
+			a.* 
+		FROM
+			dl_activity_user_info a
 	</select>
 	
 	<select id="findChildInfoByUserId" parameterType="pd" resultType="pd">
@@ -130,6 +132,17 @@
 			dl_user u 
 		WHERE
 			u.parent_user_id = #{user_id}
+	</select>
+	<select id="findUserRegisterByParentId" parameterType="pd" resultType="pd">
+		SELECT
+			COUNT( * ) count,
+			DATE_FORMAT( FROM_UNIXTIME( u.reg_time ), "%Y-%m-%d" ) reg_time 
+		FROM
+			dl_user u 
+		WHERE
+			u.parent_user_id = #{user_id}
+		GROUP BY
+			DATE_FORMAT( FROM_UNIXTIME( u.reg_time ), "%Y-%m-%d" );
 	</select>
 	
 	<!-- 批量删除 -->

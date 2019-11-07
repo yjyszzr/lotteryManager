@@ -26,7 +26,6 @@ import com.fh.util.PageData;
 
 @Configuration
 @EnableScheduling
-
 public class StatisticsSchedule {
 	private final static Logger logger = LoggerFactory.getLogger(StatisticsSchedule.class);
 

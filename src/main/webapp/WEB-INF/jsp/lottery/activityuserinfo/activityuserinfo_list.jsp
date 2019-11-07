@@ -1,12 +1,9 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,6 +72,7 @@
 <!-- 									<th class="center">id</th> -->
 									<th class="center">用户ID</th>
 									<th class="center">电话</th>
+									<th class="center">下级注册用户数量</th>
 									<th class="center">下级有效用户数量</th>
 									<th class="center">邀请人数奖励总计</th>
 									<th class="center">消费百分比返利奖总计</th>
@@ -95,7 +93,8 @@
 <!-- 											</td> -->
 											<td class='center' style="width: 30px;">${vs.index+1}</td>
 											<td class='center'>${var.user_id}</td>
-											<td class='center'>${var.mobile}</td>
+											<td class='center'><a onclick="toDetail('${var.user_id}');" style=" cursor:pointer;">${var.mobile}</a></td>
+											<td class='center'><a onclick="toRegisterDetail('${var.user_id}');" style=" cursor:pointer;">${var.total_register_count}</a></td>
 											<td class='center'>${var.history_invitation_number}</td>
 											<td class='center'>${var.history_invitation_number_reward}</td>
 											<td class='center'>${var.history_total_return_reward}</td>
@@ -198,6 +197,45 @@
 			 diag.show();
 		}
 		
+		
+		function toDetail(userId){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="用户详情";
+			 diag.URL = '<%=basePath%>activityuserinfo/toDetail.do?user_id='+userId;
+			 diag.Width = 800;
+			 diag.Height = 210;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = false;	//最大化按钮
+		     diag.ShowMinButton = false;		//最小化按钮 
+			 diag.CancelEvent = function(){ //关闭事件
+  				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 tosearch(0);
+				}  
+				diag.close();
+			 };
+			 diag.show();
+		}	
+		function toRegisterDetail(userId){
+			 top.jzts();
+			 var diag = new top.Dialog();
+			 diag.Drag=true;
+			 diag.Title ="用户详情";
+			 diag.URL = '<%=basePath%>activityuserinfo/toRegisterDetail.do?user_id='+userId;
+			 diag.Width = 400;
+			 diag.Height = 210;
+			 diag.Modal = true;				//有无遮罩窗口
+			 diag. ShowMaxButton = false;	//最大化按钮
+		     diag.ShowMinButton = false;		//最小化按钮 
+			 diag.CancelEvent = function(){ //关闭事件
+  				 if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+					 tosearch(0);
+				}  
+				diag.close();
+			 };
+			 diag.show();
+		}	
 		
 		//导出excel
 		function toExcel(){

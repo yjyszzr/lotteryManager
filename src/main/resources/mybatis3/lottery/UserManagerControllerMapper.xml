@@ -611,15 +611,33 @@
 
 	<!-- 认证并购彩 -->
 	<select id="getRealAndOrder" parameterType="pd" resultType="pd">
-		SELECT COALESCE(count(distinct od.user_id),0) as count,
-			   COALESCE(sum(od.money_paid),0) as amount,
-		COALESCE(sum(od.ticket_amount),0) as amountTicket
-		FROM   dl_user_real ur left join  dl_order od on
-														  ur.user_id = od.user_id
-														  and DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
-		where   od.order_status in ('3','4','5','6','7')
-		and  ur.add_time &gt; #{pd.lastStart1} and  ur.add_time &lt; #{pd.lastEnd1}
-		and ur.is_delete = 0
+		SELECT COALESCE
+			( count( DISTINCT od.user_id ), 0 ) AS count,
+			COALESCE ( sum( od.money_paid ), 0 ) AS amount,
+			COALESCE ( sum( od.ticket_amount ), 0 ) AS amountTicket 
+		FROM
+			dl_user_real ur
+			LEFT JOIN dl_order od ON ur.user_id = od.user_id 
+			AND DATE_FORMAT( FROM_UNIXTIME( ur.add_time ), '%Y-%m-%d' ) = DATE_FORMAT( FROM_UNIXTIME( od.add_time ), '%Y-%m-%d' ) 
+		WHERE
+			od.order_status IN ( '3', '4', '5', '6', '7' ) 
+			AND ur.add_time &gt;
+		 #{pd.lastStart1}  
+		AND ur.add_time &lt;
+		 #{pd.lastEnd1} 
+		AND ur.is_delete = 0
+	
+	
+	
+<!-- 		SELECT COALESCE(count(distinct od.user_id),0) as count, -->
+<!-- 			   COALESCE(sum(od.money_paid),0) as amount, -->
+<!-- 		COALESCE(sum(od.ticket_amount),0) as amountTicket -->
+<!-- 		FROM   dl_user_real ur left join  dl_order od on -->
+<!-- 														  ur.user_id = od.user_id -->
+<!-- 														  and DATE_FORMAT(FROM_UNIXTIME(ur.add_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d') -->
+<!-- 		where   od.order_status in ('3','4','5','6','7') -->
+<!-- 		and  ur.add_time &gt;and  ur.add_time &lt; -->
+<!-- 		and ur.is_delete = 0 -->
 	</select>
 
 	<!-- 注册并认证用户统计（购彩） -->
@@ -666,14 +684,17 @@
 
 	<!-- 注册并购彩  -->
 	<select id="getRegisterAndOrder" parameterType="pd" resultType="pd">
-
-		SELECT COALESCE(count(distinct od.user_id),0) as count,
-			   COALESCE(sum(od.money_paid),0) as amount,getUserByMobile
-		COALESCE(sum(od.ticket_amount),0) as amountTicket
-		FROM dl_user us  left join  dl_order od on
-													us.user_id = od.user_id and DATE_FORMAT(FROM_UNIXTIME(us.reg_time),'%Y-%m-%d') = DATE_FORMAT(FROM_UNIXTIME(od.add_time),'%Y-%m-%d')
-		where  od.order_status in ('3','4','5','6','7')
-		and  us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1}
+		SELECT COALESCE
+			( count( DISTINCT od.user_id ), 0 ) AS count,
+			COALESCE ( sum( od.money_paid ), 0 ) AS amount,
+			COALESCE ( sum( od.ticket_amount ), 0 ) AS amountTicket 
+		FROM
+			dl_user us
+			LEFT JOIN dl_order od ON us.user_id = od.user_id 
+			AND DATE_FORMAT( FROM_UNIXTIME( us.reg_time ), '%Y-%m-%d' ) = DATE_FORMAT( FROM_UNIXTIME( od.add_time ), '%Y-%m-%d' ) 
+		WHERE
+			od.order_status IN ( '3', '4', '5', '6', '7' ) 
+			AND us.reg_time &gt; #{pd.lastStart1} and  us.reg_time &lt; #{pd.lastEnd1}
 	</select>
 
 	<!-- 注册并购彩(复购) -->
