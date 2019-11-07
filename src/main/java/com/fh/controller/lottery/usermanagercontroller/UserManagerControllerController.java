@@ -1,5 +1,26 @@
 package com.fh.controller.lottery.usermanagercontroller;
 
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.alibaba.druid.util.StringUtils;
 import com.fh.config.URLConfig;
 import com.fh.controller.base.BaseController;
@@ -18,22 +39,15 @@ import com.fh.service.lottery.userbankmanager.impl.UserBankManagerService;
 import com.fh.service.lottery.usermanagercontroller.UserManagerControllerManager;
 import com.fh.service.lottery.userrealmanager.impl.UserRealManagerService;
 import com.fh.service.system.user.impl.UserService;
-import com.fh.util.*;
-import net.sf.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import com.fh.util.DateUtilNew;
+import com.fh.util.Jurisdiction;
+import com.fh.util.NetWorkUtil;
+import com.fh.util.ObjectExcelView;
+import com.fh.util.PageData;
+import com.fh.util.RandomUtil;
+import com.fh.util.SmsUtil;
 
-import javax.annotation.Resource;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.net.URLDecoder;
-import java.util.*;
-import java.util.stream.Collectors;
+import net.sf.json.JSONObject;
 
 /**
  * 说明：用户列表 创建人：FH Q313596790 创建时间：2018-04-23
@@ -51,7 +65,6 @@ public class UserManagerControllerController extends BaseController {
 
 	@Resource(name = "useraccountmanagerService")
 	private UserAccountManagerManager useraccountmanagerService;
-
 
 	@Resource(name = "useraccountService")
 	private UserAccountService useraccountService;
@@ -75,19 +88,17 @@ public class UserManagerControllerController extends BaseController {
 
 	@Resource(name = "orderService")
 	private OrderManager ordermanagerService;
-	
+
 	@Resource(name = "userService")
 	private UserService userService;
 
-
-	
 	@Resource(name = "activitybonusService")
 	private ActivityBonusService activityBonusService;
-	
+
 	private final static Logger logFac = LoggerFactory.getLogger(UserManagerControllerController.class);
 
-	@RequestMapping(value="/seeTotal")
-	public ModelAndView seeTotal(Page page) throws Exception{
+	@RequestMapping(value = "/seeTotal")
+	public ModelAndView seeTotal(Page page) throws Exception {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
@@ -95,33 +106,33 @@ public class UserManagerControllerController extends BaseController {
 		List<PageData> pdList = new ArrayList<>();
 		String mobile = pd.getString("mobile");
 		PageData pdMobile = new PageData();
-		pdMobile.put("mobile",mobile);
+		pdMobile.put("mobile", mobile);
 		page.setPd(pdMobile);
 		List<PageData> orderSnInfoList = ordermanagerService.queryOrderInfoByMobile(page);
-		if(orderSnInfoList.size() > 0){
-			List<String> orderSnList = orderSnInfoList.stream().map(s->s.getString("order_sn")).collect(Collectors.toList());
+		if (orderSnInfoList.size() > 0) {
+			List<String> orderSnList = orderSnInfoList.stream().map(s -> s.getString("order_sn")).collect(Collectors.toList());
 			List<PageData> everyOrderCurBalance = useraccountService.queryUserAccountBalanceByOrderSns(orderSnList);
-			Map<String,String> orderBalanceMap = everyOrderCurBalance.stream().collect(Collectors.toMap(s->s.getString("order_sn"),s->s.getString("cur_balance")));
-			orderSnInfoList.stream().forEach(s->{
+			Map<String, String> orderBalanceMap = everyOrderCurBalance.stream().collect(Collectors.toMap(s -> s.getString("order_sn"), s -> s.getString("cur_balance")));
+			orderSnInfoList.stream().forEach(s -> {
 				PageData newPd = new PageData();
-				newPd.put("order_sn",s.getString("order_sn"));
-				newPd.put("lottery_classify_id",s.getString("lottery_classify_id"));
-				newPd.put("money_paid",s.getString("money_paid"));
-				newPd.put("bonus",s.getString("bonus"));
-				newPd.put("winning_money",s.getString("winning_money"));
-				newPd.put("add_time",s.getString("add_time"));
+				newPd.put("order_sn", s.getString("order_sn"));
+				newPd.put("lottery_classify_id", s.getString("lottery_classify_id"));
+				newPd.put("money_paid", s.getString("money_paid"));
+				newPd.put("bonus", s.getString("bonus"));
+				newPd.put("winning_money", s.getString("winning_money"));
+				newPd.put("add_time", s.getString("add_time"));
 				String surplusStr = s.getString("surplus");
-				surplusStr = StringUtils.isEmpty(surplusStr)?"0.00":surplusStr;
+				surplusStr = StringUtils.isEmpty(surplusStr) ? "0.00" : surplusStr;
 				Double surplus = Double.valueOf(surplusStr);
-				if(surplus > 0.00){
-					String orderBalance  = orderBalanceMap.get(s.getString("order_sn"));
-					if(!StringUtils.isEmpty(orderBalance)){
-						newPd.put("cur_balance",orderBalance);
-					}else{
-						newPd.put("cur_balance","0.00");
+				if (surplus > 0.00) {
+					String orderBalance = orderBalanceMap.get(s.getString("order_sn"));
+					if (!StringUtils.isEmpty(orderBalance)) {
+						newPd.put("cur_balance", orderBalance);
+					} else {
+						newPd.put("cur_balance", "0.00");
 					}
-				}else{
-					newPd.put("cur_balance","");
+				} else {
+					newPd.put("cur_balance", "");
 				}
 				pdList.add(newPd);
 			});
@@ -132,7 +143,6 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("varList", pdList);
 		return mv;
 	}
-
 
 	/**
 	 * 保存
@@ -163,7 +173,6 @@ public class UserManagerControllerController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
-
 
 	/**
 	 * 删除
@@ -212,15 +221,14 @@ public class UserManagerControllerController extends BaseController {
 		pd = this.getPageData();
 		PageData userEntity = usermanagercontrollerService.findById(pd);
 		usermanagercontrollerService.changeUserSwitch(pd);
-		String text ="is_business: "+userEntity.getString("is_business")+ " -> "+pd.getString("is_business");
-		ACLOG.save("1", "0", "用户列表：交易版开关  "+pd.getString("user_id"), text);
+		String text = "is_business: " + userEntity.getString("is_business") + " -> " + pd.getString("is_business");
+		ACLOG.save("1", "0", "用户列表：交易版开关  " + pd.getString("user_id"), text);
 		mv = getDetailView(mv);
 		return mv;
 	}
 
-
 	/*
-	 *  销售人员业绩总列表
+	 * 销售人员业绩总列表
 	 */
 	@RequestMapping(value = "/listSA")
 	public ModelAndView sellerAchievementList(Page page) throws Exception {
@@ -228,90 +236,90 @@ public class UserManagerControllerController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		Calendar cal = Calendar.getInstance();
-		Integer curMonth = cal.get(Calendar.MONTH) + 1; 
+		Integer curMonth = cal.get(Calendar.MONTH) + 1;
 		pd.put("curMonth", curMonth);
 		page.setPd(pd);
-		
-		//月增加用户数 总增加用户数
+
+		// 月增加用户数 总增加用户数
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveList(page);
-		
-		//销售人员总红包数量(分库查询 进行组装)
-		Map<String,String> bonusMap = new HashMap<>();
-		for(PageData varPd:varList) {
-			List<String> userIds =  usermanagercontrollerService.queryUserIdsBySellersId(varPd.getString("last_add_seller_id"));
-			if(userIds.size() > 0) {
+
+		// 销售人员总红包数量(分库查询 进行组装)
+		Map<String, String> bonusMap = new HashMap<>();
+		for (PageData varPd : varList) {
+			List<String> userIds = usermanagercontrollerService.queryUserIdsBySellersId(varPd.getString("last_add_seller_id"));
+			if (userIds.size() > 0) {
 				PageData bonusTotal = ordermanagerService.queryOrderBonusTotalByMobile(userIds);
-						//activityBonusService.sellerUserBonushTotal(userIds);
-				if(bonusTotal != null) {
+				// activityBonusService.sellerUserBonushTotal(userIds);
+				if (bonusTotal != null) {
 					bonusMap.put(varPd.getString("last_add_seller_id"), bonusTotal.getString("totalBonus"));
 				}
 			}
 		}
-		
+
 		PageData cuPd = new PageData();
 		cuPd.put("phone", pd.getString("phone"));
 		List<PageData> sellers = userService.querySellers(cuPd);
 		List<PageData> newVarList = new ArrayList<>();
-		if(sellers.size() > 0 ) {
-			Map<String,SysUserDTO> userMap = this.createUserMap(sellers);
+		if (sellers.size() > 0) {
+			Map<String, SysUserDTO> userMap = this.createUserMap(sellers);
 			List<PageData> queryToalList = new ArrayList<>();
-			sellers.stream().forEach(s->{
-				PageData  totalPd = new PageData();
+			sellers.stream().forEach(s -> {
+				PageData totalPd = new PageData();
 				String first_add_seller_id = s.getString("USER_ID");
 				totalPd.put("user_id", first_add_seller_id);
 				queryToalList.add(totalPd);
 			});
-			
-			//销售人员月增加购彩量
+
+			// 销售人员月增加购彩量
 			List<PageData> buyMonthList = usermanagercontrollerService.queryBuyByMonth(queryToalList);
-			Map<String,String> monthMap = this.createUserMonthBuyMap(buyMonthList);
-			
-			//销售人员总购彩量(两个user_id)
-	        List<PageData> buyTotalList = usermanagercontrollerService.queryBuyTotal(queryToalList);
-	        Map<String,String> totalMap = this.createUserTotalBuyMap(buyTotalList);
-	        
-			for(PageData pdata:varList) {
-				if(userMap.get(pdata.getString("last_add_seller_id")) == null) {
+			Map<String, String> monthMap = this.createUserMonthBuyMap(buyMonthList);
+
+			// 销售人员总购彩量(两个user_id)
+			List<PageData> buyTotalList = usermanagercontrollerService.queryBuyTotal(queryToalList);
+			Map<String, String> totalMap = this.createUserTotalBuyMap(buyTotalList);
+
+			for (PageData pdata : varList) {
+				if (userMap.get(pdata.getString("last_add_seller_id")) == null) {
 					continue;
 				}
-				
+
 				String firstSellerId = pdata.getString("last_add_seller_id");
 				String totalBonus = bonusMap.get(firstSellerId);
-				
-				if(!StringUtils.isEmpty(totalBonus)) {
+
+				if (!StringUtils.isEmpty(totalBonus)) {
 					pdata.put("totalBonus", totalBonus);
-				}else {
+				} else {
 					pdata.put("totalBonus", "0");
 				}
-				
-				if(userMap.get(firstSellerId) != null) {
+
+				if (userMap.get(firstSellerId) != null) {
 					SysUserDTO sysUser = userMap.get(firstSellerId);
 					pdata.put("userId", String.valueOf(sysUser.getUserId()));
 					pdata.put("mobile", sysUser.getMobile());
-					pdata.put("username", sysUser.getUsername());				
-				}else {
+					pdata.put("username", sysUser.getUsername());
+				} else {
 					pdata.put("userId", "");
 					pdata.put("mobile", "");
 					pdata.put("username", "");
 				}
-				
-				if(totalMap.get(firstSellerId) != null) {
+
+				if (totalMap.get(firstSellerId) != null) {
 					String totalMoney = totalMap.get(firstSellerId);
 					pdata.put("totalMoney", totalMoney);
-				}else {
+				} else {
 					pdata.put("totalMoney", "0");
 				}
-				
-				if(monthMap.get(firstSellerId) != null) {
+
+				if (monthMap.get(firstSellerId) != null) {
 					String monthMoney = monthMap.get(firstSellerId);
 					pdata.put("curMoney", monthMoney);
-				}else {
+				} else {
 					pdata.put("curMoney", "0");
 				}
 				newVarList.add(pdata);
 			}
 		}
-		
+
 		Comparator<PageData> comparator = (h1, h2) -> Double.valueOf(h1.getString("curMoney")).compareTo(Double.valueOf(h2.getString("curMoney")));
 		newVarList.sort(comparator.reversed());
 		mv.setViewName("lottery/customer/sellerAchieve_list");
@@ -319,13 +327,13 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("pd", pd);
 		return mv;
 	}
-	
+
 	@RequestMapping(value = "/toDetail")
 	public ModelAndView toDetail() throws Exception {
 		ModelAndView mv = getDetailView(null);
 		return mv;
 	}
-	
+
 	@RequestMapping(value = "/toSellerDetail")
 	@ResponseBody
 	public ModelAndView toSellerDetail() throws Exception {
@@ -333,83 +341,84 @@ public class UserManagerControllerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		
+
 		PageData queryPd = new PageData();
 		pd.put("last_add_seller_id", pd.getString("user_id"));
-		String pyear = StringUtils.isEmpty(pd.getString("pyear"))?"2019":pd.getString("pyear");
+		String pyear = StringUtils.isEmpty(pd.getString("pyear")) ? "2019" : pd.getString("pyear");
 		queryPd.put("USER_ID", pd.getString("user_id"));
 		PageData seller = userService.findById(queryPd);
-		
-		seller.put("pyear",pyear);
-		seller.put("user_id",pd.getString("user_id"));
-		
-		//月购彩量(两个user_id)
+
+		seller.put("pyear", pyear);
+		seller.put("user_id", pd.getString("user_id"));
+
+		// 月购彩量(两个user_id)
 		List<PageData> varList = usermanagercontrollerService.sellerAchieveByMonthList(pd);
-		Map<String,String> curBuyMap = this.createMonthAddBuyMap(varList);
-		
-		//月增加用户数
+		Map<String, String> curBuyMap = this.createMonthAddBuyMap(varList);
+
+		// 月增加用户数
 		List<PageData> personsList = usermanagercontrollerService.sellerWriteUserhList(pd);
-		Map<String,CountPersonDTO> curPersonsMap = this.createMonthAddUserMap(personsList);
-		
-		//月增加红包数
+		Map<String, CountPersonDTO> curPersonsMap = this.createMonthAddUserMap(personsList);
+
+		// 月增加红包数
 		List<PageData> bonusMonthList = new ArrayList<>();
-		Map<String,String> bonusMonthMap = new HashMap<>();
+		Map<String, String> bonusMonthMap = new HashMap<>();
 		List<String> userIdList = usermanagercontrollerService.queryUserIdsBySellersId(pd.getString("user_id"));
-		if(userIdList.size() > 0) {
+		if (userIdList.size() > 0) {
 			bonusMonthList = ordermanagerService.queryMonthTotalBonusByMobile(userIdList);
-					//activityBonusService.queryTotalBonusByMonth(userIdList);
+			// activityBonusService.queryTotalBonusByMonth(userIdList);
 			bonusMonthMap = this.createMonthAddBonusMap(bonusMonthList);
 		}
-		
-		//获取当前年份的12个月份的数组
+
+		// 获取当前年份的12个月份的数组
 		List<String> monthArr = new ArrayList<>();
-		monthArr.add(pyear+"-01");
-		monthArr.add(pyear+"-02");
-		monthArr.add(pyear+"-03");
-		monthArr.add(pyear+"-04");
-		monthArr.add(pyear+"-05");
-		monthArr.add(pyear+"-06");
-		monthArr.add(pyear+"-07");
-		monthArr.add(pyear+"-08");
-		monthArr.add(pyear+"-09");
-		monthArr.add(pyear+"-10");
-		monthArr.add(pyear+"-11");
-		monthArr.add(pyear+"-12");
-		
+		monthArr.add(pyear + "-01");
+		monthArr.add(pyear + "-02");
+		monthArr.add(pyear + "-03");
+		monthArr.add(pyear + "-04");
+		monthArr.add(pyear + "-05");
+		monthArr.add(pyear + "-06");
+		monthArr.add(pyear + "-07");
+		monthArr.add(pyear + "-08");
+		monthArr.add(pyear + "-09");
+		monthArr.add(pyear + "-10");
+		monthArr.add(pyear + "-11");
+		monthArr.add(pyear + "-12");
+
 		List<PageData> varNewList = new ArrayList<>();
-		for(String str:monthArr) {
+		for (String str : monthArr) {
 			PageData newpd = new PageData();
 			newpd.put("eveMon", str);
 			newpd.put("curPersons", "0");
 			newpd.put("curBonus", "0");
 			newpd.put("curMoneyPaid", "0");
-			if(curPersonsMap.get(str) != null) {
+			if (curPersonsMap.get(str) != null) {
 				CountPersonDTO ctDto = curPersonsMap.get(str);
-				newpd.put("curPersons",ctDto.getCurPersons());
+				newpd.put("curPersons", ctDto.getCurPersons());
 			}
-			if(bonusMonthMap.get(str) != null) {
+			if (bonusMonthMap.get(str) != null) {
 				newpd.put("curBonus", bonusMonthMap.get(str));
 			}
-			if(curBuyMap.get(str) != null) {
+			if (curBuyMap.get(str) != null) {
 				newpd.put("curMoneyPaid", curBuyMap.get(str));
 			}
 			varNewList.add(newpd);
 		}
-		
+
 		mv.setViewName("lottery/customer/sellerAchieveByMonth_list");
 		mv.addObject("varList", varNewList);
 		mv.addObject("pd", seller);
 		return mv;
 	}
-	
+
 	/**
 	 * 构造销售人员map
+	 * 
 	 * @param sellers
 	 * @return
 	 */
-	public Map<String,SysUserDTO> createUserMap(List<PageData> sellers){
-		Map<String,SysUserDTO> map = new HashMap<String,SysUserDTO>();
-		for(PageData pageData:sellers) {
+	public Map<String, SysUserDTO> createUserMap(List<PageData> sellers) {
+		Map<String, SysUserDTO> map = new HashMap<String, SysUserDTO>();
+		for (PageData pageData : sellers) {
 			SysUserDTO sysUser = new SysUserDTO();
 			sysUser.setUserId(pageData.getString("USER_ID"));
 			sysUser.setMobile(pageData.getString("PHONE"));
@@ -418,26 +427,26 @@ public class UserManagerControllerController extends BaseController {
 		}
 		return map;
 	}
-	
-	public Map<String,String> createUserTotalBuyMap(List<PageData> valist){
-		Map<String,String> map = new HashMap<String,String>();
-		for(PageData pageData:valist) {
+
+	public Map<String, String> createUserTotalBuyMap(List<PageData> valist) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (PageData pageData : valist) {
 			map.put(pageData.getString("last_add_seller_id"), pageData.getString("moneyPaid"));
 		}
 		return map;
 	}
-	
-	public Map<String,String> createUserMonthBuyMap(List<PageData> valist){
-		Map<String,String> map = new HashMap<String,String>();
-		for(PageData pageData:valist) {
+
+	public Map<String, String> createUserMonthBuyMap(List<PageData> valist) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (PageData pageData : valist) {
 			map.put(pageData.getString("last_add_seller_id"), pageData.getString("moneyPaid"));
 		}
 		return map;
 	}
-	
-	public Map<String,CountPersonDTO> createMonthAddUserMap(List<PageData> valist){
-		Map<String,CountPersonDTO> map = new HashMap<String,CountPersonDTO>();
-		for(PageData pageData:valist) {
+
+	public Map<String, CountPersonDTO> createMonthAddUserMap(List<PageData> valist) {
+		Map<String, CountPersonDTO> map = new HashMap<String, CountPersonDTO>();
+		for (PageData pageData : valist) {
 			CountPersonDTO dto = new CountPersonDTO();
 			dto.setFirstAddSellerId(pageData.getString("last_add_seller_id"));
 			dto.setEveMon(pageData.getString("eveMon"));
@@ -446,25 +455,25 @@ public class UserManagerControllerController extends BaseController {
 		}
 		return map;
 	}
-	
-	public Map<String,String> createMonthAddBonusMap(List<PageData> valist){
-		Map<String,String> map = new HashMap<String,String>();
-		for(PageData pageData:valist) {
+
+	public Map<String, String> createMonthAddBonusMap(List<PageData> valist) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (PageData pageData : valist) {
 			map.put(pageData.getString("eveMon"), pageData.getString("bonusTotalPrice"));
 		}
 		return map;
 	}
-	
-	public Map<String,String> createMonthAddBuyMap(List<PageData> valist){
-		Map<String,String> map = new HashMap<String,String>();
-		for(PageData pageData:valist) {
+
+	public Map<String, String> createMonthAddBuyMap(List<PageData> valist) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (PageData pageData : valist) {
 			map.put(pageData.getString("eveMon"), pageData.getString("curMoneyPaid"));
 		}
 		return map;
 	}
-	
+
 	/*
-	 *  销售人员业绩按月列表
+	 * 销售人员业绩按月列表
 	 */
 	@RequestMapping(value = "/sellerAchievementByMonthList")
 	public ModelAndView sellerAchievementByMonthList() throws Exception {
@@ -478,9 +487,9 @@ public class UserManagerControllerController extends BaseController {
 		return mv;
 	}
 
-
 	/**
 	 * 强制
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
@@ -494,7 +503,7 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("QX", Jurisdiction.getHC()); // 按钮权限
 		return mv;
 	}
-	
+
 	@RequestMapping(value = "/realMobileValid")
 	@ResponseBody
 	public Object realMobileValid() throws Exception {
@@ -504,32 +513,27 @@ public class UserManagerControllerController extends BaseController {
 		String realName = pd.getString("real_name");
 		String mobile = pd.getString("real_mobile");
 		String idNo = pd.getString("id_no");
-    	try {
+		try {
 			realName = URLDecoder.decode(realName, "UTF-8");
 		} catch (Exception e) {
-			logFac.error("姓名decode异常{}"+e);
+			logFac.error("姓名decode异常{}" + e);
 		}
 		String data = this.validPhone(realName, mobile, idNo);
-		Map<String,String> map = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 		map.put("data", data);
 		return map;
 	}
-	
-	
+
 	/**
-		key	是	string	在个人中心->我的数据,接口名称上方查看
-	 	realname	是	string	姓名，需要utf8 Urlencode
-	 	idcard	是	string	身份证号码
-	 	mobile	是	string	手机号码
-	 	type	否	int	1:返回手机运营商,不输入及其他值则不返回
-	 	showid	否	int	1:返回聚合订单号,不输入及其他值则不返回
-	 	province	否	int	1:返回手机号归属地，province,city,不输入不返回
-	 	detail	否	string	是否显示匹配详情码,传1显示，默认不显示
+	 * key 是 string 在个人中心->我的数据,接口名称上方查看 realname 是 string 姓名，需要utf8 Urlencode
+	 * idcard 是 string 身份证号码 mobile 是 string 手机号码 type 否 int 1:返回手机运营商,不输入及其他值则不返回
+	 * showid 否 int 1:返回聚合订单号,不输入及其他值则不返回 province 否 int
+	 * 1:返回手机号归属地，province,city,不输入不返回 detail 否 string 是否显示匹配详情码,传1显示，默认不显示
 	 */
-	public String validPhone(String realName,String mobile,String idNo){
+	public String validPhone(String realName, String mobile, String idNo) {
 		String url = urlConfig.getJuheVerifyPhoneUrl();
 		String juheVeryPhoneKey = urlConfig.getJuhePhoneVerifyKey();
-		Map<String,String> params = new HashMap<String,String>();
+		Map<String, String> params = new HashMap<String, String>();
 		params.put("key", juheVeryPhoneKey);
 		params.put("realname", realName);
 		params.put("idcard", idNo);
@@ -540,16 +544,17 @@ public class UserManagerControllerController extends BaseController {
 		params.put("detail", "1");
 		String data = NetWorkUtil.doGet(url, params, "UTF-8");
 		JSONObject jo = JSONObject.fromObject(data);
-		if(0 == Integer.valueOf(jo.getString("error_code"))) {
+		if (0 == Integer.valueOf(jo.getString("error_code"))) {
 			logger.info(jo);
 			JSONObject result = jo.getJSONObject("result");
 			String rescode = result.getString("rescode");
 			return ThirdApiEnum.getName(Integer.valueOf(rescode));
-		}else {
+		} else {
 			logger.error(data);
 			return jo.getString("reason");
 		}
 	}
+
 	/**
 	 * 列表
 	 * 
@@ -564,6 +569,7 @@ public class UserManagerControllerController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
+		pd.put("app_code_name", 11);
 		String real_name = pd.getString("real_name"); // 关键词检索条件
 		if (null != real_name && !"".equals(real_name)) {
 			pd.put("real_name", real_name.trim());
@@ -646,8 +652,7 @@ public class UserManagerControllerController extends BaseController {
 		out.write("success");
 		out.close();
 	}
-	
-	
+
 	/**
 	 * 去新增页面
 	 * 
@@ -694,7 +699,6 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("pd", pd);
 		return mv;
 	}
-
 
 	/**
 	 * 消费详情
@@ -862,7 +866,7 @@ public class UserManagerControllerController extends BaseController {
 		mv.addObject("rentity", pd);
 		return mv;
 	}
-	
+
 	/**
 	 * 导出到excel
 	 * 
@@ -880,8 +884,8 @@ public class UserManagerControllerController extends BaseController {
 		pd = this.getPageData();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
-		
-		// 手机号	姓名	当月用户录入数	总录入用户量	当月购彩销售额	购彩销售总额	惠券使用总金额
+
+		// 手机号 姓名 当月用户录入数 总录入用户量 当月购彩销售额 购彩销售总额 惠券使用总金额
 		titles.add("手机号"); // 1
 		titles.add("姓名"); // 2
 		titles.add("当月用户录入数"); // 3
@@ -891,7 +895,7 @@ public class UserManagerControllerController extends BaseController {
 		titles.add("优惠券使用总金额"); // 6
 		dataMap.put("titles", titles);
 
-		Page page  = new Page();
+		Page page = new Page();
 		ModelAndView modelView = this.sellerAchievementList(page);
 		Map<String, Object> m = modelView.getModel();
 		List<PageData> varOList = (List<PageData>) m.get("varList");
@@ -912,7 +916,7 @@ public class UserManagerControllerController extends BaseController {
 		mv = new ModelAndView(erv, dataMap);
 		return mv;
 	}
-	
+
 	/**
 	 * 导出到excel
 	 * 
@@ -930,15 +934,15 @@ public class UserManagerControllerController extends BaseController {
 		pd = this.getPageData();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		List<String> titles = new ArrayList<String>();
-		
-		// 月份	增加用户量	销售金额	红包使用量
+
+		// 月份 增加用户量 销售金额 红包使用量
 		titles.add("月份"); // 1
 		titles.add("增加用户量"); // 2
 		titles.add("销售金额"); // 3
 		titles.add("红包使用量"); // 4
 		dataMap.put("titles", titles);
 
-		Page page  = new Page();
+		Page page = new Page();
 		ModelAndView modelView = this.toSellerDetail();
 		Map<String, Object> m = modelView.getModel();
 		List<PageData> varOList = (List<PageData>) m.get("varList");
@@ -986,55 +990,55 @@ public class UserManagerControllerController extends BaseController {
 		List<PageData> pdList = new ArrayList<>();
 		String mobile = pd.getString("mobile");
 		PageData pdMobile = new PageData();
-		pdMobile.put("mobile",mobile);
+		pdMobile.put("mobile", mobile);
 		page.setShowCount(65000);// 单页显示条数，为了全部导出应用
 		page.setPd(pdMobile);
 		List<PageData> orderSnInfoList = ordermanagerService.queryOrderInfoByMobile(page);
-		if(orderSnInfoList.size() > 0){
-			List<String> orderSnList = orderSnInfoList.stream().map(s->s.getString("order_sn")).collect(Collectors.toList());
+		if (orderSnInfoList.size() > 0) {
+			List<String> orderSnList = orderSnInfoList.stream().map(s -> s.getString("order_sn")).collect(Collectors.toList());
 			List<PageData> everyOrderCurBalance = useraccountService.queryUserAccountBalanceByOrderSns(orderSnList);
-			Map<String,String> orderBalanceMap = everyOrderCurBalance.stream().collect(Collectors.toMap(s->s.getString("order_sn"),s->s.getString("cur_balance")));
-			orderSnInfoList.stream().forEach(s->{
+			Map<String, String> orderBalanceMap = everyOrderCurBalance.stream().collect(Collectors.toMap(s -> s.getString("order_sn"), s -> s.getString("cur_balance")));
+			orderSnInfoList.stream().forEach(s -> {
 				PageData newPd = new PageData();
-				String orderBalance  = orderBalanceMap.get("order_sn");
-				newPd.put("order_sn",s.getString("order_sn"));
-				newPd.put("lottery_classify_id",s.getString("lottery_classify_id"));
-				newPd.put("money_paid",s.getString("money_paid"));
-				newPd.put("bonus",s.getString("bonus"));
-				newPd.put("winning_money",s.getString("winning_money"));
-				newPd.put("add_time",s.getString("add_time"));
+				String orderBalance = orderBalanceMap.get("order_sn");
+				newPd.put("order_sn", s.getString("order_sn"));
+				newPd.put("lottery_classify_id", s.getString("lottery_classify_id"));
+				newPd.put("money_paid", s.getString("money_paid"));
+				newPd.put("bonus", s.getString("bonus"));
+				newPd.put("winning_money", s.getString("winning_money"));
+				newPd.put("add_time", s.getString("add_time"));
 				String surplusStr = s.getString("surplus");
 				Double surplus = Double.valueOf(surplusStr);
-				if(surplus > 0.00){
-					String orderBalanceSn  = orderBalanceMap.get(s.getString("order_sn"));
-					if(!StringUtils.isEmpty(orderBalanceSn)){
-						newPd.put("cur_balance",orderBalanceSn);
-					}else{
-						newPd.put("cur_balance","0.00");
+				if (surplus > 0.00) {
+					String orderBalanceSn = orderBalanceMap.get(s.getString("order_sn"));
+					if (!StringUtils.isEmpty(orderBalanceSn)) {
+						newPd.put("cur_balance", orderBalanceSn);
+					} else {
+						newPd.put("cur_balance", "0.00");
 					}
-				}else{
-					newPd.put("cur_balance","");
+				} else {
+					newPd.put("cur_balance", "");
 				}
 				pdList.add(newPd);
 			});
 		}
 
-		for(PageData varpd:pdList){
+		for (PageData varpd : pdList) {
 			PageData nvpd = new PageData();
-			nvpd.put("var1",varpd.getString("order_sn"));
+			nvpd.put("var1", varpd.getString("order_sn"));
 			String lotteryClassifyId = varpd.getString("lottery_classify_id");
 			String lotteryClassifyName = "";
-			if("1".equals(lotteryClassifyId)){
+			if ("1".equals(lotteryClassifyId)) {
 				lotteryClassifyName = "竞彩足球";
-			}else if("2".equals(lotteryClassifyId)){
+			} else if ("2".equals(lotteryClassifyId)) {
 				lotteryClassifyName = "竞彩蓝球";
 			}
-			nvpd.put("var2",lotteryClassifyName);
-			nvpd.put("var3",varpd.getString("money_paid"));
-			nvpd.put("var4",varpd.getString("bonus"));
-			nvpd.put("var5",varpd.getString("winning_money"));
-			nvpd.put("var6",varpd.getString("add_time"));
-			nvpd.put("var7",varpd.getString("cur_balance"));
+			nvpd.put("var2", lotteryClassifyName);
+			nvpd.put("var3", varpd.getString("money_paid"));
+			nvpd.put("var4", varpd.getString("bonus"));
+			nvpd.put("var5", varpd.getString("winning_money"));
+			nvpd.put("var6", varpd.getString("add_time"));
+			nvpd.put("var7", varpd.getString("cur_balance"));
 			varList.add(nvpd);
 		}
 		dataMap.put("varList", varList);
