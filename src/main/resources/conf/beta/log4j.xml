@@ -9,21 +9,29 @@
 			<param name="ConversionPattern" value="%d{yyyy HH:mm:ss} %-5p %c - %m%n" />
 		</layout>
 	</appender>
-	
+
+	<appender name="sentry" class="com.getsentry.raven.log4j.SentryAppender">
+		<param name="dsn"
+			   value="http://cf04c9e13b204c14a80f0634485908dc:b3a8603a31e34c7c99fc4bdc1a33f52c@49.232.65.109:9000/25"/>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="WARN"/>
+		</filter>
+	</appender>
+
 	<!-- Application Loggers -->
 	<logger name="com.fh">
 		<level value="info" />
 	</logger>
-	
+
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />
-	</logger>	
-	
+	</logger>
+
 	<logger name="org.springframework.beans">
 		<level value="info" />
 	</logger>
-	
+
 	<logger name="org.springframework.context">
 		<level value="info" />
 	</logger>
@@ -46,6 +54,7 @@
 	<root>
 		<priority value="info" />
 		<appender-ref ref="console" />
+        <appender-ref ref="sentry"/>
 	</root>
-	
+
 </log4j:configuration>
