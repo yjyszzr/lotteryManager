@@ -519,9 +519,9 @@
 
         <!--sentry收集错误日志-->
         <dependency>
-            <groupId>com.getsentry.raven</groupId>
-            <artifactId>raven-log4j</artifactId>
-            <version>8.0.3</version>
+            <groupId>io.sentry</groupId>
+            <artifactId>sentry-log4j</artifactId>
+            <version>1.7.23</version>
         </dependency>
 
         <!--消息服务-->
